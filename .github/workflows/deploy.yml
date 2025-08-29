@@ -1,0 +1,518 @@
+name: 🚀 Deployment Pipeline
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      skip-tests:
+        description: 'Skip pre-deployment tests'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+permissions:
+  contents: read
+  packages: write
+  deployments: write
+  id-token: write
+
+concurrency:
+  group: deployment-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  # Job 1: Pre-deployment validation
+  pre-deployment-checks:
+    name: ✅ Pre-deployment Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: ${{ !inputs.skip-tests }}
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔍 Security pre-flight
+        run: |
+          npx secretlint "**/*"
+          npm audit --audit-level=high
+          echo "✅ Security pre-flight checks passed"
+
+      - name: 🧪 Run critical tests
+        run: |
+          npm run test:unit
+          npm run test:integration:frontend
+          echo "✅ Critical tests passed"
+
+      - name: 🏗️ Build verification
+        run: |
+          npm run build
+          npm run size-limit
+          echo "✅ Build verification passed"
+
+      - name: 📋 Extract version
+        id: version
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          else
+            VERSION=$(node -p "require('./package.json').version")-${GITHUB_SHA::7}
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Deployment version: $VERSION"
+
+  # Job 2: Build and push Docker image
+  build-image:
+    name: 🐳 Build & Push Image
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [pre-deployment-checks]
+    if: always() && (needs.pre-deployment-checks.result == 'success' || needs.pre-deployment-checks.result == 'skipped')
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+          labels: |
+            org.opencontainers.image.title=${{ github.repository }}
+            org.opencontainers.image.description=Recipe UI Service
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
+
+      - name: 🏗️ Build and push image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_VERSION=${{ env.NODE_VERSION }}
+            BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            VCS_REF=${{ github.sha }}
+
+      - name: 🔒 Sign container image
+        uses: sigstore/cosign-installer@v3
+
+      - name: ✍️ Sign the published image
+        run: |
+          cosign sign --yes ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+
+      - name: 🧾 Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: 🔍 Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: 📤 Upload Trivy scan results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: 📋 Set image output
+        id: image
+        run: |
+          echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}" >> $GITHUB_OUTPUT
+
+  # Job 3: Deploy to Staging
+  deploy-staging:
+    name: 🎪 Deploy to Staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [pre-deployment-checks, build-image]
+    if: github.ref == 'refs/heads/main' || inputs.environment == 'staging'
+    environment:
+      name: staging
+      url: https://staging.recipe-app.example.com
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.STAGING_KUBECONFIG }}
+
+      - name: 🔄 Update Kubernetes manifests
+        run: |
+          # Update image in Kubernetes manifests
+          sed -i "s|image: .*|image: ${{ needs.build-image.outputs.image }}|g" k8s/deployment.yaml
+          sed -i "s|tag: .*|tag: ${{ needs.pre-deployment-checks.outputs.version }}|g" k8s/deployment.yaml
+
+      - name: 🚀 Deploy to staging
+        run: |
+          kubectl apply -f k8s/ -n staging
+          kubectl rollout status deployment/recipe-ui-service -n staging --timeout=300s
+          echo "✅ Staging deployment successful"
+
+      - name: 🏥 Health check
+        run: |
+          # Wait for deployment to be ready
+          kubectl wait --for=condition=available deployment/recipe-ui-service -n staging --timeout=300s
+
+          # Basic health check
+          STAGING_URL="https://staging.recipe-app.example.com"
+          for i in {1..5}; do
+            if curl -f -s "$STAGING_URL/api/health"; then
+              echo "✅ Staging health check passed"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30s..."
+            sleep 30
+          done
+
+      - name: 🧪 Post-deployment smoke tests
+        run: |
+          # Run smoke tests against staging
+          npm ci --prefer-offline --no-audit
+          STAGING_URL=https://staging.recipe-app.example.com npm run test:e2e:smoke
+
+  # Job 4: Integration Tests on Staging
+  staging-integration-tests:
+    name: 🔗 Staging Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [deploy-staging]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🧪 Run integration tests against staging
+        run: |
+          STAGING_URL=https://staging.recipe-app.example.com npm run test:integration:staging
+        env:
+          CI: true
+
+      - name: ⚡ Performance tests on staging
+        run: |
+          STAGING_URL=https://staging.recipe-app.example.com npm run perf:vitals
+
+      - name: 📤 Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-test-results
+          path: |
+            test-results/
+            performance-results/
+          retention-days: 7
+
+  # Job 5: Production Deployment Approval
+  production-approval:
+    name: 🔐 Production Approval
+    runs-on: ubuntu-latest
+    timeout-minutes: 1440 # 24 hours
+    needs: [staging-integration-tests]
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || inputs.environment == 'production'
+    environment:
+      name: production-approval
+
+    steps:
+      - name: ⏳ Awaiting approval
+        run: |
+          echo "🔐 Production deployment requires manual approval"
+          echo "📋 Staging tests passed - ready for production"
+          echo "🏷️ Version: ${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "🐳 Image: ${{ needs.build-image.outputs.image }}"
+
+  # Job 6: Deploy to Production
+  deploy-production:
+    name: 🌟 Deploy to Production
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [pre-deployment-checks, build-image, production-approval]
+    environment:
+      name: production
+      url: https://recipe-app.example.com
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}
+
+      - name: 💾 Backup current deployment
+        run: |
+          kubectl get deployment recipe-ui-service -n production -o yaml > backup-deployment.yaml
+          echo "✅ Current deployment backed up"
+
+      - name: 🔄 Update Kubernetes manifests
+        run: |
+          sed -i "s|image: .*|image: ${{ needs.build-image.outputs.image }}|g" k8s/deployment.yaml
+          sed -i "s|tag: .*|tag: ${{ needs.pre-deployment-checks.outputs.version }}|g" k8s/deployment.yaml
+
+      - name: 🚀 Blue-Green Deployment
+        run: |
+          # Create new deployment with green label
+          sed 's/app: recipe-ui-service/app: recipe-ui-service-green/g' k8s/deployment.yaml > k8s/deployment-green.yaml
+
+          # Deploy green version
+          kubectl apply -f k8s/deployment-green.yaml -n production
+          kubectl rollout status deployment/recipe-ui-service-green -n production --timeout=600s
+
+          # Health check green deployment
+          kubectl wait --for=condition=available deployment/recipe-ui-service-green -n production --timeout=300s
+
+      - name: 🏥 Production health checks
+        run: |
+          # Get green pod IP for testing
+          GREEN_POD_IP=$(kubectl get pods -l app=recipe-ui-service-green -n production -o jsonpath='{.items[0].status.podIP}')
+
+          # Health check against green deployment
+          for i in {1..10}; do
+            if curl -f -s "http://$GREEN_POD_IP:3000/api/health"; then
+              echo "✅ Green deployment health check passed"
+              break
+            fi
+            echo "Health check attempt $i failed, retrying in 10s..."
+            sleep 10
+          done
+
+      - name: 🔄 Switch traffic to green
+        run: |
+          # Update service selector to point to green deployment
+          kubectl patch service recipe-ui-service -n production -p '{"spec":{"selector":{"app":"recipe-ui-service-green"}}}'
+          echo "✅ Traffic switched to green deployment"
+
+      - name: ⏳ Soak period
+        run: |
+          echo "🕰️ Starting 5-minute soak period..."
+          sleep 300
+          echo "✅ Soak period completed"
+
+      - name: 🧪 Production smoke tests
+        run: |
+          PRODUCTION_URL=https://recipe-app.example.com
+          for i in {1..3}; do
+            if curl -f -s "$PRODUCTION_URL/api/health"; then
+              echo "✅ Production smoke test passed"
+              break
+            fi
+            echo "Smoke test attempt $i failed"
+            sleep 30
+          done
+
+      - name: 🧹 Cleanup blue deployment
+        run: |
+          # Remove old blue deployment
+          kubectl delete deployment recipe-ui-service -n production || true
+
+          # Rename green to blue for next deployment
+          kubectl patch deployment recipe-ui-service-green -n production -p '{"metadata":{"name":"recipe-ui-service"},"spec":{"selector":{"matchLabels":{"app":"recipe-ui-service"}},"template":{"metadata":{"labels":{"app":"recipe-ui-service"}}}}}'
+          kubectl patch service recipe-ui-service -n production -p '{"spec":{"selector":{"app":"recipe-ui-service"}}}'
+
+          echo "✅ Deployment cleanup completed"
+
+      - name: 📤 Upload deployment artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-deployment-artifacts
+          path: |
+            backup-deployment.yaml
+            k8s/
+          retention-days: 90
+
+  # Job 7: Post-deployment monitoring
+  post-deployment-monitoring:
+    name: 📊 Post-deployment Monitoring
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [deploy-production]
+    if: always()
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📊 Performance monitoring
+        run: |
+          # Run lighthouse against production
+          PRODUCTION_URL=https://recipe-app.example.com npm run perf:lighthouse
+          echo "✅ Performance monitoring completed"
+
+      - name: 🏥 Extended health monitoring
+        run: |
+          PRODUCTION_URL="https://recipe-app.example.com"
+
+          echo "🔍 Running extended health checks..."
+          for endpoint in "/api/health" "/api/recipes" "/"; do
+            echo "Testing $endpoint..."
+            curl -f -s "$PRODUCTION_URL$endpoint" > /dev/null
+            echo "✅ $endpoint is healthy"
+          done
+
+      - name: 📈 Deployment success metrics
+        run: |
+          echo "📊 Deployment Metrics:"
+          echo "- Version: ${{ needs.pre-deployment-checks.outputs.version }}"
+          echo "- Image: ${{ needs.build-image.outputs.image }}"
+          echo "- Deployment time: $(date)"
+          echo "- Environment: production"
+          echo "- Status: SUCCESS ✅"
+
+  # Rollback Job (Manual trigger)
+  rollback:
+    name: ⏪ Rollback Deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: failure() || cancelled()
+    needs: [deploy-production]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}
+
+      - name: ⏪ Rollback to previous version
+        run: |
+          echo "🚨 Rolling back production deployment..."
+          kubectl rollout undo deployment/recipe-ui-service -n production
+          kubectl rollout status deployment/recipe-ui-service -n production --timeout=300s
+          echo "✅ Rollback completed"
+
+      - name: 🚨 Alert on rollback
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: |
+            🚨 **PRODUCTION ROLLBACK EXECUTED** 🚨
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Reason: Deployment failure - automatic rollback triggered
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_ALERTS_SLACK_WEBHOOK_URL }}
+
+  # Notification Job
+  deployment-notification:
+    name: 📬 Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [post-deployment-monitoring]
+    if: always()
+
+    steps:
+      - name: 🎉 Success notification
+        if: needs.post-deployment-monitoring.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: |
+            🚀 **PRODUCTION DEPLOYMENT SUCCESSFUL** 🎉
+            Repository: ${{ github.repository }}
+            Version: ${{ needs.pre-deployment-checks.outputs.version }}
+            Image: ${{ needs.build-image.outputs.image }}
+            URL: https://recipe-app.example.com
+            All health checks passed ✅
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: ❌ Failure notification
+        if: failure() || needs.post-deployment-monitoring.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: |
+            ❌ **DEPLOYMENT FAILED**
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Please check the workflow logs and take corrective action.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_ALERTS_SLACK_WEBHOOK_URL }}

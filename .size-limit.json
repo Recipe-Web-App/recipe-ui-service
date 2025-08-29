@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Main bundle",
+    "path": ".next/static/chunks/pages/_app-*.js",
+    "limit": "200 KB"
+  },
+  {
+    "name": "Home page",
+    "path": ".next/static/chunks/pages/index-*.js",
+    "limit": "50 KB"
+  },
+  {
+    "name": "Total CSS",
+    "path": ".next/static/css/*.css",
+    "limit": "100 KB"
+  },
+  {
+    "name": "Critical bundle (First Load JS)",
+    "path": [
+      ".next/static/chunks/webpack-*.js",
+      ".next/static/chunks/framework-*.js",
+      ".next/static/chunks/main-*.js",
+      ".next/static/chunks/pages/_app-*.js",
+      ".next/static/css/*.css"
+    ],
+    "limit": "300 KB"
+  }
+]

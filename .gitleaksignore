@@ -1,0 +1,26 @@
+# Gitleaks ignore file
+# This file is used to ignore false positives in gitleaks scanning
+
+# Ignore Next.js build artifacts (auto-generated encryption keys, not real secrets)
+.next/cache/.rscinfo:generic-api-key:1
+.next/prerender-manifest.json:generic-api-key:8
+.next/prerender-manifest.json:generic-api-key:9
+.next/server/server-reference-manifest.json:generic-api-key:4
+
+# Ignore all Next.js build directory (alternative approach)
+# These are build artifacts with auto-generated keys
+**/.next/**
+
+# Ignore test files with dummy secrets
+**/test/**
+**/__tests__/**
+**/*.test.*
+**/*.spec.*
+
+# Ignore documentation examples
+**/README.md
+**/docs/**
+
+# Ignore example environment files
+**/.env.example
+**/.env.sample

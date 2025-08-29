@@ -1,0 +1,578 @@
+name: 📦 Release Management
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Release type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+      pre-release:
+        description: 'Create pre-release'
+        required: false
+        default: false
+        type: boolean
+      skip-changelog:
+        description: 'Skip changelog generation'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '20'
+
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Job 1: Analyze commits and determine if release is needed
+  analyze-commits:
+    name: 🔍 Analyze Commits
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      should-release: ${{ steps.conventional-commits.outputs.should-release }}
+      release-type: ${{ steps.conventional-commits.outputs.release-type }}
+      new-version: ${{ steps.conventional-commits.outputs.new-version }}
+      changelog: ${{ steps.conventional-commits.outputs.changelog }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📋 Analyze conventional commits
+        id: conventional-commits
+        env:
+          MANUAL_RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+        run: |
+          # Get the last release tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            echo "No previous tags found, treating as initial release"
+            COMMIT_RANGE="HEAD"
+          else
+            COMMIT_RANGE="$LAST_TAG..HEAD"
+          fi
+
+          echo "Analyzing commits in range: $COMMIT_RANGE"
+
+          # Analyze commits for conventional commit patterns
+          COMMITS=$(git log --pretty=format:"%s" $COMMIT_RANGE)
+
+          # Check for breaking changes
+          BREAKING_CHANGES=$(echo "$COMMITS" | grep -E "^[a-z]+(\(.+\))?!:" || true)
+          FEAT_COMMITS=$(echo "$COMMITS" | grep -E "^feat(\(.+\))?:" || true)
+          FIX_COMMITS=$(echo "$COMMITS" | grep -E "^fix(\(.+\))?:" || true)
+
+          # Determine release type
+          if [ -n "$BREAKING_CHANGES" ]; then
+            RELEASE_TYPE="major"
+          elif [ -n "$FEAT_COMMITS" ]; then
+            RELEASE_TYPE="minor"
+          elif [ -n "$FIX_COMMITS" ]; then
+            RELEASE_TYPE="patch"
+          else
+            RELEASE_TYPE="none"
+          fi
+
+          # Override with manual input if provided
+          if [ "$MANUAL_RELEASE_TYPE" != "" ]; then
+            RELEASE_TYPE="$MANUAL_RELEASE_TYPE"
+          fi
+
+          # Determine if we should create a release
+          if [ "$RELEASE_TYPE" != "none" ] || [ "$MANUAL_RELEASE_TYPE" != "" ]; then
+            SHOULD_RELEASE="true"
+          else
+            SHOULD_RELEASE="false"
+          fi
+
+          # Calculate new version
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+
+          if [ "$SHOULD_RELEASE" == "true" ]; then
+            case $RELEASE_TYPE in
+              major)
+                NEW_VERSION=$(npx semver -i major $CURRENT_VERSION)
+                ;;
+              minor)
+                NEW_VERSION=$(npx semver -i minor $CURRENT_VERSION)
+                ;;
+              patch)
+                NEW_VERSION=$(npx semver -i patch $CURRENT_VERSION)
+                ;;
+              prerelease)
+                NEW_VERSION=$(npx semver -i prerelease --preid=beta $CURRENT_VERSION)
+                ;;
+              *)
+                NEW_VERSION=$CURRENT_VERSION
+                ;;
+            esac
+          else
+            NEW_VERSION=$CURRENT_VERSION
+          fi
+
+          # Generate changelog
+          CHANGELOG="# Changelog\n\n"
+          if [ -n "$BREAKING_CHANGES" ]; then
+            CHANGELOG="$CHANGELOG## 💥 BREAKING CHANGES\n$(echo "$BREAKING_CHANGES" | sed 's/^/- /')\n\n"
+          fi
+          if [ -n "$FEAT_COMMITS" ]; then
+            CHANGELOG="$CHANGELOG## ✨ Features\n$(echo "$FEAT_COMMITS" | sed 's/^feat(\(.*\)): /- **\1**: /' | sed 's/^feat: /- /')\n\n"
+          fi
+          if [ -n "$FIX_COMMITS" ]; then
+            CHANGELOG="$CHANGELOG## 🐛 Bug Fixes\n$(echo "$FIX_COMMITS" | sed 's/^fix(\(.*\)): /- **\1**: /' | sed 's/^fix: /- /')\n\n"
+          fi
+
+          # Set outputs
+          echo "should-release=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
+          echo "release-type=$RELEASE_TYPE" >> $GITHUB_OUTPUT
+          echo "new-version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          echo "📊 Release Analysis Results:"
+          echo "  Should Release: $SHOULD_RELEASE"
+          echo "  Release Type: $RELEASE_TYPE"
+          echo "  Current Version: $CURRENT_VERSION"
+          echo "  New Version: $NEW_VERSION"
+
+  # Job 2: Create release PR with version bump
+  create-release-pr:
+    name: 📝 Create Release PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [analyze-commits]
+    if: needs.analyze-commits.outputs.should-release == 'true' && github.event_name == 'push'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔢 Update version
+        run: |
+          npm version ${{ needs.analyze-commits.outputs.new-version }} --no-git-tag-version
+          echo "✅ Updated version to ${{ needs.analyze-commits.outputs.new-version }}"
+
+      - name: 📄 Update CHANGELOG.md
+        if: ${{ !inputs.skip-changelog }}
+        run: |
+          # Create or update CHANGELOG.md
+          if [ -f CHANGELOG.md ]; then
+            # Prepend to existing changelog
+            echo -e "${{ needs.analyze-commits.outputs.changelog }}\n$(cat CHANGELOG.md)" > CHANGELOG.md
+          else
+            # Create new changelog
+            echo -e "${{ needs.analyze-commits.outputs.changelog }}" > CHANGELOG.md
+          fi
+          echo "✅ Updated CHANGELOG.md"
+
+      - name: 🔄 Create release branch
+        run: |
+          BRANCH_NAME="release/v${{ needs.analyze-commits.outputs.new-version }}"
+          git checkout -b "$BRANCH_NAME"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "chore(release): bump version to v${{ needs.analyze-commits.outputs.new-version }}"
+          git push origin "$BRANCH_NAME"
+          echo "✅ Created release branch: $BRANCH_NAME"
+
+      - name: 📋 Create Release PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.RELEASE_TOKEN }}
+          script: |
+            const { data: pr } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚀 Release v${{ needs.analyze-commits.outputs.new-version }}`,
+              head: `release/v${{ needs.analyze-commits.outputs.new-version }}`,
+              base: 'main',
+              body: `# Release v${{ needs.analyze-commits.outputs.new-version }}
+
+            This PR contains the version bump and changelog updates for the upcoming release.
+
+            ## What's Changed
+            ${{ needs.analyze-commits.outputs.changelog }}
+
+            ## Pre-release Checklist
+            - [ ] All CI checks are passing
+            - [ ] Version bump is correct
+            - [ ] Changelog is accurate and complete
+            - [ ] Documentation is up to date
+            - [ ] Breaking changes are documented
+
+            ## Post-merge Actions
+            After merging this PR, the following will happen automatically:
+            1. 🏷️ Git tag will be created
+            2. 📦 GitHub release will be published
+            3. 🐳 Docker images will be built and pushed
+            4. 🚀 Deployment pipeline will be triggered
+
+            ---
+            *This PR was created automatically by the release workflow.*`
+            });
+
+            // Add labels
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['release', '🚀 deployment']
+            });
+
+  # Job 3: Build release assets
+  build-release-assets:
+    name: 🏗️ Build Release Assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [analyze-commits]
+    if: needs.analyze-commits.outputs.should-release == 'true'
+
+    strategy:
+      matrix:
+        platform:
+          [linux-amd64, linux-arm64, darwin-amd64, darwin-arm64, windows-amd64]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏗️ Build application
+        run: |
+          npm run build
+          echo "✅ Application built successfully"
+
+      - name: 📦 Create platform-specific archive
+        run: |
+          PLATFORM=${{ matrix.platform }}
+          VERSION=${{ needs.analyze-commits.outputs.new-version }}
+
+          # Create distribution directory
+          mkdir -p dist/$PLATFORM
+
+          # Copy build artifacts
+          cp -r .next dist/$PLATFORM/
+          cp -r public dist/$PLATFORM/
+          cp package.json dist/$PLATFORM/
+          cp README.md dist/$PLATFORM/
+
+          # Create archive
+          cd dist
+          if [[ "$PLATFORM" == *"windows"* ]]; then
+            zip -r "recipe-ui-service-v$VERSION-$PLATFORM.zip" $PLATFORM/
+          else
+            tar -czf "recipe-ui-service-v$VERSION-$PLATFORM.tar.gz" $PLATFORM/
+          fi
+
+          echo "✅ Created archive for $PLATFORM"
+
+      - name: 📤 Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets-${{ matrix.platform }}
+          path: |
+            dist/*.tar.gz
+            dist/*.zip
+          retention-days: 30
+
+  # Job 4: Create GitHub release
+  create-github-release:
+    name: 🎉 Create GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [analyze-commits, build-release-assets]
+    if: needs.analyze-commits.outputs.should-release == 'true' && (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main')
+    outputs:
+      release-id: ${{ steps.create-release.outputs.release-id }}
+      upload-url: ${{ steps.create-release.outputs.upload-url }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: 🔢 Update version and create tag
+        run: |
+          VERSION=${{ needs.analyze-commits.outputs.new-version }}
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          # Update package.json version
+          npm version $VERSION --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore(release): bump version to v$VERSION" || true
+
+          # Create and push tag
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git push origin "v$VERSION"
+          echo "✅ Created and pushed tag v$VERSION"
+
+      - name: 📥 Download all release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          pattern: release-assets-*
+          merge-multiple: true
+
+      - name: 🎉 Create GitHub Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          tag_name: v${{ needs.analyze-commits.outputs.new-version }}
+          release_name: 🚀 Release v${{ needs.analyze-commits.outputs.new-version }}
+          body: |
+            # Release Notes v${{ needs.analyze-commits.outputs.new-version }}
+
+            ${{ needs.analyze-commits.outputs.changelog }}
+
+            ## 📦 Installation
+
+            ### Using npm:
+            ```bash
+            npm install recipe-ui-service@${{ needs.analyze-commits.outputs.new-version }}
+            ```
+
+            ### Using Docker:
+            ```bash
+            docker pull ghcr.io/${{ github.repository }}:v${{ needs.analyze-commits.outputs.new-version }}
+            ```
+
+            ### Download Binaries:
+            Choose the appropriate binary for your platform from the assets below.
+
+            ## 🔗 Useful Links
+            - [Documentation](README.md)
+            - [Changelog](CHANGELOG.md)
+            - [Docker Image](https://ghcr.io/${{ github.repository }})
+
+            ---
+            **Full Changelog**: https://github.com/${{ github.repository }}/compare/v${{ needs.analyze-commits.outputs.new-version }}...v${{ needs.analyze-commits.outputs.new-version }}
+          draft: false
+          prerelease: ${{ inputs.pre-release == true }}
+
+      - name: 📤 Upload release assets
+        run: |
+          # Upload all built assets to the release
+          for file in release-assets/*; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file..."
+              gh release upload "v${{ needs.analyze-commits.outputs.new-version }}" "$file"
+            fi
+          done
+          echo "✅ All release assets uploaded"
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  # Job 5: Build and push Docker images for release
+  build-release-images:
+    name: 🐳 Build Release Images
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [analyze-commits, create-github-release]
+    if: needs.analyze-commits.outputs.should-release == 'true'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}},value=v${{ needs.analyze-commits.outputs.new-version }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.analyze-commits.outputs.new-version }}
+            type=semver,pattern={{major}},value=v${{ needs.analyze-commits.outputs.new-version }}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 🏗️ Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=v${{ needs.analyze-commits.outputs.new-version }}
+            BUILD_DATE=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+            VCS_REF=${{ github.sha }}
+
+      - name: 🔒 Sign container image
+        uses: sigstore/cosign-installer@v3
+
+      - name: ✍️ Sign the published image
+        run: |
+          cosign sign --yes ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+
+  # Job 6: Update documentation
+  update-documentation:
+    name: 📚 Update Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [analyze-commits, create-github-release]
+    if: needs.analyze-commits.outputs.should-release == 'true'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: 📚 Update README badges
+        run: |
+          VERSION=${{ needs.analyze-commits.outputs.new-version }}
+
+          # Update version badge in README
+          sed -i "s/version-[0-9]*\.[0-9]*\.[0-9]*/version-$VERSION/g" README.md
+          sed -i "s/v[0-9]*\.[0-9]*\.[0-9]*/v$VERSION/g" README.md
+
+          echo "✅ Updated README with new version"
+
+      - name: 📝 Generate API documentation
+        run: |
+          # Generate/update API documentation if needed
+          if [ -f "scripts/generate-docs.js" ]; then
+            node scripts/generate-docs.js
+            echo "✅ Generated API documentation"
+          fi
+
+      - name: 💾 Commit documentation updates
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "docs: update documentation for v${{ needs.analyze-commits.outputs.new-version }}"
+            git push
+            echo "✅ Committed documentation updates"
+          else
+            echo "ℹ️ No documentation changes to commit"
+          fi
+
+  # Job 7: Post-release notifications
+  post-release-notifications:
+    name: 📢 Post-release Notifications
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs:
+      [
+        analyze-commits,
+        create-github-release,
+        build-release-images,
+        update-documentation,
+      ]
+    if: always() && needs.analyze-commits.outputs.should-release == 'true'
+
+    steps:
+      - name: 🎉 Success notification
+        if: needs.create-github-release.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: |
+            🎉 **NEW RELEASE PUBLISHED** 🚀
+
+            **Repository:** ${{ github.repository }}
+            **Version:** v${{ needs.analyze-commits.outputs.new-version }}
+            **Release Type:** ${{ needs.analyze-commits.outputs.release-type }}
+
+            📦 **Assets:**
+            - GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.analyze-commits.outputs.new-version }}
+            - Docker Image: ghcr.io/${{ github.repository }}:v${{ needs.analyze-commits.outputs.new-version }}
+
+            **What's New:**
+            ${{ needs.analyze-commits.outputs.changelog }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: ❌ Failure notification
+        if: failure() || needs.create-github-release.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: |
+            ❌ **RELEASE FAILED**
+
+            Repository: ${{ github.repository }}
+            Attempted Version: v${{ needs.analyze-commits.outputs.new-version }}
+
+            Please check the workflow logs and retry the release process.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 📬 Team notification
+        if: needs.create-github-release.result == 'success'
+        run: |
+          echo "📬 Release notifications sent successfully!"
+          echo "🎉 Release v${{ needs.analyze-commits.outputs.new-version }} is now available!"
+          echo "📦 Docker image: ghcr.io/${{ github.repository }}:v${{ needs.analyze-commits.outputs.new-version }}"
+          echo "🔗 Release page: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.analyze-commits.outputs.new-version }}"

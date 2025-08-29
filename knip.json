@@ -1,0 +1,50 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/app/**/*.{js,jsx,ts,tsx}",
+    "src/pages/**/*.{js,jsx,ts,tsx}",
+    "next.config.ts",
+    "tailwind.config.ts"
+  ],
+  "project": [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/__tests__/**",
+    "!src/**/*.{test,spec}.{js,jsx,ts,tsx}"
+  ],
+  "ignore": ["**/*.d.ts", ".next/**", "node_modules/**", "coverage/**"],
+  "ignoreDependencies": [
+    "@types/node",
+    "@types/react",
+    "@types/react-dom",
+    "typescript",
+    "eslint",
+    "prettier",
+    "husky",
+    "lint-staged"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "includeEntryExports": true,
+  "next": {
+    "entry": [
+      "next.config.ts",
+      "src/app/**/*.{js,jsx,ts,tsx}",
+      "src/pages/**/*.{js,jsx,ts,tsx}",
+      "src/middleware.ts"
+    ]
+  },
+  "jest": {
+    "entry": [
+      "jest.config.js",
+      "jest.setup.js",
+      "**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "**/*.{test,spec}.{js,jsx,ts,tsx}"
+    ]
+  },
+  "playwright": {
+    "entry": [
+      "playwright.config.ts",
+      "e2e/**/*.{js,jsx,ts,tsx}",
+      "__tests__/accessibility.test.ts"
+    ]
+  }
+}

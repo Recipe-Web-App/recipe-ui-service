@@ -1,0 +1,117 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next/
+out/
+
+# Production build
+/dist
+
+# Environment files
+.env*.local
+.env.production
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Development tools
+.vscode/
+.idea/
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Documentation
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+docs/
+*.md
+
+# Temporary files
+.DS_Store
+Thumbs.db
+
+# Package manager lock files (keep for production builds)
+yarn.lock
+pnpm-lock.yaml
+
+# Husky and linting
+.husky/
+.lintstagedrc.js
+.prettierrc
+.prettierignore
+.eslintrc*
+eslint.config.*
+
+# Security and analysis tools
+.secretlintrc.json
+.gitleaksignore
+.hadolint.yaml
+.trivyignore
+
+# Kubernetes and Docker development
+k8s/
+docker-compose*.yml
+Dockerfile*
+!Dockerfile
+
+# Testing and analysis
+jest.config.*
+jest.setup.*
+playwright.config.*
+.coverage/
+.storybook/
+.lighthouseci/
+.semgrep.yml
+.osv-scanner.toml
+.size-limit.json
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.prettiercache
+.stylelintcache
+.turbo/
+
+# Build artifacts and reports
+bundle-report.html
+webpack-bundle-analyzer-report.html
+performance-results/
+test-reports/
+
+# Docker build context optimization
+**/.git
+**/.DS_Store
+**/node_modules
+**/*.log
+**/.env*
+**/coverage
+**/.nyc_output
+**/test-results
