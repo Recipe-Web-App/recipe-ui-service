@@ -1,0 +1,148 @@
+# GitHub Labels Configuration
+# Sync with: https://github.com/EndBug/label-sync
+
+# Priority Labels
+- name: '🚨 critical'
+  color: 'd73a4a'
+  description: 'Critical issue requiring immediate attention'
+
+- name: '🔥 high priority'
+  color: 'ff9500'
+  description: 'High priority issue or feature'
+
+- name: '📝 medium priority'
+  color: 'fbca04'
+  description: 'Medium priority issue or feature'
+
+- name: '🐌 low priority'
+  color: '0e8a16'
+  description: 'Low priority issue or feature'
+
+# Type Labels
+- name: '🐛 bug'
+  color: 'd73a4a'
+  description: "Something isn't working"
+
+- name: '🚀 feature'
+  color: '0075ca'
+  description: 'New feature or enhancement'
+
+- name: '📚 documentation'
+  color: '0075ca'
+  description: 'Improvements or additions to documentation'
+
+- name: '🧹 maintenance'
+  color: 'fef2c0'
+  description: 'Code cleanup, refactoring, or maintenance'
+
+- name: '⚡ performance'
+  color: 'ff6b35'
+  description: 'Performance improvements'
+
+- name: '🔒 security'
+  color: 'ee0701'
+  description: 'Security-related improvements'
+
+# Status Labels
+- name: '✅ ready'
+  color: '0e8a16'
+  description: 'Ready to work on'
+
+- name: '🔍 needs investigation'
+  color: 'd4c5f9'
+  description: 'Needs further investigation'
+
+- name: '🚧 in progress'
+  color: 'fbca04'
+  description: 'Currently being worked on'
+
+- name: '⏳ blocked'
+  color: 'd73a4a'
+  description: 'Blocked by external dependency'
+
+- name: '🎉 done'
+  color: '0e8a16'
+  description: 'Completed work'
+
+# Domain Labels
+- name: '🎨 frontend'
+  color: '1d76db'
+  description: 'Frontend/UI related'
+
+- name: '⚙️ backend'
+  color: '5319e7'
+  description: 'Backend/API related'
+
+- name: '🐳 docker'
+  color: '2496ed'
+  description: 'Docker/containerization related'
+
+- name: '🔧 ci-cd'
+  color: '28a745'
+  description: 'Continuous integration/deployment'
+
+- name: '🧪 testing'
+  color: 'f9d71c'
+  description: 'Testing related'
+
+- name: '📱 mobile'
+  color: 'ff69b4'
+  description: 'Mobile-specific features'
+
+- name: '♿ accessibility'
+  color: '7057ff'
+  description: 'Accessibility improvements'
+
+# Size Labels
+- name: '🐁 xs'
+  color: 'c2e0c6'
+  description: 'Extra small change (< 2 hours)'
+
+- name: '🐿️ small'
+  color: '7fdbff'
+  description: 'Small change (< 1 day)'
+
+- name: '🐈 medium'
+  color: 'ffa500'
+  description: 'Medium change (1-3 days)'
+
+- name: '🐘 large'
+  color: 'ff6b6b'
+  description: 'Large change (3-7 days)'
+
+- name: '🐋 xl'
+  color: 'd73a4a'
+  description: 'Extra large change (> 1 week)'
+
+# Special Labels
+- name: '🎯 good first issue'
+  color: '7057ff'
+  description: 'Good for newcomers'
+
+- name: '🆘 help wanted'
+  color: '008672'
+  description: 'Extra attention is needed'
+
+- name: '❓ question'
+  color: 'd876e3'
+  description: 'Further information is requested'
+
+- name: '💡 idea'
+  color: 'a2eeef'
+  description: 'Feature idea or suggestion'
+
+- name: '🔄 duplicate'
+  color: 'cfd3d7'
+  description: 'This issue or pull request already exists'
+
+- name: '🚫 wontfix'
+  color: 'ffffff'
+  description: 'This will not be worked on'
+
+- name: '🤖 automated'
+  color: 'e99695'
+  description: 'Automated pull request'
+
+- name: '⬆️ dependencies'
+  color: '0366d6'
+  description: 'Dependency updates'

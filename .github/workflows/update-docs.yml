@@ -1,0 +1,92 @@
+name: 📝 Update Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  update-dates:
+    name: 🗓️ Update Documentation Dates
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: 🗓️ Update README.md date
+        run: |
+          current_date=$(date -u +'%B %Y')
+          echo "Updating README.md with current date: $current_date"
+
+          # Update the date in README.md
+          sed -i "s/<!-- AUTO-GENERATED-DATE -->/$current_date/g" README.md
+
+          # Verify the change was made
+          if grep -q "$current_date" README.md; then
+            echo "✅ Date successfully updated in README.md"
+          else
+            echo "❌ Failed to update date in README.md"
+            exit 1
+          fi
+
+      - name: 📝 Update other documentation dates
+        run: |
+          current_date=$(date -u +'%B %Y')
+
+          # Update dates in other documentation files that have the marker
+          for file in *.md docs/*.md; do
+            if [ -f "$file" ] && grep -q "<!-- AUTO-GENERATED-DATE -->" "$file"; then
+              echo "Updating date in $file"
+              sed -i "s/<!-- AUTO-GENERATED-DATE -->/$current_date/g" "$file"
+            fi
+          done
+
+      - name: 🔍 Check for changes
+        id: verify-changed-files
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No documentation date changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Documentation date changes detected"
+            git diff --name-only
+          fi
+
+      - name: 📤 Commit updated documentation
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "📝 Auto-update documentation dates to $(date -u +'%B %Y')
+
+          🤖 Generated with GitHub Actions
+
+          Co-Authored-By: GitHub Actions <noreply@github.com>" || exit 0
+
+      - name: 🚀 Push changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      - name: 📊 Summary
+        run: |
+          if [[ "${{ steps.verify-changed-files.outputs.changed }}" == "true" ]]; then
+            echo "✅ Documentation dates updated successfully to $(date -u +'%B %Y')"
+          else
+            echo "ℹ️ No documentation date updates needed"
+          fi

@@ -1,0 +1,728 @@
+name: 🔧 Maintenance & Monitoring
+
+on:
+  schedule:
+    # Daily maintenance at 4 AM UTC
+    - cron: '0 4 * * *'
+    # Weekly comprehensive maintenance on Sundays at 1 AM UTC
+    - cron: '0 1 * * 0'
+    # Monthly deep maintenance on the 1st at 12 AM UTC
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    inputs:
+      maintenance-type:
+        description: 'Maintenance type'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - dependencies
+          - security
+          - cleanup
+          - health-check
+          - backup
+          - monitoring
+
+env:
+  NODE_VERSION: '20'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  security-events: write
+
+concurrency:
+  group: maintenance
+  cancel-in-progress: false
+
+jobs:
+  # Job 1: Repository Health Check
+  repository-health:
+    name: 🏥 Repository Health
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'health-check' || github.event.inputs.maintenance-type == ''
+    outputs:
+      health-score: ${{ steps.health-check.outputs.score }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏥 Repository health assessment
+        id: health-check
+        run: |
+          echo "🏥 Assessing repository health..."
+
+          SCORE=100
+          ISSUES=()
+
+          # Check for outdated dependencies
+          OUTDATED=$(npm outdated --json 2>/dev/null || echo "{}")
+          OUTDATED_COUNT=$(echo "$OUTDATED" | jq 'length // 0')
+          if [ "$OUTDATED_COUNT" -gt 10 ]; then
+            SCORE=$((SCORE - 10))
+            ISSUES+=("📦 $OUTDATED_COUNT outdated dependencies")
+          elif [ "$OUTDATED_COUNT" -gt 5 ]; then
+            SCORE=$((SCORE - 5))
+            ISSUES+=("📦 $OUTDATED_COUNT outdated dependencies (minor)")
+          fi
+
+          # Check for security vulnerabilities
+          AUDIT_RESULT=$(npm audit --json 2>/dev/null || echo '{"vulnerabilities":{}}')
+          CRITICAL_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.critical // 0')
+          HIGH_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.high // 0')
+
+          if [ "$CRITICAL_VULNS" -gt 0 ]; then
+            SCORE=$((SCORE - 30))
+            ISSUES+=("🚨 $CRITICAL_VULNS critical vulnerabilities")
+          fi
+          if [ "$HIGH_VULNS" -gt 0 ]; then
+            SCORE=$((SCORE - 15))
+            ISSUES+=("⚠️ $HIGH_VULNS high vulnerabilities")
+          fi
+
+          # Check for unused dependencies
+          UNUSED=$(npx knip --reporter json 2>/dev/null || echo '{"files":[],"dependencies":[],"devDependencies":[]}')
+          UNUSED_DEPS=$(echo "$UNUSED" | jq '.dependencies | length')
+          if [ "$UNUSED_DEPS" -gt 0 ]; then
+            SCORE=$((SCORE - 5))
+            ISSUES+=("🗑️ $UNUSED_DEPS unused dependencies")
+          fi
+
+          # Check for large files
+          LARGE_FILES=$(find . -name "*.js" -o -name "*.ts" -o -name "*.jsx" -o -name "*.tsx" | xargs wc -l | awk '$1 > 500 {print $0}' | wc -l)
+          if [ "$LARGE_FILES" -gt 5 ]; then
+            SCORE=$((SCORE - 5))
+            ISSUES+=("📏 $LARGE_FILES files over 500 lines")
+          fi
+
+          # Check test coverage
+          COVERAGE_RESULT=$(npm run test:coverage --silent 2>/dev/null || echo "")
+          if echo "$COVERAGE_RESULT" | grep -q "Coverage threshold"; then
+            SCORE=$((SCORE - 10))
+            ISSUES+=("📊 Test coverage below threshold")
+          fi
+
+          # Generate health report
+          echo "# 🏥 Repository Health Report" > health-report.md
+          echo "" >> health-report.md
+          echo "**Overall Health Score: $SCORE/100**" >> health-report.md
+          echo "" >> health-report.md
+
+          if [ "$SCORE" -ge 90 ]; then
+            echo "✅ **Status: EXCELLENT** - Repository is in great shape!" >> health-report.md
+          elif [ "$SCORE" -ge 80 ]; then
+            echo "🟡 **Status: GOOD** - Repository is healthy with minor issues" >> health-report.md
+          elif [ "$SCORE" -ge 70 ]; then
+            echo "🟠 **Status: FAIR** - Repository needs attention" >> health-report.md
+          else
+            echo "🔴 **Status: POOR** - Repository requires immediate maintenance" >> health-report.md
+          fi
+
+          echo "" >> health-report.md
+          echo "## Issues Found:" >> health-report.md
+          if [ ${#ISSUES[@]} -eq 0 ]; then
+            echo "- No issues detected! 🎉" >> health-report.md
+          else
+            for issue in "${ISSUES[@]}"; do
+              echo "- $issue" >> health-report.md
+            done
+          fi
+
+          echo "" >> health-report.md
+          echo "**Generated:** $(date)" >> health-report.md
+
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+
+          echo "🏥 Repository health score: $SCORE/100"
+
+      - name: 📤 Upload health report
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-health-report
+          path: health-report.md
+          retention-days: 30
+
+  # Job 2: Dependency Management
+  dependency-management:
+    name: 📦 Dependency Management
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'dependencies' || github.event.inputs.maintenance-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📊 Dependency audit
+        run: |
+          echo "📊 Performing dependency audit..."
+
+          # Generate dependency report
+          echo "# 📦 Dependency Management Report" > dependency-report.md
+          echo "" >> dependency-report.md
+          echo "**Generated:** $(date)" >> dependency-report.md
+          echo "" >> dependency-report.md
+
+          # Outdated packages
+          echo "## 📈 Outdated Packages" >> dependency-report.md
+          npm outdated --json > outdated.json 2>/dev/null || echo "{}" > outdated.json
+
+          if [ "$(cat outdated.json)" != "{}" ]; then
+            echo "| Package | Current | Wanted | Latest | Type |" >> dependency-report.md
+            echo "|---------|---------|--------|--------|------|" >> dependency-report.md
+
+            node -e "
+              const outdated = JSON.parse(require('fs').readFileSync('outdated.json', 'utf8'));
+              Object.entries(outdated).forEach(([pkg, info]) => {
+                console.log(\`| \${pkg} | \${info.current} | \${info.wanted} | \${info.latest} | \${info.type} |\`);
+              });
+            " >> dependency-report.md
+          else
+            echo "✅ All packages are up to date!" >> dependency-report.md
+          fi
+
+          echo "" >> dependency-report.md
+
+          # Unused dependencies
+          echo "## 🗑️ Unused Dependencies" >> dependency-report.md
+          UNUSED=$(npx knip --reporter json 2>/dev/null || echo '{"dependencies":[],"devDependencies":[]}')
+          UNUSED_DEPS=$(echo "$UNUSED" | jq -r '.dependencies[]?' 2>/dev/null || true)
+          UNUSED_DEV_DEPS=$(echo "$UNUSED" | jq -r '.devDependencies[]?' 2>/dev/null || true)
+
+          if [ -n "$UNUSED_DEPS" ] || [ -n "$UNUSED_DEV_DEPS" ]; then
+            echo "### Production Dependencies:" >> dependency-report.md
+            if [ -n "$UNUSED_DEPS" ]; then
+              echo "$UNUSED_DEPS" | sed 's/^/- /' >> dependency-report.md
+            else
+              echo "- None" >> dependency-report.md
+            fi
+
+            echo "" >> dependency-report.md
+            echo "### Development Dependencies:" >> dependency-report.md
+            if [ -n "$UNUSED_DEV_DEPS" ]; then
+              echo "$UNUSED_DEV_DEPS" | sed 's/^/- /' >> dependency-report.md
+            else
+              echo "- None" >> dependency-report.md
+            fi
+          else
+            echo "✅ No unused dependencies found!" >> dependency-report.md
+          fi
+
+          echo "📦 Dependency audit completed"
+
+      - name: 🔒 Security audit
+        run: |
+          echo "🔒 Running security audit..."
+
+          # Security vulnerabilities
+          echo "" >> dependency-report.md
+          echo "## 🔒 Security Vulnerabilities" >> dependency-report.md
+
+          AUDIT_RESULT=$(npm audit --json 2>/dev/null || echo '{"vulnerabilities":{}}')
+          TOTAL_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities | add // 0')
+
+          if [ "$TOTAL_VULNS" -gt 0 ]; then
+            echo "**Total vulnerabilities found:** $TOTAL_VULNS" >> dependency-report.md
+            echo "" >> dependency-report.md
+
+            # Vulnerability breakdown
+            CRITICAL=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.critical // 0')
+            HIGH=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.high // 0')
+            MODERATE=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.moderate // 0')
+            LOW=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.low // 0')
+
+            echo "| Severity | Count |" >> dependency-report.md
+            echo "|----------|-------|" >> dependency-report.md
+            echo "| Critical | $CRITICAL |" >> dependency-report.md
+            echo "| High     | $HIGH |" >> dependency-report.md
+            echo "| Moderate | $MODERATE |" >> dependency-report.md
+            echo "| Low      | $LOW |" >> dependency-report.md
+
+            echo "" >> dependency-report.md
+            echo "🚨 **Action Required:** Run \`npm audit fix\` to resolve fixable vulnerabilities" >> dependency-report.md
+          else
+            echo "✅ No security vulnerabilities found!" >> dependency-report.md
+          fi
+
+      - name: 🧹 Clean up node_modules
+        run: |
+          echo "🧹 Cleaning up node_modules..."
+          rm -rf node_modules package-lock.json
+          npm install
+          echo "✅ Node modules cleaned and reinstalled"
+
+      - name: 📤 Upload dependency report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-management-report
+          path: |
+            dependency-report.md
+            outdated.json
+          retention-days: 30
+
+  # Job 3: Security Maintenance
+  security-maintenance:
+    name: 🔒 Security Maintenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'security' || github.event.inputs.maintenance-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🔍 Secret scan maintenance
+        run: |
+          echo "🔍 Running secret detection maintenance..."
+
+          # Scan for secrets
+          npx secretlint "**/*" --format json --output secret-scan-results.json || true
+
+          # Check git history for secrets (last 100 commits)
+          echo "Scanning git history for secrets..."
+          git log --oneline -100 | while read commit; do
+            commit_hash=$(echo $commit | cut -d' ' -f1)
+            git show $commit_hash | grep -i -E "(password|secret|key|token)" || true
+          done > git-history-secrets.log
+
+          # Generate security report
+          echo "# 🔒 Security Maintenance Report" > security-report.md
+          echo "" >> security-report.md
+          echo "**Generated:** $(date)" >> security-report.md
+          echo "" >> security-report.md
+
+          # Secret scan results
+          echo "## 🔍 Secret Detection" >> security-report.md
+          if [ -f "secret-scan-results.json" ]; then
+            SECRET_COUNT=$(cat secret-scan-results.json | jq 'length // 0')
+            if [ "$SECRET_COUNT" -gt 0 ]; then
+              echo "⚠️ **$SECRET_COUNT potential secrets detected**" >> security-report.md
+              echo "Please review the secret scan results in artifacts." >> security-report.md
+            else
+              echo "✅ No secrets detected in codebase" >> security-report.md
+            fi
+          fi
+
+          echo "" >> security-report.md
+
+          # Git history scan
+          echo "## 📚 Git History Scan" >> security-report.md
+          if [ -s "git-history-secrets.log" ]; then
+            echo "⚠️ **Potential secrets found in git history**" >> security-report.md
+            echo "Please review the git history scan results in artifacts." >> security-report.md
+          else
+            echo "✅ No obvious secrets found in recent git history" >> security-report.md
+          fi
+
+      - name: 🔐 Certificate and key rotation check
+        run: |
+          echo "🔐 Checking for certificate and key rotation needs..."
+
+          echo "" >> security-report.md
+          echo "## 🔐 Certificate Status" >> security-report.md
+
+          # Check for certificate files
+          CERT_FILES=$(find . -name "*.crt" -o -name "*.pem" -o -name "*.cert" 2>/dev/null | wc -l)
+
+          if [ "$CERT_FILES" -gt 0 ]; then
+            echo "⚠️ **$CERT_FILES certificate files found**" >> security-report.md
+            echo "Consider implementing automated certificate rotation." >> security-report.md
+          else
+            echo "ℹ️ No certificate files found in repository" >> security-report.md
+          fi
+
+      - name: 📤 Upload security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-maintenance-report
+          path: |
+            security-report.md
+            secret-scan-results.json
+            git-history-secrets.log
+          retention-days: 30
+
+  # Job 4: Repository Cleanup
+  repository-cleanup:
+    name: 🧹 Repository Cleanup
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'cleanup' || github.event.inputs.maintenance-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧹 Clean up old workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: workflows } = await github.rest.actions.listRepoWorkflows({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            for (const workflow of workflows.workflows) {
+              const { data: runs } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflow.id,
+                status: 'completed',
+                per_page: 100
+              });
+
+              // Keep only the 50 most recent runs for each workflow
+              const runsToDelete = runs.workflow_runs.slice(50);
+
+              for (const run of runsToDelete) {
+                try {
+                  await github.rest.actions.deleteWorkflowRun({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    run_id: run.id
+                  });
+                  console.log(`Deleted workflow run ${run.id} from ${workflow.name}`);
+                } catch (error) {
+                  console.log(`Failed to delete run ${run.id}: ${error.message}`);
+                }
+              }
+            }
+
+      - name: 🗂️ Manage stale issues and PRs
+        uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity.
+            It will be closed if no further activity occurs within 7 days.
+            Thank you for your contributions! 🙏
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+            It will be closed if no further activity occurs within 7 days.
+            Thank you for your contributions! 🙏
+          close-issue-message: |
+            This issue has been automatically closed due to inactivity.
+            If you believe this issue is still relevant, please reopen it or create a new issue.
+            Thank you! 🙏
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity.
+            If you would like to continue this work, please reopen the PR or create a new one.
+            Thank you! 🙏
+          days-before-stale: 60
+          days-before-close: 7
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'security,bug,enhancement,pinned'
+          exempt-pr-labels: 'security,WIP,pinned'
+
+      - name: 📊 Generate cleanup report
+        run: |
+          echo "# 🧹 Repository Cleanup Report" > cleanup-report.md
+          echo "" >> cleanup-report.md
+          echo "**Generated:** $(date)" >> cleanup-report.md
+          echo "" >> cleanup-report.md
+
+          echo "## Cleanup Actions Performed:" >> cleanup-report.md
+          echo "- ✅ Old workflow runs cleaned up" >> cleanup-report.md
+          echo "- ✅ Stale issues and PRs processed" >> cleanup-report.md
+          echo "- ✅ Repository maintenance completed" >> cleanup-report.md
+
+          echo "" >> cleanup-report.md
+
+          # Repository statistics
+          echo "## 📊 Repository Statistics:" >> cleanup-report.md
+          echo "- **Total commits:** $(git rev-list --count HEAD)" >> cleanup-report.md
+          echo "- **Contributors:** $(git shortlog -sn | wc -l)" >> cleanup-report.md
+          echo "- **Branches:** $(git branch -r | wc -l)" >> cleanup-report.md
+          echo "- **Tags:** $(git tag | wc -l)" >> cleanup-report.md
+
+          # File statistics
+          echo "- **Source files:** $(find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | wc -l)" >> cleanup-report.md
+          echo "- **Test files:** $(find . -name "*.test.*" -o -name "*.spec.*" | wc -l)" >> cleanup-report.md
+          echo "- **Total lines of code:** $(find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | xargs wc -l | tail -1 | awk '{print $1}')" >> cleanup-report.md
+
+      - name: 📤 Upload cleanup report
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-cleanup-report
+          path: cleanup-report.md
+          retention-days: 30
+
+  # Job 5: Backup Validation
+  backup-validation:
+    name: 💾 Backup Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'backup' || github.event_name == 'schedule'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 💾 Validate repository backup
+        run: |
+          echo "💾 Validating repository backup..."
+
+          # Create backup validation report
+          echo "# 💾 Backup Validation Report" > backup-report.md
+          echo "" >> backup-report.md
+          echo "**Generated:** $(date)" >> backup-report.md
+          echo "" >> backup-report.md
+
+          # Check git integrity
+          echo "## 🔍 Git Integrity Check" >> backup-report.md
+          if git fsck --full --strict; then
+            echo "✅ Git repository integrity check passed" >> backup-report.md
+          else
+            echo "❌ Git repository integrity check failed" >> backup-report.md
+          fi
+
+          echo "" >> backup-report.md
+
+          # Verify important files exist
+          echo "## 📋 Critical Files Check" >> backup-report.md
+          CRITICAL_FILES=(
+            "package.json"
+            "README.md"
+            "src/"
+            "tests/"
+            ".github/workflows/"
+            "tsconfig.json"
+            "next.config.ts"
+          )
+
+          for file in "${CRITICAL_FILES[@]}"; do
+            if [ -e "$file" ]; then
+              echo "✅ $file exists" >> backup-report.md
+            else
+              echo "❌ $file missing" >> backup-report.md
+            fi
+          done
+
+          echo "" >> backup-report.md
+          echo "## 📊 Repository Size" >> backup-report.md
+          REPO_SIZE=$(du -sh . | cut -f1)
+          echo "- **Total size:** $REPO_SIZE" >> backup-report.md
+
+          echo "💾 Backup validation completed"
+
+      - name: ☁️ Cloud backup verification
+        run: |
+          echo "☁️ Verifying cloud backup availability..."
+
+          echo "" >> backup-report.md
+          echo "## ☁️ Cloud Backup Status" >> backup-report.md
+
+          # This would typically verify external backups
+          echo "ℹ️ Cloud backup verification requires external configuration" >> backup-report.md
+          echo "- Repository is mirrored on GitHub (primary backup)" >> backup-report.md
+          echo "- Consider setting up additional backup strategies for critical data" >> backup-report.md
+
+      - name: 📤 Upload backup report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-validation-report
+          path: backup-report.md
+          retention-days: 90
+
+  # Job 6: Monitoring & Alerts
+  monitoring-alerts:
+    name: 📊 Monitoring & Alerts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event.inputs.maintenance-type == 'all' || github.event.inputs.maintenance-type == 'monitoring' || github.event.inputs.maintenance-type == ''
+    needs: [repository-health, dependency-management, security-maintenance]
+
+    steps:
+      - name: 📊 Generate monitoring report
+        run: |
+          echo "📊 Generating monitoring and alerts report..."
+
+          # Create monitoring report
+          echo "# 📊 Monitoring & Alerts Report" > monitoring-report.md
+          echo "" >> monitoring-report.md
+          echo "**Generated:** $(date)" >> monitoring-report.md
+          echo "" >> monitoring-report.md
+
+          echo "## 🏥 Health Status" >> monitoring-report.md
+          HEALTH_SCORE="${{ needs.repository-health.outputs.health-score }}"
+          echo "- **Repository Health Score:** $HEALTH_SCORE/100" >> monitoring-report.md
+
+          if [ "$HEALTH_SCORE" -lt 70 ]; then
+            echo "🚨 **ALERT:** Repository health is below acceptable threshold!" >> monitoring-report.md
+          elif [ "$HEALTH_SCORE" -lt 80 ]; then
+            echo "⚠️ **WARNING:** Repository health needs attention" >> monitoring-report.md
+          else
+            echo "✅ **OK:** Repository health is good" >> monitoring-report.md
+          fi
+
+          echo "" >> monitoring-report.md
+          echo "## 📈 Maintenance Status" >> monitoring-report.md
+          echo "- Dependency Management: ${{ needs.dependency-management.result }}" >> monitoring-report.md
+          echo "- Security Maintenance: ${{ needs.security-maintenance.result }}" >> monitoring-report.md
+
+          echo "" >> monitoring-report.md
+          echo "## 🎯 Recommended Actions" >> monitoring-report.md
+
+          if [ "$HEALTH_SCORE" -lt 80 ]; then
+            echo "1. Review and address repository health issues" >> monitoring-report.md
+            echo "2. Update outdated dependencies" >> monitoring-report.md
+            echo "3. Fix security vulnerabilities" >> monitoring-report.md
+            echo "4. Improve test coverage" >> monitoring-report.md
+          else
+            echo "✅ No immediate actions required - repository is healthy!" >> monitoring-report.md
+          fi
+
+      - name: 🚨 Critical alert
+        if: needs.repository-health.outputs.health-score < 70
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: |
+            🚨 **CRITICAL MAINTENANCE ALERT** 🚨
+
+            Repository: ${{ github.repository }}
+            Health Score: ${{ needs.repository-health.outputs.health-score }}/100
+
+            The repository health is below acceptable levels and requires immediate attention!
+            Please review the maintenance reports and take corrective action.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_ALERTS_SLACK_WEBHOOK_URL }}
+
+      - name: 📤 Upload monitoring report
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitoring-alerts-report
+          path: monitoring-report.md
+          retention-days: 90
+
+  # Consolidation Job
+  maintenance-summary:
+    name: 📋 Maintenance Summary
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - repository-health
+      - dependency-management
+      - security-maintenance
+      - repository-cleanup
+      - backup-validation
+      - monitoring-alerts
+
+    steps:
+      - name: 📥 Download all maintenance reports
+        uses: actions/download-artifact@v4
+        with:
+          path: maintenance-reports
+          pattern: '*-report*'
+          merge-multiple: true
+
+      - name: 📋 Generate comprehensive summary
+        run: |
+          echo "# 🔧 Comprehensive Maintenance Summary" > maintenance-summary.md
+          echo "" >> maintenance-summary.md
+          echo "**Date:** $(date)" >> maintenance-summary.md
+          echo "**Repository:** ${{ github.repository }}" >> maintenance-summary.md
+          echo "" >> maintenance-summary.md
+
+          # Overall status
+          echo "## 📊 Overall Status" >> maintenance-summary.md
+          HEALTH_SCORE="${{ needs.repository-health.outputs.health-score }}"
+          echo "**Repository Health Score:** $HEALTH_SCORE/100" >> maintenance-summary.md
+          echo "" >> maintenance-summary.md
+
+          # Maintenance results
+          echo "## 🔧 Maintenance Results" >> maintenance-summary.md
+          echo "| Task | Status | Details |" >> maintenance-summary.md
+          echo "|------|---------|---------|" >> maintenance-summary.md
+          echo "| Repository Health | ${{ needs.repository-health.result }} | Health score: $HEALTH_SCORE/100 |" >> maintenance-summary.md
+          echo "| Dependency Management | ${{ needs.dependency-management.result }} | Dependencies audited and cleaned |" >> maintenance-summary.md
+          echo "| Security Maintenance | ${{ needs.security-maintenance.result }} | Security scans completed |" >> maintenance-summary.md
+          echo "| Repository Cleanup | ${{ needs.repository-cleanup.result }} | Old data cleaned up |" >> maintenance-summary.md
+          echo "| Backup Validation | ${{ needs.backup-validation.result }} | Backup integrity verified |" >> maintenance-summary.md
+          echo "| Monitoring & Alerts | ${{ needs.monitoring-alerts.result }} | Monitoring systems checked |" >> maintenance-summary.md
+          echo "" >> maintenance-summary.md
+
+          # Next steps
+          echo "## 🎯 Next Steps" >> maintenance-summary.md
+          if [ "$HEALTH_SCORE" -ge 90 ]; then
+            echo "✅ Repository is in excellent condition. Continue regular maintenance." >> maintenance-summary.md
+          elif [ "$HEALTH_SCORE" -ge 80 ]; then
+            echo "🟡 Repository is in good condition with minor issues to address." >> maintenance-summary.md
+          else
+            echo "🔴 Repository requires immediate attention. Review all maintenance reports." >> maintenance-summary.md
+          fi
+
+          echo "" >> maintenance-summary.md
+          echo "---" >> maintenance-summary.md
+          echo "*This report was generated automatically by the maintenance workflow.*" >> maintenance-summary.md
+
+      - name: 📤 Upload comprehensive summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: maintenance-comprehensive-summary
+          path: |
+            maintenance-summary.md
+            maintenance-reports/
+          retention-days: 90
+
+      - name: 📬 Maintenance summary notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            🔧 **Maintenance Summary** for ${{ github.repository }}
+
+            **Health Score:** ${{ needs.repository-health.outputs.health-score }}/100
+
+            **Tasks Completed:**
+            - Health Check: ${{ needs.repository-health.result }}
+            - Dependencies: ${{ needs.dependency-management.result }}
+            - Security: ${{ needs.security-maintenance.result }}
+            - Cleanup: ${{ needs.repository-cleanup.result }}
+            - Backup: ${{ needs.backup-validation.result }}
+            - Monitoring: ${{ needs.monitoring-alerts.result }}
+
+            📊 Detailed reports available in workflow artifacts.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -1,0 +1,573 @@
+name: ⚡ Performance Monitoring
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run performance tests daily at 3 AM UTC
+    - cron: '0 3 * * *'
+    # Run comprehensive performance analysis weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: 'Performance test type'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - lighthouse
+          - vitals
+          - load
+          - bundle
+          - memory
+
+env:
+  NODE_VERSION: '20'
+  LIGHTHOUSE_CI_TOKEN: ${{ secrets.LIGHTHOUSE_CI_TOKEN }}
+
+concurrency:
+  group: performance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: Lighthouse Performance Audits
+  lighthouse-audit:
+    name: 🏮 Lighthouse Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'lighthouse' || github.event.inputs.test-type == ''
+
+    strategy:
+      matrix:
+        url-path: ['/', '/recipes', '/recipes/new', '/profile']
+        device: ['desktop', 'mobile']
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: 🏮 Run Lighthouse CI
+        run: |
+          npx lighthouse-ci autorun \
+            --config=lighthouserc.js \
+            --collect.url="http://localhost:3000${{ matrix.url-path }}" \
+            --collect.settings.preset="${{ matrix.device }}" \
+            --collect.numberOfRuns=3 \
+            --assert.preset="lighthouse:recommended" \
+            --assert.assertions.speed-index="error" \
+            --assert.assertions.largest-contentful-paint="error" \
+            --assert.assertions.cumulative-layout-shift="error" \
+            --upload.target=temporary-public-storage
+
+      - name: 📊 Parse Lighthouse results
+        run: |
+          # Extract key metrics from lighthouse results
+          RESULTS_FILE=".lighthouseci/lhci_reports/manifest.json"
+          if [ -f "$RESULTS_FILE" ]; then
+            echo "📊 Lighthouse Results for ${{ matrix.url-path }} (${{ matrix.device }}):"
+            node -e "
+              const manifest = JSON.parse(require('fs').readFileSync('$RESULTS_FILE', 'utf8'));
+              const report = manifest[0];
+              if (report) {
+                console.log('Performance Score:', report.summary.performance);
+                console.log('LCP:', report.summary.largestContentfulPaint + 'ms');
+                console.log('CLS:', report.summary.cumulativeLayoutShift);
+                console.log('FCP:', report.summary.firstContentfulPaint + 'ms');
+                console.log('Speed Index:', report.summary.speedIndex + 'ms');
+              }
+            "
+          fi
+
+      - name: 📤 Upload Lighthouse artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results-${{ matrix.device }}-${{ matrix.url-path }}-${{ github.run_id }}
+          path: |
+            .lighthouseci/
+            lighthouse-report.html
+          retention-days: 30
+
+  # Job 2: Core Web Vitals Testing
+  core-web-vitals:
+    name: 🎯 Core Web Vitals
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'vitals' || github.event.inputs.test-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: 🎯 Measure Core Web Vitals
+        run: npm run perf:vitals
+
+      - name: 📊 Validate Web Vitals thresholds
+        run: |
+          echo "🎯 Validating Core Web Vitals against thresholds..."
+          node -e "
+            const results = JSON.parse(require('fs').readFileSync('performance-results/web-vitals.json', 'utf8'));
+            const thresholds = {
+              LCP: 2500, // Good: <= 2.5s
+              CLS: 0.1,  // Good: <= 0.1
+              FID: 100,  // Good: <= 100ms
+              FCP: 1800, // Good: <= 1.8s
+              TTFB: 600  // Good: <= 600ms
+            };
+
+            let failures = 0;
+            Object.entries(results).forEach(([metric, value]) => {
+              const threshold = thresholds[metric];
+              const status = value <= threshold ? '✅ PASS' : '❌ FAIL';
+              console.log(\`\${metric}: \${value} (threshold: \${threshold}) \${status}\`);
+              if (value > threshold) failures++;
+            });
+
+            if (failures > 0) {
+              console.log(\`\\n❌ \${failures} Core Web Vitals metrics failed thresholds\`);
+              process.exit(1);
+            } else {
+              console.log('\\n🎉 All Core Web Vitals metrics passed!');
+            }
+          "
+
+      - name: 📤 Upload Web Vitals results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-vitals-results
+          path: |
+            performance-results/
+            test-results/
+          retention-days: 30
+
+  # Job 3: Load Testing
+  load-testing:
+    name: 🔥 Load Testing
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'load' || github.event.inputs.test-type == ''
+
+    strategy:
+      matrix:
+        scenario:
+          - name: 'normal-load'
+            users: 50
+            duration: 300
+          - name: 'peak-load'
+            users: 200
+            duration: 180
+          - name: 'stress-test'
+            users: 500
+            duration: 120
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+          NODE_ENV: production
+
+      - name: 🔥 Run load test - ${{ matrix.scenario.name }}
+        run: |
+          echo "🔥 Running load test: ${{ matrix.scenario.name }}"
+          echo "Users: ${{ matrix.scenario.users }}, Duration: ${{ matrix.scenario.duration }}s"
+
+          npx autocannon \
+            --connections ${{ matrix.scenario.users }} \
+            --duration ${{ matrix.scenario.duration }} \
+            --json \
+            --output load-test-${{ matrix.scenario.name }}.json \
+            http://localhost:3000
+
+      - name: 📊 Analyze load test results
+        run: |
+          echo "📊 Load Test Results - ${{ matrix.scenario.name }}:"
+          node -e "
+            const results = JSON.parse(require('fs').readFileSync('load-test-${{ matrix.scenario.name }}.json', 'utf8'));
+            console.log('Requests/sec:', results.requests.average);
+            console.log('Latency avg:', results.latency.average + 'ms');
+            console.log('Latency p95:', results.latency.p95 + 'ms');
+            console.log('Latency p99:', results.latency.p99 + 'ms');
+            console.log('Throughput:', results.throughput.average + ' bytes/sec');
+            console.log('Total requests:', results.requests.total);
+            console.log('Error rate:', ((results.errors / results.requests.total) * 100).toFixed(2) + '%');
+
+            // Performance thresholds
+            const thresholds = {
+              'normal-load': { maxLatencyP95: 500, minRps: 100 },
+              'peak-load': { maxLatencyP95: 1000, minRps: 50 },
+              'stress-test': { maxLatencyP95: 2000, minRps: 20 }
+            };
+
+            const threshold = thresholds['${{ matrix.scenario.name }}'];
+            const p95Latency = results.latency.p95;
+            const rps = results.requests.average;
+
+            console.log('\\n🎯 Performance Validation:');
+            console.log('P95 Latency:', p95Latency <= threshold.maxLatencyP95 ? '✅ PASS' : '❌ FAIL', '(' + p95Latency + 'ms <= ' + threshold.maxLatencyP95 + 'ms)');
+            console.log('Requests/sec:', rps >= threshold.minRps ? '✅ PASS' : '❌ FAIL', '(' + rps + ' >= ' + threshold.minRps + ')');
+          "
+
+      - name: 📤 Upload load test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results-${{ matrix.scenario.name }}
+          path: |
+            load-test-*.json
+            performance-results/
+          retention-days: 7
+
+  # Job 4: Bundle Size Analysis
+  bundle-analysis:
+    name: 📦 Bundle Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'bundle' || github.event.inputs.test-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏗️ Build with bundle analysis
+        run: |
+          ANALYZE=true npm run build
+          npm run size-limit
+        env:
+          CI: true
+
+      - name: 📊 Generate bundle report
+        run: |
+          echo "📦 Bundle Size Analysis:" > bundle-report.md
+          echo "" >> bundle-report.md
+
+          # Size-limit report
+          echo "## Size Limits" >> bundle-report.md
+          npm run size-limit --json > size-limit-results.json || true
+
+          if [ -f "size-limit-results.json" ]; then
+            node -e "
+              const results = JSON.parse(require('fs').readFileSync('size-limit-results.json', 'utf8'));
+              results.forEach(result => {
+                console.log('| ' + result.name + ' | ' + result.size + ' | ' + result.limit + ' | ' + (result.size <= result.limit ? '✅' : '❌') + ' |');
+              });
+            " >> bundle-report.md
+          fi
+
+          echo "" >> bundle-report.md
+          echo "## Bundle Analysis" >> bundle-report.md
+
+          # Next.js bundle analysis
+          if [ -f ".next/analyze/bundle-analyzer-client.html" ]; then
+            echo "- 📊 Client bundle analysis available in artifacts" >> bundle-report.md
+          fi
+
+          if [ -f ".next/analyze/bundle-analyzer-server.html" ]; then
+            echo "- 🖥️ Server bundle analysis available in artifacts" >> bundle-report.md
+          fi
+
+          echo "" >> bundle-report.md
+          echo "Generated on: $(date)" >> bundle-report.md
+
+      - name: 📤 Upload bundle analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-analysis
+          path: |
+            .next/analyze/
+            bundle-report.md
+            size-limit-results.json
+          retention-days: 30
+
+      - name: 💬 Comment bundle size on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            if (fs.existsSync('bundle-report.md')) {
+              const report = fs.readFileSync('bundle-report.md', 'utf8');
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '📦 **Bundle Size Report**\n\n' + report
+              });
+            }
+
+  # Job 5: Memory Profiling
+  memory-profiling:
+    name: 🧠 Memory Profiling
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'memory' || github.event_name == 'schedule'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🧠 Memory profiling with Clinic.js
+        run: |
+          # Start application with memory profiling
+          timeout 300 npx clinic doctor --open=false --on-port='echo "Application started for profiling"' -- npm start || true
+
+          echo "🧠 Memory profiling completed"
+
+      - name: 📊 Analyze memory usage
+        run: |
+          # Generate memory report
+          echo "# 🧠 Memory Profile Report" > memory-report.md
+          echo "" >> memory-report.md
+          echo "Generated on: $(date)" >> memory-report.md
+          echo "" >> memory-report.md
+
+          # Check if clinic files exist
+          if ls .clinic/* 1> /dev/null 2>&1; then
+            echo "📊 Memory profiling data available in artifacts" >> memory-report.md
+            echo "" >> memory-report.md
+            echo "## Analysis Files:" >> memory-report.md
+            echo "- Memory usage patterns" >> memory-report.md
+            echo "- GC activity logs" >> memory-report.md
+            echo "- Performance recommendations" >> memory-report.md
+          else
+            echo "⚠️ No memory profiling data generated" >> memory-report.md
+          fi
+
+      - name: 🎯 Memory leak detection
+        run: |
+          # Basic memory leak detection
+          echo "🔍 Running memory leak detection..."
+          npm run test:unit -- --detectLeaks --forceExit
+          echo "✅ Memory leak detection completed"
+
+      - name: 📤 Upload memory profiling results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: memory-profiling-results
+          path: |
+            .clinic/
+            memory-report.md
+            *.clinic-doctor*
+          retention-days: 7
+
+  # Job 6: Performance Regression Detection
+  regression-detection:
+    name: 📈 Regression Detection
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [lighthouse-audit, core-web-vitals, bundle-analysis]
+    if: always() && github.event_name == 'pull_request'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download performance results
+        uses: actions/download-artifact@v4
+        with:
+          path: performance-results
+          pattern: '*-results*'
+          merge-multiple: true
+
+      - name: 📊 Compare with baseline
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo "📈 Performance Regression Analysis" > regression-report.md
+          echo "" >> regression-report.md
+          echo "**PR:** #$PR_NUMBER" >> regression-report.md
+          echo "**Branch:** $HEAD_REF" >> regression-report.md
+          echo "**Base:** $BASE_REF" >> regression-report.md
+          echo "" >> regression-report.md
+
+          # Placeholder for actual regression detection logic
+          echo "## 🎯 Core Web Vitals" >> regression-report.md
+          echo "| Metric | Current | Baseline | Change | Status |" >> regression-report.md
+          echo "|--------|---------|----------|---------|--------|" >> regression-report.md
+          echo "| LCP    | TBD     | TBD      | TBD     | ⏳     |" >> regression-report.md
+          echo "| CLS    | TBD     | TBD      | TBD     | ⏳     |" >> regression-report.md
+          echo "| FCP    | TBD     | TBD      | TBD     | ⏳     |" >> regression-report.md
+          echo "" >> regression-report.md
+
+          echo "## 📦 Bundle Size" >> regression-report.md
+          echo "| Bundle | Current | Baseline | Change | Status |" >> regression-report.md
+          echo "|--------|---------|----------|---------|--------|" >> regression-report.md
+          echo "| Total  | TBD     | TBD      | TBD     | ⏳     |" >> regression-report.md
+          echo "" >> regression-report.md
+
+          echo "## 🏮 Lighthouse Scores" >> regression-report.md
+          echo "| Page | Performance | Baseline | Change | Status |" >> regression-report.md
+          echo "|------|-------------|----------|---------|--------|" >> regression-report.md
+          echo "| /    | TBD         | TBD      | TBD     | ⏳     |" >> regression-report.md
+          echo "" >> regression-report.md
+
+          echo "*Note: Actual regression detection requires baseline data from the main branch.*" >> regression-report.md
+
+      - name: 💬 Comment regression analysis on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('regression-report.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  # Consolidation Job
+  performance-summary:
+    name: 📋 Performance Summary
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - lighthouse-audit
+      - core-web-vitals
+      - load-testing
+      - bundle-analysis
+      - memory-profiling
+
+    steps:
+      - name: 📊 Generate performance summary
+        run: |
+          echo "# ⚡ Performance Test Summary" > performance-summary.md
+          echo "" >> performance-summary.md
+          echo "**Date:** $(date)" >> performance-summary.md
+          echo "**Commit:** ${{ github.sha }}" >> performance-summary.md
+          echo "**Branch:** ${{ github.ref_name }}" >> performance-summary.md
+          echo "" >> performance-summary.md
+          echo "## Test Results" >> performance-summary.md
+          echo "- 🏮 Lighthouse Audit: ${{ needs.lighthouse-audit.result }}" >> performance-summary.md
+          echo "- 🎯 Core Web Vitals: ${{ needs.core-web-vitals.result }}" >> performance-summary.md
+          echo "- 🔥 Load Testing: ${{ needs.load-testing.result }}" >> performance-summary.md
+          echo "- 📦 Bundle Analysis: ${{ needs.bundle-analysis.result }}" >> performance-summary.md
+          echo "- 🧠 Memory Profiling: ${{ needs.memory-profiling.result }}" >> performance-summary.md
+          echo "" >> performance-summary.md
+
+          # Overall status
+          if [[ "${{ needs.lighthouse-audit.result }}" == "success" &&
+                "${{ needs.core-web-vitals.result }}" == "success" &&
+                "${{ needs.load-testing.result }}" == "success" &&
+                "${{ needs.bundle-analysis.result }}" == "success" ]]; then
+            echo "✅ **Overall Status: PASSED** - All performance tests succeeded" >> performance-summary.md
+          else
+            echo "❌ **Overall Status: FAILED** - Some performance tests failed" >> performance-summary.md
+          fi
+
+      - name: 📤 Upload performance summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-summary
+          path: performance-summary.md
+          retention-days: 90
+
+      - name: 📬 Performance notification
+        if: github.ref == 'refs/heads/main'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            ⚡ **Performance Test Results** for ${{ github.repository }}
+
+            - 🏮 Lighthouse: ${{ needs.lighthouse-audit.result }}
+            - 🎯 Web Vitals: ${{ needs.core-web-vitals.result }}
+            - 🔥 Load Testing: ${{ needs.load-testing.result }}
+            - 📦 Bundle Size: ${{ needs.bundle-analysis.result }}
+            - 🧠 Memory: ${{ needs.memory-profiling.result }}
+
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -1,0 +1,43 @@
+# Hadolint Configuration for Recipe UI Service Docker Security
+# Comprehensive Docker security and best practices validation
+
+# Ignore rules that are not applicable or too restrictive for our use case
+ignored:
+  # Allow specific package managers and update patterns
+  - DL3008 # Pin versions in apt-get install (handled by base image)
+  - DL3009 # Delete apt cache in same layer (handled by multi-stage)
+  - DL3015 # Avoid additional packages (base images include necessary tools)
+
+# Rules to enforce with high severity
+failure-threshold: error
+
+# Override specific rules with custom configuration
+override:
+  # Require specific user (security best practice)
+  error:
+    - DL3002 # Do not switch to root USER
+    - DL3020 # Use COPY instead of ADD for files
+    - DL3025 # Use JSON format for CMD and ENTRYPOINT
+
+  # Warnings for optimization opportunities
+  warning:
+    - DL3003 # Use WORKDIR for switching directories
+    - DL3016 # Pin versions in npm install
+    - DL3019 # Use --no-install-recommends with apt-get
+
+  # Info level for style preferences
+  info:
+    - DL3006 # Always tag Docker images
+    - DL3007 # Use --from flag with COPY
+
+# Trusted registries for base images
+trustedRegistries:
+  - docker.io
+  - node
+  - alpine
+
+# Format for output (can be json, tty, codeclimate, gitlab_codeclimate, gnu, codacy)
+format: tty
+
+# Enable strict mode for enhanced security validation
+strictLabels: false

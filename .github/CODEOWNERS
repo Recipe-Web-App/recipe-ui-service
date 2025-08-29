@@ -1,0 +1,48 @@
+# CODEOWNERS file for Recipe UI Service
+# This file defines who owns which parts of the codebase and who must review changes.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global ownership - Jonathan Samuelsen owns everything by default
+* @jsamuelsen
+
+# Critical files that require extra attention
+/.github/ @jsamuelsen
+/Dockerfile* @jsamuelsen
+/docker-compose*.yml @jsamuelsen
+/package.json @jsamuelsen
+/package-lock.json @jsamuelsen
+/next.config.ts @jsamuelsen
+/tailwind.config.ts @jsamuelsen
+/tsconfig.json @jsamuelsen
+
+# Security and configuration files
+/SECURITY.md @jsamuelsen
+/.env.example @jsamuelsen
+/.secrets.baseline @jsamuelsen
+/.gitleaks* @jsamuelsen
+/.semgrep.yml @jsamuelsen
+/.osv-scanner.toml @jsamuelsen
+
+# Documentation (for consistency)
+/*.md @jsamuelsen
+/docs/ @jsamuelsen
+
+# CI/CD workflows (critical for deployment)
+/.github/workflows/ @jsamuelsen
+
+# Infrastructure and deployment
+/k8s/ @jsamuelsen
+/deployment/ @jsamuelsen
+
+# Core source code
+/src/ @jsamuelsen
+
+# Testing configuration
+/tests/ @jsamuelsen
+/jest.config.js @jsamuelsen
+/playwright.config.ts @jsamuelsen
+
+# Linting and code quality
+/eslint.config.mjs @jsamuelsen
+/.prettierrc @jsamuelsen
+/.stylelintrc.json @jsamuelsen

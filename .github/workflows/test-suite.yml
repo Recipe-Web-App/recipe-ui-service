@@ -1,0 +1,494 @@
+name: 🧪 Advanced Testing Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run full test suite daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test-type:
+        description: 'Test type to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - e2e
+          - visual
+          - accessibility
+          - performance
+          - cross-browser
+
+env:
+  NODE_VERSION: '20'
+  PLAYWRIGHT_BROWSERS_PATH: ~/.cache/playwright
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: E2E Tests across multiple browsers
+  e2e-tests:
+    name: 🎭 E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'e2e' || github.event.inputs.test-type == ''
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        shard: [1/4, 2/4, 3/4, 4/4]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📥 Get Playwright version
+        id: playwright-version
+        run: echo "version=$(npx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+      - name: 🎭 Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: 🎭 Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: 🧪 Run E2E tests
+        run: |
+          npx playwright test tests/e2e \
+            --project=${{ matrix.browser }} \
+            --shard=${{ matrix.shard }} \
+            --reporter=blob
+        env:
+          CI: true
+
+      - name: 📤 Upload blob report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.browser }}-${{ strategy.job-index }}
+          path: blob-report
+          retention-days: 7
+
+  # Job 2: Merge E2E Test Reports
+  merge-e2e-reports:
+    name: 📊 Merge E2E Reports
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    if: always()
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 📥 Download blob reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: 📊 Merge reports
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: 📤 Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 💬 Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './playwright-report/index.html';
+
+            if (fs.existsSync(path)) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: '🎭 **E2E Test Results**\n\nTest report is available in the artifacts section of this workflow run.'
+              });
+            }
+
+  # Job 3: Visual Regression Testing
+  visual-regression:
+    name: 👁️ Visual Regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'visual' || github.event.inputs.test-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: 👁️ Run visual tests
+        run: npm run test:visual
+
+      - name: 📤 Upload visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: |
+            test-results/
+            tests/visual/screenshots/
+          retention-days: 30
+
+  # Job 4: Accessibility Testing
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'accessibility' || github.event.inputs.test-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: ♿ Run accessibility tests
+        run: npm run test:a11y
+
+      - name: 📊 Generate accessibility report
+        if: always()
+        run: |
+          echo "# Accessibility Test Results" > accessibility-report.md
+          echo "Tests completed on $(date)" >> accessibility-report.md
+          echo "Check the detailed results in the artifacts." >> accessibility-report.md
+
+      - name: 📤 Upload accessibility results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-test-results
+          path: |
+            test-results/
+            accessibility-report.md
+          retention-days: 30
+
+  # Job 5: Performance Testing
+  performance-tests:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'performance' || github.event.inputs.test-type == ''
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: ⚡ Core Web Vitals tests
+        run: npm run perf:vitals
+
+      - name: 📊 Lighthouse performance audit
+        run: npm run perf:lighthouse
+
+      - name: 🔄 Load testing
+        run: npm run perf:load
+
+      - name: 📈 Performance budget check
+        run: |
+          echo "Checking performance budgets..."
+          npm run size-limit
+          echo "✅ Performance budgets validated"
+
+      - name: 📤 Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-test-results
+          path: |
+            .lighthouseci/
+            performance-results/
+            test-results/
+          retention-days: 30
+
+  # Job 6: Cross-Browser Testing
+  cross-browser:
+    name: 🌐 Cross-Browser Tests
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == 'cross-browser' || github.event.inputs.test-type == ''
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        browser: [chromium, firefox, webkit]
+        exclude:
+          # WebKit on Linux sometimes has issues in CI
+          - os: ubuntu-latest
+            browser: webkit
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        shell: bash
+        env:
+          CI: true
+
+      - name: 🧪 Run cross-browser tests
+        run: npx playwright test tests/e2e/critical-paths --project=${{ matrix.browser }}
+
+      - name: 📤 Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-browser-results-${{ matrix.os }}-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
+
+  # Job 7: Mobile Testing
+  mobile-tests:
+    name: 📱 Mobile Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: github.event.inputs.test-type == 'all' || github.event.inputs.test-type == ''
+
+    strategy:
+      matrix:
+        device: ['iPhone 13', 'Pixel 5', 'iPad Pro']
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          npx wait-on http://localhost:3000 --timeout 60000
+        env:
+          CI: true
+
+      - name: 📱 Run mobile tests
+        run: |
+          npx playwright test tests/e2e/critical-paths \
+            --project=chromium \
+            --global-timeout=300000 \
+            --config=playwright.config.ts
+        env:
+          DEVICE: ${{ matrix.device }}
+
+      - name: 📤 Upload mobile test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-test-results-${{ matrix.device }}
+          path: |
+            test-results/
+            screenshots/
+          retention-days: 7
+
+  # Consolidation Job
+  test-suite-summary:
+    name: 📋 Test Suite Summary
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - merge-e2e-reports
+      - visual-regression
+      - accessibility-tests
+      - performance-tests
+      - cross-browser
+      - mobile-tests
+
+    steps:
+      - name: 📊 Generate summary report
+        run: |
+          echo "# 🧪 Test Suite Summary" > test-summary.md
+          echo "" >> test-summary.md
+          echo "## Test Results" >> test-summary.md
+          echo "- E2E Tests: ${{ needs.merge-e2e-reports.result }}" >> test-summary.md
+          echo "- Visual Regression: ${{ needs.visual-regression.result }}" >> test-summary.md
+          echo "- Accessibility: ${{ needs.accessibility-tests.result }}" >> test-summary.md
+          echo "- Performance: ${{ needs.performance-tests.result }}" >> test-summary.md
+          echo "- Cross-Browser: ${{ needs.cross-browser.result }}" >> test-summary.md
+          echo "- Mobile: ${{ needs.mobile-tests.result }}" >> test-summary.md
+          echo "" >> test-summary.md
+          echo "Generated on: $(date)" >> test-summary.md
+
+      - name: 📤 Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-suite-summary
+          path: test-summary.md
+          retention-days: 30
+
+      - name: 🎉 All tests passed
+        if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+        run: |
+          echo "🎉 All advanced tests passed successfully!"
+          echo "✅ E2E tests completed"
+          echo "👁️ Visual regression tests passed"
+          echo "♿ Accessibility tests passed"
+          echo "⚡ Performance tests passed"
+          echo "🌐 Cross-browser tests passed"
+          echo "📱 Mobile tests passed"
+
+      - name: ❌ Some tests failed
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: |
+          echo "❌ Some advanced tests failed. Please review the logs and artifacts."
+          exit 1
+
+      - name: 📬 Notify team
+        if: always() && github.ref == 'refs/heads/main'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            🧪 Advanced Test Suite Results for ${{ github.repository }}
+            - E2E: ${{ needs.merge-e2e-reports.result }}
+            - Visual: ${{ needs.visual-regression.result }}
+            - A11y: ${{ needs.accessibility-tests.result }}
+            - Perf: ${{ needs.performance-tests.result }}
+            - Cross-browser: ${{ needs.cross-browser.result }}
+            - Mobile: ${{ needs.mobile-tests.result }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

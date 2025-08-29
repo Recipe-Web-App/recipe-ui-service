@@ -1,0 +1,188 @@
+name: ⚡ Performance Issue
+description: Report a performance problem or slow behavior
+title: '[Performance]: '
+labels: ['performance', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a performance issue! This helps us keep the Recipe UI Service fast and responsive.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Prerequisites
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I have searched the existing issues to make sure this performance issue hasn't been reported yet
+          required: true
+        - label: I have tested this in multiple browsers/devices if possible
+          required: true
+
+  - type: textarea
+    id: performance-problem
+    attributes:
+      label: Performance Problem
+      description: Describe the performance issue you're experiencing
+      placeholder: |
+        - What specific action/page is slow?
+        - How long does it take vs. how long should it take?
+        - When did you first notice this issue?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: performance-type
+    attributes:
+      label: Performance Issue Type
+      description: What type of performance issue is this?
+      options:
+        - Page load time
+        - JavaScript execution slow
+        - Large bundle size
+        - Memory leak
+        - CSS rendering performance
+        - Network requests slow
+        - Database queries slow
+        - Image loading slow
+        - Search/filtering slow
+        - Animation/scroll performance
+        - Mobile performance
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Performance Metrics
+      description: |
+        Please provide any performance measurements you have
+        (Lighthouse scores, loading times, Network tab screenshots, etc.)
+      placeholder: |
+        - Lighthouse Performance Score:
+        - Page Load Time:
+        - Time to First Contentful Paint (FCP):
+        - Largest Contentful Paint (LCP):
+        - First Input Delay (FID):
+        - Cumulative Layout Shift (CLS):
+        - Bundle size (if relevant):
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide the exact steps to reproduce this performance issue
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Wait for '....'
+        4. Notice slow performance in '....'
+      value: |
+        1.
+        2.
+        3.
+        4.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this occur?
+      description: Is this performance issue consistent?
+      options:
+        - Always (100% of the time)
+        - Frequently (75% of the time)
+        - Sometimes (50% of the time)
+        - Rarely (25% of the time)
+        - Once or twice
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment-info
+    attributes:
+      label: Environment Information
+      description: |
+        Please provide detailed environment information
+      placeholder: |
+        - OS: [e.g. macOS 13.0, Windows 11, Ubuntu 22.04]
+        - Browser: [e.g. Chrome 118.0, Firefox 119.0, Safari 17.0]
+        - Device: [e.g. MacBook Pro M2, iPhone 14, Samsung Galaxy S23]
+        - Network: [e.g. Fast 3G, Slow 3G, WiFi, 4G, 5G]
+        - Screen resolution: [e.g. 1920x1080, 2560x1440]
+        - Node.js version (if relevant): [e.g. 20.10.0]
+        - npm version (if relevant): [e.g. 10.2.3]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deployment-environment
+    attributes:
+      label: Deployment Environment
+      description: Where are you experiencing this performance issue?
+      options:
+        - Development (npm run dev)
+        - Production (deployed)
+        - Testing
+        - Staging
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots-profiles
+    attributes:
+      label: Screenshots/Performance Profiles
+      description: |
+        Please attach screenshots or performance profiles that demonstrate the issue
+        - Chrome DevTools Performance tab screenshots
+        - Lighthouse reports
+        - Network tab screenshots
+        - Console warnings/errors
+        Tip: You can attach files by clicking this area to highlight it and then dragging files in.
+
+  - type: textarea
+    id: expected-performance
+    attributes:
+      label: Expected Performance
+      description: What performance would you expect instead?
+      placeholder: |
+        - Expected load time:
+        - Expected Lighthouse score:
+        - Other performance expectations:
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: How does this performance issue affect the user experience?
+      placeholder: |
+        - Does it block user workflows?
+        - How many users are affected?
+        - Are there workarounds available?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How critical is this performance issue?
+      options:
+        - Low - Minor slowdown, doesn't significantly impact UX
+        - Medium - Noticeable slowdown, affects user experience
+        - High - Significant slowdown, major impact on usability
+        - Critical - App becomes unusable, blocks core functionality
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: |
+        Add any other context about the performance issue here
+        - Have you tried any solutions?
+        - Are there specific conditions that make it worse?
+        - Any relevant configuration or setup details?

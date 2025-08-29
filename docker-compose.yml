@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  recipe-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+      args:
+        - APP_VERSION=${APP_VERSION:-0.1.0}
+        - BUILD_DATE=${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
+        - VCS_REF=${VCS_REF:-$(git rev-parse --short HEAD)}
+        - BUILD_NUMBER=${BUILD_NUMBER:-local}
+        - BUILD_URL=${BUILD_URL:-local}
+        - GIT_BRANCH=${GIT_BRANCH:-$(git branch --show-current)}
+        - GIT_COMMIT=${GIT_COMMIT:-$(git rev-parse HEAD)}
+      cache_from:
+        - recipe-ui-service:latest
+      cache_to:
+        - type=local,dest=/tmp/.buildx-cache
+    image: recipe-ui-service:latest
+    container_name: recipe-ui-service
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    env_file:
+      - .env.local
+    healthcheck:
+      test: ['CMD', 'node', 'healthcheck.js']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=100m
+      - /app/.next/cache:rw,noexec,nosuid,size=200m
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    user: '1001:1001'
+    networks:
+      - recipe-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Development service with hot reload
+  recipe-ui-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: recipe-ui-service:dev
+    container_name: recipe-ui-service-dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true
+    env_file:
+      - .env.local
+    command: npm run dev
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/tmp
+      - /app/.next
+    profiles:
+      - dev
+    networks:
+      - recipe-network
+
+networks:
+  recipe-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  node_modules:
+  next_cache:

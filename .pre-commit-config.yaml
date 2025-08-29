@@ -1,0 +1,190 @@
+# Pre-commit configuration for Recipe UI Service
+# Enterprise-grade validation with minimal local hooks
+# Uses proper pre-commit repositories wherever possible
+
+repos:
+  # Built-in hooks for basic validations
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1024'] # 1MB limit
+        exclude: 'package-lock\.json'
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # JavaScript/TypeScript formatting (using local hook to avoid Node.js issues)
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Prettier formatting
+        entry: npx prettier --write
+        language: system
+        files: \.(js|jsx|ts|tsx|json|ya?ml|md|css|scss)$
+
+  # ESLint for JavaScript/TypeScript with security rules (using local hook)
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint with security rules
+        entry: npx eslint --fix --max-warnings=0 --no-warn-ignored
+        language: system
+        files: \.(js|jsx|ts|tsx)$
+
+  # TypeScript type checking (local hook - no reliable pre-commit alternative)
+  - repo: local
+    hooks:
+      - id: typescript-check
+        name: TypeScript type checking
+        entry: npx tsc --noEmit
+        language: system
+        files: \.(ts|tsx)$
+        pass_filenames: false
+
+  # CSS/SCSS linting (local hook to avoid Node.js environment issues)
+  - repo: local
+    hooks:
+      - id: stylelint
+        name: Stylelint CSS/SCSS
+        entry: npx stylelint --fix
+        language: system
+        files: \.(css|scss)$
+
+  # Markdown linting with auto-fix (local hook to avoid Node.js environment issues)
+  - repo: local
+    hooks:
+      - id: markdownlint
+        name: Markdownlint
+        entry: npx markdownlint --fix
+        language: system
+        files: \.md$
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+        args: [-c=.yamllint.yml]
+
+  # Secret detection - multiple layers for comprehensive coverage
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  # Gitleaks for advanced secret detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+    hooks:
+      - id: gitleaks
+
+  # Enhanced secret detection
+  - repo: https://github.com/trufflesecurity/trufflehog
+    rev: v3.90.5
+    hooks:
+      - id: trufflehog
+        name: TruffleHog Secret Detection
+        entry: trufflehog git file://. --since-commit HEAD --only-verified --fail
+        language: system
+        stages: [pre-commit, pre-push]
+
+  # Security analysis with semgrep
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.89.0
+    hooks:
+      - id: semgrep
+        args: [--config=auto, --error]
+
+  # Container security with Trivy (using local hook for better control)
+  - repo: local
+    hooks:
+      - id: trivy-config
+        name: Trivy configuration scan
+        entry: trivy config .
+        language: system
+        files: Dockerfile.*
+        pass_filenames: false
+
+  # Docker security scanning
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.13.1-beta
+    hooks:
+      - id: hadolint-docker
+        files: Dockerfile.*
+
+  # Commit message validation (local hook to avoid Node.js environment issues)
+  - repo: local
+    hooks:
+      - id: commitlint
+        name: Commit message validation
+        entry: npx commitlint --edit
+        language: system
+        stages: [commit-msg]
+        pass_filenames: false
+
+  # Essential local hooks (no pre-commit alternatives available)
+  - repo: local
+    hooks:
+      # NPM security audit
+      - id: npm-audit
+        name: NPM vulnerability scan
+        entry: bash -c 'npm audit --audit-level high || echo "⚠️ Vulnerabilities found"'
+        language: system
+        files: package.*\.json$
+        pass_filenames: false
+
+      # Circular dependency detection
+      - id: madge-circular
+        name: Circular dependency detection
+        entry: npx madge --circular --extensions js,jsx,ts,tsx src/
+        language: system
+        files: \.(js|jsx|ts|tsx)$
+        pass_filenames: false
+
+      # License compliance checking
+      - id: license-check
+        name: License compliance check
+        entry: npx license-checker --summary --excludePrivatePackages
+        language: system
+        files: package.*\.json$
+        pass_filenames: false
+
+      # Kubernetes validation (when K8s files present)
+      - id: kubeval
+        name: Kubernetes manifest validation
+        entry: bash -c 'if [ -d "k8s" ] && [ "$(find k8s -name "*.yml" -o -name "*.yaml" | wc -l)" -gt 0 ]; then find k8s -name "*.yml" -o -name "*.yaml" -exec kubeval {} \;; else echo "No Kubernetes files to validate"; fi'
+        language: system
+        files: k8s/.*\.(yml|yaml)$
+        pass_filenames: false
+
+      # Kubernetes policy validation with conftest
+      - id: conftest
+        name: Kubernetes policy validation
+        entry: bash -c 'if [ -d "k8s" ] && [ "$(find k8s -name "*.yml" -o -name "*.yaml" | wc -l)" -gt 0 ]; then find k8s -name "*.yml" -o -name "*.yaml" -exec conftest verify --policy conftest-policy.rego {} \;; else echo "No Kubernetes files to validate"; fi'
+        language: system
+        files: k8s/.*\.(yml|yaml)$
+        pass_filenames: false
+
+      - id: kube-score
+        name: Kubernetes resource validation
+        entry: >-
+          sh -c 'find k8s -name "*.yaml" -type f 2>/dev/null |
+          xargs kube-score score 2>/dev/null || true'
+        language: system
+        files: k8s/.*\.yaml$
+        pass_filenames: false
+        args: []
+
+# Configuration
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+minimum_pre_commit_version: 3.0.0
+default_language_version:
+  node: system

@@ -1,0 +1,137 @@
+name: 🚀 Feature Request
+description: Suggest an idea for this project
+title: '[Feature]: '
+labels: ['enhancement', 'needs-triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a new feature! Please provide as much detail as possible.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Prerequisites
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I have searched the existing issues to make sure this feature hasn't been requested yet
+          required: true
+        - label: I am using the latest version of the Recipe UI Service
+          required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe alternatives you've considered
+      placeholder: A clear and concise description of any alternative solutions or features you've considered.
+
+  - type: dropdown
+    id: feature-category
+    attributes:
+      label: Feature Category
+      description: What category does this feature belong to?
+      options:
+        - User Interface (UI/UX)
+        - Performance
+        - Security
+        - API/Backend Integration
+        - Testing
+        - Developer Experience
+        - Accessibility
+        - Mobile Responsiveness
+        - SEO
+        - Analytics/Tracking
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Expected Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - Simple - Minor changes, few lines of code
+        - Medium - Moderate changes, new components/functions
+        - Complex - Major changes, affects multiple systems
+        - Epic - Large feature requiring significant architecture changes
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Low - Nice to have
+        - Medium - Would significantly improve experience
+        - High - Important for core functionality
+        - Critical - Blocking current workflows
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-stories
+    attributes:
+      label: User Stories/Use Cases
+      description: Describe the user scenarios where this feature would be used
+      placeholder: |
+        As a [type of user], I want [some goal] so that [some reason].
+
+        Example scenarios:
+        - When I am browsing recipes, I want to...
+        - As a recipe contributor, I need to...
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What would make this feature complete?
+      placeholder: |
+        - [ ] The feature should...
+        - [ ] Users should be able to...
+        - [ ] The system should...
+
+  - type: textarea
+    id: mockups-references
+    attributes:
+      label: Mockups/References
+      description: |
+        If applicable, add sketches, mockups, or references to help explain your feature request.
+        Tip: You can attach images by clicking this area to highlight it and then dragging files in.
+
+  - type: checkboxes
+    id: implementation-interest
+    attributes:
+      label: Implementation
+      description: Are you interested in implementing this feature?
+      options:
+        - label: I'm willing to implement this feature and submit a PR
+        - label: I can help with testing and feedback
+        - label: I'm available for consultation during implementation
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request here

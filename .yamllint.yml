@@ -1,0 +1,63 @@
+# YAML Linting Configuration for Recipe UI Service
+# Enforces consistent YAML formatting and best practices
+
+extends: default
+
+rules:
+  # Line length - accommodate longer lines for URLs and descriptions
+  line-length:
+    max: 120
+    level: warning
+
+  # Document start - allow files without document start marker
+  document-start:
+    present: false
+
+  # Comments - require space after # but allow inline comments
+  comments:
+    min-spaces-from-content: 1
+
+  # Indentation - use 2 spaces consistently
+  indentation:
+    spaces: 2
+    indent-sequences: true
+    check-multi-line-strings: false
+
+  # Truthy values - allow yes/no, on/off for better readability
+  truthy:
+    allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
+    check-keys: false
+
+  # Brackets - allow single line arrays
+  brackets:
+    max-spaces-inside: 1
+
+  # Braces - allow single line objects
+  braces:
+    max-spaces-inside: 1
+
+  # Empty lines
+  empty-lines:
+    max-start: 1
+    max-end: 1
+    max: 2
+
+  # Trailing spaces
+  trailing-spaces: enable
+
+  # Key duplicates - prevent duplicate keys
+  key-duplicates: enable
+
+  # Hyphens - consistent spacing
+  hyphens:
+    max-spaces-after: 1
+
+# Ignore patterns for generated files and dependencies
+ignore: |
+  node_modules/
+  .next/
+  build/
+  dist/
+  coverage/
+  *.min.yml
+  *.min.yaml
