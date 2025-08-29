@@ -1,7 +1,7 @@
 # Development Dockerfile for Recipe UI Service
 # Optimized for hot reload and development workflow
 
-FROM node:20-alpine3.19
+FROM node:23-alpine3.19
 
 # Install development tools
 RUN apk add --no-cache \
