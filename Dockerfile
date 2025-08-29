@@ -10,7 +10,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 # Stage 1: Dependencies
-FROM node:20-alpine3.19 AS deps
+FROM node:23-alpine3.19 AS deps
 LABEL stage=deps \
       org.opencontainers.image.title="Recipe UI Service - Dependencies" \
       org.opencontainers.image.description="Dependencies stage for Recipe UI Service" \
@@ -47,7 +47,7 @@ RUN npm ci --only=production --frozen-lockfile --audit=false --fund=false && \
 RUN rm -f package*.json
 
 # Stage 2: Builder
-FROM node:20-alpine3.19 AS builder
+FROM node:23-alpine3.19 AS builder
 LABEL stage=builder \
       org.opencontainers.image.title="Recipe UI Service - Builder" \
       org.opencontainers.image.description="Build stage for Recipe UI Service" \
@@ -111,7 +111,7 @@ RUN apk add --no-cache \
 RUN npm audit --production --audit-level=high || true
 
 # Stage 4: Final Runtime
-FROM node:20-alpine3.19 AS runner
+FROM node:23-alpine3.19 AS runner
 LABEL stage=runner \
       org.opencontainers.image.title="Recipe UI Service" \
       org.opencontainers.image.description="Production-ready Recipe UI Service" \
