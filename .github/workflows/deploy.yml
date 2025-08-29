@@ -194,7 +194,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ⚙️ Configure kubectl
-        uses: azure/k8s-set-context@v3
+        uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.STAGING_KUBECONFIG }}
@@ -309,7 +309,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ⚙️ Configure kubectl
-        uses: azure/k8s-set-context@v3
+        uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}
@@ -456,7 +456,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ⚙️ Configure kubectl
-        uses: azure/k8s-set-context@v3
+        uses: azure/k8s-set-context@v4
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}
