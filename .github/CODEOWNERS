@@ -3,46 +3,46 @@
 # See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Global ownership - Jonathan Samuelsen owns everything by default
-* @jsamuelsen
+* @jsamuelsen11
 
 # Critical files that require extra attention
-/.github/ @jsamuelsen
-/Dockerfile* @jsamuelsen
-/docker-compose*.yml @jsamuelsen
-/package.json @jsamuelsen
-/package-lock.json @jsamuelsen
-/next.config.ts @jsamuelsen
-/tailwind.config.ts @jsamuelsen
-/tsconfig.json @jsamuelsen
+/.github/ @jsamuelsen11
+/Dockerfile* @jsamuelsen11
+/docker-compose*.yml @jsamuelsen11
+/package.json @jsamuelsen11
+/package-lock.json @jsamuelsen11
+/next.config.ts @jsamuelsen11
+/tailwind.config.ts @jsamuelsen11
+/tsconfig.json @jsamuelsen11
 
 # Security and configuration files
-/SECURITY.md @jsamuelsen
-/.env.example @jsamuelsen
-/.secrets.baseline @jsamuelsen
-/.gitleaks* @jsamuelsen
-/.semgrep.yml @jsamuelsen
-/.osv-scanner.toml @jsamuelsen
+/SECURITY.md @jsamuelsen11
+/.env.example @jsamuelsen11
+/.secrets.baseline @jsamuelsen11
+/.gitleaks* @jsamuelsen11
+/.semgrep.yml @jsamuelsen11
+/.osv-scanner.toml @jsamuelsen11
 
 # Documentation (for consistency)
-/*.md @jsamuelsen
-/docs/ @jsamuelsen
+/*.md @jsamuelsen11
+/docs/ @jsamuelsen11
 
 # CI/CD workflows (critical for deployment)
-/.github/workflows/ @jsamuelsen
+/.github/workflows/ @jsamuelsen11
 
 # Infrastructure and deployment
-/k8s/ @jsamuelsen
-/deployment/ @jsamuelsen
+/k8s/ @jsamuelsen11
+/deployment/ @jsamuelsen11
 
 # Core source code
-/src/ @jsamuelsen
+/src/ @jsamuelsen11
 
 # Testing configuration
-/tests/ @jsamuelsen
-/jest.config.js @jsamuelsen
-/playwright.config.ts @jsamuelsen
+/tests/ @jsamuelsen11
+/jest.config.js @jsamuelsen11
+/playwright.config.ts @jsamuelsen11
 
 # Linting and code quality
-/eslint.config.mjs @jsamuelsen
-/.prettierrc @jsamuelsen
-/.stylelintrc.json @jsamuelsen
+/eslint.config.mjs @jsamuelsen11
+/.prettierrc @jsamuelsen11
+/.stylelintrc.json @jsamuelsen11
