@@ -10,10 +10,7 @@ updates:
       interval: 'weekly'
       day: 'monday'
       time: '06:00'
-      timezone: 'UTC'
-    open-pull-requests-limit: 10
-    reviewers:
-      - 'jsamuelsen'
+    open-pull-requests-limit: 100
     assignees:
       - 'jsamuelsen'
     labels:
@@ -61,9 +58,6 @@ updates:
       interval: 'weekly'
       day: 'tuesday'
       time: '06:00'
-      timezone: 'UTC'
-    reviewers:
-      - 'jsamuelsen'
     assignees:
       - 'jsamuelsen'
     labels:
@@ -78,11 +72,8 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
-      day: '1'
+      day: 'monday'
       time: '06:00'
-      timezone: 'UTC'
-    reviewers:
-      - 'jsamuelsen'
     assignees:
       - 'jsamuelsen'
     labels:
