@@ -94,6 +94,7 @@ ehthumbs.db
 *.tmp
 .tmp/
 .temp/
+tmp/
 
 # Secrets baseline (keep this tracked for detect-secrets)
 !.secrets.baseline
