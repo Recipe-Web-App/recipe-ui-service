@@ -1,0 +1,12 @@
+---
+# k8s/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: recipe-ui
+  labels:
+    app: recipe-ui-service
+    environment: production
+    team: recipe-app
+  annotations:
+    description: 'Recipe UI Service namespace for Next.js SSR application'

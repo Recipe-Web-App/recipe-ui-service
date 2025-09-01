@@ -24,13 +24,13 @@ LABEL stage=deps \
 WORKDIR /app
 
 # Install security updates and required packages
-# Package versions pinned for Alpine 3.19
+# Using latest versions from Alpine 3.19 repository
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
-        libc6-compat=1.2.4-r3 \
-        ca-certificates=20240226-r0 \
-        tzdata=2024a-r0 && \
+        libc6-compat \
+        ca-certificates \
+        tzdata && \
     rm -rf /var/cache/apk/*
 
 # Set timezone
@@ -58,12 +58,12 @@ LABEL stage=builder \
 WORKDIR /app
 
 # Install build dependencies
-# Package versions pinned for Alpine 3.19
+# Using latest versions from Alpine 3.19 repository
 RUN apk add --no-cache \
-        python3=3.11.9-r0 \
-        make=4.4.1-r2 \
-        g++=13.2.1_git20240309-r0 \
-        git=2.43.5-r0 && \
+        python3 \
+        make \
+        g++ \
+        git && \
     rm -rf /var/cache/apk/*
 
 # Copy production node_modules from deps stage
@@ -83,7 +83,7 @@ COPY --chown=node:node . .
 # Set build environment variables
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production \
-    NODE_OPTIONS="--max-old-space-size=4096" \
+    NODE_OPTIONS="--max-old-space-size=2048" \
     GENERATE_SOURCEMAP=false
 
 # Build the application with optimizations
@@ -94,17 +94,17 @@ RUN --mount=type=cache,target=/app/.next/cache \
     npm cache clean --force
 
 # Verify build artifacts
-RUN test -d .next/standalone || (echo "Build failed: standalone not found" && exit 1)
+RUN test -d .next || (echo "Build failed: .next not found" && exit 1)
 
 # Stage 3: Runtime Security Scanner (Optional)
 FROM builder AS security-scanner
 LABEL stage=security-scanner
 
 # Install security scanning tools
-# Package versions pinned for Alpine 3.19
+# Using latest versions from Alpine 3.19 repository
 RUN apk add --no-cache \
-        curl=8.5.0-r0 \
-        jq=1.7.1-r0 && \
+        curl \
+        jq && \
     rm -rf /var/cache/apk/*
 
 # Run security scans (optional, can be skipped in CI)
@@ -126,14 +126,14 @@ LABEL stage=runner \
       maintainer="Recipe App Team"
 
 # Install runtime security updates and essential packages
-# Package versions pinned for Alpine 3.19
+# Using latest versions from Alpine 3.19 repository
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
-        dumb-init=1.2.5-r3 \
-        ca-certificates=20240226-r0 \
-        tzdata=2024a-r0 \
-        tini=0.19.0-r3 && \
+        dumb-init \
+        ca-certificates \
+        tzdata \
+        tini && \
     rm -rf /var/cache/apk/* && \
     # Create app directory with secure permissions
     mkdir -p /app && \
@@ -155,17 +155,15 @@ WORKDIR /app
 
 # Copy built application with proper ownership and minimal files
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
-# Copy health check script
-COPY --chown=nextjs:nodejs healthcheck.js ./
+# Health checks handled by Kubernetes probes
 
 # Set final permissions and switch to non-root user
 RUN chown -R nextjs:nodejs /app && \
-    chmod 755 /app && \
-    chmod 644 /app/healthcheck.js
+    chmod 755 /app
 USER nextjs
 
 # Create non-root owned directories for Next.js
@@ -179,13 +177,13 @@ EXPOSE 3000
 # Health checks handled by Kubernetes probes in production
 
 # Add resource limits and performance optimizations
-ENV NODE_OPTIONS="--max-old-space-size=512 --optimize-for-size"
+ENV NODE_OPTIONS="--max-old-space-size=896"
 
 # Use tini for proper signal handling (alternative to dumb-init)
 ENTRYPOINT ["tini", "--"]
 
 # Add startup script with graceful shutdown
-CMD ["sh", "-c", "trap 'echo Received SIGTERM, shutting down gracefully; kill -TERM $PID; wait $PID' TERM; node server.js & PID=$!; wait $PID"]
+CMD ["sh", "-c", "trap 'echo Received SIGTERM, shutting down gracefully; kill -TERM $PID; wait $PID' TERM; npm start & PID=$!; wait $PID"]
 
 # Add build metadata as labels (populated by CI/CD)
 LABEL build.number="${BUILD_NUMBER:-unknown}" \
