@@ -72,6 +72,13 @@ repos:
       - id: yamllint
         args: [-c=.yamllint.yml]
 
+  # Shell script linting
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
+        args: [-e, SC1091]
+
   # Secret detection - multiple layers for comprehensive coverage
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0

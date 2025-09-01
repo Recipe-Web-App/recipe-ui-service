@@ -1,0 +1,35 @@
+---
+# k8s/configmap-template.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recipe-ui-config
+  namespace: recipe-ui
+  labels:
+    app: recipe-ui-service
+data:
+  # Next.js Configuration
+  NODE_ENV: '${NODE_ENV}'
+  NEXT_TELEMETRY_DISABLED: '1'
+  HOSTNAME: '0.0.0.0'
+  PORT: '3000'
+
+  # Application Configuration
+  RECIPE_UI_SERVICE_HOST: '${RECIPE_UI_SERVICE_HOST}'
+  RECIPE_UI_SERVICE_PORT: '${RECIPE_UI_SERVICE_PORT}'
+
+  # External Service URLs (non-sensitive)
+  RECIPE_SERVICE_URL: '${RECIPE_SERVICE_URL}'
+  USER_SERVICE_URL: '${USER_SERVICE_URL}'
+  MEAL_PLAN_SERVICE_URL: '${MEAL_PLAN_SERVICE_URL}'
+
+  # CORS Configuration
+  CORS_ORIGINS: '${CORS_ORIGINS}'
+
+  # Logging Configuration
+  LOGGING_LEVEL: '${LOGGING_LEVEL}'
+  LOGGING_FORMAT: '${LOGGING_FORMAT}'
+
+  # Performance Configuration
+  CACHE_TTL: '${CACHE_TTL}'
+  MAX_REQUEST_SIZE: '${MAX_REQUEST_SIZE}'
