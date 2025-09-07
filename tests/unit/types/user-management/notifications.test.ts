@@ -88,26 +88,12 @@ describe('User Management Notifications Types', () => {
             updatedAt: '2023-01-01T12:00:00Z',
           },
         ],
-        results: [
-          {
-            notificationId: '123e4567-e89b-12d3-a456-426614174000',
-            userId: '223e4567-e89b-12d3-a456-426614174000',
-            title: 'Test Notification',
-            message: 'This is a test',
-            notificationType: 'test',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-01T12:00:00Z',
-            updatedAt: '2023-01-01T12:00:00Z',
-          },
-        ],
         totalCount: 1,
         limit: 20,
         offset: 0,
       };
 
       expect(Array.isArray(response.notifications)).toBe(true);
-      expect(Array.isArray(response.results)).toBe(true);
       expect(typeof response.totalCount).toBe('number');
       expect(typeof response.limit).toBe('number');
       expect(typeof response.offset).toBe('number');
@@ -116,14 +102,12 @@ describe('User Management Notifications Types', () => {
     it('should handle empty notifications list', () => {
       const emptyResponse: NotificationListResponse = {
         notifications: [],
-        results: [],
         totalCount: 0,
         limit: 20,
         offset: 0,
       };
 
       expect(emptyResponse.notifications).toHaveLength(0);
-      expect(emptyResponse.results).toHaveLength(0);
       expect(emptyResponse.totalCount).toBe(0);
     });
   });

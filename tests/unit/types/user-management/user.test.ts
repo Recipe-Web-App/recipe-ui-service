@@ -1,7 +1,6 @@
 import type {
   User,
   UserSearchResult,
-  UserProfileResponse,
   UserProfileUpdateRequest,
   UserSearchResponse,
   UserAccountDeleteRequest,
@@ -271,7 +270,7 @@ describe('User Management User Types', () => {
   describe('UserSearchResponse', () => {
     it('should extend PaginatedResponse structure', () => {
       const searchResponse: UserSearchResponse = {
-        results: [
+        users: [
           {
             userId: '123e4567-e89b-12d3-a456-426614174000',
             username: 'user1',
@@ -285,12 +284,12 @@ describe('User Management User Types', () => {
         offset: 0,
       };
 
-      expect(Array.isArray(searchResponse.results)).toBe(true);
+      expect(Array.isArray(searchResponse.users)).toBe(true);
       expect(typeof searchResponse.totalCount).toBe('number');
       expect(typeof searchResponse.limit).toBe('number');
       expect(typeof searchResponse.offset).toBe('number');
-      expect(searchResponse.results[0]).toHaveProperty('userId');
-      expect(searchResponse.results[0]).toHaveProperty('username');
+      expect(searchResponse.users![0]).toHaveProperty('userId');
+      expect(searchResponse.users![0]).toHaveProperty('username');
     });
   });
 });

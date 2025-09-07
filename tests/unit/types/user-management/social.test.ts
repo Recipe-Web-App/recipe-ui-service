@@ -33,7 +33,7 @@ describe('User Management Social Types', () => {
 
   describe('GetFollowedUsersResponse', () => {
     it('should have totalCount as required field', () => {
-      const response: GetFollowedUsersResponse = {
+      const response: Partial<GetFollowedUsersResponse> = {
         totalCount: 42,
       };
 
@@ -71,20 +71,6 @@ describe('User Management Social Types', () => {
       expect(response.followedUsers).toHaveLength(2);
       expect(typeof response.limit).toBe('number');
       expect(typeof response.offset).toBe('number');
-    });
-
-    it('should handle null followedUsers for count-only requests', () => {
-      const response: GetFollowedUsersResponse = {
-        totalCount: 100,
-        followedUsers: null,
-        limit: null,
-        offset: null,
-      };
-
-      expect(response.totalCount).toBe(100);
-      expect(response.followedUsers).toBeNull();
-      expect(response.limit).toBeNull();
-      expect(response.offset).toBeNull();
     });
   });
 

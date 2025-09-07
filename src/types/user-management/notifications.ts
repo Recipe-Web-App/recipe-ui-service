@@ -14,10 +14,10 @@ export interface Notification {
 }
 
 // Notification List Responses
-export interface NotificationListResponse
-  extends PaginatedResponse<Notification> {
-  notifications: Notification[];
-}
+export type NotificationListResponse = PaginatedResponse<
+  Notification,
+  'notifications'
+>;
 
 export type NotificationCountResponse = CountOnlyResponse;
 

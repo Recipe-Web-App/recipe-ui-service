@@ -7,12 +7,13 @@ export interface PaginationParams {
   [key: string]: unknown;
 }
 
-export interface PaginatedResponse<T> {
-  results: T[];
+export type PaginatedResponse<T, K extends string = 'results'> = {
   totalCount: number;
-  limit: number;
-  offset: number;
-}
+  limit?: number;
+  offset?: number;
+} & {
+  [P in K]?: T[];
+};
 
 export interface CountOnlyResponse {
   totalCount: number;

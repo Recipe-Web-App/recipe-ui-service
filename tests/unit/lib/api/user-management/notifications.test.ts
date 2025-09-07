@@ -1,8 +1,5 @@
 import { notificationsApi } from '@/lib/api/user-management/notifications';
-import {
-  userManagementClient,
-  buildQueryParams,
-} from '@/lib/api/user-management/client';
+import { userManagementClient } from '@/lib/api/user-management/client';
 import type {
   NotificationListResponse,
   NotificationCountResponse,
@@ -52,19 +49,6 @@ describe('Notifications API', () => {
             updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
-        results: [
-          {
-            notificationId: 'notif1',
-            userId: 'user123',
-            notificationType: 'follow',
-            title: 'New Follower',
-            message: 'User John started following you',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
         totalCount: 1,
         limit: 20,
         offset: 0,
@@ -81,7 +65,6 @@ describe('Notifications API', () => {
     it('should get notifications with filter parameters', async () => {
       const mockResponse: NotificationListResponse = {
         notifications: [],
-        results: [],
         totalCount: 0,
         limit: 10,
         offset: 5,
@@ -105,7 +88,6 @@ describe('Notifications API', () => {
     it('should get notifications count only', async () => {
       const mockResponse: NotificationListResponse = {
         notifications: [],
-        results: [],
         totalCount: 25,
         limit: 0,
         offset: 0,
@@ -359,19 +341,6 @@ describe('Notifications API', () => {
             updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
-        results: [
-          {
-            notificationId: 'notif2',
-            userId: 'user123',
-            notificationType: 'like',
-            title: 'Recipe Liked',
-            message: 'Someone liked your recipe',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
         totalCount: 1,
         limit: 20,
         offset: 0,
@@ -390,19 +359,6 @@ describe('Notifications API', () => {
     it('should get unread notifications', async () => {
       const mockResponse: NotificationListResponse = {
         notifications: [
-          {
-            notificationId: 'notif2',
-            userId: 'user123',
-            notificationType: 'comment',
-            title: 'New Comment',
-            message: 'Someone commented on your recipe',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
-        results: [
           {
             notificationId: 'notif2',
             userId: 'user123',
@@ -449,19 +405,6 @@ describe('Notifications API', () => {
             updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
-        results: [
-          {
-            notificationId: 'notif3',
-            userId: 'user123',
-            notificationType: 'system',
-            title: 'System Update',
-            message: 'New features available',
-            isRead: true,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
         totalCount: 1,
         limit: 20,
         offset: 0,
@@ -482,19 +425,6 @@ describe('Notifications API', () => {
     it('should get notifications by type', async () => {
       const mockResponse: NotificationListResponse = {
         notifications: [
-          {
-            notificationId: 'notif4',
-            userId: 'user123',
-            notificationType: 'follow',
-            title: 'New Follower',
-            message: 'User Jane started following you',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
-        results: [
           {
             notificationId: 'notif4',
             userId: 'user123',
@@ -550,30 +480,6 @@ describe('Notifications API', () => {
             updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
-        results: [
-          {
-            notificationId: 'read1',
-            userId: 'user123',
-            notificationType: 'like',
-            title: 'Recipe Liked',
-            message: 'Someone liked your recipe',
-            isRead: true,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-          {
-            notificationId: 'read2',
-            userId: 'user123',
-            notificationType: 'comment',
-            title: 'New Comment',
-            message: 'Someone commented on your recipe',
-            isRead: true,
-            isDeleted: false,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
         totalCount: 2,
         limit: 1000,
         offset: 0,
@@ -600,7 +506,6 @@ describe('Notifications API', () => {
     it('should return message when no read notifications to clear', async () => {
       const emptyResponse: NotificationListResponse = {
         notifications: [],
-        results: [],
         totalCount: 0,
         limit: 1000,
         offset: 0,
@@ -726,30 +631,6 @@ describe('Notifications API', () => {
 
       const recentNotifications: NotificationListResponse = {
         notifications: [
-          {
-            notificationId: 'new1',
-            userId: 'user123',
-            notificationType: 'follow',
-            title: 'New Follower',
-            message: 'User Bob started following you',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2023-01-02T00:00:00Z',
-            updatedAt: '2023-01-02T00:00:00Z',
-          },
-          {
-            notificationId: 'old1',
-            userId: 'user123',
-            notificationType: 'like',
-            title: 'Recipe Liked',
-            message: 'Someone liked your recipe',
-            isRead: false,
-            isDeleted: false,
-            createdAt: '2022-12-31T00:00:00Z',
-            updatedAt: '2022-12-31T00:00:00Z',
-          },
-        ],
-        results: [
           {
             notificationId: 'new1',
             userId: 'user123',

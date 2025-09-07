@@ -67,8 +67,8 @@ describe('User Management Common Types', () => {
         offset: 0,
       };
 
-      expect(response.results[0].id).toBe('1');
-      expect(response.results[0].name).toBe('test');
+      expect(response.results![0].id).toBe('1');
+      expect(response.results![0].name).toBe('test');
     });
   });
 

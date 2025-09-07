@@ -1,3 +1,4 @@
+import { PaginatedResponse } from './common';
 import type { User } from './user';
 
 // Social Relationship Types
@@ -6,12 +7,7 @@ export interface FollowResponse {
   isFollowing: boolean;
 }
 
-export interface GetFollowedUsersResponse {
-  totalCount: number;
-  followedUsers?: User[] | null;
-  limit?: number | null;
-  offset?: number | null;
-}
+export type GetFollowedUsersResponse = PaginatedResponse<User, 'followedUsers'>;
 
 // User Activity Types
 export interface RecipeSummary {

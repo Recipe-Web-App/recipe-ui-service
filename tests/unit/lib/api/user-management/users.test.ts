@@ -1,8 +1,5 @@
 import { usersApi } from '@/lib/api/user-management/users';
-import {
-  userManagementClient,
-  buildQueryParams,
-} from '@/lib/api/user-management/client';
+import { userManagementClient } from '@/lib/api/user-management/client';
 import type {
   UserProfileResponse,
   UserProfileUpdateRequest,
@@ -171,7 +168,7 @@ describe('Users API', () => {
   describe('searchUsers', () => {
     it('should search users with query parameters', async () => {
       const mockResponse: UserSearchResponse = {
-        results: [
+        users: [
           {
             userId: '123',
             username: 'testuser',
@@ -202,7 +199,7 @@ describe('Users API', () => {
 
     it('should search users without parameters', async () => {
       const mockResponse: UserSearchResponse = {
-        results: [],
+        users: [],
         totalCount: 0,
         limit: 20,
         offset: 0,
@@ -218,7 +215,7 @@ describe('Users API', () => {
 
     it('should handle search with count_only parameter', async () => {
       const mockResponse: UserSearchResponse = {
-        results: [],
+        users: [],
         totalCount: 50,
         limit: 0,
         offset: 0,
@@ -335,7 +332,7 @@ describe('Users API', () => {
   describe('isUsernameAvailable', () => {
     it('should return true when username is available', async () => {
       const mockResponse: UserSearchResponse = {
-        results: [],
+        users: [],
         totalCount: 0,
         limit: 1,
         offset: 0,
@@ -353,7 +350,7 @@ describe('Users API', () => {
 
     it('should return false when username is taken', async () => {
       const mockResponse: UserSearchResponse = {
-        results: [],
+        users: [],
         totalCount: 1,
         limit: 1,
         offset: 0,

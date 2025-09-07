@@ -40,7 +40,7 @@ export interface UserProfileUpdateRequest {
   bio?: string | null;
 }
 
-export type UserSearchResponse = PaginatedResponse<UserSearchResult>;
+export type UserSearchResponse = PaginatedResponse<UserSearchResult, 'users'>;
 
 // Account Deletion Types
 export interface UserAccountDeleteRequest {
