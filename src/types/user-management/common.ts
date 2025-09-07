@@ -4,6 +4,7 @@ export interface PaginationParams {
   limit?: number;
   offset?: number;
   count_only?: boolean;
+  [key: string]: unknown;
 }
 
 export interface PaginatedResponse<T> {
