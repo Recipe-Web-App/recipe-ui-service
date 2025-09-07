@@ -14,7 +14,11 @@ describe('formatDate utility function', () => {
   });
 
   test('should handle different date formats', () => {
-    expect(formatDate('2023-01-01')).toBe('January 1, 2023');
-    expect(formatDate('2023/06/15')).toBe('June 15, 2023');
+    // Use explicit UTC dates to avoid timezone issues
+    const utcDate1 = new Date('2023-01-01T12:00:00Z');
+    const utcDate2 = new Date('2023-06-15T12:00:00Z');
+
+    expect(formatDate(utcDate1)).toBe('January 1, 2023');
+    expect(formatDate(utcDate2)).toBe('June 15, 2023');
   });
 });

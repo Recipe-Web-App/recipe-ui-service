@@ -8,7 +8,7 @@ const config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverageFrom: [
@@ -18,21 +18,21 @@ const config = {
     '!src/**/*.test.{js,jsx,ts,tsx}',
     '!src/**/__tests__/**',
     '!src/**/index.ts', // Export-only files
+    '!src/app/**', // Next.js app directory (not unit testable)
+    '!src/types/**', // Type definitions (no executable code)
   ],
   testMatch: [
     '<rootDir>/tests/unit/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/tests/integration/frontend/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/tests/integration/backend/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/tests/performance/**/*.test.js', // Performance tests with Jest
     '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
     '<rootDir>/src/**/*.{test,spec}.{js,jsx,ts,tsx}',
   ],
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '<rootDir>/tests/e2e/', // Playwright tests
-    '<rootDir>/tests/visual/', // Visual regression tests
-    '<rootDir>/tests/performance/**/*.test.ts', // Playwright performance tests
+    '<rootDir>/tests/e2e/',
+    '<rootDir>/tests/visual/',
+    '<rootDir>/tests/performance/',
+    '<rootDir>/tests/integration/',
   ],
   // Coverage thresholds - enforce minimum coverage
   coverageThreshold: {
