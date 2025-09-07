@@ -1,0 +1,70 @@
+import axios, { AxiosError, AxiosResponse } from 'axios';
+
+const baseURL =
+  process.env.NEXT_PUBLIC_AUTH_SERVICE_URL ??
+  'http://localhost:8080/api/v1/auth';
+
+export const authClient = axios.create({
+  baseURL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+authClient.interceptors.request.use(
+  config => {
+    const token =
+      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
+authClient.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    const message =
+      (error.response?.data as { error_description?: string; message?: string })
+        ?.error_description ??
+      (error.response?.data as { message?: string })?.message ??
+      error.message ??
+      'An unexpected error occurred';
+
+    return Promise.reject({
+      ...error,
+      message,
+      status: error.response?.status,
+    });
+  }
+);
+
+export class AuthApiError extends Error {
+  status?: number;
+
+  constructor(message: string, status?: number) {
+    super(message);
+    this.name = 'AuthApiError';
+    this.status = status;
+  }
+}
+
+export const handleAuthApiError = (error: unknown): never => {
+  if (error instanceof AxiosError) {
+    const errorData = error.response?.data as
+      | { error_description?: string; message?: string }
+      | undefined;
+    const message =
+      errorData?.error_description ?? errorData?.message ?? error.message;
+    throw new AuthApiError(message, error.response?.status);
+  }
+
+  if (error instanceof Error) {
+    throw new AuthApiError(error.message);
+  }
+
+  throw new AuthApiError('An unexpected error occurred');
+};
