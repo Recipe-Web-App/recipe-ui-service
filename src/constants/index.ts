@@ -42,6 +42,20 @@ export const QUERY_KEYS = {
     READINESS: ['auth', 'readiness'],
     LIVENESS: ['auth', 'liveness'],
   },
+  USER_MANAGEMENT: {
+    USER: ['userManagement', 'user'],
+    USERS: ['userManagement', 'users'],
+    FOLLOWING: ['userManagement', 'following'],
+    FOLLOWERS: ['userManagement', 'followers'],
+    NOTIFICATIONS: ['userManagement', 'notifications'],
+    UNREAD_COUNT: ['userManagement', 'unreadCount'],
+    PREFERENCES: ['userManagement', 'preferences'],
+    ACTIVITY: ['userManagement', 'activity'],
+    HEALTH: ['userManagement', 'health'],
+    METRICS: ['userManagement', 'metrics'],
+    MUTUAL_FOLLOWS: ['userManagement', 'mutualFollows'],
+    FOLLOW_STATS: ['userManagement', 'followStats'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
