@@ -78,7 +78,7 @@
     "@secretlint/secretlint-rule-aws": "^11.2.0",
     "@secretlint/secretlint-rule-gcp": "^11.2.0",
     "@secretlint/secretlint-rule-github": "^11.2.0",
-    "@secretlint/secretlint-rule-npm": "^11.2.0",
+    "@secretlint/secretlint-rule-npm": "^11.2.3",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.0",
     "@secretlint/secretlint-rule-slack": "^11.2.0",
     "@size-limit/preset-big-lib": "^11.2.0",
