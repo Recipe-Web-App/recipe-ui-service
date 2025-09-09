@@ -127,7 +127,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "puppeteer": "^24.19.0",
-    "secretlint": "^11.2.0",
+    "secretlint": "^11.2.4",
     "size-limit": "^11.2.0",
     "stylelint": "^16.23.1",
     "stylelint-config-standard": "^39.0.0",
