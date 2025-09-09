@@ -56,6 +56,48 @@ export const QUERY_KEYS = {
     MUTUAL_FOLLOWS: ['userManagement', 'mutualFollows'],
     FOLLOW_STATS: ['userManagement', 'followStats'],
   },
+  RECIPE_MANAGEMENT: {
+    // Recipe operations
+    RECIPES: ['recipeManagement', 'recipes'],
+    RECIPE: ['recipeManagement', 'recipe'],
+    RECIPE_VERSIONS: ['recipeManagement', 'recipeVersions'],
+
+    // Ingredient operations
+    INGREDIENTS: ['recipeManagement', 'ingredients'],
+    RECIPE_INGREDIENTS: ['recipeManagement', 'recipeIngredients'],
+
+    // Step operations
+    STEPS: ['recipeManagement', 'steps'],
+    RECIPE_STEPS: ['recipeManagement', 'recipeSteps'],
+    STEP_COMMENTS: ['recipeManagement', 'stepComments'],
+
+    // Tag operations
+    TAGS: ['recipeManagement', 'tags'],
+    RECIPE_TAGS: ['recipeManagement', 'recipeTags'],
+
+    // Review operations
+    REVIEWS: ['recipeManagement', 'reviews'],
+    RECIPE_REVIEWS: ['recipeManagement', 'recipeReviews'],
+
+    // Revision operations
+    REVISIONS: ['recipeManagement', 'revisions'],
+    RECIPE_REVISIONS: ['recipeManagement', 'recipeRevisions'],
+    STEP_REVISIONS: ['recipeManagement', 'stepRevisions'],
+    INGREDIENT_REVISIONS: ['recipeManagement', 'ingredientRevisions'],
+
+    // Media operations
+    MEDIA: ['recipeManagement', 'media'],
+    RECIPE_MEDIA: ['recipeManagement', 'recipeMedia'],
+
+    // Search operations
+    SEARCH: ['recipeManagement', 'search'],
+    SEARCH_SUGGESTIONS: ['recipeManagement', 'searchSuggestions'],
+
+    // Health and monitoring
+    HEALTH: ['recipeManagement', 'health'],
+    METRICS: ['recipeManagement', 'metrics'],
+    MONITORING: ['recipeManagement', 'monitoring'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
