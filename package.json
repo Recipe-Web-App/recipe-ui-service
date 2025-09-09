@@ -76,7 +76,7 @@
     "@next/eslint-plugin-next": "^15.5.2",
     "@playwright/test": "^1.55.0",
     "@secretlint/secretlint-rule-aws": "^11.2.4",
-    "@secretlint/secretlint-rule-gcp": "^11.2.0",
+    "@secretlint/secretlint-rule-gcp": "^11.2.4",
     "@secretlint/secretlint-rule-github": "^11.2.0",
     "@secretlint/secretlint-rule-npm": "^11.2.3",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.4",
