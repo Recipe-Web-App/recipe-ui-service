@@ -24,11 +24,12 @@ export interface PageMediaDto extends PageInfo {
 }
 
 export interface MediaUploadRequest {
-  file: string;
+  file: File;
   originalFilename: string;
   mediaType: MediaType;
   fileSize: number;
   contentHash?: string;
+  [key: string]: unknown;
 }
 
 export interface CreateMediaResponse {
