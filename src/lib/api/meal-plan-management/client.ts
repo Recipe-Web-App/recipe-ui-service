@@ -1,0 +1,164 @@
+import axios, { AxiosError, AxiosResponse } from 'axios';
+
+const baseURL =
+  process.env.NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL ??
+  'http://localhost:3000/api/v1/meal-plan-management';
+
+export const mealPlanManagementClient = axios.create({
+  baseURL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+mealPlanManagementClient.interceptors.request.use(
+  config => {
+    const token =
+      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  error => Promise.reject(error)
+);
+
+mealPlanManagementClient.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  (error: AxiosError) => {
+    const message =
+      (
+        error.response?.data as {
+          error?: { message?: string };
+          message?: string;
+          detail?: string;
+        }
+      )?.error?.message ??
+      (error.response?.data as { message?: string })?.message ??
+      (error.response?.data as { detail?: string })?.detail ??
+      error.message ??
+      'An unexpected error occurred';
+
+    return Promise.reject({
+      ...error,
+      message,
+      status: error.response?.status,
+    });
+  }
+);
+
+export class MealPlanManagementApiError extends Error {
+  status?: number;
+  details?: Record<string, unknown>;
+
+  constructor(
+    message: string,
+    status?: number,
+    details?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = 'MealPlanManagementApiError';
+    this.status = status;
+    this.details = details;
+  }
+}
+
+export const handleMealPlanManagementApiError = (error: unknown): never => {
+  if (error instanceof AxiosError) {
+    const errorData = error.response?.data as
+      | {
+          error?: { message?: string; details?: string[] };
+          message?: string;
+          detail?: string;
+          details?: Record<string, unknown>;
+        }
+      | undefined;
+
+    const message =
+      errorData?.error?.message ??
+      errorData?.message ??
+      errorData?.detail ??
+      error.message;
+
+    throw new MealPlanManagementApiError(
+      message,
+      error.response?.status,
+      errorData?.details
+    );
+  }
+
+  if (error && typeof error === 'object' && 'response' in error) {
+    const axiosLikeError = error as {
+      response?: {
+        status?: number;
+        data?: {
+          error?: { message?: string; details?: string[] };
+          message?: string;
+          detail?: string;
+          details?: Record<string, unknown>;
+        };
+      };
+      message?: string;
+    };
+
+    const errorData = axiosLikeError.response?.data;
+    const message =
+      errorData?.error?.message ??
+      errorData?.message ??
+      errorData?.detail ??
+      axiosLikeError.message ??
+      'An unexpected error occurred';
+
+    throw new MealPlanManagementApiError(
+      message,
+      axiosLikeError.response?.status,
+      errorData?.details
+    );
+  }
+
+  if (error && typeof error === 'object' && 'message' in error) {
+    const errorObj = error as {
+      message: string;
+      status?: number;
+      details?: Record<string, unknown>;
+    };
+
+    throw new MealPlanManagementApiError(
+      errorObj.message,
+      errorObj.status,
+      errorObj.details
+    );
+  }
+
+  if (error instanceof Error) {
+    throw new MealPlanManagementApiError(error.message);
+  }
+
+  throw new MealPlanManagementApiError('An unexpected error occurred');
+};
+
+export const buildQueryParams = (
+  params: Record<string, unknown> | object
+): string => {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      if (Array.isArray(value)) {
+        value.forEach(item => searchParams.append(key, String(item)));
+      } else {
+        searchParams.append(key, String(value));
+      }
+    }
+  });
+
+  return searchParams.toString();
+};
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}

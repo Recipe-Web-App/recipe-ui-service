@@ -133,6 +133,26 @@ export const QUERY_KEYS = {
     ADMIN: ['recipeScraper', 'admin'],
     CLEAR_CACHE: ['recipeScraper', 'clearCache'],
   },
+  MEAL_PLAN_MANAGEMENT: {
+    // Meal plan operations
+    MEAL_PLANS: ['mealPlanManagement', 'mealPlans'],
+    MEAL_PLAN: ['mealPlanManagement', 'mealPlan'],
+
+    // Health endpoints
+    HEALTH: ['mealPlanManagement', 'health'],
+    READINESS: ['mealPlanManagement', 'readiness'],
+    LIVENESS: ['mealPlanManagement', 'liveness'],
+    VERSION: ['mealPlanManagement', 'version'],
+
+    // Metrics
+    METRICS: ['mealPlanManagement', 'metrics'],
+
+    // System endpoints
+    SWAGGER_UI: ['mealPlanManagement', 'swaggerUI'],
+    OPENAPI_JSON: ['mealPlanManagement', 'openApiJson'],
+    SERVICE_INFO: ['mealPlanManagement', 'serviceInfo'],
+    CONFIGURATION: ['mealPlanManagement', 'configuration'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
