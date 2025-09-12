@@ -485,5 +485,73 @@ describe('OAuth2 API', () => {
         'token=test-token&token_type_hint=refresh_token'
       );
     });
+
+    it('should transform request data for client credentials endpoint', async () => {
+      const mockToken: TokenResponse = {
+        access_token: 'client-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      };
+
+      const request: ClientCredentialsRequest = {
+        grant_type: 'client_credentials',
+        scope: 'api:read',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockToken };
+      });
+
+      await oauth2Api.clientCredentialsToken(request);
+
+      expect(transformedData).toBe(
+        'grant_type=client_credentials&scope=api%3Aread'
+      );
+    });
+
+    it('should transform request data for refresh token endpoint', async () => {
+      const mockToken: TokenResponse = {
+        access_token: 'new-access-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      };
+
+      const request: RefreshTokenRequest = {
+        grant_type: 'refresh_token',
+        refresh_token: 'refresh-token',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockToken };
+      });
+
+      await oauth2Api.refreshToken(request);
+
+      expect(transformedData).toBe(
+        'grant_type=refresh_token&refresh_token=refresh-token'
+      );
+    });
   });
 });
