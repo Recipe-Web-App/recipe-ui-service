@@ -98,6 +98,41 @@ export const QUERY_KEYS = {
     METRICS: ['recipeManagement', 'metrics'],
     MONITORING: ['recipeManagement', 'monitoring'],
   },
+  RECIPE_SCRAPER: {
+    // Health endpoints
+    ROOT: ['recipeScraper', 'root'],
+    METRICS: ['recipeScraper', 'metrics'],
+    LIVENESS: ['recipeScraper', 'liveness'],
+    READINESS: ['recipeScraper', 'readiness'],
+    HEALTH: ['recipeScraper', 'health'],
+    LEGACY_HEALTH: ['recipeScraper', 'legacyHealth'],
+
+    // Recipe operations
+    RECIPES: ['recipeScraper', 'recipes'],
+    POPULAR_RECIPES: ['recipeScraper', 'popularRecipes'],
+
+    // Nutrition operations
+    NUTRITION: ['recipeScraper', 'nutrition'],
+    RECIPE_NUTRITION: ['recipeScraper', 'recipeNutrition'],
+    INGREDIENT_NUTRITION: ['recipeScraper', 'ingredientNutrition'],
+
+    // Ingredient operations
+    INGREDIENTS: ['recipeScraper', 'ingredients'],
+    INGREDIENT_SUBSTITUTIONS: ['recipeScraper', 'ingredientSubstitutions'],
+
+    // Pairing operations
+    PAIRING: ['recipeScraper', 'pairing'],
+    RECIPE_PAIRINGS: ['recipeScraper', 'recipePairings'],
+
+    // Shopping operations
+    SHOPPING: ['recipeScraper', 'shopping'],
+    INGREDIENT_SHOPPING: ['recipeScraper', 'ingredientShopping'],
+    RECIPE_SHOPPING: ['recipeScraper', 'recipeShopping'],
+
+    // Admin operations
+    ADMIN: ['recipeScraper', 'admin'],
+    CLEAR_CACHE: ['recipeScraper', 'clearCache'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
