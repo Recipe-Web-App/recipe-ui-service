@@ -17,7 +17,8 @@ const config = {
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/**/*.test.{js,jsx,ts,tsx}',
     '!src/**/__tests__/**',
-    '!src/**/index.ts', // Export-only files
+    '!src/**/index.ts', // Export-only files (exclude by default)
+    'src/utils/index.ts', // Override: include utils with actual logic
     '!src/app/**', // Next.js app directory (not unit testable)
     '!src/types/**', // Type definitions (no executable code)
   ],
