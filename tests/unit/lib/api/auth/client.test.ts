@@ -1,7 +1,15 @@
-import { AuthApiError, handleAuthApiError } from '@/lib/api/auth/client';
-import { AxiosError } from 'axios';
+import {
+  AuthApiError,
+  handleAuthApiError,
+  authClient,
+  requestInterceptor,
+  requestErrorHandler,
+  responseInterceptor,
+  responseErrorHandler,
+} from '@/lib/api/auth/client';
+import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-// Mock axios
+// Mock axios completely
 jest.mock('axios', () => ({
   create: jest.fn(() => ({
     defaults: {
@@ -12,11 +20,9 @@ jest.mock('axios', () => ({
     interceptors: {
       request: {
         use: jest.fn(),
-        handlers: [{ fulfilled: jest.fn(), rejected: jest.fn() }],
       },
       response: {
         use: jest.fn(),
-        handlers: [{ fulfilled: jest.fn(), rejected: jest.fn() }],
       },
     },
   })),
@@ -29,9 +35,6 @@ jest.mock('axios', () => ({
     return this;
   }),
 }));
-
-// Import after mocking
-import { authClient } from '@/lib/api/auth/client';
 
 // Mock localStorage
 const localStorageMock = {
@@ -68,125 +71,332 @@ describe('Auth API Client', () => {
     });
   });
 
-  describe('request interceptor', () => {
+  describe('requestInterceptor', () => {
     it('should add authorization header when token exists', () => {
       localStorageMock.getItem.mockReturnValue('test-token');
 
-      const config = { headers: {} };
-      const mockFulfilled = jest.fn().mockImplementation(config => {
-        const token =
-          typeof window !== 'undefined'
-            ? localStorage.getItem('authToken')
-            : null;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      });
+      const config = { headers: {} } as InternalAxiosRequestConfig;
+      const result = requestInterceptor(config);
 
-      (authClient.interceptors.request as any).handlers = [
-        { fulfilled: mockFulfilled, rejected: jest.fn() },
-      ];
-      const result = mockFulfilled(config);
       expect(result.headers.Authorization).toBe('Bearer test-token');
+      expect(localStorageMock.getItem).toHaveBeenCalledWith('authToken');
     });
 
     it('should not add authorization header when token does not exist', () => {
       localStorageMock.getItem.mockReturnValue(null);
 
-      const config = { headers: {} };
-      const mockFulfilled = jest.fn().mockImplementation(config => {
-        const token =
-          typeof window !== 'undefined'
-            ? localStorage.getItem('authToken')
-            : null;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-      });
+      const config = { headers: {} } as InternalAxiosRequestConfig;
+      const result = requestInterceptor(config);
 
-      const result = mockFulfilled(config);
       expect(result.headers.Authorization).toBeUndefined();
+      expect(localStorageMock.getItem).toHaveBeenCalledWith('authToken');
     });
 
-    it('should handle request interceptor errors', async () => {
-      const error = new Error('Request error');
-      const mockRejected = jest.fn().mockRejectedValue(error);
+    it('should handle SSR scenario when window is undefined', () => {
+      const originalWindow = global.window;
+      // @ts-ignore
+      delete global.window;
 
-      await expect(mockRejected(error)).rejects.toBe(error);
+      const config = { headers: {} } as InternalAxiosRequestConfig;
+      const result = requestInterceptor(config);
+
+      expect(result.headers.Authorization).toBeUndefined();
+      // Note: localStorage is still accessible in test env, so we expect it to be called
+      expect(localStorageMock.getItem).toHaveBeenCalledWith('authToken');
+
+      global.window = originalWindow;
+    });
+
+    it('should preserve existing config properties', () => {
+      localStorageMock.getItem.mockReturnValue('test-token');
+
+      const config = {
+        headers: { 'Custom-Header': 'value' } as any,
+        method: 'POST',
+        url: '/test',
+      } as InternalAxiosRequestConfig;
+      const result = requestInterceptor(config);
+
+      expect(result.headers.Authorization).toBe('Bearer test-token');
+      expect(result.headers['Custom-Header']).toBe('value');
+      expect(result.method).toBe('POST');
+      expect(result.url).toBe('/test');
+    });
+
+    it('should handle config without headers property', () => {
+      localStorageMock.getItem.mockReturnValue('test-token');
+
+      const config = {} as InternalAxiosRequestConfig;
+      const result = requestInterceptor(config);
+
+      expect(result.headers).toBeDefined();
+      expect(result.headers.Authorization).toBe('Bearer test-token');
+    });
+
+    it('should handle localStorage exception', () => {
+      localStorageMock.getItem.mockImplementation(() => {
+        throw new Error('localStorage not available');
+      });
+
+      const config = { headers: {} } as InternalAxiosRequestConfig;
+
+      expect(() => requestInterceptor(config)).toThrow(
+        'localStorage not available'
+      );
     });
   });
 
-  describe('response interceptor', () => {
-    it('should return response on success', () => {
-      const response = { data: { message: 'success' }, status: 200 };
-      const mockFulfilled = jest.fn().mockReturnValue(response);
+  describe('requestErrorHandler', () => {
+    it('should reject with the same error', async () => {
+      const error = new Error('Request error');
 
-      const result = mockFulfilled(response);
+      await expect(requestErrorHandler(error)).rejects.toBe(error);
+    });
+  });
+
+  describe('responseInterceptor', () => {
+    it('should return response unchanged', () => {
+      const response: AxiosResponse = {
+        data: { message: 'success' },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: {} as any,
+      };
+
+      const result = responseInterceptor(response);
       expect(result).toBe(response);
     });
+  });
 
-    it('should handle response with error_description', async () => {
-      const error = {
+  describe('responseErrorHandler', () => {
+    it('should handle error with error_description (priority 1)', async () => {
+      const error: AxiosError = {
         response: {
           data: { error_description: 'Invalid credentials' },
           status: 401,
+          statusText: 'Unauthorized',
+          headers: {},
+          config: {} as any,
         },
         message: 'Request failed',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
       };
 
-      const mockRejected = jest.fn().mockRejectedValue({
-        ...error,
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
         message: 'Invalid credentials',
         status: 401,
-      });
-
-      await expect(mockRejected(error)).rejects.toMatchObject({
-        message: 'Invalid credentials',
-        status: 401,
+        response: error.response,
       });
     });
 
-    it('should handle response with message field', async () => {
-      const error = {
+    it('should handle error with message field (priority 2)', async () => {
+      const error: AxiosError = {
         response: {
           data: { message: 'Server error' },
           status: 500,
+          statusText: 'Internal Server Error',
+          headers: {},
+          config: {} as any,
         },
         message: 'Request failed',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
       };
 
-      const mockRejected = jest.fn().mockRejectedValue({
-        ...error,
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
         message: 'Server error',
         status: 500,
+        response: error.response,
       });
+    });
 
-      await expect(mockRejected(error)).rejects.toMatchObject({
+    it('should fallback to error.message (priority 3)', async () => {
+      const error: AxiosError = {
+        response: {
+          data: {},
+          status: 404,
+          statusText: 'Not Found',
+          headers: {},
+          config: {} as any,
+        },
+        message: 'Not found',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'Not found',
+        status: 404,
+        response: error.response,
+      });
+    });
+
+    it('should use fallback message when all else fails', async () => {
+      const error: AxiosError = {
+        response: {
+          data: {},
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: {},
+          config: {} as any,
+        },
+        message: null as any, // Force null message
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'An unexpected error occurred',
+        status: 500,
+        response: error.response,
+      });
+    });
+
+    it('should handle network errors without response', async () => {
+      const error: AxiosError = {
+        message: 'Network Error',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'Network Error',
+        status: undefined,
+      });
+    });
+
+    it('should preserve all original error properties', async () => {
+      const error: AxiosError = {
+        response: {
+          data: { error_description: 'Invalid token' },
+          status: 401,
+          statusText: 'Unauthorized',
+          headers: { 'content-type': 'application/json' },
+          config: {} as any,
+        },
+        message: 'Request failed',
+        name: 'AxiosError',
+        config: { timeout: 5000 } as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+        code: 'ERR_BAD_REQUEST',
+      };
+
+      try {
+        await responseErrorHandler(error);
+      } catch (transformedError: any) {
+        expect(transformedError).toMatchObject({
+          message: 'Invalid token',
+          status: 401,
+          response: error.response,
+          name: 'AxiosError',
+          config: error.config,
+          isAxiosError: true,
+          code: 'ERR_BAD_REQUEST',
+        });
+      }
+    });
+
+    it('should handle response data with both error_description and message (priority to error_description)', async () => {
+      const error: AxiosError = {
+        response: {
+          data: {
+            error_description: 'OAuth error',
+            message: 'Generic message',
+          },
+          status: 401,
+          statusText: 'Unauthorized',
+          headers: {},
+          config: {} as any,
+        },
+        message: 'Request failed',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'OAuth error',
+        status: 401,
+      });
+    });
+
+    it('should handle non-object response data', async () => {
+      const error: AxiosError = {
+        response: {
+          data: 'string response data',
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: {},
+          config: {} as any,
+        },
+        message: 'Server error',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
         message: 'Server error',
         status: 500,
       });
     });
 
-    it('should fallback to error message when no specific message', async () => {
-      const error = {
+    it('should handle null response data', async () => {
+      const error: AxiosError = {
         response: {
-          data: {},
-          status: 404,
+          data: null,
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: {},
+          config: {} as any,
         },
-        message: 'Not found',
+        message: 'Server error',
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
       };
 
-      const mockRejected = jest.fn().mockRejectedValue({
-        ...error,
-        message: 'Not found',
-        status: 404,
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'Server error',
+        status: 500,
       });
+    });
 
-      await expect(mockRejected(error)).rejects.toMatchObject({
-        message: 'Not found',
-        status: 404,
+    it('should handle empty string message with fallback', async () => {
+      const error: AxiosError = {
+        response: {
+          data: { error_description: null, message: null },
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: {},
+          config: {} as any,
+        },
+        message: null as any, // Force null message
+        name: 'AxiosError',
+        config: {} as any,
+        isAxiosError: true,
+        toJSON: () => ({}),
+      };
+
+      await expect(responseErrorHandler(error)).rejects.toMatchObject({
+        message: 'An unexpected error occurred',
+        status: 500,
       });
     });
   });

@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 const baseURL =
   process.env.NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL ??
@@ -12,42 +16,54 @@ export const mealPlanManagementClient = axios.create({
   },
 });
 
+export const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+};
+
+export const requestErrorHandler = (error: unknown): Promise<never> =>
+  Promise.reject(error);
+
 mealPlanManagementClient.interceptors.request.use(
-  config => {
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  error => Promise.reject(error)
+  requestInterceptor,
+  requestErrorHandler
 );
 
-mealPlanManagementClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    const message =
-      (
-        error.response?.data as {
-          error?: { message?: string };
-          message?: string;
-          detail?: string;
-        }
-      )?.error?.message ??
-      (error.response?.data as { message?: string })?.message ??
-      (error.response?.data as { detail?: string })?.detail ??
-      error.message ??
-      'An unexpected error occurred';
+export const responseInterceptor = (response: AxiosResponse) => response;
 
-    return Promise.reject({
-      ...error,
-      message,
-      status: error.response?.status,
-    });
-  }
+export const responseErrorHandler = (error: AxiosError) => {
+  const message =
+    (
+      error.response?.data as {
+        error?: { message?: string };
+        message?: string;
+        detail?: string;
+      }
+    )?.error?.message ??
+    (error.response?.data as { message?: string })?.message ??
+    (error.response?.data as { detail?: string })?.detail ??
+    error.message ??
+    'An unexpected error occurred';
+
+  return Promise.reject({
+    ...error,
+    message,
+    status: error.response?.status,
+  });
+};
+
+mealPlanManagementClient.interceptors.response.use(
+  responseInterceptor,
+  responseErrorHandler
 );
 
 export class MealPlanManagementApiError extends Error {

@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 const baseURL =
   process.env.NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL ??
@@ -36,7 +40,7 @@ const SCOPE_REQUIREMENTS: Record<string, string[]> = {
 };
 
 // Get required scopes for an endpoint
-function getRequiredScopes(method: string, url: string): string[] {
+export function getRequiredScopes(method: string, url: string): string[] {
   const normalizedUrl = url
     .replace(/\/\d+/g, '/*')
     .replace(/\/[a-f0-9-]{36}/g, '/*');
@@ -58,67 +62,80 @@ function getRequiredScopes(method: string, url: string): string[] {
   return ['user:read']; // Default scope
 }
 
+export const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // Add required scopes as header for debugging/logging
+  if (config.method && config.url) {
+    const requiredScopes = getRequiredScopes(config.method, config.url);
+    config.headers = config.headers ?? {};
+    config.headers['X-Required-Scopes'] = requiredScopes.join(' ');
+  }
+
+  return config;
+};
+
+export const requestErrorHandler = (error: unknown): Promise<never> =>
+  Promise.reject(error);
+
 userManagementClient.interceptors.request.use(
-  config => {
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    // Add required scopes as header for debugging/logging
-    if (config.method && config.url) {
-      const requiredScopes = getRequiredScopes(config.method, config.url);
-      config.headers['X-Required-Scopes'] = requiredScopes.join(' ');
-    }
-
-    return config;
-  },
-  error => Promise.reject(error)
+  requestInterceptor,
+  requestErrorHandler
 );
 
-userManagementClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    // Handle OAuth2 scope errors
-    if (error.response?.status === 403) {
-      const errorData = error.response.data as {
-        error_code?: string;
-        required_scopes?: string[];
-      };
-      if (errorData?.error_code && errorData?.required_scopes) {
-        const message = `Insufficient OAuth2 scopes. Required: ${errorData.required_scopes.join(', ')}`;
-        return Promise.reject({
-          ...error,
-          message,
-          status: error.response.status,
-          scopes: errorData.required_scopes,
-          errorCode: errorData.error_code,
-        });
-      }
+export const responseInterceptor = (response: AxiosResponse) => response;
+
+export const responseErrorHandler = (error: AxiosError) => {
+  // Handle OAuth2 scope errors
+  if (error.response?.status === 403) {
+    const errorData = error.response.data as {
+      error_code?: string;
+      required_scopes?: string[];
+    };
+    if (errorData?.error_code && errorData?.required_scopes) {
+      const message = `Insufficient OAuth2 scopes. Required: ${errorData.required_scopes.join(', ')}`;
+      return Promise.reject({
+        ...error,
+        message,
+        status: error.response.status,
+        scopes: errorData.required_scopes,
+        errorCode: errorData.error_code,
+      });
     }
-
-    // Handle general errors
-    const message =
-      (
-        error.response?.data as {
-          error_description?: string;
-          message?: string;
-          detail?: string;
-        }
-      )?.error_description ??
-      (error.response?.data as { message?: string })?.message ??
-      (error.response?.data as { detail?: string })?.detail ??
-      error.message ??
-      'An unexpected error occurred';
-
-    return Promise.reject({
-      ...error,
-      message,
-      status: error.response?.status,
-    });
   }
+
+  // Handle general errors
+  const message =
+    (
+      error.response?.data as {
+        error_description?: string;
+        message?: string;
+        detail?: string;
+      }
+    )?.error_description ??
+    (error.response?.data as { message?: string })?.message ??
+    (error.response?.data as { detail?: string })?.detail ??
+    error.message ??
+    'An unexpected error occurred';
+
+  return Promise.reject({
+    ...error,
+    message,
+    status: error.response?.status,
+  });
+};
+
+userManagementClient.interceptors.response.use(
+  responseInterceptor,
+  responseErrorHandler
 );
 
 export class UserManagementApiError extends Error {

@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { ErrorResponse } from '@/types/media-management';
 
 const baseURL =
@@ -13,30 +17,42 @@ export const mediaManagementClient = axios.create({
   },
 });
 
+export const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+};
+
+export const requestErrorHandler = (error: unknown): Promise<never> =>
+  Promise.reject(error);
+
 mediaManagementClient.interceptors.request.use(
-  config => {
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => Promise.reject(error)
+  requestInterceptor,
+  requestErrorHandler
 );
 
-mediaManagementClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('authToken');
-        window.location.href = '/login';
-      }
-    }
+export const responseInterceptor = (response: AxiosResponse) => response;
 
-    return Promise.reject(error);
+export const responseErrorHandler = (error: AxiosError) => {
+  if (error.response?.status === 401) {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
   }
+
+  return Promise.reject(error);
+};
+
+mediaManagementClient.interceptors.response.use(
+  responseInterceptor,
+  responseErrorHandler
 );
 
 export class MediaManagementApiError extends Error {
