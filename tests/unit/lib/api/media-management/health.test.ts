@@ -1,5 +1,8 @@
 import { healthApi } from '@/lib/api/media-management/health';
-import { mediaManagementClient } from '@/lib/api/media-management/client';
+import {
+  mediaManagementClient,
+  handleMediaManagementApiError,
+} from '@/lib/api/media-management/client';
 import { HealthResponse, ReadinessResponse } from '@/types/media-management';
 
 // Mock the client
@@ -7,13 +10,14 @@ jest.mock('@/lib/api/media-management/client', () => ({
   mediaManagementClient: {
     get: jest.fn(),
   },
-  handleMediaManagementApiError: jest.fn().mockImplementation(error => {
-    throw error;
-  }),
+  handleMediaManagementApiError: jest.fn(),
 }));
 
 const mockedClient = mediaManagementClient as jest.Mocked<
   typeof mediaManagementClient
+>;
+const mockedErrorHandler = handleMediaManagementApiError as jest.MockedFunction<
+  typeof handleMediaManagementApiError
 >;
 
 describe('Media Management Health API', () => {
@@ -120,6 +124,21 @@ describe('Media Management Health API', () => {
       expect(result.status).toBe('unhealthy');
       expect(result.checks.overall).toBe('unhealthy');
     });
+
+    it('should handle API errors', async () => {
+      const apiError = new Error('Network error');
+      mockedClient.get.mockRejectedValue(apiError);
+      mockedErrorHandler.mockImplementation(error => {
+        throw error;
+      });
+
+      await expect(healthApi.getHealth()).rejects.toThrow('Network error');
+
+      expect(mockedClient.get).toHaveBeenCalledWith('/health', {
+        headers: { Authorization: undefined },
+      });
+      expect(mockedErrorHandler).toHaveBeenCalledWith(apiError);
+    });
   });
 
   describe('getReadiness', () => {
@@ -158,6 +177,23 @@ describe('Media Management Health API', () => {
       expect(result.status).toBe('not_ready');
       expect(result.checks.overall).toBe('not_ready');
     });
+
+    it('should handle API errors', async () => {
+      const apiError = new Error('Service unavailable');
+      mockedClient.get.mockRejectedValue(apiError);
+      mockedErrorHandler.mockImplementation(error => {
+        throw error;
+      });
+
+      await expect(healthApi.getReadiness()).rejects.toThrow(
+        'Service unavailable'
+      );
+
+      expect(mockedClient.get).toHaveBeenCalledWith('/ready', {
+        headers: { Authorization: undefined },
+      });
+      expect(mockedErrorHandler).toHaveBeenCalledWith(apiError);
+    });
   });
 
   describe('getMetrics', () => {
@@ -184,6 +220,26 @@ media_uploads_total{status="failed"} 2`;
       expect(result).toBe(mockMetrics);
       expect(result).toContain('http_requests_total');
       expect(result).toContain('media_uploads_total');
+    });
+
+    it('should handle API errors', async () => {
+      const apiError = new Error('Metrics endpoint error');
+      mockedClient.get.mockRejectedValue(apiError);
+      mockedErrorHandler.mockImplementation(error => {
+        throw error;
+      });
+
+      await expect(healthApi.getMetrics()).rejects.toThrow(
+        'Metrics endpoint error'
+      );
+
+      expect(mockedClient.get).toHaveBeenCalledWith('/metrics', {
+        headers: {
+          Authorization: undefined,
+          Accept: 'text/plain; version=0.0.4; charset=utf-8',
+        },
+      });
+      expect(mockedErrorHandler).toHaveBeenCalledWith(apiError);
     });
   });
 });
