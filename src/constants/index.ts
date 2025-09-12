@@ -153,6 +153,22 @@ export const QUERY_KEYS = {
     SERVICE_INFO: ['mealPlanManagement', 'serviceInfo'],
     CONFIGURATION: ['mealPlanManagement', 'configuration'],
   },
+  MEDIA_MANAGEMENT: {
+    // Health endpoints
+    HEALTH: ['mediaManagement', 'health'],
+    READINESS: ['mediaManagement', 'readiness'],
+    METRICS: ['mediaManagement', 'metrics'],
+
+    // Media operations
+    MEDIA: ['mediaManagement', 'media'],
+    MEDIA_LIST: ['mediaManagement', 'mediaList'],
+    UPLOAD_STATUS: ['mediaManagement', 'uploadStatus'],
+
+    // Recipe integration
+    RECIPE_MEDIA: ['mediaManagement', 'recipeMedia'],
+    INGREDIENT_MEDIA: ['mediaManagement', 'ingredientMedia'],
+    STEP_MEDIA: ['mediaManagement', 'stepMedia'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
