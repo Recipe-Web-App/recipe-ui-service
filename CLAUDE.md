@@ -78,16 +78,17 @@ and follows our project's component patterns. Also create unit tests.
 
 For API-related code:
 
-- Reference `src/lib/api/client.ts` for HTTP client patterns
-- Use TanStack Query patterns from `src/hooks/use-recipes.ts`
-- Follow error handling patterns established in the project
+- Reference service-specific client patterns in `src/lib/api/{service}/client.ts`
+- Use TanStack Query patterns from `src/hooks/{service}/use{Feature}.ts`
+- Follow error handling patterns established in each microservice API client
 
 **Example Request:**
 
 ```text
 Create a new API hook for user management that follows the TanStack Query
-patterns in src/hooks/use-recipes.ts, uses our API client from
-src/lib/api/client.ts, and includes proper error handling.
+patterns in src/hooks/recipe-management/useRecipes.ts, uses the user management
+API client from src/lib/api/user-management/client.ts, and includes proper
+error handling following the microservices architecture.
 ```
 
 ### 3. **Testing Integration**
@@ -196,8 +197,9 @@ TanStack Query for API calls and follows strict TypeScript patterns.
 **Reference Project Files:**
 
 ```text
-Looking at src/lib/api/client.ts, help me add error retry logic that follows
-the same patterns used for the recipes API in src/lib/api/recipes.ts.
+Looking at src/lib/api/recipe-management/client.ts, help me add error retry
+logic that follows the same patterns used for the recipe management API in
+src/lib/api/recipe-management/recipes.ts.
 ```
 
 ### 2. **Code Generation Requests**
@@ -207,7 +209,7 @@ the same patterns used for the recipes API in src/lib/api/recipes.ts.
 ```text
 Create a new page component in src/app/profile/ that follows Next.js 15 App
 Router patterns, uses server components where appropriate, and integrates
-with our existing auth store.
+with our existing auth store and the user management microservice API.
 ```
 
 **Testing Requests:**
@@ -435,7 +437,7 @@ and documentation for user profile management."
 
 ```text
 "Analyze the relationship between src/stores/auth-store.ts and
-src/hooks/use-auth.ts and suggest improvements for better type safety."
+src/hooks/auth/useAuth.ts and suggest improvements for better type safety."
 ```
 
 ### 3. **Migration Assistance**

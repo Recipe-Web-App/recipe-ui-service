@@ -251,17 +251,44 @@ npm run deps:check  # Check for circular dependencies and unused code
 
 See `.env.example` for required environment variables:
 
-- `NEXT_PUBLIC_API_URL` - Backend API URL
+#### Core Application
+
 - `NEXT_PUBLIC_APP_URL` - Frontend app URL
-- Additional service configuration as needed
 
-### API Integration
+#### Microservice Endpoints
 
-The application is configured to communicate with backend services:
+- `NEXT_PUBLIC_AUTH_SERVICE_URL` - Authentication service URL (default: http://localhost:8081)
+- `NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL` - Recipe management service URL (default: http://localhost:8082)
+- `NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL` - Recipe scraper service URL (default: http://localhost:8083)
+- `NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL` - Media management service URL (default: http://localhost:8084)
+- `NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL` - User management service URL (default: http://localhost:8085)
+- `NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL` - Meal plan management service URL (default: http://localhost:8086)
 
-- **API client** with interceptors for authentication and error handling
-- **Query hooks** for data fetching with proper caching
+#### Additional Configuration
+
+- Service-specific API keys and configurations as needed per microservice
+
+### Microservices API Integration
+
+The application is configured to communicate with multiple backend microservices:
+
+#### Service Architecture
+
+- **6 dedicated microservices** with service-specific API clients
+- **Authentication service** - User authentication and authorization
+- **Recipe management service** - Recipe CRUD operations and management
+- **Recipe scraper service** - Web scraping and recipe import functionality
+- **Media management service** - File upload, storage, and optimization
+- **User management service** - User profiles and preferences
+- **Meal plan management service** - Meal planning and scheduling
+
+#### Integration Features
+
+- **Service-specific API clients** with dedicated interceptors for authentication and error handling
+- **Query hooks** organized by service for data fetching with proper caching
 - **Mutation hooks** for data updates with optimistic updates
+- **Health monitoring** for all microservices with automatic failover
+- **Request tracing** with correlation IDs across services
 
 ## 🌍 Browser Support
 
@@ -377,12 +404,23 @@ This project maintains enterprise-grade quality standards with comprehensive val
 - **♿ Accessibility**: WCAG 2.1 AA compliance with automated testing
 - **🚀 Deployment**: Zero-downtime with comprehensive pre-push validation
 
-## 🔗 Related Projects
+## 🔗 Related Microservices
 
-- **[Recipe API Service](../recipe-api-service/)** - Backend GraphQL API
+### Backend Services
+
+- **[Auth Service](../auth-service/)** - Authentication and authorization microservice
+- **[Recipe Management Service](../recipe-management-service/)** - Recipe CRUD and management operations
+- **[Recipe Scraper Service](../recipe-scraper-service/)** - Web scraping and recipe import functionality
+- **[Media Management Service](../media-management-service/)** - File storage, upload, and media processing
+- **[User Management Service](../user-management-service/)** - User profiles, preferences, and management
+- **[Meal Plan Management Service](../meal-plan-management-service/)** - Meal planning and scheduling
+
+### Supporting Projects
+
 - **[Recipe Mobile App](../recipe-mobile-app/)** - React Native companion app
-- **[Recipe Analytics](../recipe-analytics/)** - Data analytics service
-- **[Recipe Infrastructure](../infrastructure/)** - Kubernetes manifests and terraform
+- **[Recipe Analytics](../recipe-analytics/)** - Data analytics and insights service
+- **[Recipe Infrastructure](../infrastructure/)** - Kubernetes manifests, Terraform, and deployment configs
+- **[API Gateway](../api-gateway/)** - Service mesh and API gateway configuration
 
 ## 📈 Metrics and Monitoring
 
