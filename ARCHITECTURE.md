@@ -107,13 +107,15 @@ src/
 │   ├── auth/             # Authentication utilities
 │   └── utils/            # General purpose utilities
 ├── stores/               # Zustand state stores
+│   └── ui/               # UI state management stores
 ├── types/                # TypeScript type definitions (service-specific)
 │   ├── auth/             # Authentication types
 │   ├── recipe-management/ # Recipe management types
 │   ├── recipe-scraper/   # Recipe scraper types
 │   ├── media-management/ # Media management types
 │   ├── meal-plan-management/ # Meal plan types
-│   └── user-management/  # User management types
+│   ├── user-management/  # User management types
+│   └── ui/               # UI state types
 └── constants/            # Application constants
 ```
 
@@ -335,51 +337,128 @@ graph TB
 
 ### 1. **Client State Management (Zustand)**
 
+#### Comprehensive UI Store Architecture
+
+The application implements a modular UI state management system with 12 specialized Zustand stores:
+
 ```typescript
-// Auth Store
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
-  logout: () => void;
-  refreshToken: () => Promise<void>;
+// Composed UI Store Access
+import { useUI } from '@/stores/ui';
+
+const ui = useUI();
+// Access all stores through one interface
+const { toast, theme, navigation, modal, loading } = ui;
+```
+
+#### UI Stores Overview
+
+| Store                   | Purpose                                             | Persistence |
+| ----------------------- | --------------------------------------------------- | ----------- |
+| **Toast Store**         | Notification management with queue and auto-dismiss | No          |
+| **Theme Store**         | Theme preferences and system detection              | Yes         |
+| **Navigation Store**    | Breadcrumbs, tabs, and navigation state             | Partial     |
+| **Modal Store**         | Modal stack management with keyboard shortcuts      | No          |
+| **Loading Store**       | Global and component-level loading states           | No          |
+| **Search/Filter Store** | Search queries, filters, and saved searches         | Partial     |
+| **Layout Store**        | View modes, pagination, and panel management        | Yes         |
+| **Interaction Store**   | Drag & drop, selections, and gestures               | No          |
+| **Offline Store**       | Network status and sync queue                       | Partial     |
+| **Accessibility Store** | A11y preferences and announcements                  | Yes         |
+| **Feature Store**       | Feature flags and A/B testing                       | Partial     |
+| **Preference Store**    | User preferences and recent items                   | Yes         |
+
+#### Example Store Implementation
+
+```typescript
+// Toast Store - Notification Management
+interface ToastStoreState {
+  toasts: Toast[];
+  maxToasts: number;
+  defaultDuration: number;
+
+  // Actions
+  addToast: (toast: Omit<Toast, 'id' | 'createdAt'>) => string;
+  removeToast: (id: string) => void;
+  clearToasts: () => void;
+  updateToast: (id: string, updates: Partial<Toast>) => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
+// Feature Store - Feature Flags & A/B Testing
+interface FeatureStoreState {
+  features: Record<string, FeatureFlag>;
+  experiments: Record<string, ExperimentState>;
 
-  login: async credentials => {
-    const { user, token } = await authApi.login(credentials);
-    set({ user, token, isAuthenticated: true });
-    localStorage.setItem('auth-token', token);
-  },
+  // Actions
+  isFeatureEnabled: (key: string) => boolean;
+  getFeatureVariant: (key: string) => string | undefined;
+  joinExperiment: (id: string, variant: string) => void;
+  calculateRolloutEligibility: (percentage: number) => boolean;
+}
 
-  logout: () => {
-    set({ user: null, token: null, isAuthenticated: false });
-    localStorage.removeItem('auth-token');
-  },
+// Offline Store - Network & Sync Management
+interface OfflineStoreState {
+  isOnline: boolean;
+  connectionType: ConnectionType;
+  syncQueue: SyncOperation[];
 
-  refreshToken: async () => {
-    const { token } = await authApi.refreshToken();
-    set({ token });
-    localStorage.setItem('auth-token', token);
-  },
-}));
+  // Actions
+  addToSyncQueue: (operation: Omit<SyncOperation, 'id'>) => void;
+  processSyncQueue: () => Promise<void>;
+  setNetworkStatus: (status: NetworkStatus) => void;
+  estimateTimeToSync: () => number;
+}
+```
 
-// UI State Store
-interface UIState {
-  theme: 'light' | 'dark';
-  sidebar: {
-    isOpen: boolean;
-    toggleSidebar: () => void;
+#### Store Usage Patterns
+
+```typescript
+// Individual Store Usage
+import { useToastStore } from '@/stores/ui/toast-store';
+
+function MyComponent() {
+  const { addToast, removeToast } = useToastStore();
+
+  const handleSuccess = () => {
+    addToast({
+      message: 'Operation successful!',
+      type: 'success',
+      duration: 3000,
+    });
   };
-  notifications: Notification[];
-  addNotification: (notification: Notification) => void;
-  removeNotification: (id: string) => void;
 }
+
+// Composed Store Usage
+import { useUI } from '@/stores/ui';
+
+function MyApp() {
+  const ui = useUI();
+
+  // Access multiple stores
+  const { theme, navigation, modal } = ui;
+
+  // Use store actions
+  theme.setTheme('dark');
+  navigation.pushBreadcrumb({ label: 'Home', path: '/' });
+  modal.openModal({ id: 'settings', component: SettingsModal });
+}
+
+// Persistence Configuration
+export const usePreferenceStore = create<PreferenceStoreState>()(
+  persist(
+    (set, get) => ({
+      // State and actions
+    }),
+    {
+      name: 'preference-storage',
+      partialize: state => ({
+        // Only persist specific fields
+        locale: state.locale,
+        dateFormat: state.dateFormat,
+        recentItems: state.recentItems.slice(0, 10),
+      }),
+    }
+  )
+);
 ```
 
 ### 2. **Server State Management (TanStack Query)**
