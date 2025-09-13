@@ -563,6 +563,122 @@ function AccessibleRecipeCard({ recipe }) {
 }
 ```
 
+### User Preferences Management
+
+```tsx
+import { usePreferencesStore } from '@/stores/preferences-store';
+import {
+  useUserPreferences,
+  useUpdateDisplayPreferences,
+} from '@/hooks/user-management';
+
+function UserPreferenceSettings() {
+  const {
+    preferences,
+    isLoading,
+    isSync,
+    updateDisplayPreferences,
+    updateNotificationPreferences,
+    getTheme,
+    getLanguage,
+  } = usePreferencesStore();
+
+  const { data: backendPrefs } = useUserPreferences();
+  const updateDisplay = useUpdateDisplayPreferences();
+
+  // Sync backend preferences to store
+  useEffect(() => {
+    if (backendPrefs && !isLoading) {
+      setPreferences(backendPrefs);
+    }
+  }, [backendPrefs, isLoading]);
+
+  const handleThemeChange = async (theme: 'light' | 'dark' | 'system') => {
+    // Optimistic update for immediate UI response
+    updateDisplayPreferences({ theme });
+
+    try {
+      // Sync to backend
+      await updateDisplay.mutateAsync({ theme });
+      markSynced();
+    } catch (error) {
+      console.error('Failed to sync theme preference:', error);
+    }
+  };
+
+  return (
+    <div>
+      <div className="mb-4">
+        <label className="mb-2 block text-sm font-medium">Theme</label>
+        <select
+          value={getTheme() || 'system'}
+          onChange={e => handleThemeChange(e.target.value)}
+          className="w-full rounded border p-2"
+        >
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+
+      <div className="mb-4">
+        <label className="mb-2 block text-sm font-medium">Language</label>
+        <input
+          value={getLanguage() || ''}
+          onChange={e => updateDisplayPreferences({ language: e.target.value })}
+          placeholder="e.g., en, es, fr"
+          className="w-full rounded border p-2"
+        />
+      </div>
+
+      {!isSync && (
+        <div className="rounded border border-yellow-200 bg-yellow-50 p-3">
+          <p className="text-sm text-yellow-800">
+            Preferences are out of sync with server
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+**Key Features:**
+
+- **Backend Sync**: Automatically syncs with user-management service
+- **Optimistic Updates**: Immediate UI feedback with sync tracking
+- **Type Safety**: Uses backend-supported preference types only
+- **Persistence**: Automatically saves to localStorage
+- **Loading States**: Tracks sync status and loading states
+
+**Supported Preferences:**
+
+- `theme`: 'light' | 'dark' | 'system'
+- `language`: string (e.g., 'en', 'es', 'fr')
+- `timezone`: string
+- `notification_preferences`: email, push, follow notifications, etc.
+- `privacy_preferences`: profile visibility, contact settings
+
+**Integration Pattern:**
+
+```tsx
+// Use with existing theme store for complete theming
+import { useThemeStore } from '@/stores/ui/theme-store';
+import { usePreferencesStore } from '@/stores/preferences-store';
+
+function ThemeManager() {
+  const themeStore = useThemeStore(); // UI theme state
+  const prefStore = usePreferencesStore(); // Backend-synced preferences
+
+  // Sync theme preference to backend when UI theme changes
+  useEffect(() => {
+    if (themeStore.theme !== prefStore.getTheme()) {
+      prefStore.updateDisplayPreferences({ theme: themeStore.theme });
+    }
+  }, [themeStore.theme]);
+}
+```
+
 ## 💫 User Experience Patterns
 
 ### Loading States
