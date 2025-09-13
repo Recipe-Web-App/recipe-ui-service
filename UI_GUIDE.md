@@ -490,6 +490,761 @@ function RecipeGrid() {
 }
 ```
 
+### Recipe State Management
+
+The Recipe Store provides comprehensive state management for recipe-related UI features, handling recently viewed
+recipes, draft management, favorites, and collections with optimistic updates and sync tracking.
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+
+function RecipeComponent() {
+  const {
+    // Recently viewed
+    recentlyViewedRecipes,
+    addRecentlyViewed,
+
+    // Draft management
+    draftRecipe,
+    setDraftRecipe,
+    updateDraftRecipe,
+    hasUnsavedDraft,
+
+    // Favorites
+    favoriteRecipeIds,
+    toggleFavorite,
+    isFavorite,
+
+    // Collections
+    collections,
+    createCollection,
+    addToCollection,
+
+    // UI preferences
+    activeFilters,
+    sortPreference,
+    viewPreference,
+    setActiveFilters,
+  } = useRecipeStore();
+}
+```
+
+#### Recently Viewed Recipes
+
+Track and display user's recently viewed recipes with automatic deduplication and size limits:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+
+function RecentlyViewed() {
+  const { recentlyViewedRecipes, clearRecentlyViewed } = useRecipeStore();
+
+  if (recentlyViewedRecipes.length === 0) {
+    return (
+      <EmptyState
+        icon={<ClockIcon />}
+        title="No recently viewed recipes"
+        description="Recipes you view will appear here"
+      />
+    );
+  }
+
+  return (
+    <section>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-lg font-semibold">Recently Viewed</h2>
+        <Button variant="ghost" size="sm" onClick={clearRecentlyViewed}>
+          Clear All
+        </Button>
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {recentlyViewedRecipes.map(recipe => (
+          <RecipeCard
+            key={recipe.recipeId}
+            recipe={recipe}
+            variant="compact"
+            showViewedIndicator
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// Integration with recipe detail view
+function RecipeDetailPage({ recipeId }) {
+  const { addRecentlyViewed } = useRecipeStore();
+  const { data: recipe } = useRecipe(recipeId);
+
+  useEffect(() => {
+    if (recipe) {
+      addRecentlyViewed(recipe);
+    }
+  }, [recipe, addRecentlyViewed]);
+
+  return <RecipeDetail recipe={recipe} />;
+}
+```
+
+#### Draft Recipe Management
+
+Handle recipe creation and editing with auto-save functionality and unsaved changes tracking:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+import { useCreateRecipe, useUpdateRecipe } from '@/hooks/recipe-management';
+
+function RecipeForm({ recipeId, onSuccess }) {
+  const {
+    draftRecipe,
+    setDraftRecipe,
+    updateDraftRecipe,
+    addDraftIngredient,
+    removeDraftIngredient,
+    addDraftStep,
+    removeDraftStep,
+    clearDraftRecipe,
+    hasUnsavedDraft,
+    isDraftSaving,
+    setDraftSaving,
+  } = useRecipeStore();
+
+  const createRecipe = useCreateRecipe();
+  const updateRecipe = useUpdateRecipe();
+
+  // Auto-save draft with debouncing
+  const debouncedSave = useMemo(
+    () =>
+      debounce(draft => {
+        setDraftSaving(true);
+        // Save to localStorage automatically handled by store
+        setTimeout(() => setDraftSaving(false), 500);
+      }, 1000),
+    [setDraftSaving]
+  );
+
+  useEffect(() => {
+    if (draftRecipe) {
+      debouncedSave(draftRecipe);
+    }
+  }, [draftRecipe, debouncedSave]);
+
+  // Warn about unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = e => {
+      if (hasUnsavedDraft()) {
+        e.preventDefault();
+        e.returnValue =
+          'You have unsaved changes. Are you sure you want to leave?';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedDraft]);
+
+  const handleSubmit = async formData => {
+    try {
+      if (recipeId) {
+        await updateRecipe.mutateAsync({ id: recipeId, ...formData });
+      } else {
+        await createRecipe.mutateAsync(formData);
+      }
+      clearDraftRecipe();
+      onSuccess?.();
+    } catch (error) {
+      console.error('Failed to save recipe:', error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">
+          {recipeId ? 'Edit Recipe' : 'Create Recipe'}
+        </h1>
+        {isDraftSaving && (
+          <div className="flex items-center text-sm text-gray-500">
+            <Spinner size="xs" className="mr-2" />
+            Saving draft...
+          </div>
+        )}
+        {hasUnsavedDraft() && !isDraftSaving && (
+          <Badge variant="warning">Unsaved changes</Badge>
+        )}
+      </div>
+
+      <Input
+        label="Recipe Title"
+        value={draftRecipe?.title || ''}
+        onChange={value => updateDraftRecipe({ title: value })}
+        placeholder="Enter recipe title"
+        required
+      />
+
+      <Textarea
+        label="Description"
+        value={draftRecipe?.description || ''}
+        onChange={value => updateDraftRecipe({ description: value })}
+        placeholder="Describe your recipe..."
+      />
+
+      {/* Ingredients Section */}
+      <div>
+        <h3 className="mb-3 text-lg font-semibold">Ingredients</h3>
+        {draftRecipe?.ingredients?.map((ingredient, index) => (
+          <IngredientInput
+            key={index}
+            ingredient={ingredient}
+            onUpdate={updates => updateDraftIngredient(index, updates)}
+            onRemove={() => removeDraftIngredient(index)}
+          />
+        ))}
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            addDraftIngredient({ name: '', quantity: 0, unit: '' })
+          }
+        >
+          <PlusIcon className="mr-2 h-4 w-4" />
+          Add Ingredient
+        </Button>
+      </div>
+
+      {/* Steps Section */}
+      <div>
+        <h3 className="mb-3 text-lg font-semibold">Instructions</h3>
+        {draftRecipe?.steps?.map((step, index) => (
+          <StepInput
+            key={index}
+            step={step}
+            stepNumber={index + 1}
+            onUpdate={updates => updateDraftStep(index, updates)}
+            onRemove={() => removeDraftStep(index)}
+          />
+        ))}
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            addDraftStep({
+              stepNumber: (draftRecipe?.steps?.length || 0) + 1,
+              instruction: '',
+            })
+          }
+        >
+          <PlusIcon className="mr-2 h-4 w-4" />
+          Add Step
+        </Button>
+      </div>
+
+      <div className="flex gap-3 border-t pt-4">
+        <Button
+          type="submit"
+          loading={createRecipe.isPending || updateRecipe.isPending}
+        >
+          {recipeId ? 'Update Recipe' : 'Create Recipe'}
+        </Button>
+        <Button type="button" variant="outline" onClick={clearDraftRecipe}>
+          Clear Draft
+        </Button>
+      </div>
+    </form>
+  );
+}
+```
+
+#### Favorites Management
+
+Implement favorite recipes with optimistic updates and sync state tracking:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+import {
+  useFavoriteRecipe,
+  useUnfavoriteRecipe,
+} from '@/hooks/recipe-management';
+
+function FavoriteButton({ recipeId, size = 'md' }) {
+  const { isFavorite, toggleFavorite } = useRecipeStore();
+  const favoriteRecipe = useFavoriteRecipe();
+  const unfavoriteRecipe = useUnfavoriteRecipe();
+
+  const isCurrentlyFavorited = isFavorite(recipeId);
+
+  const handleToggle = async () => {
+    // Optimistic update for immediate UI feedback
+    toggleFavorite(recipeId);
+
+    try {
+      if (isCurrentlyFavorited) {
+        await unfavoriteRecipe.mutateAsync(recipeId);
+      } else {
+        await favoriteRecipe.mutateAsync(recipeId);
+      }
+    } catch (error) {
+      // Revert optimistic update on error
+      toggleFavorite(recipeId);
+      console.error('Failed to update favorite status:', error);
+    }
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size={size}
+      onClick={handleToggle}
+      className={cn(
+        'transition-colors',
+        isCurrentlyFavorited && 'text-red-500 hover:text-red-600'
+      )}
+      aria-label={
+        isCurrentlyFavorited ? 'Remove from favorites' : 'Add to favorites'
+      }
+    >
+      <HeartIcon
+        className={cn(
+          'h-4 w-4 transition-all duration-200',
+          isCurrentlyFavorited && 'scale-110 fill-current'
+        )}
+      />
+    </Button>
+  );
+}
+
+function FavoritesSection() {
+  const { favoriteRecipeIds } = useRecipeStore();
+  const { data: favoriteRecipes, isLoading } =
+    useRecipesByIds(favoriteRecipeIds);
+
+  if (isLoading) {
+    return <RecipeGridSkeleton count={6} />;
+  }
+
+  if (favoriteRecipeIds.length === 0) {
+    return (
+      <EmptyState
+        icon={<HeartIcon />}
+        title="No favorite recipes yet"
+        description="Mark recipes as favorites to see them here"
+        action={
+          <Button asChild>
+            <Link href="/recipes">Browse Recipes</Link>
+          </Button>
+        }
+      />
+    );
+  }
+
+  return (
+    <section>
+      <h2 className="mb-6 text-xl font-semibold">
+        Your Favorites ({favoriteRecipeIds.length})
+      </h2>
+      <RecipeGrid>
+        {favoriteRecipes?.map(recipe => (
+          <RecipeCard
+            key={recipe.recipeId}
+            recipe={recipe}
+            showFavoriteButton
+            isFavorited={true}
+          />
+        ))}
+      </RecipeGrid>
+    </section>
+  );
+}
+```
+
+#### Recipe Collections
+
+Organize recipes into custom collections with full CRUD operations:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+
+function RecipeCollections() {
+  const {
+    collections,
+    createCollection,
+    updateCollection,
+    deleteCollection,
+    addToCollection,
+    removeFromCollection,
+    getCollectionRecipes,
+  } = useRecipeStore();
+
+  const [isCreating, setIsCreating] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+
+  const handleCreateCollection = data => {
+    const newCollection = createCollection(data.name, data.description);
+    setIsCreating(false);
+    return newCollection;
+  };
+
+  const handleUpdateCollection = (id, updates) => {
+    updateCollection(id, updates);
+    setEditingId(null);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold">Recipe Collections</h2>
+        <Button onClick={() => setIsCreating(true)}>
+          <PlusIcon className="mr-2 h-4 w-4" />
+          New Collection
+        </Button>
+      </div>
+
+      {isCreating && (
+        <CollectionForm
+          onSubmit={handleCreateCollection}
+          onCancel={() => setIsCreating(false)}
+        />
+      )}
+
+      <div className="grid gap-4">
+        {collections.map(collection => (
+          <CollectionCard
+            key={collection.id}
+            collection={collection}
+            recipeCount={getCollectionRecipes(collection.id).length}
+            isEditing={editingId === collection.id}
+            onEdit={() => setEditingId(collection.id)}
+            onUpdate={updates => handleUpdateCollection(collection.id, updates)}
+            onDelete={() => deleteCollection(collection.id)}
+            onCancelEdit={() => setEditingId(null)}
+          />
+        ))}
+      </div>
+
+      {collections.length === 0 && !isCreating && (
+        <EmptyState
+          icon={<FolderIcon />}
+          title="No collections yet"
+          description="Create collections to organize your favorite recipes"
+          action={
+            <Button onClick={() => setIsCreating(true)}>
+              Create Your First Collection
+            </Button>
+          }
+        />
+      )}
+    </div>
+  );
+}
+
+function CollectionCard({
+  collection,
+  recipeCount,
+  isEditing,
+  onEdit,
+  onUpdate,
+  onDelete,
+  onCancelEdit,
+}) {
+  const [formData, setFormData] = useState({
+    name: collection.name,
+    description: collection.description || '',
+  });
+
+  if (isEditing) {
+    return (
+      <Card>
+        <Card.Content className="space-y-4">
+          <Input
+            value={formData.name}
+            onChange={value => setFormData(prev => ({ ...prev, name: value }))}
+            placeholder="Collection name"
+          />
+          <Textarea
+            value={formData.description}
+            onChange={value =>
+              setFormData(prev => ({ ...prev, description: value }))
+            }
+            placeholder="Description (optional)"
+          />
+          <div className="flex gap-2">
+            <Button size="sm" onClick={() => onUpdate(formData)}>
+              Save
+            </Button>
+            <Button size="sm" variant="outline" onClick={onCancelEdit}>
+              Cancel
+            </Button>
+          </div>
+        </Card.Content>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="transition-shadow hover:shadow-md">
+      <Card.Content>
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold">{collection.name}</h3>
+            {collection.description && (
+              <p className="mt-1 text-gray-600">{collection.description}</p>
+            )}
+            <div className="mt-3 flex items-center gap-4 text-sm text-gray-500">
+              <span>{recipeCount} recipes</span>
+              <span>Updated {format(collection.updatedAt, 'MMM d, yyyy')}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={onEdit}>
+              <EditIcon className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}>
+              <TrashIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </Card.Content>
+    </Card>
+  );
+}
+```
+
+#### Filter & Sort Integration
+
+Connect recipe store filters with UI components for consistent filtering:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+import { DifficultyLevel } from '@/types/recipe-management';
+
+function RecipeFilters() {
+  const {
+    activeFilters,
+    setActiveFilters,
+    clearFilters,
+    sortPreference,
+    setSortPreference,
+    viewPreference,
+    setViewPreference,
+  } = useRecipeStore();
+
+  const updateFilter = (key, value) => {
+    setActiveFilters({ ...activeFilters, [key]: value });
+  };
+
+  const removeFilter = key => {
+    const newFilters = { ...activeFilters };
+    delete newFilters[key];
+    setActiveFilters(newFilters);
+  };
+
+  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Search */}
+      <SearchInput
+        value={activeFilters.searchQuery || ''}
+        onChange={value => updateFilter('searchQuery', value)}
+        placeholder="Search recipes..."
+        className="w-full"
+      />
+
+      {/* Active Filters */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(activeFilters).map(([key, value]) => (
+            <FilterChip
+              key={key}
+              label={getFilterLabel(key, value)}
+              onRemove={() => removeFilter(key)}
+            />
+          ))}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="text-xs"
+          >
+            Clear all
+          </Button>
+        </div>
+      )}
+
+      {/* Filter Controls */}
+      <div className="grid gap-4">
+        <FilterGroup title="Difficulty">
+          <Select
+            value={activeFilters.difficulty || ''}
+            onValueChange={value =>
+              value
+                ? updateFilter('difficulty', value)
+                : removeFilter('difficulty')
+            }
+          >
+            <SelectItem value="">Any Difficulty</SelectItem>
+            {Object.values(DifficultyLevel).map(level => (
+              <SelectItem key={level} value={level}>
+                {level.toLowerCase().replace('_', ' ')}
+              </SelectItem>
+            ))}
+          </Select>
+        </FilterGroup>
+
+        <FilterGroup title="Cook Time">
+          <Select
+            value={activeFilters.maxCookTime?.toString() || ''}
+            onValueChange={value =>
+              value
+                ? updateFilter('maxCookTime', parseInt(value))
+                : removeFilter('maxCookTime')
+            }
+          >
+            <SelectItem value="">Any Time</SelectItem>
+            <SelectItem value="15">Under 15 minutes</SelectItem>
+            <SelectItem value="30">Under 30 minutes</SelectItem>
+            <SelectItem value="60">Under 1 hour</SelectItem>
+          </Select>
+        </FilterGroup>
+
+        <FilterGroup title="Tags">
+          <TagInput
+            value={activeFilters.tags || []}
+            onChange={tags =>
+              tags.length > 0
+                ? updateFilter('tags', tags)
+                : removeFilter('tags')
+            }
+            placeholder="Add tags..."
+          />
+        </FilterGroup>
+      </div>
+
+      {/* Sort & View Controls */}
+      <div className="border-t border-gray-200 pt-4">
+        <div className="flex items-center justify-between">
+          <Select value={sortPreference} onValueChange={setSortPreference}>
+            <SelectItem value="newest">Newest First</SelectItem>
+            <SelectItem value="oldest">Oldest First</SelectItem>
+            <SelectItem value="title">Alphabetical</SelectItem>
+            <SelectItem value="cookTime">Cook Time</SelectItem>
+            <SelectItem value="difficulty">Difficulty</SelectItem>
+          </Select>
+
+          <ViewModeToggle
+            value={viewPreference}
+            onChange={setViewPreference}
+            options={[
+              { value: 'grid', icon: GridIcon, label: 'Grid' },
+              { value: 'list', icon: ListIcon, label: 'List' },
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FilterChip({ label, onRemove }) {
+  return (
+    <Badge variant="secondary" className="pr-1 pl-3">
+      {label}
+      <Button
+        variant="ghost"
+        size="xs"
+        onClick={onRemove}
+        className="ml-1 h-auto p-0 hover:bg-transparent"
+      >
+        <XIcon className="h-3 w-3" />
+      </Button>
+    </Badge>
+  );
+}
+```
+
+#### Integration with Other Stores
+
+Combine recipe store with other UI stores for complete functionality:
+
+```tsx
+import { useRecipeStore } from '@/stores/recipe-store';
+import { useToastStore } from '@/stores/ui/toast-store';
+import { useModalStore } from '@/stores/ui/modal-store';
+
+function IntegratedRecipeCard({ recipe }) {
+  const { addRecentlyViewed, toggleFavorite, isFavorite } = useRecipeStore();
+  const { addToast } = useToastStore();
+  const { openModal } = useModalStore();
+
+  const handleViewRecipe = () => {
+    addRecentlyViewed(recipe);
+    router.push(`/recipes/${recipe.recipeId}`);
+  };
+
+  const handleFavoriteToggle = () => {
+    const wasFavorited = isFavorite(recipe.recipeId.toString());
+    toggleFavorite(recipe.recipeId.toString());
+
+    addToast({
+      message: wasFavorited
+        ? 'Recipe removed from favorites'
+        : 'Recipe added to favorites',
+      type: 'success',
+      duration: 2000,
+    });
+  };
+
+  const handleAddToCollection = () => {
+    openModal({
+      id: 'add-to-collection',
+      component: AddToCollectionModal,
+      props: { recipeId: recipe.recipeId },
+    });
+  };
+
+  return (
+    <Card className="recipe-card">
+      <Card.Image
+        src={recipe.imageUrl}
+        alt={recipe.title}
+        onClick={handleViewRecipe}
+        className="cursor-pointer transition-opacity hover:opacity-90"
+      />
+      <Card.Content>
+        <Card.Title onClick={handleViewRecipe} className="cursor-pointer">
+          {recipe.title}
+        </Card.Title>
+        <Card.Description>{recipe.description}</Card.Description>
+        <Card.Footer>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline">{recipe.cookingTime}m</Badge>
+              <Badge variant="outline">{recipe.difficulty}</Badge>
+            </div>
+            <div className="flex items-center gap-1">
+              <FavoriteButton
+                recipeId={recipe.recipeId.toString()}
+                size="sm"
+                onClick={handleFavoriteToggle}
+                isFavorited={isFavorite(recipe.recipeId.toString())}
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleAddToCollection}
+                aria-label="Add to collection"
+              >
+                <FolderPlusIcon className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Card.Footer>
+      </Card.Content>
+    </Card>
+  );
+}
+```
+
 ### Offline Support
 
 ```tsx
