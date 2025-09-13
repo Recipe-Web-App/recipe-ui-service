@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 const baseURL =
   process.env.NEXT_PUBLIC_AUTH_SERVICE_URL ??
@@ -12,35 +16,41 @@ export const authClient = axios.create({
   },
 });
 
-authClient.interceptors.request.use(
-  config => {
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-authClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    const message =
-      (error.response?.data as { error_description?: string; message?: string })
-        ?.error_description ??
-      (error.response?.data as { message?: string })?.message ??
-      error.message ??
-      'An unexpected error occurred';
-
-    return Promise.reject({
-      ...error,
-      message,
-      status: error.response?.status,
-    });
+export const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+};
+
+export const requestErrorHandler = (error: unknown): Promise<never> =>
+  Promise.reject(error);
+
+authClient.interceptors.request.use(requestInterceptor, requestErrorHandler);
+
+export const responseInterceptor = (response: AxiosResponse) => response;
+
+export const responseErrorHandler = (error: AxiosError) => {
+  const message =
+    (error.response?.data as { error_description?: string; message?: string })
+      ?.error_description ??
+    (error.response?.data as { message?: string })?.message ??
+    error.message ??
+    'An unexpected error occurred';
+
+  return Promise.reject({
+    ...error,
+    message,
+    status: error.response?.status,
+  });
+};
+
+authClient.interceptors.response.use(responseInterceptor, responseErrorHandler);
 
 export class AuthApiError extends Error {
   status?: number;

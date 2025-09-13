@@ -1,9 +1,3 @@
-export const API_ROUTES = {
-  RECIPES: '/api/recipes',
-  USERS: '/api/users',
-  AUTH: '/api/auth',
-} as const;
-
 export const AUTH_API_ROUTES = {
   HEALTH: '/health',
   READINESS: '/health/ready',

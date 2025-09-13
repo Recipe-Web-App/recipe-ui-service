@@ -40,10 +40,13 @@ graph TB
         I[Error Handling]
     end
 
-    subgraph "Backend Services"
-        J[Recipe API Service]
-        K[Authentication Service]
-        L[Analytics Service]
+    subgraph "Backend Microservices"
+        J[Recipe Management Service]
+        K[Recipe Scraper Service]
+        L[Media Management Service]
+        M[User Management Service]
+        N[Meal Plan Management Service]
+        O[Auth Service]
     end
 
     subgraph "Infrastructure"
@@ -86,13 +89,31 @@ src/
 │   ├── ui/                # Base design system components
 │   ├── forms/             # Form-specific components
 │   └── layout/            # Layout and navigation components
-├── hooks/                 # Custom React hooks (feature-specific)
+├── hooks/                 # Custom React hooks (service-specific)
+│   ├── auth/             # Authentication hooks
+│   ├── recipe-management/ # Recipe management hooks
+│   ├── recipe-scraper/   # Recipe scraper hooks
+│   ├── media-management/ # Media management hooks
+│   ├── meal-plan-management/ # Meal plan hooks
+│   └── user-management/  # User management hooks
 ├── lib/                   # Shared utilities and configurations
-│   ├── api/              # API client and endpoints
+│   ├── api/              # Microservice API clients
+│   │   ├── auth/         # Authentication service client
+│   │   ├── recipe-management/ # Recipe management client
+│   │   ├── recipe-scraper/    # Recipe scraper client
+│   │   ├── media-management/  # Media management client
+│   │   ├── meal-plan-management/ # Meal plan client
+│   │   └── user-management/   # User management client
 │   ├── auth/             # Authentication utilities
 │   └── utils/            # General purpose utilities
 ├── stores/               # Zustand state stores
-├── types/                # TypeScript type definitions
+├── types/                # TypeScript type definitions (service-specific)
+│   ├── auth/             # Authentication types
+│   ├── recipe-management/ # Recipe management types
+│   ├── recipe-scraper/   # Recipe scraper types
+│   ├── media-management/ # Media management types
+│   ├── meal-plan-management/ # Meal plan types
+│   └── user-management/  # User management types
 └── constants/            # Application constants
 ```
 
@@ -292,9 +313,12 @@ graph TB
     end
 
     subgraph "Server State (TanStack Query)"
-        D[Recipe Queries]
-        E[User Queries]
-        F[Analytics Queries]
+        D[Recipe Management Queries]
+        E[Recipe Scraper Queries]
+        F[Media Management Queries]
+        G[User Management Queries]
+        H[Meal Plan Queries]
+        I[Auth Queries]
     end
 
     subgraph "Component State"
@@ -371,11 +395,11 @@ export const recipeQueries = {
   detail: (id: string) => [...recipeQueries.details(), id] as const,
 };
 
-// Recipe Query Hooks
+// Recipe Management Query Hooks
 export function useRecipes(filters: RecipeFilters = {}) {
   return useQuery({
     queryKey: recipeQueries.list(filters),
-    queryFn: () => recipesApi.getRecipes(filters),
+    queryFn: () => recipeManagementApi.getAllRecipes(filters),
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
   });
@@ -384,7 +408,7 @@ export function useRecipes(filters: RecipeFilters = {}) {
 export function useRecipe(id: string) {
   return useQuery({
     queryKey: recipeQueries.detail(id),
-    queryFn: () => recipesApi.getRecipe(id),
+    queryFn: () => recipeManagementApi.getRecipeById(id),
     enabled: !!id,
   });
 }
@@ -394,7 +418,7 @@ export function useCreateRecipe() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: recipesApi.createRecipe,
+    mutationFn: recipeManagementApi.createRecipe,
     onSuccess: newRecipe => {
       // Optimistic update
       queryClient.setQueryData(recipeQueries.detail(newRecipe.id), newRecipe);
@@ -438,96 +462,220 @@ export function useAuthSync() {
 
 ## 🔗 API Integration
 
-### API Client Architecture
+### Microservices API Client Architecture
 
 ```typescript
-// Base API Client Configuration
-export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+// Base API Client Factory
+function createServiceClient(baseURL: string, serviceName: string) {
+  return axios.create({
+    baseURL,
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Service-Name': serviceName,
+    },
+  });
+}
+
+// Microservice API Clients
+export const authClient = createServiceClient(
+  process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:8081',
+  'auth-service'
+);
+
+export const recipeManagementClient = createServiceClient(
+  process.env.NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL ||
+    'http://localhost:8082',
+  'recipe-management-service'
+);
+
+export const recipeScraperClient = createServiceClient(
+  process.env.NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL || 'http://localhost:8083',
+  'recipe-scraper-service'
+);
+
+export const mediaManagementClient = createServiceClient(
+  process.env.NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL ||
+    'http://localhost:8084',
+  'media-management-service'
+);
+
+export const userManagementClient = createServiceClient(
+  process.env.NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL ||
+    'http://localhost:8085',
+  'user-management-service'
+);
+
+export const mealPlanManagementClient = createServiceClient(
+  process.env.NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL ||
+    'http://localhost:8086',
+  'meal-plan-management-service'
+);
+
+// Shared Request Interceptor for All Services
+const requestInterceptor = (config: any) => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  // Add request ID for tracing
+  config.headers['X-Request-ID'] = crypto.randomUUID();
+  return config;
+};
+
+// Shared Response Interceptor for All Services
+const responseInterceptor = async (error: any) => {
+  const originalRequest = error.config;
+
+  if (error.response?.status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true;
+
+    try {
+      await useAuthStore.getState().refreshToken();
+      const token = useAuthStore.getState().token;
+      originalRequest.headers.Authorization = `Bearer ${token}`;
+      // Retry with the appropriate client based on service name
+      const serviceName = originalRequest.headers['X-Service-Name'];
+      const client = getClientByServiceName(serviceName);
+      return client(originalRequest);
+    } catch (refreshError) {
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+      return Promise.reject(refreshError);
+    }
+  }
+
+  return Promise.reject(error);
+};
+
+// Apply interceptors to all service clients
+[
+  authClient,
+  recipeManagementClient,
+  recipeScraperClient,
+  mediaManagementClient,
+  userManagementClient,
+  mealPlanManagementClient,
+].forEach(client => {
+  client.interceptors.request.use(requestInterceptor, error =>
+    Promise.reject(error)
+  );
+  client.interceptors.response.use(response => response, responseInterceptor);
 });
 
-// Request Interceptor
-apiClient.interceptors.request.use(
-  config => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => Promise.reject(error)
-);
-
-// Response Interceptor
-apiClient.interceptors.response.use(
-  response => response,
-  async error => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        await useAuthStore.getState().refreshToken();
-        const token = useAuthStore.getState().token;
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        useAuthStore.getState().logout();
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-
-    return Promise.reject(error);
-  }
-);
+// Service Client Resolver
+function getClientByServiceName(serviceName: string) {
+  const clientMap: Record<string, any> = {
+    'auth-service': authClient,
+    'recipe-management-service': recipeManagementClient,
+    'recipe-scraper-service': recipeScraperClient,
+    'media-management-service': mediaManagementClient,
+    'user-management-service': userManagementClient,
+    'meal-plan-management-service': mealPlanManagementClient,
+  };
+  return clientMap[serviceName] || recipeManagementClient;
+}
 ```
 
-### API Service Pattern
+### Microservice API Pattern
 
 ```typescript
-// Recipe API Service
-export class RecipeApiService {
-  async getRecipes(filters: RecipeFilters): Promise<RecipesResponse> {
-    const { data } = await apiClient.get('/recipes', { params: filters });
+// Recipe Management Service API
+export class RecipeManagementApiService {
+  async getAllRecipes(
+    params?: PaginationParams
+  ): Promise<SearchRecipesResponse> {
+    const queryString = params ? buildQueryParams(params) : '';
+    const { data } = await recipeManagementClient.get(
+      `/recipes${queryString ? `?${queryString}` : ''}`
+    );
     return data;
   }
 
-  async getRecipe(id: string): Promise<Recipe> {
-    const { data } = await apiClient.get(`/recipes/${id}`);
+  async getRecipeById(id: string): Promise<RecipeDto> {
+    const { data } = await recipeManagementClient.get(`/recipes/${id}`);
     return data;
   }
 
-  async createRecipe(recipe: CreateRecipeRequest): Promise<Recipe> {
-    const { data } = await apiClient.post('/recipes', recipe);
+  async createRecipe(recipe: CreateRecipeRequest): Promise<RecipeDto> {
+    const { data } = await recipeManagementClient.post('/recipes', recipe);
     return data;
   }
 
-  async updateRecipe(id: string, recipe: UpdateRecipeRequest): Promise<Recipe> {
-    const { data } = await apiClient.put(`/recipes/${id}`, recipe);
+  async updateRecipe(
+    id: string,
+    recipe: UpdateRecipeRequest
+  ): Promise<RecipeDto> {
+    const { data } = await recipeManagementClient.put(`/recipes/${id}`, recipe);
     return data;
   }
 
   async deleteRecipe(id: string): Promise<void> {
-    await apiClient.delete(`/recipes/${id}`);
+    await recipeManagementClient.delete(`/recipes/${id}`);
+  }
+}
+
+// Recipe Scraper Service API
+export class RecipeScraperApiService {
+  async scrapeRecipe(url: string): Promise<ScrapedRecipeDto> {
+    const { data } = await recipeScraperClient.post('/recipes/scrape', { url });
+    return data;
   }
 
-  // Bulk operations
-  async bulkUpdateRecipes(updates: BulkRecipeUpdate[]): Promise<Recipe[]> {
-    const { data } = await apiClient.post('/recipes/bulk-update', { updates });
+  async getScrapingHistory(
+    params?: PaginationParams
+  ): Promise<ScrapingHistoryResponse> {
+    const queryString = params ? buildQueryParams(params) : '';
+    const { data } = await recipeScraperClient.get(
+      `/recipes/history${queryString ? `?${queryString}` : ''}`
+    );
+    return data;
+  }
+
+  async getSupportedSites(): Promise<SupportedSitesResponse> {
+    const { data } = await recipeScraperClient.get('/sites/supported');
     return data;
   }
 }
 
-export const recipesApi = new RecipeApiService();
+// Media Management Service API
+export class MediaManagementApiService {
+  async uploadMedia(file: File, metadata?: MediaMetadata): Promise<MediaDto> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (metadata) {
+      formData.append('metadata', JSON.stringify(metadata));
+    }
+
+    const { data } = await mediaManagementClient.post(
+      '/media/upload',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    );
+    return data;
+  }
+
+  async getPresignedUploadUrl(
+    filename: string,
+    contentType: string
+  ): Promise<PresignedUrlDto> {
+    const { data } = await mediaManagementClient.post('/media/presigned-url', {
+      filename,
+      contentType,
+    });
+    return data;
+  }
+}
+
+// Export service instances
+export const recipeManagementApi = new RecipeManagementApiService();
+export const recipeScraperApi = new RecipeScraperApiService();
+export const mediaManagementApi = new MediaManagementApiService();
 ```
 
-### Error Handling Architecture
+### Microservice Error Handling Architecture
 
 ```typescript
 // API Error Types
@@ -1020,23 +1168,112 @@ spec:
 
 For detailed deployment information, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
+### Microservices Environment Configuration
+
+```bash
+# Authentication Service
+NEXT_PUBLIC_AUTH_SERVICE_URL=http://localhost:8081
+
+# Recipe Management Service
+NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL=http://localhost:8082
+
+# Recipe Scraper Service
+NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL=http://localhost:8083
+
+# Media Management Service
+NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL=http://localhost:8084
+
+# User Management Service
+NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL=http://localhost:8085
+
+# Meal Plan Management Service
+NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL=http://localhost:8086
+```
+
+### Service Health Monitoring
+
+```typescript
+// Health Check Coordinator
+export class ServiceHealthMonitor {
+  private services = [
+    { name: 'auth', client: authClient },
+    { name: 'recipe-management', client: recipeManagementClient },
+    { name: 'recipe-scraper', client: recipeScraperClient },
+    { name: 'media-management', client: mediaManagementClient },
+    { name: 'user-management', client: userManagementClient },
+    { name: 'meal-plan-management', client: mealPlanManagementClient },
+  ];
+
+  async checkAllServices(): Promise<ServiceHealthStatus[]> {
+    const healthChecks = this.services.map(async service => {
+      try {
+        await service.client.get('/health');
+        return { name: service.name, status: 'healthy', timestamp: Date.now() };
+      } catch (error) {
+        return {
+          name: service.name,
+          status: 'unhealthy',
+          timestamp: Date.now(),
+          error,
+        };
+      }
+    });
+
+    return Promise.all(healthChecks);
+  }
+
+  async getServiceStatus(serviceName: string): Promise<ServiceHealthStatus> {
+    const service = this.services.find(s => s.name === serviceName);
+    if (!service) {
+      throw new Error(`Unknown service: ${serviceName}`);
+    }
+
+    try {
+      await service.client.get('/health');
+      return { name: serviceName, status: 'healthy', timestamp: Date.now() };
+    } catch (error) {
+      return {
+        name: serviceName,
+        status: 'unhealthy',
+        timestamp: Date.now(),
+        error,
+      };
+    }
+  }
+}
+```
+
 ## 📈 Scalability Considerations
 
-### Horizontal Scaling Strategy
+### Microservices Scaling Strategy
 
-1. **Stateless Design**: All components are designed to be stateless
-2. **Load Balancing**: Multiple instances behind load balancer
-3. **Database Scaling**: Read replicas and connection pooling
-4. **CDN Integration**: Static assets served from CDN
-5. **Caching Layers**: Multiple levels of caching
+1. **Service Independence**: Each microservice can scale independently based on demand
+2. **Stateless Design**: All UI and service components are designed to be stateless
+3. **Load Balancing**: Multiple instances of each service behind load balancers
+4. **Database Per Service**: Each service manages its own data store
+5. **Service Mesh**: Communication between services through service mesh (Istio/Linkerd)
+6. **CDN Integration**: Static assets served from CDN
+7. **Multi-level Caching**: Browser cache, CDN cache, service cache, and database cache
+
+### Service-Specific Scaling Patterns
+
+1. **Recipe Management**: Read-heavy workload, multiple read replicas
+2. **Recipe Scraper**: CPU-intensive, horizontal scaling with job queues
+3. **Media Management**: Storage-heavy, CDN integration and compression
+4. **User Management**: Session management with Redis clustering
+5. **Meal Plan Management**: Time-sensitive operations, optimized for quick queries
+6. **Auth Service**: Critical availability, multiple regions with failover
 
 ### Performance Optimization
 
 1. **Bundle Splitting**: Route-based and component-based splitting
-2. **Lazy Loading**: On-demand component loading
-3. **Image Optimization**: Next.js image optimization with WebP/AVIF
+2. **Lazy Loading**: On-demand component loading with service-specific bundles
+3. **Image Optimization**: Next.js image optimization with WebP/AVIF via Media Management Service
 4. **Service Worker**: Offline capability and asset caching
-5. **Database Optimization**: Query optimization and indexing
+5. **Database Optimization**: Service-specific query optimization and indexing
+6. **API Gateway**: Request routing, rate limiting, and response caching
+7. **Connection Pooling**: Efficient database connections per service
+8. **Circuit Breakers**: Prevent cascade failures between services
 
 ### Monitoring & Observability
 

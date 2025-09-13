@@ -8,6 +8,7 @@ import type {
   ClientCredentialsRequest,
   RefreshTokenRequest,
 } from '@/types/auth';
+import { AxiosHeaders } from 'axios';
 
 // Mock the auth client
 jest.mock('@/lib/api/auth/client', () => ({
@@ -209,6 +210,20 @@ describe('OAuth2 API', () => {
       );
       expect(result).toEqual(mockToken);
     });
+
+    it('should handle client credentials token error', async () => {
+      const request: ClientCredentialsRequest = {
+        grant_type: 'client_credentials',
+        scope: 'api:read',
+      };
+
+      const error = new Error('Client credentials failed');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(oauth2Api.clientCredentialsToken(request)).rejects.toThrow(
+        'Client credentials failed'
+      );
+    });
   });
 
   describe('refreshToken', () => {
@@ -237,6 +252,20 @@ describe('OAuth2 API', () => {
         }
       );
       expect(result).toEqual(mockToken);
+    });
+
+    it('should handle refresh token error', async () => {
+      const request: RefreshTokenRequest = {
+        grant_type: 'refresh_token',
+        refresh_token: 'invalid-refresh-token',
+      };
+
+      const error = new Error('Invalid refresh token');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(oauth2Api.refreshToken(request)).rejects.toThrow(
+        'Invalid refresh token'
+      );
     });
   });
 
@@ -279,6 +308,15 @@ describe('OAuth2 API', () => {
 
       expect(result).toEqual(mockIntrospection);
     });
+
+    it('should handle introspect token error', async () => {
+      const error = new Error('Introspection failed');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(
+        oauth2Api.introspectToken({ token: 'bad-token' })
+      ).rejects.toThrow('Introspection failed');
+    });
   });
 
   describe('revokeToken', () => {
@@ -317,6 +355,15 @@ describe('OAuth2 API', () => {
         }
       );
     });
+
+    it('should handle revoke token error', async () => {
+      const error = new Error('Revoke failed');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(
+        oauth2Api.revokeToken({ token: 'bad-token' })
+      ).rejects.toThrow('Revoke failed');
+    });
   });
 
   describe('getUserInfo', () => {
@@ -340,6 +387,171 @@ describe('OAuth2 API', () => {
       mockedAuthClient.get.mockRejectedValue(error);
 
       await expect(oauth2Api.getUserInfo()).rejects.toThrow('Unauthorized');
+    });
+  });
+
+  describe('Transform Request Functionality', () => {
+    it('should transform request data to URLSearchParams for token endpoints', async () => {
+      const mockToken: TokenResponse = {
+        access_token: 'test-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      };
+
+      const request = {
+        grant_type: 'authorization_code',
+        code: 'test-code',
+        redirect_uri: 'http://localhost:3000/callback',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockToken };
+      });
+
+      await oauth2Api.exchangeCodeForToken(request as any);
+
+      expect(transformedData).toBe(
+        'grant_type=authorization_code&code=test-code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback'
+      );
+    });
+
+    it('should transform request data for introspect endpoint', async () => {
+      const mockIntrospection: IntrospectResponse = {
+        active: true,
+      };
+
+      const request = {
+        token: 'test-token',
+        token_type_hint: 'access_token' as const,
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockIntrospection };
+      });
+
+      await oauth2Api.introspectToken(request);
+
+      expect(transformedData).toBe(
+        'token=test-token&token_type_hint=access_token'
+      );
+    });
+
+    it('should transform request data for revoke endpoint', async () => {
+      const request = {
+        token: 'test-token',
+        token_type_hint: 'refresh_token' as const,
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: {} };
+      });
+
+      await oauth2Api.revokeToken(request);
+
+      expect(transformedData).toBe(
+        'token=test-token&token_type_hint=refresh_token'
+      );
+    });
+
+    it('should transform request data for client credentials endpoint', async () => {
+      const mockToken: TokenResponse = {
+        access_token: 'client-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      };
+
+      const request: ClientCredentialsRequest = {
+        grant_type: 'client_credentials',
+        scope: 'api:read',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockToken };
+      });
+
+      await oauth2Api.clientCredentialsToken(request);
+
+      expect(transformedData).toBe(
+        'grant_type=client_credentials&scope=api%3Aread'
+      );
+    });
+
+    it('should transform request data for refresh token endpoint', async () => {
+      const mockToken: TokenResponse = {
+        access_token: 'new-access-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+      };
+
+      const request: RefreshTokenRequest = {
+        grant_type: 'refresh_token',
+        refresh_token: 'refresh-token',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockToken };
+      });
+
+      await oauth2Api.refreshToken(request);
+
+      expect(transformedData).toBe(
+        'grant_type=refresh_token&refresh_token=refresh-token'
+      );
     });
   });
 });

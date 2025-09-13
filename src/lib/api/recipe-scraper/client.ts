@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import type { ErrorResponse } from '@/types/recipe-scraper';
 
 const baseURL =
@@ -12,34 +16,45 @@ export const recipeScraperClient = axios.create({
   },
 });
 
+export const requestInterceptor = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+
+  if (token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+};
+
+export const requestErrorHandler = (error: unknown): Promise<never> =>
+  Promise.reject(error);
+
 recipeScraperClient.interceptors.request.use(
-  config => {
-    const token =
-      typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  error => Promise.reject(error)
+  requestInterceptor,
+  requestErrorHandler
 );
 
-recipeScraperClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    // Handle general errors
-    const errorData = error.response?.data as ErrorResponse | undefined;
-    const message =
-      errorData?.detail ?? error.message ?? 'An unexpected error occurred';
+export const responseInterceptor = (response: AxiosResponse) => response;
 
-    return Promise.reject({
-      ...error,
-      message,
-      status: error.response?.status,
-    });
-  }
+export const responseErrorHandler = (error: AxiosError) => {
+  const errorData = error.response?.data as ErrorResponse | undefined;
+  const message =
+    errorData?.detail ?? error.message ?? 'An unexpected error occurred';
+
+  return Promise.reject({
+    ...error,
+    message,
+    status: error.response?.status,
+  });
+};
+
+recipeScraperClient.interceptors.response.use(
+  responseInterceptor,
+  responseErrorHandler
 );
 
 export class RecipeScraperApiError extends Error {

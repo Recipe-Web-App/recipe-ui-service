@@ -64,6 +64,7 @@ repos:
         entry: npx markdownlint --fix
         language: system
         files: \.md$
+        exclude: ^CLAUDE\.md$
 
   # YAML linting
   - repo: https://github.com/adrienverge/yamllint
@@ -189,8 +190,16 @@ repos:
         pass_filenames: false
         args: []
 
+      # Test coverage validation (pre-push only)
+      - id: test-coverage
+        name: Test coverage validation
+        entry: npm run test:coverage
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+
 # Configuration
-default_install_hook_types: [pre-commit, commit-msg]
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
 default_stages: [pre-commit]
 minimum_pre_commit_version: 3.0.0
 default_language_version:

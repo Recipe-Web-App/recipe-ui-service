@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@/types';
+import { AuthorizedUser } from '@/types';
 import type { User as AuthUser, Token } from '@/types/auth';
 
 interface AuthState {
-  user: User | null;
+  user: AuthorizedUser | null;
   authUser: AuthUser | null;
   token: string | null;
   refreshToken: string | null;
@@ -13,7 +13,7 @@ interface AuthState {
   isLoading: boolean;
   pkceVerifier: string | null;
   pkceState: string | null;
-  setUser: (user: User) => void;
+  setUser: (user: AuthorizedUser) => void;
   setAuthUser: (user: AuthUser) => void;
   setToken: (token: string) => void;
   setTokenData: (tokenData: Token) => void;
@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthState>()(
       pkceVerifier: null,
       pkceState: null,
 
-      setUser: (user: User) => {
+      setUser: (user: AuthorizedUser) => {
         set({ user, isAuthenticated: true });
       },
 
