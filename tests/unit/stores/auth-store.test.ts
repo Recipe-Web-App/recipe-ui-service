@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/stores/auth-store';
 import { renderHook, act } from '@testing-library/react';
 import type { User as AuthUser, Token } from '@/types/auth';
+import type { AuthorizedUser } from '@/types';
 
 // Mock localStorage
 const localStorageMock = {
@@ -43,6 +44,12 @@ describe('Auth Store', () => {
     updated_at: '2023-01-01T00:00:00Z',
   };
 
+  const mockUser: AuthorizedUser = {
+    id: '123',
+    email: 'test@example.com',
+    name: 'Test User',
+  };
+
   const mockToken: Token = {
     access_token: 'mock-access-token',
     refresh_token: 'mock-refresh-token',
@@ -67,6 +74,19 @@ describe('Auth Store', () => {
     });
   });
 
+  describe('setUser', () => {
+    it('should set user and mark as authenticated', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      act(() => {
+        result.current.setUser(mockUser);
+      });
+
+      expect(result.current.user).toEqual(mockUser);
+      expect(result.current.isAuthenticated).toBe(true);
+    });
+  });
+
   describe('setAuthUser', () => {
     it('should set auth user and mark as authenticated', () => {
       const { result } = renderHook(() => useAuthStore());
@@ -77,6 +97,27 @@ describe('Auth Store', () => {
 
       expect(result.current.authUser).toEqual(mockAuthUser);
       expect(result.current.isAuthenticated).toBe(true);
+    });
+  });
+
+  describe('setToken', () => {
+    it('should set token with default expiration and store in localStorage', () => {
+      const { result } = renderHook(() => useAuthStore());
+      const mockNow = 1000000;
+      jest.spyOn(Date, 'now').mockReturnValue(mockNow);
+
+      act(() => {
+        result.current.setToken('test-token');
+      });
+
+      expect(result.current.token).toBe('test-token');
+      expect(result.current.tokenExpiresAt).toBe(mockNow + 60 * 60 * 1000);
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
+        'authToken',
+        'test-token'
+      );
+
+      jest.restoreAllMocks();
     });
   });
 
@@ -250,6 +291,24 @@ describe('Auth Store', () => {
       });
 
       expect(result.current.isTokenExpired()).toBe(true);
+    });
+  });
+
+  describe('setLoading', () => {
+    it('should set loading state', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      act(() => {
+        result.current.setLoading(true);
+      });
+
+      expect(result.current.isLoading).toBe(true);
+
+      act(() => {
+        result.current.setLoading(false);
+      });
+
+      expect(result.current.isLoading).toBe(false);
     });
   });
 });

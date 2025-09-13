@@ -50,13 +50,45 @@ src/
 │   ├── ui/             # Base UI components
 │   ├── forms/          # Form components
 │   └── layout/         # Layout components
-├── hooks/              # Custom React hooks
+├── hooks/              # Custom React hooks (service-specific)
+│   ├── auth/           # Authentication hooks
+│   ├── recipe-management/ # Recipe management hooks
+│   ├── recipe-scraper/ # Recipe scraper hooks
+│   ├── media-management/ # Media management hooks
+│   ├── meal-plan-management/ # Meal plan hooks
+│   └── user-management/ # User management hooks
 ├── lib/                # Utilities, API clients, configurations
-│   ├── api/            # API client and endpoints
+│   ├── api/            # Microservice API clients
+│   │   ├── auth/       # Auth service client
+│   │   ├── recipe-management/ # Recipe management client
+│   │   ├── recipe-scraper/ # Recipe scraper client
+│   │   ├── media-management/ # Media management client
+│   │   ├── meal-plan-management/ # Meal plan client
+│   │   └── user-management/ # User management client
 │   ├── auth/           # Authentication utilities
 │   └── utils/          # General utilities
 ├── stores/             # Zustand state management stores
+│   └── ui/             # UI state stores (12 specialized stores)
+│       ├── toast-store.ts # Notification management
+│       ├── theme-store.ts # Theme & system preferences
+│       ├── navigation-store.ts # Navigation state
+│       ├── modal-store.ts # Modal stack management
+│       ├── loading-store.ts # Loading states
+│       ├── search-filter-store.ts # Search & filters
+│       ├── layout-store.ts # Layout & pagination
+│       ├── interaction-store.ts # User interactions
+│       ├── offline-store.ts # Offline & sync
+│       ├── accessibility-store.ts # A11y preferences
+│       ├── feature-store.ts # Feature flags
+│       └── preference-store.ts # User preferences
 ├── types/              # TypeScript type definitions
+│   ├── auth/           # Authentication types
+│   ├── recipe-management/ # Recipe management types
+│   ├── recipe-scraper/ # Recipe scraper types
+│   ├── media-management/ # Media management types
+│   ├── meal-plan-management/ # Meal plan types
+│   ├── user-management/ # User management types
+│   └── ui/             # UI state types
 ├── styles/             # Global styles and themes
 ├── utils/              # Helper functions
 └── constants/          # App constants and configuration
@@ -73,9 +105,13 @@ src/
 
 ### State Management & Data Fetching
 
-- **TanStack Query** - Server state management
-- **Zustand** - Client state management
-- **Axios** - HTTP client
+- **TanStack Query** - Server state management with caching and synchronization
+- **Zustand** - Client state management with 12 specialized UI stores
+  - Toast notifications, Theme management, Navigation state
+  - Modal stack, Loading states, Search & filters
+  - Layout & pagination, User interactions, Offline support
+  - Accessibility, Feature flags, User preferences
+- **Axios** - HTTP client with interceptors for auth and error handling
 
 ### Development & Quality Tools
 

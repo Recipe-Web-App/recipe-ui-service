@@ -331,6 +331,238 @@ space-16: 4rem; /* 64px */
 </RecipePage>
 ```
 
+## 🔄 State Management Integration
+
+### UI Store Architecture
+
+The application uses a comprehensive set of Zustand stores for UI state management:
+
+```tsx
+import { useUI } from '@/stores/ui';
+
+// Access all UI stores through one hook
+const ui = useUI();
+const {
+  toast,
+  theme,
+  navigation,
+  modal,
+  loading,
+  search,
+  layout,
+  accessibility,
+} = ui;
+```
+
+### Toast Notifications
+
+```tsx
+import { useToastStore } from '@/stores/ui/toast-store';
+
+function RecipeActions() {
+  const { addToast } = useToastStore();
+
+  const handleSave = async () => {
+    try {
+      await saveRecipe();
+      addToast({
+        message: 'Recipe saved successfully!',
+        type: 'success',
+        duration: 3000,
+      });
+    } catch (error) {
+      addToast({
+        message: 'Failed to save recipe',
+        type: 'error',
+        action: {
+          label: 'Retry',
+          onClick: handleSave,
+        },
+      });
+    }
+  };
+}
+```
+
+### Theme Management
+
+```tsx
+import { useThemeStore } from '@/stores/ui/theme-store';
+
+function ThemeToggle() {
+  const { theme, effectiveTheme, setTheme } = useThemeStore();
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => setTheme(effectiveTheme === 'light' ? 'dark' : 'light')}
+    >
+      {effectiveTheme === 'light' ? <MoonIcon /> : <SunIcon />}
+    </Button>
+  );
+}
+```
+
+### Modal Management
+
+```tsx
+import { useModalStore } from '@/stores/ui/modal-store';
+
+function RecipeDetails() {
+  const { openModal, closeModal } = useModalStore();
+
+  const handleEdit = () => {
+    openModal({
+      id: 'edit-recipe',
+      component: RecipeEditModal,
+      props: { recipeId: recipe.id },
+      size: 'lg',
+      closeOnOverlayClick: false,
+    });
+  };
+}
+```
+
+### Search & Filter State
+
+```tsx
+import { useSearchFilterStore } from '@/stores/ui/search-filter-store';
+
+function RecipeFilters() {
+  const {
+    activeQuery,
+    activeFilters,
+    setQuery,
+    addFilter,
+    removeFilter,
+    setSortConfig,
+  } = useSearchFilterStore();
+
+  return (
+    <FilterPanel>
+      <SearchInput
+        value={activeQuery}
+        onChange={setQuery}
+        placeholder="Search recipes..."
+      />
+      <FilterGroup>
+        {activeFilters.map(filter => (
+          <FilterChip
+            key={filter.id}
+            label={filter.label}
+            onRemove={() => removeFilter(filter.id)}
+          />
+        ))}
+      </FilterGroup>
+    </FilterPanel>
+  );
+}
+```
+
+### Layout & View Modes
+
+```tsx
+import { useLayoutStore } from '@/stores/ui/layout-store';
+
+function RecipeGrid() {
+  const { viewMode, setViewMode, pagination, setPage } = useLayoutStore();
+
+  return (
+    <>
+      <ViewModeSelector
+        mode={viewMode}
+        onChange={setViewMode}
+        options={['grid', 'list', 'card']}
+      />
+      <div className={viewMode === 'grid' ? 'grid' : 'flex flex-col'}>
+        {recipes.map(recipe => (
+          <RecipeCard key={recipe.id} recipe={recipe} />
+        ))}
+      </div>
+      <Pagination
+        page={pagination.page}
+        totalPages={pagination.totalPages}
+        onPageChange={setPage}
+      />
+    </>
+  );
+}
+```
+
+### Offline Support
+
+```tsx
+import { useOfflineStore } from '@/stores/ui/offline-store';
+
+function OfflineIndicator() {
+  const { isOnline, syncQueue, processSyncQueue } = useOfflineStore();
+
+  if (isOnline) return null;
+
+  return (
+    <Banner variant="warning">
+      <p>You're offline. {syncQueue.length} changes pending sync.</p>
+      <Button size="sm" onClick={processSyncQueue}>
+        Sync Now
+      </Button>
+    </Banner>
+  );
+}
+```
+
+### Feature Flags
+
+```tsx
+import { useFeatureStore } from '@/stores/ui/feature-store';
+
+function RecipeFeatures() {
+  const { isFeatureEnabled, getFeatureVariant } = useFeatureStore();
+
+  // Check if feature is enabled
+  if (!isFeatureEnabled('ai-suggestions')) {
+    return null;
+  }
+
+  // Get A/B test variant
+  const variant = getFeatureVariant('recipe-layout');
+
+  return (
+    <div>
+      {variant === 'grid' ? <GridLayout /> : <ListLayout />}
+      <AISuggestions />
+    </div>
+  );
+}
+```
+
+### Accessibility Management
+
+```tsx
+import { useAccessibilityStore } from '@/stores/ui/accessibility-store';
+
+function AccessibleRecipeCard({ recipe }) {
+  const { fontSize, highContrast, announce } = useAccessibilityStore();
+
+  const handleFavorite = () => {
+    toggleFavorite(recipe.id);
+    announce(`${recipe.title} added to favorites`, 'polite');
+  };
+
+  return (
+    <Card
+      className={cn(
+        'recipe-card',
+        highContrast && 'high-contrast',
+        fontSize === 'large' && 'text-lg'
+      )}
+    >
+      {/* Card content */}
+    </Card>
+  );
+}
+```
+
 ## 💫 User Experience Patterns
 
 ### Loading States
