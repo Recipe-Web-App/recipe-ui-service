@@ -1,452 +1,345 @@
-# 🤖 Claude Code Integration Guide
+# CLAUDE.md
 
-This document provides comprehensive guidance for using Claude Code with this Recipe UI Service project,
-optimizing your AI-assisted development workflow.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 🚀 Quick Start
+## Recipe UI Service - Claude Code Guide
 
-### Setting Up Claude Code for This Project
+A comprehensive guide for using Claude Code with this Next.js 15 recipe management application built with microservices architecture.
 
-1. **Project Recognition**: Claude Code automatically recognizes this as a Next.js project with enterprise-grade tooling
-2. **Context Loading**: Key project files are automatically indexed for better assistance
-3. **Tool Integration**: All project scripts and tools are available for Claude Code operations
+## 🚀 Quick Start Commands
 
-### Key Project Commands for Claude Code
+### Essential Development Commands
 
 ```bash
 # Development workflow
-npm run dev                    # Start development server
+npm run dev                    # Start development server with Turbopack
 npm run build                 # Production build
 npm run test                  # Run all tests
-npm run lint                  # Code quality checks
-
-# Claude Code friendly commands
-npm run test:watch            # Interactive testing
+npm run test:watch            # Interactive test watcher
+npm run lint                  # Lint and fix code issues
 npm run type-check           # TypeScript validation
+npm run format              # Format code with Prettier
+
+# Quality assurance (run before committing)
+npm run quality             # Combined lint + type-check + test
+npm run validate            # Full validation suite
+npm run validate:security   # Security scans
+```
+
+### Testing Commands
+
+```bash
+# Unit and integration tests
+npm run test:unit                    # Unit tests only
+npm run test:integration            # All integration tests
+npm run test:integration:frontend   # Frontend integration tests
+npm run test:integration:backend    # Backend integration tests
+
+# End-to-end and specialized testing
+npm run test:e2e                   # E2E tests with Playwright
+npm run test:e2e:headed           # E2E tests with browser UI
+npm run test:performance          # Performance testing
+npm run test:a11y                 # Accessibility testing
+npm run test:visual               # Visual regression testing
+npm run test:coverage             # Generate coverage report
+```
+
+### Performance and Analysis
+
+```bash
 npm run analyze              # Bundle analysis
+npm run perf:lighthouse     # Lighthouse performance audit
+npm run perf:vitals         # Core Web Vitals measurement
+npm run size-limit          # Bundle size validation
+npm run knip                # Unused code detection
+npm run madge               # Circular dependency detection
 ```
 
-## 🛠️ Claude Code Workflows
+## 🏗️ Architecture Overview
 
-### 1. **Development Workflow Integration**
+### Microservices Architecture
 
-#### Starting a New Feature
+This UI service communicates with 6 backend microservices:
 
-```bash
-# Claude Code can help you:
-git checkout -b feature/new-feature
-npm run dev                   # Start development server
-npm run test:watch           # Start test watcher
+- **Auth Service** (port 8081) - Authentication and authorization
+- **Recipe Management Service** (port 8082) - Recipe CRUD operations
+- **Recipe Scraper Service** (port 8083) - Web scraping and import
+- **Media Management Service** (port 8084) - File upload and processing
+- **User Management Service** (port 8085) - User profiles and preferences
+- **Meal Plan Management Service** (port 8086) - Meal planning
+
+### Project Structure
+
+```
+src/
+├── app/                    # Next.js 15 App Router
+├── components/             # React components
+│   ├── ui/                # Base design system components
+│   ├── forms/             # Form components
+│   └── layout/            # Layout components
+├── hooks/                 # Service-specific React hooks
+│   ├── auth/             # Authentication hooks
+│   ├── recipe-management/
+│   ├── recipe-scraper/
+│   ├── media-management/
+│   ├── user-management/
+│   └── meal-plan-management/
+├── lib/                   # API clients and utilities
+│   ├── api/              # Service-specific API clients
+│   │   ├── auth/
+│   │   ├── recipe-management/
+│   │   ├── recipe-scraper/
+│   │   ├── media-management/
+│   │   ├── user-management/
+│   │   └── meal-plan-management/
+│   └── utils/            # General utilities
+├── stores/               # Zustand state stores
+├── types/                # Service-specific TypeScript types
+└── constants/            # Application constants
 ```
 
-**Claude Code Tips:**
+## 🔧 Key Technologies & Patterns
 
-- Mention the feature you're building for context-aware suggestions
-- Ask Claude to generate component boilerplate following project patterns
-- Request test cases that match the project's testing strategy
+### State Management
 
-#### Code Quality Assurance
+- **TanStack Query**: Server state management with caching, prefetching, and synchronization
+- **Zustand**: Lightweight client state management
+- **React Hook Form**: Form state management
 
-```bash
-# Run these before committing (Claude Code can run these for you):
-npm run lint                 # ESLint with 60+ rules
-npm run type-check          # TypeScript validation
-npm run test                # Unit and integration tests
-npm run format              # Prettier formatting
+### API Integration Pattern
+
+Each microservice follows this structure:
+
+```typescript
+// API Client (src/lib/api/{service}/client.ts)
+export const serviceClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_{SERVICE}_URL,
+  // Interceptors for auth, error handling
+});
+
+// API Methods (src/lib/api/{service}/[feature].ts)
+export class FeatureApi {
+  async getItems(): Promise<ItemDto[]> { /* ... */ }
+  async createItem(data: CreateRequest): Promise<ItemDto> { /* ... */ }
+}
+
+// React Hooks (src/hooks/{service}/use[Feature].ts)
+export const useItems = () => useQuery({
+  queryKey: ['service', 'items'],
+  queryFn: () => featureApi.getItems(),
+});
+
+export const useCreateItem = () => useMutation({
+  mutationFn: featureApi.createItem,
+  onSuccess: () => queryClient.invalidateQueries(['service', 'items']),
+});
 ```
 
-### 2. **AI-Assisted Code Generation**
+### Component Patterns
 
-#### Component Creation
+- **Container/Presenter**: Separate business logic from presentation
+- **Compound Components**: For complex UI components
+- **Custom Hooks**: Encapsulate business logic and API integration
 
-When asking Claude Code to create components, mention:
+### Error Handling
 
-- **Project structure**: "Create a component following the src/components structure"
-- **Styling approach**: "Use TailwindCSS with our design system"
-- **Testing requirements**: "Include unit tests with React Testing Library"
-- **TypeScript**: "Use strict TypeScript with proper interfaces"
+Each service has custom error classes and handlers:
 
-**Example Request:**
+```typescript
+export class ServiceApiError extends Error {
+  status?: number;
+  details?: Record<string, unknown>;
+}
+
+export const handleServiceApiError = (error: unknown): never => {
+  // Standardized error handling logic
+};
+```
+
+## 📝 Code Generation Guidelines
+
+### When Creating Components
+
+Specify the following for proper code generation:
 
 ```text
-Create a RecipeCard component in src/components/ui/ that displays recipe
-information, uses TailwindCSS styling, includes proper TypeScript interfaces,
-and follows our project's component patterns. Also create unit tests.
+Create a [ComponentName] component in src/components/[folder]/ that:
+- Uses TypeScript with strict typing
+- Follows the existing component patterns in src/components/
+- Uses TailwindCSS for styling
+- Includes proper accessibility attributes
+- Has comprehensive unit tests with React Testing Library
+- Follows the error boundary patterns
 ```
 
-#### API Integration
-
-For API-related code:
-
-- Reference service-specific client patterns in `src/lib/api/{service}/client.ts`
-- Use TanStack Query patterns from `src/hooks/{service}/use{Feature}.ts`
-- Follow error handling patterns established in each microservice API client
-
-**Example Request:**
+### When Creating API Integration
 
 ```text
-Create a new API hook for user management that follows the TanStack Query
-patterns in src/hooks/recipe-management/useRecipes.ts, uses the user management
-API client from src/lib/api/user-management/client.ts, and includes proper
-error handling following the microservices architecture.
+Create API integration for [feature] that:
+- Follows the existing pattern in src/lib/api/[service-name]/
+- Uses the service-specific client from src/lib/api/[service-name]/client.ts
+- Includes proper TypeScript types from src/types/[service-name]/
+- Has corresponding React hooks in src/hooks/[service-name]/
+- Includes comprehensive error handling
+- Has unit and integration tests
 ```
 
-### 3. **Testing Integration**
-
-#### Test Generation
-
-Claude Code can generate tests following project patterns:
-
-```bash
-# Test types available:
-npm run test:unit            # Unit tests
-npm run test:integration     # Integration tests
-npm run test:e2e            # End-to-end tests
-npm run test:coverage       # Coverage reports
-```
-
-**Testing Request Examples:**
+### When Creating Tests
 
 ```text
-Generate unit tests for the RecipeCard component using React Testing Library,
-following the patterns in tests/unit/components/. Include accessibility
-testing and user interaction scenarios.
-
-Create integration tests for the recipe creation workflow following the
-frontend integration test patterns in tests/integration/frontend/.
+Create tests that:
+- Follow patterns in tests/unit/ and tests/integration/
+- Use React Testing Library for components
+- Mock API calls appropriately
+- Include accessibility testing with @axe-core/react
+- Test both happy path and error scenarios
+- Maintain the 85%+ coverage target
 ```
 
-### 4. **Performance Optimization**
+## 🔍 Common Patterns to Follow
 
-#### Performance Analysis
+### API Client Configuration
 
-Claude Code can help analyze and optimize performance:
-
-```bash
-# Performance commands Claude Code can run:
-npm run analyze             # Bundle analysis
-npm run size-limit         # Bundle size validation
-npm run perf:vitals        # Core Web Vitals testing
-npm run perf:lighthouse    # Lighthouse audits
+```typescript
+// Each service client includes:
+- Custom baseURL from environment variables
+- Request/response interceptors for auth and error handling
+- Proper timeout configuration (30s for file uploads)
+- TypeScript error handling with custom error classes
 ```
 
-**Performance Request Example:**
+### TanStack Query Configuration
 
-```text
-Analyze the current bundle size using npm run analyze and suggest
-optimizations for the largest chunks. Focus on code splitting and
-tree shaking opportunities.
-```
-
-## 🔧 Project-Specific Claude Code Commands
-
-### Custom Commands Available
-
-Claude Code has access to all package.json scripts:
-
-```json
+```typescript
+// Query configuration follows this pattern:
 {
-  "dev": "Start development server with Turbopack",
-  "build": "Production build",
-  "test:unit": "Unit tests only",
-  "test:integration:frontend": "Frontend integration tests",
-  "test:integration:backend": "Backend integration tests",
-  "test:e2e": "End-to-end tests with Playwright",
-  "test:performance": "Performance testing suite",
-  "test:visual": "Visual regression testing",
-  "test:a11y": "Accessibility testing",
-  "lint": "ESLint with auto-fix",
-  "type-check": "TypeScript validation",
-  "format": "Prettier code formatting",
-  "analyze": "Bundle size analysis",
-  "knip": "Unused code detection",
-  "madge": "Circular dependency check"
+  queryKey: ['service-name', 'resource', ...params],
+  queryFn: () => api.method(),
+  staleTime: 5 * 60 * 1000,  // 5 minutes
+  gcTime: 10 * 60 * 1000,    // 10 minutes
+}
+
+// Mutations include cache updates:
+onSuccess: (data) => {
+  queryClient.setQueryData(queryKey, data);
+  queryClient.invalidateQueries(['service-name']);
 }
 ```
 
-### Advanced Workflows
+### Environment Variables
 
-#### Security Scanning
-
-```bash
-# Claude Code can run security checks:
-npm audit                   # Dependency vulnerabilities
-npm run lint               # Security-focused ESLint rules
-secretlint                 # Secret detection
-```
-
-#### Quality Gates
+Services use these environment variable patterns:
 
 ```bash
-# Pre-commit simulation:
-npm run lint && npm run type-check && npm run test
+NEXT_PUBLIC_AUTH_SERVICE_URL=http://localhost:8081
+NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL=http://localhost:8082
+NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL=http://localhost:8083
+NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL=http://localhost:8084
+NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL=http://localhost:8085
+NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL=http://localhost:8086
 ```
 
-## 📝 Best Practices for Claude Code Interaction
+## 🛠️ Development Workflow
 
-### 1. **Context Sharing**
+### Before Committing Changes
 
-**Provide Clear Context:**
+Always run these commands to ensure code quality:
 
-```text
-I'm working on the Recipe UI Service project. I need to add user authentication
-to the existing Zustand store in src/stores/auth-store.ts. The project uses
-TanStack Query for API calls and follows strict TypeScript patterns.
+```bash
+npm run lint              # Fix linting issues
+npm run type-check       # Verify TypeScript
+npm run test             # Run tests
+npm run format           # Format code
 ```
 
-**Reference Project Files:**
+Or use the combined command:
 
-```text
-Looking at src/lib/api/recipe-management/client.ts, help me add error retry
-logic that follows the same patterns used for the recipe management API in
-src/lib/api/recipe-management/recipes.ts.
+```bash
+npm run quality          # Runs all the above
 ```
 
-### 2. **Code Generation Requests**
+### Creating New Features
 
-**Specific Structure Requests:**
+1. **Plan the feature** - Identify which services are involved
+2. **Create types** - Add TypeScript types in `src/types/[service]/`
+3. **Create API client** - Add methods to appropriate service client
+4. **Create hooks** - Add TanStack Query hooks in `src/hooks/[service]/`
+5. **Create components** - Build UI components following existing patterns
+6. **Add tests** - Unit tests for hooks/utils, integration tests for workflows
+7. **Update documentation** - Add any new patterns or conventions
 
-```text
-Create a new page component in src/app/profile/ that follows Next.js 15 App
-Router patterns, uses server components where appropriate, and integrates
-with our existing auth store and the user management microservice API.
+### Testing Strategy
+
+- **Unit Tests (70%)**: Components, hooks, utilities
+- **Integration Tests (25%)**: API integration, user workflows
+- **E2E Tests (5%)**: Critical user journeys
+
+### Performance Considerations
+
+- Components are optimized with React.memo where appropriate
+- TanStack Query handles caching and deduplication
+- Bundle analysis with `npm run analyze` to monitor size
+- Core Web Vitals monitoring with `npm run perf:vitals`
+
+## 🔒 Security & Best Practices
+
+### Security Features
+
+- ESLint security plugin with comprehensive rules
+- Automated secret detection with secretlint
+- Content Security Policy headers
+- Input validation and sanitization
+- HTTPS-only in production
+
+### Code Quality Tools
+
+- **ESLint**: 60+ rules covering TypeScript, React, accessibility, security
+- **Prettier**: Consistent code formatting
+- **TypeScript**: Strict mode with comprehensive type checking
+- **Husky**: Git hooks for quality gates
+- **pre-commit**: Multi-stage validation pipeline
+
+## 📊 Monitoring & Debugging
+
+### Available Metrics
+
+```bash
+npm run perf:lighthouse    # Performance scoring
+npm run perf:vitals       # Core Web Vitals
+npm run analyze           # Bundle composition
+npm run test:coverage     # Test coverage report
 ```
 
-**Testing Requests:**
+### Health Checks
 
-```text
-Generate comprehensive tests for the authentication flow that cover both
-happy path and error scenarios, following the testing patterns in
-tests/integration/frontend/workflows/.
-```
+The application includes health check endpoints for monitoring:
 
-### 3. **Problem Solving**
+- `/api/v1/recipe-ui/health/live` - Liveness probe
+- `/api/v1/recipe-ui/health/ready` - Readiness probe
+- `/api/v1/recipe-ui/metrics` - Application metrics
 
-**Debug Assistance:**
+## 🎯 Best Practices for Claude Code
 
-```text
-I'm getting a TypeScript error in src/components/forms/RecipeForm.tsx.
-The error is about type inference for form validation. Can you help
-debug this while maintaining compatibility with our ESLint rules?
-```
+### When Analyzing Code
 
-**Performance Issues:**
+- Reference specific files with line numbers: `src/hooks/recipe-management/useRecipes.ts:45`
+- Check existing patterns before suggesting changes
+- Consider the microservices architecture when making recommendations
 
-```text
-The app is loading slowly. Can you analyze the components in src/components/
-and suggest React.memo or useMemo optimizations that follow our performance
-guidelines?
-```
+### When Writing Code
 
-## 🎯 Claude Code Integration Patterns
+- Always follow the established service-specific patterns
+- Use existing error handling classes and utilities
+- Maintain consistency with TypeScript strict mode
+- Include proper test coverage for new functionality
 
-### 1. **Component Development Workflow**
+### When Debugging Issues
 
-```mermaid
-graph TD
-    A[Describe Component Need] --> B[Generate Component Boilerplate]
-    B --> C[Add TypeScript Interfaces]
-    C --> D[Implement TailwindCSS Styling]
-    D --> E[Create Unit Tests]
-    E --> F[Add Storybook Stories]
-    F --> G[Integration Testing]
-    G --> H[Performance Validation]
-```
+- Check service-specific error handling first
+- Verify environment variables are properly configured
+- Use the health check endpoints to verify service connectivity
+- Check TanStack Query DevTools for cache issues
 
-### 2. **API Integration Workflow**
+---
 
-```mermaid
-graph TD
-    A[Define API Requirements] --> B[Create Type Definitions]
-    B --> C[Implement API Client Methods]
-    C --> D[Create TanStack Query Hooks]
-    D --> E[Add Error Handling]
-    E --> F[Create Integration Tests]
-    F --> G[Update Documentation]
-```
-
-### 3. **Testing Workflow**
-
-```mermaid
-graph TD
-    A[Component/Feature Ready] --> B[Generate Unit Tests]
-    B --> C[Create Integration Tests]
-    C --> D[Add E2E Test Scenarios]
-    D --> E[Accessibility Testing]
-    E --> F[Performance Testing]
-    F --> G[Visual Regression Tests]
-```
-
-## 🔍 Advanced Claude Code Features
-
-### 1. **Code Analysis and Refactoring**
-
-**Request Examples:**
-
-```text
-Analyze src/components/forms/ for potential performance improvements and
-suggest React optimization patterns that align with our ESLint rules.
-
-Review the state management in src/stores/ and suggest improvements for
-type safety and performance.
-```
-
-### 2. **Architecture Guidance**
-
-**Request Examples:**
-
-```text
-I'm adding a notification system. Based on the current project architecture,
-what's the best pattern to implement this while maintaining separation of
-concerns?
-
-Help me design a caching strategy for API responses that integrates well
-with our TanStack Query setup.
-```
-
-### 3. **Security and Best Practices**
-
-**Request Examples:**
-
-```text
-Review this authentication implementation for security vulnerabilities and
-ensure it follows OWASP best practices.
-
-Check this component for accessibility issues and suggest improvements
-following WCAG 2.1 guidelines.
-```
-
-## 🚨 Common Issues and Solutions
-
-### Issue: "Claude doesn't understand project structure"
-
-**Solution:**
-
-```text
-Explicitly reference key files and explain the project structure:
-"This Next.js 15 project uses App Router (src/app/), components in src/components/,
-and API integration via src/lib/api/. We use Zustand for state management
-and TanStack Query for server state."
-```
-
-### Issue: "Generated code doesn't match project patterns"
-
-**Solution:**
-
-```text
-Reference existing code patterns:
-"Generate this following the same patterns used in src/components/ui/Button.tsx
-and the testing approach from tests/unit/components/Button.test.tsx"
-```
-
-### Issue: "TypeScript errors in generated code"
-
-**Solution:**
-
-```text
-Specify TypeScript requirements upfront:
-"Use strict TypeScript with proper interfaces defined in src/types/,
-following the patterns in src/types/index.ts"
-```
-
-## 📊 Performance Optimization with Claude Code
-
-### Bundle Analysis
-
-```text
-Ask Claude Code to:
-1. Run `npm run analyze`
-2. Identify large chunks
-3. Suggest code splitting opportunities
-4. Recommend tree shaking improvements
-```
-
-### Core Web Vitals
-
-```text
-Request performance analysis:
-"Run npm run perf:vitals and analyze the results. Suggest improvements
-for LCP, CLS, and FID metrics based on our current component structure."
-```
-
-### Testing Performance
-
-```text
-Performance testing requests:
-"Create performance tests for the recipe search functionality that validate
-response times under various data loads."
-```
-
-## 🔒 Security Considerations
-
-### Secret Management
-
-Claude Code can help identify potential security issues:
-
-```text
-"Review this authentication code for potential security vulnerabilities.
-Ensure no secrets are hardcoded and proper sanitization is used."
-```
-
-### Security Testing
-
-```text
-"Generate security-focused test cases for user input validation, following
-OWASP security testing guidelines."
-```
-
-## 📚 Learning and Development
-
-### Skill Building Requests
-
-```text
-"Explain the benefits of the current state management architecture and
-suggest learning resources for advanced Zustand patterns."
-
-"Walk me through the testing strategy used in this project and explain
-how each test type contributes to overall quality assurance."
-```
-
-### Code Reviews
-
-```text
-"Review this pull request code for adherence to project standards,
-performance implications, and potential security issues."
-```
-
-## 🎉 Success Metrics
-
-Track your Claude Code integration success:
-
-- **Development Speed**: Faster component creation and testing
-- **Code Quality**: Consistent patterns and fewer review iterations
-- **Learning Velocity**: Understanding of project architecture and best practices
-- **Bug Reduction**: Proactive issue identification and prevention
-- **Performance**: Optimized code generation and analysis
-
-## 🚀 Advanced Tips
-
-### 1. **Batch Operations**
-
-```text
-"Generate a complete feature including component, tests, API integration,
-and documentation for user profile management."
-```
-
-### 2. **Cross-File Analysis**
-
-```text
-"Analyze the relationship between src/stores/auth-store.ts and
-src/hooks/auth/useAuth.ts and suggest improvements for better type safety."
-```
-
-### 3. **Migration Assistance**
-
-```text
-"Help migrate the authentication system from the current implementation
-to use Next.js 15 server actions while maintaining existing functionality."
-```
-
-Remember: Claude Code is most effective when provided with clear context about your project structure,
-coding standards, and specific requirements. Always reference existing patterns and be specific about the
-desired outcomes.
+This guide covers the essential patterns and practices specific to this Recipe UI Service codebase. Always refer to existing code patterns and maintain consistency with the established architecture.
