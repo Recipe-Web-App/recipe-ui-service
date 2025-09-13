@@ -64,6 +64,7 @@ repos:
         entry: npx markdownlint --fix
         language: system
         files: \.md$
+        exclude: ^CLAUDE\.md$
 
   # YAML linting
   - repo: https://github.com/adrienverge/yamllint
