@@ -10,7 +10,7 @@ import {
   toastCloseButtonVariants,
   toastActionVariants,
   toastProgressVariants,
-} from '@/lib/toast-variants';
+} from '@/lib/ui/toast-variants';
 
 /**
  * Toast component props interface

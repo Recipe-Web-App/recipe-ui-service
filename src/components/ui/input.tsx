@@ -10,7 +10,7 @@ import {
   inputIconVariants,
   clearButtonVariants,
   characterCounterVariants,
-} from '@/lib/input-variants';
+} from '@/lib/ui/input-variants';
 
 /**
  * Base Input component props interface

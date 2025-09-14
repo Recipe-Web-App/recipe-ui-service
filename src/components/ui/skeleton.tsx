@@ -6,7 +6,7 @@ import {
   skeletonContainerVariants,
   skeletonTextVariants,
   skeletonAvatarVariants,
-} from '@/lib/skeleton-variants';
+} from '@/lib/ui/skeleton-variants';
 
 /**
  * Skeleton component props interface
