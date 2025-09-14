@@ -113,6 +113,67 @@ space-16: 4rem; /* 64px */
 - `ghost`: Minimal styling for icon buttons
 - `destructive`: Delete or remove actions
 
+#### Badge Component
+
+```tsx
+// Basic badge for labels and categories
+<Badge>New Recipe</Badge>
+
+// Recipe category badges
+<Badge variant="info">Breakfast</Badge>
+<Badge variant="info">Vegetarian</Badge>
+<Badge variant="info">Quick</Badge>
+
+// Difficulty level indicators
+<Badge variant="success">Easy</Badge>
+<Badge variant="warning">Medium</Badge>
+<Badge variant="destructive">Hard</Badge>
+
+// Status indicators
+<Badge variant="success">Published</Badge>
+<Badge variant="warning">Draft</Badge>
+<Badge variant="secondary">Private</Badge>
+
+// Cooking time badges
+<Badge variant="outline" size="sm">30 min</Badge>
+<Badge variant="outline" size="sm">1 hour</Badge>
+
+// Dietary restriction tags
+<Badge variant="outline">Gluten-Free</Badge>
+<Badge variant="outline">Vegan</Badge>
+<Badge variant="outline">Keto</Badge>
+
+// Interactive badges (polymorphic usage)
+<Badge asChild>
+  <Link href="/category/dessert">Dessert</Link>
+</Badge>
+```
+
+**Badge Variants:**
+
+- `default`: Primary brand badges for featured content
+- `secondary`: Less prominent tags and secondary categories
+- `destructive`: Error states, warnings, expired content
+- `outline`: Subtle emphasis, filter states, dietary restrictions
+- `success`: Published recipes, positive indicators, easy difficulty
+- `warning`: Draft content, pending states, medium difficulty
+- `info`: New content, informational badges, recipe categories
+
+**Badge Sizes:**
+
+- `sm`: Compact badges for dense layouts (cooking times, small tags)
+- `default`: Standard size for most use cases
+- `lg`: Prominent badges for emphasis and featured content
+
+**Recipe App Use Cases:**
+
+- **Recipe Categories**: Breakfast, Lunch, Dinner, Dessert, Snack
+- **Difficulty Levels**: Easy (success), Medium (warning), Hard (destructive)
+- **Dietary Restrictions**: Vegetarian, Vegan, Gluten-Free, Dairy-Free, Keto
+- **Recipe Status**: Published (success), Draft (warning), Private (secondary)
+- **Cooking Times**: "15 min", "30 min", "1 hour" (outline, small size)
+- **Tags and Labels**: Any custom user-generated or system tags
+
 #### Input Components
 
 ```tsx
