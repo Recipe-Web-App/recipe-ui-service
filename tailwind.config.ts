@@ -69,6 +69,7 @@ export default {
         'fade-out': 'fade-out 0.2s ease-out',
         'zoom-in': 'zoom-in 0.2s ease-out',
         'zoom-out': 'zoom-out 0.2s ease-out',
+        'skeleton-wave': 'skeleton-wave 2s ease-in-out infinite',
       },
       keyframes: {
         'accordion-down': {
@@ -185,6 +186,14 @@ export default {
           to: {
             opacity: '0',
             transform: 'scale(0.95)',
+          },
+        },
+        'skeleton-wave': {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
           },
         },
       },

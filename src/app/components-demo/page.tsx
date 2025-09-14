@@ -31,6 +31,15 @@ import {
   ToastAction,
   ToastClose,
 } from '@/components/ui/toast';
+import {
+  Skeleton,
+  SkeletonText,
+  SkeletonAvatar,
+  SkeletonButton,
+  RecipeCardSkeleton,
+  RecipeListSkeleton,
+  ProfileSkeleton,
+} from '@/components/ui/skeleton';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 /**
@@ -135,6 +144,24 @@ export default function ComponentsDemo() {
     setToasts(prev => prev.filter(t => t.id !== id));
   };
 
+  // Skeleton demo state
+  const [skeletonAnimation, setSkeletonAnimation] = useState<
+    'pulse' | 'wave' | 'none'
+  >('pulse');
+  const [skeletonVariant, setSkeletonVariant] = useState<
+    'default' | 'text' | 'circular' | 'card' | 'image' | 'button'
+  >('default');
+  const [skeletonSize, setSkeletonSize] = useState<
+    'sm' | 'default' | 'lg' | 'full'
+  >('default');
+  const [skeletonRounded, setSkeletonRounded] = useState<
+    'none' | 'sm' | 'default' | 'lg' | 'full'
+  >('default');
+  const [skeletonCount, setSkeletonCount] = useState(1);
+  const [skeletonWidth, setSkeletonWidth] = useState('');
+  const [skeletonHeight, setSkeletonHeight] = useState('');
+  const [showSkeletonDemo, setShowSkeletonDemo] = useState(false);
+
   const handleAsyncAction = async () => {
     setButtonLoading(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -168,7 +195,7 @@ export default function ComponentsDemo() {
         <div className="mb-8 grid gap-4 md:grid-cols-3">
           <Card size="sm">
             <CardContent>
-              <div className="text-primary text-2xl font-bold">5</div>
+              <div className="text-primary text-2xl font-bold">6</div>
               <div className="text-muted-foreground text-sm">Components</div>
             </CardContent>
           </Card>
@@ -2230,13 +2257,479 @@ export default function ComponentsDemo() {
           </Card>
         </section>
 
+        {/* Skeleton Component Section */}
+        <section className="mt-12 space-y-8">
+          <div>
+            <h2 className="text-foreground mb-4 text-2xl font-semibold">
+              Skeleton Component
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Loading placeholders that provide visual feedback while content is
+              being fetched. Includes multiple animation styles and
+              recipe-specific presets.
+            </p>
+          </div>
+
+          {/* Interactive Controls */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Interactive Skeleton Demo</CardTitle>
+              <CardDescription>
+                Configure and test different skeleton variants and features
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Controls Grid */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Variant
+                    </label>
+                    <select
+                      value={skeletonVariant}
+                      onChange={e =>
+                        setSkeletonVariant(
+                          e.target.value as
+                            | 'default'
+                            | 'text'
+                            | 'circular'
+                            | 'card'
+                            | 'image'
+                            | 'button'
+                        )
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="default">Default</option>
+                      <option value="text">Text</option>
+                      <option value="circular">Circular</option>
+                      <option value="card">Card</option>
+                      <option value="image">Image</option>
+                      <option value="button">Button</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Animation
+                    </label>
+                    <select
+                      value={skeletonAnimation}
+                      onChange={e =>
+                        setSkeletonAnimation(
+                          e.target.value as 'pulse' | 'wave' | 'none'
+                        )
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="pulse">Pulse</option>
+                      <option value="wave">Wave</option>
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Size
+                    </label>
+                    <select
+                      value={skeletonSize}
+                      onChange={e =>
+                        setSkeletonSize(
+                          e.target.value as 'sm' | 'default' | 'lg' | 'full'
+                        )
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="sm">Small</option>
+                      <option value="default">Default</option>
+                      <option value="lg">Large</option>
+                      <option value="full">Full Width</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Rounded
+                    </label>
+                    <select
+                      value={skeletonRounded}
+                      onChange={e =>
+                        setSkeletonRounded(
+                          e.target.value as
+                            | 'none'
+                            | 'sm'
+                            | 'default'
+                            | 'lg'
+                            | 'full'
+                        )
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="none">None</option>
+                      <option value="sm">Small</option>
+                      <option value="default">Default</option>
+                      <option value="lg">Large</option>
+                      <option value="full">Full</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Count
+                    </label>
+                    <Input
+                      type="number"
+                      value={skeletonCount}
+                      onChange={e =>
+                        setSkeletonCount(parseInt(e.target.value) || 1)
+                      }
+                      min="1"
+                      max="10"
+                      size="sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Custom Width
+                    </label>
+                    <Input
+                      value={skeletonWidth}
+                      onChange={e => setSkeletonWidth(e.target.value)}
+                      placeholder="e.g., 200px or 50%"
+                      size="sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Custom Height
+                    </label>
+                    <Input
+                      value={skeletonHeight}
+                      onChange={e => setSkeletonHeight(e.target.value)}
+                      placeholder="e.g., 100px or 2rem"
+                      size="sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Live Preview */}
+                <div>
+                  <h4 className="mb-3 font-medium">Live Preview</h4>
+                  <div className="rounded-lg border p-6">
+                    <Skeleton
+                      variant={skeletonVariant}
+                      animation={skeletonAnimation}
+                      size={skeletonSize}
+                      rounded={skeletonRounded}
+                      count={skeletonCount}
+                      width={skeletonWidth || undefined}
+                      height={skeletonHeight || undefined}
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Variants Showcase */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Skeleton Variants</CardTitle>
+              <CardDescription>
+                All available skeleton variants with their default styling
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <h4 className="mb-3 font-medium">Default</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="default" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Text</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="text" count={3} />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Circular</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="circular" size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Card</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="card" size="lg" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Image</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="image" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Button</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton variant="button" />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Animation Styles */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Animation Styles</CardTitle>
+              <CardDescription>
+                Different loading animations for various contexts
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 md:grid-cols-3">
+                <div>
+                  <h4 className="mb-3 font-medium">Pulse (Default)</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton animation="pulse" />
+                    <SkeletonText animation="pulse" className="mt-3" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Wave</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton animation="wave" />
+                    <SkeletonText animation="wave" className="mt-3" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">None (Accessibility)</h4>
+                  <div className="rounded-lg border p-4">
+                    <Skeleton animation="none" />
+                    <SkeletonText animation="none" className="mt-3" />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Compound Components */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Compound Components</CardTitle>
+              <CardDescription>
+                Pre-built skeleton combinations for common patterns
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="mb-3 font-medium">SkeletonText</h4>
+                  <div className="rounded-lg border p-4">
+                    <SkeletonText lines="paragraph" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">SkeletonAvatar</h4>
+                  <div className="flex items-center gap-4 rounded-lg border p-4">
+                    <SkeletonAvatar size="xs" />
+                    <SkeletonAvatar size="sm" />
+                    <SkeletonAvatar size="default" />
+                    <SkeletonAvatar size="lg" />
+                    <SkeletonAvatar size="xl" />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">SkeletonButton</h4>
+                  <div className="flex gap-3 rounded-lg border p-4">
+                    <SkeletonButton size="sm" />
+                    <SkeletonButton size="default" />
+                    <SkeletonButton size="lg" />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recipe Presets */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Recipe App Presets</CardTitle>
+              <CardDescription>
+                Ready-to-use skeleton components for recipe-specific layouts
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-8">
+                <div>
+                  <h4 className="mb-3 font-medium">Recipe Card Skeleton</h4>
+                  <div className="max-w-sm">
+                    <RecipeCardSkeleton />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Recipe List Skeleton</h4>
+                  <RecipeListSkeleton count={2} />
+                </div>
+                <div>
+                  <h4 className="mb-3 font-medium">Profile Skeleton</h4>
+                  <div className="max-w-sm">
+                    <ProfileSkeleton />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Loading States Demo */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Loading States Demo</CardTitle>
+              <CardDescription>
+                Simulate loading states for recipe content
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <Button
+                  onClick={() => {
+                    setShowSkeletonDemo(true);
+                    setTimeout(() => setShowSkeletonDemo(false), 3000);
+                  }}
+                >
+                  Simulate Loading (3 seconds)
+                </Button>
+
+                {showSkeletonDemo ? (
+                  <div className="space-y-6">
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <RecipeCardSkeleton />
+                      <RecipeCardSkeleton />
+                      <RecipeCardSkeleton />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <Card>
+                        <CardContent>
+                          <div className="mb-3 flex h-32 w-full items-center justify-center rounded-md bg-gradient-to-br from-orange-100 to-red-100 text-sm text-gray-600">
+                            Recipe Image
+                          </div>
+                          <CardTitle className="mb-2">
+                            Chocolate Cookies
+                          </CardTitle>
+                          <CardDescription>
+                            Delicious homemade cookies
+                          </CardDescription>
+                          <div className="text-muted-foreground mt-2 flex gap-2 text-xs">
+                            <span>30 min</span>
+                            <span>•</span>
+                            <span>Easy</span>
+                            <span>•</span>
+                            <span>★★★★★</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent>
+                          <div className="mb-3 flex h-32 w-full items-center justify-center rounded-md bg-gradient-to-br from-green-100 to-blue-100 text-sm text-gray-600">
+                            Recipe Image
+                          </div>
+                          <CardTitle className="mb-2">Caesar Salad</CardTitle>
+                          <CardDescription>
+                            Fresh and crispy salad
+                          </CardDescription>
+                          <div className="text-muted-foreground mt-2 flex gap-2 text-xs">
+                            <span>15 min</span>
+                            <span>•</span>
+                            <span>Easy</span>
+                            <span>•</span>
+                            <span>★★★★☆</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardContent>
+                          <div className="mb-3 flex h-32 w-full items-center justify-center rounded-md bg-gradient-to-br from-purple-100 to-pink-100 text-sm text-gray-600">
+                            Recipe Image
+                          </div>
+                          <CardTitle className="mb-2">Beef Stir Fry</CardTitle>
+                          <CardDescription>
+                            Quick and healthy dinner
+                          </CardDescription>
+                          <div className="text-muted-foreground mt-2 flex gap-2 text-xs">
+                            <span>25 min</span>
+                            <span>•</span>
+                            <span>Medium</span>
+                            <span>•</span>
+                            <span>★★★★★</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Code Examples */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Code Examples</CardTitle>
+              <CardDescription>
+                Implementation examples for different skeleton patterns
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">{`// Basic skeleton`}</div>
+                  <div>{`<Skeleton />`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Custom dimensions and animation`}
+                  </div>
+                  <div>{`<Skeleton`}</div>
+                  <div>{`  variant="text"`}</div>
+                  <div>{`  animation="wave"`}</div>
+                  <div>{`  width={200}`}</div>
+                  <div>{`  height={20}`}</div>
+                  <div>{`/>`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Loading state pattern`}
+                  </div>
+                  <div>{`{isLoading ? (`}</div>
+                  <div>{`  <RecipeCardSkeleton />`}</div>
+                  <div>{`) : (`}</div>
+                  <div>{`  <RecipeCard {...recipe} />`}</div>
+                  <div>{`)}`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Inline loading`}
+                  </div>
+                  <div>{`<h1>`}</div>
+                  <div>{`  {title || <Skeleton variant="text" />}`}</div>
+                  <div>{`</h1>`}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Future Components Section */}
         <section className="mt-12 space-y-4">
           <h2 className="text-foreground text-2xl font-semibold">
             Coming Soon
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {['Skeleton', 'Badge', 'Dropdown', 'Tabs', 'Accordion'].map(
+            {['Badge', 'Dropdown', 'Tabs', 'Accordion', 'Tooltip'].map(
               component => (
                 <Card key={component} variant="ghost" className="opacity-60">
                   <CardContent>
