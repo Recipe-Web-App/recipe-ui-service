@@ -12,6 +12,7 @@ export default {
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
+        'input-hover': 'hsl(var(--input-hover))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -69,6 +70,31 @@ export default {
         'button-lg': [
           '1.125rem',
           { lineHeight: '1.25rem', letterSpacing: '-0.025em' },
+        ],
+        'input-sm': [
+          '0.875rem',
+          { lineHeight: '1.25rem', letterSpacing: '0em' },
+        ],
+        'input-base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0em' }],
+        'input-lg': [
+          '1.125rem',
+          { lineHeight: '1.75rem', letterSpacing: '0em' },
+        ],
+        'label-sm': [
+          '0.75rem',
+          { lineHeight: '1rem', letterSpacing: '0.025em', fontWeight: '500' },
+        ],
+        'label-base': [
+          '0.875rem',
+          {
+            lineHeight: '1.25rem',
+            letterSpacing: '0.025em',
+            fontWeight: '500',
+          },
+        ],
+        'label-lg': [
+          '1rem',
+          { lineHeight: '1.5rem', letterSpacing: '0.025em', fontWeight: '500' },
         ],
       },
     },
