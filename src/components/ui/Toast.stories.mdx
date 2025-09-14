@@ -1,0 +1,555 @@
+# Toast Component
+
+A flexible, accessible toast notification component built with Tailwind CSS and class-variance-authority for type-safe variants.
+
+## Features
+
+- **Multiple Variants**: Default, success, error, warning, and info notification types
+- **Multiple Sizes**: Small, medium (default), and large sizes
+- **Auto-dismiss**: Customizable timer with optional progress bar
+- **Interactive**: Action buttons and manual dismissal
+- **Full Accessibility**: ARIA attributes, screen reader support, keyboard navigation
+- **Icon Support**: Built-in icons for each variant or custom icons
+- **Compound Components**: Flexible composition with sub-components
+- **Type Safety**: Full TypeScript support with variant props
+- **Animation**: Smooth enter/exit transitions and hover interactions
+
+## Import
+
+```tsx
+import {
+  Toast,
+  ToastRoot,
+  ToastIcon,
+  ToastContent,
+  ToastTitle,
+  ToastDescription,
+  ToastAction,
+  ToastClose
+} from '@/components/ui/toast';
+```
+
+## Basic Usage
+
+```tsx
+// Simple toast
+<Toast
+  title="Success!"
+  description="Your changes have been saved."
+  variant="success"
+/>
+
+// With action
+<Toast
+  title="Update Available"
+  description="A new version is available. Would you like to update?"
+  variant="info"
+  action="Update Now"
+  onAction={() => console.log('Update clicked')}
+/>
+```
+
+## Variants
+
+### Default
+The standard notification style for general messages.
+
+```tsx
+<Toast
+  title="Notification"
+  description="This is a default notification message."
+  variant="default"
+/>
+```
+
+### Success
+For positive feedback and successful operations.
+
+```tsx
+<Toast
+  title="Success!"
+  description="Your recipe has been saved successfully."
+  variant="success"
+/>
+```
+
+### Error
+For error messages and failed operations.
+
+```tsx
+<Toast
+  title="Error"
+  description="Failed to save your changes. Please try again."
+  variant="error"
+/>
+```
+
+### Warning
+For warnings and important notices that need attention.
+
+```tsx
+<Toast
+  title="Warning"
+  description="Your session will expire in 5 minutes."
+  variant="warning"
+/>
+```
+
+### Info
+For informational messages and tips.
+
+```tsx
+<Toast
+  title="Tip"
+  description="You can press Ctrl+S to save your recipe quickly."
+  variant="info"
+/>
+```
+
+## Sizes
+
+### Small
+Compact size for less important notifications.
+
+```tsx
+<Toast
+  size="sm"
+  title="Small Toast"
+  description="This is a smaller notification."
+  variant="info"
+/>
+```
+
+### Default (Medium)
+Standard size for most notifications.
+
+```tsx
+<Toast
+  size="default"
+  title="Default Toast"
+  description="This is a standard-sized notification."
+  variant="success"
+/>
+```
+
+### Large
+Prominent size for important notifications.
+
+```tsx
+<Toast
+  size="lg"
+  title="Large Toast"
+  description="This is a larger, more prominent notification."
+  variant="warning"
+/>
+```
+
+## Behavior Options
+
+### Auto-dismiss with Timer
+Automatically dismiss after a specified duration.
+
+```tsx
+<Toast
+  title="Auto-dismiss"
+  description="This toast will disappear after 3 seconds."
+  variant="info"
+  autoDismiss={true}
+  duration={3000}
+/>
+```
+
+### Progress Bar Indicator
+Show a visual countdown for auto-dismiss.
+
+```tsx
+<Toast
+  title="With Progress"
+  description="Watch the progress bar at the bottom!"
+  variant="success"
+  autoDismiss={true}
+  duration={5000}
+  showProgress={true}
+/>
+```
+
+### Manual Dismiss Only
+Require user interaction to dismiss.
+
+```tsx
+<Toast
+  title="Stay Put"
+  description="This toast won't disappear automatically."
+  variant="warning"
+  autoDismiss={false}
+/>
+```
+
+### Non-dismissible
+Remove the close button entirely.
+
+```tsx
+<Toast
+  title="Loading..."
+  description="Please wait while we process your request."
+  variant="info"
+  dismissible={false}
+  autoDismiss={false}
+/>
+```
+
+## Action Buttons
+
+### Simple Action
+String-based action button.
+
+```tsx
+<Toast
+  title="Update Available"
+  description="A new version of the app is available."
+  variant="info"
+  action="Update Now"
+  onAction={() => window.location.reload()}
+/>
+```
+
+### Custom Action Button
+React element with custom styling.
+
+```tsx
+<Toast
+  title="Confirmation Required"
+  description="Are you sure you want to delete this recipe?"
+  variant="warning"
+  action={
+    <button className="font-semibold underline">
+      Yes, Delete
+    </button>
+  }
+  onAction={() => console.log('Confirmed deletion')}
+/>
+```
+
+### Multiple Actions with Compound Components
+Using compound components for complex layouts.
+
+```tsx
+<ToastRoot variant="error">
+  <ToastIcon variant="error" />
+  <ToastContent>
+    <ToastTitle variant="error">Connection Failed</ToastTitle>
+    <ToastDescription variant="error">
+      Unable to connect to the server.
+    </ToastDescription>
+    <div className="flex gap-2 mt-3">
+      <ToastAction variant="error" onClick={() => retry()}>
+        Retry
+      </ToastAction>
+      <ToastAction variant="error" onClick={() => goOffline()}>
+        Go Offline
+      </ToastAction>
+    </div>
+  </ToastContent>
+  <ToastClose variant="error" />
+</ToastRoot>
+```
+
+## Custom Icons
+
+### Default Icons
+Each variant comes with appropriate default icons.
+
+```tsx
+<Toast
+  title="With Default Icon"
+  description="This uses the built-in success icon."
+  variant="success"
+  showIcon={true}
+/>
+```
+
+### Custom Icon
+Provide your own icon element.
+
+```tsx
+<Toast
+  title="Custom Icon"
+  description="This toast has a custom icon."
+  variant="info"
+  icon={<span className="text-2xl">🎉</span>}
+/>
+```
+
+### No Icon
+Hide the icon completely.
+
+```tsx
+<Toast
+  title="No Icon"
+  description="This toast doesn't have an icon."
+  variant="default"
+  showIcon={false}
+/>
+```
+
+## Advanced Usage
+
+### Custom Content
+Use children for complex content.
+
+```tsx
+<Toast
+  title="Rich Content"
+  description="This toast contains custom content below."
+  variant="info"
+>
+  <div className="mt-2 p-3 bg-blue-100 rounded-md">
+    <h4 className="font-semibold">Additional Information</h4>
+    <p className="text-sm">You can include any custom content here.</p>
+  </div>
+</Toast>
+```
+
+### Event Handlers
+Handle various user interactions.
+
+```tsx
+<Toast
+  title="Interactive Toast"
+  description="This toast handles multiple events."
+  variant="success"
+  onDismiss={() => console.log('Toast dismissed')}
+  onAction={() => console.log('Action clicked')}
+  action="Take Action"
+  onMouseEnter={() => console.log('Mouse entered - timer paused')}
+  onMouseLeave={() => console.log('Mouse left - timer resumed')}
+/>
+```
+
+### Custom Styling
+Extend styling with additional Tailwind classes.
+
+```tsx
+<Toast
+  className="border-2 border-purple-500 shadow-xl"
+  titleClassName="text-purple-900"
+  descriptionClassName="text-purple-700"
+  title="Custom Styled"
+  description="This toast has custom styling."
+  variant="default"
+/>
+```
+
+## Compound Components Usage
+
+For maximum flexibility, use the compound component approach:
+
+```tsx
+<ToastRoot variant="success" size="lg">
+  <ToastIcon variant="success">
+    <CustomSuccessIcon />
+  </ToastIcon>
+
+  <ToastContent size="lg">
+    <ToastTitle variant="success" size="lg">
+      Recipe Published!
+    </ToastTitle>
+    <ToastDescription variant="success" size="lg">
+      Your recipe "Chocolate Chip Cookies" is now live.
+    </ToastDescription>
+
+    <div className="flex items-center gap-3 mt-3">
+      <ToastAction variant="success" onClick={viewRecipe}>
+        View Recipe
+      </ToastAction>
+      <ToastAction variant="success" onClick={shareRecipe}>
+        Share
+      </ToastAction>
+    </div>
+  </ToastContent>
+
+  <ToastClose variant="success" onClick={handleClose} />
+</ToastRoot>
+```
+
+## Accessibility
+
+The Toast component follows WCAG accessibility guidelines:
+
+### Screen Reader Support
+- Uses proper ARIA roles (`alert` for errors, `status` for others)
+- Configures `aria-live` regions for dynamic announcements
+- Proper labeling with `aria-labelledby` and `aria-describedby`
+- Error toasts use `aria-live="assertive"` for immediate announcement
+
+### Keyboard Navigation
+- Close button is focusable and keyboard accessible
+- Action buttons support keyboard interaction
+- Proper tab order through interactive elements
+- Enter and Space keys work with buttons
+
+### Focus Management
+- Clear focus indicators with ring styles
+- Proper focus offset for better visibility
+- Focus-visible support for keyboard vs mouse interaction
+- Focus is managed appropriately when toasts appear/disappear
+
+### Timer Interaction
+- Auto-dismiss timer pauses on hover for accessibility
+- Sufficient time given for users to read content (5s default)
+- Progress bar provides visual indication of remaining time
+- Manual dismiss always available when auto-dismiss is enabled
+
+## Examples in Context
+
+### Recipe Application Scenarios
+
+#### Save Confirmation
+```tsx
+<Toast
+  title="Recipe Saved"
+  description="Your chocolate chip cookies recipe has been saved to your cookbook."
+  variant="success"
+  action="View Recipe"
+  onAction={() => router.push('/recipes/123')}
+/>
+```
+
+#### Error Handling
+```tsx
+<Toast
+  title="Upload Failed"
+  description="Could not upload recipe image. Please check your connection and try again."
+  variant="error"
+  action="Retry Upload"
+  onAction={() => retryImageUpload()}
+/>
+```
+
+#### Feature Tips
+```tsx
+<Toast
+  title="Pro Tip"
+  description="You can drag and drop ingredients to reorder them in your recipe."
+  variant="info"
+  autoDismiss={true}
+  duration={7000}
+  showProgress={true}
+/>
+```
+
+#### Batch Operations
+```tsx
+<Toast
+  title="Bulk Import Complete"
+  description="Successfully imported 15 recipes from your backup file."
+  variant="success"
+  action="View Imported"
+  onAction={() => setFilter('imported')}
+/>
+```
+
+### Toast Manager Integration
+```tsx
+// Example with a toast manager/context
+const showToast = (type, title, description, options = {}) => {
+  return (
+    <Toast
+      variant={type}
+      title={title}
+      description={description}
+      {...options}
+    />
+  );
+};
+
+// Usage in components
+showToast('success', 'Saved!', 'Recipe saved successfully');
+showToast('error', 'Error', 'Failed to save recipe', {
+  action: 'Retry',
+  onAction: retrySave
+});
+```
+
+## Design Guidelines
+
+### When to Use Each Variant
+
+- **Success**: Confirmations, completed actions, positive feedback
+- **Error**: Failed operations, validation errors, system failures
+- **Warning**: Important notices, potential issues, confirmations for destructive actions
+- **Info**: Tips, feature announcements, neutral information
+- **Default**: General notifications that don't fit other categories
+
+### Duration Guidelines
+
+- **Success**: 4-5 seconds (users want to see confirmation)
+- **Info**: 5-7 seconds (may contain more information to read)
+- **Warning**: 7-10 seconds (users need time to process)
+- **Error**: Manual dismiss only (users need time to understand and act)
+
+### Content Best Practices
+
+- **Title**: Brief, action-oriented (2-4 words)
+- **Description**: Clear, specific, actionable (1-2 sentences)
+- **Actions**: Verb-based, clear next steps ("Retry", "View Details", "Dismiss")
+- **Tone**: Match the variant (positive for success, helpful for errors)
+
+## Technical Details
+
+### Timer Behavior
+- Timer pauses on hover for better UX
+- Progress bar animates smoothly at 60fps
+- Cleanup prevents memory leaks
+- Multiple toasts don't interfere with each other
+
+### Performance Optimizations
+- Uses `React.forwardRef` for proper ref handling
+- Memoized icon rendering to prevent unnecessary re-renders
+- Efficient class merging with `tailwind-merge`
+- Minimal re-renders through stable callbacks
+
+### Theming
+The toast uses design tokens from your CSS custom properties:
+
+- `--success` / `--success-foreground` for success variant
+- `--destructive` / `--destructive-foreground` for error variant
+- `--warning` / `--warning-foreground` for warning variant
+- `--info` / `--info-foreground` for info variant
+- `--ring` for focus indicators
+- `--radius` for border radius
+
+## Props Reference
+
+### Toast Component
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'success' \| 'error' \| 'warning' \| 'info'` | `'default'` | Toast style variant |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Toast size |
+| `title` | `string` | - | Toast title text |
+| `description` | `string` | - | Toast description text |
+| `dismissible` | `boolean` | `true` | Show close button |
+| `autoDismiss` | `boolean` | `true` | Auto-dismiss after duration |
+| `duration` | `number` | `5000` | Auto-dismiss duration in ms |
+| `showProgress` | `boolean` | `false` | Show progress bar |
+| `action` | `ReactNode` | - | Action button content |
+| `onDismiss` | `() => void` | - | Dismiss event handler |
+| `onAction` | `() => void` | - | Action button handler |
+| `icon` | `ReactNode` | - | Custom icon element |
+| `showIcon` | `boolean` | `true` | Show icon |
+| `className` | `string` | - | Additional CSS classes |
+
+### Compound Components
+
+Each compound component accepts relevant variant and size props along with standard HTML attributes:
+
+- `ToastRoot`: Main container with variant and size styling
+- `ToastIcon`: Icon container with automatic default icons
+- `ToastContent`: Content wrapper for title/description
+- `ToastTitle`: Title text with variant-specific styling
+- `ToastDescription`: Description text with variant-specific styling
+- `ToastAction`: Action button with variant-specific styling
+- `ToastClose`: Close button with variant-specific styling
+
+Plus all standard HTML attributes (`id`, `aria-*`, `data-*`, etc.).

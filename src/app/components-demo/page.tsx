@@ -21,6 +21,16 @@ import {
   ModalTitle,
   ModalDescription,
 } from '@/components/ui/modal';
+import {
+  Toast,
+  ToastRoot,
+  ToastIcon,
+  ToastContent,
+  ToastTitle,
+  ToastDescription,
+  ToastAction,
+  ToastClose,
+} from '@/components/ui/toast';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 /**
@@ -55,6 +65,76 @@ export default function ComponentsDemo() {
     'sm' | 'default' | 'lg' | 'xl' | '2xl' | 'full'
   >('default');
 
+  // Toast demo state
+  const [toasts, setToasts] = useState<
+    Array<{
+      id: string;
+      variant: 'default' | 'success' | 'error' | 'warning' | 'info';
+      size: 'sm' | 'default' | 'lg';
+      title: string;
+      description?: string;
+      autoDismiss: boolean;
+      showProgress: boolean;
+      dismissible: boolean;
+      showIcon: boolean;
+      action?: string;
+    }>
+  >([]);
+  const [toastVariant, setToastVariant] = useState<
+    'default' | 'success' | 'error' | 'warning' | 'info'
+  >('default');
+  const [toastSize, setToastSize] = useState<'sm' | 'default' | 'lg'>(
+    'default'
+  );
+  const [toastTitle, setToastTitle] = useState('Toast Notification');
+  const [toastDescription, setToastDescription] = useState(
+    'This is a sample toast message.'
+  );
+  const [toastAutoDismiss, setToastAutoDismiss] = useState(true);
+  const [toastShowProgress, setToastShowProgress] = useState(false);
+  const [toastDismissible, setToastDismissible] = useState(true);
+  const [toastShowIcon, setToastShowIcon] = useState(true);
+  const [toastAction, setToastAction] = useState('');
+
+  const addToast = (
+    toastConfig?: Partial<{
+      variant: 'default' | 'success' | 'error' | 'warning' | 'info';
+      size: 'sm' | 'default' | 'lg';
+      title: string;
+      description?: string;
+      autoDismiss: boolean;
+      showProgress: boolean;
+      dismissible: boolean;
+      showIcon: boolean;
+      action?: string;
+    }>
+  ) => {
+    const newToast = {
+      id: `toast-${Date.now()}-${Math.random()}`,
+      variant: toastConfig?.variant ?? toastVariant,
+      size: toastConfig?.size ?? toastSize,
+      title: toastConfig?.title ?? toastTitle,
+      description: toastConfig?.description ?? toastDescription,
+      autoDismiss: toastConfig?.autoDismiss ?? toastAutoDismiss,
+      showProgress: toastConfig?.showProgress ?? toastShowProgress,
+      dismissible: toastConfig?.dismissible ?? toastDismissible,
+      showIcon: toastConfig?.showIcon ?? toastShowIcon,
+      action: toastConfig?.action ?? (toastAction || undefined),
+    };
+    setToasts(prev => [...prev, newToast]);
+
+    // Auto-remove after duration if auto-dismiss is enabled
+    if (newToast.autoDismiss) {
+      setTimeout(() => {
+        setToasts(prev => prev.filter(t => t.id !== newToast.id));
+      }, 5000);
+    }
+  };
+
+  const removeToast = (id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  };
+
   const handleAsyncAction = async () => {
     setButtonLoading(true);
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -88,7 +168,7 @@ export default function ComponentsDemo() {
         <div className="mb-8 grid gap-4 md:grid-cols-3">
           <Card size="sm">
             <CardContent>
-              <div className="text-primary text-2xl font-bold">4</div>
+              <div className="text-primary text-2xl font-bold">5</div>
               <div className="text-muted-foreground text-sm">Components</div>
             </CardContent>
           </Card>
@@ -400,7 +480,7 @@ export default function ComponentsDemo() {
                 <h4 className="mb-3 font-medium">Live Example</h4>
                 <div className="max-w-md">
                   <Input
-                    label={inputFloating ? 'Recipe Name' : 'Recipe Name'}
+                    label="Recipe Name"
                     placeholder={inputFloating ? '' : 'Enter recipe name...'}
                     value={inputValue}
                     onChange={e => setInputValue(e.target.value)}
@@ -1376,13 +1456,787 @@ export default function ComponentsDemo() {
           </Card>
         </section>
 
+        {/* Toast Component Section */}
+        <section className="mt-12 space-y-8">
+          <div>
+            <h2 className="text-foreground mb-4 text-2xl font-semibold">
+              Toast Component
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Flexible, accessible toast notification component with
+              auto-dismiss, progress indicators, and multiple variants. Perfect
+              for user feedback and status updates.
+            </p>
+          </div>
+
+          {/* Toast Container - Fixed position for demo toasts */}
+          <div className="fixed top-4 right-4 z-50 flex max-w-sm flex-col gap-2">
+            {toasts.map(toast => (
+              <Toast
+                key={toast.id}
+                variant={toast.variant}
+                size={toast.size}
+                title={toast.title}
+                description={toast.description}
+                autoDismiss={toast.autoDismiss}
+                showProgress={toast.showProgress}
+                dismissible={toast.dismissible}
+                showIcon={toast.showIcon}
+                action={toast.action}
+                onDismiss={() => removeToast(toast.id)}
+                onAction={() => {
+                  console.log(`Toast action clicked: ${toast.title}`);
+                  removeToast(toast.id);
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Interactive Controls */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Interactive Toast Demo</CardTitle>
+              <CardDescription>
+                Configure and test different toast variants and features
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Controls Grid */}
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Variant
+                    </label>
+                    <select
+                      value={toastVariant}
+                      onChange={e =>
+                        setToastVariant(
+                          e.target.value as
+                            | 'default'
+                            | 'success'
+                            | 'error'
+                            | 'warning'
+                            | 'info'
+                        )
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="default">Default</option>
+                      <option value="success">Success</option>
+                      <option value="error">Error</option>
+                      <option value="warning">Warning</option>
+                      <option value="info">Info</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Size
+                    </label>
+                    <select
+                      value={toastSize}
+                      onChange={e =>
+                        setToastSize(e.target.value as 'sm' | 'default' | 'lg')
+                      }
+                      className="border-border bg-background w-full rounded-md border px-3 py-2 text-sm"
+                    >
+                      <option value="sm">Small</option>
+                      <option value="default">Default</option>
+                      <option value="lg">Large</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Title
+                    </label>
+                    <Input
+                      value={toastTitle}
+                      onChange={e => setToastTitle(e.target.value)}
+                      placeholder="Toast title..."
+                      size="sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Description
+                    </label>
+                    <Input
+                      value={toastDescription}
+                      onChange={e => setToastDescription(e.target.value)}
+                      placeholder="Toast description..."
+                      size="sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium">
+                      Action Button Text
+                    </label>
+                    <Input
+                      value={toastAction}
+                      onChange={e => setToastAction(e.target.value)}
+                      placeholder="Action text (optional)"
+                      size="sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Feature Toggles */}
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={toastAutoDismiss}
+                      onChange={e => setToastAutoDismiss(e.target.checked)}
+                      className="rounded"
+                    />
+                    <span className="text-sm">Auto-dismiss</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={toastShowProgress}
+                      onChange={e => setToastShowProgress(e.target.checked)}
+                      className="rounded"
+                    />
+                    <span className="text-sm">Show Progress</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={toastDismissible}
+                      onChange={e => setToastDismissible(e.target.checked)}
+                      className="rounded"
+                    />
+                    <span className="text-sm">Dismissible</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={toastShowIcon}
+                      onChange={e => setToastShowIcon(e.target.checked)}
+                      className="rounded"
+                    />
+                    <span className="text-sm">Show Icon</span>
+                  </label>
+                </div>
+
+                {/* Launch Button */}
+                <div>
+                  <Button
+                    onClick={() => addToast()}
+                    size="lg"
+                    className="w-full md:w-auto"
+                  >
+                    Show Toast ({toastVariant} - {toastSize})
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Examples */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Quick Examples</CardTitle>
+              <CardDescription>
+                Common toast scenarios with pre-configured settings
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'success',
+                      title: 'Recipe Saved!',
+                      description:
+                        'Your chocolate chip cookies recipe has been saved.',
+                      showProgress: true,
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  ✅ Success Example
+                </Button>
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'error',
+                      title: 'Upload Failed',
+                      description: 'Could not save recipe. Please try again.',
+                      autoDismiss: false,
+                      action: 'Retry',
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  ❌ Error Example
+                </Button>
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'warning',
+                      title: 'Session Expiring',
+                      description: 'You will be logged out in 5 minutes.',
+                      showProgress: true,
+                      action: 'Extend',
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  ⚠️ Warning Example
+                </Button>
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'info',
+                      title: 'Pro Tip',
+                      description: 'You can drag ingredients to reorder them.',
+                      size: 'lg',
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  ℹ️ Info Example
+                </Button>
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'default',
+                      title: 'Update Available',
+                      description: 'Version 2.1 is now available.',
+                      action: 'Update',
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  📦 Update Example
+                </Button>
+                <Button
+                  onClick={() =>
+                    addToast({
+                      variant: 'success',
+                      title: 'Import Complete',
+                      description: 'Successfully imported 15 recipes.',
+                      size: 'sm',
+                      showIcon: false,
+                    })
+                  }
+                  variant="outline"
+                  size="sm"
+                  className="justify-start"
+                >
+                  📤 Batch Example
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Variants Showcase */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Toast Variants</CardTitle>
+              <CardDescription>
+                All available toast variants with their default styling
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Default Toast</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="default"
+                        title="Default Notification"
+                        description="This is a standard notification message."
+                        autoDismiss={false}
+                        dismissible={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Success Toast</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="success"
+                        title="Success!"
+                        description="Your recipe has been saved successfully."
+                        autoDismiss={false}
+                        dismissible={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Error Toast</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="error"
+                        title="Error"
+                        description="Failed to save your changes. Please try again."
+                        autoDismiss={false}
+                        dismissible={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Warning Toast</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="warning"
+                        title="Warning"
+                        description="Your session will expire in 5 minutes."
+                        autoDismiss={false}
+                        dismissible={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Info Toast</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="info"
+                        title="Tip"
+                        description="You can press Ctrl+S to save quickly."
+                        autoDismiss={false}
+                        dismissible={false}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">With Progress Bar</h4>
+                    <div className="rounded-lg border p-4">
+                      <Toast
+                        variant="success"
+                        title="Auto-dismiss"
+                        description="This toast shows progress."
+                        autoDismiss={false}
+                        dismissible={false}
+                        showProgress={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Sizes Showcase */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Toast Sizes</CardTitle>
+              <CardDescription>
+                Available size variants for different use cases
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="space-y-3">
+                  <h4 className="font-medium">Small (sm)</h4>
+                  <div className="rounded-lg border p-4">
+                    <Toast
+                      size="sm"
+                      variant="info"
+                      title="Small Toast"
+                      description="Compact size for less important notifications."
+                      autoDismiss={false}
+                      dismissible={false}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="font-medium">Default</h4>
+                  <div className="rounded-lg border p-4">
+                    <Toast
+                      size="default"
+                      variant="default"
+                      title="Default Toast"
+                      description="Standard size for most notifications."
+                      autoDismiss={false}
+                      dismissible={false}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="font-medium">Large (lg)</h4>
+                  <div className="rounded-lg border p-4">
+                    <Toast
+                      size="lg"
+                      variant="success"
+                      title="Large Toast"
+                      description="Prominent size for important notifications."
+                      autoDismiss={false}
+                      dismissible={false}
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Advanced Features */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Advanced Features</CardTitle>
+              <CardDescription>
+                Compound components and custom implementations
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="mb-3 font-medium">
+                    Compound Components Usage
+                  </h4>
+                  <div className="rounded-lg border p-4">
+                    <ToastRoot variant="success" size="lg">
+                      <ToastIcon variant="success" />
+                      <ToastContent size="lg">
+                        <ToastTitle variant="success" size="lg">
+                          Recipe Published!
+                        </ToastTitle>
+                        <ToastDescription variant="success" size="lg">
+                          Your recipe &quot;Chocolate Chip Cookies&quot; is now
+                          live.
+                        </ToastDescription>
+                        <div className="mt-3 flex items-center gap-2">
+                          <ToastAction
+                            variant="success"
+                            onClick={() => console.log('View clicked')}
+                          >
+                            View Recipe
+                          </ToastAction>
+                          <ToastAction
+                            variant="success"
+                            onClick={() => console.log('Share clicked')}
+                          >
+                            Share
+                          </ToastAction>
+                        </div>
+                      </ToastContent>
+                      <ToastClose
+                        variant="success"
+                        onClick={() => console.log('Closed')}
+                      />
+                    </ToastRoot>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="mb-3 font-medium">Custom Icon Toast</h4>
+                  <div className="rounded-lg border p-4">
+                    <Toast
+                      variant="info"
+                      title="Custom Icon"
+                      description="This toast has a custom emoji icon."
+                      icon={<span className="text-2xl">🎉</span>}
+                      autoDismiss={false}
+                      dismissible={false}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="mb-3 font-medium">Without Icon</h4>
+                  <div className="rounded-lg border p-4">
+                    <Toast
+                      variant="default"
+                      title="No Icon"
+                      description="This toast doesn't show an icon."
+                      showIcon={false}
+                      autoDismiss={false}
+                      dismissible={false}
+                    />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Code Examples */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Code Examples</CardTitle>
+              <CardDescription>
+                Implementation examples for different toast patterns
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">{`// Basic toast`}</div>
+                  <div>{`<Toast`}</div>
+                  <div>{`  title="Success!"`}</div>
+                  <div>{`  description="Your changes have been saved."`}</div>
+                  <div>{`  variant="success"`}</div>
+                  <div>{`/>`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Toast with action button`}
+                  </div>
+                  <div>{`<Toast`}</div>
+                  <div>{`  title="Update Available"`}</div>
+                  <div>{`  description="A new version is available."`}</div>
+                  <div>{`  variant="info"`}</div>
+                  <div>{`  action="Update Now"`}</div>
+                  <div>{`  onAction={() => window.location.reload()}`}</div>
+                  <div>{`  showProgress={true}`}</div>
+                  <div>{`/>`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Compound components for flexibility`}
+                  </div>
+                  <div>{`<ToastRoot variant="error">`}</div>
+                  <div>{`  <ToastIcon variant="error" />`}</div>
+                  <div>{`  <ToastContent>`}</div>
+                  <div>{`    <ToastTitle variant="error">`}</div>
+                  <div>{`      Connection Failed`}</div>
+                  <div>{`    </ToastTitle>`}</div>
+                  <div>{`    <ToastDescription variant="error">`}</div>
+                  <div>{`      Unable to connect to server.`}</div>
+                  <div>{`    </ToastDescription>`}</div>
+                  <div>{`    <ToastAction variant="error" onClick={retry}>`}</div>
+                  <div>{`      Retry`}</div>
+                  <div>{`    </ToastAction>`}</div>
+                  <div>{`  </ToastContent>`}</div>
+                  <div>{`  <ToastClose variant="error" />`}</div>
+                  <div>{`</ToastRoot>`}</div>
+                </div>
+                <div className="bg-muted overflow-x-auto rounded-md p-4 font-mono text-sm">
+                  <div className="text-muted-foreground mb-2">
+                    {`// Custom icon and styling`}
+                  </div>
+                  <div>{`<Toast`}</div>
+                  <div>{`  title="Custom Icon"`}</div>
+                  <div>{`  description="This toast has a custom icon."`}</div>
+                  <div>{`  variant="info"`}</div>
+                  <div>{`  icon={<span className="text-2xl">🎉</span>}`}</div>
+                  <div>{`  className="border-2 border-purple-500"`}</div>
+                  <div>{`/>`}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recipe App Examples */}
+          <Card size="lg">
+            <CardHeader>
+              <CardTitle>Recipe App Usage Examples</CardTitle>
+              <CardDescription>
+                Real-world toast implementations for the recipe application
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="mb-3 font-medium">
+                    Common Recipe App Scenarios
+                  </h4>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <Button
+                      onClick={() =>
+                        addToast({
+                          variant: 'success',
+                          title: 'Recipe Saved',
+                          description:
+                            'Your chocolate chip cookies recipe has been saved to your cookbook.',
+                          action: 'View Recipe',
+                        })
+                      }
+                      variant="outline"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Save Confirmation
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        addToast({
+                          variant: 'error',
+                          title: 'Upload Failed',
+                          description:
+                            'Could not upload recipe image. Please check your connection.',
+                          action: 'Retry Upload',
+                          autoDismiss: false,
+                        })
+                      }
+                      variant="outline"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Error Handling
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        addToast({
+                          variant: 'info',
+                          title: 'Pro Tip',
+                          description:
+                            'You can drag ingredients to reorder them in your recipe.',
+                          showProgress: true,
+                        })
+                      }
+                      variant="outline"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Feature Tips
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        addToast({
+                          variant: 'success',
+                          title: 'Bulk Import Complete',
+                          description:
+                            'Successfully imported 15 recipes from your backup file.',
+                          action: 'View Imported',
+                        })
+                      }
+                      variant="outline"
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Batch Operations
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="mb-3 font-medium">User Workflow Examples</h4>
+                  <div className="space-y-3">
+                    <div className="bg-muted/50 rounded-lg border p-4">
+                      <h5 className="mb-2 font-medium">
+                        Recipe Creation Workflow
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'info',
+                              title: 'Saving Draft...',
+                              description: 'Auto-saving your recipe progress.',
+                              size: 'sm',
+                              showProgress: true,
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Auto-save
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'warning',
+                              title: 'Missing Ingredients',
+                              description:
+                                'Please add at least one ingredient.',
+                              size: 'sm',
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Validation
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'success',
+                              title: 'Recipe Published',
+                              description:
+                                'Your recipe is now visible to other users.',
+                              action: 'Share',
+                              size: 'sm',
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Publish
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="bg-muted/50 rounded-lg border p-4">
+                      <h5 className="mb-2 font-medium">
+                        Meal Planning Workflow
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'info',
+                              title: 'Recipe Added',
+                              description: 'Added to Monday dinner.',
+                              size: 'sm',
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Add to Plan
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'success',
+                              title: 'Shopping List Updated',
+                              description:
+                                'Ingredients added to your shopping list.',
+                              action: 'View List',
+                              size: 'sm',
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Generate List
+                        </Button>
+                        <Button
+                          onClick={() =>
+                            addToast({
+                              variant: 'warning',
+                              title: 'Meal Plan Conflict',
+                              description:
+                                'You already have a recipe for Tuesday dinner.',
+                              action: 'Replace',
+                              size: 'sm',
+                            })
+                          }
+                          size="sm"
+                          variant="ghost"
+                        >
+                          Conflict
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
         {/* Future Components Section */}
         <section className="mt-12 space-y-4">
           <h2 className="text-foreground text-2xl font-semibold">
             Coming Soon
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {['Toast', 'Skeleton', 'Badge', 'Dropdown', 'Tabs'].map(
+            {['Skeleton', 'Badge', 'Dropdown', 'Tabs', 'Accordion'].map(
               component => (
                 <Card key={component} variant="ghost" className="opacity-60">
                   <CardContent>
