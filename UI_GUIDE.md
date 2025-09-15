@@ -1315,6 +1315,178 @@ space-16: 4rem; /* 64px */
 - **Advanced Features**: Notes, tips, variations, nutrition information
 - **Meal Planning**: Recipe summaries and quick access to key details
 
+#### Textarea Component
+
+```tsx
+// Basic textarea for multi-line text input
+<Textarea
+  label="Recipe Description"
+  placeholder="Describe your recipe..."
+  helperText="Write a brief description of your recipe"
+/>
+
+// Textarea with character counting and validation
+<Textarea
+  label="Recipe Notes"
+  placeholder="Add your notes..."
+  maxLength={500}
+  showCharacterCount
+  required
+  errorMessage="This field is required"
+/>
+
+// Different variants for various states
+<Textarea
+  variant="success"
+  label="Approved Content"
+  successMessage="This content has been approved"
+  defaultValue="This recipe has been reviewed and approved."
+/>
+
+<Textarea
+  variant="warning"
+  label="Review Required"
+  warningMessage="Please review this content"
+  defaultValue="Content that needs attention"
+/>
+
+<Textarea
+  variant="destructive"
+  label="Error State"
+  errorMessage="Please fix the errors below"
+  defaultValue="Invalid content"
+/>
+
+// Auto-expanding textarea that grows with content
+<AutoTextarea
+  label="Dynamic Content"
+  placeholder="Start typing and watch this expand..."
+  minRows={3}
+  maxRows={8}
+  helperText="This textarea will grow as you type"
+/>
+
+// Recipe-specific textarea with enhanced features
+<RecipeTextarea
+  type="description"
+  label="Recipe Description"
+  showCharacterCount
+  maxLength={500}
+  placeholder="What makes this recipe special?"
+/>
+
+<RecipeTextarea
+  type="instructions"
+  label="Cooking Instructions"
+  showWordCount
+  minWords={20}
+  autoResize
+  placeholder="Provide detailed step-by-step instructions"
+/>
+
+<RecipeTextarea
+  type="notes"
+  label="Chef's Notes"
+  showCharacterCount
+  maxLength={300}
+  placeholder="Tips, substitutions, or observations"
+/>
+
+<RecipeTextarea
+  type="tips"
+  label="Pro Tips"
+  showWordCount
+  maxWords={50}
+  placeholder="Share your cooking wisdom"
+/>
+
+<RecipeTextarea
+  type="review"
+  label="Your Experience"
+  showWordCount
+  minWords={5}
+  maxWords={100}
+  placeholder="How did this recipe turn out?"
+/>
+
+// Complete recipe form example
+<div className="space-y-6">
+  <RecipeTextarea
+    type="description"
+    label="Recipe Description"
+    required
+    showCharacterCount
+    maxLength={500}
+  />
+
+  <RecipeTextarea
+    type="instructions"
+    label="Cooking Instructions"
+    required
+    showWordCount
+    minWords={20}
+    autoResize
+  />
+
+  <div className="grid md:grid-cols-2 gap-4">
+    <RecipeTextarea
+      type="notes"
+      label="Chef's Notes"
+      showCharacterCount
+      maxLength={300}
+    />
+
+    <RecipeTextarea
+      type="tips"
+      label="Pro Tips"
+      showWordCount
+      maxWords={30}
+    />
+  </div>
+</div>
+```
+
+**Textarea Variants:**
+
+- `default`: Standard styling with blue focus states
+- `destructive`: Red styling for error states and validation failures
+- `success`: Green styling for valid states and confirmations
+- `warning`: Yellow styling for warnings and cautions
+- `ghost`: Minimal styling with transparent background
+
+**Textarea Sizes:**
+
+- `sm`: Compact size for dense layouts (smaller text, reduced padding)
+- `default`: Standard size for most use cases
+- `lg`: Large size for prominent fields and better readability
+
+**Recipe-Specific Types:**
+
+- **description**: Recipe overview and backstory (blue theme, 6rem min-height)
+- **instructions**: Step-by-step cooking directions (green theme, 8rem min-height)
+- **notes**: Chef's notes and tips (yellow theme, 4rem min-height)
+- **tips**: Pro tips and techniques (purple theme, 4rem min-height)
+- **review**: User reviews and experiences (orange theme, 5rem min-height)
+
+**Advanced Features:**
+
+- **Character Counting**: Real-time character count with warning states
+- **Word Counting**: Word count validation for recipe content
+- **Auto-Resize**: Dynamic height adjustment based on content
+- **Validation States**: Min/max word limits with helpful feedback
+- **Contextual Placeholders**: Recipe-type specific placeholder text
+- **Enhanced Accessibility**: Full ARIA support and screen reader compatibility
+
+**Recipe App Use Cases:**
+
+- **Recipe Creation**: Multi-line descriptions, detailed instructions
+- **Content Editing**: Notes, tips, variations, and reviews
+- **Form Validation**: Character/word limits with real-time feedback
+- **User Reviews**: Experience sharing with word count guidance
+- **Recipe Import**: Large text areas for pasting external content
+- **Collaborative Editing**: Multiple contributors with validation
+- **Mobile-Friendly**: Responsive design with touch-optimized controls
+
 ### Specialized Components
 
 #### Recipe Components

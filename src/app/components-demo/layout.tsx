@@ -20,6 +20,7 @@ const components = [
   { name: 'Avatar', path: '/components-demo/avatar' },
   { name: 'Progress', path: '/components-demo/progress' },
   { name: 'Accordion', path: '/components-demo/accordion' },
+  { name: 'Text Area', path: '/components-demo/textarea' },
 ];
 
 export default function ComponentsDemoLayout({

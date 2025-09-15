@@ -1,0 +1,374 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { Textarea, RecipeTextarea, AutoTextarea } from './textarea';
+
+<Meta
+  title="Components/Textarea"
+  component={Textarea}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'A collection of textarea components designed for recipe descriptions, instructions, and other multi-line text input needs.',
+      },
+    },
+  }}
+/>
+
+# Textarea Components
+
+Comprehensive textarea components for recipe descriptions, instructions, and multi-line text input with advanced features like auto-resize, character counting, and recipe-specific styling.
+
+## Basic Textarea
+
+The base textarea component with standard form styling and optional features.
+
+<Canvas>
+  <Story name="Basic">
+    <div className="w-96 space-y-4">
+      <Textarea
+        label="Recipe Description"
+        placeholder="Describe your recipe..."
+        helperText="Write a brief description of your recipe"
+      />
+      <Textarea
+        label="Required Field"
+        placeholder="This field is required"
+        required
+        helperText="This field cannot be empty"
+      />
+      <Textarea
+        label="With Character Count"
+        placeholder="Type something..."
+        maxLength={200}
+        showCharacterCount
+        helperText="Maximum 200 characters"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Textarea Variants
+
+Different visual styles for various use cases.
+
+<Canvas>
+  <Story name="Variants">
+    <div className="w-96 space-y-4">
+      <Textarea
+        variant="default"
+        label="Default"
+        placeholder="Default textarea"
+        defaultValue="This is the default variant"
+      />
+      <Textarea
+        variant="destructive"
+        label="Error State"
+        placeholder="Error textarea"
+        errorMessage="This field has an error"
+        defaultValue="Invalid input"
+      />
+      <Textarea
+        variant="success"
+        label="Success State"
+        placeholder="Success textarea"
+        successMessage="This field is valid"
+        defaultValue="Valid input that meets requirements"
+      />
+      <Textarea
+        variant="warning"
+        label="Warning State"
+        placeholder="Warning textarea"
+        warningMessage="Please review this input"
+        defaultValue="Input that needs attention"
+      />
+      <Textarea
+        variant="ghost"
+        label="Ghost Variant"
+        placeholder="Minimal styling"
+        defaultValue="Ghost variant with minimal borders"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Textarea Sizes
+
+Different sizes for various layout needs.
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="w-96 space-y-4">
+      <Textarea
+        size="sm"
+        label="Small"
+        placeholder="Small textarea"
+        defaultValue="Small size textarea"
+      />
+      <Textarea
+        size="default"
+        label="Default"
+        placeholder="Default textarea"
+        defaultValue="Default size textarea"
+      />
+      <Textarea
+        size="lg"
+        label="Large"
+        placeholder="Large textarea"
+        defaultValue="Large size textarea"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Textarea
+
+Specialized textarea component designed for recipe-specific content with contextual styling.
+
+<Canvas>
+  <Story name="Recipe Types">
+    <div className="w-96 space-y-6">
+      <RecipeTextarea
+        type="description"
+        label="Recipe Description"
+        showCharacterCount
+        maxLength={500}
+        defaultValue="This Mediterranean-style chicken dish combines tender chicken breasts with colorful vegetables and aromatic herbs."
+      />
+      <RecipeTextarea
+        type="instructions"
+        label="Cooking Instructions"
+        showWordCount
+        minWords={20}
+        defaultValue="1. Preheat oven to 375°F. 2. Season chicken with salt and pepper. 3. Heat oil in a large oven-safe skillet over medium-high heat."
+      />
+      <RecipeTextarea
+        type="notes"
+        label="Chef's Notes"
+        showCharacterCount
+        maxLength={300}
+        defaultValue="For best results, let the chicken rest at room temperature for 15 minutes before cooking."
+      />
+      <RecipeTextarea
+        type="tips"
+        label="Cooking Tips"
+        showWordCount
+        defaultValue="Don't move the chicken too early - let it develop a golden crust before flipping."
+      />
+      <RecipeTextarea
+        type="review"
+        label="Recipe Review"
+        showWordCount
+        minWords={10}
+        maxWords={100}
+        defaultValue="Absolutely delicious! The flavors were perfectly balanced and the chicken was so tender."
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Auto-Expanding Textarea
+
+Automatically adjusts height based on content.
+
+<Canvas>
+  <Story name="Auto Expanding">
+    <div className="w-96 space-y-4">
+      <AutoTextarea
+        label="Auto-Expanding"
+        placeholder="Start typing and watch this expand..."
+        minRows={3}
+        maxRows={8}
+        helperText="This textarea will grow as you type"
+      />
+      <RecipeTextarea
+        type="instructions"
+        label="Recipe Instructions"
+        autoResize
+        showWordCount
+        minWords={15}
+        placeholder="Write detailed step-by-step instructions..."
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Interactive States
+
+Different states and validation examples.
+
+<Canvas>
+  <Story name="States">
+    <div className="w-96 space-y-4">
+      <Textarea
+        label="Default State"
+        placeholder="Normal textarea"
+        helperText="This is a normal textarea"
+      />
+      <Textarea
+        label="Disabled State"
+        placeholder="Disabled textarea"
+        disabled
+        defaultValue="This textarea is disabled"
+        helperText="This field is disabled"
+      />
+      <Textarea
+        label="Error State"
+        placeholder="Error textarea"
+        errorMessage="This field is required"
+        defaultValue=""
+      />
+      <Textarea
+        label="Success State"
+        placeholder="Success textarea"
+        successMessage="Great! This looks good"
+        defaultValue="Perfect recipe description"
+      />
+      <RecipeTextarea
+        type="instructions"
+        label="Word Count Validation"
+        showWordCount
+        minWords={10}
+        maxWords={50}
+        defaultValue="This is too short"
+        helperText="Write between 10-50 words"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Complete Recipe Form Example
+
+A realistic example showing textarea components in a recipe creation form.
+
+<Canvas>
+  <Story name="Recipe Form">
+    <div className="w-full max-w-2xl space-y-6">
+      <div className="grid gap-6">
+        <RecipeTextarea
+          type="description"
+          label="Recipe Description"
+          required
+          showCharacterCount
+          maxLength={500}
+          placeholder="What makes this recipe special?"
+          helperText="Describe the dish, its origins, or what inspired you to create it"
+        />
+
+        <RecipeTextarea
+          type="instructions"
+          label="Cooking Instructions"
+          required
+          showWordCount
+          minWords={20}
+          autoResize
+          placeholder="Provide clear, step-by-step instructions"
+          helperText="Be detailed to help others succeed with your recipe"
+        />
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <RecipeTextarea
+            type="notes"
+            label="Chef's Notes"
+            showCharacterCount
+            maxLength={300}
+            placeholder="Tips, substitutions, or personal observations"
+          />
+
+          <RecipeTextarea
+            type="tips"
+            label="Pro Tips"
+            showWordCount
+            maxWords={30}
+            placeholder="What tricks make this recipe better?"
+          />
+        </div>
+
+        <RecipeTextarea
+          type="review"
+          label="Your Experience"
+          showWordCount
+          minWords={5}
+          maxWords={100}
+          placeholder="How did this recipe turn out for you?"
+          helperText="Share your experience to help other cooks"
+        />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Validation Examples
+
+Examples showing various validation states and feedback.
+
+<Canvas>
+  <Story name="Validation">
+    <div className="w-96 space-y-4">
+      <RecipeTextarea
+        type="description"
+        label="Character Limit Validation"
+        maxLength={100}
+        showCharacterCount
+        defaultValue="This recipe description is getting close to the character limit and will show warning colors as it approaches the maximum allowed length."
+        helperText="Description is approaching character limit"
+      />
+
+      <RecipeTextarea
+        type="instructions"
+        label="Word Count Validation"
+        showWordCount
+        minWords={15}
+        maxWords={30}
+        defaultValue="Heat oil. Add chicken. Cook until done."
+        helperText="Instructions need more detail"
+      />
+
+      <Textarea
+        label="Custom Validation"
+        maxLength={50}
+        showCharacterCount
+        errorMessage="Recipe name must be between 5-50 characters"
+        defaultValue="Too long recipe name that exceeds the maximum character limit"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Props
+
+### Textarea Props
+
+<ArgsTable of={Textarea} />
+
+### RecipeTextarea Props
+
+<ArgsTable of={RecipeTextarea} />
+
+### AutoTextarea Props
+
+<ArgsTable of={AutoTextarea} />
+
+## Usage Guidelines
+
+### When to Use
+
+- **Textarea**: General multi-line text input needs
+- **RecipeTextarea**: Recipe-specific content with contextual styling
+- **AutoTextarea**: When you want automatic height adjustment
+
+### Recipe Type Guidelines
+
+- **description**: Recipe overview, inspiration, or backstory (blue theme)
+- **instructions**: Step-by-step cooking directions (green theme)
+- **notes**: Chef's notes, tips, or substitutions (yellow theme)
+- **tips**: Pro tips and cooking tricks (purple theme)
+- **review**: User reviews and experiences (orange theme)
+
+### Best Practices
+
+1. Always provide clear labels and helpful placeholder text
+2. Use appropriate validation with helpful error messages
+3. Consider character/word limits for better user experience
+4. Use auto-resize for dynamic content that varies in length
+5. Provide context-specific helper text
+6. Consider the recipe type for appropriate styling and validation
