@@ -174,6 +174,111 @@ space-16: 4rem; /* 64px */
 - **Cooking Times**: "15 min", "30 min", "1 hour" (outline, small size)
 - **Tags and Labels**: Any custom user-generated or system tags
 
+#### Dropdown Component
+
+```tsx
+// Basic action menu
+<DropdownMenu>
+  <DropdownMenuTrigger>Recipe Actions</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>View Recipe</DropdownMenuItem>
+    <DropdownMenuItem>Edit Recipe</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Delete Recipe</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// Recipe filter menu with checkbox items
+<DropdownMenu>
+  <DropdownMenuTrigger variant="outline">Filter Options</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>Display Options</DropdownMenuLabel>
+    <DropdownMenuCheckboxItem checked={showBookmarked} onCheckedChange={setShowBookmarked}>
+      Show Only Bookmarked
+    </DropdownMenuCheckboxItem>
+    <DropdownMenuCheckboxItem checked={showNutrition} onCheckedChange={setShowNutrition}>
+      Show Nutrition Panel
+    </DropdownMenuCheckboxItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// Dietary preference selector with radio items
+<DropdownMenu>
+  <DropdownMenuTrigger variant="outline">Diet: {selectedDiet || 'All'}</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>Dietary Restrictions</DropdownMenuLabel>
+    <DropdownMenuRadioGroup value={selectedDiet} onValueChange={setSelectedDiet}>
+      <DropdownMenuRadioItem value="">All Recipes</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="vegetarian">Vegetarian</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="vegan">Vegan</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="gluten-free">Gluten-Free</DropdownMenuRadioItem>
+    </DropdownMenuRadioGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// User profile menu with keyboard shortcuts
+<DropdownMenu>
+  <DropdownMenuTrigger variant="ghost">Chef John</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuItem>
+      Profile Settings
+      <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+    </DropdownMenuItem>
+    <DropdownMenuItem>My Recipes</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>Export Recipe</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem>PDF Document</DropdownMenuItem>
+        <DropdownMenuItem>Text File</DropdownMenuItem>
+        <DropdownMenuItem>Recipe Card (PNG)</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+**Dropdown Variants:**
+
+**Trigger Variants:**
+
+- `default`: Primary brand styling for main action menus
+- `secondary`: Less prominent styling for secondary actions
+- `outline`: Subtle border styling for filter and option menus
+- `ghost`: Minimal styling for user menus and inline actions
+
+**Content Variants:**
+
+- `default`: Standard dropdown content styling
+- `secondary`: Alternative styling for specialized contexts
+
+**Sizes:**
+
+- `sm`: Compact size for dense layouts and toolbar actions
+- `default`: Standard size for most use cases
+- `lg`: Larger size for prominent menus and touch interfaces
+
+**Recipe App Use Cases:**
+
+- **Recipe Actions**: View, edit, duplicate, share, delete recipes
+- **Filter Menus**: Category filters, difficulty selectors, dietary restrictions
+- **User Menus**: Profile settings, account actions, preferences
+- **Bulk Actions**: Multi-select recipe operations
+- **Sort Options**: Recipe ordering and view preferences
+- **Export Options**: Multiple format downloads with sub-menus
+- **Collection Management**: Add to collections, organize recipes
+- **Quick Settings**: View options, display preferences
+
+**Interactive Elements:**
+
+- **DropdownMenuCheckboxItem**: For toggleable options like "Show only favorites"
+- **DropdownMenuRadioItem**: For exclusive selections like dietary preferences
+- **DropdownMenuSeparator**: To group related actions logically
+- **DropdownMenuLabel**: For section headers and organization
+- **DropdownMenuShortcut**: Keyboard shortcuts for power users
+- **Sub-menus**: For complex hierarchical actions like export options
+
 #### Input Components
 
 ```tsx

@@ -13,6 +13,7 @@ const components = [
   { name: 'Toast', path: '/components-demo/toast' },
   { name: 'Skeleton', path: '/components-demo/skeleton' },
   { name: 'Badge', path: '/components-demo/badge' },
+  { name: 'Dropdown', path: '/components-demo/dropdown' },
 ];
 
 export default function ComponentsDemoLayout({

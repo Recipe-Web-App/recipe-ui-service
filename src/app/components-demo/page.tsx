@@ -60,6 +60,13 @@ const components = [
     variants: 7,
     status: 'ready',
   },
+  {
+    name: 'Dropdown',
+    path: '/components-demo/dropdown',
+    description: 'Menus, select options, and action lists',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
@@ -91,7 +98,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">7</div>
+            <div className="text-primary text-3xl font-bold">8</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -99,7 +106,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">36</div>
+            <div className="text-primary text-3xl font-bold">44</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
