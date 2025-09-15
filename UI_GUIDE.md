@@ -405,6 +405,184 @@ space-16: 4rem; /* 64px */
 - Clear focus indicators and active state styling
 - Semantic HTML structure with proper heading hierarchy
 
+#### Select Component
+
+```tsx
+// Basic category selection
+<Select>
+  <SelectTrigger className="w-[200px]">
+    <SelectValue placeholder="Select category" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="breakfast">Breakfast</SelectItem>
+    <SelectItem value="lunch">Lunch</SelectItem>
+    <SelectItem value="dinner">Dinner</SelectItem>
+    <SelectItem value="dessert">Dessert</SelectItem>
+  </SelectContent>
+</Select>
+
+// Grouped recipe categories with labels and separators
+<Select>
+  <SelectTrigger className="w-[250px]">
+    <SelectValue placeholder="Choose category" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Meal Types</SelectLabel>
+      <SelectItem value="breakfast">🍳 Breakfast</SelectItem>
+      <SelectItem value="lunch">🥗 Lunch</SelectItem>
+      <SelectItem value="dinner">🍽️ Dinner</SelectItem>
+      <SelectSeparator />
+      <SelectLabel>Other</SelectLabel>
+      <SelectItem value="appetizer">🥙 Appetizer</SelectItem>
+      <SelectItem value="dessert">🍰 Dessert</SelectItem>
+      <SelectItem value="snack">🥨 Snack</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
+// Dietary restrictions selector
+<Select>
+  <SelectTrigger className="w-[280px]">
+    <SelectValue placeholder="Dietary preferences" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Plant-Based</SelectLabel>
+      <SelectItem value="vegetarian">🥬 Vegetarian</SelectItem>
+      <SelectItem value="vegan">🌱 Vegan</SelectItem>
+      <SelectSeparator />
+      <SelectLabel>Dietary Restrictions</SelectLabel>
+      <SelectItem value="gluten-free">🌾 Gluten-Free</SelectItem>
+      <SelectItem value="dairy-free">🥛 Dairy-Free</SelectItem>
+      <SelectItem value="nut-free">🥜 Nut-Free</SelectItem>
+      <SelectItem value="keto">🥓 Keto</SelectItem>
+      <SelectItem value="paleo">🦴 Paleo</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
+// Complete form field with label and error handling
+<SelectField
+  label="Recipe Category"
+  placeholder="Choose a category"
+  required
+  error="Please select a category"
+>
+  <SelectGroup>
+    <SelectLabel>Main Meals</SelectLabel>
+    <SelectItem value="breakfast">Breakfast</SelectItem>
+    <SelectItem value="lunch">Lunch</SelectItem>
+    <SelectItem value="dinner">Dinner</SelectItem>
+    <SelectSeparator />
+    <SelectLabel>Other</SelectLabel>
+    <SelectItem value="snack">Snack</SelectItem>
+    <SelectItem value="dessert">Dessert</SelectItem>
+  </SelectGroup>
+</SelectField>
+
+// Filter controls with different variants
+<Select>
+  <SelectTrigger variant="outline" size="sm" className="w-[150px]">
+    <SelectValue placeholder="Sort by" />
+  </SelectTrigger>
+  <SelectContent size="sm">
+    <SelectItem value="newest">📅 Newest</SelectItem>
+    <SelectItem value="popular">⭐ Popular</SelectItem>
+    <SelectItem value="rating">🏆 Top Rated</SelectItem>
+    <SelectItem value="cook-time">⏱️ Quick</SelectItem>
+  </SelectContent>
+</Select>
+
+// Cooking time filter
+<Select>
+  <SelectTrigger variant="filled" className="w-[180px]">
+    <SelectValue placeholder="Cook time" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="15">⚡ Under 15 min</SelectItem>
+    <SelectItem value="30">⏱️ 15-30 min</SelectItem>
+    <SelectItem value="60">⏰ 30-60 min</SelectItem>
+    <SelectItem value="120">🕰️ 1-2 hours</SelectItem>
+    <SelectItem value="240">⏳ Over 2 hours</SelectItem>
+  </SelectContent>
+</Select>
+
+// Difficulty level with different styling
+<Select>
+  <SelectTrigger className="w-[160px]">
+    <SelectValue placeholder="Difficulty" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="easy">🟢 Easy</SelectItem>
+    <SelectItem value="medium">🟡 Medium</SelectItem>
+    <SelectItem value="hard">🔴 Hard</SelectItem>
+    <SelectItem value="expert">⚫ Expert</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+**Select Variants:**
+
+**Trigger Variants:**
+
+- `default`: Standard border styling with gray borders and white background
+- `outline`: Emphasized border styling with hover effects for form controls
+- `ghost`: Transparent styling for inline selections and minimal interfaces
+- `filled`: Filled background styling for form fields and input areas
+
+**Content Variants:**
+
+- `default`: Clean white background with subtle shadows for dropdowns
+- `secondary`: Alternative gray background for secondary selection contexts
+
+**Sizes:**
+
+- `sm`: Compact size for dense layouts and toolbar controls (height: 32px, text: xs)
+- `default`: Standard size for most form and filter use cases (height: 36px, text: sm)
+- `lg`: Larger size for prominent selections and touch interfaces (height: 40px, text: base)
+
+**Error States:**
+
+- `error={true}`: Red border styling with error state indicators for validation
+- Automatic `aria-invalid` and `aria-describedby` attributes for accessibility
+
+**Recipe App Use Cases:**
+
+- **Category Selection**: Meal types, cuisine categories, recipe classifications
+- **Filter Controls**: Dietary restrictions, cooking time, difficulty levels, ingredients
+- **Sort Options**: Recipe ordering preferences, date sorting, popularity ranking
+- **User Preferences**: Default dietary restrictions, favorite cuisines, portion sizes
+- **Recipe Creation**: Category assignment, difficulty setting, cuisine selection
+- **Search Refinement**: Advanced filtering, multi-criteria selection
+- **Bulk Operations**: Apply actions to multiple recipes with category selection
+- **Settings**: User preference configuration, display options
+
+**Grouped Selection Examples:**
+
+- **Meal Planning**: Breakfast/Lunch/Dinner with sub-categories like Quick/Elaborate
+- **Dietary Needs**: Plant-based options separated from allergy restrictions
+- **Recipe Attributes**: Time-based vs. skill-based vs. equipment-based filtering
+- **Content Organization**: Published/Draft/Private with sub-status indicators
+
+**Accessibility Features:**
+
+- Full keyboard navigation with arrow keys, Enter, and Escape
+- Screen reader support with proper ARIA labeling and announcements
+- Focus management and visual focus indicators
+- Error state announcements with `role="alert"`
+- Proper labeling association with `SelectField` wrapper
+- Semantic grouping with `SelectGroup` and `SelectLabel`
+- Required field indication and validation feedback
+
+**Form Integration:**
+
+- `SelectField` wrapper component for complete form integration
+- Built-in label association and error message handling
+- Controlled and uncontrolled component support
+- Validation state management with visual and accessible feedback
+- Seamless integration with form libraries like React Hook Form
+
 #### Input Components
 
 ```tsx
@@ -421,15 +599,6 @@ space-16: 4rem; /* 64px */
   placeholder="Search recipes..."
   onSearch={handleSearch}
   icon={<SearchIcon />}
-/>
-
-// Select dropdown
-<Select
-  label="Category"
-  options={categories}
-  placeholder="Select category"
-  value={selectedCategory}
-  onChange={setSelectedCategory}
 />
 ```
 

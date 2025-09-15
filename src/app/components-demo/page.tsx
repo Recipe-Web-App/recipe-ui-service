@@ -74,10 +74,16 @@ const components = [
     variants: 9,
     status: 'ready',
   },
+  {
+    name: 'Select',
+    path: '/components-demo/select',
+    description: 'Category selection, filters, and form controls',
+    variants: 4,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Select', description: 'Dropdown selection component' },
   { name: 'Checkbox', description: 'Checkbox and radio inputs' },
   { name: 'Switch', description: 'Toggle switch component' },
   { name: 'Tooltip', description: 'Contextual information on hover' },
