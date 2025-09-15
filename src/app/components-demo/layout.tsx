@@ -21,6 +21,7 @@ const components = [
   { name: 'Progress', path: '/components-demo/progress' },
   { name: 'Accordion', path: '/components-demo/accordion' },
   { name: 'Text Area', path: '/components-demo/textarea' },
+  { name: 'Dialog', path: '/components-demo/dialog' },
 ];
 
 export default function ComponentsDemoLayout({

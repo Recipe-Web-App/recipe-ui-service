@@ -1487,6 +1487,177 @@ space-16: 4rem; /* 64px */
 - **Collaborative Editing**: Multiple contributors with validation
 - **Mobile-Friendly**: Responsive design with touch-optimized controls
 
+#### Dialog Component
+
+```tsx
+// Basic dialog for confirmations and alerts
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Confirm Action</DialogTitle>
+      <DialogDescription>
+        Are you sure you want to perform this action?
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogButton intent="secondary" onClick={() => setOpen(false)}>
+        Cancel
+      </DialogButton>
+      <DialogButton intent="primary" onClick={handleConfirm}>
+        Confirm
+      </DialogButton>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+// Confirmation dialog with contextual styling
+<ConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete Recipe"
+  description="This action cannot be undone."
+  type="delete"
+  icon={<Trash2 className="w-6 h-6" />}
+  onConfirm={handleDelete}
+  onCancel={() => setOpen(false)}
+/>
+
+// Recipe-specific confirmation with auto-generated content
+<RecipeConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  action="delete-recipe"
+  recipeName="Chocolate Chip Cookies"
+  onConfirm={handleRecipeDelete}
+  onCancel={() => setOpen(false)}
+/>
+
+// Simple alert dialog for notifications
+<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Success!"
+  description="Your recipe has been saved successfully."
+  variant="success"
+  onAction={() => setOpen(false)}
+/>
+
+// Dialog with custom content and icon
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent variant="warning" size="lg">
+    <DialogHeader>
+      <DialogIcon variant="warning">
+        <AlertTriangle className="w-6 h-6" />
+      </DialogIcon>
+      <DialogTitle>Unsaved Changes</DialogTitle>
+      <DialogDescription>
+        You have unsaved changes that will be lost if you continue.
+      </DialogDescription>
+    </DialogHeader>
+    <div className="py-4">
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <h4 className="font-medium text-yellow-900 mb-1">What will be lost:</h4>
+        <ul className="text-sm text-yellow-700 space-y-1">
+          <li>• Recipe title and description changes</li>
+          <li>• Ingredient modifications</li>
+          <li>• Instruction updates</li>
+        </ul>
+      </div>
+    </div>
+    <DialogFooter>
+      <DialogButton intent="secondary" onClick={handleSave}>
+        Save Changes
+      </DialogButton>
+      <DialogButton intent="destructive" onClick={handleDiscard}>
+        Discard Changes
+      </DialogButton>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+// Loading state dialog
+<ConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Processing Recipe"
+  description="Saving your recipe to the database..."
+  isLoading={isLoading}
+  onConfirm={handleProcess}
+/>
+```
+
+**Key Features:**
+
+- **Radix UI Foundation**: Built on accessible, headless components
+- **Multiple Variants**: Basic, confirmation, recipe-specific, and alert dialogs
+- **Contextual Styling**: Variant-based styling (default, destructive, success, warning, info)
+- **Size Options**: Small to full-screen dialog sizes
+- **Animation Support**: Smooth enter/exit animations with backdrop blur
+- **Icon Integration**: Support for contextual icons and visual indicators
+- **Loading States**: Built-in loading handling for async operations
+- **Focus Management**: Automatic focus trapping and restoration
+- **Keyboard Navigation**: Full keyboard support (Tab, Escape, Enter)
+
+**Advanced Features:**
+
+- **Recipe Actions**: Pre-built confirmations for delete, save, publish, share, export, duplicate
+- **Auto-Generated Content**: Smart titles and descriptions based on recipe context
+- **Accessibility**: Full ARIA attributes, screen reader support, focus management
+- **Error Handling**: Proper error states and validation feedback
+- **Responsive Design**: Mobile-optimized touch targets and layouts
+- **Backdrop Handling**: Click-outside and escape key closing
+- **Portal Rendering**: Renders outside DOM tree for proper stacking
+
+**Dialog Types and Use Cases:**
+
+**Basic Dialog**: Custom content, forms, complex interactions
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>{/* Custom content */}</DialogContent>
+</Dialog>
+```
+
+**Confirmation Dialog**: Destructive actions, important decisions
+
+```tsx
+<ConfirmationDialog
+  type="delete" // delete, save, discard, publish, archive
+  title="Delete Recipe"
+  onConfirm={handleAction}
+/>
+```
+
+**Recipe Confirmation**: Recipe-specific actions with contextual styling
+
+```tsx
+<RecipeConfirmationDialog
+  action="delete-recipe" // delete-recipe, save-recipe, publish-recipe, etc.
+  recipeName="Recipe Name"
+  onConfirm={handleRecipeAction}
+/>
+```
+
+**Alert Dialog**: Simple notifications, single-action confirmations
+
+```tsx
+<AlertDialog
+  variant="success" // default, success, warning, destructive
+  title="Success"
+  description="Operation completed"
+/>
+```
+
+**Recipe App Use Cases:**
+
+- **Recipe Management**: Delete, save, publish, duplicate recipe confirmations
+- **Data Loss Prevention**: Unsaved changes warnings with save/discard options
+- **Import/Export**: Progress dialogs for file operations
+- **User Actions**: Account deletion, subscription changes, data export
+- **Error Handling**: Network errors, validation failures, permission issues
+- **Success Feedback**: Recipe saved, published, shared confirmations
+- **Batch Operations**: Multiple recipe actions with progress indicators
+
 ### Specialized Components
 
 #### Recipe Components
