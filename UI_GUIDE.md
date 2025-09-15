@@ -279,6 +279,132 @@ space-16: 4rem; /* 64px */
 - **DropdownMenuShortcut**: Keyboard shortcuts for power users
 - **Sub-menus**: For complex hierarchical actions like export options
 
+#### Tabs Component
+
+```tsx
+// Basic recipe content tabs
+<Tabs defaultValue="ingredients">
+  <TabsList>
+    <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+    <TabsTrigger value="instructions">Instructions</TabsTrigger>
+    <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
+  </TabsList>
+  <TabsContent value="ingredients">
+    <IngredientsList ingredients={recipe.ingredients} />
+  </TabsContent>
+  <TabsContent value="instructions">
+    <InstructionsList steps={recipe.steps} />
+  </TabsContent>
+  <TabsContent value="nutrition">
+    <NutritionPanel nutrition={recipe.nutrition} />
+  </TabsContent>
+</Tabs>
+
+// User profile sections with line variant
+<Tabs defaultValue="account" variant="line">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="recipes">My Recipes</TabsTrigger>
+    <TabsTrigger value="favorites">Favorites</TabsTrigger>
+    <TabsTrigger value="collections">Collections</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">
+    <AccountSettings />
+  </TabsContent>
+  <TabsContent value="recipes">
+    <UserRecipesList />
+  </TabsContent>
+  <TabsContent value="favorites">
+    <FavoriteRecipesList />
+  </TabsContent>
+  <TabsContent value="collections">
+    <RecipeCollections />
+  </TabsContent>
+</Tabs>
+
+// Recipe management dashboard with pills variant
+<Tabs defaultValue="published" variant="pills" size="lg">
+  <TabsList>
+    <TabsTrigger value="published">Published (12)</TabsTrigger>
+    <TabsTrigger value="drafts">Drafts (3)</TabsTrigger>
+    <TabsTrigger value="pending">Pending Review (1)</TabsTrigger>
+  </TabsList>
+  <TabsContent value="published" variant="card">
+    <PublishedRecipesList />
+  </TabsContent>
+  <TabsContent value="drafts" variant="card">
+    <DraftRecipesList />
+  </TabsContent>
+  <TabsContent value="pending" variant="card">
+    <PendingRecipesList />
+  </TabsContent>
+</Tabs>
+
+// Compact recipe details view
+<Tabs defaultValue="overview" size="sm">
+  <TabsList variant="line">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="reviews">Reviews (24)</TabsTrigger>
+    <TabsTrigger value="related">Similar</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <RecipeOverview recipe={recipe} />
+  </TabsContent>
+  <TabsContent value="reviews">
+    <RecipeReviews recipeId={recipe.id} />
+  </TabsContent>
+  <TabsContent value="related">
+    <RelatedRecipes tags={recipe.tags} />
+  </TabsContent>
+</Tabs>
+```
+
+**Tabs Variants:**
+
+**List Variants:**
+
+- `default`: Standard contained tabs with background and shadow styling
+- `line`: Minimal underlined tabs for clean layouts and secondary content
+- `pills`: Rounded pill-style tabs for modern card-based interfaces
+
+**Trigger Variants:**
+
+- `default`: Standard trigger styling matching the list variant
+- `line`: Underlined triggers for minimal interfaces
+- `pills`: Rounded pill triggers with accent colors
+
+**Content Variants:**
+
+- `default`: Standard content with subtle border and padding
+- `line`: Minimal content styling with just top padding
+- `pills`: Soft background content matching pill aesthetic
+- `card`: Elevated card-style content with shadow and background
+
+**Sizes:**
+
+- `sm`: Compact tabs for dense layouts (height: 24px, text: xs)
+- `default`: Standard size for most use cases (height: 28px, text: sm)
+- `lg`: Larger tabs for prominent sections (height: 32px, text: base)
+
+**Recipe App Use Cases:**
+
+- **Recipe Content Organization**: Ingredients, instructions, nutrition, reviews sections
+- **User Profile Management**: Account settings, recipes, favorites, collections
+- **Recipe Management Dashboard**: Published/drafts/pending recipe states
+- **Content Categorization**: Browse by meal type, difficulty, dietary restrictions
+- **Recipe Details**: Overview, reviews, similar recipes, cooking tips
+- **Admin Interfaces**: User management, content moderation, analytics
+- **Search Results**: Filter views by relevance, date, popularity
+- **Recipe Creation**: Basic info, ingredients, steps, settings tabs
+
+**Accessibility Features:**
+
+- Full keyboard navigation with arrow keys and tab/shift+tab
+- ARIA attributes for screen reader support
+- Automatic focus management when switching tabs
+- Clear focus indicators and active state styling
+- Semantic HTML structure with proper heading hierarchy
+
 #### Input Components
 
 ```tsx

@@ -14,6 +14,7 @@ const components = [
   { name: 'Skeleton', path: '/components-demo/skeleton' },
   { name: 'Badge', path: '/components-demo/badge' },
   { name: 'Dropdown', path: '/components-demo/dropdown' },
+  { name: 'Tabs', path: '/components-demo/tabs' },
 ];
 
 export default function ComponentsDemoLayout({

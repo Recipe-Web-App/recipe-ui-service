@@ -1,0 +1,526 @@
+import { Canvas, Meta, Story, ArgsTable } from '@storybook/addon-docs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
+
+<Meta
+  title="Components/UI/Tabs"
+  component={Tabs}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+A comprehensive tabs component built on Radix UI primitives with multiple variants and sizes.
+Perfect for organizing recipe sections, user profile sections, and navigation interfaces.
+
+## Features
+
+- 🎨 **Multiple Variants**: Default, line, pills, and card styles
+- 📏 **Responsive Sizes**: Small, default, and large options
+- ♿ **Accessible**: Full keyboard navigation and screen reader support
+- 🎯 **Recipe Focused**: Optimized for recipe app use cases
+- 🎨 **Customizable**: Type-safe variants with class-variance-authority
+- 📱 **Mobile Friendly**: Responsive design with touch-friendly targets
+
+## Recipe App Use Cases
+
+### Recipe Details Organization
+- **Ingredients Tab**: Recipe ingredients and shopping list
+- **Instructions Tab**: Step-by-step cooking instructions
+- **Nutrition Tab**: Nutritional information and dietary details
+- **Reviews Tab**: User reviews and ratings
+- **Related Tab**: Similar recipes and suggestions
+
+### User Profile Sections
+- **My Recipes**: User's created and saved recipes
+- **Collections**: Organized recipe collections
+- **Activity**: Recent activity and interactions
+- **Settings**: Profile and preference settings
+
+### Recipe Management
+- **Edit Recipe**: Organize complex recipe forms into sections
+- **Recipe Analytics**: Views, saves, and engagement metrics
+- **Version History**: Track recipe changes and updates
+        `,
+      },
+    },
+  }}
+/>
+
+# Tabs
+
+<Canvas>
+  <Story name="Default">
+    <Tabs defaultValue="ingredients" className="w-full max-w-md">
+      <TabsList>
+        <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+        <TabsTrigger value="instructions">Instructions</TabsTrigger>
+        <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
+      </TabsList>
+      <TabsContent value="ingredients">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Recipe Ingredients</h3>
+          <ul className="space-y-1 text-sm">
+            <li>• 2 cups all-purpose flour</li>
+            <li>• 1 cup sugar</li>
+            <li>• 1/2 cup butter</li>
+            <li>• 2 eggs</li>
+          </ul>
+        </div>
+      </TabsContent>
+      <TabsContent value="instructions">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Cooking Instructions</h3>
+          <ol className="space-y-1 text-sm list-decimal list-inside">
+            <li>Preheat oven to 350°F</li>
+            <li>Mix dry ingredients</li>
+            <li>Add wet ingredients</li>
+            <li>Bake for 25 minutes</li>
+          </ol>
+        </div>
+      </TabsContent>
+      <TabsContent value="nutrition">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Nutrition Facts</h3>
+          <div className="text-sm space-y-1">
+            <div>Calories: 250</div>
+            <div>Protein: 4g</div>
+            <div>Carbs: 35g</div>
+            <div>Fat: 10g</div>
+          </div>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </Story>
+</Canvas>
+
+## Variants
+
+### Line Variant
+Clean underline style perfect for minimal interfaces.
+
+<Canvas>
+  <Story name="Line Variant">
+    <Tabs defaultValue="recipes" className="w-full max-w-lg">
+      <TabsList variant="line">
+        <TabsTrigger variant="line" value="recipes">My Recipes</TabsTrigger>
+        <TabsTrigger variant="line" value="collections">Collections</TabsTrigger>
+        <TabsTrigger variant="line" value="activity">Activity</TabsTrigger>
+        <TabsTrigger variant="line" value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent variant="line" value="recipes">
+        <div className="py-4">
+          <h3 className="font-semibold mb-2">My Recipe Collection</h3>
+          <p className="text-sm text-gray-600">
+            View and manage all your created recipes. You have 24 recipes saved.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="line" value="collections">
+        <div className="py-4">
+          <h3 className="font-semibold mb-2">Recipe Collections</h3>
+          <p className="text-sm text-gray-600">
+            Organize recipes into themed collections like "Quick Dinners" or "Holiday Treats".
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="line" value="activity">
+        <div className="py-4">
+          <h3 className="font-semibold mb-2">Recent Activity</h3>
+          <p className="text-sm text-gray-600">
+            Track your cooking activity, saved recipes, and community interactions.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="line" value="settings">
+        <div className="py-4">
+          <h3 className="font-semibold mb-2">Profile Settings</h3>
+          <p className="text-sm text-gray-600">
+            Manage your profile, preferences, and account settings.
+          </p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </Story>
+</Canvas>
+
+### Pills Variant
+Rounded pill style for modern, friendly interfaces.
+
+<Canvas>
+  <Story name="Pills Variant">
+    <Tabs defaultValue="breakfast" className="w-full max-w-lg">
+      <TabsList variant="pills">
+        <TabsTrigger variant="pills" value="breakfast">Breakfast</TabsTrigger>
+        <TabsTrigger variant="pills" value="lunch">Lunch</TabsTrigger>
+        <TabsTrigger variant="pills" value="dinner">Dinner</TabsTrigger>
+        <TabsTrigger variant="pills" value="dessert">Dessert</TabsTrigger>
+      </TabsList>
+      <TabsContent variant="pills" value="breakfast">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Breakfast Recipes</h3>
+          <p className="text-sm text-gray-600">
+            Start your day right with these delicious breakfast recipes.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="pills" value="lunch">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Lunch Recipes</h3>
+          <p className="text-sm text-gray-600">
+            Quick and satisfying lunch options for busy days.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="pills" value="dinner">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Dinner Recipes</h3>
+          <p className="text-sm text-gray-600">
+            Hearty dinner recipes for family meals and special occasions.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="pills" value="dessert">
+        <div className="space-y-2">
+          <h3 className="font-semibold">Dessert Recipes</h3>
+          <p className="text-sm text-gray-600">
+            Sweet treats and desserts to complete any meal.
+          </p>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </Story>
+</Canvas>
+
+### Card Variant
+Elevated card style with shadow for premium content areas.
+
+<Canvas>
+  <Story name="Card Variant">
+    <Tabs defaultValue="overview" className="w-full max-w-2xl">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+        <TabsTrigger value="method">Method</TabsTrigger>
+        <TabsTrigger value="tips">Tips</TabsTrigger>
+      </TabsList>
+      <TabsContent variant="card" value="overview">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Recipe Overview</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div>
+              <div className="font-medium text-gray-600">Prep Time</div>
+              <div>15 minutes</div>
+            </div>
+            <div>
+              <div className="font-medium text-gray-600">Cook Time</div>
+              <div>30 minutes</div>
+            </div>
+            <div>
+              <div className="font-medium text-gray-600">Serves</div>
+              <div>4 people</div>
+            </div>
+            <div>
+              <div className="font-medium text-gray-600">Difficulty</div>
+              <div>Easy</div>
+            </div>
+          </div>
+          <p className="text-gray-600">
+            A delicious and easy recipe that's perfect for weeknight dinners.
+            This dish combines fresh ingredients with simple techniques for amazing results.
+          </p>
+        </div>
+      </TabsContent>
+      <TabsContent variant="card" value="ingredients">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Ingredients</h3>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" className="rounded" />
+              <span>2 cups all-purpose flour</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" className="rounded" />
+              <span>1 cup granulated sugar</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" className="rounded" />
+              <span>1/2 cup unsalted butter, softened</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" className="rounded" />
+              <span>2 large eggs</span>
+            </div>
+          </div>
+        </div>
+      </TabsContent>
+      <TabsContent variant="card" value="method">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Cooking Method</h3>
+          <ol className="space-y-3 list-decimal list-inside">
+            <li>Preheat your oven to 350°F (175°C)</li>
+            <li>In a large bowl, mix together the flour and sugar</li>
+            <li>Add the softened butter and mix until crumbly</li>
+            <li>Beat in the eggs one at a time</li>
+            <li>Bake for 25-30 minutes until golden brown</li>
+          </ol>
+        </div>
+      </TabsContent>
+      <TabsContent variant="card" value="tips">
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Pro Tips</h3>
+          <ul className="space-y-2 text-sm">
+            <li>• Make sure butter is at room temperature for best mixing</li>
+            <li>• Don't overmix the batter to keep it tender</li>
+            <li>• Test for doneness with a toothpick</li>
+            <li>• Let cool completely before serving</li>
+          </ul>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-6">
+      {/* Small */}
+      <div>
+        <h4 className="mb-2 font-medium">Small Size</h4>
+        <Tabs defaultValue="tab1" className="w-full max-w-md">
+          <TabsList size="sm">
+            <TabsTrigger size="sm" value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger size="sm" value="tab2">Tab 2</TabsTrigger>
+            <TabsTrigger size="sm" value="tab3">Tab 3</TabsTrigger>
+          </TabsList>
+          <TabsContent size="sm" value="tab1">Small tab content</TabsContent>
+          <TabsContent size="sm" value="tab2">Small tab content</TabsContent>
+          <TabsContent size="sm" value="tab3">Small tab content</TabsContent>
+        </Tabs>
+      </div>
+
+      {/* Default */}
+      <div>
+        <h4 className="mb-2 font-medium">Default Size</h4>
+        <Tabs defaultValue="tab1" className="w-full max-w-md">
+          <TabsList>
+            <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+            <TabsTrigger value="tab3">Tab 3</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tab1">Default tab content</TabsContent>
+          <TabsContent value="tab2">Default tab content</TabsContent>
+          <TabsContent value="tab3">Default tab content</TabsContent>
+        </Tabs>
+      </div>
+
+      {/* Large */}
+      <div>
+        <h4 className="mb-2 font-medium">Large Size</h4>
+        <Tabs defaultValue="tab1" className="w-full max-w-md">
+          <TabsList size="lg">
+            <TabsTrigger size="lg" value="tab1">Tab 1</TabsTrigger>
+            <TabsTrigger size="lg" value="tab2">Tab 2</TabsTrigger>
+            <TabsTrigger size="lg" value="tab3">Tab 3</TabsTrigger>
+          </TabsList>
+          <TabsContent size="lg" value="tab1">Large tab content</TabsContent>
+          <TabsContent size="lg" value="tab2">Large tab content</TabsContent>
+          <TabsContent size="lg" value="tab3">Large tab content</TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Management Example
+
+<Canvas>
+  <Story name="Recipe Management">
+    <Tabs defaultValue="details" className="w-full max-w-4xl">
+      <TabsList variant="line">
+        <TabsTrigger variant="line" value="details">Recipe Details</TabsTrigger>
+        <TabsTrigger variant="line" value="ingredients">Ingredients</TabsTrigger>
+        <TabsTrigger variant="line" value="instructions">Instructions</TabsTrigger>
+        <TabsTrigger variant="line" value="nutrition">Nutrition</TabsTrigger>
+        <TabsTrigger variant="line" value="reviews">Reviews</TabsTrigger>
+      </TabsList>
+
+      <TabsContent variant="line" value="details">
+        <div className="space-y-4 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Recipe Information</h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Prep Time:</span>
+                  <span>15 minutes</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Cook Time:</span>
+                  <span>30 minutes</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Total Time:</span>
+                  <span>45 minutes</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Servings:</span>
+                  <span>4 people</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Difficulty:</span>
+                  <span>Easy</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-3">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Vegetarian</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Quick</span>
+                <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Comfort Food</span>
+                <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs">Family-Friendly</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent variant="line" value="ingredients">
+        <div className="py-4">
+          <h3 className="text-lg font-semibold mb-4">Ingredients List</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium text-gray-600">Dry Ingredients</h4>
+              <ul className="space-y-1 text-sm">
+                <li>• 2 cups all-purpose flour</li>
+                <li>• 1 cup granulated sugar</li>
+                <li>• 1 tsp baking powder</li>
+                <li>• 1/2 tsp salt</li>
+              </ul>
+            </div>
+            <div className="space-y-2">
+              <h4 className="font-medium text-gray-600">Wet Ingredients</h4>
+              <ul className="space-y-1 text-sm">
+                <li>• 1/2 cup unsalted butter, melted</li>
+                <li>• 2 large eggs</li>
+                <li>• 1 cup milk</li>
+                <li>• 1 tsp vanilla extract</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent variant="line" value="instructions">
+        <div className="py-4">
+          <h3 className="text-lg font-semibold mb-4">Cooking Instructions</h3>
+          <ol className="space-y-3 list-decimal list-inside">
+            <li>Preheat oven to 350°F (175°C) and grease a 9x13 inch baking dish</li>
+            <li>In a large bowl, whisk together flour, sugar, baking powder, and salt</li>
+            <li>In another bowl, combine melted butter, eggs, milk, and vanilla</li>
+            <li>Pour wet ingredients into dry ingredients and stir until just combined</li>
+            <li>Pour batter into prepared baking dish and smooth the top</li>
+            <li>Bake for 25-30 minutes until golden brown and a toothpick comes out clean</li>
+            <li>Cool for 10 minutes before serving</li>
+          </ol>
+        </div>
+      </TabsContent>
+
+      <TabsContent variant="line" value="nutrition">
+        <div className="py-4">
+          <h3 className="text-lg font-semibold mb-4">Nutrition Information</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="text-xl font-bold text-blue-600">250</div>
+              <div className="text-sm text-gray-600">Calories</div>
+            </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="text-xl font-bold text-green-600">4g</div>
+              <div className="text-sm text-gray-600">Protein</div>
+            </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="text-xl font-bold text-orange-600">35g</div>
+              <div className="text-sm text-gray-600">Carbs</div>
+            </div>
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="text-xl font-bold text-red-600">10g</div>
+              <div className="text-sm text-gray-600">Fat</div>
+            </div>
+          </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent variant="line" value="reviews">
+        <div className="py-4">
+          <h3 className="text-lg font-semibold mb-4">User Reviews</h3>
+          <div className="space-y-4">
+            <div className="border-b border-gray-200 pb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-medium">Sarah K.</span>
+                <div className="flex text-yellow-400">★★★★★</div>
+              </div>
+              <p className="text-sm text-gray-600">
+                "This recipe is amazing! My family loved it and it's so easy to make.
+                Will definitely be making this again."
+              </p>
+            </div>
+            <div className="border-b border-gray-200 pb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="font-medium">Mike R.</span>
+                <div className="flex text-yellow-400">★★★★☆</div>
+              </div>
+              <p className="text-sm text-gray-600">
+                "Great recipe! I added some chocolate chips and it turned out perfectly.
+                My kids couldn't get enough."
+              </p>
+            </div>
+          </div>
+        </div>
+      </TabsContent>
+    </Tabs>
+  </Story>
+</Canvas>
+
+## Accessibility
+
+The Tabs component is built with accessibility in mind:
+
+- **Keyboard Navigation**: Full support for arrow keys, Home, End, and Tab navigation
+- **Screen Reader Support**: Proper ARIA attributes and roles
+- **Focus Management**: Clear focus indicators and logical tab order
+- **High Contrast**: Works well with high contrast themes
+- **Touch Friendly**: Adequate touch targets for mobile devices
+
+## API Reference
+
+<ArgsTable of={Tabs} />
+
+## Best Practices
+
+### Recipe App Usage
+
+1. **Content Organization**: Use tabs to organize complex recipe information
+2. **User Experience**: Keep tab labels short and descriptive
+3. **Mobile Consideration**: Use horizontal scrolling for many tabs on mobile
+4. **Consistent Variants**: Stick to one variant style within the same interface
+5. **Loading States**: Show loading indicators in tab content when needed
+
+### Implementation Guidelines
+
+```tsx
+// Good: Clear, descriptive tab labels
+<TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+<TabsTrigger value="instructions">Instructions</TabsTrigger>
+
+// Good: Consistent variant usage
+<TabsList variant="line">
+  <TabsTrigger variant="line" value="tab1">Tab 1</TabsTrigger>
+  <TabsTrigger variant="line" value="tab2">Tab 2</TabsTrigger>
+</TabsList>
+
+// Good: Proper content organization
+<TabsContent value="ingredients">
+  <IngredientsList />
+</TabsContent>
+```
