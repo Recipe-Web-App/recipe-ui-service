@@ -778,6 +778,149 @@ space-16: 4rem; /* 64px */
 - Validation state management with visual and accessible feedback
 - Seamless integration with form libraries like React Hook Form
 
+#### Avatar Component
+
+```tsx
+// Basic avatar with image and fallback
+<Avatar>
+  <AvatarImage
+    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    alt="John Doe"
+  />
+  <AvatarFallback>JD</AvatarFallback>
+</Avatar>
+
+// User avatar with automatic initials and role styling
+<UserAvatar
+  name="Chef Gordon Ramsay"
+  role="chef"
+  src="/chef-avatar.jpg"
+  status="chef"
+  showStatus={true}
+  size="lg"
+/>
+
+// Recipe author with complete profile information
+<RecipeAuthor
+  author={{
+    id: "1",
+    name: "Gordon Ramsay",
+    avatar: "/gordon-avatar.jpg",
+    role: "chef",
+    verified: true,
+    rating: 4.9,
+    recipeCount: 127
+  }}
+  variant="chef"
+  interactive={true}
+  onClick={() => viewProfile(author.id)}
+/>
+
+// Avatar group for recipe collaborations
+<AvatarGroup max={4} totalCount={12}>
+  <UserAvatar name="Alice Johnson" role="user" size="default" />
+  <UserAvatar name="Bob Smith" role="chef" size="default" />
+  <UserAvatar name="Carol Williams" role="user" size="default" />
+  <UserAvatar name="David Brown" role="user" size="default" />
+  <UserAvatar name="Eve Davis" role="user" size="default" />
+</AvatarGroup>
+
+// Avatar with status indicators
+<Avatar variant="chef">
+  <AvatarFallback variant="chef">CH</AvatarFallback>
+  <AvatarStatus status="chef" aria-label="Verified Chef" />
+</Avatar>
+```
+
+**Avatar Variants:**
+
+**Container Variants:**
+
+- `default`: Standard gray border for general user avatars
+- `outlined`: Enhanced border styling for emphasized profiles
+- `success`: Green border for positive indicators and achievements
+- `warning`: Yellow border for cautions and pending states
+- `error`: Red border for error states and blocked users
+- `accent`: Blue border for featured users and highlights
+- `chef`: Orange border with shadow for professional chefs
+- `premium`: Purple border with shadow for premium/admin users
+
+**Status Indicators:**
+
+- `online`: Green indicator for active users
+- `offline`: Gray indicator for inactive users
+- `away`: Yellow indicator for temporarily away users
+- `busy`: Red indicator for do-not-disturb status
+- `verified`: Blue indicator for verified accounts
+- `chef`: Orange indicator for professional chef status
+- `premium`: Purple indicator for premium/admin status
+
+**Sizes:**
+
+- `xs`: Extra small (24px) for compact layouts and dense lists
+- `sm`: Small (32px) for sidebar lists and inline mentions
+- `default`: Standard (40px) for most use cases and recipe cards
+- `lg`: Large (48px) for profile headers and detailed views
+- `xl`: Extra large (64px) for main profile displays
+- `2xl`: Double extra large (80px) for hero sections
+- `3xl`: Triple extra large (96px) for prominent profile features
+
+**Specialized Avatar Components:**
+
+**UserAvatar**: Automatic user profile avatars with role-based styling
+
+- Generates initials from full names (first + last initial)
+- Role-based variant selection (user, chef, admin, guest)
+- Optional status indicators for verification and online presence
+- Automatic alt text generation for accessibility
+- Fallback handling for missing images
+
+**AvatarGroup**: Collaborative avatar displays with overflow indicators
+
+- Configurable maximum visible avatars with "+N" overflow
+- Overlapping layout with proper z-index stacking
+- Consistent sizing across all child avatars
+- Optional total count display for accurate overflow calculation
+- Responsive spacing adjustments for different screen sizes
+
+**RecipeAuthor**: Complete recipe attribution profiles
+
+- Author metadata including ratings, recipe counts, and verification
+- Role display with emoji indicators (👨‍🍳 Chef, 👑 Admin, Home Cook)
+- Interactive mode for clickable profile links
+- Configurable information display (stats, role, verification)
+- Variant styling for different contexts (chef, premium, outlined, simple)
+
+**Recipe App Use Cases:**
+
+- **Recipe Attribution**: Show recipe creators with chef credentials and verification badges
+- **User Profiles**: Display user information in comments, reviews, and social features
+- **Chef Showcases**: Highlight professional chefs with special styling and status indicators
+- **Collaboration Lists**: Show multiple recipe contributors and modification history
+- **Review Systems**: Display reviewer profiles with ratings and verification status
+- **Recipe Collections**: Show collection owners and collaborators
+- **Cooking Communities**: Member avatars for forums, groups, and cooking challenges
+- **Recipe Cards**: Compact author information on recipe previews
+- **Profile Management**: User account displays with status and role indicators
+
+**Status Integration:**
+
+- **Chef Verification**: Orange badges and borders for professional chefs
+- **Account Verification**: Blue checkmarks for verified users
+- **Premium Features**: Purple styling for premium/admin accounts
+- **Activity Status**: Online/offline indicators for community features
+- **Role Display**: Visual distinction between users, chefs, and administrators
+
+**Accessibility Features:**
+
+- Automatic ARIA labeling for status indicators with descriptive text
+- Proper alt text for all avatar images with fallback descriptions
+- Keyboard navigation support for interactive avatar components
+- Screen reader announcements for status changes and interactions
+- High contrast support with sufficient color differentiation
+- Focus indicators for interactive elements
+- Semantic markup with appropriate roles and landmarks
+
 #### Input Components
 
 ```tsx
