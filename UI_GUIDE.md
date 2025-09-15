@@ -921,6 +921,185 @@ space-16: 4rem; /* 64px */
 - Focus indicators for interactive elements
 - Semantic markup with appropriate roles and landmarks
 
+#### Progress Component
+
+```tsx
+// Basic progress bar with percentage
+<Progress value={65} showPercentage />
+
+// Upload progress with detailed information
+<UploadProgress
+  fileName="recipe-hero-image.jpg"
+  fileSize="3.2 MB"
+  progress={85}
+  state="uploading"
+  speed="2.1 MB/s"
+  timeRemaining="2s"
+  onPause={() => handlePause()}
+  onCancel={() => handleCancel()}
+/>
+
+// Cooking progress tracker for multi-step recipes
+<CookingProgress
+  currentStep={2}
+  steps={[
+    {
+      id: '1',
+      title: 'Prep ingredients',
+      description: 'Wash, chop, and measure everything',
+      duration: '10 min',
+      isCompleted: true,
+    },
+    {
+      id: '2',
+      title: 'Preheat oven',
+      description: 'Heat oven to 350°F (175°C)',
+      duration: '5 min',
+    },
+    {
+      id: '3',
+      title: 'Make the batter',
+      description: 'Mix all ingredients until smooth',
+      duration: '8 min',
+    },
+  ]}
+  onStepClick={(index) => goToStep(index)}
+/>
+
+// Cooking timer for baking and preparation
+<TimerProgress
+  totalTime={1800}
+  remainingTime={420}
+  isRunning={true}
+  label="Baking Timer"
+  size="lg"
+  onComplete={() => playTimerSound()}
+/>
+
+// Individual cooking step with state indicators
+<CookingStep
+  stepNumber={1}
+  title="Preheat oven to 375°F"
+  description="Make sure your oven is properly preheated"
+  duration="5 min"
+  isCompleted={true}
+/>
+
+// Animated progress with different effects
+<Progress
+  value={45}
+  barAnimation="shimmer"
+  barVariant="cooking"
+  label="Processing recipe data"
+  showLabel
+  showPercentage
+/>
+```
+
+**Progress Variants:**
+
+**Container Variants:**
+
+- `default`: Standard gray background for general progress indicators
+- `subtle`: Light gray background for minimal interfaces
+- `outlined`: Transparent with border for card-based layouts
+- `elevated`: Shadow styling for prominent progress displays
+
+**Bar Variants:**
+
+- `default`: Blue progress bar for standard operations
+- `success`: Green bar for completed or successful operations
+- `warning`: Yellow bar for caution states and moderate progress
+- `error`: Red bar for failed operations and error states
+- `info`: Light blue bar for informational progress
+- `cooking`: Orange bar for cooking-related progress (recipe-specific)
+- `upload`: Blue bar optimized for file upload progress
+- `download`: Purple bar for download operations
+
+**Animation Types:**
+
+- `none`: Static progress bar without animation
+- `pulse`: Subtle pulsing effect for active operations
+- `shimmer`: Shimmer effect across the progress bar for uploads
+- `glow`: Glowing effect for emphasized progress indicators
+
+**Sizes:**
+
+- `xs`: Extra small (4px height) for compact layouts and status bars
+- `sm`: Small (8px height) for dense information displays
+- `default`: Standard (12px height) for most use cases
+- `lg`: Large (16px height) for prominent progress indicators
+- `xl`: Extra large (24px height) for hero sections
+- `2xl`: Double extra large (32px height) for dashboard displays
+
+**Specialized Progress Components:**
+
+**UploadProgress**: File upload progress with detailed controls
+
+- Real-time upload progress with speed and time estimates
+- State management for uploading, paused, completed, and error states
+- Interactive controls: pause, resume, cancel, and retry functionality
+- File information display: name, size, and upload status
+- Compact and detailed variants for different layout needs
+
+**CookingProgress**: Multi-step cooking workflow tracker
+
+- Visual progress overview with completion percentage
+- Individual step management with state tracking
+- Interactive step navigation and completion marking
+- Duration estimates and step descriptions
+- Support for completed, active, pending, and skipped states
+
+**CookingStep**: Individual cooking step with rich state indicators
+
+- Step numbering with automatic state icons (checkmark, dash, number)
+- Title, description, and duration information
+- Visual state differentiation (pending, active, completed, skipped)
+- Optional custom icons for specialized steps
+- Click handlers for interactive step navigation
+
+**TimerProgress**: Circular countdown timers for cooking
+
+- Visual countdown with circular progress indicator
+- Multiple timer states: running, paused, completed, warning
+- Time formatting with minutes and seconds or seconds only
+- Size variants for different contexts (ingredient prep, baking, etc.)
+- Completion callbacks for sound alerts and next-step triggers
+
+**Recipe App Use Cases:**
+
+- **File Uploads**: Recipe images, videos, PDFs with detailed progress tracking
+- **Recipe Processing**: Nutritional analysis, ingredient parsing, cooking instruction generation
+- **Cooking Workflows**: Step-by-step recipe execution with progress tracking
+- **Baking Timers**: Circular timers for precise cooking durations
+- **Batch Operations**: Multiple recipe imports, exports, or processing operations
+- **Data Synchronization**: Recipe data sync across devices with progress indication
+- **Image Processing**: Recipe photo optimization and thumbnail generation
+- **Video Transcoding**: Cooking video processing for different quality levels
+
+**State Management:**
+
+- **Upload States**: uploading, paused, completed, error with appropriate icons
+- **Cooking States**: pending, active, completed, skipped with visual indicators
+- **Timer States**: running, paused, completed, warning with color coding
+- **Progress States**: active, paused, completed, error with animation control
+
+**Interactive Features:**
+
+- **Upload Controls**: Pause, resume, cancel, and retry functionality
+- **Step Navigation**: Click-to-jump between cooking steps
+- **Timer Controls**: Start, pause, reset for cooking timers
+- **Progress Tracking**: Real-time updates with smooth animations
+
+**Accessibility Features:**
+
+- Full ARIA support with proper role and state attributes
+- Keyboard navigation for interactive progress components
+- Screen reader announcements for progress changes and state updates
+- High contrast support for visual progress indicators
+- Descriptive labels for complex progress operations
+- Focus management for interactive step navigation
+
 #### Input Components
 
 ```tsx

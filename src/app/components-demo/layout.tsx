@@ -18,6 +18,7 @@ const components = [
   { name: 'Select', path: '/components-demo/select' },
   { name: 'Tooltip', path: '/components-demo/tooltip' },
   { name: 'Avatar', path: '/components-demo/avatar' },
+  { name: 'Progress', path: '/components-demo/progress' },
 ];
 
 export default function ComponentsDemoLayout({
