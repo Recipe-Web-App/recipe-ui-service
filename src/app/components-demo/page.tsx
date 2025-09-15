@@ -95,6 +95,13 @@ const components = [
     variants: 8,
     status: 'ready',
   },
+  {
+    name: 'Alert',
+    path: '/components-demo/alert',
+    description: 'Notifications, status messages, and user feedback',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
@@ -123,7 +130,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">11</div>
+            <div className="text-primary text-3xl font-bold">12</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -131,7 +138,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">67</div>
+            <div className="text-primary text-3xl font-bold">77</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

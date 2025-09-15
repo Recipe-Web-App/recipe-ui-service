@@ -1487,6 +1487,149 @@ space-16: 4rem; /* 64px */
 - **Collaborative Editing**: Multiple contributors with validation
 - **Mobile-Friendly**: Responsive design with touch-optimized controls
 
+#### Alert Component
+
+```tsx
+// Basic alert for notifications and status messages
+<BaseAlert
+  variant="success"
+  title="Recipe Saved"
+  description="Your recipe has been saved successfully."
+  icon={<CheckCircle className="w-4 h-4" />}
+  dismissible
+/>
+
+// Different alert variants for various message types
+<BaseAlert
+  variant="warning"
+  title="Update Available"
+  description="A new version of the recipe app is available."
+  icon={<Download className="w-4 h-4" />}
+  actions={
+    <>
+      <AlertButton intent="secondary" size="sm">Later</AlertButton>
+      <AlertButton intent="primary" size="sm">Update Now</AlertButton>
+    </>
+  }
+/>
+
+// Recipe-specific alerts with contextual messaging
+<RecipeAlert
+  type="recipe-published"
+  recipeName="Chocolate Chip Cookies"
+  dismissible
+/>
+
+<RecipeAlert
+  type="cooking-tip"
+  title="Pro Tip"
+  description="Let your cookie dough chill for 30 minutes before baking."
+  dismissible
+/>
+
+// Toast notifications with auto-dismiss
+<ToastAlert
+  variant="info"
+  title="Auto-save Enabled"
+  description="Your changes are being saved automatically."
+  position="top-right"
+  duration={3000}
+/>
+
+// Banner alerts for system-wide announcements
+<BannerAlert
+  variant="maintenance"
+  title="Scheduled Maintenance"
+  description="System maintenance tonight from 2-4 AM EST."
+  position="top"
+/>
+
+// Inline alerts for form validation and contextual feedback
+<InlineAlert
+  variant="destructive"
+  icon={<XCircle className="w-3 h-3" />}
+  description="Please enter a valid email address."
+/>
+
+// Global alert provider for application-wide notifications
+<AlertProvider maxAlerts={5}>
+  <App />
+</AlertProvider>
+
+// Using the global alert system
+const { showAlert, showToast, showBanner } = useAlert();
+
+showToast({
+  variant: 'success',
+  title: 'Recipe Published',
+  description: 'Your recipe is now live!',
+  duration: 4000,
+});
+```
+
+**Alert Variants:**
+
+- `default`: General information and neutral messages
+- `info`: Helpful information and tips for users
+- `success`: Successful operations and positive confirmations
+- `warning`: Important information requiring user attention
+- `destructive`: Errors, failures, and critical issues
+- `secondary`: Less prominent information and subtle notifications
+
+**Alert Sizes:**
+
+- `sm`: Compact alerts for dense layouts and subtle notifications
+- `default`: Standard size for most notification scenarios
+- `lg`: Prominent alerts for important messages and emphasis
+
+**Alert Types:**
+
+- **BaseAlert**: General-purpose alert component for any notification
+- **RecipeAlert**: Recipe-specific alerts with contextual icons and messaging
+- **ToastAlert**: Floating notifications with auto-dismiss functionality
+- **BannerAlert**: Full-width alerts for system announcements
+- **InlineAlert**: Compact alerts for form validation and inline feedback
+
+**Recipe Alert Types:**
+
+- `recipe-saved`: Confirmation when recipes are saved
+- `recipe-published`: Notification when recipes go live
+- `recipe-shared`: Confirmation for recipe sharing actions
+- `recipe-imported`: Success message for recipe imports
+- `recipe-error`: Error handling for recipe operations
+- `cooking-tip`: Helpful cooking tips and suggestions
+- `nutritional-info`: Nutrition calculation notifications
+- `seasonal-suggestion`: Seasonal ingredient recommendations
+
+**Recipe App Use Cases:**
+
+- **Recipe Operations**: Save confirmations, publish notifications, sharing updates
+- **System Notifications**: Maintenance alerts, feature announcements, status updates
+- **Form Validation**: Real-time feedback for recipe creation and editing forms
+- **Cooking Guidance**: Tips, suggestions, and helpful information during recipe viewing
+- **Error Handling**: Clear communication of issues with recipe operations
+- **Progress Updates**: Auto-save notifications, import status, processing updates
+- **User Feedback**: Success confirmations, operation results, action acknowledgments
+- **Contextual Help**: Inline guidance and information throughout the recipe experience
+
+**Accessibility Features:**
+
+- **ARIA Support**: Proper `role="alert"` and `aria-live` attributes for screen readers
+- **Keyboard Navigation**: Full keyboard support for interactive elements
+- **Focus Management**: Proper focus handling for dismissible alerts
+- **High Contrast**: Clear visual distinction for all alert variants
+- **Screen Reader Friendly**: Descriptive text and proper semantic structure
+
+**Global Alert Management:**
+
+The `AlertProvider` enables application-wide alert management:
+
+- **Centralized Control**: Manage all alerts from a single provider
+- **Auto-cleanup**: Automatic removal with configurable limits
+- **Multiple Types**: Support for alerts, toasts, and banners
+- **Position Control**: Flexible positioning for different alert types
+- **Queue Management**: Intelligent handling of multiple simultaneous alerts
+
 #### Dialog Component
 
 ```tsx

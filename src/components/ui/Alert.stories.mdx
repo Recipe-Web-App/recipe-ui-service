@@ -1,0 +1,674 @@
+import { Meta, StoryObj, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { Info, AlertTriangle, CheckCircle, XCircle, X, Bell, Lightbulb, Share, Download } from 'lucide-react';
+import {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+  AlertIcon,
+  AlertActions,
+  AlertButton,
+  AlertClose,
+  BaseAlert,
+  RecipeAlert,
+  ToastAlert,
+  BannerAlert,
+  InlineAlert,
+  AlertProvider,
+  useAlert,
+} from './alert';
+
+<Meta
+  title="UI Components/Alert"
+  component={BaseAlert}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+A comprehensive alert system for notifications, status messages, and user feedback. Built with accessibility in mind and provides multiple variants for different use cases.
+
+## Features
+
+- **Accessible**: Full ARIA support with proper roles and live regions
+- **Flexible**: Multiple component types for different notification patterns
+- **Recipe-specific**: Specialized components for recipe application workflows
+- **Auto-dismiss**: Toast notifications with configurable auto-close timers
+- **Context management**: Global alert provider for application-wide notifications
+- **Customizable**: Extensive variant system for styling and behavior
+
+## Component Types
+
+- \`BaseAlert\` - General-purpose alert component
+- \`RecipeAlert\` - Recipe-specific alerts with contextual messaging
+- \`ToastAlert\` - Floating notifications with auto-dismiss
+- \`BannerAlert\` - Full-width banner notifications
+- \`InlineAlert\` - Compact inline notifications for forms
+- \`AlertProvider\` - Context provider for global alert management
+
+## Usage Guidelines
+
+- Use BaseAlert for general notifications and status messages
+- Use RecipeAlert for recipe-specific actions and feedback
+- Use ToastAlert for temporary notifications that auto-dismiss
+- Use BannerAlert for important system-wide announcements
+- Use InlineAlert for form validation and inline feedback
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    variant: {
+      control: 'select',
+      options: ['default', 'destructive', 'success', 'warning', 'info', 'secondary'],
+      description: 'Alert styling variant',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'default', 'lg'],
+      description: 'Alert size',
+    },
+    dismissible: {
+      control: 'boolean',
+      description: 'Whether the alert can be dismissed',
+    },
+  }}
+/>
+
+# Alert
+
+A versatile alert system for notifications, status messages, and user feedback.
+
+<Primary />
+
+<Controls />
+
+## Basic Alerts
+
+<Canvas>
+  <Story name="Basic Alerts">
+    {() => {
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <BaseAlert
+            variant="default"
+            title="Information"
+            description="This is an informational alert with default styling."
+            icon={<Info className="w-4 h-4" />}
+          />
+          <BaseAlert
+            variant="success"
+            title="Success"
+            description="Your action completed successfully."
+            icon={<CheckCircle className="w-4 h-4" />}
+          />
+          <BaseAlert
+            variant="warning"
+            title="Warning"
+            description="Please review this information before proceeding."
+            icon={<AlertTriangle className="w-4 h-4" />}
+          />
+          <BaseAlert
+            variant="destructive"
+            title="Error"
+            description="An error occurred while processing your request."
+            icon={<XCircle className="w-4 h-4" />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Alert Variants
+
+<Canvas>
+  <Story name="Alert Variants">
+    {() => {
+      const variants = [
+        { variant: 'default', label: 'Default', icon: <Info className="w-4 h-4" /> },
+        { variant: 'info', label: 'Info', icon: <Bell className="w-4 h-4" /> },
+        { variant: 'success', label: 'Success', icon: <CheckCircle className="w-4 h-4" /> },
+        { variant: 'warning', label: 'Warning', icon: <AlertTriangle className="w-4 h-4" /> },
+        { variant: 'destructive', label: 'Destructive', icon: <XCircle className="w-4 h-4" /> },
+        { variant: 'secondary', label: 'Secondary', icon: <Lightbulb className="w-4 h-4" /> },
+      ];
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          {variants.map((v) => (
+            <BaseAlert
+              key={v.variant}
+              variant={v.variant}
+              title={v.label + ' Alert'}
+              description={`This is a ${v.variant} alert variant.`}
+              icon={v.icon}
+            />
+          ))}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Alert Sizes
+
+<Canvas>
+  <Story name="Alert Sizes">
+    {() => {
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <BaseAlert
+            size="sm"
+            variant="info"
+            title="Small Alert"
+            description="This is a small-sized alert."
+            icon={<Info className="w-3 h-3" />}
+          />
+          <BaseAlert
+            size="default"
+            variant="info"
+            title="Default Alert"
+            description="This is a default-sized alert."
+            icon={<Info className="w-4 h-4" />}
+          />
+          <BaseAlert
+            size="lg"
+            variant="info"
+            title="Large Alert"
+            description="This is a large-sized alert with more spacing."
+            icon={<Info className="w-5 h-5" />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Dismissible Alerts
+
+<Canvas>
+  <Story name="Dismissible Alerts">
+    {() => {
+      const [alerts, setAlerts] = useState([
+        { id: 1, title: 'Dismissible Alert', description: 'You can close this alert by clicking the X button.' },
+        { id: 2, title: 'Another Alert', description: 'This alert also has a close button.' }
+      ]);
+
+      const handleClose = (id) => {
+        setAlerts(prev => prev.filter(alert => alert.id !== id));
+      };
+
+      const resetAlerts = () => {
+        setAlerts([
+          { id: 1, title: 'Dismissible Alert', description: 'You can close this alert by clicking the X button.' },
+          { id: 2, title: 'Another Alert', description: 'This alert also has a close button.' }
+        ]);
+      };
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          {alerts.map((alert) => (
+            <BaseAlert
+              key={alert.id}
+              variant="info"
+              title={alert.title}
+              description={alert.description}
+              icon={<Info className="w-4 h-4" />}
+              dismissible
+              onClose={() => handleClose(alert.id)}
+            />
+          ))}
+          {alerts.length === 0 && (
+            <div className="text-center py-4">
+              <p className="text-gray-500 mb-2">All alerts dismissed</p>
+              <button
+                onClick={resetAlerts}
+                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+              >
+                Reset Alerts
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Alerts with Actions
+
+<Canvas>
+  <Story name="Alerts with Actions">
+    {() => {
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <BaseAlert
+            variant="warning"
+            title="Update Available"
+            description="A new version of the application is available."
+            icon={<Download className="w-4 h-4" />}
+            actions={
+              <>
+                <AlertButton intent="secondary" size="sm">
+                  Later
+                </AlertButton>
+                <AlertButton intent="primary" size="sm">
+                  Update Now
+                </AlertButton>
+              </>
+            }
+          />
+          <BaseAlert
+            variant="info"
+            title="Share Recipe"
+            description="Would you like to share this recipe with others?"
+            icon={<Share className="w-4 h-4" />}
+            actions={
+              <>
+                <AlertButton intent="secondary" size="sm">
+                  Cancel
+                </AlertButton>
+                <AlertButton intent="success" size="sm">
+                  Share
+                </AlertButton>
+              </>
+            }
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Alerts
+
+<Canvas>
+  <Story name="Recipe Alerts">
+    {() => {
+      const recipeTypes = [
+        { type: 'recipe-saved', recipeName: 'Chocolate Chip Cookies' },
+        { type: 'recipe-published', recipeName: 'Beef Stew' },
+        { type: 'recipe-shared', recipeName: 'Caesar Salad' },
+        { type: 'recipe-imported', recipeName: 'Thai Curry' },
+        { type: 'recipe-error', recipeName: 'Apple Pie' },
+        { type: 'cooking-tip' },
+        { type: 'nutritional-info' },
+        { type: 'seasonal-suggestion' },
+      ];
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          {recipeTypes.map((recipe) => (
+            <RecipeAlert
+              key={recipe.type}
+              type={recipe.type}
+              recipeName={recipe.recipeName}
+              dismissible
+            />
+          ))}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Toast Alerts
+
+<Canvas>
+  <Story name="Toast Alerts">
+    {() => {
+      const [toasts, setToasts] = useState([]);
+      const [counter, setCounter] = useState(0);
+
+      const showToast = (variant, position = 'top-right') => {
+        const id = counter;
+        setCounter(prev => prev + 1);
+
+        const newToast = {
+          id,
+          variant,
+          position,
+          title: `${variant.charAt(0).toUpperCase() + variant.slice(1)} Toast`,
+          description: `This is a ${variant} toast notification.`,
+          icon: variant === 'success' ? <CheckCircle className="w-4 h-4" /> :
+                variant === 'warning' ? <AlertTriangle className="w-4 h-4" /> :
+                variant === 'destructive' ? <XCircle className="w-4 h-4" /> :
+                <Info className="w-4 h-4" />,
+        };
+
+        setToasts(prev => [...prev, newToast]);
+
+        // Auto remove after 3 seconds for demo
+        setTimeout(() => {
+          setToasts(prev => prev.filter(t => t.id !== id));
+        }, 3000);
+      };
+
+      const removeToast = (id) => {
+        setToasts(prev => prev.filter(t => t.id !== id));
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => showToast('default')}
+              className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+            >
+              Show Default Toast
+            </button>
+            <button
+              onClick={() => showToast('success')}
+              className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+            >
+              Show Success Toast
+            </button>
+            <button
+              onClick={() => showToast('warning')}
+              className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600"
+            >
+              Show Warning Toast
+            </button>
+            <button
+              onClick={() => showToast('destructive')}
+              className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+            >
+              Show Error Toast
+            </button>
+          </div>
+
+          {/* Toast container */}
+          <div className="fixed top-4 right-4 space-y-2 z-50">
+            {toasts.map((toast) => (
+              <ToastAlert
+                key={toast.id}
+                variant={toast.variant}
+                position={toast.position}
+                title={toast.title}
+                description={toast.description}
+                icon={toast.icon}
+                autoClose={false}
+                onClose={() => removeToast(toast.id)}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Banner Alerts
+
+<Canvas>
+  <Story name="Banner Alerts">
+    {() => {
+      const [banners, setBanners] = useState([
+        { id: 1, variant: 'info', title: 'System Maintenance', description: 'Scheduled maintenance will occur tonight from 2-4 AM EST.' },
+        { id: 2, variant: 'warning', title: 'Feature Update', description: 'New recipe sharing features are now available.' }
+      ]);
+
+      const closeBanner = (id) => {
+        setBanners(prev => prev.filter(b => b.id !== id));
+      };
+
+      const resetBanners = () => {
+        setBanners([
+          { id: 1, variant: 'info', title: 'System Maintenance', description: 'Scheduled maintenance will occur tonight from 2-4 AM EST.' },
+          { id: 2, variant: 'warning', title: 'Feature Update', description: 'New recipe sharing features are now available.' }
+        ]);
+      };
+
+      return (
+        <div className="space-y-4 w-full">
+          {banners.map((banner) => (
+            <BannerAlert
+              key={banner.id}
+              variant={banner.variant}
+              title={banner.title}
+              description={banner.description}
+              onClose={() => closeBanner(banner.id)}
+            />
+          ))}
+          {banners.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-500 mb-4">All banners dismissed</p>
+              <button
+                onClick={resetBanners}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                Reset Banners
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Inline Alerts
+
+<Canvas>
+  <Story name="Inline Alerts">
+    {() => {
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <div>
+            <label className="block text-sm font-medium mb-1">Email Address</label>
+            <input
+              type="email"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
+            />
+            <InlineAlert
+              variant="destructive"
+              icon={<XCircle className="w-3 h-3" />}
+              description="Please enter a valid email address."
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
+            />
+            <InlineAlert
+              variant="success"
+              icon={<CheckCircle className="w-3 h-3" />}
+              description="Password strength: Strong"
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Recipe Name</label>
+            <input
+              type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter recipe name"
+            />
+            <InlineAlert
+              variant="info"
+              icon={<Info className="w-3 h-3" />}
+              description="Recipe names should be descriptive and unique."
+              className="mt-1"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Alert Provider Demo
+
+<Canvas>
+  <Story name="Alert Provider Demo">
+    {() => {
+      const AlertDemo = () => {
+        const { showAlert, showToast, showBanner, clearAlerts } = useAlert();
+
+        return (
+          <div className="space-y-4">
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => showAlert({
+                  variant: 'success',
+                  title: 'Global Alert',
+                  description: 'This alert was triggered using the global alert provider.',
+                  icon: <CheckCircle className="w-4 h-4" />,
+                  dismissible: true,
+                })}
+                className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
+              >
+                Show Global Alert
+              </button>
+
+              <button
+                onClick={() => showToast({
+                  variant: 'info',
+                  title: 'Global Toast',
+                  description: 'This toast uses the global provider.',
+                  icon: <Bell className="w-4 h-4" />,
+                  duration: 4000,
+                })}
+                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
+              >
+                Show Global Toast
+              </button>
+
+              <button
+                onClick={() => showBanner({
+                  variant: 'warning',
+                  title: 'Global Banner',
+                  description: 'This banner uses the global provider.',
+                  position: 'top',
+                })}
+                className="px-3 py-1 bg-yellow-500 text-white rounded text-sm hover:bg-yellow-600"
+              >
+                Show Global Banner
+              </button>
+
+              <button
+                onClick={clearAlerts}
+                className="px-3 py-1 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <AlertProvider maxAlerts={3}>
+          <AlertDemo />
+        </AlertProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Features
+
+<Canvas>
+  <Story name="Accessibility Demo">
+    {() => {
+      return (
+        <div className="space-y-4">
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <h3 className="font-semibold mb-2">Accessibility Features:</h3>
+            <ul className="text-sm space-y-1">
+              <li>• ARIA role="alert" for screen reader announcements</li>
+              <li>• aria-live="polite" for toast notifications</li>
+              <li>• Keyboard navigation for interactive elements</li>
+              <li>• High contrast focus indicators</li>
+              <li>• Semantic HTML with proper heading hierarchy</li>
+              <li>• Screen reader friendly close button labels</li>
+            </ul>
+          </div>
+
+          <BaseAlert
+            variant="info"
+            title="Screen Reader Test"
+            description="This alert demonstrates proper ARIA attributes and will be announced to screen readers."
+            icon={<Info className="w-4 h-4" />}
+            dismissible
+            actions={
+              <AlertButton intent="primary" size="sm">
+                Focusable Action
+              </AlertButton>
+            }
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Best Practices
+
+### Do&apos;s
+- ✅ Use appropriate variants for the message type (success, warning, error)
+- ✅ Provide clear, actionable titles and descriptions
+- ✅ Include relevant icons to provide visual context
+- ✅ Use dismissible alerts for non-critical information
+- ✅ Implement auto-dismiss for temporary notifications
+- ✅ Test with screen readers and keyboard navigation
+
+### Don&apos;ts
+- ❌ Don&apos;t overuse alerts or show too many at once
+- ❌ Don&apos;t use alerts for critical system failures
+- ❌ Don&apos;t make all alerts dismissible if the information is important
+- ❌ Don&apos;t use vague or unclear messaging
+- ❌ Don&apos;t forget to handle alert overflow in your layout
+
+### When to Use Each Type
+
+**BaseAlert**: General notifications, status updates, form feedback
+**RecipeAlert**: Recipe-specific actions and contextual messages
+**ToastAlert**: Temporary notifications, success confirmations, non-critical updates
+**BannerAlert**: System announcements, maintenance notices, feature updates
+**InlineAlert**: Form validation, field-level feedback, contextual tips
+
+<Source
+  language="tsx"
+  code={`
+// Basic alert
+<BaseAlert
+  variant="success"
+  title="Success"
+  description="Your recipe has been saved."
+  icon={<CheckCircle className="w-4 h-4" />}
+  dismissible
+/>
+
+// Recipe-specific alert
+<RecipeAlert
+  type="recipe-published"
+  recipeName="Chocolate Chip Cookies"
+  dismissible
+/>
+
+// Toast notification
+<ToastAlert
+  variant="info"
+  title="Auto-save"
+  description="Your changes have been saved automatically."
+  duration={3000}
+/>
+
+// Using the provider
+const { showToast } = useAlert();
+showToast({
+  variant: 'success',
+  title: 'Recipe Published',
+  description: 'Your recipe is now live!',
+});
+`}
+/>

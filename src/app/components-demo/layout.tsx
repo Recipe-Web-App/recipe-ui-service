@@ -22,6 +22,7 @@ const components = [
   { name: 'Accordion', path: '/components-demo/accordion' },
   { name: 'Text Area', path: '/components-demo/textarea' },
   { name: 'Dialog', path: '/components-demo/dialog' },
+  { name: 'Alert', path: '/components-demo/alert' },
 ];
 
 export default function ComponentsDemoLayout({
