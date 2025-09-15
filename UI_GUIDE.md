@@ -1185,6 +1185,136 @@ space-16: 4rem; /* 64px */
 </RecipeGrid>
 ```
 
+#### Accordion Component
+
+```tsx
+// Basic accordion for collapsible content
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Recipe Details</AccordionTrigger>
+    <AccordionContent>
+      Recipe details and description content...
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Multiple items with single selection (default)
+<Accordion type="single" collapsible>
+  <AccordionItem value="ingredients">
+    <AccordionTrigger>Ingredients</AccordionTrigger>
+    <AccordionContent>
+      List of recipe ingredients...
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="instructions">
+    <AccordionTrigger>Instructions</AccordionTrigger>
+    <AccordionContent>
+      Step-by-step cooking instructions...
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Multiple selection accordion for complex recipes
+<Accordion type="multiple" defaultValue={['ingredients', 'notes']}>
+  <AccordionItem value="ingredients">
+    <AccordionTrigger>Ingredients</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="instructions">
+    <AccordionTrigger>Instructions</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="notes">
+    <AccordionTrigger>Chef's Notes</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Recipe-specific accordion with specialized components
+<Accordion type="multiple" variant="elevated">
+  <RecipeSection
+    value="ingredients"
+    title="Ingredients"
+    section="ingredients"
+    icon={<ChefIcon />}
+  >
+    <RecipeIngredients
+      ingredients={ingredients}
+      showCheckboxes
+      groupByCategory
+      onIngredientCheck={handleCheck}
+      checkedIngredients={checkedItems}
+    />
+  </RecipeSection>
+
+  <RecipeSection
+    value="instructions"
+    title="Instructions"
+    section="instructions"
+    icon={<ListIcon />}
+  >
+    <RecipeInstructions
+      instructions={instructions}
+      showStepNumbers
+      currentStep={currentStep}
+      onStepClick={handleStepClick}
+    />
+  </RecipeSection>
+
+  <RecipeSection
+    value="nutrition"
+    title="Nutrition Facts"
+    section="nutrition"
+    icon={<NutritionIcon />}
+  >
+    <NutritionTable nutritionData={nutrition} />
+  </RecipeSection>
+</Accordion>
+
+// Controlled accordion for complex interactions
+<Accordion
+  type="single"
+  value={activeSection}
+  onValueChange={setActiveSection}
+  variant="card"
+  size="lg"
+>
+  <AccordionItem value="prep" disabled={!canViewPrep}>
+    <AccordionTrigger>Preparation Steps</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+**Accordion Variants:**
+
+- `default`: Clean white background with subtle borders
+- `outlined`: Transparent background with stronger borders
+- `elevated`: White background with shadow for emphasis
+- `minimal`: Borderless design for clean layouts
+- `card`: Gray background with enhanced borders
+
+**Accordion Sizes:**
+
+- `sm`: Compact accordion for dense layouts (small text, tight spacing)
+- `default`: Standard size for most recipe content
+- `lg`: Large accordion for prominence and readability
+
+**Recipe-Specific Components:**
+
+- **RecipeSection**: Styled accordion item with recipe-specific theming
+- **RecipeIngredients**: Interactive ingredient list with checkboxes and categorization
+- **RecipeInstructions**: Step-by-step instructions with progress tracking
+
+**Recipe App Use Cases:**
+
+- **Recipe Details**: Collapsible ingredient lists, instructions, nutrition facts
+- **Shopping Mode**: Interactive ingredient checklist for grocery shopping
+- **Cooking Mode**: Step-by-step instructions with progress tracking
+- **Recipe Categories**: Grouping related content (prep, cooking, storage)
+- **Advanced Features**: Notes, tips, variations, nutrition information
+- **Meal Planning**: Recipe summaries and quick access to key details
+
 ### Specialized Components
 
 #### Recipe Components

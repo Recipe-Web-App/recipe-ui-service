@@ -19,6 +19,7 @@ const components = [
   { name: 'Tooltip', path: '/components-demo/tooltip' },
   { name: 'Avatar', path: '/components-demo/avatar' },
   { name: 'Progress', path: '/components-demo/progress' },
+  { name: 'Accordion', path: '/components-demo/accordion' },
 ];
 
 export default function ComponentsDemoLayout({
