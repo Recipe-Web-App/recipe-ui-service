@@ -405,6 +405,201 @@ space-16: 4rem; /* 64px */
 - Clear focus indicators and active state styling
 - Semantic HTML structure with proper heading hierarchy
 
+#### Tooltip Component
+
+```tsx
+// Basic tooltip with simple content
+<SimpleTooltip content="This is a helpful tooltip">
+  <Button>Hover me</Button>
+</SimpleTooltip>
+
+// Cooking term tooltip with pronunciation and category
+<CookingTermTooltip
+  term="Julienne"
+  definition="A knife cut in which the food item is cut into long thin strips resembling matchsticks"
+  pronunciation="zhoo-lee-EHN"
+  category="technique"
+>
+  <span>Cut vegetables into julienne</span>
+</CookingTermTooltip>
+
+// Help icon tooltip for UI assistance
+<HelpTooltip
+  helpText="This setting controls how recipes are displayed in your feed"
+  iconVariant="default"
+  iconSize="default"
+/>
+
+// Info icon tooltip with additional context
+<InfoTooltip
+  infoText="Premium feature: Get personalized recipe recommendations based on your cooking history"
+  iconVariant="accent"
+  iconSize="lg"
+/>
+
+// Keyboard shortcut tooltip for power users
+<KeyboardTooltip
+  shortcut={["Ctrl", "S"]}
+  description="Save recipe"
+  side="bottom"
+>
+  <Button>Save Recipe</Button>
+</KeyboardTooltip>
+
+// Metric tooltip with unit conversions
+<MetricTooltip
+  metric="Temperature"
+  value={180}
+  unit="°C"
+  conversion={{ value: 356, unit: "°F", system: "imperial" }}
+>
+  <span>Preheat oven to 180°C</span>
+</MetricTooltip>
+
+// Advanced tooltip with custom positioning
+<SimpleTooltip
+  content="Recipe saved to your favorites"
+  variant="success"
+  size="lg"
+  side="top"
+  align="center"
+  delayDuration={200}
+  showArrow={true}
+>
+  <FavoriteButton />
+</SimpleTooltip>
+
+// Tooltip with rich content
+<SimpleTooltip
+  content={
+    <div className="space-y-2">
+      <h4 className="font-semibold">Recipe Rating</h4>
+      <p className="text-sm">Based on 24 reviews</p>
+      <div className="flex items-center gap-1">
+        <StarIcon className="h-4 w-4 fill-yellow-400" />
+        <span className="text-sm">4.5 out of 5 stars</span>
+      </div>
+    </div>
+  }
+  variant="light"
+  size="xl"
+>
+  <RatingDisplay rating={4.5} reviews={24} />
+</SimpleTooltip>
+```
+
+**Tooltip Variants:**
+
+**Content Variants:**
+
+- `default`: Dark gray background with white text for standard tooltips
+- `light`: White background with dark text for complex content and forms
+- `accent`: Blue background for informational tooltips and feature highlights
+- `success`: Green background for positive feedback and confirmations
+- `warning`: Yellow background for cautions and important notices
+- `error`: Red background for error messages and destructive actions
+- `info`: Blue background for neutral information and help content
+
+**Content Sizes:**
+
+- `sm`: Compact tooltips for simple text (max-width: 200px, text: xs)
+- `default`: Standard size for most use cases (max-width: 300px, text: sm)
+- `lg`: Larger tooltips for detailed explanations (max-width: 400px, text: base)
+- `xl`: Extra large for rich content and complex information (max-width: 500px, text: base)
+
+**Specialized Tooltip Components:**
+
+**SimpleTooltip**: General-purpose tooltip wrapper for any content
+
+- Supports all content variants and sizes
+- Configurable positioning (side, align)
+- Customizable delay and animation settings
+- Optional arrow display
+- Controlled and uncontrolled modes
+
+**CookingTermTooltip**: Enhanced tooltips for culinary terminology
+
+- Category icons: 👨‍🍳 technique, 🥗 ingredient, 🔪 equipment, ⚖️ measurement, 📖 general
+- Pronunciation guides with phonetic notation
+- Color-coded category badges
+- Optimized for recipe content and cooking instructions
+- Default large size for comprehensive information display
+
+**HelpTooltip**: Question mark icon tooltips for UI guidance
+
+- Clickable help icon with consistent styling
+- Customizable icon variants (default, subtle, accent, success, warning, error)
+- Configurable icon sizes (sm, default, lg)
+- Custom aria-label support for accessibility
+- Integrated with help documentation systems
+
+**InfoTooltip**: Information icon tooltips for additional context
+
+- Info icon with accent styling by default
+- Uses info variant for consistent information display
+- Perfect for feature explanations and contextual help
+- Supports all icon customization options
+
+**KeyboardTooltip**: Keyboard shortcut display tooltips
+
+- Single shortcut: `shortcut="Ctrl+S"`
+- Multiple keys: `shortcut={["Ctrl", "Shift", "S"]}`
+- Styled keyboard key representations
+- Optional description text above shortcuts
+- Bottom placement by default for better visibility
+
+**MetricTooltip**: Unit conversion and measurement tooltips
+
+- Primary metric display with value and unit
+- Optional conversion to different unit systems
+- Metric/imperial conversion support
+- Perfect for recipe measurements and cooking temperatures
+- Accent variant styling for measurement emphasis
+
+**Recipe App Use Cases:**
+
+- **Cooking Terms**: Explain culinary techniques, ingredients, and equipment with CookingTermTooltip
+- **Measurements**: Show unit conversions (Celsius/Fahrenheit, metric/imperial) with MetricTooltip
+- **UI Help**: Provide contextual assistance for complex features with HelpTooltip
+- **Feature Info**: Introduce new features and premium content with InfoTooltip
+- **Shortcuts**: Display keyboard shortcuts for recipe management with KeyboardTooltip
+- **Recipe Details**: Show additional information about ratings, cook times, difficulty with SimpleTooltip
+- **Dietary Information**: Explain dietary restrictions, allergens, and nutritional content
+- **Equipment**: Describe cooking tools and equipment requirements
+- **Technique Instructions**: Provide detailed explanations for cooking methods
+
+**Positioning Options:**
+
+- `side`: 'top' | 'right' | 'bottom' | 'left' - Position relative to trigger
+- `align`: 'start' | 'center' | 'end' - Alignment along the chosen side
+- `sideOffset`: Number - Distance from trigger element (default: 4px)
+
+**Timing & Behavior:**
+
+- `delayDuration`: Hover delay before showing (default: 200ms)
+- `skipDelayDuration`: Reduced delay for subsequent tooltips (default: 100ms)
+- `showArrow`: Boolean - Display pointing arrow (default: true)
+- `open`: Boolean - Controlled open state
+- `onOpenChange`: Callback for open state changes
+
+**Content Guidelines:**
+
+- Keep tooltip content concise and scannable
+- Use hierarchy with headings for complex tooltips
+- Include conversion information for measurements
+- Provide pronunciation for unfamiliar culinary terms
+- Use appropriate icons to reinforce content categories
+- Ensure color contrast meets accessibility standards
+
+**Accessibility Features:**
+
+- Full keyboard navigation support with Escape key
+- Screen reader announcements with proper ARIA labeling
+- Focus management and return focus handling
+- High contrast support for visibility
+- Semantic markup with role attributes
+- Alternative interaction methods for touch interfaces
+
 #### Select Component
 
 ```tsx

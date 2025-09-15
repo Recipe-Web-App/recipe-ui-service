@@ -16,6 +16,7 @@ const components = [
   { name: 'Dropdown', path: '/components-demo/dropdown' },
   { name: 'Tabs', path: '/components-demo/tabs' },
   { name: 'Select', path: '/components-demo/select' },
+  { name: 'Tooltip', path: '/components-demo/tooltip' },
 ];
 
 export default function ComponentsDemoLayout({

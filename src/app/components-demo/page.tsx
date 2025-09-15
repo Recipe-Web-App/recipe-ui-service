@@ -81,12 +81,18 @@ const components = [
     variants: 4,
     status: 'ready',
   },
+  {
+    name: 'Tooltip',
+    path: '/components-demo/tooltip',
+    description: 'Contextual help for cooking terms and UI elements',
+    variants: 6,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
   { name: 'Checkbox', description: 'Checkbox and radio inputs' },
   { name: 'Switch', description: 'Toggle switch component' },
-  { name: 'Tooltip', description: 'Contextual information on hover' },
   { name: 'Popover', description: 'Floating content container' },
   { name: 'Avatar', description: 'User profile images' },
   { name: 'Progress', description: 'Progress bars and indicators' },
@@ -110,7 +116,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">9</div>
+            <div className="text-primary text-3xl font-bold">10</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -118,13 +124,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">53</div>
+            <div className="text-primary text-3xl font-bold">59</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">8</div>
+            <div className="text-primary text-3xl font-bold">6</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>
