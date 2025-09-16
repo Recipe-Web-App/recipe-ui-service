@@ -123,6 +123,34 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'Avatar',
+    path: '/components-demo/avatar',
+    description: 'User profile images and chef avatars',
+    variants: 8,
+    status: 'ready',
+  },
+  {
+    name: 'Progress',
+    path: '/components-demo/progress',
+    description: 'Progress bars for cooking and upload states',
+    variants: 8,
+    status: 'ready',
+  },
+  {
+    name: 'Accordion',
+    path: '/components-demo/accordion',
+    description: 'Collapsible content for recipes and FAQs',
+    variants: 5,
+    status: 'ready',
+  },
+  {
+    name: 'Textarea',
+    path: '/components-demo/textarea',
+    description: 'Multi-line text input for recipes and reviews',
+    variants: 5,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
@@ -150,7 +178,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">15</div>
+            <div className="text-primary text-3xl font-bold">20</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -158,7 +186,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">110</div>
+            <div className="text-primary text-3xl font-bold">140</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
