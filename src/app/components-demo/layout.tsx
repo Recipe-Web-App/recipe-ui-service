@@ -25,6 +25,7 @@ const components = [
   { name: 'Alert', path: '/components-demo/alert' },
   { name: 'Switch', path: '/components-demo/switch' },
   { name: 'Checkbox', path: '/components-demo/checkbox' },
+  { name: 'Radio Group', path: '/components-demo/radio' },
 ];
 
 export default function ComponentsDemoLayout({

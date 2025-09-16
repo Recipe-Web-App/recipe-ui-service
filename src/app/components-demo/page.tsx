@@ -116,15 +116,21 @@ const components = [
     variants: 12,
     status: 'ready',
   },
+  {
+    name: 'Radio',
+    path: '/components-demo/radio',
+    description: 'Exclusive selection for preferences and options',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
   { name: 'Popover', description: 'Floating content container' },
-  { name: 'Avatar', description: 'User profile images' },
-  { name: 'Progress', description: 'Progress bars and indicators' },
   { name: 'Table', description: 'Data table component' },
-  { name: 'Radio', description: 'Radio button groups' },
   { name: 'Slider', description: 'Range and value sliders' },
+  { name: 'DatePicker', description: 'Date and time selection' },
+  { name: 'Pagination', description: 'Page navigation controls' },
 ];
 
 export default function ComponentsDemoOverview() {
@@ -144,7 +150,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">14</div>
+            <div className="text-primary text-3xl font-bold">15</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -152,13 +158,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">100</div>
+            <div className="text-primary text-3xl font-bold">110</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">6</div>
+            <div className="text-primary text-3xl font-bold">5</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>
