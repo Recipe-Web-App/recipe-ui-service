@@ -102,15 +102,29 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'Switch',
+    path: '/components-demo/switch',
+    description: 'Toggle switches for settings and preferences',
+    variants: 11,
+    status: 'ready',
+  },
+  {
+    name: 'Checkbox',
+    path: '/components-demo/checkbox',
+    description: 'Multi-select filters and form controls',
+    variants: 12,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Checkbox', description: 'Checkbox and radio inputs' },
-  { name: 'Switch', description: 'Toggle switch component' },
   { name: 'Popover', description: 'Floating content container' },
   { name: 'Avatar', description: 'User profile images' },
   { name: 'Progress', description: 'Progress bars and indicators' },
   { name: 'Table', description: 'Data table component' },
+  { name: 'Radio', description: 'Radio button groups' },
+  { name: 'Slider', description: 'Range and value sliders' },
 ];
 
 export default function ComponentsDemoOverview() {
@@ -130,7 +144,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">12</div>
+            <div className="text-primary text-3xl font-bold">14</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -138,7 +152,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">77</div>
+            <div className="text-primary text-3xl font-bold">100</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
