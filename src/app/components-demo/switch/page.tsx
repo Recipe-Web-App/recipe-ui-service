@@ -8,7 +8,7 @@ import {
   AnimatedSwitch,
   SettingsSwitch,
 } from '@/components/ui/switch';
-import type { RecipeSwitchItemProps } from '@/components/ui/switch.types';
+import type { RecipeSwitchItemProps } from '@/types/ui/switch';
 import {
   Bell,
   Moon,

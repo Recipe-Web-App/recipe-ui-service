@@ -2,7 +2,7 @@ import * as React from 'react';
 import type {
   SwitchContextValue,
   SwitchGroupContextValue,
-} from '@/components/ui/switch.types';
+} from '@/types/ui/switch';
 
 // Switch Context definitions
 export const SwitchContext = React.createContext<

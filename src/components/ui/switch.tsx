@@ -30,7 +30,7 @@ import type {
   SwitchGroupContextValue,
   AnimatedSwitchProps,
   SettingsSwitchProps,
-} from './switch.types';
+} from '@/types/ui/switch';
 import {
   SwitchContext,
   SwitchGroupContext,

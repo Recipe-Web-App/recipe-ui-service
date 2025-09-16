@@ -25,7 +25,7 @@ import type {
   AlertItem,
   AlertContextType,
   AlertCloseProps,
-} from './alert.types';
+} from '@/types/ui/alert';
 
 const Alert = React.forwardRef<
   HTMLDivElement,
