@@ -1,0 +1,693 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Checkbox,
+  CheckboxRoot,
+  CheckboxInput,
+  CheckboxLabel,
+  CheckboxDescription,
+  CheckboxField,
+  FilterCheckboxGroup,
+  AnimatedCheckbox,
+  SearchCheckbox,
+  MultiSelectFilter,
+} from './checkbox';
+import { useState } from 'react';
+import {
+  ChefHat,
+  Clock,
+  Utensils,
+  Leaf,
+  Heart,
+  Fish,
+  Wheat,
+  Apple,
+  Coffee,
+  Pizza,
+  Search,
+  Filter,
+} from 'lucide-react';
+
+<Meta title="Components/Checkbox" component={Checkbox} />
+
+# Checkbox
+
+Multi-selection controls for filtering, preferences, and form inputs with comprehensive variants and accessibility features.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [checked, setChecked] = useState(false);
+      return (
+        <Checkbox
+          checked={checked}
+          onCheckedChange={setChecked}
+          label="Accept terms and conditions"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    {() => {
+      const [sizes, setSizes] = useState({
+        sm: true,
+        md: true,
+        lg: true,
+        xl: true,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            size="sm"
+            checked={sizes.sm}
+            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, sm: checked }))}
+            label="Small checkbox"
+          />
+          <Checkbox
+            size="md"
+            checked={sizes.md}
+            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, md: checked }))}
+            label="Medium checkbox (default)"
+          />
+          <Checkbox
+            size="lg"
+            checked={sizes.lg}
+            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, lg: checked }))}
+            label="Large checkbox"
+          />
+          <Checkbox
+            size="xl"
+            checked={sizes.xl}
+            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, xl: checked }))}
+            label="Extra large checkbox"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    {() => {
+      const [variants, setVariants] = useState({
+        default: true,
+        success: true,
+        warning: true,
+        danger: true,
+        info: true,
+        subtle: true,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            variant="default"
+            checked={variants.default}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, default: checked }))}
+            label="Default variant"
+          />
+          <Checkbox
+            variant="success"
+            checked={variants.success}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, success: checked }))}
+            label="Success variant"
+          />
+          <Checkbox
+            variant="warning"
+            checked={variants.warning}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, warning: checked }))}
+            label="Warning variant"
+          />
+          <Checkbox
+            variant="danger"
+            checked={variants.danger}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, danger: checked }))}
+            label="Danger variant"
+          />
+          <Checkbox
+            variant="info"
+            checked={variants.info}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, info: checked }))}
+            label="Info variant"
+          />
+          <Checkbox
+            variant="subtle"
+            checked={variants.subtle}
+            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, subtle: checked }))}
+            label="Subtle variant"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Description
+
+<Canvas>
+  <Story name="With Description">
+    {() => {
+      const [preferences, setPreferences] = useState({
+        notifications: true,
+        marketing: false,
+        analytics: true,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            checked={preferences.notifications}
+            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, notifications: checked }))}
+            label="Email notifications"
+            description="Receive email updates about your recipes and meal plans"
+          />
+          <Checkbox
+            checked={preferences.marketing}
+            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, marketing: checked }))}
+            label="Marketing communications"
+            description="Get updates about new features, recipes, and special offers"
+          />
+          <Checkbox
+            checked={preferences.analytics}
+            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, analytics: checked }))}
+            label="Usage analytics"
+            description="Help improve the app by sharing anonymous usage data"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Icons
+
+<Canvas>
+  <Story name="With Icons">
+    {() => {
+      const [dietary, setDietary] = useState({
+        vegetarian: true,
+        vegan: false,
+        glutenFree: true,
+        dairyFree: false,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            checked={dietary.vegetarian}
+            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, vegetarian: checked }))}
+            label="Vegetarian"
+            description="Plant-based with dairy and eggs"
+            icon={<Leaf className="h-4 w-4" />}
+            variant="success"
+          />
+          <Checkbox
+            checked={dietary.vegan}
+            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, vegan: checked }))}
+            label="Vegan"
+            description="Entirely plant-based"
+            icon={<Heart className="h-4 w-4" />}
+            variant="success"
+          />
+          <Checkbox
+            checked={dietary.glutenFree}
+            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, glutenFree: checked }))}
+            label="Gluten-free"
+            description="No wheat, barley, or rye"
+            icon={<Wheat className="h-4 w-4" />}
+            variant="warning"
+          />
+          <Checkbox
+            checked={dietary.dairyFree}
+            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, dairyFree: checked }))}
+            label="Dairy-free"
+            description="No milk or dairy products"
+            icon={<Apple className="h-4 w-4" />}
+            variant="info"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## States
+
+<Canvas>
+  <Story name="States">
+    {() => {
+      const [states, setStates] = useState({
+        normal: true,
+        indeterminate: 'indeterminate',
+        disabled: false,
+        error: false,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            checked={states.normal}
+            onCheckedChange={(checked) => setStates(prev => ({ ...prev, normal: checked }))}
+            label="Normal checkbox"
+            description="Standard interactive state"
+          />
+          <Checkbox
+            checked={states.indeterminate}
+            onCheckedChange={(checked) => setStates(prev => ({ ...prev, indeterminate: checked }))}
+            label="Indeterminate checkbox"
+            description="Partially selected state"
+          />
+          <Checkbox
+            checked={true}
+            disabled
+            label="Disabled checked"
+            description="Cannot be changed"
+          />
+          <Checkbox
+            checked={false}
+            disabled
+            label="Disabled unchecked"
+            description="Cannot be changed"
+          />
+          <Checkbox
+            checked={states.error}
+            onCheckedChange={(checked) => setStates(prev => ({ ...prev, error: checked }))}
+            label="Required field"
+            description="This field must be checked"
+            error="This field is required"
+            required
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Form Field
+
+<Canvas>
+  <Story name="Form Field">
+    {() => {
+      const [form, setForm] = useState({
+        terms: false,
+        newsletter: true,
+        privacy: false,
+      });
+      return (
+        <div className="space-y-6">
+          <CheckboxField
+            checked={form.terms}
+            onCheckedChange={(checked) => setForm(prev => ({ ...prev, terms: checked }))}
+            label="Terms and Conditions"
+            description="I agree to the terms of service and privacy policy"
+            required
+            error={!form.terms ? "You must accept the terms to continue" : undefined}
+          />
+          <CheckboxField
+            checked={form.newsletter}
+            onCheckedChange={(checked) => setForm(prev => ({ ...prev, newsletter: checked }))}
+            label="Newsletter Subscription"
+            description="Receive weekly recipe newsletters and cooking tips"
+            helperText="You can unsubscribe at any time"
+          />
+          <CheckboxField
+            checked={form.privacy}
+            onCheckedChange={(checked) => setForm(prev => ({ ...prev, privacy: checked }))}
+            label="Privacy Settings"
+            description="Make my profile and recipes public"
+            helperText="Other users will be able to see your shared recipes"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Filter Checkbox Group
+
+<Canvas>
+  <Story name="Filter Groups">
+    {() => {
+      const [cuisineFilters, setCuisineFilters] = useState(['italian', 'mexican']);
+      const [mealTypeFilters, setMealTypeFilters] = useState(['breakfast', 'dinner']);
+
+      const cuisineOptions = [
+        {
+          id: 'italian',
+          value: 'italian',
+          label: 'Italian',
+          count: 127,
+          icon: <Pizza className="h-4 w-4" />,
+        },
+        {
+          id: 'mexican',
+          value: 'mexican',
+          label: 'Mexican',
+          count: 89,
+          icon: <ChefHat className="h-4 w-4" />,
+        },
+        {
+          id: 'asian',
+          value: 'asian',
+          label: 'Asian',
+          count: 156,
+          icon: <Utensils className="h-4 w-4" />,
+        },
+        {
+          id: 'mediterranean',
+          value: 'mediterranean',
+          label: 'Mediterranean',
+          count: 67,
+          icon: <Fish className="h-4 w-4" />,
+        },
+      ];
+
+      const mealTypeOptions = [
+        {
+          id: 'breakfast',
+          value: 'breakfast',
+          label: 'Breakfast',
+          count: 45,
+          icon: <Coffee className="h-4 w-4" />,
+        },
+        {
+          id: 'lunch',
+          value: 'lunch',
+          label: 'Lunch',
+          count: 78,
+          icon: <Utensils className="h-4 w-4" />,
+        },
+        {
+          id: 'dinner',
+          value: 'dinner',
+          label: 'Dinner',
+          count: 134,
+          icon: <ChefHat className="h-4 w-4" />,
+        },
+        {
+          id: 'snack',
+          value: 'snack',
+          label: 'Snacks',
+          count: 56,
+          icon: <Apple className="h-4 w-4" />,
+        },
+      ];
+
+      return (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <FilterCheckboxGroup
+            title="Cuisine Type"
+            options={cuisineOptions}
+            selectedValues={cuisineFilters}
+            onSelectionChange={setCuisineFilters}
+            variant="cuisine"
+            showCounts
+          />
+          <FilterCheckboxGroup
+            title="Meal Type"
+            options={mealTypeOptions}
+            selectedValues={mealTypeFilters}
+            onSelectionChange={setMealTypeFilters}
+            variant="meal-type"
+            showCounts
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Search Checkbox
+
+<Canvas>
+  <Story name="Search Checkbox">
+    {() => {
+      const [searchTerm, setSearchTerm] = useState('');
+      const [selectedIngredients, setSelectedIngredients] = useState(['tomato', 'basil']);
+
+      const ingredients = [
+        'tomato', 'basil', 'mozzarella', 'olive oil', 'garlic',
+        'onion', 'bell pepper', 'mushroom', 'spinach', 'chicken',
+        'beef', 'salmon', 'pasta', 'rice', 'quinoa'
+      ];
+
+      const filteredIngredients = ingredients.filter(ingredient =>
+        ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      return (
+        <SearchCheckbox
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          options={filteredIngredients.map(ingredient => ({
+            id: ingredient,
+            value: ingredient,
+            label: ingredient.charAt(0).toUpperCase() + ingredient.slice(1),
+            checked: selectedIngredients.includes(ingredient),
+          }))}
+          selectedValues={selectedIngredients}
+          onSelectionChange={setSelectedIngredients}
+          placeholder="Search ingredients..."
+          title="Select Ingredients"
+          maxHeight="300px"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Animated Checkbox
+
+<Canvas>
+  <Story name="Animated Checkbox">
+    {() => {
+      const [animated, setAnimated] = useState({
+        scale: true,
+        bounce: false,
+        slide: true,
+      });
+      return (
+        <div className="space-y-4">
+          <AnimatedCheckbox
+            checked={animated.scale}
+            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, scale: checked }))}
+            label="Scale Animation"
+            animation="scale"
+            animationDuration={200}
+          />
+          <AnimatedCheckbox
+            checked={animated.bounce}
+            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, bounce: checked }))}
+            label="Bounce Animation"
+            animation="bounce"
+            animationDuration={300}
+          />
+          <AnimatedCheckbox
+            checked={animated.slide}
+            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, slide: checked }))}
+            label="Slide Animation"
+            animation="slide"
+            animationDuration={250}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Multi-Select Filter
+
+<Canvas>
+  <Story name="Multi-Select Filter">
+    {() => {
+      const [dietaryFilters, setDietaryFilters] = useState(['vegetarian']);
+      const [difficultyFilters, setDifficultyFilters] = useState(['easy', 'medium']);
+
+      return (
+        <div className="space-y-6">
+          <MultiSelectFilter
+            title="Dietary Restrictions"
+            options={[
+              { id: 'vegetarian', value: 'vegetarian', label: 'Vegetarian', icon: <Leaf className="h-4 w-4" /> },
+              { id: 'vegan', value: 'vegan', label: 'Vegan', icon: <Heart className="h-4 w-4" /> },
+              { id: 'gluten-free', value: 'gluten-free', label: 'Gluten Free', icon: <Wheat className="h-4 w-4" /> },
+              { id: 'dairy-free', value: 'dairy-free', label: 'Dairy Free', icon: <Apple className="h-4 w-4" /> },
+              { id: 'keto', value: 'keto', label: 'Keto' },
+              { id: 'paleo', value: 'paleo', label: 'Paleo' },
+            ]}
+            selectedValues={dietaryFilters}
+            onSelectionChange={setDietaryFilters}
+            variant="dietary"
+            collapsible
+          />
+          <MultiSelectFilter
+            title="Difficulty Level"
+            options={[
+              { id: 'easy', value: 'easy', label: 'Easy', description: 'Beginner friendly' },
+              { id: 'medium', value: 'medium', label: 'Medium', description: 'Some experience needed' },
+              { id: 'hard', value: 'hard', label: 'Hard', description: 'Advanced techniques' },
+            ]}
+            selectedValues={difficultyFilters}
+            onSelectionChange={setDifficultyFilters}
+            variant="difficulty"
+            showSelectAll
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Compound Components
+
+<Canvas>
+  <Story name="Compound Components">
+    {() => {
+      const [compound, setCompound] = useState({
+        feature1: true,
+        feature2: false,
+        feature3: true,
+      });
+      return (
+        <div className="space-y-6">
+          <CheckboxRoot>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3 p-4 border rounded-lg">
+                <CheckboxInput
+                  checked={compound.feature1}
+                  onCheckedChange={(checked) => setCompound(prev => ({ ...prev, feature1: checked }))}
+                  size="lg"
+                  variant="success"
+                />
+                <div className="flex-1">
+                  <CheckboxLabel size="lg" className="font-semibold">
+                    Auto-save recipes
+                  </CheckboxLabel>
+                  <CheckboxDescription size="lg" className="mt-1">
+                    Automatically save your recipes as you create them. Never lose your work again.
+                  </CheckboxDescription>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3 p-4 border rounded-lg">
+                <CheckboxInput
+                  checked={compound.feature2}
+                  onCheckedChange={(checked) => setCompound(prev => ({ ...prev, feature2: checked }))}
+                  size="lg"
+                  variant="info"
+                />
+                <div className="flex-1">
+                  <CheckboxLabel size="lg" className="font-semibold">
+                    Smart meal planning
+                  </CheckboxLabel>
+                  <CheckboxDescription size="lg" className="mt-1">
+                    Get AI-powered meal suggestions based on your preferences and dietary restrictions.
+                  </CheckboxDescription>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-3 p-4 border rounded-lg">
+                <CheckboxInput
+                  checked={compound.feature3}
+                  onCheckedChange={(checked) => setCompound(prev => ({ ...prev, feature3: checked }))}
+                  size="lg"
+                  variant="warning"
+                />
+                <div className="flex-1">
+                  <CheckboxLabel size="lg" className="font-semibold">
+                    Shopping list integration
+                  </CheckboxLabel>
+                  <CheckboxDescription size="lg" className="mt-1">
+                    Automatically generate shopping lists from your meal plans and recipes.
+                  </CheckboxDescription>
+                </div>
+              </div>
+            </div>
+          </CheckboxRoot>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Features
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => {
+      const [a11y, setA11y] = useState({
+        option1: true,
+        option2: false,
+        option3: true,
+      });
+      return (
+        <div className="space-y-4">
+          <Checkbox
+            checked={a11y.option1}
+            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option1: checked }))}
+            label="Screen reader friendly"
+            description="Includes proper ARIA attributes and labels"
+            aria-label="Screen reader accessibility option"
+          />
+          <Checkbox
+            checked={a11y.option2}
+            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option2: checked }))}
+            label="Keyboard navigation"
+            description="Fully accessible via keyboard with proper focus management"
+            aria-describedby="keyboard-help"
+          />
+          <Checkbox
+            checked={a11y.option3}
+            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option3: checked }))}
+            label="High contrast support"
+            description="Works with high contrast mode and color preferences"
+          />
+          <div id="keyboard-help" className="text-sm text-gray-600 mt-2">
+            <p>Keyboard navigation:</p>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>Use Tab to navigate between checkboxes</li>
+              <li>Press Space to toggle checkbox state</li>
+              <li>Screen readers will announce the label and state</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Checkbox} />
+
+## Usage Guidelines
+
+### When to use
+- For multi-selection from a list of options
+- In forms for binary choices or feature toggles
+- For filtering and categorization with multiple selections
+- In preference settings and configuration screens
+- For recipe ingredient selection and dietary restrictions
+
+### Best practices
+- Always provide clear, descriptive labels
+- Use descriptions for complex options or settings
+- Group related checkboxes together logically
+- Use appropriate variants for visual hierarchy and context
+- Support keyboard navigation and screen readers
+- Show visual feedback for all interaction states
+- Use indeterminate state for partial selections
+- Consider using search for long lists of options
+
+### Accessibility
+- Full keyboard navigation support
+- Screen reader compatible with proper ARIA attributes
+- High contrast mode support
+- Focus indicators for all interactive states
+- Proper labeling and descriptions
+- Support for assistive technologies

@@ -1,0 +1,453 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+} from './card';
+import { Button } from './button';
+import { Badge } from './badge';
+import { Avatar } from './avatar';
+import {
+  ChefHat,
+  Clock,
+  Users,
+  Star,
+  Heart,
+  Bookmark,
+  Share2,
+  MoreVertical,
+  Camera,
+  MapPin,
+  Calendar,
+} from 'lucide-react';
+
+<Meta title="Components/Card" component={Card} />
+
+# Card
+
+A flexible container component for grouping related content with multiple variants and composition patterns.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    <Card className="w-80">
+      <CardHeader>
+        <CardTitle>Recipe Card</CardTitle>
+        <CardDescription>A simple recipe card example</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>This is the main content area of the card where recipe details would go.</p>
+      </CardContent>
+      <CardFooter>
+        <Button>View Recipe</Button>
+      </CardFooter>
+    </Card>
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Card variant="default" className="w-64">
+        <CardHeader>
+          <CardTitle>Default</CardTitle>
+          <CardDescription>Standard card appearance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Default card content with subtle shadow and border.</p>
+        </CardContent>
+      </Card>
+
+      <Card variant="elevated" className="w-64">
+        <CardHeader>
+          <CardTitle>Elevated</CardTitle>
+          <CardDescription>Enhanced shadow depth</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Elevated card with increased shadow for more prominence.</p>
+        </CardContent>
+      </Card>
+
+      <Card variant="outlined" className="w-64">
+        <CardHeader>
+          <CardTitle>Outlined</CardTitle>
+          <CardDescription>Border-focused design</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Outlined card with prominent border and minimal shadow.</p>
+        </CardContent>
+      </Card>
+
+      <Card variant="ghost" className="w-64">
+        <CardHeader>
+          <CardTitle>Ghost</CardTitle>
+          <CardDescription>Minimal appearance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Ghost card with subtle styling and transparent background.</p>
+        </CardContent>
+      </Card>
+
+      <Card variant="interactive" className="w-64">
+        <CardHeader>
+          <CardTitle>Interactive</CardTitle>
+          <CardDescription>Hover and focus states</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Interactive card with hover effects and cursor pointer.</p>
+        </CardContent>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-6">
+      <Card size="sm" className="w-64">
+        <CardHeader>
+          <CardTitle>Small Card</CardTitle>
+          <CardDescription>Compact size with reduced padding</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Small card content with tighter spacing.</p>
+        </CardContent>
+      </Card>
+
+      <Card size="default" className="w-80">
+        <CardHeader>
+          <CardTitle>Default Card</CardTitle>
+          <CardDescription>Standard size with balanced spacing</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Default card content with standard padding and spacing.</p>
+        </CardContent>
+      </Card>
+
+      <Card size="lg" className="w-96">
+        <CardHeader>
+          <CardTitle>Large Card</CardTitle>
+          <CardDescription>Spacious size with generous padding</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Large card content with increased padding for more breathing room.</p>
+        </CardContent>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Card Examples
+
+<Canvas>
+  <Story name="Recipe Cards">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <Card variant="elevated" className="w-80">
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <ChefHat className="h-5 w-5" />
+                Spaghetti Carbonara
+              </CardTitle>
+              <CardDescription>Classic Italian pasta dish</CardDescription>
+            </div>
+            <Badge variant="success">Featured</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                <span>30 min</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                <span>4 servings</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                <span>4.8</span>
+              </div>
+            </div>
+            <p className="text-sm">
+              Creamy pasta with eggs, cheese, pancetta, and black pepper. A restaurant-quality dish you can make at home.
+            </p>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline" size="sm">
+            <Bookmark className="h-4 w-4 mr-2" />
+            Save
+          </Button>
+          <Button size="sm">View Recipe</Button>
+        </CardFooter>
+      </Card>
+
+      <Card variant="interactive" className="w-80">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <img src="/api/placeholder/40/40" alt="Chef Avatar" />
+            </Avatar>
+            <div>
+              <CardTitle>Thai Green Curry</CardTitle>
+              <CardDescription>by Chef Maria Santos</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
+              <Camera className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <MapPin className="h-4 w-4" />
+                <span>Thai</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <span>2 days ago</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm">
+              <Heart className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm">
+              <Share2 className="h-4 w-4" />
+            </Button>
+          </div>
+          <Button variant="ghost" size="sm">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <Card variant="outlined" className="w-80">
+        <CardHeader>
+          <CardTitle>Quick & Easy Meals</CardTitle>
+          <CardDescription>Collection of 15-minute recipes</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center py-2 border-b">
+              <span className="text-sm">Avocado Toast</span>
+              <Badge variant="outline">5 min</Badge>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b">
+              <span className="text-sm">Scrambled Eggs</span>
+              <Badge variant="outline">8 min</Badge>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b">
+              <span className="text-sm">Caesar Salad</span>
+              <Badge variant="outline">12 min</Badge>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="text-sm">Pasta Aglio e Olio</span>
+              <Badge variant="outline">15 min</Badge>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full" variant="outline">
+            View All Recipes
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Interactive States
+
+<Canvas>
+  <Story name="Interactive States">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <Card interactive className="w-80">
+        <CardHeader>
+          <CardTitle>Hover Me</CardTitle>
+          <CardDescription>This card has interactive hover effects</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>Move your cursor over this card to see the hover effect.</p>
+        </CardContent>
+      </Card>
+
+      <Card variant="interactive" className="w-80">
+        <CardHeader>
+          <CardTitle>Click Me</CardTitle>
+          <CardDescription>This card responds to click events</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>This card can be clicked and will show focus states when navigated with keyboard.</p>
+        </CardContent>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Composition Patterns
+
+<Canvas>
+  <Story name="Composition Patterns">
+    <div className="space-y-6">
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Header Only</CardTitle>
+        </CardHeader>
+      </Card>
+
+      <Card className="w-full max-w-2xl">
+        <CardContent>
+          <p>Content Only - No header or footer</p>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Header and Content</CardTitle>
+          <CardDescription>With description</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>This card has both header and content sections.</p>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-2xl">
+        <CardContent>
+          <p>Content and Footer only</p>
+        </CardContent>
+        <CardFooter>
+          <Button>Action</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Complex Layout
+
+<Canvas>
+  <Story name="Complex Layout">
+    <div className="max-w-4xl">
+      <Card variant="elevated" size="lg">
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div>
+              <CardTitle className="text-2xl">Recipe Dashboard</CardTitle>
+              <CardDescription>Manage your recipe collection and cooking activities</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Badge variant="success">Pro</Badge>
+              <Button variant="outline" size="sm">Settings</Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="space-y-2">
+              <h4 className="font-semibold">Recent Recipes</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-2 bg-muted rounded">
+                  <span className="text-sm">Chicken Tikka</span>
+                  <Star className="h-4 w-4 text-yellow-400" />
+                </div>
+                <div className="flex items-center justify-between p-2 bg-muted rounded">
+                  <span className="text-sm">Beef Stir Fry</span>
+                  <Star className="h-4 w-4 text-yellow-400" />
+                </div>
+                <div className="flex items-center justify-between p-2 bg-muted rounded">
+                  <span className="text-sm">Chocolate Cake</span>
+                  <Star className="h-4 w-4 text-yellow-400" />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-semibold">Quick Stats</h4>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Total Recipes</span>
+                  <span className="font-medium">127</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Favorites</span>
+                  <span className="font-medium">23</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>This Week</span>
+                  <span className="font-medium">8</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h4 className="font-semibold">Quick Actions</h4>
+              <div className="space-y-2">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <ChefHat className="h-4 w-4 mr-2" />
+                  Add Recipe
+                </Button>
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Plan Meals
+                </Button>
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Users className="h-4 w-4 mr-2" />
+                  Share Collection
+                </Button>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <p className="text-sm text-muted-foreground">Last updated 2 minutes ago</p>
+          <Button>View All</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Card} />
+
+## Usage Guidelines
+
+### When to use
+- For grouping related content and actions
+- To create visual hierarchy and organization
+- For displaying recipes, user profiles, or content previews
+- In dashboards and content galleries
+- For interactive content that needs hover/focus states
+
+### Best practices
+- Use appropriate variants for visual hierarchy
+- Combine with other components like Button, Badge, Avatar
+- Keep content focused and related
+- Use interactive variant for clickable cards
+- Maintain consistent spacing with the size prop
+- Use semantic heading levels in CardTitle
+- Provide meaningful descriptions in CardDescription
+
+### Accessibility
+- Cards are semantically neutral containers
+- Use proper heading hierarchy within cards
+- Interactive cards should have proper focus indicators
+- Include appropriate ARIA labels for complex interactions
+- Ensure sufficient color contrast in all variants

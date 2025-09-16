@@ -1,0 +1,735 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Modal,
+  ModalTrigger,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+  ModalClose,
+} from './modal';
+import { Button } from './button';
+import { Input } from './input';
+import { Checkbox } from './checkbox';
+import { Badge } from './badge';
+import { Avatar } from './avatar';
+import { useState } from 'react';
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Share2,
+  Download,
+  Print,
+  Star,
+  Heart,
+  Bookmark,
+  Clock,
+  Users,
+  ChefHat,
+  Utensils,
+  X,
+  AlertTriangle,
+  CheckCircle,
+  Info,
+  Settings,
+  Camera,
+  Upload,
+} from 'lucide-react';
+
+<Meta title="Components/Modal" component={Modal} />
+
+# Modal
+
+Accessible dialog component for displaying content that requires user attention or interaction.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    <Modal>
+      <ModalTrigger asChild>
+        <Button>Open Modal</Button>
+      </ModalTrigger>
+      <ModalOverlay>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Modal Title</ModalTitle>
+            <ModalDescription>
+              This is a basic modal with a title, description, and content area.
+            </ModalDescription>
+          </ModalHeader>
+          <ModalBody>
+            <p>This is the main content of the modal. You can put any content here.</p>
+          </ModalBody>
+          <ModalFooter>
+            <ModalClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </ModalClose>
+            <Button>Confirm</Button>
+          </ModalFooter>
+        </ModalContent>
+      </ModalOverlay>
+    </Modal>
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="flex gap-4">
+      <Modal>
+        <ModalTrigger asChild>
+          <Button size="sm">Small Modal</Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="sm">
+            <ModalHeader>
+              <ModalTitle>Small Modal</ModalTitle>
+              <ModalDescription>A compact modal for simple confirmations.</ModalDescription>
+            </ModalHeader>
+            <ModalBody>
+              <p>This is a small modal with limited content space.</p>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button variant="outline" size="sm">Cancel</Button>
+              </ModalClose>
+              <Button size="sm">OK</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+
+      <Modal>
+        <ModalTrigger asChild>
+          <Button>Default Modal</Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="default">
+            <ModalHeader>
+              <ModalTitle>Default Modal</ModalTitle>
+              <ModalDescription>Standard modal size for most use cases.</ModalDescription>
+            </ModalHeader>
+            <ModalBody>
+              <p>This is a default-sized modal with balanced proportions for most content.</p>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </ModalClose>
+              <Button>Confirm</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+
+      <Modal>
+        <ModalTrigger asChild>
+          <Button size="lg">Large Modal</Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="lg">
+            <ModalHeader>
+              <ModalTitle>Large Modal</ModalTitle>
+              <ModalDescription>Spacious modal for complex content and forms.</ModalDescription>
+            </ModalHeader>
+            <ModalBody>
+              <p>This is a large modal with plenty of space for detailed content, forms, and complex layouts.</p>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </ModalClose>
+              <Button>Save</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+    </div>
+  </Story>
+</Canvas>
+
+## Modal Types
+
+<Canvas>
+  <Story name="Modal Types">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      {/* Confirmation Modal */}
+      <Modal>
+        <ModalTrigger asChild>
+          <Button variant="destructive" size="sm">
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
+          </Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="sm">
+            <ModalHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                </div>
+                <div>
+                  <ModalTitle>Delete Recipe</ModalTitle>
+                  <ModalDescription>Are you sure you want to delete this recipe?</ModalDescription>
+                </div>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <p className="text-sm text-gray-600">
+                This action cannot be undone. The recipe "Spaghetti Carbonara" and all its data will be permanently removed.
+              </p>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </ModalClose>
+              <Button variant="destructive">Delete Recipe</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal>
+        <ModalTrigger asChild>
+          <Button variant="success" size="sm">
+            <CheckCircle className="h-4 w-4 mr-2" />
+            Success
+          </Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="sm">
+            <ModalHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <ModalTitle>Recipe Saved!</ModalTitle>
+                  <ModalDescription>Your recipe has been successfully saved.</ModalDescription>
+                </div>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <p className="text-sm text-gray-600">
+                "Thai Green Curry" has been added to your recipe collection.
+              </p>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button>View Recipe</Button>
+              </ModalClose>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+
+      {/* Info Modal */}
+      <Modal>
+        <ModalTrigger asChild>
+          <Button variant="outline" size="sm">
+            <Info className="h-4 w-4 mr-2" />
+            Info
+          </Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent>
+            <ModalHeader>
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <Info className="h-5 w-5 text-blue-600" />
+                </div>
+                <div>
+                  <ModalTitle>Cooking Tips</ModalTitle>
+                  <ModalDescription>Helpful tips for better cooking results.</ModalDescription>
+                </div>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <ChefHat className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm">Always preheat your oven for consistent results.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Clock className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm">Let meat rest after cooking to retain juices.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Utensils className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm">Taste and adjust seasoning throughout cooking.</p>
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button>Got it</Button>
+              </ModalClose>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+
+      {/* Settings Modal */}
+      <Modal>
+        <ModalTrigger asChild>
+          <Button variant="ghost" size="sm">
+            <Settings className="h-4 w-4 mr-2" />
+            Settings
+          </Button>
+        </ModalTrigger>
+        <ModalOverlay>
+          <ModalContent size="lg">
+            <ModalHeader>
+              <ModalTitle>Recipe Settings</ModalTitle>
+              <ModalDescription>Customize your recipe preferences and display options.</ModalDescription>
+            </ModalHeader>
+            <ModalBody>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-medium mb-3">Display Preferences</h4>
+                  <div className="space-y-3">
+                    <Checkbox label="Show nutritional information" defaultChecked />
+                    <Checkbox label="Display cooking time prominently" defaultChecked />
+                    <Checkbox label="Show difficulty level" />
+                    <Checkbox label="Enable recipe rating" defaultChecked />
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-3">Measurement Units</h4>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input type="radio" name="units" value="metric" className="mr-2" />
+                      Metric (grams, liters)
+                    </label>
+                    <label className="flex items-center">
+                      <input type="radio" name="units" value="imperial" className="mr-2" defaultChecked />
+                      Imperial (cups, ounces)
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <ModalClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </ModalClose>
+              <Button>Save Settings</Button>
+            </ModalFooter>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+    </div>
+  </Story>
+</Canvas>
+
+## Form Modal
+
+<Canvas>
+  <Story name="Form Modal">
+    {() => {
+      const [formData, setFormData] = useState({
+        name: '',
+        servings: '',
+        prepTime: '',
+        description: '',
+      });
+
+      return (
+        <Modal>
+          <ModalTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Recipe
+            </Button>
+          </ModalTrigger>
+          <ModalOverlay>
+            <ModalContent size="lg">
+              <ModalHeader>
+                <ModalTitle>Create New Recipe</ModalTitle>
+                <ModalDescription>
+                  Add a new recipe to your collection. Fill in the basic information below.
+                </ModalDescription>
+              </ModalHeader>
+              <ModalBody>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <Input
+                      label="Recipe Name"
+                      placeholder="Enter recipe name"
+                      value={formData.name}
+                      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                      required
+                    />
+                    <Input
+                      label="Servings"
+                      type="number"
+                      placeholder="4"
+                      value={formData.servings}
+                      onChange={(e) => setFormData(prev => ({ ...prev, servings: e.target.value }))}
+                      leftIcon={<Users className="h-4 w-4" />}
+                    />
+                  </div>
+                  <Input
+                    label="Prep Time (minutes)"
+                    type="number"
+                    placeholder="30"
+                    value={formData.prepTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, prepTime: e.target.value }))}
+                    leftIcon={<Clock className="h-4 w-4" />}
+                  />
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <textarea
+                      className="w-full p-3 border border-gray-300 rounded-md resize-none"
+                      rows={4}
+                      placeholder="Describe your recipe..."
+                      value={formData.description}
+                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium">Recipe Options</h4>
+                    <div className="space-y-2">
+                      <Checkbox label="Make recipe public" />
+                      <Checkbox label="Allow comments" defaultChecked />
+                      <Checkbox label="Include in meal planning suggestions" defaultChecked />
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <ModalClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </ModalClose>
+                <Button>Create Recipe</Button>
+              </ModalFooter>
+            </ModalContent>
+          </ModalOverlay>
+        </Modal>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Details Modal
+
+<Canvas>
+  <Story name="Recipe Details">
+    <Modal>
+      <ModalTrigger asChild>
+        <Button variant="outline">
+          <ChefHat className="h-4 w-4 mr-2" />
+          View Recipe
+        </Button>
+      </ModalTrigger>
+      <ModalOverlay>
+        <ModalContent size="lg">
+          <ModalHeader>
+            <div className="flex items-start justify-between">
+              <div>
+                <ModalTitle>Spaghetti Carbonara</ModalTitle>
+                <ModalDescription>Classic Italian pasta with eggs, cheese, and pancetta</ModalDescription>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="success">Featured</Badge>
+                <Button variant="ghost" size="sm">
+                  <Star className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Heart className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Share2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="space-y-6">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <Clock className="h-5 w-5 mx-auto mb-1 text-gray-600" />
+                  <p className="text-sm font-medium">30 mins</p>
+                  <p className="text-xs text-gray-500">Total time</p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <Users className="h-5 w-5 mx-auto mb-1 text-gray-600" />
+                  <p className="text-sm font-medium">4 servings</p>
+                  <p className="text-xs text-gray-500">Serves</p>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <ChefHat className="h-5 w-5 mx-auto mb-1 text-gray-600" />
+                  <p className="text-sm font-medium">Easy</p>
+                  <p className="text-xs text-gray-500">Difficulty</p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Ingredients</h4>
+                <ul className="space-y-2">
+                  <li className="flex justify-between">
+                    <span>Spaghetti</span>
+                    <span className="text-gray-500">400g</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Pancetta</span>
+                    <span className="text-gray-500">150g</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Eggs</span>
+                    <span className="text-gray-500">3 large</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Parmesan cheese</span>
+                    <span className="text-gray-500">100g grated</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Black pepper</span>
+                    <span className="text-gray-500">To taste</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Instructions</h4>
+                <ol className="space-y-3">
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-sm font-medium">1</span>
+                    <span className="text-sm">Cook spaghetti in salted boiling water until al dente.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-sm font-medium">2</span>
+                    <span className="text-sm">Meanwhile, cook pancetta in a large pan until crispy.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-sm font-medium">3</span>
+                    <span className="text-sm">Whisk eggs with grated Parmesan and black pepper.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-800 rounded-full flex items-center justify-center text-sm font-medium">4</span>
+                    <span className="text-sm">Drain pasta and toss with pancetta and egg mixture off heat.</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <img src="/api/placeholder/32/32" alt="Chef" />
+                </Avatar>
+                <div className="text-left">
+                  <p className="text-sm font-medium">Chef Maria</p>
+                  <p className="text-xs text-gray-500">Created 2 days ago</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+                <Button>
+                  <Bookmark className="h-4 w-4 mr-2" />
+                  Save Recipe
+                </Button>
+              </div>
+            </div>
+          </ModalFooter>
+        </ModalContent>
+      </ModalOverlay>
+    </Modal>
+  </Story>
+</Canvas>
+
+## Image Upload Modal
+
+<Canvas>
+  <Story name="Image Upload">
+    <Modal>
+      <ModalTrigger asChild>
+        <Button variant="outline">
+          <Camera className="h-4 w-4 mr-2" />
+          Add Photo
+        </Button>
+      </ModalTrigger>
+      <ModalOverlay>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Add Recipe Photo</ModalTitle>
+            <ModalDescription>
+              Upload a photo to make your recipe more appealing.
+            </ModalDescription>
+          </ModalHeader>
+          <ModalBody>
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <Upload className="h-8 w-8 mx-auto mb-4 text-gray-400" />
+                <p className="text-sm text-gray-600 mb-2">
+                  Drop your image here, or <button className="text-blue-600 hover:underline">browse</button>
+                </p>
+                <p className="text-xs text-gray-500">
+                  Supports: JPG, PNG, GIF (max 10MB)
+                </p>
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Photo Description</label>
+                <Input placeholder="Describe your photo..." />
+              </div>
+              <div className="space-y-2">
+                <Checkbox label="Set as recipe cover photo" defaultChecked />
+                <Checkbox label="Include in recipe gallery" defaultChecked />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <ModalClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </ModalClose>
+            <Button>Upload Photo</Button>
+          </ModalFooter>
+        </ModalContent>
+      </ModalOverlay>
+    </Modal>
+  </Story>
+</Canvas>
+
+## Scrollable Content
+
+<Canvas>
+  <Story name="Scrollable Content">
+    <Modal>
+      <ModalTrigger asChild>
+        <Button variant="outline">Long Content Modal</Button>
+      </ModalTrigger>
+      <ModalOverlay>
+        <ModalContent size="lg">
+          <ModalHeader>
+            <ModalTitle>Terms of Service</ModalTitle>
+            <ModalDescription>
+              Please read and accept our terms of service to continue.
+            </ModalDescription>
+          </ModalHeader>
+          <ModalBody className="max-h-96 overflow-y-auto">
+            <div className="space-y-4 text-sm">
+              <section>
+                <h3 className="font-semibold mb-2">1. Acceptance of Terms</h3>
+                <p>By accessing and using this recipe platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">2. Recipe Content</h3>
+                <p>Users are responsible for the accuracy and safety of recipes they share. All recipes should include proper ingredient lists, instructions, and safety warnings where applicable.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">3. User Accounts</h3>
+                <p>Users must provide accurate information when creating accounts. Each user is responsible for maintaining the security of their account credentials.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">4. Content Ownership</h3>
+                <p>Users retain ownership of original recipes they create and share. By sharing content, users grant the platform a license to display and distribute the content.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">5. Community Guidelines</h3>
+                <p>Users must maintain respectful communication and provide constructive feedback. Spam, harassment, or inappropriate content will result in account suspension.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">6. Privacy Policy</h3>
+                <p>User data is protected according to our privacy policy. Personal information is not shared with third parties without explicit consent.</p>
+              </section>
+              <section>
+                <h3 className="font-semibold mb-2">7. Modifications</h3>
+                <p>These terms may be updated periodically. Users will be notified of significant changes and continued use constitutes acceptance of updated terms.</p>
+              </section>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <ModalClose asChild>
+              <Button variant="outline">Decline</Button>
+            </ModalClose>
+            <Button>Accept Terms</Button>
+          </ModalFooter>
+        </ModalContent>
+      </ModalOverlay>
+    </Modal>
+  </Story>
+</Canvas>
+
+## Without Close Button
+
+<Canvas>
+  <Story name="No Close Button">
+    <Modal>
+      <ModalTrigger asChild>
+        <Button variant="outline">Force Action Modal</Button>
+      </ModalTrigger>
+      <ModalOverlay>
+        <ModalContent showClose={false}>
+          <ModalHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-100 rounded-full">
+                <AlertTriangle className="h-5 w-5 text-orange-600" />
+              </div>
+              <div>
+                <ModalTitle>Unsaved Changes</ModalTitle>
+                <ModalDescription>
+                  You have unsaved changes that will be lost if you continue.
+                </ModalDescription>
+              </div>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-sm text-gray-600">
+              Your recipe "Chocolate Chip Cookies" has unsaved changes. Would you like to save before leaving?
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <ModalClose asChild>
+              <Button variant="outline">Discard Changes</Button>
+            </ModalClose>
+            <ModalClose asChild>
+              <Button>Save & Continue</Button>
+            </ModalClose>
+          </ModalFooter>
+        </ModalContent>
+      </ModalOverlay>
+    </Modal>
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Modal} />
+
+## Usage Guidelines
+
+### When to use
+- For confirmations that require user decision
+- To display detailed information without leaving current page
+- For forms that create or edit content
+- To show warnings or important notifications
+- For image galleries or media viewers
+
+### Best practices
+- Use appropriate sizes for content amount
+- Include clear actions in the footer
+- Provide descriptive titles and descriptions
+- Use consistent spacing and hierarchy
+- Support keyboard navigation (ESC to close)
+- Focus management for accessibility
+- Don't nest modals within modals
+- Use sparingly to avoid interrupting user flow
+
+### Accessibility
+- Proper focus management and restoration
+- Screen reader compatible with ARIA attributes
+- Keyboard navigation support (Tab, ESC)
+- Focus trapping within modal content
+- Appropriate contrast and sizing
+- Semantic HTML structure with proper headings
