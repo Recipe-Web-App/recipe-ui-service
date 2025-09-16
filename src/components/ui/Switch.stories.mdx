@@ -1,0 +1,456 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Switch,
+  SwitchRoot,
+  SwitchTrack,
+  SwitchThumb,
+  SwitchLabel,
+  SwitchDescription,
+  SwitchField,
+  RecipeSwitchGroup,
+  AnimatedSwitch,
+  SettingsSwitch,
+} from './switch';
+import { useState } from 'react';
+import {
+  Bell,
+  Moon,
+  Sun,
+  Globe,
+  Lock,
+  Mail,
+  Save,
+  Wifi,
+  Volume2,
+  Eye,
+  CheckCircle,
+  XCircle,
+} from 'lucide-react';
+
+<Meta title="Components/Switch" component={Switch} />
+
+# Switch
+
+A toggle switch component for settings and preferences with comprehensive variants and accessibility features.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [checked, setChecked] = useState(false);
+      return (
+        <Switch
+          checked={checked}
+          onCheckedChange={setChecked}
+          label="Enable notifications"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-4">
+      <Switch size="sm" label="Small switch" defaultChecked />
+      <Switch size="md" label="Medium switch (default)" defaultChecked />
+      <Switch size="lg" label="Large switch" defaultChecked />
+      <Switch size="xl" label="Extra large switch" defaultChecked />
+    </div>
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    <div className="space-y-4">
+      <Switch variant="default" label="Default variant" defaultChecked />
+      <Switch variant="success" label="Success variant" defaultChecked />
+      <Switch variant="warning" label="Warning variant" defaultChecked />
+      <Switch variant="danger" label="Danger variant" defaultChecked />
+      <Switch variant="info" label="Info variant" defaultChecked />
+      <Switch variant="subtle" label="Subtle variant" defaultChecked />
+    </div>
+  </Story>
+</Canvas>
+
+## With Description
+
+<Canvas>
+  <Story name="With Description">
+    <div className="space-y-4">
+      <Switch
+        label="Auto-save"
+        description="Automatically save your changes as you type"
+        defaultChecked
+      />
+      <Switch
+        label="Dark mode"
+        description="Switch between light and dark themes"
+      />
+      <Switch
+        label="Public profile"
+        description="Make your profile visible to other users"
+        variant="info"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## With Icons
+
+<Canvas>
+  <Story name="With Icons">
+    {() => {
+      const [darkMode, setDarkMode] = useState(false);
+      const [sound, setSound] = useState(true);
+      const [wifi, setWifi] = useState(true);
+      return (
+        <div className="space-y-4">
+          <Switch
+            checked={darkMode}
+            onCheckedChange={setDarkMode}
+            checkedIcon={<Moon className="h-3 w-3" />}
+            uncheckedIcon={<Sun className="h-3 w-3" />}
+            label="Theme"
+            description={darkMode ? 'Dark mode' : 'Light mode'}
+          />
+          <Switch
+            checked={sound}
+            onCheckedChange={setSound}
+            checkedIcon={<Volume2 className="h-3 w-3" />}
+            uncheckedIcon={<Volume2 className="h-3 w-3 opacity-50" />}
+            label="Sound"
+            description={sound ? 'Sound enabled' : 'Muted'}
+          />
+          <Switch
+            checked={wifi}
+            onCheckedChange={setWifi}
+            checkedIcon={<Wifi className="h-3 w-3" />}
+            uncheckedIcon={<Wifi className="h-3 w-3 opacity-50" />}
+            label="Wi-Fi"
+            description={wifi ? 'Connected' : 'Disconnected'}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Orientations
+
+<Canvas>
+  <Story name="Orientations">
+    <div className="space-y-6">
+      <Switch
+        orientation="horizontal"
+        label="Horizontal (default)"
+        description="Label and description on the right"
+        defaultChecked
+      />
+      <Switch
+        orientation="vertical"
+        label="Vertical"
+        description="Label and description below"
+        defaultChecked
+      />
+      <Switch
+        orientation="reverse-horizontal"
+        label="Reverse horizontal"
+        description="Label and description on the left"
+        defaultChecked
+      />
+      <Switch
+        orientation="reverse-vertical"
+        label="Reverse vertical"
+        description="Label and description above"
+        defaultChecked
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## States
+
+<Canvas>
+  <Story name="States">
+    <div className="space-y-4">
+      <Switch label="Enabled switch" />
+      <Switch label="Disabled switch" disabled />
+      <Switch label="Disabled checked" disabled defaultChecked />
+      <Switch label="Loading switch" loading />
+      <Switch label="Required switch" required />
+      <Switch
+        label="With error"
+        error="This field is required"
+        description="Please enable this option"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Form Field
+
+<Canvas>
+  <Story name="Form Field">
+    <div className="space-y-4">
+      <SwitchField
+        label="Terms and conditions"
+        helperText="You must accept the terms to continue"
+        required
+      />
+      <SwitchField
+        label="Marketing emails"
+        helperText="Receive updates about new recipes and features"
+        defaultChecked
+      />
+      <SwitchField
+        label="Privacy settings"
+        error="Please review your privacy settings"
+        helperText="Control who can see your recipes"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Switch Group
+
+<Canvas>
+  <Story name="Recipe Switch Group">
+    {() => {
+      const [values, setValues] = useState({});
+      const preferencesSwitches = [
+        {
+          id: 'auto-save',
+          label: 'Auto-save',
+          description: 'Save changes automatically',
+          context: 'auto-save',
+          defaultChecked: true,
+        },
+        {
+          id: 'metric',
+          label: 'Metric units',
+          description: 'Use metric measurements',
+          context: 'metric-units',
+        },
+        {
+          id: 'nutrition',
+          label: 'Show nutrition',
+          description: 'Display nutritional information',
+          context: 'show-nutrition',
+          defaultChecked: true,
+        },
+      ];
+
+      const notificationSwitches = [
+        {
+          id: 'email',
+          label: 'Email notifications',
+          description: 'Receive email updates',
+          context: 'email-notifications',
+          defaultChecked: true,
+        },
+        {
+          id: 'weekly',
+          label: 'Weekly meal plans',
+          description: 'Get weekly meal plan suggestions',
+          context: 'weekly-meal-plan',
+        },
+        {
+          id: 'suggestions',
+          label: 'Recipe suggestions',
+          description: 'Personalized recipe recommendations',
+          context: 'recipe-suggestions',
+        },
+      ];
+
+      return (
+        <div className="space-y-6">
+          <RecipeSwitchGroup
+            variant="preferences"
+            title="Preferences"
+            switches={preferencesSwitches}
+            onBatchChange={(v) => console.log('Preferences:', v)}
+          />
+          <RecipeSwitchGroup
+            variant="notifications"
+            title="Notifications"
+            switches={notificationSwitches}
+            onBatchChange={(v) => console.log('Notifications:', v)}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Settings Switch
+
+<Canvas>
+  <Story name="Settings Switch">
+    {() => {
+      const [settings, setSettings] = useState({
+        darkMode: false,
+        notifications: true,
+        public: false,
+        autoSave: true,
+      });
+
+      const handleSettingChange = (key, value) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setSettings(prev => ({ ...prev, [key]: value }));
+            resolve();
+          }, 1000);
+        });
+      };
+
+      return (
+        <div className="space-y-4">
+          <SettingsSwitch
+            icon={<Moon />}
+            label="Dark mode"
+            description="Use dark theme"
+            checked={settings.darkMode}
+            onChange={(v) => handleSettingChange('darkMode', v)}
+            optimisticUpdate
+          />
+          <SettingsSwitch
+            icon={<Bell />}
+            label="Notifications"
+            description="Receive push notifications"
+            checked={settings.notifications}
+            onChange={(v) => handleSettingChange('notifications', v)}
+            badge={<span className="text-xs bg-blue-100 px-2 py-1 rounded">New</span>}
+          />
+          <SettingsSwitch
+            icon={<Globe />}
+            label="Public profile"
+            description="Make profile visible to everyone"
+            checked={settings.public}
+            onChange={(v) => handleSettingChange('public', v)}
+            variant="info"
+          />
+          <SettingsSwitch
+            icon={<Save />}
+            label="Auto-save"
+            description="Save changes automatically"
+            checked={settings.autoSave}
+            onChange={(v) => handleSettingChange('autoSave', v)}
+            variant="success"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Animated Switch
+
+<Canvas>
+  <Story name="Animated Switch">
+    <div className="space-y-4">
+      <AnimatedSwitch
+        label="Slide animation (default)"
+        animationType="slide"
+        animationDuration={200}
+        defaultChecked
+      />
+      <AnimatedSwitch
+        label="Fade animation"
+        animationType="fade"
+        animationDuration={300}
+        defaultChecked
+      />
+      <AnimatedSwitch
+        label="Scale animation"
+        animationType="scale"
+        animationDuration={150}
+        defaultChecked
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Compound Components
+
+<Canvas>
+  <Story name="Compound Components">
+    {() => {
+      const [checked, setChecked] = useState(false);
+      return (
+        <div className="space-y-6">
+          <SwitchRoot
+            checked={checked}
+            onCheckedChange={setChecked}
+            className="flex items-center gap-4 p-4 border rounded-lg"
+          >
+            <SwitchTrack size="lg" variant="success">
+              <SwitchThumb
+                size="lg"
+                checkedIcon={<CheckCircle className="h-4 w-4 text-green-600" />}
+                uncheckedIcon={<XCircle className="h-4 w-4 text-gray-400" />}
+              />
+            </SwitchTrack>
+            <div className="flex-1">
+              <SwitchLabel size="lg" className="block font-semibold">
+                Custom compound switch
+              </SwitchLabel>
+              <SwitchDescription size="lg" className="mt-1">
+                Built with compound components for maximum flexibility
+              </SwitchDescription>
+            </div>
+          </SwitchRoot>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Features
+
+<Canvas>
+  <Story name="Accessibility">
+    <div className="space-y-4">
+      <Switch
+        label="Screen reader friendly"
+        description="Includes proper ARIA attributes"
+        aria-label="Enable screen reader support"
+        defaultChecked
+      />
+      <Switch
+        label="Keyboard navigation"
+        description="Fully keyboard accessible"
+        aria-describedby="keyboard-help"
+      />
+      <div id="keyboard-help" className="text-sm text-gray-600 mt-2">
+        Press Space to toggle the switch
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Switch} />
+
+## Usage Guidelines
+
+### When to use
+- For binary on/off settings
+- For enabling/disabling features
+- For preference toggles
+- In settings and configuration screens
+
+### Best practices
+- Always provide a clear label
+- Use descriptions for complex settings
+- Group related switches together
+- Provide immediate visual feedback
+- Use appropriate variants for context
+- Ensure keyboard accessibility
+- Save preferences automatically or provide clear save actions

@@ -23,6 +23,7 @@ const components = [
   { name: 'Text Area', path: '/components-demo/textarea' },
   { name: 'Dialog', path: '/components-demo/dialog' },
   { name: 'Alert', path: '/components-demo/alert' },
+  { name: 'Switch', path: '/components-demo/switch' },
 ];
 
 export default function ComponentsDemoLayout({
