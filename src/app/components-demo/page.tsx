@@ -179,10 +179,17 @@ const components = [
     variants: 7,
     status: 'ready',
   },
+  {
+    name: 'Pagination',
+    path: '/components-demo/pagination',
+    description: 'Page navigation controls with multiple configurations',
+    variants: 4,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Pagination', description: 'Page navigation controls' },
+  { name: 'Breadcrumb', description: 'Navigation breadcrumb trail' },
 ];
 
 export default function ComponentsDemoOverview() {

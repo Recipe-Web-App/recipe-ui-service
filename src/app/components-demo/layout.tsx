@@ -30,6 +30,7 @@ const components = [
   { name: 'Table', path: '/components-demo/table' },
   { name: 'Slider', path: '/components-demo/slider' },
   { name: 'DatePicker', path: '/components-demo/datepicker' },
+  { name: 'Pagination', path: '/components-demo/pagination' },
 ];
 
 export default function ComponentsDemoLayout({
