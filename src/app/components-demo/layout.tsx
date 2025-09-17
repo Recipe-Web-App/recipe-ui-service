@@ -26,6 +26,7 @@ const components = [
   { name: 'Switch', path: '/components-demo/switch' },
   { name: 'Checkbox', path: '/components-demo/checkbox' },
   { name: 'Radio Group', path: '/components-demo/radio' },
+  { name: 'Popover', path: '/components-demo/popover' },
 ];
 
 export default function ComponentsDemoLayout({

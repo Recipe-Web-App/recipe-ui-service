@@ -151,10 +151,16 @@ const components = [
     variants: 5,
     status: 'ready',
   },
+  {
+    name: 'Popover',
+    path: '/components-demo/popover',
+    description: 'Floating content container for actions and information',
+    variants: 7,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Popover', description: 'Floating content container' },
   { name: 'Table', description: 'Data table component' },
   { name: 'Slider', description: 'Range and value sliders' },
   { name: 'DatePicker', description: 'Date and time selection' },
@@ -178,7 +184,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">20</div>
+            <div className="text-primary text-3xl font-bold">21</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -186,13 +192,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">140</div>
+            <div className="text-primary text-3xl font-bold">147</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">5</div>
+            <div className="text-primary text-3xl font-bold">4</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>
