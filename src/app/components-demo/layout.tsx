@@ -29,6 +29,7 @@ const components = [
   { name: 'Popover', path: '/components-demo/popover' },
   { name: 'Table', path: '/components-demo/table' },
   { name: 'Slider', path: '/components-demo/slider' },
+  { name: 'DatePicker', path: '/components-demo/datepicker' },
 ];
 
 export default function ComponentsDemoLayout({

@@ -172,10 +172,16 @@ const components = [
     variants: 15,
     status: 'ready',
   },
+  {
+    name: 'DatePicker',
+    path: '/components-demo/datepicker',
+    description: 'Date and time selection with recipe-specific variants',
+    variants: 7,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'DatePicker', description: 'Date and time selection' },
   { name: 'Pagination', description: 'Page navigation controls' },
 ];
 
@@ -196,7 +202,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">23</div>
+            <div className="text-primary text-3xl font-bold">24</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -204,13 +210,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">159</div>
+            <div className="text-primary text-3xl font-bold">166</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">3</div>
+            <div className="text-primary text-3xl font-bold">1</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>
