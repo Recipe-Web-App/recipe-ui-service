@@ -158,10 +158,16 @@ const components = [
     variants: 7,
     status: 'ready',
   },
+  {
+    name: 'Table',
+    path: '/components-demo/table',
+    description: 'Data tables with recipe-specific variants',
+    variants: 12,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Table', description: 'Data table component' },
   { name: 'Slider', description: 'Range and value sliders' },
   { name: 'DatePicker', description: 'Date and time selection' },
   { name: 'Pagination', description: 'Page navigation controls' },
@@ -184,7 +190,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">21</div>
+            <div className="text-primary text-3xl font-bold">22</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -192,13 +198,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">147</div>
+            <div className="text-primary text-3xl font-bold">159</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">4</div>
+            <div className="text-primary text-3xl font-bold">3</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>

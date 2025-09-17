@@ -1,0 +1,744 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+  RecipeTable,
+  IngredientsTable,
+  NutritionTable,
+} from './table';
+
+<Meta
+  title="UI/Table"
+  component={Table}
+  parameters={{
+    docs: {
+      description: {
+        component: 'A comprehensive table component system for displaying structured data in the recipe management application, with specialized variants for ingredients and nutrition information.',
+      },
+    },
+  }}
+/>
+
+# Table Component
+
+The Table component provides a flexible and accessible way to display structured data. It includes basic table elements as well as specialized components for recipe-specific data like ingredients and nutrition information.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Basic">
+    <Table>
+      <TableCaption>A list of your recent recipes</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Recipe Name</TableHead>
+          <TableHead>Prep Time</TableHead>
+          <TableHead>Difficulty</TableHead>
+          <TableHead align="right">Rating</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>Chocolate Chip Cookies</TableCell>
+          <TableCell>15 min</TableCell>
+          <TableCell>Easy</TableCell>
+          <TableCell align="right">4.8/5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Beef Bourguignon</TableCell>
+          <TableCell>45 min</TableCell>
+          <TableCell>Hard</TableCell>
+          <TableCell align="right">4.9/5</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Caesar Salad</TableCell>
+          <TableCell>10 min</TableCell>
+          <TableCell>Easy</TableCell>
+          <TableCell align="right">4.6/5</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </Story>
+</Canvas>
+
+## Table Variants
+
+Different visual styles for various contexts:
+
+<Canvas>
+  <Story name="Variants">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Default</h3>
+        <Table variant="default">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead>Servings</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Pasta Carbonara</TableCell>
+              <TableCell>20 min</TableCell>
+              <TableCell>4</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Greek Salad</TableCell>
+              <TableCell>15 min</TableCell>
+              <TableCell>2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Simple (No Borders)</h3>
+        <Table variant="simple">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead>Servings</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Pasta Carbonara</TableCell>
+              <TableCell>20 min</TableCell>
+              <TableCell>4</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Greek Salad</TableCell>
+              <TableCell>15 min</TableCell>
+              <TableCell>2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Lined (Separated Borders)</h3>
+        <Table variant="lined">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead>Servings</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Pasta Carbonara</TableCell>
+              <TableCell>20 min</TableCell>
+              <TableCell>4</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Greek Salad</TableCell>
+              <TableCell>15 min</TableCell>
+              <TableCell>2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Table Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Small</h3>
+        <Table size="sm">
+          <TableHeader>
+            <TableRow>
+              <TableHead size="sm">Name</TableHead>
+              <TableHead size="sm">Time</TableHead>
+              <TableHead size="sm">Rating</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell size="sm">Quick Pasta</TableCell>
+              <TableCell size="sm">10 min</TableCell>
+              <TableCell size="sm">4.5/5</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Default</h3>
+        <Table size="default">
+          <TableHeader>
+            <TableRow>
+              <TableHead size="default">Name</TableHead>
+              <TableHead size="default">Time</TableHead>
+              <TableHead size="default">Rating</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell size="default">Standard Recipe</TableCell>
+              <TableCell size="default">25 min</TableCell>
+              <TableCell size="default">4.7/5</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Large</h3>
+        <Table size="lg">
+          <TableHeader>
+            <TableRow>
+              <TableHead size="lg">Name</TableHead>
+              <TableHead size="lg">Time</TableHead>
+              <TableHead size="lg">Rating</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell size="lg">Detailed Recipe</TableCell>
+              <TableCell size="lg">45 min</TableCell>
+              <TableCell size="lg">4.9/5</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Table Features
+
+Enhanced functionality with striped rows, hover effects, and borders:
+
+<Canvas>
+  <Story name="Features">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Striped Rows</h3>
+        <Table striped>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Difficulty</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow variant="striped">
+              <TableCell>Chocolate Cake</TableCell>
+              <TableCell>Dessert</TableCell>
+              <TableCell>Medium</TableCell>
+            </TableRow>
+            <TableRow variant="striped">
+              <TableCell>Caesar Salad</TableCell>
+              <TableCell>Salad</TableCell>
+              <TableCell>Easy</TableCell>
+            </TableRow>
+            <TableRow variant="striped">
+              <TableCell>Beef Stew</TableCell>
+              <TableCell>Main Course</TableCell>
+              <TableCell>Medium</TableCell>
+            </TableRow>
+            <TableRow variant="striped">
+              <TableCell>Fruit Smoothie</TableCell>
+              <TableCell>Beverage</TableCell>
+              <TableCell>Easy</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">With Borders</h3>
+        <Table bordered>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Difficulty</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Pancakes</TableCell>
+              <TableCell>Breakfast</TableCell>
+              <TableCell>Easy</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Risotto</TableCell>
+              <TableCell>Main Course</TableCell>
+              <TableCell>Hard</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Table with Footer
+
+<Canvas>
+  <Story name="With Footer">
+    <Table>
+      <TableCaption>Monthly cooking statistics</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Month</TableHead>
+          <TableHead align="right">Recipes Tried</TableHead>
+          <TableHead align="right">Success Rate</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>January</TableCell>
+          <TableCell align="right">12</TableCell>
+          <TableCell align="right">92%</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>February</TableCell>
+          <TableCell align="right">15</TableCell>
+          <TableCell align="right">87%</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>March</TableCell>
+          <TableCell align="right">18</TableCell>
+          <TableCell align="right">94%</TableCell>
+        </TableRow>
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell>Total</TableCell>
+          <TableCell align="right">45</TableCell>
+          <TableCell align="right">91%</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  </Story>
+</Canvas>
+
+## RecipeTable Component
+
+A higher-level component for displaying tabular data with built-in functionality:
+
+<Canvas>
+  <Story name="RecipeTable">
+    {() => {
+      const data = [
+        { id: 1, name: 'Margherita Pizza', cuisine: 'Italian', time: '30 min', rating: 4.8 },
+        { id: 2, name: 'Chicken Teriyaki', cuisine: 'Japanese', time: '25 min', rating: 4.6 },
+        { id: 3, name: 'Fish & Chips', cuisine: 'British', time: '35 min', rating: 4.4 },
+        { id: 4, name: 'Pad Thai', cuisine: 'Thai', time: '20 min', rating: 4.7 },
+      ];
+
+      const columns = [
+        { key: 'name', header: 'Recipe Name', align: 'left' },
+        { key: 'cuisine', header: 'Cuisine', align: 'center' },
+        { key: 'time', header: 'Prep Time', align: 'center' },
+        {
+          key: 'rating',
+          header: 'Rating',
+          align: 'right',
+          render: (value) => (
+            <div className="flex items-center justify-end gap-1">
+              <span className="font-mono">{value}</span>
+              <span className="text-yellow-500">★</span>
+            </div>
+          ),
+        },
+      ];
+
+      return (
+        <RecipeTable
+          data={data}
+          columns={columns}
+          caption="Popular recipes from around the world"
+          onRowClick={(row) => console.log('Clicked recipe:', row.name)}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## IngredientsTable Component
+
+Specialized table for displaying recipe ingredients:
+
+<Canvas>
+  <Story name="IngredientsTable">
+    {() => {
+      const ingredients = [
+        {
+          name: 'All-purpose flour',
+          amount: 2,
+          unit: 'cups',
+          category: 'Baking',
+          notes: 'Sifted',
+        },
+        {
+          name: 'Large eggs',
+          amount: 3,
+          unit: 'whole',
+          category: 'Dairy',
+        },
+        {
+          name: 'Whole milk',
+          amount: 1.5,
+          unit: 'cups',
+          category: 'Dairy',
+        },
+        {
+          name: 'Vanilla extract',
+          amount: 1,
+          unit: 'tsp',
+          category: 'Flavoring',
+          optional: true,
+        },
+        {
+          name: 'Salt',
+          amount: 0.5,
+          unit: 'tsp',
+          category: 'Seasoning',
+        },
+        {
+          name: 'Fresh blueberries',
+          amount: 1,
+          unit: 'cup',
+          category: 'Fruit',
+          notes: 'Fresh or frozen',
+          optional: true,
+        },
+      ];
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Basic Ingredients Table</h3>
+            <IngredientsTable ingredients={ingredients} />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">With Categories and Notes</h3>
+            <IngredientsTable
+              ingredients={ingredients}
+              showCategory={true}
+              showNotes={true}
+              caption="Blueberry Pancakes - Ingredients List"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## NutritionTable Component
+
+Specialized table for displaying nutrition information:
+
+<Canvas>
+  <Story name="NutritionTable">
+    {() => {
+      const nutrition = [
+        {
+          nutrient: 'Calories',
+          amount: 320,
+          unit: 'kcal',
+          dailyValue: 16,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Total Fat',
+          amount: 12,
+          unit: 'g',
+          dailyValue: 18,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Saturated Fat',
+          amount: 6,
+          unit: 'g',
+          dailyValue: 30,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Cholesterol',
+          amount: 85,
+          unit: 'mg',
+          dailyValue: 28,
+          category: 'other',
+        },
+        {
+          nutrient: 'Sodium',
+          amount: 280,
+          unit: 'mg',
+          dailyValue: 12,
+          category: 'mineral',
+        },
+        {
+          nutrient: 'Total Carbohydrates',
+          amount: 45,
+          unit: 'g',
+          dailyValue: 15,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Dietary Fiber',
+          amount: 3,
+          unit: 'g',
+          dailyValue: 12,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Total Sugars',
+          amount: 8,
+          unit: 'g',
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Protein',
+          amount: 12,
+          unit: 'g',
+          dailyValue: 24,
+          category: 'macronutrient',
+        },
+        {
+          nutrient: 'Vitamin D',
+          amount: 2.5,
+          unit: 'mcg',
+          dailyValue: 12,
+          category: 'vitamin',
+        },
+        {
+          nutrient: 'Calcium',
+          amount: 180,
+          unit: 'mg',
+          dailyValue: 14,
+          category: 'mineral',
+        },
+        {
+          nutrient: 'Iron',
+          amount: 2.1,
+          unit: 'mg',
+          dailyValue: 12,
+          category: 'mineral',
+        },
+      ];
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Basic Nutrition Table</h3>
+            <NutritionTable nutrition={nutrition} />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">With Categories</h3>
+            <NutritionTable
+              nutrition={nutrition}
+              showCategory={true}
+              caption="Blueberry Pancakes - Nutrition Facts (per serving)"
+            />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Without Daily Values</h3>
+            <NutritionTable
+              nutrition={nutrition}
+              showDailyValue={false}
+              showCategory={true}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Advanced Features
+
+<Canvas>
+  <Story name="Advanced">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Sortable Headers</h3>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead sortable>Recipe Name ↕</TableHead>
+              <TableHead sortable>Prep Time ↕</TableHead>
+              <TableHead sortable>Rating ↕</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Chocolate Chip Cookies</TableCell>
+              <TableCell>15 min</TableCell>
+              <TableCell>4.8/5</TableCell>
+              <TableCell>
+                <button className="text-blue-600 hover:underline">Edit</button>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Apple Pie</TableCell>
+              <TableCell>60 min</TableCell>
+              <TableCell>4.9/5</TableCell>
+              <TableCell>
+                <button className="text-blue-600 hover:underline">Edit</button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Cell Variants</h3>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Metric</TableHead>
+              <TableHead>Value</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell variant="emphasized">Total Recipes</TableCell>
+              <TableCell variant="numeric">1,234</TableCell>
+              <TableCell>
+                <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
+                  Active
+                </span>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell variant="emphasized">Average Rating</TableCell>
+              <TableCell variant="numeric">4.67</TableCell>
+              <TableCell variant="muted">Updated daily</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell variant="emphasized">Success Rate</TableCell>
+              <TableCell variant="numeric">94.2%</TableCell>
+              <TableCell>
+                <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
+                  Trending Up
+                </span>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Interactive Rows</h3>
+        <Table>
+          <TableHeader variant="accent">
+            <TableRow>
+              <TableHead>Recipe</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow variant="interactive">
+              <TableCell>Beef Bourguignon</TableCell>
+              <TableCell>Main Course</TableCell>
+              <TableCell>
+                <span className="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-800">
+                  In Progress
+                </span>
+              </TableCell>
+            </TableRow>
+            <TableRow variant="highlighted">
+              <TableCell>Crème Brûlée</TableCell>
+              <TableCell>Dessert</TableCell>
+              <TableCell>
+                <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
+                  Completed
+                </span>
+              </TableCell>
+            </TableRow>
+            <TableRow variant="interactive">
+              <TableCell>Caesar Salad</TableCell>
+              <TableCell>Salad</TableCell>
+              <TableCell>
+                <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-800">
+                  Planned
+                </span>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Empty States
+
+<Canvas>
+  <Story name="Empty States">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Empty RecipeTable</h3>
+        <RecipeTable
+          data={[]}
+          columns={[
+            { key: 'name', header: 'Recipe Name' },
+            { key: 'time', header: 'Prep Time' },
+          ]}
+          emptyMessage="No recipes found. Start by adding your first recipe!"
+        />
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Empty IngredientsTable</h3>
+        <IngredientsTable ingredients={[]} />
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Empty NutritionTable</h3>
+        <NutritionTable nutrition={[]} />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Table} />
+
+## Best Practices
+
+1. **Use semantic HTML** - Leverage proper table elements for accessibility
+2. **Keep tables responsive** - Consider how tables will behave on mobile devices
+3. **Provide meaningful captions** - Help users understand what the table contains
+4. **Use consistent alignment** - Align numeric data to the right, text to the left
+5. **Include interactive feedback** - Show hover states for clickable rows
+6. **Handle empty states** - Provide helpful messages when tables have no data
+7. **Consider sorting** - Add sort functionality for large datasets
+8. **Optimize for scanning** - Use striped rows or other visual aids for large tables
+
+## Accessibility
+
+- Full keyboard navigation support
+- Proper ARIA attributes and roles
+- Screen reader compatibility
+- High contrast mode support
+- Focus management for interactive elements
+- Semantic HTML structure with proper table elements
