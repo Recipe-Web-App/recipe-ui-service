@@ -165,10 +165,16 @@ const components = [
     variants: 12,
     status: 'ready',
   },
+  {
+    name: 'Slider',
+    path: '/components-demo/slider',
+    description: 'Range and value sliders for interactive input',
+    variants: 15,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
-  { name: 'Slider', description: 'Range and value sliders' },
   { name: 'DatePicker', description: 'Date and time selection' },
   { name: 'Pagination', description: 'Page navigation controls' },
 ];
@@ -190,7 +196,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">22</div>
+            <div className="text-primary text-3xl font-bold">23</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>

@@ -28,6 +28,7 @@ const components = [
   { name: 'Radio Group', path: '/components-demo/radio' },
   { name: 'Popover', path: '/components-demo/popover' },
   { name: 'Table', path: '/components-demo/table' },
+  { name: 'Slider', path: '/components-demo/slider' },
 ];
 
 export default function ComponentsDemoLayout({
