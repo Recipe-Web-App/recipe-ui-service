@@ -187,6 +187,13 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'Divider',
+    path: '/components-demo/divider',
+    description: 'Horizontal/vertical separators with recipe-specific variants',
+    variants: 8,
+    status: 'ready',
+  },
+  {
     name: 'Stepper',
     path: '/components-demo/stepper',
     description: 'Multi-step workflows, recipe wizards, and cooking mode',
@@ -244,7 +251,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">29</div>
+            <div className="text-primary text-3xl font-bold">30</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -252,7 +259,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">213</div>
+            <div className="text-primary text-3xl font-bold">221</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

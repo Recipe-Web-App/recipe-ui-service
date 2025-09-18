@@ -36,6 +36,7 @@ const components = [
   { name: 'Stepper', path: '/components-demo/stepper' },
   { name: 'Drawer', path: '/components-demo/drawer' },
   { name: 'List', path: '/components-demo/list' },
+  { name: 'Divider', path: '/components-demo/divider' },
 ];
 
 export default function ComponentsDemoLayout({
