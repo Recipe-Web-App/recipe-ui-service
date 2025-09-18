@@ -193,10 +193,17 @@ const components = [
     variants: 15,
     status: 'ready',
   },
+  {
+    name: 'Breadcrumb',
+    path: '/components-demo/breadcrumb',
+    description: 'Hierarchical navigation with overflow handling',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
-const upcomingComponents = [
-  { name: 'Breadcrumb', description: 'Navigation breadcrumb trail' },
+const upcomingComponents: Array<{ name: string; description: string }> = [
+  // Add new upcoming components here
 ];
 
 export default function ComponentsDemoOverview() {
@@ -216,7 +223,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">25</div>
+            <div className="text-primary text-3xl font-bold">26</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -224,13 +231,13 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">181</div>
+            <div className="text-primary text-3xl font-bold">189</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">1</div>
+            <div className="text-primary text-3xl font-bold">0</div>
             <div className="text-muted-foreground text-sm">Coming Soon</div>
           </CardContent>
         </Card>

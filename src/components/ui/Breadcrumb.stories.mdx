@@ -1,0 +1,585 @@
+# Breadcrumb Component
+
+A hierarchical navigation component that shows the user's location within a website or application structure, designed specifically for recipe app navigation patterns.
+
+## Features
+
+- **Hierarchical Navigation**: Clear visual hierarchy for multi-level navigation
+- **Auto-Generation**: Generate breadcrumbs from simple item arrays
+- **Overflow Handling**: Automatic collapsing with ellipsis for long paths
+- **Multiple Sizes**: Small, default, and large variants with proper scaling
+- **Separator Variants**: Chevron, slash, arrow, dot, and custom separators
+- **Link Variants**: Default, solid, ghost, and minimal link styles
+- **Recipe Workflows**: Specialized breadcrumbs for cooking processes
+- **Icon Support**: Built-in icon integration with proper sizing
+- **Full Accessibility**: ARIA attributes, keyboard navigation, screen reader support
+- **Responsive Design**: Mobile-optimized with overflow handling
+
+## Import
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+  RecipeBreadcrumb,
+} from '@/components/ui/breadcrumb';
+```
+
+## Basic Usage
+
+### Manual Breadcrumb Construction
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes">Recipes</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Pasta Carbonara</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Auto-Generated from Items
+
+```tsx
+const items = [
+  { label: 'Recipes', href: '/recipes', icon: 'cooking-pot' },
+  { label: 'Italian', href: '/recipes/italian', icon: 'map-pin' },
+  { label: 'Pasta', href: '/recipes/italian/pasta' },
+  { label: 'Carbonara', href: '/recipes/italian/pasta/carbonara' },
+];
+
+<Breadcrumb items={items} showHome={true} />
+```
+
+## Size Variants
+
+### Small
+Compact breadcrumbs for dense layouts or secondary navigation.
+
+```tsx
+<Breadcrumb size="sm">
+  <BreadcrumbList size="sm">
+    <BreadcrumbItem size="sm">
+      <BreadcrumbLink href="/" size="sm">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator size="sm" />
+    <BreadcrumbItem size="sm">
+      <BreadcrumbPage size="sm">Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Default
+Standard size for most use cases.
+
+```tsx
+<Breadcrumb size="default">
+  <BreadcrumbList size="default">
+    <BreadcrumbItem size="default">
+      <BreadcrumbLink href="/" size="default">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator size="default" />
+    <BreadcrumbItem size="default">
+      <BreadcrumbPage size="default">Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Large
+Prominent breadcrumbs for main navigation or hero sections.
+
+```tsx
+<Breadcrumb size="lg">
+  <BreadcrumbList size="lg">
+    <BreadcrumbItem size="lg">
+      <BreadcrumbLink href="/" size="lg">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator size="lg" />
+    <BreadcrumbItem size="lg">
+      <BreadcrumbPage size="lg">Current Page</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Separator Variants
+
+### Chevron (Default)
+The most common separator using chevron right icon.
+
+```tsx
+<BreadcrumbSeparator variant="chevron" />
+```
+
+### Slash
+Clean text-based separator for minimal designs.
+
+```tsx
+<BreadcrumbSeparator variant="slash" />
+```
+
+### Arrow
+Bold directional separator for emphasis.
+
+```tsx
+<BreadcrumbSeparator variant="arrow" />
+```
+
+### Dot
+Subtle separator for compact layouts.
+
+```tsx
+<BreadcrumbSeparator variant="dot" />
+```
+
+### Custom Separator
+Use any content as a separator.
+
+```tsx
+<BreadcrumbSeparator>
+  <Icon name="star" size="sm" />
+</BreadcrumbSeparator>
+```
+
+## Link Variants
+
+### Default
+Standard muted text with hover effects.
+
+```tsx
+<BreadcrumbLink href="/page" variant="default">
+  Standard Link
+</BreadcrumbLink>
+```
+
+### Solid
+High-contrast links with background on hover.
+
+```tsx
+<BreadcrumbLink href="/page" variant="solid">
+  Solid Link
+</BreadcrumbLink>
+```
+
+### Ghost
+Subtle links with background on hover.
+
+```tsx
+<BreadcrumbLink href="/page" variant="ghost">
+  Ghost Link
+</BreadcrumbLink>
+```
+
+### Minimal
+Clean links without underlines.
+
+```tsx
+<BreadcrumbLink href="/page" variant="minimal">
+  Minimal Link
+</BreadcrumbLink>
+```
+
+## With Icons
+
+Add visual context with icons from the icon registry.
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">
+        <Icon name="home" size="sm" />
+        Home
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes">
+        <Icon name="cooking-pot" size="sm" />
+        Recipes
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>
+        <Icon name="utensils" size="sm" />
+        Current Recipe
+      </BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Overflow Handling
+
+### Auto-Collapse
+Automatically collapses middle items when exceeding maxItems.
+
+```tsx
+const longPath = [
+  { label: 'Home', href: '/' },
+  { label: 'Recipes', href: '/recipes' },
+  { label: 'Italian', href: '/recipes/italian' },
+  { label: 'Pasta', href: '/recipes/italian/pasta' },
+  { label: 'Main Dishes', href: '/recipes/italian/pasta/main' },
+  { label: 'Cream Based', href: '/recipes/italian/pasta/main/cream' },
+  { label: 'Carbonara', href: '/recipes/italian/pasta/main/cream/carbonara' },
+];
+
+<Breadcrumb items={longPath} maxItems={3} />
+```
+
+### Manual Ellipsis
+Explicitly place ellipsis where needed.
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbEllipsis />
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes/pasta">Pasta</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Carbonara</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## Recipe Workflow Breadcrumbs
+
+Specialized breadcrumb component for cooking workflow navigation.
+
+### Basic Recipe Workflow
+
+```tsx
+const workflowItems = [
+  {
+    id: 'planning',
+    label: 'Planning',
+    icon: 'clipboard-list',
+    completed: true,
+    accessible: true,
+  },
+  {
+    id: 'shopping',
+    label: 'Shopping',
+    icon: 'shopping-cart',
+    completed: true,
+    accessible: true,
+  },
+  {
+    id: 'cooking',
+    label: 'Cooking',
+    icon: 'chef-hat',
+    active: true,
+    accessible: true,
+  },
+  {
+    id: 'serving',
+    label: 'Serving',
+    icon: 'utensils',
+    accessible: false,
+  },
+];
+
+<RecipeBreadcrumb
+  workflow="cooking"
+  items={workflowItems}
+  currentStep="cooking"
+  onStepClick={(step) => console.log('Navigate to:', step)}
+/>
+```
+
+### Workflow Stages
+
+#### Planning Stage
+```tsx
+<RecipeBreadcrumb
+  workflow="planning"
+  items={[
+    {
+      id: 'plan',
+      label: 'Recipe Planning',
+      icon: 'clipboard-list',
+      active: true,
+    },
+  ]}
+/>
+```
+
+#### Shopping Stage
+```tsx
+<RecipeBreadcrumb
+  workflow="shopping"
+  items={[
+    {
+      id: 'shop',
+      label: 'Shopping List',
+      icon: 'shopping-cart',
+      active: true,
+    },
+  ]}
+/>
+```
+
+#### Serving Stage
+```tsx
+<RecipeBreadcrumb
+  workflow="serving"
+  items={[
+    {
+      id: 'serve',
+      label: 'Ready to Serve',
+      icon: 'utensils',
+      active: true,
+    },
+  ]}
+/>
+```
+
+## Real-World Examples
+
+### Recipe Category Navigation
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">
+        <Icon name="home" size="sm" />
+        Home
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes">
+        <Icon name="cooking-pot" size="sm" />
+        Recipes
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes/cuisines">
+        <Icon name="globe" size="sm" />
+        Cuisines
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/recipes/cuisines/italian">
+        <Icon name="map-pin" size="sm" />
+        Italian
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>
+        <Icon name="wheat" size="sm" />
+        Spaghetti Carbonara
+      </BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### User Collection Navigation
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">
+        <Icon name="home" size="sm" />
+        Home
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/my-recipes">
+        <Icon name="user" size="sm" />
+        My Recipes
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/my-recipes/favorites">
+        <Icon name="heart" size="sm" />
+        Favorites
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>
+        <Icon name="star" size="sm" />
+        Quick Weeknight Dinners
+      </BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+### Meal Planning Navigation
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">
+        <Icon name="home" size="sm" />
+        Home
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/meal-plans">
+        <Icon name="calendar" size="sm" />
+        Meal Plans
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/meal-plans/2024">
+        <Icon name="clock" size="sm" />
+        2024
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>
+        <Icon name="calendar-days" size="sm" />
+        Week of March 15th
+      </BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## API Reference
+
+### Breadcrumb Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `items` | `BreadcrumbItem[]` | `[]` | Array of breadcrumb items (auto-generates breadcrumb) |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
+| `separator` | `React.ReactNode` | - | Custom separator component |
+| `maxItems` | `number` | `3` | Maximum items before collapsing |
+| `showHome` | `boolean` | `true` | Whether to show home icon |
+| `homeUrl` | `string` | `'/'` | Custom home URL |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbLink Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'solid' \| 'ghost' \| 'minimal'` | `'default'` | Link style variant |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
+| `asChild` | `boolean` | `false` | Render as child component with Radix Slot |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbSeparator Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'` | Separator style |
+| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
+| `children` | `React.ReactNode` | - | Custom separator content |
+| `className` | `string` | - | Additional CSS classes |
+
+### RecipeBreadcrumb Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `workflow` | `'planning' \| 'shopping' \| 'cooking' \| 'serving'` | `'cooking'` | Workflow stage theme |
+| `emphasis` | `'subtle' \| 'normal' \| 'strong'` | `'normal'` | Visual emphasis level |
+| `items` | `RecipeWorkflowItem[]` | - | Array of workflow items |
+| `currentStep` | `string` | - | Currently active step ID |
+| `onStepClick` | `(step: string) => void` | - | Click handler for workflow navigation |
+| `className` | `string` | - | Additional CSS classes |
+
+### BreadcrumbItem Interface
+
+```tsx
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  icon?: string;
+  disabled?: boolean;
+  id?: string;
+  metadata?: Record<string, unknown>;
+}
+```
+
+### RecipeWorkflowItem Interface
+
+```tsx
+interface RecipeWorkflowItem {
+  id: string;
+  label: string;
+  description?: string;
+  icon?: string;
+  completed?: boolean;
+  active?: boolean;
+  accessible?: boolean;
+  href?: string;
+}
+```
+
+## Usage Guidelines
+
+### Best Practices
+
+- Use breadcrumbs for hierarchical navigation with 3+ levels
+- Always include the current page as the last item
+- Keep breadcrumb labels concise and descriptive
+- Use icons sparingly to avoid visual clutter
+- Implement proper keyboard navigation support
+- Consider mobile experience with overflow handling
+
+### Recipe App Patterns
+
+- Use RecipeBreadcrumb for cooking workflow steps
+- Include cuisine/category navigation for recipe browsing
+- Show collection hierarchy for user-organized recipes
+- Use workflow breadcrumbs for meal planning processes
+- Include icons for better visual hierarchy in recipe context
+
+### Accessibility
+
+- All breadcrumbs include proper ARIA labels and navigation structure
+- Keyboard navigation is fully supported with Tab and Enter keys
+- Screen readers announce navigation changes and current location
+- Visual focus indicators are provided for all interactive elements
+- Color contrast meets WCAG 2.1 AA standards
+
+### Mobile Considerations
+
+- Automatic overflow handling prevents horizontal scrolling
+- Touch targets meet minimum size requirements (44px)
+- Ellipsis expansion is touch-friendly
+- Text remains readable at all viewport sizes

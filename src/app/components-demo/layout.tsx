@@ -32,6 +32,7 @@ const components = [
   { name: 'DatePicker', path: '/components-demo/datepicker' },
   { name: 'Pagination', path: '/components-demo/pagination' },
   { name: 'Icon', path: '/components-demo/icon' },
+  { name: 'Breadcrumb', path: '/components-demo/breadcrumb' },
 ];
 
 export default function ComponentsDemoLayout({
