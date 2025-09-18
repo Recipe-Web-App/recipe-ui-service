@@ -186,6 +186,13 @@ const components = [
     variants: 4,
     status: 'ready',
   },
+  {
+    name: 'Icon',
+    path: '/components-demo/icon',
+    description: 'Standard icon system with comprehensive icon collection',
+    variants: 15,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents = [
@@ -209,7 +216,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">24</div>
+            <div className="text-primary text-3xl font-bold">25</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -217,7 +224,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">166</div>
+            <div className="text-primary text-3xl font-bold">181</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

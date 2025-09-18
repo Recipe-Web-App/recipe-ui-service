@@ -31,6 +31,7 @@ const components = [
   { name: 'Slider', path: '/components-demo/slider' },
   { name: 'DatePicker', path: '/components-demo/datepicker' },
   { name: 'Pagination', path: '/components-demo/pagination' },
+  { name: 'Icon', path: '/components-demo/icon' },
 ];
 
 export default function ComponentsDemoLayout({
