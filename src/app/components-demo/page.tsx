@@ -180,6 +180,13 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'List',
+    path: '/components-demo/list',
+    description: 'Flexible lists with icons, checkmarks, and recipe variants',
+    variants: 12,
+    status: 'ready',
+  },
+  {
     name: 'Stepper',
     path: '/components-demo/stepper',
     description: 'Multi-step workflows, recipe wizards, and cooking mode',
@@ -237,7 +244,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">28</div>
+            <div className="text-primary text-3xl font-bold">29</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -245,7 +252,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">201</div>
+            <div className="text-primary text-3xl font-bold">213</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

@@ -35,6 +35,7 @@ const components = [
   { name: 'Breadcrumb', path: '/components-demo/breadcrumb' },
   { name: 'Stepper', path: '/components-demo/stepper' },
   { name: 'Drawer', path: '/components-demo/drawer' },
+  { name: 'List', path: '/components-demo/list' },
 ];
 
 export default function ComponentsDemoLayout({
