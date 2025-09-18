@@ -180,6 +180,13 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'Stepper',
+    path: '/components-demo/stepper',
+    description: 'Multi-step workflows, recipe wizards, and cooking mode',
+    variants: 12,
+    status: 'ready',
+  },
+  {
     name: 'Pagination',
     path: '/components-demo/pagination',
     description: 'Page navigation controls with multiple configurations',
@@ -223,7 +230,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">26</div>
+            <div className="text-primary text-3xl font-bold">27</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>

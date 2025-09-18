@@ -1,0 +1,566 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Stepper,
+  StepperItem,
+  StepIndicator,
+  StepConnector,
+  StepHeader,
+  StepContent,
+  StepControls,
+  StepProgress,
+  RecipeStepper,
+  CookingStepper,
+  CookingTimer,
+} from './stepper';
+
+<Meta
+  title="UI/Stepper"
+  component={Stepper}
+  parameters={{
+    docs: {
+      description: {
+        component: 'A comprehensive stepper component system for creating multi-step workflows, recipe creation wizards, and cooking mode interfaces with built-in state management and accessibility.',
+      },
+    },
+  }}
+/>
+
+# Stepper Component
+
+The Stepper component provides a flexible and accessible way to guide users through multi-step processes. It includes specialized variants for recipe workflows, cooking instructions, and timer functionality.
+
+## Features
+
+- **Multi-step Navigation**: Linear and non-linear step progression
+- **State Management**: Built-in state persistence with localStorage support
+- **Validation Support**: Step-by-step validation with error handling
+- **Recipe Workflows**: Specialized components for recipe creation and cooking
+- **Timer Integration**: Built-in cooking timers with play/pause/reset controls
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Customizable**: Multiple orientations, sizes, and visual variants
+
+## Import
+
+```tsx
+import {
+  Stepper,
+  StepperItem,
+  StepIndicator,
+  StepConnector,
+  StepHeader,
+  StepContent,
+  StepControls,
+  StepProgress,
+  RecipeStepper,
+  CookingStepper,
+  CookingTimer,
+} from '@/components/ui/stepper';
+```
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const sampleSteps = [
+        {
+          id: 'step1',
+          title: 'Personal Information',
+          description: 'Enter your basic details',
+          content: <div className="p-4 bg-muted/50 rounded-lg">Personal information form would go here</div>,
+        },
+        {
+          id: 'step2',
+          title: 'Preferences',
+          description: 'Choose your preferences',
+          content: <div className="p-4 bg-muted/50 rounded-lg">Preferences form would go here</div>,
+          isOptional: true,
+        },
+        {
+          id: 'step3',
+          title: 'Review',
+          description: 'Review and confirm',
+          content: <div className="p-4 bg-muted/50 rounded-lg">Review summary would go here</div>,
+        },
+      ];
+
+      return (
+        <Stepper
+          steps={sampleSteps}
+          currentStep="step1"
+          showProgress={true}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Orientations
+
+The stepper supports both horizontal and vertical orientations:
+
+<Canvas>
+  <Story name="Orientations">
+    {() => {
+      const steps = [
+        { id: 'step1', title: 'Step 1', description: 'First step' },
+        { id: 'step2', title: 'Step 2', description: 'Second step' },
+        { id: 'step3', title: 'Step 3', description: 'Third step' },
+      ];
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Horizontal (Default)</h3>
+            <Stepper steps={steps} currentStep="step2" orientation="horizontal" />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Vertical</h3>
+            <Stepper steps={steps} currentStep="step2" orientation="vertical" />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+Different visual styles for various contexts:
+
+<Canvas>
+  <Story name="Variants">
+    {() => {
+      const steps = [
+        { id: 'step1', title: 'Setup', description: 'Initial setup', isCompleted: true },
+        { id: 'step2', title: 'Configuration', description: 'Configure settings' },
+        { id: 'step3', title: 'Review', description: 'Final review' },
+      ];
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Default</h3>
+            <Stepper steps={steps} currentStep="step2" variant="default" />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Compact</h3>
+            <Stepper steps={steps} currentStep="step2" variant="compact" />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Elevated</h3>
+            <Stepper steps={steps} currentStep="step2" variant="elevated" />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Bordered</h3>
+            <Stepper steps={steps} currentStep="step2" variant="bordered" />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Step States
+
+Steps can have different states to indicate progress:
+
+<Canvas>
+  <Story name="Step States">
+    {() => {
+      const stateSteps = [
+        { id: 'step1', title: 'Completed', description: 'This step is done', isCompleted: true },
+        { id: 'step2', title: 'Active', description: 'Currently active step' },
+        { id: 'step3', title: 'Pending', description: 'Not yet started' },
+        { id: 'step4', title: 'Error', description: 'Has validation errors', isError: true },
+        { id: 'step5', title: 'Optional', description: 'Can be skipped', isOptional: true },
+      ];
+
+      return (
+        <Stepper
+          steps={stateSteps}
+          currentStep="step2"
+          orientation="vertical"
+          size="lg"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Stepper
+
+Specialized stepper for recipe creation workflows:
+
+<Canvas>
+  <Story name="Recipe Stepper">
+    {() => {
+      const recipeSteps = [
+        {
+          id: 'basic',
+          title: 'Basic Information',
+          description: 'Recipe name, description, and basic details',
+          category: 'basic',
+          estimatedTime: '2 min',
+        },
+        {
+          id: 'ingredients',
+          title: 'Ingredients',
+          description: 'Add recipe ingredients with measurements',
+          category: 'ingredients',
+          estimatedTime: '5 min',
+        },
+        {
+          id: 'instructions',
+          title: 'Instructions',
+          description: 'Step-by-step cooking instructions',
+          category: 'instructions',
+          estimatedTime: '10 min',
+        },
+        {
+          id: 'details',
+          title: 'Additional Details',
+          description: 'Photos, tags, and nutrition information',
+          category: 'details',
+          estimatedTime: '3 min',
+          isOptional: true,
+        },
+        {
+          id: 'review',
+          title: 'Review & Publish',
+          description: 'Review your recipe before publishing',
+          category: 'review',
+          estimatedTime: '2 min',
+        },
+      ];
+
+      return (
+        <RecipeStepper
+          steps={recipeSteps}
+          currentStep="ingredients"
+          workflow="creation"
+          emphasis="normal"
+          onStepComplete={(stepId) => console.log('Step completed:', stepId)}
+          onSave={(data) => console.log('Recipe saved:', data)}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Cooking Stepper
+
+Interactive stepper for cooking mode with timers:
+
+<Canvas>
+  <Story name="Cooking Stepper">
+    {() => {
+      const cookingInstructions = [
+        {
+          id: '1',
+          stepNumber: 1,
+          instruction: 'Heat olive oil in a large pan over medium heat',
+          duration: 120, // 2 minutes
+          equipment: ['Large pan', 'Stove'],
+          tips: 'Make sure the oil is hot but not smoking',
+        },
+        {
+          id: '2',
+          stepNumber: 2,
+          instruction: 'Add diced onions and cook until translucent',
+          duration: 300, // 5 minutes
+          equipment: ['Wooden spoon'],
+          tips: 'Stir occasionally to prevent burning',
+        },
+        {
+          id: '3',
+          stepNumber: 3,
+          instruction: 'Add garlic and cook for another minute',
+          duration: 60, // 1 minute
+          tips: 'Garlic burns quickly, so watch carefully',
+        },
+      ];
+
+      return (
+        <CookingStepper
+          instructions={cookingInstructions}
+          currentStep={1}
+          showTimers={true}
+          showIngredients={false}
+          onTimerComplete={(stepNumber) => console.log('Timer completed for step:', stepNumber)}
+          onStepComplete={(stepNumber) => console.log('Step completed:', stepNumber)}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Cooking Timer
+
+Standalone cooking timer component:
+
+<Canvas>
+  <Story name="Cooking Timer">
+    {() => {
+      return (
+        <div className="space-y-4">
+          <div>
+            <h4 className="mb-2 font-medium">Idle Timer</h4>
+            <CookingTimer
+              duration={300}
+              label="Prep Time"
+              onStart={() => console.log('Timer started')}
+              onComplete={() => console.log('Timer completed')}
+            />
+          </div>
+
+          <div>
+            <h4 className="mb-2 font-medium">Running Timer</h4>
+            <CookingTimer
+              duration={180}
+              label="Cooking Time"
+              isRunning={true}
+              state="running"
+            />
+          </div>
+
+          <div>
+            <h4 className="mb-2 font-medium">Completed Timer</h4>
+            <CookingTimer
+              duration={120}
+              label="Rest Time"
+              state="completed"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Non-Linear Navigation
+
+Allow users to jump between steps:
+
+<Canvas>
+  <Story name="Non-Linear Navigation">
+    {() => {
+      const steps = [
+        {
+          id: 'step1',
+          title: 'Account Setup',
+          description: 'Create your account',
+          isCompleted: true,
+          content: <div className="p-4 bg-green-50 rounded-lg">Account created successfully!</div>,
+        },
+        {
+          id: 'step2',
+          title: 'Profile Details',
+          description: 'Complete your profile',
+          isCompleted: true,
+          content: <div className="p-4 bg-green-50 rounded-lg">Profile completed!</div>,
+        },
+        {
+          id: 'step3',
+          title: 'Preferences',
+          description: 'Set your preferences',
+          content: <div className="p-4 bg-blue-50 rounded-lg">Currently configuring preferences...</div>,
+        },
+        {
+          id: 'step4',
+          title: 'Verification',
+          description: 'Verify your email',
+          content: <div className="p-4 bg-muted/50 rounded-lg">Email verification pending...</div>,
+        },
+      ];
+
+      return (
+        <Stepper
+          steps={steps}
+          currentStep="step3"
+          allowNonLinear={true}
+          showProgress={true}
+          onStepChange={(current, previous) => console.log('Step changed from', previous, 'to', current)}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Validation
+
+Stepper with step validation:
+
+<Canvas>
+  <Story name="With Validation">
+    {() => {
+      const validationSteps = [
+        {
+          id: 'step1',
+          title: 'Required Information',
+          description: 'All fields must be completed',
+          isCompleted: true,
+          validationRules: [
+            {
+              validate: () => true,
+              errorMessage: 'All required fields must be filled',
+              required: true,
+            },
+          ],
+        },
+        {
+          id: 'step2',
+          title: 'Email Verification',
+          description: 'Check your email for verification',
+          isError: true,
+          validationRules: [
+            {
+              validate: () => false,
+              errorMessage: 'Email not verified yet',
+              required: true,
+            },
+          ],
+        },
+        {
+          id: 'step3',
+          title: 'Final Review',
+          description: 'Review your information',
+        },
+      ];
+
+      return (
+        <Stepper
+          steps={validationSteps}
+          currentStep="step2"
+          onValidateStep={(stepId) => {
+            console.log('Validating step:', stepId);
+            return Promise.resolve(stepId !== 'step2');
+          }}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Progressive Enhancement
+
+Shows step progress and completion:
+
+<Canvas>
+  <Story name="Progressive Enhancement">
+    {() => {
+      const progressSteps = [
+        { id: 'step1', title: 'Start', description: 'Getting started', isCompleted: true, estimatedTime: '1 min' },
+        { id: 'step2', title: 'Configure', description: 'Setup configuration', isCompleted: true, estimatedTime: '3 min' },
+        { id: 'step3', title: 'Customize', description: 'Customize settings', estimatedTime: '5 min' },
+        { id: 'step4', title: 'Deploy', description: 'Deploy changes', estimatedTime: '2 min' },
+        { id: 'step5', title: 'Verify', description: 'Verify deployment', estimatedTime: '1 min' },
+      ];
+
+      return (
+        <Stepper
+          steps={progressSteps}
+          currentStep="step3"
+          showProgress={true}
+          size="lg"
+          persistState={true}
+          storageKey="progressive-stepper"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## API Reference
+
+### Stepper Props
+
+<ArgsTable of={Stepper} />
+
+### Step Object Interface
+
+```typescript
+interface StepperStep {
+  id: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  content?: React.ReactNode;
+  isOptional?: boolean;
+  isCompleted?: boolean;
+  isError?: boolean;
+  isAccessible?: boolean;
+  validationRules?: ValidationRule[];
+  estimatedTime?: string;
+  metadata?: Record<string, unknown>;
+}
+```
+
+### Validation Rule Interface
+
+```typescript
+interface ValidationRule {
+  validate: () => boolean | Promise<boolean>;
+  errorMessage: string;
+  required?: boolean;
+}
+```
+
+## Accessibility
+
+The Stepper component follows WAI-ARIA guidelines:
+
+- **Keyboard Navigation**: Arrow keys, Tab, Enter, and Space for navigation
+- **Screen Reader Support**: Proper ARIA labels and live regions
+- **Focus Management**: Clear focus indicators and logical tab order
+- **State Announcements**: Dynamic content changes are announced
+- **Progressive Enhancement**: Works without JavaScript
+
+## Best Practices
+
+1. **Keep Steps Logical**: Organize steps in a logical flow that users can understand
+2. **Provide Clear Labels**: Use descriptive titles and descriptions for each step
+3. **Show Progress**: Use progress indicators to help users understand their position
+4. **Handle Errors Gracefully**: Provide clear error messages and recovery options
+5. **Save Progress**: Use state persistence for longer workflows
+6. **Mobile Friendly**: Test on mobile devices and consider vertical orientation
+7. **Accessibility First**: Ensure keyboard navigation and screen reader compatibility
+
+## Integration with Forms
+
+The Stepper component works well with form libraries like React Hook Form:
+
+```tsx
+import { useForm, FormProvider } from 'react-hook-form';
+import { Stepper } from '@/components/ui/stepper';
+
+function RecipeCreationForm() {
+  const methods = useForm();
+
+  const steps = [
+    {
+      id: 'basic',
+      title: 'Basic Info',
+      content: <BasicInfoForm />,
+      validationRules: [{
+        validate: () => methods.formState.isValid,
+        errorMessage: 'Please complete all required fields',
+      }],
+    },
+    // ... more steps
+  ];
+
+  return (
+    <FormProvider {...methods}>
+      <Stepper
+        steps={steps}
+        onValidateStep={(stepId) => methods.trigger()}
+      />
+    </FormProvider>
+  );
+}
+```

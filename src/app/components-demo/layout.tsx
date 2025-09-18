@@ -33,6 +33,7 @@ const components = [
   { name: 'Pagination', path: '/components-demo/pagination' },
   { name: 'Icon', path: '/components-demo/icon' },
   { name: 'Breadcrumb', path: '/components-demo/breadcrumb' },
+  { name: 'Stepper', path: '/components-demo/stepper' },
 ];
 
 export default function ComponentsDemoLayout({
@@ -131,7 +132,7 @@ export default function ComponentsDemoLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-x-hidden">{children}</main>
+        <main className="min-h-0 flex-1 overflow-auto">{children}</main>
       </div>
     </div>
   );
