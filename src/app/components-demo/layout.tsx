@@ -37,6 +37,7 @@ const components = [
   { name: 'Drawer', path: '/components-demo/drawer' },
   { name: 'List', path: '/components-demo/list' },
   { name: 'Divider', path: '/components-demo/divider' },
+  { name: 'Chip', path: '/components-demo/chip' },
 ];
 
 export default function ComponentsDemoLayout({

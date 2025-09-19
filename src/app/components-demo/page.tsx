@@ -228,6 +228,13 @@ const components = [
     variants: 12,
     status: 'ready',
   },
+  {
+    name: 'Chip',
+    path: '/components-demo/chip',
+    description: 'Interactive tags for ingredients, filters, and dynamic lists',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -251,7 +258,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">30</div>
+            <div className="text-primary text-3xl font-bold">31</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -259,7 +266,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">221</div>
+            <div className="text-primary text-3xl font-bold">231</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
