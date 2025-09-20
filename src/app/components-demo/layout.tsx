@@ -41,6 +41,7 @@ const components = [
   { name: 'File Upload', path: '/components-demo/file-upload' },
   { name: 'Disclosure', path: '/components-demo/disclosure' },
   { name: 'Collapse', path: '/components-demo/collapse' },
+  { name: 'Rating', path: '/components-demo/rating' },
 ];
 
 export default function ComponentsDemoLayout({

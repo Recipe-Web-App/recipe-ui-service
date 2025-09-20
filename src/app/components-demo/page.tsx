@@ -257,6 +257,14 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'Rating',
+    path: '/components-demo/rating',
+    description:
+      'Visual indicator for feedback or quality (e.g., stars, hearts, recipe ratings)',
+    variants: 12,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -280,7 +288,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">34</div>
+            <div className="text-primary text-3xl font-bold">35</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -288,7 +296,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">257</div>
+            <div className="text-primary text-3xl font-bold">269</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
