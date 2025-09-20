@@ -242,6 +242,13 @@ const components = [
     variants: 8,
     status: 'ready',
   },
+  {
+    name: 'Disclosure',
+    path: '/components-demo/disclosure',
+    description: 'Simple toggle for showing/hiding content sections',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -265,7 +272,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">32</div>
+            <div className="text-primary text-3xl font-bold">33</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -273,7 +280,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">239</div>
+            <div className="text-primary text-3xl font-bold">247</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

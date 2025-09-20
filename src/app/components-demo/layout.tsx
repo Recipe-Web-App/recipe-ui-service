@@ -39,6 +39,7 @@ const components = [
   { name: 'Divider', path: '/components-demo/divider' },
   { name: 'Chip', path: '/components-demo/chip' },
   { name: 'File Upload', path: '/components-demo/file-upload' },
+  { name: 'Disclosure', path: '/components-demo/disclosure' },
 ];
 
 export default function ComponentsDemoLayout({
