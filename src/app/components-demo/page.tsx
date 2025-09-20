@@ -235,6 +235,13 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'File Upload',
+    path: '/components-demo/file-upload',
+    description: 'Drag-and-drop upload zone with validation and preview',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -258,7 +265,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">31</div>
+            <div className="text-primary text-3xl font-bold">32</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -266,7 +273,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">231</div>
+            <div className="text-primary text-3xl font-bold">239</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

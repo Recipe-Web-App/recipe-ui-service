@@ -38,6 +38,7 @@ const components = [
   { name: 'List', path: '/components-demo/list' },
   { name: 'Divider', path: '/components-demo/divider' },
   { name: 'Chip', path: '/components-demo/chip' },
+  { name: 'File Upload', path: '/components-demo/file-upload' },
 ];
 
 export default function ComponentsDemoLayout({
