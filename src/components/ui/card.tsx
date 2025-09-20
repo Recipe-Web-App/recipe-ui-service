@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import {
   cardVariants,
@@ -10,52 +9,14 @@ import {
   cardTitleVariants,
   cardDescriptionVariants,
 } from '@/lib/ui/card-variants';
-
-/**
- * Card component props interface
- */
-interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
-  asChild?: boolean;
-  interactive?: boolean;
-}
-
-/**
- * Card Header component props interface
- */
-interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  asChild?: boolean;
-}
-
-/**
- * Card Content component props interface
- */
-interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  asChild?: boolean;
-}
-
-/**
- * Card Footer component props interface
- */
-interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  asChild?: boolean;
-}
-
-/**
- * Card Title component props interface
- */
-interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  asChild?: boolean;
-}
-
-/**
- * Card Description component props interface
- */
-interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
-  asChild?: boolean;
-}
+import {
+  type CardProps,
+  type CardHeaderProps,
+  type CardContentProps,
+  type CardFooterProps,
+  type CardTitleProps,
+  type CardDescriptionProps,
+} from '@/types/ui/card';
 
 /**
  * Card Component

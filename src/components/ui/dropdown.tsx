@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import {
   dropdownTriggerVariants,
@@ -10,6 +9,11 @@ import {
   dropdownSeparatorVariants,
   dropdownShortcutVariants,
 } from '@/lib/ui/dropdown-variants';
+import {
+  type DropdownMenuTriggerProps,
+  type DropdownMenuContentProps,
+  type DropdownMenuItemProps,
+} from '@/types/ui/dropdown';
 
 /**
  * Dropdown Menu root component
@@ -91,15 +95,6 @@ DropdownMenuSubContent.displayName =
   DropdownMenuPrimitive.SubContent.displayName;
 
 /**
- * Dropdown Menu trigger component props interface
- */
-export interface DropdownMenuTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>,
-    VariantProps<typeof dropdownTriggerVariants> {
-  asChild?: boolean;
-}
-
-/**
  * Dropdown Menu trigger component
  */
 const DropdownMenuTrigger = React.forwardRef<
@@ -113,13 +108,6 @@ const DropdownMenuTrigger = React.forwardRef<
   />
 ));
 DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName;
-
-/**
- * Dropdown Menu content component props interface
- */
-export interface DropdownMenuContentProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>,
-    VariantProps<typeof dropdownContentVariants> {}
 
 /**
  * Dropdown Menu content component
@@ -138,13 +126,6 @@ const DropdownMenuContent = React.forwardRef<
   </DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
-
-/**
- * Dropdown Menu item component props interface
- */
-export interface DropdownMenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>,
-    VariantProps<typeof dropdownItemVariants> {}
 
 /**
  * Dropdown Menu item component
@@ -294,4 +275,10 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
+};
+
+export type {
+  DropdownMenuTriggerProps,
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
 };

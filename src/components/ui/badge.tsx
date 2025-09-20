@@ -1,17 +1,8 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { badgeVariants } from '@/lib/ui/badge-variants';
-
-/**
- * Badge component props interface
- */
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {
-  asChild?: boolean;
-}
+import { type BadgeProps } from '@/types/ui/badge';
 
 /**
  * Badge Component
@@ -72,3 +63,4 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
 Badge.displayName = 'Badge';
 
 export { Badge };
+export type { BadgeProps };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import {
   textareaVariants,
@@ -9,23 +8,11 @@ import {
   characterCounterVariants,
   textareaContainerVariants,
 } from '@/lib/ui/textarea-variants';
-
-/**
- * Base textarea component props interface
- */
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaVariants> {
-  label?: string;
-  helperText?: string;
-  errorMessage?: string;
-  successMessage?: string;
-  warningMessage?: string;
-  required?: boolean;
-  maxLength?: number;
-  showCharacterCount?: boolean;
-  autoResize?: boolean;
-}
+import {
+  type TextareaProps,
+  type RecipeTextareaProps,
+  type AutoTextareaProps,
+} from '@/types/ui/textarea';
 
 /**
  * Base textarea component
@@ -182,25 +169,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   }
 );
 Textarea.displayName = 'Textarea';
-
-/**
- * Recipe textarea component props interface
- */
-export interface RecipeTextareaProps
-  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>,
-    VariantProps<typeof recipeTextareaVariants> {
-  label?: string;
-  helperText?: string;
-  errorMessage?: string;
-  successMessage?: string;
-  required?: boolean;
-  maxLength?: number;
-  showCharacterCount?: boolean;
-  autoResize?: boolean;
-  minWords?: number;
-  maxWords?: number;
-  showWordCount?: boolean;
-}
 
 /**
  * Recipe-specific textarea component with enhanced features
@@ -417,10 +385,6 @@ RecipeTextarea.displayName = 'RecipeTextarea';
 /**
  * Auto-expanding textarea component
  */
-export interface AutoTextareaProps extends TextareaProps {
-  minRows?: number;
-  maxRows?: number;
-}
 
 const AutoTextarea = React.forwardRef<HTMLTextAreaElement, AutoTextareaProps>(
   (
@@ -493,3 +457,4 @@ const AutoTextarea = React.forwardRef<HTMLTextAreaElement, AutoTextareaProps>(
 AutoTextarea.displayName = 'AutoTextarea';
 
 export { Textarea, RecipeTextarea, AutoTextarea };
+export type { TextareaProps, RecipeTextareaProps, AutoTextareaProps };
