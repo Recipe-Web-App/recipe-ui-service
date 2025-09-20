@@ -1,0 +1,655 @@
+# File Upload Component
+
+A comprehensive drag-and-drop file upload component with validation, preview, and progress tracking. Perfect for recipe images, documents, and media management.
+
+## Features
+
+- **Drag & Drop**: Full drag-and-drop support with visual feedback
+- **Multiple Variants**: Default, outlined, filled, and dashed styles
+- **Size Options**: Small, medium, and large upload zones
+- **File Validation**: Type, size, and count validation with custom rules
+- **Image Preview**: Automatic image preview with thumbnail generation
+- **Progress Tracking**: Built-in upload progress indicators
+- **Recipe-Specific**: Specialized components for recipe images and documents
+- **Error Handling**: Comprehensive error states with helpful messages
+- **Accessibility**: Full keyboard support and screen reader compatibility
+- **Customizable**: Flexible styling and behavior options
+
+## Import
+
+```tsx
+import {
+  FileUpload,
+  RecipeImageUpload,
+  RecipeDocumentUpload,
+  FileUploadProgress
+} from '@/components/ui/file-upload';
+```
+
+## Basic Usage
+
+```tsx
+// Simple file upload
+<FileUpload />
+
+// With custom label and description
+<FileUpload
+  label="Click or drag files to upload"
+  description="PNG, JPG, PDF up to 10MB"
+/>
+
+// Multiple files with preview
+<FileUpload
+  multiple
+  maxFiles={5}
+  accept="image/*"
+  showPreview
+/>
+```
+
+## Variants
+
+### Default
+Standard upload zone with neutral styling.
+
+```tsx
+<FileUpload variant="default" />
+```
+
+### Outlined
+Upload zone with border styling.
+
+```tsx
+<FileUpload variant="outlined" />
+```
+
+### Filled
+Upload zone with filled background.
+
+```tsx
+<FileUpload variant="filled" />
+```
+
+### Dashed (Recommended)
+Upload zone with dashed border for clear visual indication.
+
+```tsx
+<FileUpload variant="dashed" />
+```
+
+## Sizes
+
+Control the size of the upload zone.
+
+### Small
+Compact upload zone for tight spaces.
+
+```tsx
+<FileUpload size="sm" label="Small upload zone" />
+```
+
+### Medium (Default)
+Standard size for most use cases.
+
+```tsx
+<FileUpload size="md" label="Medium upload zone" />
+```
+
+### Large
+Prominent upload zone for important file uploads.
+
+```tsx
+<FileUpload size="lg" label="Large upload zone" />
+```
+
+## Interactive File Upload
+
+Complete file upload with state management and handlers.
+
+```tsx
+const [files, setFiles] = useState([]);
+const [uploading, setUploading] = useState(false);
+
+const handleDrop = (droppedFiles) => {
+  console.log('Files dropped:', droppedFiles);
+};
+
+const handleUpload = async (file) => {
+  setUploading(true);
+
+  // Simulate upload progress
+  for (let i = 0; i <= 100; i += 10) {
+    file.progress = i;
+    setFiles(prev => [...prev]);
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  setUploading(false);
+};
+
+return (
+  <FileUpload
+    files={files}
+    onDrop={handleDrop}
+    onChange={setFiles}
+    onDelete={(file) => {
+      setFiles(files.filter(f => f.id !== file.id));
+    }}
+    onUpload={handleUpload}
+    loading={uploading}
+    multiple
+    maxFiles={5}
+    maxSize={10 * 1024 * 1024} // 10MB
+    accept="image/*,.pdf"
+    showPreview
+    showFileList
+  />
+);
+```
+
+## File Types and Validation
+
+### Image Upload
+Optimized for image files with preview functionality.
+
+```tsx
+const [files, setFiles] = useState([]);
+
+return (
+  <FileUpload
+    accept="image/*"
+    multiple
+    maxFiles={3}
+    files={files}
+    onChange={setFiles}
+    onDelete={(file) => {
+      setFiles(files.filter(f => f.id !== file.id));
+    }}
+    label="Upload Images"
+    description="Drop your images here (max 3)"
+    showPreview
+  />
+);
+```
+
+### Document Upload
+Configured for document files without preview.
+
+```tsx
+const [files, setFiles] = useState([]);
+
+return (
+  <FileUpload
+    accept=".pdf,.doc,.docx,.txt"
+    multiple
+    files={files}
+    onChange={setFiles}
+    onDelete={(file) => {
+      setFiles(files.filter(f => f.id !== file.id));
+    }}
+    label="Upload Documents"
+    description="PDF, DOC, DOCX, or TXT files"
+    showPreview={false}
+  />
+);
+```
+
+### Custom Validation
+Add custom validation rules for uploaded files.
+
+```tsx
+const [files, setFiles] = useState([]);
+
+const validateFile = (file) => {
+  // Custom validation logic
+  if (file.size > 5 * 1024 * 1024) {
+    return 'File size must be less than 5MB';
+  }
+  if (!file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return 'Only image files are allowed';
+  }
+  return true;
+};
+
+return (
+  <FileUpload
+    files={files}
+    onChange={setFiles}
+    validate={validateFile}
+    label="Upload Images"
+    description="Images only, max 5MB each"
+  />
+);
+```
+
+## Recipe-Specific Components
+
+### Recipe Image Upload
+Specialized component for recipe images with optimized settings.
+
+```tsx
+const [files, setFiles] = useState([]);
+
+return (
+  <RecipeImageUpload
+    files={files}
+    onChange={setFiles}
+    onDelete={(file) => {
+      setFiles(files.filter(f => f.id !== file.id));
+    }}
+    maxImages={5}
+  />
+);
+```
+
+### Recipe Document Upload
+Specialized component for recipe documents and attachments.
+
+```tsx
+const [files, setFiles] = useState([]);
+
+return (
+  <RecipeDocumentUpload
+    files={files}
+    onChange={setFiles}
+    onDelete={(file) => {
+      setFiles(files.filter(f => f.id !== file.id));
+    }}
+    documentTypes={['pdf', 'doc', 'docx']}
+  />
+);
+```
+
+## Upload Progress
+
+Track and display upload progress with the progress component.
+
+```tsx
+// Small progress indicator
+<FileUploadProgress value={30} size="sm" />
+
+// Medium progress with percentage
+<FileUploadProgress value={60} size="md" showPercentage />
+
+// Large progress indicator
+<FileUploadProgress value={90} size="lg" />
+```
+
+### Progress in Context
+```tsx
+const [uploadProgress, setUploadProgress] = useState(0);
+const [isUploading, setIsUploading] = useState(false);
+
+const handleUpload = async (file) => {
+  setIsUploading(true);
+  setUploadProgress(0);
+
+  // Simulate progress updates
+  const interval = setInterval(() => {
+    setUploadProgress(prev => {
+      if (prev >= 100) {
+        clearInterval(interval);
+        setIsUploading(false);
+        return 100;
+      }
+      return prev + 10;
+    });
+  }, 200);
+};
+
+return (
+  <div className="space-y-4">
+    <FileUpload onUpload={handleUpload} />
+
+    {isUploading && (
+      <div className="space-y-2">
+        <p className="text-sm">Uploading...</p>
+        <FileUploadProgress value={uploadProgress} showPercentage />
+      </div>
+    )}
+  </div>
+);
+```
+
+## Error States
+
+Display various error states with helpful messages.
+
+### File Size Error
+```tsx
+<FileUpload
+  error="File size exceeds maximum limit"
+  label="Upload failed"
+  description="Please try again with a smaller file"
+/>
+```
+
+### File Type Error
+```tsx
+<FileUpload
+  error={{
+    message: 'Invalid file type',
+    code: 'INVALID_TYPE'
+  }}
+  label="Wrong file type"
+  description="Only images are accepted"
+/>
+```
+
+### Custom Error Handling
+```tsx
+const [error, setError] = useState(null);
+
+const handleError = (errorInfo) => {
+  switch (errorInfo.code) {
+    case 'FILE_TOO_LARGE':
+      setError('File is too large. Maximum size is 10MB.');
+      break;
+    case 'TOO_MANY_FILES':
+      setError('Too many files. Maximum is 5 files.');
+      break;
+    case 'INVALID_TYPE':
+      setError('Invalid file type. Only images and PDFs are allowed.');
+      break;
+    default:
+      setError('An error occurred while uploading the file.');
+  }
+};
+
+return (
+  <FileUpload
+    error={error}
+    onError={handleError}
+    onClearError={() => setError(null)}
+  />
+);
+```
+
+## States
+
+### Disabled State
+Prevent interaction when upload is not available.
+
+```tsx
+<FileUpload
+  disabled
+  label="Upload disabled"
+  description="File upload is currently not available"
+/>
+```
+
+### Loading State
+Show loading indicator during upload operations.
+
+```tsx
+<FileUpload
+  loading
+  label="Uploading..."
+  description="Please wait while your files are being processed"
+/>
+```
+
+## Advanced Usage
+
+### Multi-Step Upload Process
+```tsx
+const [step, setStep] = useState('select'); // select, uploading, complete
+const [files, setFiles] = useState([]);
+const [uploadedFiles, setUploadedFiles] = useState([]);
+
+const handleUpload = async () => {
+  setStep('uploading');
+
+  try {
+    const results = await Promise.all(
+      files.map(file => uploadFile(file))
+    );
+    setUploadedFiles(results);
+    setStep('complete');
+  } catch (error) {
+    setStep('select');
+    // Handle error
+  }
+};
+
+return (
+  <div className="space-y-4">
+    {step === 'select' && (
+      <FileUpload
+        files={files}
+        onChange={setFiles}
+        multiple
+        maxFiles={10}
+      />
+    )}
+
+    {step === 'uploading' && (
+      <div className="text-center space-y-4">
+        <FileUploadProgress value={uploadProgress} showPercentage />
+        <p>Uploading {files.length} files...</p>
+      </div>
+    )}
+
+    {step === 'complete' && (
+      <div className="text-center space-y-4">
+        <p className="text-green-600">✓ Upload complete!</p>
+        <p>{uploadedFiles.length} files uploaded successfully</p>
+      </div>
+    )}
+  </div>
+);
+```
+
+### Integration with Forms
+```tsx
+const [recipeImages, setRecipeImages] = useState([]);
+const [recipeDocuments, setRecipeDocuments] = useState([]);
+
+return (
+  <form className="space-y-8">
+    <div>
+      <label className="block text-sm font-medium mb-2">Recipe Name</label>
+      <input type="text" className="w-full p-2 border rounded" />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium mb-2">Recipe Images</label>
+      <RecipeImageUpload
+        files={recipeImages}
+        onChange={setRecipeImages}
+        maxImages={5}
+      />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium mb-2">Recipe Documents</label>
+      <RecipeDocumentUpload
+        files={recipeDocuments}
+        onChange={setRecipeDocuments}
+        documentTypes={['pdf', 'doc']}
+      />
+    </div>
+
+    <button
+      type="submit"
+      disabled={recipeImages.length === 0}
+      className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+    >
+      Save Recipe
+    </button>
+  </form>
+);
+```
+
+### Bulk Upload with Progress
+```tsx
+const [files, setFiles] = useState([]);
+const [uploadQueue, setUploadQueue] = useState([]);
+const [completedUploads, setCompletedUploads] = useState([]);
+
+const handleBulkUpload = async () => {
+  const queue = files.map(file => ({ file, progress: 0, status: 'pending' }));
+  setUploadQueue(queue);
+
+  for (let i = 0; i < queue.length; i++) {
+    const item = queue[i];
+    item.status = 'uploading';
+    setUploadQueue([...queue]);
+
+    try {
+      await uploadFileWithProgress(item.file, (progress) => {
+        item.progress = progress;
+        setUploadQueue([...queue]);
+      });
+
+      item.status = 'completed';
+      setCompletedUploads(prev => [...prev, item]);
+    } catch (error) {
+      item.status = 'error';
+      item.error = error.message;
+    }
+
+    setUploadQueue([...queue]);
+  }
+};
+
+return (
+  <div className="space-y-6">
+    <FileUpload
+      files={files}
+      onChange={setFiles}
+      multiple
+      maxFiles={20}
+    />
+
+    {uploadQueue.length > 0 && (
+      <div className="space-y-2">
+        <h3 className="font-medium">Upload Progress</h3>
+        {uploadQueue.map((item, index) => (
+          <div key={index} className="space-y-1">
+            <div className="flex justify-between text-sm">
+              <span>{item.file.name}</span>
+              <span className={
+                item.status === 'completed' ? 'text-green-600' :
+                item.status === 'error' ? 'text-red-600' :
+                'text-blue-600'
+              }>
+                {item.status === 'completed' ? '✓' :
+                 item.status === 'error' ? '✗' :
+                 `${item.progress}%`}
+              </span>
+            </div>
+            <FileUploadProgress value={item.progress} size="sm" />
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
+```
+
+## Accessibility
+
+The FileUpload component follows WCAG accessibility guidelines:
+
+### Keyboard Navigation
+- **Enter** and **Space** keys open file dialog
+- **Tab** navigation through interactive elements
+- **Escape** key cancels drag operations
+- Arrow keys navigate through uploaded files
+
+### Screen Reader Support
+- Proper ARIA labels for upload zones and buttons
+- Upload progress announced to screen readers
+- File list with proper semantics and descriptions
+- Error messages associated with form controls
+
+### Drag and Drop Accessibility
+- Keyboard-accessible file selection fallback
+- Clear visual feedback for drag states
+- Accessible instructions for interaction methods
+- Focus management during drag operations
+
+### Focus Management
+- Clear focus indicators for all interactive elements
+- Logical tab order through upload interface
+- Focus restoration after file operations
+- Proper focus trapping in modal dialogs
+
+## Design Guidelines
+
+### When to Use Each Variant
+- **Default**: General file uploads, neutral contexts
+- **Outlined**: Form integrations, structured layouts
+- **Filled**: Prominent uploads, hero sections
+- **Dashed**: Clear upload indication, drag-and-drop emphasis
+
+### Size Guidelines
+- **Small**: Compact forms, secondary uploads, mobile interfaces
+- **Medium**: Standard uploads, balanced layouts, desktop interfaces
+- **Large**: Primary uploads, hero sections, prominent file operations
+
+### File Type Recommendations
+- **Images**: Use preview functionality, limit to 5-10 files, optimize for web formats
+- **Documents**: Disable preview, allow common office formats, larger file sizes
+- **Mixed**: Provide clear type indicators, separate validation rules
+
+## Props Reference
+
+### FileUpload Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'outlined' \| 'filled' \| 'dashed'` | `'dashed'` | Visual style variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the upload zone |
+| `label` | `string` | - | Upload zone label text |
+| `description` | `string` | - | Upload zone description text |
+| `disabled` | `boolean` | `false` | Whether the upload is disabled |
+| `loading` | `boolean` | `false` | Loading state |
+| `multiple` | `boolean` | `false` | Allow multiple file selection |
+| `maxFiles` | `number` | - | Maximum number of files |
+| `maxSize` | `number` | - | Maximum file size in bytes |
+| `accept` | `string` | - | Accepted file types |
+| `files` | `FileWithPreview[]` | - | Current files array |
+| `showPreview` | `boolean` | `true` | Show image preview |
+| `showFileList` | `boolean` | `true` | Show uploaded files list |
+| `error` | `string \| ErrorObject` | - | Error message or object |
+| `validate` | `(file: File) => boolean \| string` | - | Custom validation function |
+| `onDrop` | `(files: File[]) => void` | - | Drop event handler |
+| `onChange` | `(files: FileWithPreview[]) => void` | - | Files change handler |
+| `onDelete` | `(file: FileWithPreview) => void` | - | File delete handler |
+| `onUpload` | `(file: FileWithPreview) => Promise<void>` | - | Upload handler |
+| `onError` | `(error: ErrorObject) => void` | - | Error handler |
+
+### RecipeImageUpload Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `files` | `FileWithPreview[]` | - | Current files array |
+| `onChange` | `(files: FileWithPreview[]) => void` | - | Files change handler |
+| `onDelete` | `(file: FileWithPreview) => void` | - | File delete handler |
+| `maxImages` | `number` | `5` | Maximum number of images |
+| `maxSize` | `number` | `10MB` | Maximum file size |
+| All base FileUpload props | - | - | Inherited from FileUpload |
+
+### RecipeDocumentUpload Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `files` | `FileWithPreview[]` | - | Current files array |
+| `onChange` | `(files: FileWithPreview[]) => void` | - | Files change handler |
+| `onDelete` | `(file: FileWithPreview) => void` | - | File delete handler |
+| `documentTypes` | `string[]` | `['pdf', 'doc', 'docx']` | Allowed document types |
+| `maxSize` | `number` | `25MB` | Maximum file size |
+| All base FileUpload props | - | - | Inherited from FileUpload |
+
+### FileUploadProgress Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | - | Progress value (0-100) |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Progress bar size |
+| `showPercentage` | `boolean` | `false` | Show percentage text |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all standard HTML div and input attributes.
