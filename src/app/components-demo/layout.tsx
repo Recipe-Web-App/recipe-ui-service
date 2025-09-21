@@ -42,6 +42,7 @@ const components = [
   { name: 'Disclosure', path: '/components-demo/disclosure' },
   { name: 'Collapse', path: '/components-demo/collapse' },
   { name: 'Rating', path: '/components-demo/rating' },
+  { name: 'Spinner', path: '/components-demo/spinner' },
 ];
 
 export default function ComponentsDemoLayout({

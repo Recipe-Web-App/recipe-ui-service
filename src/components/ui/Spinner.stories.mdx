@@ -1,0 +1,226 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { Spinner } from './spinner';
+
+<Meta title="Components/Spinner" component={Spinner} />
+
+# Spinner
+
+A versatile loading indicator component with multiple variants, sizes, and animation speeds. Perfect for showing loading states throughout the recipe application.
+
+## Features
+
+- **Multiple Variants**: Choose from spinner, dots, pulse, or bars animations
+- **Flexible Sizing**: From extra small to extra large
+- **Color Options**: Supports theme colors and custom color schemes
+- **Animation Speed**: Adjustable speed for different contexts
+- **Overlay Mode**: Full-screen loading overlay for page transitions
+- **Loading Text**: Optional text to provide context
+- **Accessibility**: Proper ARIA attributes and screen reader support
+- **Polymorphic**: Can be rendered as different elements with `asChild`
+
+## Import
+
+```tsx
+import { Spinner } from '@/components/ui/spinner';
+```
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    <Spinner />
+  </Story>
+</Canvas>
+
+## Variants
+
+The spinner comes with four distinct animation variants:
+
+<Canvas>
+  <Story name="Variants">
+    <div className="flex items-center gap-8">
+      <div className="text-center">
+        <Spinner variant="spinner" />
+        <p className="mt-2 text-sm text-muted-foreground">Spinner</p>
+      </div>
+      <div className="text-center">
+        <Spinner variant="dots" />
+        <p className="mt-2 text-sm text-muted-foreground">Dots</p>
+      </div>
+      <div className="text-center">
+        <Spinner variant="pulse" />
+        <p className="mt-2 text-sm text-muted-foreground">Pulse</p>
+      </div>
+      <div className="text-center">
+        <Spinner variant="bars" />
+        <p className="mt-2 text-sm text-muted-foreground">Bars</p>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Sizes
+
+Available in five sizes to fit different contexts:
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="flex items-center gap-4">
+      <Spinner size="xs" />
+      <Spinner size="sm" />
+      <Spinner size="default" />
+      <Spinner size="lg" />
+      <Spinner size="xl" />
+    </div>
+  </Story>
+</Canvas>
+
+## Colors
+
+Supports all theme colors:
+
+<Canvas>
+  <Story name="Colors">
+    <div className="flex items-center gap-4">
+      <Spinner color="default" />
+      <Spinner color="primary" />
+      <Spinner color="secondary" />
+      <Spinner color="muted" />
+      <Spinner color="destructive" />
+      <Spinner color="success" />
+      <Spinner color="warning" />
+      <Spinner color="info" />
+    </div>
+  </Story>
+</Canvas>
+
+## Animation Speed
+
+Control the animation speed:
+
+<Canvas>
+  <Story name="Speed">
+    <div className="flex items-center gap-4">
+      <div className="text-center">
+        <Spinner speed="slow" />
+        <p className="mt-2 text-sm text-muted-foreground">Slow</p>
+      </div>
+      <div className="text-center">
+        <Spinner speed="default" />
+        <p className="mt-2 text-sm text-muted-foreground">Default</p>
+      </div>
+      <div className="text-center">
+        <Spinner speed="fast" />
+        <p className="mt-2 text-sm text-muted-foreground">Fast</p>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## With Loading Text
+
+Add descriptive text to provide context:
+
+<Canvas>
+  <Story name="With Text">
+    <div className="space-y-4">
+      <Spinner text="Loading recipes..." />
+      <Spinner text="Uploading image..." textPosition="right" />
+      <Spinner variant="dots" text="Processing..." />
+    </div>
+  </Story>
+</Canvas>
+
+## Centered Loading
+
+Center the spinner in a container:
+
+<Canvas>
+  <Story name="Centered">
+    <div className="h-32 border rounded-lg">
+      <Spinner centered />
+    </div>
+  </Story>
+</Canvas>
+
+## Overlay Mode
+
+Use as a fullscreen loading overlay:
+
+<Canvas>
+  <Story name="Overlay">
+    <div className="relative h-32 border rounded-lg p-4">
+      <p>Content beneath the overlay</p>
+      <div className="absolute inset-0">
+        <Spinner overlay text="Saving recipe..." />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## In Components
+
+Common usage patterns in UI components:
+
+### Button Loading State
+
+<Canvas>
+  <Story name="Button Loading">
+    <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md" disabled>
+      <Spinner size="sm" color="default" />
+      <span>Saving Recipe</span>
+    </button>
+  </Story>
+</Canvas>
+
+### Card Loading
+
+<Canvas>
+  <Story name="Card Loading">
+    <div className="w-64 p-6 border rounded-lg">
+      <Spinner centered text="Loading recipe details..." />
+    </div>
+  </Story>
+</Canvas>
+
+### Inline Loading
+
+<Canvas>
+  <Story name="Inline Loading">
+    <div className="flex items-center gap-2">
+      <span>Fetching ingredients</span>
+      <Spinner size="xs" variant="dots" />
+    </div>
+  </Story>
+</Canvas>
+
+## Accessibility
+
+The Spinner component includes:
+- `role="status"` for screen reader announcement
+- `aria-label` for descriptive loading state
+- `aria-live="polite"` for non-intrusive updates
+- Hidden text for screen readers with `sr-only` class
+
+## Design Guidelines
+
+### When to Use
+- **Page Loading**: Use overlay mode for full-page loading states
+- **Data Fetching**: Show inline spinners when loading specific content
+- **Form Submission**: Add to buttons during submission
+- **Background Tasks**: Use subtle spinners for background operations
+
+### Variant Selection
+- **Spinner**: Default choice for most loading states
+- **Dots**: Good for inline text loading or subtle indicators
+- **Pulse**: Effective for placeholder content
+- **Bars**: Best for processing or upload progress
+
+### Size Guidelines
+- **xs/sm**: Inline with text or in small buttons
+- **default**: Standard loading states
+- **lg/xl**: Page-level loading or empty states
+
+## Props
+
+<ArgsTable of={Spinner} />
