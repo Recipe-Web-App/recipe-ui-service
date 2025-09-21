@@ -43,6 +43,7 @@ const components = [
   { name: 'Collapse', path: '/components-demo/collapse' },
   { name: 'Rating', path: '/components-demo/rating' },
   { name: 'Spinner', path: '/components-demo/spinner' },
+  { name: 'EmptyState', path: '/components-demo/empty-state' },
 ];
 
 export default function ComponentsDemoLayout({
