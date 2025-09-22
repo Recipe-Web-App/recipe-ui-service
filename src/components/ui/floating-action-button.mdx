@@ -1,0 +1,325 @@
+# Floating Action Button
+
+A Material Design-inspired floating action button (FAB) that provides quick access to primary actions. Perfect for "Add Recipe", "Quick Actions", or other primary user interactions.
+
+## Features
+
+- **Multiple Variants**: Primary, secondary, destructive, success, outline, and surface styles
+- **Flexible Sizes**: Small (40px), medium (56px), and large (64px) options
+- **Extended Mode**: Support for labels alongside icons
+- **Screen Positioning**: Place in any corner of the viewport
+- **Speed Dial**: Expand to reveal multiple related actions
+- **Portal Rendering**: Ensures proper z-index layering
+- **Full Accessibility**: ARIA labels, keyboard navigation, and screen reader support
+- **Loading States**: Built-in loading spinner support
+
+## Basic Usage
+
+```tsx
+import { FloatingActionButton } from '@/components/ui/floating-action-button';
+import { Plus } from 'lucide-react';
+
+function MyComponent() {
+  return (
+    <FloatingActionButton
+      icon={<Plus />}
+      onClick={() => console.log('Add recipe')}
+      ariaLabel="Add new recipe"
+    />
+  );
+}
+```
+
+## Extended FAB
+
+Add a label for better context:
+
+```tsx
+<FloatingActionButton
+  icon={<Plus />}
+  label="Add Recipe"
+  extended
+  onClick={() => console.log('Add recipe')}
+/>
+```
+
+## Positioning
+
+Place the FAB in different corners:
+
+```tsx
+// Bottom right (default)
+<FloatingActionButton icon={<Plus />} position="bottom-right" />
+
+// Top left
+<FloatingActionButton icon={<Menu />} position="top-left" />
+
+// Custom offset from edges
+<FloatingActionButton icon={<Plus />} offset={24} />
+```
+
+## Speed Dial
+
+Reveal multiple actions from a single FAB:
+
+```tsx
+import { SpeedDial } from '@/components/ui/floating-action-button';
+import { Plus, Upload, Link, Camera } from 'lucide-react';
+
+const actions = [
+  {
+    id: 'upload',
+    icon: <Upload />,
+    label: 'Upload Recipe',
+    onClick: () => console.log('Upload'),
+  },
+  {
+    id: 'url',
+    icon: <Link />,
+    label: 'Import from URL',
+    onClick: () => console.log('Import'),
+  },
+  {
+    id: 'camera',
+    icon: <Camera />,
+    label: 'Take Photo',
+    onClick: () => console.log('Camera'),
+  },
+];
+
+function MyComponent() {
+  return (
+    <SpeedDial
+      actions={actions}
+      icon={<Plus />}
+      ariaLabel="Recipe actions"
+    />
+  );
+}
+```
+
+## FAB Group
+
+Use multiple FABs together:
+
+```tsx
+import { FABGroup, FloatingActionButton } from '@/components/ui/floating-action-button';
+import { Plus, Search } from 'lucide-react';
+
+function MyComponent() {
+  return (
+    <FABGroup position="bottom-right" direction="vertical" spacing={16}>
+      <FloatingActionButton
+        icon={<Search />}
+        size="sm"
+        variant="secondary"
+        onClick={() => console.log('Search')}
+      />
+      <FloatingActionButton
+        icon={<Plus />}
+        size="md"
+        variant="primary"
+        onClick={() => console.log('Add')}
+      />
+    </FABGroup>
+  );
+}
+```
+
+## Variants
+
+### Color Variants
+
+```tsx
+// Primary (default)
+<FloatingActionButton icon={<Plus />} variant="primary" />
+
+// Secondary
+<FloatingActionButton icon={<Edit />} variant="secondary" />
+
+// Destructive
+<FloatingActionButton icon={<Trash />} variant="destructive" />
+
+// Success
+<FloatingActionButton icon={<Check />} variant="success" />
+
+// Outline
+<FloatingActionButton icon={<Settings />} variant="outline" />
+
+// Surface
+<FloatingActionButton icon={<Share />} variant="surface" />
+```
+
+### Size Options
+
+```tsx
+// Small (40px)
+<FloatingActionButton icon={<Plus />} size="sm" />
+
+// Medium (56px) - default
+<FloatingActionButton icon={<Plus />} size="md" />
+
+// Large (64px)
+<FloatingActionButton icon={<Plus />} size="lg" />
+```
+
+## Loading State
+
+Show a loading spinner while performing async operations:
+
+```tsx
+const [loading, setLoading] = useState(false);
+
+<FloatingActionButton
+  icon={<Plus />}
+  loading={loading}
+  onClick={async () => {
+    setLoading(true);
+    await saveRecipe();
+    setLoading(false);
+  }}
+/>
+```
+
+## Accessibility
+
+The FAB components are built with accessibility in mind:
+
+- Proper ARIA labels for screen readers
+- Keyboard navigation support (Enter/Space to activate)
+- Focus management for Speed Dial
+- Escape key to close Speed Dial
+- Semantic HTML with proper roles
+
+```tsx
+<FloatingActionButton
+  icon={<Plus />}
+  ariaLabel="Add new recipe"
+  tooltipLabel="Click to add a new recipe"
+/>
+```
+
+## Recipe App Examples
+
+### Add Recipe FAB
+
+```tsx
+<FloatingActionButton
+  icon={<Plus />}
+  label="New Recipe"
+  extended
+  variant="primary"
+  position="bottom-right"
+  onClick={() => router.push('/recipes/new')}
+/>
+```
+
+### Quick Actions Speed Dial
+
+```tsx
+const recipeActions = [
+  {
+    id: 'manual',
+    icon: <Edit />,
+    label: 'Create Manually',
+    onClick: () => router.push('/recipes/new'),
+  },
+  {
+    id: 'import',
+    icon: <Download />,
+    label: 'Import from Web',
+    onClick: () => setImportModalOpen(true),
+  },
+  {
+    id: 'scan',
+    icon: <Camera />,
+    label: 'Scan Recipe',
+    onClick: () => startCamera(),
+  },
+  {
+    id: 'ai',
+    icon: <Sparkles />,
+    label: 'Generate with AI',
+    onClick: () => setAiModalOpen(true),
+  },
+];
+
+<SpeedDial
+  actions={recipeActions}
+  variant="primary"
+  showLabels
+  direction="up"
+/>
+```
+
+### Multi-FAB Layout
+
+```tsx
+<FABGroup>
+  <FloatingActionButton
+    icon={<Filter />}
+    size="sm"
+    variant="surface"
+    onClick={() => setFiltersOpen(!filtersOpen)}
+    ariaLabel="Toggle filters"
+  />
+  <FloatingActionButton
+    icon={<Plus />}
+    label="Add Recipe"
+    extended
+    variant="primary"
+    onClick={() => router.push('/recipes/new')}
+  />
+</FABGroup>
+```
+
+## Best Practices
+
+1. **One Primary FAB**: Use only one primary FAB per screen
+2. **Most Important Action**: FAB should represent the most important action on the screen
+3. **Clear Icons**: Use universally understood icons
+4. **Consistent Positioning**: Keep FAB position consistent across your app
+5. **Avoid Overlapping**: Ensure FAB doesn't cover important content
+6. **Mobile Consideration**: Test FAB placement on mobile devices
+7. **Loading Feedback**: Always show loading state during async operations
+
+## API Reference
+
+### FloatingActionButton Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| icon | ReactNode | - | Icon to display in the FAB |
+| label | string | - | Label text for extended FAB |
+| variant | 'primary' \| 'secondary' \| 'destructive' \| 'success' \| 'outline' \| 'surface' | 'primary' | Visual style variant |
+| size | 'sm' \| 'md' \| 'lg' | 'md' | Size of the FAB |
+| position | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' | 'bottom-right' | Screen position |
+| extended | boolean | false | Show as extended FAB with label |
+| loading | boolean | false | Show loading spinner |
+| disabled | boolean | false | Disable the FAB |
+| usePortal | boolean | true | Render in a portal |
+| offset | number | 16 | Distance from screen edge in pixels |
+| zIndex | number | 50 | Z-index for stacking |
+| tooltipLabel | string | - | Tooltip text on hover |
+| ariaLabel | string | - | Accessibility label |
+
+### SpeedDial Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| actions | SpeedDialAction[] | - | Array of action items |
+| open | boolean | - | Controlled open state |
+| onOpenChange | (open: boolean) => void | - | Open state change handler |
+| direction | 'up' \| 'down' \| 'left' \| 'right' | 'up' | Direction to expand actions |
+| showLabels | boolean | true | Show labels for actions |
+| showBackdrop | boolean | true | Show backdrop when open |
+| ...FloatingActionButtonProps | - | - | All FAB props are also supported |
+
+### FABGroup Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| position | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' | 'bottom-right' | Screen position |
+| direction | 'vertical' \| 'horizontal' | 'vertical' | Stacking direction |
+| spacing | number | 16 | Space between FABs |
+| offset | number | 16 | Distance from screen edge |
