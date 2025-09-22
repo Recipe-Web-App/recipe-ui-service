@@ -45,6 +45,7 @@ const components = [
   { name: 'Spinner', path: '/components-demo/spinner' },
   { name: 'EmptyState', path: '/components-demo/empty-state' },
   { name: 'ErrorBoundary', path: '/components-demo/error-boundary' },
+  { name: 'SearchInput', path: '/components-demo/search-input' },
 ];
 
 export default function ComponentsDemoLayout({

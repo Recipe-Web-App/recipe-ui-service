@@ -1,0 +1,485 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { SearchInput } from './search-input';
+import { useState } from 'react';
+import {
+  Search,
+  Filter,
+  MapPin,
+  User,
+  Calendar,
+  Clock,
+  Hash,
+  ChefHat,
+  Utensils,
+  Heart,
+  Star,
+  Bookmark,
+} from 'lucide-react';
+
+<Meta title="Components/SearchInput" component={SearchInput} />
+
+# SearchInput
+
+A specialized input component optimized for search functionality with built-in debouncing, clear functionality, and loading states.
+
+## Features
+
+- **Smart Debouncing**: Configurable debouncing to reduce API calls
+- **Visual Feedback**: Search icon, clear button, and loading states
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Flexible Styling**: Multiple variants, sizes, and states
+- **Event Handling**: Comprehensive callback system for search interactions
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [value, setValue] = useState('');
+      const [results, setResults] = useState([]);
+
+      const handleSearch = (searchValue) => {
+        console.log('Searching for:', searchValue);
+        // Simulate API call
+        setResults([`Result for "${searchValue}"`]);
+      };
+
+      return (
+        <SearchInput
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onSearch={handleSearch}
+          placeholder="Search recipes..."
+          label="Recipe Search"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+### Default Variant
+<Canvas>
+  <Story name="Variant Default">
+    {() => {
+      const [value, setValue] = useState('');
+      return (
+        <SearchInput
+          variant="default"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Search with default variant"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Filled Variant
+<Canvas>
+  <Story name="Variant Filled">
+    {() => {
+      const [value, setValue] = useState('');
+      return (
+        <SearchInput
+          variant="filled"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Search with filled variant"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Outlined Variant
+<Canvas>
+  <Story name="Variant Outlined">
+    {() => {
+      const [value, setValue] = useState('');
+      return (
+        <SearchInput
+          variant="outlined"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Search with outlined variant"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    {() => {
+      const [small, setSmall] = useState('');
+      const [medium, setMedium] = useState('');
+      const [large, setLarge] = useState('');
+
+      return (
+        <div className="space-y-4">
+          <SearchInput
+            size="sm"
+            value={small}
+            onChange={(e) => setSmall(e.target.value)}
+            placeholder="Small search input"
+            label="Small"
+          />
+          <SearchInput
+            size="default"
+            value={medium}
+            onChange={(e) => setMedium(e.target.value)}
+            placeholder="Default search input"
+            label="Default"
+          />
+          <SearchInput
+            size="lg"
+            value={large}
+            onChange={(e) => setLarge(e.target.value)}
+            placeholder="Large search input"
+            label="Large"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## States
+
+<Canvas>
+  <Story name="States">
+    {() => {
+      const [defaultState, setDefaultState] = useState('');
+      const [errorState, setErrorState] = useState('invalid input');
+      const [successState, setSuccessState] = useState('valid input');
+      const [warningState, setWarningState] = useState('check this');
+
+      return (
+        <div className="space-y-4">
+          <SearchInput
+            state="default"
+            value={defaultState}
+            onChange={(e) => setDefaultState(e.target.value)}
+            placeholder="Default state"
+            label="Default State"
+          />
+          <SearchInput
+            state="error"
+            value={errorState}
+            onChange={(e) => setErrorState(e.target.value)}
+            placeholder="Error state"
+            label="Error State"
+            errorText="Please enter a valid search term"
+          />
+          <SearchInput
+            state="success"
+            value={successState}
+            onChange={(e) => setSuccessState(e.target.value)}
+            placeholder="Success state"
+            label="Success State"
+            helperText="Search term is valid"
+          />
+          <SearchInput
+            state="warning"
+            value={warningState}
+            onChange={(e) => setWarningState(e.target.value)}
+            placeholder="Warning state"
+            label="Warning State"
+            helperText="This might not return many results"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Loading State
+
+<Canvas>
+  <Story name="Loading">
+    {() => {
+      const [value, setValue] = useState('chicken recipe');
+      const [loading, setLoading] = useState(false);
+
+      const handleSearch = (searchValue) => {
+        setLoading(true);
+        // Simulate API delay
+        setTimeout(() => setLoading(false), 2000);
+      };
+
+      return (
+        <SearchInput
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onSearch={handleSearch}
+          loading={loading}
+          placeholder="Search recipes..."
+          label="Search with Loading"
+          helperText={loading ? "Searching..." : "Enter a recipe name"}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Icons
+
+<Canvas>
+  <Story name="Custom Icons">
+    {() => {
+      const [value1, setValue1] = useState('');
+      const [value2, setValue2] = useState('');
+      const [value3, setValue3] = useState('');
+
+      return (
+        <div className="space-y-4">
+          <SearchInput
+            value={value1}
+            onChange={(e) => setValue1(e.target.value)}
+            placeholder="Search recipes..."
+            label="Custom Search Icon"
+            searchIcon={<ChefHat />}
+          />
+          <SearchInput
+            value={value2}
+            onChange={(e) => setValue2(e.target.value)}
+            placeholder="Filter results..."
+            label="Filter Icon"
+            searchIcon={<Filter />}
+          />
+          <SearchInput
+            value={value3}
+            onChange={(e) => setValue3(e.target.value)}
+            placeholder="Find location..."
+            label="Location Search"
+            searchIcon={<MapPin />}
+            clearIcon={<Hash />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Debouncing Configuration
+
+<Canvas>
+  <Story name="Debouncing">
+    {() => {
+      const [value1, setValue1] = useState('');
+      const [value2, setValue2] = useState('');
+      const [searchLog, setSearchLog] = useState([]);
+
+      const addToLog = (type, value) => {
+        const timestamp = new Date().toLocaleTimeString();
+        setSearchLog(prev => [...prev.slice(-4), `${timestamp} - ${type}: "${value}"`]);
+      };
+
+      return (
+        <div className="space-y-4">
+          <SearchInput
+            value={value1}
+            onChange={(e) => setValue1(e.target.value)}
+            onSearch={(value) => addToLog('Fast Debounce (100ms)', value)}
+            debounceConfig={{ delay: 100 }}
+            placeholder="Fast debounce (100ms)"
+            label="Fast Debounce"
+          />
+          <SearchInput
+            value={value2}
+            onChange={(e) => setValue2(e.target.value)}
+            onSearch={(value) => addToLog('Slow Debounce (1000ms)', value)}
+            debounceConfig={{ delay: 1000 }}
+            placeholder="Slow debounce (1000ms)"
+            label="Slow Debounce"
+          />
+          <div className="mt-4 p-3 bg-muted rounded-md">
+            <h4 className="font-medium mb-2">Search Log:</h4>
+            {searchLog.length === 0 ? (
+              <p className="text-muted-foreground text-sm">Start typing to see debounce effect...</p>
+            ) : (
+              <ul className="text-sm space-y-1">
+                {searchLog.map((entry, index) => (
+                  <li key={index} className="font-mono">{entry}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Event Handling
+
+<Canvas>
+  <Story name="Event Handling">
+    {() => {
+      const [value, setValue] = useState('');
+      const [events, setEvents] = useState([]);
+
+      const addEvent = (eventType, data) => {
+        const timestamp = new Date().toLocaleTimeString();
+        setEvents(prev => [...prev.slice(-4), `${timestamp} - ${eventType}: ${data}`]);
+      };
+
+      return (
+        <div className="space-y-4">
+          <SearchInput
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              addEvent('onChange', e.target.value);
+            }}
+            onSearch={(value) => addEvent('onSearch (debounced)', value)}
+            onFocus={() => addEvent('onFocus', 'focused')}
+            onBlur={() => addEvent('onBlur', 'blurred')}
+            onClear={() => {
+              setValue('');
+              addEvent('onClear', 'cleared');
+            }}
+            onSubmit={(value) => addEvent('onSubmit (Enter)', value)}
+            placeholder="Try typing, focusing, clearing, or pressing Enter..."
+            label="Event Handling Demo"
+            helperText="Check the event log below"
+          />
+          <div className="p-3 bg-muted rounded-md">
+            <h4 className="font-medium mb-2">Event Log:</h4>
+            {events.length === 0 ? (
+              <p className="text-muted-foreground text-sm">Interact with the search input above...</p>
+            ) : (
+              <ul className="text-sm space-y-1">
+                {events.map((event, index) => (
+                  <li key={index} className="font-mono">{event}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe-Specific Examples
+
+<Canvas>
+  <Story name="Recipe Examples">
+    {() => {
+      const [recipeSearch, setRecipeSearch] = useState('');
+      const [ingredientSearch, setIngredientSearch] = useState('');
+      const [cuisineSearch, setCuisineSearch] = useState('');
+
+      return (
+        <div className="space-y-6">
+          <SearchInput
+            value={recipeSearch}
+            onChange={(e) => setRecipeSearch(e.target.value)}
+            onSearch={(value) => console.log('Recipe search:', value)}
+            placeholder="Search for recipes..."
+            label="Recipe Search"
+            searchIcon={<ChefHat />}
+            helperText="Find recipes by name, description, or cooking method"
+            size="lg"
+          />
+
+          <SearchInput
+            value={ingredientSearch}
+            onChange={(e) => setIngredientSearch(e.target.value)}
+            onSearch={(value) => console.log('Ingredient search:', value)}
+            placeholder="Enter ingredients you have..."
+            label="Ingredient-Based Search"
+            searchIcon={<Utensils />}
+            helperText="Enter ingredients separated by commas"
+            variant="filled"
+          />
+
+          <SearchInput
+            value={cuisineSearch}
+            onChange={(e) => setCuisineSearch(e.target.value)}
+            onSearch={(value) => console.log('Cuisine search:', value)}
+            placeholder="Italian, Mexican, Asian..."
+            label="Cuisine Type"
+            searchIcon={<Star />}
+            helperText="Discover recipes from different cuisines"
+            variant="outlined"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Disabled State
+
+<Canvas>
+  <Story name="Disabled">
+    <SearchInput
+      disabled
+      value="Cannot edit this"
+      placeholder="Disabled search input"
+      label="Disabled State"
+      helperText="This search input is disabled"
+    />
+  </Story>
+</Canvas>
+
+## Without Icons
+
+<Canvas>
+  <Story name="Without Icons">
+    {() => {
+      const [value, setValue] = useState('');
+      return (
+        <SearchInput
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          showSearchIcon={false}
+          showClearButton={false}
+          placeholder="Minimal search input"
+          label="No Icons"
+          helperText="Search input without any icons"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Features
+
+This component includes comprehensive accessibility features:
+
+- **ARIA Labels**: Proper labeling for screen readers
+- **Keyboard Navigation**: Full keyboard support including Enter to submit and Escape to clear
+- **Focus Management**: Clear visual focus indicators
+- **Role Assignment**: Proper `searchbox` role
+- **Live Regions**: Error messages announced to screen readers
+- **Semantic HTML**: Proper form structure and relationships
+
+## Usage Guidelines
+
+### When to Use
+- **Primary Search**: Main search functionality in your application
+- **Filter Interfaces**: When users need to filter through lists or data
+- **Quick Actions**: Fast access to search across different content types
+- **Auto-complete**: When you need debounced input for typeahead functionality
+
+### Best Practices
+1. **Debounce Configuration**: Use appropriate debounce delays (300ms default)
+2. **Loading States**: Show loading indicators for async searches
+3. **Error Handling**: Provide clear error messages for failed searches
+4. **Placeholder Text**: Use descriptive placeholder text
+5. **Help Text**: Provide context about what can be searched
+
+### Recipe App Specific Usage
+- **Recipe Discovery**: Main recipe search with ingredient filtering
+- **Quick Filters**: Dietary restrictions, cuisine types, cooking time
+- **Ingredient Search**: Find recipes by available ingredients
+- **User-Generated Content**: Search through saved recipes, meal plans
+
+<ArgsTable of={SearchInput} />
