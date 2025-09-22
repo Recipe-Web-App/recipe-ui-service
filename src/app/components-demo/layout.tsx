@@ -46,6 +46,7 @@ const components = [
   { name: 'EmptyState', path: '/components-demo/empty-state' },
   { name: 'ErrorBoundary', path: '/components-demo/error-boundary' },
   { name: 'SearchInput', path: '/components-demo/search-input' },
+  { name: 'ImageGallery', path: '/components-demo/image-gallery' },
 ];
 
 export default function ComponentsDemoLayout({

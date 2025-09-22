@@ -1,0 +1,409 @@
+import { Meta, Canvas, Story, ArgsTable } from '@storybook/addon-docs';
+import { ImageGallery } from './image-gallery';
+
+<Meta
+  title="UI Components/ImageGallery"
+  component={ImageGallery}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+A responsive image gallery component with grid layouts and optional lightbox functionality.
+Perfect for displaying recipe photos, cooking steps, or any collection of images.
+
+## Features
+
+- **Multiple grid layouts**: 2, 3, 4 column grids or masonry layout
+- **Responsive design**: Automatically adapts to screen size
+- **Lightbox viewing**: Full-screen image viewing with navigation
+- **Lazy loading**: Images load as they come into view
+- **Keyboard navigation**: Arrow keys for lightbox navigation
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Error handling**: Graceful fallbacks for failed image loads
+- **Customizable styling**: Multiple variants and sizes
+
+## Usage
+
+\`\`\`tsx
+import { ImageGallery } from '@/components/ui/image-gallery';
+
+const images = [
+  {
+    id: '1',
+    src: '/images/recipe1.jpg',
+    alt: 'Delicious pasta dish',
+    caption: 'Fresh pasta with tomato sauce',
+  },
+  // ... more images
+];
+
+<ImageGallery
+  images={images}
+  variant="grid-3"
+  aspectRatio="square"
+  showLightbox
+  showCaptions
+/>
+\`\`\`
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['grid-2', 'grid-3', 'grid-4', 'masonry'],
+      description: 'Grid layout variant',
+    },
+    aspectRatio: {
+      control: { type: 'select' },
+      options: ['square', 'landscape', 'portrait', 'auto'],
+      description: 'Aspect ratio for images',
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg', 'xl'],
+      description: 'Size of images and spacing',
+    },
+    spacing: {
+      control: { type: 'select' },
+      options: ['tight', 'normal', 'loose'],
+      description: 'Spacing between images',
+    },
+    showLightbox: {
+      control: { type: 'boolean' },
+      description: 'Enable lightbox functionality',
+    },
+    showCaptions: {
+      control: { type: 'boolean' },
+      description: 'Show image captions',
+    },
+    lazyLoad: {
+      control: { type: 'boolean' },
+      description: 'Enable lazy loading',
+    },
+  }}
+/>
+
+export const sampleImages = [
+  {
+    id: '1',
+    src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=800&h=600&fit=crop',
+    alt: 'Delicious pizza with fresh toppings',
+    caption: 'Wood-fired pizza with fresh basil and mozzarella',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: '2',
+    src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop',
+    alt: 'Creamy pasta dish',
+    caption: 'Homemade pasta with creamy sauce',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: '3',
+    src: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&h=600&fit=crop',
+    alt: 'Fresh salad bowl',
+    caption: 'Mixed greens with seasonal vegetables',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: '4',
+    src: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800&h=600&fit=crop',
+    alt: 'Breakfast plate',
+    caption: 'Healthy breakfast with eggs and toast',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: '5',
+    src: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop',
+    alt: 'Soup bowl',
+    caption: 'Hearty vegetable soup',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: '6',
+    src: 'https://images.unsplash.com/photo-1563379091339-03246963d7d3?w=800&h=600&fit=crop',
+    alt: 'Dessert plate',
+    caption: 'Chocolate cake with berries',
+    width: 800,
+    height: 600,
+  },
+];
+
+export const Template = (args) => <ImageGallery {...args} />;
+
+## Default Gallery
+
+The default gallery uses a 3-column grid with automatic aspect ratio and normal spacing.
+
+<Canvas>
+  <Story
+    name="Default"
+    args={{
+      images: sampleImages,
+      variant: 'grid-3',
+      aspectRatio: 'auto',
+      size: 'md',
+      spacing: 'normal',
+      showLightbox: true,
+      showCaptions: true,
+      lazyLoad: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Grid Variants
+
+Different grid layouts for various use cases.
+
+<Canvas>
+  <Story
+    name="Two Column Grid"
+    args={{
+      images: sampleImages.slice(0, 4),
+      variant: 'grid-2',
+      aspectRatio: 'landscape',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story
+    name="Four Column Grid"
+    args={{
+      images: sampleImages,
+      variant: 'grid-4',
+      aspectRatio: 'square',
+      size: 'sm',
+      showLightbox: true,
+      showCaptions: false,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story
+    name="Masonry Layout"
+    args={{
+      images: sampleImages,
+      variant: 'masonry',
+      aspectRatio: 'auto',
+      spacing: 'normal',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Aspect Ratios
+
+Control the aspect ratio of images in the gallery.
+
+<Canvas>
+  <Story
+    name="Square Images"
+    args={{
+      images: sampleImages.slice(0, 4),
+      variant: 'grid-2',
+      aspectRatio: 'square',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story
+    name="Portrait Images"
+    args={{
+      images: sampleImages.slice(0, 3),
+      variant: 'grid-3',
+      aspectRatio: 'portrait',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Sizes and Spacing
+
+Different size variants and spacing options.
+
+<Canvas>
+  <Story
+    name="Large with Loose Spacing"
+    args={{
+      images: sampleImages.slice(0, 4),
+      variant: 'grid-2',
+      aspectRatio: 'landscape',
+      size: 'lg',
+      spacing: 'loose',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story
+    name="Small with Tight Spacing"
+    args={{
+      images: sampleImages,
+      variant: 'grid-4',
+      aspectRatio: 'square',
+      size: 'sm',
+      spacing: 'tight',
+      showLightbox: true,
+      showCaptions: false,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Without Lightbox
+
+Gallery without lightbox functionality for custom click handling.
+
+<Canvas>
+  <Story
+    name="No Lightbox"
+    args={{
+      images: sampleImages.slice(0, 6),
+      variant: 'grid-3',
+      aspectRatio: 'square',
+      showLightbox: false,
+      showCaptions: true,
+      onImageClick: (image, index) => {
+        alert(\`Clicked image \${index + 1}: \${image.alt}\`);
+      },
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Empty State
+
+How the gallery appears when no images are provided.
+
+<Canvas>
+  <Story
+    name="Empty State"
+    args={{
+      images: [],
+      variant: 'grid-3',
+      showLightbox: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Recipe-Specific Examples
+
+Examples tailored for recipe applications.
+
+<Canvas>
+  <Story
+    name="Recipe Steps"
+    args={{
+      images: [
+        {
+          id: 'step1',
+          src: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop',
+          alt: 'Prep ingredients',
+          caption: 'Step 1: Prepare all ingredients',
+        },
+        {
+          id: 'step2',
+          src: 'https://images.unsplash.com/photo-1556909045-ac8fcde2f5f4?w=400&h=300&fit=crop',
+          alt: 'Mix ingredients',
+          caption: 'Step 2: Mix dry ingredients',
+        },
+        {
+          id: 'step3',
+          src: 'https://images.unsplash.com/photo-1556909045-ac8fcde2f5f4?w=400&h=300&fit=crop',
+          alt: 'Cook mixture',
+          caption: 'Step 3: Cook on medium heat',
+        },
+        {
+          id: 'step4',
+          src: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop',
+          alt: 'Final dish',
+          caption: 'Step 4: Serve hot and enjoy!',
+        },
+      ],
+      variant: 'grid-2',
+      aspectRatio: 'landscape',
+      size: 'md',
+      spacing: 'normal',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story
+    name="Recipe Gallery"
+    args={{
+      images: sampleImages.slice(0, 6),
+      variant: 'masonry',
+      aspectRatio: 'auto',
+      size: 'md',
+      spacing: 'normal',
+      showLightbox: true,
+      showCaptions: true,
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+## Props
+
+<ArgsTable of={ImageGallery} />
+
+## Accessibility
+
+The ImageGallery component includes comprehensive accessibility features:
+
+- **Keyboard Navigation**: Arrow keys navigate through lightbox, Escape closes
+- **ARIA Labels**: Proper labeling for screen readers
+- **Focus Management**: Logical tab order and focus indicators
+- **Image Alt Text**: Required alt text for all images
+- **Role Attributes**: Proper dialog role for lightbox
+
+## Performance
+
+The component is optimized for performance:
+
+- **Lazy Loading**: Images load only when visible
+- **Responsive Images**: Uses appropriate image sizes
+- **Efficient Rendering**: Optimized re-renders with React.memo patterns
+- **Bundle Size**: Minimal dependencies and tree-shakable exports
