@@ -44,6 +44,7 @@ const components = [
   { name: 'Rating', path: '/components-demo/rating' },
   { name: 'Spinner', path: '/components-demo/spinner' },
   { name: 'EmptyState', path: '/components-demo/empty-state' },
+  { name: 'ErrorBoundary', path: '/components-demo/error-boundary' },
 ];
 
 export default function ComponentsDemoLayout({
