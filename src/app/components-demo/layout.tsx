@@ -49,6 +49,7 @@ const components = [
   { name: 'ImageGallery', path: '/components-demo/image-gallery' },
   { name: 'FAB', path: '/components-demo/fab' },
   { name: 'CommandPalette', path: '/components-demo/command-palette' },
+  { name: 'InfiniteScroll', path: '/components-demo/infinite-scroll' },
 ];
 
 export default function ComponentsDemoLayout({

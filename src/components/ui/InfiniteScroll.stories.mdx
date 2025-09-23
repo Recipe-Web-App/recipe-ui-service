@@ -1,0 +1,464 @@
+# InfiniteScroll Component
+
+A powerful, accessible infinite scroll component designed specifically for recipe applications. Built with React, TypeScript, and comprehensive accessibility features.
+
+## Features
+
+- **Multiple Variants**: Default, grid, compact, spacious, and feed layouts
+- **Recipe-Specific**: Specialized components for recipes, search results, favorites, and meal plans
+- **Loading States**: Skeleton loading, spinner, dots, wave, and pulse animations
+- **Error Handling**: Retry mechanisms, user-friendly error states, and graceful error recovery
+- **Performance**: Virtual scrolling support, debounced loading, and intersection observer optimization
+- **Accessibility**: Full keyboard navigation, screen reader support, and WCAG 2.1 AA compliance
+- **Responsive**: Mobile-first design with touch optimization
+
+## Import
+
+```tsx
+import {
+  InfiniteScroll,
+  InfiniteScrollItem,
+  RecipeInfiniteScroll,
+  SearchResultsInfiniteScroll,
+  DefaultInfiniteScrollLoading,
+  DefaultInfiniteScrollError,
+  DefaultInfiniteScrollEmpty,
+  Spinner
+} from '@/components/ui/infinite-scroll';
+```
+
+## Basic Usage
+
+### Simple Infinite Scroll
+
+```tsx
+const [items, setItems] = useState([]);
+const [hasNextPage, setHasNextPage] = useState(true);
+const [loading, setLoading] = useState('idle');
+
+const loadMore = async () => {
+  setLoading('loadingMore');
+  try {
+    const newItems = await fetchMoreItems();
+    setItems(prev => [...prev, ...newItems]);
+    setHasNextPage(newItems.length > 0);
+    setLoading('idle');
+  } catch (error) {
+    setLoading('error');
+  }
+};
+
+<InfiniteScroll
+  items={items}
+  renderItem={({ item }) => (
+    <div className="p-4 border rounded">
+      <h3>{item.title}</h3>
+      <p>{item.description}</p>
+    </div>
+  )}
+  hasNextPage={hasNextPage}
+  loadingState={loading}
+  onLoadMore={loadMore}
+/>
+```
+
+### Recipe Infinite Scroll
+
+```tsx
+const [recipes, setRecipes] = useState([]);
+const [hasNextPage, setHasNextPage] = useState(true);
+
+<RecipeInfiniteScroll
+  items={recipes}
+  recipeContext="recipes"
+  hasNextPage={hasNextPage}
+  onLoadMore={loadMoreRecipes}
+  showAuthor={true}
+  showRating={true}
+  showCookTime={true}
+  cardVariant="default"
+  enableImageLazyLoading={true}
+/>
+```
+
+### Search Results Infinite Scroll
+
+```tsx
+const [searchResults, setSearchResults] = useState([]);
+const [searchQuery, setSearchQuery] = useState('');
+
+<SearchResultsInfiniteScroll
+  items={searchResults}
+  recipeContext="search-results"
+  searchQuery={searchQuery}
+  hasNextPage={hasNextPage}
+  onLoadMore={loadMoreResults}
+  highlightQuery={true}
+  showResultType={true}
+  showRelevanceScore={false}
+/>
+```
+
+## Variants
+
+### Default
+Standard infinite scroll for general content.
+
+```tsx
+<InfiniteScroll
+  variant="default"
+  items={items}
+  renderItem={renderItem}
+/>
+```
+
+### Grid Layout
+Responsive grid layout with configurable columns.
+
+```tsx
+<InfiniteScroll
+  variant="grid"
+  gridCols={3}
+  items={items}
+  renderItem={renderItem}
+/>
+```
+
+### Compact
+Reduced spacing for dense content.
+
+```tsx
+<InfiniteScroll
+  variant="compact"
+  items={items}
+  renderItem={renderItem}
+/>
+```
+
+### Feed Style
+Social media feed style with enhanced spacing.
+
+```tsx
+<InfiniteScroll
+  variant="feed"
+  items={items}
+  renderItem={renderItem}
+/>
+```
+
+## Loading States
+
+### Skeleton Loading
+Shows skeleton placeholders while loading.
+
+```tsx
+<InfiniteScroll
+  items={[]}
+  loadingState="loading"
+  loadingComponent={({ showSkeleton, skeletonCount }) => (
+    <DefaultInfiniteScrollLoading
+      variant="skeleton"
+      showSkeleton={true}
+      skeletonCount={3}
+    />
+  )}
+  renderItem={renderItem}
+/>
+```
+
+### Spinner Variants
+Different spinner animations for loading states.
+
+```tsx
+// Default spinner
+<Spinner variant="default" size="md" />
+
+// Dots animation
+<Spinner variant="dots" size="md" />
+
+// Wave animation
+<Spinner variant="wave" size="md" />
+
+// Pulse animation
+<Spinner variant="pulse" size="md" />
+```
+
+## Error Handling
+
+### Basic Error State
+
+```tsx
+<InfiniteScroll
+  items={items}
+  error="Failed to load recipes"
+  onRetry={handleRetry}
+  renderItem={renderItem}
+/>
+```
+
+### Custom Error Component
+
+```tsx
+const CustomError = ({ error, onRetry }) => (
+  <div className="text-center p-8">
+    <h3>Oops! Something went wrong</h3>
+    <p>{error.message}</p>
+    <button onClick={onRetry} className="mt-4 btn">
+      Try Again
+    </button>
+  </div>
+);
+
+<InfiniteScroll
+  items={items}
+  error={error}
+  errorComponent={CustomError}
+  renderItem={renderItem}
+/>
+```
+
+## Recipe-Specific Features
+
+### Recipe Cards with Metadata
+
+```tsx
+<RecipeInfiniteScroll
+  items={recipes}
+  recipeContext="recipes"
+  showAuthor={true}
+  showRating={true}
+  showCookTime={true}
+  showCategories={false}
+  cardVariant="detailed"
+  hasNextPage={hasNextPage}
+  onLoadMore={loadMore}
+/>
+```
+
+### Search Results with Highlighting
+
+```tsx
+<SearchResultsInfiniteScroll
+  items={searchResults}
+  recipeContext="search-results"
+  searchQuery="chocolate"
+  highlightQuery={true}
+  showResultType={true}
+  showRelevanceScore={true}
+  hasNextPage={hasNextPage}
+  onLoadMore={loadMore}
+/>
+```
+
+## Advanced Configuration
+
+### Custom Intersection Observer
+
+```tsx
+<InfiniteScroll
+  items={items}
+  observerConfig={{
+    rootMargin: '100px',
+    threshold: 0.1
+  }}
+  loadMoreThreshold={200}
+  renderItem={renderItem}
+/>
+```
+
+### Performance Optimization
+
+```tsx
+<InfiniteScroll
+  items={items}
+  enableVirtualization={true}
+  itemHeight={300}
+  overscan={5}
+  getItemKey={(item) => item.id}
+  renderItem={renderItem}
+/>
+```
+
+### Accessibility Features
+
+```tsx
+<InfiniteScroll
+  items={items}
+  announceLoadingText="Loading more recipes"
+  announceErrorText="Error loading recipes"
+  announceCompletedText="All recipes loaded"
+  aria-label="Recipe list"
+  renderItem={renderItem}
+/>
+```
+
+## Empty States
+
+### Default Empty State
+
+```tsx
+<InfiniteScroll
+  items={[]}
+  loadingState="idle"
+  emptyText="No recipes found"
+  renderItem={renderItem}
+/>
+```
+
+### Custom Empty State
+
+```tsx
+const CustomEmpty = () => (
+  <div className="text-center py-16">
+    <ChefHat className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+    <h3>No recipes yet</h3>
+    <p>Start by adding your first recipe!</p>
+    <button className="mt-4 btn">Add Recipe</button>
+  </div>
+);
+
+<InfiniteScroll
+  items={[]}
+  loadingState="idle"
+  emptyComponent={CustomEmpty}
+  renderItem={renderItem}
+/>
+```
+
+## Recipe Context Configurations
+
+The component includes optimized defaults for different recipe contexts:
+
+### Recipes Context
+- Virtual scrolling enabled with 280px item height
+- Image lazy loading enabled
+- Shows author, rating, and cook time
+- 200px load threshold
+
+### Search Results Context
+- Virtual scrolling enabled with 120px item height
+- Faster loading with 150px threshold
+- Shows categories but not author/rating
+- Optimized for quick browsing
+
+### Favorites Context
+- Virtual scrolling disabled for better UX
+- All metadata shown
+- 300px load threshold for leisurely browsing
+
+### Meal Plans Context
+- Compact layout with 200px item height
+- Shows cook time but not author/rating
+- Optimized for planning workflows
+
+## Keyboard Navigation
+
+- **Tab/Shift+Tab**: Navigate between interactive elements
+- **Enter/Space**: Activate buttons and retry actions
+- **Arrow Keys**: Navigate within the scroll container (when focused)
+- **Home/End**: Jump to start/end of list
+- **Page Up/Page Down**: Scroll by viewport height
+
+## Accessibility Features
+
+- **Screen Reader Support**: Proper ARIA labels and live regions
+- **Loading Announcements**: Automatic announcements for state changes
+- **Focus Management**: Proper focus handling during loading
+- **Semantic HTML**: Uses appropriate HTML elements (article, feed role)
+- **High Contrast**: Compatible with high contrast modes
+- **Reduced Motion**: Respects prefers-reduced-motion settings
+
+## Performance Tips
+
+1. **Use getItemKey**: Provide stable keys for better React performance
+2. **Enable Virtual Scrolling**: For lists with many items (>100)
+3. **Optimize Images**: Use lazy loading and appropriate image sizes
+4. **Debounce Loading**: Built-in debouncing prevents rapid API calls
+5. **Memory Management**: Component automatically cleans up observers
+
+## Browser Support
+
+- Modern browsers with IntersectionObserver support
+- Polyfill available for older browsers
+- Progressive enhancement for JavaScript-disabled environments
+- Touch-optimized for mobile devices
+
+## Testing
+
+The component includes comprehensive test coverage:
+
+- Unit tests for all variants and props
+- Accessibility testing with jest-axe
+- Intersection Observer mocking
+- Loading state testing
+- Error handling verification
+- Keyboard navigation testing
+
+## Migration from Other Libraries
+
+### From react-infinite-scroll-component
+
+```tsx
+// Before
+<InfiniteScroll
+  dataLength={items.length}
+  next={fetchData}
+  hasMore={hasMore}
+  loader={<h4>Loading...</h4>}
+>
+  {items.map(item => <div key={item.id}>{item.name}</div>)}
+</InfiniteScroll>
+
+// After
+<InfiniteScroll
+  items={items}
+  onLoadMore={fetchData}
+  hasNextPage={hasMore}
+  loadingComponent={DefaultInfiniteScrollLoading}
+  renderItem={({ item }) => <div>{item.name}</div>}
+  getItemKey={(item) => item.id}
+/>
+```
+
+### From react-window
+
+```tsx
+// Before
+<FixedSizeList
+  height={600}
+  itemCount={items.length}
+  itemSize={200}
+>
+  {({ index, style }) => (
+    <div style={style}>{items[index].name}</div>
+  )}
+</FixedSizeList>
+
+// After
+<InfiniteScroll
+  items={items}
+  enableVirtualization={true}
+  itemHeight={200}
+  renderItem={({ item }) => <div>{item.name}</div>}
+/>
+```
+
+## FAQ
+
+**Q: How do I handle network errors?**
+A: Use the `error` prop and `onRetry` callback. The component will show a retry button automatically.
+
+**Q: Can I customize the loading indicators?**
+A: Yes, use the `loadingComponent` prop to provide your own loading component.
+
+**Q: How do I implement server-side pagination?**
+A: Use the `onLoadMore` callback to fetch the next page and append to your items array.
+
+**Q: Is virtual scrolling necessary?**
+A: Virtual scrolling is recommended for lists with 100+ items to maintain performance.
+
+**Q: How do I make the component work with my existing API?**
+A: The component is API-agnostic. Just implement the `onLoadMore` callback to work with your endpoint.
+
+**Q: Can I use this with React Query or SWR?**
+A: Yes! The component works well with any data fetching library. Use their loading states to control the component's `loadingState` prop.

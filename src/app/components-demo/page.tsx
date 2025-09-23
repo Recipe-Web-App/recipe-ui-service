@@ -318,6 +318,13 @@ const components = [
     variants: 12,
     status: 'ready',
   },
+  {
+    name: 'InfiniteScroll',
+    path: '/components-demo/infinite-scroll',
+    description: 'Infinite scroll for recipe lists and search results',
+    variants: 15,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -341,7 +348,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">42</div>
+            <div className="text-primary text-3xl font-bold">43</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -349,7 +356,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">337</div>
+            <div className="text-primary text-3xl font-bold">352</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
