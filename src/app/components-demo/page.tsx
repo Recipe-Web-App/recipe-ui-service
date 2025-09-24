@@ -332,6 +332,13 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'CopyButton',
+    path: '/components-demo/copy-button',
+    description: 'One-click copy functionality for sharing recipes and content',
+    variants: 15,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -355,7 +362,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">44</div>
+            <div className="text-primary text-3xl font-bold">45</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -363,7 +370,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">362</div>
+            <div className="text-primary text-3xl font-bold">377</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

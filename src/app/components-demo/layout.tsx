@@ -29,7 +29,7 @@ const components = [
   { name: 'Popover', path: '/components-demo/popover' },
   { name: 'Table', path: '/components-demo/table' },
   { name: 'Slider', path: '/components-demo/slider' },
-  { name: 'DatePicker', path: '/components-demo/datepicker' },
+  { name: 'Date Picker', path: '/components-demo/datepicker' },
   { name: 'Pagination', path: '/components-demo/pagination' },
   { name: 'Icon', path: '/components-demo/icon' },
   { name: 'Breadcrumb', path: '/components-demo/breadcrumb' },
@@ -43,20 +43,21 @@ const components = [
   { name: 'Collapse', path: '/components-demo/collapse' },
   { name: 'Rating', path: '/components-demo/rating' },
   { name: 'Spinner', path: '/components-demo/spinner' },
-  { name: 'EmptyState', path: '/components-demo/empty-state' },
-  { name: 'ErrorBoundary', path: '/components-demo/error-boundary' },
-  { name: 'SearchInput', path: '/components-demo/search-input' },
-  { name: 'ImageGallery', path: '/components-demo/image-gallery' },
+  { name: 'Empty State', path: '/components-demo/empty-state' },
+  { name: 'Error Boundary', path: '/components-demo/error-boundary' },
+  { name: 'Search Input', path: '/components-demo/search-input' },
+  { name: 'Image Gallery', path: '/components-demo/image-gallery' },
   { name: 'FAB', path: '/components-demo/fab' },
-  { name: 'CommandPalette', path: '/components-demo/command-palette' },
-  { name: 'InfiniteScroll', path: '/components-demo/infinite-scroll' },
-  { name: 'AvatarGroup', path: '/components-demo/avatar-group' },
+  { name: 'Command Palette', path: '/components-demo/command-palette' },
+  { name: 'Infinite Scroll', path: '/components-demo/infinite-scroll' },
+  { name: 'Avatar Group', path: '/components-demo/avatar-group' },
+  { name: 'Copy Button', path: '/components-demo/copy-button' },
 ];
 
 export default function ComponentsDemoLayout({
   children,
 }: {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
