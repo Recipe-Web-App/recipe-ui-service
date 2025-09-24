@@ -325,6 +325,13 @@ const components = [
     variants: 15,
     status: 'ready',
   },
+  {
+    name: 'AvatarGroup',
+    path: '/components-demo/avatar-group',
+    description: 'Show multiple user avatars for shared recipes/meal plans',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -348,7 +355,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">43</div>
+            <div className="text-primary text-3xl font-bold">44</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -356,7 +363,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">352</div>
+            <div className="text-primary text-3xl font-bold">362</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

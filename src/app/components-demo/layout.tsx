@@ -50,6 +50,7 @@ const components = [
   { name: 'FAB', path: '/components-demo/fab' },
   { name: 'CommandPalette', path: '/components-demo/command-palette' },
   { name: 'InfiniteScroll', path: '/components-demo/infinite-scroll' },
+  { name: 'AvatarGroup', path: '/components-demo/avatar-group' },
 ];
 
 export default function ComponentsDemoLayout({
