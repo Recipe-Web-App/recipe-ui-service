@@ -1,0 +1,474 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  SelectField,
+} from './select';
+
+<Meta
+  title="UI Components/Select"
+  component={Select}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Select component provides a dropdown selection interface with comprehensive styling options and accessibility features.
+Perfect for category selection, filters, preferences, and form inputs in recipe applications.
+
+## Features
+
+- Built on Radix UI Select for full accessibility
+- Multiple variants: default, outline, ghost, filled
+- Size options: sm, default, lg
+- Error state support
+- Keyboard navigation
+- Screen reader support
+- Convenient SelectField wrapper component
+- Recipe-specific styling optimized for food categories
+
+## Usage
+
+Use Select for:
+- Recipe category selection (Breakfast, Lunch, Dinner, etc.)
+- Difficulty level selection (Easy, Medium, Hard)
+- Cooking time filters (15 min, 30 min, 1 hour)
+- Dietary restriction filters (Vegetarian, Vegan, Gluten-Free)
+- Sort preferences (Newest, Popular, Alphabetical)
+- User preferences and settings
+        `
+      }
+    }
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'outline', 'ghost', 'filled'],
+      description: 'Visual style variant'
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg'],
+      description: 'Size of the select trigger'
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      description: 'Whether the select is disabled'
+    }
+  }}
+/>
+
+# Select
+
+<Description of={Select} />
+
+## Default Select
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <Select>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a category" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="breakfast">Breakfast</SelectItem>
+          <SelectItem value="lunch">Lunch</SelectItem>
+          <SelectItem value="dinner">Dinner</SelectItem>
+          <SelectItem value="dessert">Dessert</SelectItem>
+          <SelectItem value="snack">Snack</SelectItem>
+        </SelectContent>
+      </Select>
+    )}
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    {() => (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 items-center">
+          <label className="w-20 text-sm font-medium">Default:</label>
+          <Select>
+            <SelectTrigger variant="default" className="w-[180px]">
+              <SelectValue placeholder="Select option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-20 text-sm font-medium">Outline:</label>
+          <Select>
+            <SelectTrigger variant="outline" className="w-[180px]">
+              <SelectValue placeholder="Select option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-20 text-sm font-medium">Ghost:</label>
+          <Select>
+            <SelectTrigger variant="ghost" className="w-[180px]">
+              <SelectValue placeholder="Select option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-20 text-sm font-medium">Filled:</label>
+          <Select>
+            <SelectTrigger variant="filled" className="w-[180px]">
+              <SelectValue placeholder="Select option" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    {() => (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 items-center">
+          <label className="w-16 text-sm font-medium">Small:</label>
+          <Select>
+            <SelectTrigger size="sm" className="w-[180px]">
+              <SelectValue placeholder="Small select" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-16 text-sm font-medium">Default:</label>
+          <Select>
+            <SelectTrigger size="default" className="w-[180px]">
+              <SelectValue placeholder="Default select" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-16 text-sm font-medium">Large:</label>
+          <Select>
+            <SelectTrigger size="lg" className="w-[180px]">
+              <SelectValue placeholder="Large select" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="option1">Option 1</SelectItem>
+              <SelectItem value="option2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Recipe Categories
+
+<Canvas>
+  <Story name="Recipe Categories">
+    {() => (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4 items-center">
+          <label className="w-24 text-sm font-medium">Category:</label>
+          <Select>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Choose category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Meal Types</SelectLabel>
+                <SelectItem value="breakfast">🍳 Breakfast</SelectItem>
+                <SelectItem value="lunch">🥗 Lunch</SelectItem>
+                <SelectItem value="dinner">🍽️ Dinner</SelectItem>
+                <SelectSeparator />
+                <SelectLabel>Other</SelectLabel>
+                <SelectItem value="appetizer">🥙 Appetizer</SelectItem>
+                <SelectItem value="dessert">🍰 Dessert</SelectItem>
+                <SelectItem value="snack">🥨 Snack</SelectItem>
+                <SelectItem value="beverage">🥤 Beverage</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-24 text-sm font-medium">Difficulty:</label>
+          <Select>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Choose difficulty" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="easy">🟢 Easy</SelectItem>
+              <SelectItem value="medium">🟡 Medium</SelectItem>
+              <SelectItem value="hard">🔴 Hard</SelectItem>
+              <SelectItem value="expert">⚫ Expert</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-4 items-center">
+          <label className="w-24 text-sm font-medium">Cook Time:</label>
+          <Select>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Choose time" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="quick">⚡ Under 15 minutes</SelectItem>
+              <SelectItem value="short">⏱️ 15-30 minutes</SelectItem>
+              <SelectItem value="medium">⏰ 30-60 minutes</SelectItem>
+              <SelectItem value="long">🕰️ Over 1 hour</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Dietary Restrictions
+
+<Canvas>
+  <Story name="Dietary Restrictions">
+    {() => (
+      <Select>
+        <SelectTrigger className="w-[250px]">
+          <SelectValue placeholder="Choose dietary preference" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Plant-Based</SelectLabel>
+            <SelectItem value="vegetarian">🥬 Vegetarian</SelectItem>
+            <SelectItem value="vegan">🌱 Vegan</SelectItem>
+            <SelectSeparator />
+            <SelectLabel>Dietary Restrictions</SelectLabel>
+            <SelectItem value="gluten-free">🌾 Gluten-Free</SelectItem>
+            <SelectItem value="dairy-free">🥛 Dairy-Free</SelectItem>
+            <SelectItem value="nut-free">🥜 Nut-Free</SelectItem>
+            <SelectItem value="low-carb">⚖️ Low-Carb</SelectItem>
+            <SelectItem value="keto">🥓 Keto</SelectItem>
+            <SelectSeparator />
+            <SelectLabel>Special Diets</SelectLabel>
+            <SelectItem value="paleo">🦴 Paleo</SelectItem>
+            <SelectItem value="mediterranean">🫒 Mediterranean</SelectItem>
+            <SelectItem value="whole30">💪 Whole30</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    )}
+  </Story>
+</Canvas>
+
+## Error State
+
+<Canvas>
+  <Story name="Error State">
+    {() => (
+      <div className="flex flex-col gap-4">
+        <Select>
+          <SelectTrigger error className="w-[200px]">
+            <SelectValue placeholder="Select required field" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="option1">Option 1</SelectItem>
+            <SelectItem value="option2">Option 2</SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-sm text-red-500">Please select a category</p>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Disabled State
+
+<Canvas>
+  <Story name="Disabled">
+    {() => (
+      <Select disabled>
+        <SelectTrigger className="w-[200px]">
+          <SelectValue placeholder="Disabled select" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="option1">Option 1</SelectItem>
+          <SelectItem value="option2">Option 2</SelectItem>
+        </SelectContent>
+      </Select>
+    )}
+  </Story>
+</Canvas>
+
+## SelectField Wrapper
+
+<Canvas>
+  <Story name="SelectField">
+    {() => (
+      <div className="flex flex-col gap-6">
+        <SelectField
+          label="Recipe Category"
+          placeholder="Choose a category"
+          required
+        >
+          <SelectItem value="breakfast">Breakfast</SelectItem>
+          <SelectItem value="lunch">Lunch</SelectItem>
+          <SelectItem value="dinner">Dinner</SelectItem>
+          <SelectItem value="dessert">Dessert</SelectItem>
+        </SelectField>
+
+        <SelectField
+          label="Difficulty Level"
+          placeholder="Choose difficulty"
+          error="Please select a difficulty level"
+        >
+          <SelectItem value="easy">Easy</SelectItem>
+          <SelectItem value="medium">Medium</SelectItem>
+          <SelectItem value="hard">Hard</SelectItem>
+        </SelectField>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Complex Recipe Form
+
+<Canvas>
+  <Story name="Recipe Form">
+    {() => (
+      <div className="max-w-md space-y-6 p-6 border rounded-lg">
+        <h3 className="text-lg font-semibold">Recipe Filters</h3>
+
+        <SelectField
+          label="Meal Type"
+          placeholder="Any meal type"
+        >
+          <SelectGroup>
+            <SelectLabel>Main Meals</SelectLabel>
+            <SelectItem value="breakfast">Breakfast</SelectItem>
+            <SelectItem value="lunch">Lunch</SelectItem>
+            <SelectItem value="dinner">Dinner</SelectItem>
+            <SelectSeparator />
+            <SelectLabel>Other</SelectLabel>
+            <SelectItem value="snack">Snack</SelectItem>
+            <SelectItem value="dessert">Dessert</SelectItem>
+          </SelectGroup>
+        </SelectField>
+
+        <SelectField
+          label="Cooking Time"
+          placeholder="Any duration"
+        >
+          <SelectItem value="15">Under 15 minutes</SelectItem>
+          <SelectItem value="30">15-30 minutes</SelectItem>
+          <SelectItem value="60">30-60 minutes</SelectItem>
+          <SelectItem value="120">1-2 hours</SelectItem>
+          <SelectItem value="240">Over 2 hours</SelectItem>
+        </SelectField>
+
+        <SelectField
+          label="Difficulty"
+          placeholder="Any difficulty"
+        >
+          <SelectItem value="easy">Easy</SelectItem>
+          <SelectItem value="medium">Medium</SelectItem>
+          <SelectItem value="hard">Hard</SelectItem>
+          <SelectItem value="expert">Expert</SelectItem>
+        </SelectField>
+
+        <SelectField
+          label="Dietary Preferences"
+          placeholder="No restrictions"
+        >
+          <SelectGroup>
+            <SelectLabel>Plant-Based</SelectLabel>
+            <SelectItem value="vegetarian">Vegetarian</SelectItem>
+            <SelectItem value="vegan">Vegan</SelectItem>
+            <SelectSeparator />
+            <SelectLabel>Restrictions</SelectLabel>
+            <SelectItem value="gluten-free">Gluten-Free</SelectItem>
+            <SelectItem value="dairy-free">Dairy-Free</SelectItem>
+            <SelectItem value="nut-free">Nut-Free</SelectItem>
+          </SelectGroup>
+        </SelectField>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## API Reference
+
+<ArgsTable of={Select} />
+
+### SelectTrigger Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | 'default' \| 'outline' \| 'ghost' \| 'filled' | 'default' | Visual style variant |
+| size | 'sm' \| 'default' \| 'lg' | 'default' | Size of the trigger |
+| error | boolean | false | Whether to show error state |
+
+### SelectField Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| label | string | - | Label text for the field |
+| error | string | - | Error message to display |
+| required | boolean | false | Whether the field is required |
+| placeholder | string | - | Placeholder text |
+| triggerProps | SelectTriggerProps | - | Props to pass to trigger |
+| contentProps | SelectContentProps | - | Props to pass to content |
+
+## Accessibility
+
+- Full keyboard navigation support
+- Screen reader compatible with proper ARIA attributes
+- Focus management and visual indicators
+- Automatic error announcement
+- Semantic HTML structure
+- Support for required field indication
+
+## Best Practices
+
+### Recipe Application Usage
+
+1. **Category Selection**: Use grouped items for better organization
+2. **Filter Controls**: Include "Any" or "All" options for filters
+3. **Error Handling**: Provide clear validation messages
+4. **Loading States**: Handle async data loading gracefully
+5. **Mobile**: Ensure touch-friendly sizing on mobile devices
+
+### Accessibility
+
+1. Always provide meaningful labels
+2. Use error messages for validation feedback
+3. Group related options with SelectGroup and SelectLabel
+4. Ensure sufficient color contrast for all states
+5. Test with keyboard navigation and screen readers

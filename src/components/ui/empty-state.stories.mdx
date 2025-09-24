@@ -1,0 +1,497 @@
+# EmptyState Component
+
+A flexible, accessible empty state component for when lists/grids have no content (no recipes, empty search results, etc.).
+
+## Features
+
+- **Multiple Variants**: Default, search, minimal, illustrated, and error states
+- **Multiple Sizes**: Small, medium (default), and large for different contexts
+- **Compound Components**: Flexible composition with Icon, Title, Description, and Actions
+- **Full Accessibility**: ARIA attributes, semantic HTML, keyboard navigation
+- **Responsive Design**: Mobile-first approach with adaptive layouts
+- **Type Safety**: Full TypeScript support with variant props
+- **Customizable**: Easy to extend with custom classes and content
+
+## Import
+
+```tsx
+import {
+  EmptyState,
+  EmptyStateIcon,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateActions,
+} from '@/components/ui/empty-state';
+```
+
+## Basic Usage
+
+```tsx
+// Simple empty state
+<EmptyState>
+  <EmptyStateIcon>📦</EmptyStateIcon>
+  <EmptyStateTitle>No items found</EmptyStateTitle>
+  <EmptyStateDescription>
+    There are no items to display at this time.
+  </EmptyStateDescription>
+</EmptyState>
+
+// With actions
+<EmptyState>
+  <EmptyStateIcon>🔍</EmptyStateIcon>
+  <EmptyStateTitle>No search results</EmptyStateTitle>
+  <EmptyStateDescription>
+    Try adjusting your search terms or clear filters.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button variant="outline">Clear Filters</Button>
+    <Button>Browse All</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Variants
+
+### Default
+Standard empty state with card-like appearance for general use.
+
+```tsx
+<EmptyState variant="default">
+  <EmptyStateIcon>📋</EmptyStateIcon>
+  <EmptyStateTitle>No recipes yet</EmptyStateTitle>
+  <EmptyStateDescription>
+    Start building your recipe collection by adding your first recipe.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button>Add Recipe</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Search
+Specialized for empty search results with dashed border styling.
+
+```tsx
+<EmptyState variant="search">
+  <EmptyStateIcon>🔍</EmptyStateIcon>
+  <EmptyStateTitle>No recipes found</EmptyStateTitle>
+  <EmptyStateDescription>
+    Try different keywords or browse our featured recipes.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button variant="outline">Clear Search</Button>
+    <Button>Browse Featured</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Minimal
+Clean, text-only version for subtle empty states.
+
+```tsx
+<EmptyState variant="minimal">
+  <EmptyStateIcon>✨</EmptyStateIcon>
+  <EmptyStateTitle>All caught up!</EmptyStateTitle>
+  <EmptyStateDescription>
+    You've viewed all available recipes.
+  </EmptyStateDescription>
+</EmptyState>
+```
+
+### Illustrated
+Version with gradient background for prominent empty states.
+
+```tsx
+<EmptyState variant="illustrated">
+  <EmptyStateIcon>🎨</EmptyStateIcon>
+  <EmptyStateTitle>Start your culinary journey</EmptyStateTitle>
+  <EmptyStateDescription>
+    Discover amazing recipes from chefs around the world and create your own collection.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button size="lg">Explore Recipes</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Error
+For error states like connection failures or loading errors.
+
+```tsx
+<EmptyState variant="error">
+  <EmptyStateIcon>⚠️</EmptyStateIcon>
+  <EmptyStateTitle>Unable to load recipes</EmptyStateTitle>
+  <EmptyStateDescription>
+    Something went wrong while loading your recipes. Please try again.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button variant="outline">Retry</Button>
+    <Button>Contact Support</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Sizes
+
+### Small
+Compact size for smaller containers or sidebars.
+
+```tsx
+<EmptyState size="sm">
+  <EmptyStateIcon>📝</EmptyStateIcon>
+  <EmptyStateTitle>No notes</EmptyStateTitle>
+  <EmptyStateDescription>
+    Add cooking notes for this recipe.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button size="sm">Add Note</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Medium (Default)
+Standard size for most use cases.
+
+```tsx
+<EmptyState size="md">
+  <EmptyStateIcon>🍳</EmptyStateIcon>
+  <EmptyStateTitle>No ingredients</EmptyStateTitle>
+  <EmptyStateDescription>
+    Start by adding ingredients to your recipe.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button>Add Ingredient</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Large
+Prominent size for main content areas and landing pages.
+
+```tsx
+<EmptyState size="lg">
+  <EmptyStateIcon>🌟</EmptyStateIcon>
+  <EmptyStateTitle>Welcome to Recipe Manager</EmptyStateTitle>
+  <EmptyStateDescription>
+    Your recipe collection is empty. Let's get started by adding your first recipe or importing from your favorite cooking websites.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button size="lg">Create Recipe</Button>
+    <Button variant="outline" size="lg">Import Recipe</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Actions Layout
+
+### Horizontal (Default)
+Actions arranged in a row with flexible wrapping.
+
+```tsx
+<EmptyState>
+  <EmptyStateTitle>No favorites</EmptyStateTitle>
+  <EmptyStateActions layout="horizontal">
+    <Button variant="outline">Browse Recipes</Button>
+    <Button>Add Favorite</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Vertical
+Actions stacked vertically for narrow containers.
+
+```tsx
+<EmptyState>
+  <EmptyStateTitle>No meal plans</EmptyStateTitle>
+  <EmptyStateActions layout="vertical">
+    <Button className="w-full">Create Meal Plan</Button>
+    <Button variant="outline" className="w-full">View Templates</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Stacked
+Centered vertical layout with consistent spacing.
+
+```tsx
+<EmptyState>
+  <EmptyStateTitle>No shopping lists</EmptyStateTitle>
+  <EmptyStateActions layout="stacked">
+    <Button>Create List</Button>
+    <Button variant="link">Import from Recipe</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Advanced Usage
+
+### Custom Icons
+Use custom SVG icons or icon components.
+
+```tsx
+<EmptyState variant="search">
+  <EmptyStateIcon>
+    <SearchIcon className="h-12 w-12" />
+  </EmptyStateIcon>
+  <EmptyStateTitle>No search results</EmptyStateTitle>
+  <EmptyStateDescription>
+    Try different search terms or browse categories.
+  </EmptyStateDescription>
+</EmptyState>
+```
+
+### Complex Actions
+Multiple action buttons with different variants and sizes.
+
+```tsx
+<EmptyState>
+  <EmptyStateTitle>Import your recipes</EmptyStateTitle>
+  <EmptyStateDescription>
+    Get started quickly by importing recipes from popular cooking websites.
+  </EmptyStateDescription>
+  <EmptyStateActions layout="vertical">
+    <div className="flex gap-2">
+      <Button>Import from URL</Button>
+      <Button variant="outline">Upload File</Button>
+    </div>
+    <Button variant="link" size="sm">Manual Entry</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Custom Classes
+Extend styling with additional Tailwind classes.
+
+```tsx
+<EmptyState className="border-2 border-dashed border-primary/30 bg-primary/5">
+  <EmptyStateIcon className="text-primary">
+    <PlusIcon className="h-16 w-16" />
+  </EmptyStateIcon>
+  <EmptyStateTitle className="text-primary">
+    Drop recipes here
+  </EmptyStateTitle>
+  <EmptyStateDescription>
+    Drag and drop recipe files or click to browse.
+  </EmptyStateDescription>
+</EmptyState>
+```
+
+### Conditional Content
+Show different content based on state or user permissions.
+
+```tsx
+const EmptyRecipeList = ({ userCanCreate }: { userCanCreate: boolean }) => (
+  <EmptyState variant={userCanCreate ? "default" : "minimal"}>
+    <EmptyStateIcon>📚</EmptyStateIcon>
+    <EmptyStateTitle>No recipes yet</EmptyStateTitle>
+    <EmptyStateDescription>
+      {userCanCreate
+        ? "Start building your recipe collection."
+        : "Ask an admin to add recipes to this collection."
+      }
+    </EmptyStateDescription>
+    {userCanCreate && (
+      <EmptyStateActions>
+        <Button>Create Recipe</Button>
+        <Button variant="outline">Import Recipe</Button>
+      </EmptyStateActions>
+    )}
+  </EmptyState>
+);
+```
+
+## Accessibility
+
+The EmptyState component follows WCAG accessibility guidelines:
+
+### Semantic Structure
+- Uses proper heading hierarchy with `h3` for titles
+- Includes `role="status"` for screen reader announcements
+- Provides `aria-live="polite"` for dynamic content updates
+
+### Screen Reader Support
+- Icons are hidden from screen readers with `aria-hidden="true"`
+- Descriptive text provides context for empty states
+- Action buttons have clear, descriptive labels
+
+### Keyboard Navigation
+- All interactive elements are keyboard accessible
+- Proper tab order through action buttons
+- Focus indicators for keyboard users
+
+```tsx
+// Accessible empty state with custom ARIA labels
+<EmptyState aria-label="Empty recipe collection">
+  <EmptyStateTitle id="empty-title">No recipes found</EmptyStateTitle>
+  <EmptyStateDescription aria-describedby="empty-title">
+    Your search didn't match any recipes. Try different keywords.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button aria-label="Clear search filters">Clear Filters</Button>
+    <Button aria-label="Browse all available recipes">Browse All</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Recipe-Specific Examples
+
+### Empty Recipe Collection
+```tsx
+<EmptyState variant="illustrated" size="lg">
+  <EmptyStateIcon>👨‍🍳</EmptyStateIcon>
+  <EmptyStateTitle>Your recipe box is empty</EmptyStateTitle>
+  <EmptyStateDescription>
+    Start your culinary journey by adding your first recipe or discovering new ones from our community.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button size="lg">Add Recipe</Button>
+    <Button variant="outline" size="lg">Discover Recipes</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Failed Recipe Import
+```tsx
+<EmptyState variant="error">
+  <EmptyStateIcon>🚫</EmptyStateIcon>
+  <EmptyStateTitle>Import failed</EmptyStateTitle>
+  <EmptyStateDescription>
+    We couldn't import the recipe from that URL. Please check the link and try again.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button variant="outline">Try Again</Button>
+    <Button>Manual Entry</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Empty Search Results
+```tsx
+<EmptyState variant="search">
+  <EmptyStateIcon>🔍</EmptyStateIcon>
+  <EmptyStateTitle>No recipes found for "chocolate cake"</EmptyStateTitle>
+  <EmptyStateDescription>
+    Try different keywords, check your spelling, or browse our dessert category.
+  </EmptyStateDescription>
+  <EmptyStateActions>
+    <Button variant="outline">Clear Search</Button>
+    <Button>Browse Desserts</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+### Empty Meal Plan
+```tsx
+<EmptyState>
+  <EmptyStateIcon>📅</EmptyStateIcon>
+  <EmptyStateTitle>No meals planned</EmptyStateTitle>
+  <EmptyStateDescription>
+    Plan your meals for the week to stay organized and save time cooking.
+  </EmptyStateDescription>
+  <EmptyStateActions layout="vertical">
+    <Button className="w-full">Create Meal Plan</Button>
+    <Button variant="outline" className="w-full">Use Template</Button>
+  </EmptyStateActions>
+</EmptyState>
+```
+
+## Design Guidelines
+
+### When to Use Each Variant
+
+- **Default**: General empty states, main content areas, recipe collections
+- **Search**: Empty search results, filtered lists with no matches
+- **Minimal**: Secondary content areas, subtle empty states, loading states
+- **Illustrated**: Landing pages, onboarding flows, prominent empty states
+- **Error**: Failed operations, connection errors, import failures
+
+### Size Guidelines
+
+- **Small**: Sidebars, cards, modal content, secondary sections
+- **Medium**: Standard content areas, search results, list views
+- **Large**: Landing pages, main dashboards, prominent features
+
+### Content Guidelines
+
+- **Titles**: Keep concise (2-5 words), describe the empty state clearly
+- **Descriptions**: Explain why it's empty and suggest next steps (1-2 sentences)
+- **Actions**: Use action-oriented language, limit to 1-3 primary actions
+- **Icons**: Choose relevant, recognizable icons that support the message
+
+### Spacing and Layout
+
+- Use consistent spacing between components via size variants
+- Align content centrally for better visual balance
+- Consider responsive behavior for mobile devices
+- Maintain proper spacing from surrounding content
+
+## Technical Details
+
+### CSS Custom Properties
+The component uses design tokens from your CSS custom properties:
+
+- `--card` / `--card-foreground` for default variant
+- `--muted` / `--muted-foreground` for search and minimal variants
+- `--destructive` / `--destructive-foreground` for error variant
+- `--primary` for illustrated variant accents
+- `--border` for border colors and styling
+
+### Performance
+The component is optimized for performance:
+
+- Uses `React.forwardRef` for proper ref handling
+- Compound components enable tree-shaking
+- Efficient class merging with `tailwind-merge`
+- Minimal re-renders through stable class generation
+
+### Responsive Design
+Built with mobile-first approach:
+
+- Flexible layouts that adapt to container width
+- Responsive text sizing and spacing
+- Touch-friendly action button sizing
+- Proper spacing on smaller screens
+
+## Props Reference
+
+### EmptyState
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Visual style variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the empty state container |
+| `asChild` | `boolean` | `false` | Render as child element (polymorphic) |
+| `className` | `string` | - | Additional CSS classes |
+
+### EmptyStateIcon
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Icon color variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Icon size |
+| `asChild` | `boolean` | `false` | Render as child element |
+| `className` | `string` | - | Additional CSS classes |
+
+### EmptyStateTitle
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Title color variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Title text size |
+| `asChild` | `boolean` | `false` | Render as child element |
+| `className` | `string` | - | Additional CSS classes |
+
+### EmptyStateDescription
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Description color variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Description text size |
+| `asChild` | `boolean` | `false` | Render as child element |
+| `className` | `string` | - | Additional CSS classes |
+
+### EmptyStateActions
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `layout` | `'horizontal' \| 'vertical' \| 'stacked'` | `'horizontal'` | Layout direction for actions |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Gap size between actions |
+| `asChild` | `boolean` | `false` | Render as child element |
+| `className` | `string` | - | Additional CSS classes |
+
+Plus all standard HTML div/heading/paragraph attributes for each component.

@@ -1,0 +1,477 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/blocks';
+import { Rating } from './rating';
+import { useState } from 'react';
+
+<Meta
+  title="UI Components/Rating"
+  component={Rating}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'A flexible rating component that supports stars, hearts, thumbs, and numeric displays with full accessibility support.'
+      }
+    }
+  }}
+/>
+
+# Rating
+
+A comprehensive rating component designed for recipe applications and general feedback systems.
+
+## Features
+
+- **Multiple Types**: Stars, hearts, thumbs up/down, and numeric ratings
+- **Interactive & Read-only**: Can be used for input or display
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Customizable**: Various sizes, colors, and precision levels
+- **Recipe-Focused**: Perfect for recipe ratings, difficulty levels, and user feedback
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [rating, setRating] = useState(3);
+      return (
+        <Rating
+          value={rating}
+          interactive
+          onChange={setRating}
+          showValue
+          label="Recipe Rating"
+          showLabel
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Props
+
+<ArgsTable of={Rating} />
+
+## Rating Types
+
+### Star Rating
+Perfect for recipe quality ratings and general feedback.
+
+<Canvas>
+  <Story name="Star Types">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Read-only Display</h4>
+        <Rating type="star" value={4} maxValue={5} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Interactive</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              type="star"
+              value={rating}
+              maxValue={5}
+              interactive
+              onChange={setRating}
+              showValue
+            />
+          );
+        })()}
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Half Precision</h4>
+        <Rating type="star" value={3.5} precision="half" showValue />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Heart Rating
+Ideal for favorites and love-based feedback.
+
+<Canvas>
+  <Story name="Heart Types">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Read-only Display</h4>
+        <Rating type="heart" value={3} maxValue={5} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Interactive</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              type="heart"
+              value={rating}
+              maxValue={5}
+              interactive
+              onChange={setRating}
+              showValue
+            />
+          );
+        })()}
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Thumbs Rating
+Simple binary feedback system.
+
+<Canvas>
+  <Story name="Thumbs Types">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Thumbs Up</h4>
+        <Rating type="thumbs" value={1} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Thumbs Down</h4>
+        <Rating type="thumbs" value={-1} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Interactive</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              type="thumbs"
+              value={rating}
+              interactive
+              onChange={setRating}
+              showValue
+            />
+          );
+        })()}
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Numeric Rating
+Clean numerical display for scores and metrics.
+
+<Canvas>
+  <Story name="Numeric Types">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Read-only Display</h4>
+        <Rating type="numeric" value={8} maxValue={10} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Interactive</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              type="numeric"
+              value={rating}
+              maxValue={10}
+              interactive
+              onChange={setRating}
+              showValue
+            />
+          );
+        })()}
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Small</h4>
+        <Rating size="sm" value={4} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Medium (Default)</h4>
+        <Rating size="md" value={4} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Large</h4>
+        <Rating size="lg" value={4} showValue />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Color Variants
+
+<Canvas>
+  <Story name="Variants">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Default</h4>
+        <Rating variant="default" value={4} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Accent</h4>
+        <Rating variant="accent" value={4} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Warning</h4>
+        <Rating variant="warning" value={4} showValue />
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">Success</h4>
+        <Rating variant="success" value={4} showValue />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Use Cases
+
+### Recipe Quality Rating
+
+<Canvas>
+  <Story name="Recipe Quality">
+    <div className="p-4 border rounded-lg space-y-3">
+      <h3 className="font-semibold">Grandma's Chocolate Chip Cookies</h3>
+      <div className="flex items-center gap-4">
+        <Rating
+          type="star"
+          value={5}
+          showValue
+          label="Overall Rating"
+          showLabel
+        />
+        <span className="text-sm text-muted-foreground">(142 reviews)</span>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Difficulty Level
+
+<Canvas>
+  <Story name="Difficulty Level">
+    <div className="p-4 border rounded-lg space-y-3">
+      <h3 className="font-semibold">Beef Wellington</h3>
+      <div className="flex items-center gap-4">
+        <Rating
+          type="star"
+          variant="warning"
+          value={4}
+          maxValue={5}
+          showValue
+          label="Difficulty"
+          showLabel
+        />
+        <span className="text-sm text-muted-foreground">Advanced</span>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Favorite System
+
+<Canvas>
+  <Story name="Favorite System">
+    <div className="p-4 border rounded-lg space-y-3">
+      <h3 className="font-semibold">Quick Pasta Salad</h3>
+      <div className="flex items-center gap-4">
+        {(() => {
+          const [isFavorite, setIsFavorite] = useState(false);
+          return (
+            <Rating
+              type="heart"
+              value={isFavorite ? 1 : 0}
+              maxValue={1}
+              interactive
+              onChange={(value) => setIsFavorite(value > 0)}
+              label="Add to Favorites"
+              showLabel
+            />
+          );
+        })()}
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Nutritional Score
+
+<Canvas>
+  <Story name="Nutritional Score">
+    <div className="p-4 border rounded-lg space-y-3">
+      <h3 className="font-semibold">Mediterranean Quinoa Bowl</h3>
+      <div className="flex items-center gap-4">
+        <Rating
+          type="numeric"
+          variant="success"
+          value={9}
+          maxValue={10}
+          showValue
+          label="Health Score"
+          showLabel
+        />
+        <span className="text-sm text-muted-foreground">Excellent nutrition</span>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## States
+
+### Disabled State
+
+<Canvas>
+  <Story name="Disabled">
+    <div className="space-y-4">
+      <Rating value={3} disabled showValue label="Disabled Rating" showLabel />
+      <Rating value={2} interactive disabled showValue label="Disabled Interactive" showLabel />
+    </div>
+  </Story>
+</Canvas>
+
+### Read-only State
+
+<Canvas>
+  <Story name="Read-only">
+    <div className="space-y-4">
+      <Rating value={4} readOnly showValue label="Read-only Rating" showLabel />
+      <Rating value={3} interactive readOnly showValue label="Read-only Interactive" showLabel />
+    </div>
+  </Story>
+</Canvas>
+
+## Accessibility
+
+The Rating component follows WAI-ARIA guidelines:
+
+- **Keyboard Navigation**: Tab to focus, Enter/Space to select
+- **Screen Reader Support**: Proper ARIA labels and live regions
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Semantic HTML**: Uses appropriate roles and properties
+
+### Keyboard Controls
+
+- `Tab` - Navigate between rating items
+- `Enter` or `Space` - Select a rating value
+- `Escape` - Clear hover state (when interactive)
+
+<Canvas>
+  <Story name="Accessibility Demo">
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        Try navigating this rating with your keyboard:
+      </p>
+      {(() => {
+        const [rating, setRating] = useState(0);
+        return (
+          <Rating
+            value={rating}
+            interactive
+            onChange={setRating}
+            showValue
+            label="Keyboard Navigation Demo"
+            showLabel
+            aria-describedby="rating-help"
+          />
+        );
+      })()}
+      <p id="rating-help" className="text-xs text-muted-foreground">
+        Use Tab to navigate, Enter or Space to select a rating
+      </p>
+    </div>
+  </Story>
+</Canvas>
+
+## Advanced Usage
+
+### Custom Max Values
+
+<Canvas>
+  <Story name="Custom Max">
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">3-Star System</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              value={rating}
+              maxValue={3}
+              interactive
+              onChange={setRating}
+              showValue
+              label="Simple Rating"
+              showLabel
+            />
+          );
+        })()}
+      </div>
+      <div className="space-y-2">
+        <h4 className="font-medium">10-Point Scale</h4>
+        {(() => {
+          const [rating, setRating] = useState(0);
+          return (
+            <Rating
+              type="numeric"
+              value={rating}
+              maxValue={10}
+              interactive
+              onChange={setRating}
+              showValue
+              label="Detailed Score"
+              showLabel
+            />
+          );
+        })()}
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Combined Rating Display
+
+<Canvas>
+  <Story name="Combined Display">
+    <div className="p-6 border rounded-lg space-y-4">
+      <h3 className="text-lg font-semibold">Recipe Overview</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Rating
+            type="star"
+            value={4.5}
+            precision="half"
+            showValue
+            label="Overall Rating"
+            showLabel
+          />
+          <Rating
+            type="star"
+            variant="warning"
+            value={3}
+            showValue
+            label="Difficulty"
+            showLabel
+          />
+        </div>
+        <div className="space-y-2">
+          <Rating
+            type="heart"
+            value={1}
+            maxValue={1}
+            showLabel
+            label="Favorited"
+          />
+          <Rating
+            type="numeric"
+            variant="success"
+            value={8}
+            maxValue={10}
+            showValue
+            label="Health Score"
+            showLabel
+          />
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>

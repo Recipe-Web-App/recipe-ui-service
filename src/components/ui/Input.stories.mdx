@@ -1,0 +1,615 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Input } from './input';
+import { Button } from './button';
+import { useState } from 'react';
+import {
+  Search,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  User,
+  Phone,
+  MapPin,
+  Calendar,
+  Clock,
+  DollarSign,
+  Hash,
+  AtSign,
+  Globe,
+  ChefHat,
+  Utensils,
+  Timer,
+  Scale,
+  Thermometer,
+} from 'lucide-react';
+
+<Meta title="Components/Input" component={Input} />
+
+# Input
+
+Versatile input component with multiple variants, states, and features for forms and data entry.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [value, setValue] = useState('');
+      return (
+        <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="Enter your name"
+          label="Name"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    {() => {
+      const [values, setValues] = useState({
+        default: '',
+        filled: '',
+        outlined: '',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            variant="default"
+            value={values.default}
+            onChange={(e) => setValues(prev => ({ ...prev, default: e.target.value }))}
+            placeholder="Default variant"
+            label="Default Input"
+          />
+          <Input
+            variant="filled"
+            value={values.filled}
+            onChange={(e) => setValues(prev => ({ ...prev, filled: e.target.value }))}
+            placeholder="Filled variant"
+            label="Filled Input"
+          />
+          <Input
+            variant="outlined"
+            value={values.outlined}
+            onChange={(e) => setValues(prev => ({ ...prev, outlined: e.target.value }))}
+            placeholder="Outlined variant"
+            label="Outlined Input"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    {() => {
+      const [sizes, setSizes] = useState({
+        sm: '',
+        default: '',
+        lg: '',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            size="sm"
+            value={sizes.sm}
+            onChange={(e) => setSizes(prev => ({ ...prev, sm: e.target.value }))}
+            placeholder="Small input"
+            label="Small Size"
+          />
+          <Input
+            size="default"
+            value={sizes.default}
+            onChange={(e) => setSizes(prev => ({ ...prev, default: e.target.value }))}
+            placeholder="Default input"
+            label="Default Size"
+          />
+          <Input
+            size="lg"
+            value={sizes.lg}
+            onChange={(e) => setSizes(prev => ({ ...prev, lg: e.target.value }))}
+            placeholder="Large input"
+            label="Large Size"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## States
+
+<Canvas>
+  <Story name="States">
+    {() => {
+      const [states, setStates] = useState({
+        default: '',
+        error: '',
+        success: 'john@example.com',
+        warning: 'john',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            state="default"
+            value={states.default}
+            onChange={(e) => setStates(prev => ({ ...prev, default: e.target.value }))}
+            placeholder="Default state"
+            label="Default State"
+            helperText="This is helper text"
+          />
+          <Input
+            state="error"
+            value={states.error}
+            onChange={(e) => setStates(prev => ({ ...prev, error: e.target.value }))}
+            placeholder="Error state"
+            label="Error State"
+            errorText="This field is required"
+          />
+          <Input
+            state="success"
+            value={states.success}
+            onChange={(e) => setStates(prev => ({ ...prev, success: e.target.value }))}
+            placeholder="Success state"
+            label="Success State"
+            helperText="Valid email address"
+          />
+          <Input
+            state="warning"
+            value={states.warning}
+            onChange={(e) => setStates(prev => ({ ...prev, warning: e.target.value }))}
+            placeholder="Warning state"
+            label="Warning State"
+            helperText="Username should include domain"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Icons
+
+<Canvas>
+  <Story name="With Icons">
+    {() => {
+      const [iconInputs, setIconInputs] = useState({
+        search: '',
+        email: '',
+        location: '',
+        phone: '',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            value={iconInputs.search}
+            onChange={(e) => setIconInputs(prev => ({ ...prev, search: e.target.value }))}
+            placeholder="Search recipes..."
+            label="Search"
+            leftIcon={<Search className="h-4 w-4" />}
+          />
+          <Input
+            type="email"
+            value={iconInputs.email}
+            onChange={(e) => setIconInputs(prev => ({ ...prev, email: e.target.value }))}
+            placeholder="your@email.com"
+            label="Email Address"
+            leftIcon={<Mail className="h-4 w-4" />}
+            rightIcon={<AtSign className="h-4 w-4" />}
+          />
+          <Input
+            value={iconInputs.location}
+            onChange={(e) => setIconInputs(prev => ({ ...prev, location: e.target.value }))}
+            placeholder="Enter your address"
+            label="Location"
+            leftIcon={<MapPin className="h-4 w-4" />}
+          />
+          <Input
+            type="tel"
+            value={iconInputs.phone}
+            onChange={(e) => setIconInputs(prev => ({ ...prev, phone: e.target.value }))}
+            placeholder="+1 (555) 123-4567"
+            label="Phone Number"
+            leftIcon={<Phone className="h-4 w-4" />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Clearable Input
+
+<Canvas>
+  <Story name="Clearable">
+    {() => {
+      const [clearableValue, setClearableValue] = useState('Some text that can be cleared');
+      return (
+        <Input
+          value={clearableValue}
+          onChange={(e) => setClearableValue(e.target.value)}
+          onClear={() => setClearableValue('')}
+          placeholder="Type something..."
+          label="Clearable Input"
+          helperText="Click the X to clear the input"
+          clearable
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Password Input
+
+<Canvas>
+  <Story name="Password">
+    {() => {
+      const [password, setPassword] = useState('');
+      const [showPassword, setShowPassword] = useState(false);
+      return (
+        <Input
+          type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          label="Password"
+          leftIcon={<Lock className="h-4 w-4" />}
+          rightIcon={
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          }
+          helperText="Password must be at least 8 characters"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Floating Labels
+
+<Canvas>
+  <Story name="Floating Labels">
+    {() => {
+      const [floating, setFloating] = useState({
+        name: '',
+        email: '',
+        message: '',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            value={floating.name}
+            onChange={(e) => setFloating(prev => ({ ...prev, name: e.target.value }))}
+            placeholder=" "
+            label="Full Name"
+            floatingLabel
+            leftIcon={<User className="h-4 w-4" />}
+          />
+          <Input
+            type="email"
+            value={floating.email}
+            onChange={(e) => setFloating(prev => ({ ...prev, email: e.target.value }))}
+            placeholder=" "
+            label="Email Address"
+            floatingLabel
+            leftIcon={<Mail className="h-4 w-4" />}
+          />
+          <Input
+            value={floating.message}
+            onChange={(e) => setFloating(prev => ({ ...prev, message: e.target.value }))}
+            placeholder=" "
+            label="Message"
+            floatingLabel
+            showCharacterCount
+            characterLimit={100}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Character Count
+
+<Canvas>
+  <Story name="Character Count">
+    {() => {
+      const [countInputs, setCountInputs] = useState({
+        title: '',
+        description: '',
+        tweet: '',
+      });
+      return (
+        <div className="space-y-6">
+          <Input
+            value={countInputs.title}
+            onChange={(e) => setCountInputs(prev => ({ ...prev, title: e.target.value }))}
+            placeholder="Recipe title"
+            label="Recipe Title"
+            showCharacterCount
+            characterLimit={50}
+            helperText="Keep it short and descriptive"
+          />
+          <Input
+            value={countInputs.description}
+            onChange={(e) => setCountInputs(prev => ({ ...prev, description: e.target.value }))}
+            placeholder="Brief description"
+            label="Description"
+            showCharacterCount
+            characterLimit={100}
+          />
+          <Input
+            value={countInputs.tweet}
+            onChange={(e) => setCountInputs(prev => ({ ...prev, tweet: e.target.value }))}
+            placeholder="Share this recipe..."
+            label="Social Media Post"
+            showCharacterCount
+            characterLimit={280}
+            state={countInputs.tweet.length > 280 ? 'error' : 'default'}
+            errorText={countInputs.tweet.length > 280 ? 'Message is too long' : undefined}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Form Inputs
+
+<Canvas>
+  <Story name="Recipe Inputs">
+    {() => {
+      const [recipe, setRecipe] = useState({
+        name: '',
+        servings: '',
+        prepTime: '',
+        cookTime: '',
+        temperature: '',
+        calories: '',
+      });
+      return (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <Input
+            value={recipe.name}
+            onChange={(e) => setRecipe(prev => ({ ...prev, name: e.target.value }))}
+            placeholder="Spaghetti Carbonara"
+            label="Recipe Name"
+            leftIcon={<ChefHat className="h-4 w-4" />}
+            showCharacterCount
+            characterLimit={60}
+          />
+          <Input
+            type="number"
+            value={recipe.servings}
+            onChange={(e) => setRecipe(prev => ({ ...prev, servings: e.target.value }))}
+            placeholder="4"
+            label="Servings"
+            leftIcon={<Utensils className="h-4 w-4" />}
+            min="1"
+            max="20"
+          />
+          <Input
+            type="number"
+            value={recipe.prepTime}
+            onChange={(e) => setRecipe(prev => ({ ...prev, prepTime: e.target.value }))}
+            placeholder="15"
+            label="Prep Time (minutes)"
+            leftIcon={<Timer className="h-4 w-4" />}
+          />
+          <Input
+            type="number"
+            value={recipe.cookTime}
+            onChange={(e) => setRecipe(prev => ({ ...prev, cookTime: e.target.value }))}
+            placeholder="25"
+            label="Cook Time (minutes)"
+            leftIcon={<Clock className="h-4 w-4" />}
+          />
+          <Input
+            type="number"
+            value={recipe.temperature}
+            onChange={(e) => setRecipe(prev => ({ ...prev, temperature: e.target.value }))}
+            placeholder="375"
+            label="Oven Temperature (°F)"
+            leftIcon={<Thermometer className="h-4 w-4" />}
+          />
+          <Input
+            type="number"
+            value={recipe.calories}
+            onChange={(e) => setRecipe(prev => ({ ...prev, calories: e.target.value }))}
+            placeholder="450"
+            label="Calories per Serving"
+            leftIcon={<Scale className="h-4 w-4" />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Loading State
+
+<Canvas>
+  <Story name="Loading">
+    {() => {
+      const [loading, setLoading] = useState(false);
+      const [value, setValue] = useState('');
+
+      const handleSubmit = async () => {
+        setLoading(true);
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setLoading(false);
+      };
+
+      return (
+        <div className="space-y-4">
+          <Input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Search recipes..."
+            label="Search"
+            leftIcon={<Search className="h-4 w-4" />}
+            loading={loading}
+            disabled={loading}
+          />
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Searching...' : 'Search'}
+          </Button>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Form Example
+
+<Canvas>
+  <Story name="Form Example">
+    {() => {
+      const [form, setForm] = useState({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        website: '',
+      });
+      const [errors, setErrors] = useState({});
+
+      const validateForm = () => {
+        const newErrors = {};
+        if (!form.email) newErrors.email = 'Email is required';
+        if (!form.password) newErrors.password = 'Password is required'; // pragma: allowlist secret
+        if (form.password !== form.confirmPassword) { // pragma: allowlist secret
+          newErrors.confirmPassword = 'Passwords do not match'; // pragma: allowlist secret
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+      };
+
+      return (
+        <div className="max-w-md space-y-6">
+          <Input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
+            placeholder="your@email.com"
+            label="Email Address"
+            leftIcon={<Mail className="h-4 w-4" />}
+            state={errors.email ? 'error' : 'default'}
+            errorText={errors.email}
+            required
+          />
+          <Input
+            type="password"
+            value={form.password}
+            onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
+            placeholder="Password"
+            label="Password"
+            leftIcon={<Lock className="h-4 w-4" />}
+            state={errors.password ? 'error' : 'default'}
+            errorText={errors.password}
+            helperText="Must be at least 8 characters"
+            required
+          />
+          <Input
+            type="password"
+            value={form.confirmPassword}
+            onChange={(e) => setForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+            placeholder="Confirm password"
+            label="Confirm Password"
+            leftIcon={<Lock className="h-4 w-4" />}
+            state={errors.confirmPassword ? 'error' : form.confirmPassword && form.password === form.confirmPassword ? 'success' : 'default'}
+            errorText={errors.confirmPassword}
+            required
+          />
+          <Input
+            type="url"
+            value={form.website}
+            onChange={(e) => setForm(prev => ({ ...prev, website: e.target.value }))}
+            placeholder="https://yourwebsite.com"
+            label="Website (Optional)"
+            leftIcon={<Globe className="h-4 w-4" />}
+            helperText="Your personal or business website"
+          />
+          <Button onClick={validateForm} className="w-full">
+            Create Account
+          </Button>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Disabled State
+
+<Canvas>
+  <Story name="Disabled">
+    <div className="space-y-6">
+      <Input
+        value="Disabled input"
+        placeholder="This input is disabled"
+        label="Disabled Input"
+        disabled
+      />
+      <Input
+        value="Disabled with icon"
+        placeholder="Disabled with icon"
+        label="Disabled with Icon"
+        leftIcon={<User className="h-4 w-4" />}
+        disabled
+      />
+      <Input
+        value=""
+        placeholder="Readonly input"
+        label="Readonly Input"
+        helperText="This input is readonly"
+        readOnly
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Input} />
+
+## Usage Guidelines
+
+### When to use
+- For single-line text input in forms
+- For data entry and user input collection
+- For search functionality
+- For numeric input with validation
+- For email, password, and URL inputs
+
+### Best practices
+- Always provide clear, descriptive labels
+- Use appropriate input types (email, password, tel, etc.)
+- Provide helpful placeholder text
+- Show validation feedback immediately
+- Use icons to clarify input purpose
+- Implement proper error handling and messaging
+- Support keyboard navigation and accessibility
+- Use character limits for constrained inputs
+- Provide clear helper text for complex requirements
+
+### Accessibility
+- Proper label association with inputs
+- Support for screen readers and assistive technologies
+- Keyboard navigation support
+- High contrast mode compatibility
+- Error messaging that's announced to screen readers
+- Proper focus management and indicators

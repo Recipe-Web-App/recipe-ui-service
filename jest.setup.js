@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import 'jest-axe/extend-expect';
 
 // Polyfill TextEncoder/TextDecoder for Node.js environment
 import { TextEncoder, TextDecoder } from 'util';

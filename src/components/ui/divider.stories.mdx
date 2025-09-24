@@ -1,0 +1,619 @@
+# Divider Component
+
+A flexible, accessible divider component with support for horizontal/vertical orientations, various styles, text/icon decorations, and recipe-specific variants. Built with TypeScript and full accessibility compliance.
+
+## Features
+
+- **Multiple Orientations**: Horizontal and vertical dividers
+- **Style Options**: Solid, dashed, dotted, and double line styles
+- **Weight Variants**: Thin, normal, and thick dividers
+- **Length Options**: Short, normal, long, and full width/height
+- **Color Variants**: Multiple color options including primary, secondary, and semantic colors
+- **Text Integration**: Dividers with centered, start, or end-positioned text
+- **Icon Support**: Dividers with icons and custom styling
+- **Recipe-Specific**: Specialized dividers for recipe sections and content groups
+- **Section Dividers**: Enhanced dividers with titles, subtitles, and collapsible functionality
+- **Full Accessibility**: Proper ARIA attributes and semantic markup
+
+## Import
+
+```tsx
+import {
+  Divider,
+  DividerWithText,
+  DividerWithIcon,
+  RecipeDivider,
+  SectionDivider
+} from '@/components/ui/divider';
+```
+
+## Basic Usage
+
+```tsx
+// Simple horizontal divider
+<Divider />
+
+// Vertical divider
+<Divider orientation="vertical" />
+
+// Styled divider
+<Divider style="dashed" weight="thick" color="primary" />
+
+// Custom length
+<Divider length="short" />
+```
+
+## Orientations
+
+### Horizontal (Default)
+Standard horizontal divider for separating content vertically.
+
+```tsx
+<div className="space-y-4">
+  <p>Content above the divider</p>
+  <Divider />
+  <p>Content below the divider</p>
+</div>
+```
+
+### Vertical
+Vertical divider for separating content horizontally.
+
+```tsx
+<div className="flex h-32 items-center gap-4">
+  <div className="text-center">
+    <p>Left Content</p>
+  </div>
+  <Divider orientation="vertical" />
+  <div className="text-center">
+    <p>Right Content</p>
+  </div>
+</div>
+```
+
+## Styles
+
+Control the visual style of the divider line.
+
+### Solid (Default)
+```tsx
+<Divider style="solid" />
+```
+
+### Dashed
+```tsx
+<Divider style="dashed" />
+```
+
+### Dotted
+```tsx
+<Divider style="dotted" />
+```
+
+### Double
+```tsx
+<Divider style="double" />
+```
+
+## Weights
+
+Control the thickness of the divider line.
+
+### Thin (Default)
+Subtle divider for minimal separation.
+
+```tsx
+<Divider weight="thin" />
+```
+
+### Normal
+Standard divider for most use cases.
+
+```tsx
+<Divider weight="normal" />
+```
+
+### Thick
+Prominent divider for strong separation.
+
+```tsx
+<Divider weight="thick" />
+```
+
+## Colors
+
+Choose from multiple color variants to match your design.
+
+```tsx
+<Divider color="default" />
+<Divider color="muted" />
+<Divider color="primary" />
+<Divider color="secondary" />
+<Divider color="accent" />
+<Divider color="destructive" />
+```
+
+## Lengths
+
+Control the length of the divider (horizontal) or height (vertical).
+
+### Short
+Compact divider for subtle separation.
+
+```tsx
+<div className="flex justify-center">
+  <Divider length="short" />
+</div>
+```
+
+### Normal (Default)
+Standard length for most use cases.
+
+```tsx
+<div className="flex justify-center">
+  <Divider length="normal" />
+</div>
+```
+
+### Long
+Extended divider for prominent separation.
+
+```tsx
+<div className="flex justify-center">
+  <Divider length="long" />
+</div>
+```
+
+### Full
+Full width or height divider.
+
+```tsx
+<Divider length="full" />
+```
+
+## Spacing
+
+Control the spacing around the divider.
+
+```tsx
+// Tight spacing
+<Divider spacing="tight" />
+
+// Normal spacing (default)
+<Divider spacing="normal" />
+
+// Loose spacing
+<Divider spacing="loose" />
+```
+
+## Dividers with Text
+
+Add text labels to provide context for the separation.
+
+### Center Position (Default)
+```tsx
+<DividerWithText text="OR" />
+```
+
+### Start Position
+```tsx
+<DividerWithText text="Beginning" textPosition="start" />
+```
+
+### End Position
+```tsx
+<DividerWithText text="End" textPosition="end" />
+```
+
+### Custom Text Styling
+```tsx
+<DividerWithText
+  text="INGREDIENTS"
+  textProps={{
+    size: 'sm',
+    weight: 'semibold',
+    transform: 'uppercase',
+    color: 'primary'
+  }}
+/>
+```
+
+## Dividers with Icons
+
+Add icons to provide visual context.
+
+### Center Position (Default)
+```tsx
+<DividerWithIcon icon={<Star className="h-4 w-4" />} />
+```
+
+### Start Position
+```tsx
+<DividerWithIcon
+  icon={<Heart className="h-4 w-4" />}
+  textPosition="start"
+/>
+```
+
+### Custom Icon Styling
+```tsx
+<DividerWithIcon
+  icon={<ChefHat className="h-5 w-5" />}
+  iconProps={{
+    size: 'lg',
+    variant: 'filled'
+  }}
+/>
+```
+
+## Recipe-Specific Dividers
+
+Use specialized dividers for recipe content with optimized styling.
+
+### Ingredient Group
+Separate different groups of ingredients.
+
+```tsx
+<RecipeDivider context="ingredient-group" />
+```
+
+### Instruction Step
+Separate cooking instruction steps.
+
+```tsx
+<RecipeDivider context="instruction-step" />
+```
+
+### Nutrition Group
+Separate nutrition information sections.
+
+```tsx
+<RecipeDivider context="nutrition-group" />
+```
+
+### Recipe Section
+General recipe section separator.
+
+```tsx
+<RecipeDivider context="recipe-section" />
+```
+
+### With Labels
+Add descriptive labels to recipe dividers.
+
+```tsx
+<RecipeDivider
+  context="ingredient-group"
+  label="Wet Ingredients"
+  showLabel
+/>
+```
+
+## Section Dividers
+
+Enhanced dividers with titles, subtitles, and additional functionality.
+
+### Basic Section Divider
+```tsx
+<SectionDivider
+  section="ingredients"
+  title="Ingredients"
+  subtitle="Everything you need for this recipe"
+  icon={<Leaf className="h-4 w-4" />}
+/>
+```
+
+### Instructions Section
+```tsx
+<SectionDivider
+  section="instructions"
+  title="Instructions"
+  subtitle="Step-by-step cooking guide"
+  icon={<Utensils className="h-4 w-4" />}
+/>
+```
+
+### Nutrition Section
+```tsx
+<SectionDivider
+  section="nutrition"
+  title="Nutrition Information"
+  subtitle="Per serving"
+  icon={<Scale className="h-4 w-4" />}
+/>
+```
+
+### Collapsible Section
+```tsx
+<SectionDivider
+  section="metadata"
+  title="Recipe Details"
+  subtitle="Prep time, cook time, and servings"
+  icon={<Clock className="h-4 w-4" />}
+  collapsible
+  onToggleCollapse={(collapsed) => console.log('Collapsed:', collapsed)}
+/>
+```
+
+## Advanced Usage
+
+### Interactive Divider Controls
+Create dynamic dividers with user controls.
+
+```tsx
+const [selectedStyle, setSelectedStyle] = useState('solid');
+const [selectedWeight, setSelectedWeight] = useState('thin');
+const [selectedColor, setSelectedColor] = useState('default');
+
+return (
+  <div className="space-y-8">
+    <div className="grid grid-cols-3 gap-4">
+      <div>
+        <label className="mb-2 block text-sm font-medium">Style</label>
+        <select
+          value={selectedStyle}
+          onChange={(e) => setSelectedStyle(e.target.value)}
+          className="w-full rounded border px-3 py-2"
+        >
+          <option value="solid">Solid</option>
+          <option value="dashed">Dashed</option>
+          <option value="dotted">Dotted</option>
+          <option value="double">Double</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-medium">Weight</label>
+        <select
+          value={selectedWeight}
+          onChange={(e) => setSelectedWeight(e.target.value)}
+          className="w-full rounded border px-3 py-2"
+        >
+          <option value="thin">Thin</option>
+          <option value="normal">Normal</option>
+          <option value="thick">Thick</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-medium">Color</label>
+        <select
+          value={selectedColor}
+          onChange={(e) => setSelectedColor(e.target.value)}
+          className="w-full rounded border px-3 py-2"
+        >
+          <option value="default">Default</option>
+          <option value="primary">Primary</option>
+          <option value="secondary">Secondary</option>
+        </select>
+      </div>
+    </div>
+
+    <div className="mt-8">
+      <p className="mb-4">Live Preview:</p>
+      <Divider
+        style={selectedStyle}
+        weight={selectedWeight}
+        color={selectedColor}
+      />
+    </div>
+  </div>
+);
+```
+
+### Recipe Layout Example
+Complete recipe layout using various divider types.
+
+```tsx
+<div className="mx-auto max-w-2xl space-y-6">
+  <h2 className="text-2xl font-bold">Chocolate Chip Cookies</h2>
+
+  <SectionDivider
+    section="metadata"
+    title="Recipe Info"
+    icon={<Clock className="h-4 w-4" />}
+  />
+
+  <div className="grid grid-cols-3 gap-4 text-center">
+    <div>
+      <span className="text-muted-foreground text-sm">Prep Time</span>
+      <p className="font-semibold">15 min</p>
+    </div>
+    <div>
+      <span className="text-muted-foreground text-sm">Cook Time</span>
+      <p className="font-semibold">12 min</p>
+    </div>
+    <div>
+      <span className="text-muted-foreground text-sm">Servings</span>
+      <p className="font-semibold">24</p>
+    </div>
+  </div>
+
+  <SectionDivider
+    section="ingredients"
+    title="Ingredients"
+    icon={<Leaf className="h-4 w-4" />}
+  />
+
+  <div className="space-y-3">
+    <p>• 2¼ cups all-purpose flour</p>
+    <p>• 1 tsp baking soda</p>
+    <p>• 1 tsp salt</p>
+
+    <RecipeDivider
+      context="ingredient-group"
+      label="Wet Ingredients"
+      showLabel
+    />
+
+    <p>• 1 cup butter, softened</p>
+    <p>• ¾ cup granulated sugar</p>
+    <p>• 2 large eggs</p>
+  </div>
+
+  <SectionDivider
+    section="instructions"
+    title="Instructions"
+    icon={<Utensils className="h-4 w-4" />}
+  />
+
+  <div className="space-y-4">
+    <div>
+      <p className="font-medium">1. Preheat and prepare</p>
+      <p className="text-muted-foreground">Preheat oven to 375°F...</p>
+    </div>
+
+    <RecipeDivider context="instruction-step" />
+
+    <div>
+      <p className="font-medium">2. Mix dry ingredients</p>
+      <p className="text-muted-foreground">
+        In a medium bowl, whisk together...
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+### Form Section Dividers
+Use dividers to organize form sections.
+
+```tsx
+<form className="space-y-8">
+  <div>
+    <h2 className="text-xl font-semibold">Personal Information</h2>
+    <DividerWithText text="Basic Details" />
+
+    <div className="space-y-4">
+      <input placeholder="First Name" className="w-full p-2 border rounded" />
+      <input placeholder="Last Name" className="w-full p-2 border rounded" />
+      <input placeholder="Email" className="w-full p-2 border rounded" />
+    </div>
+  </div>
+
+  <DividerWithIcon icon={<Settings className="h-4 w-4" />} />
+
+  <div>
+    <h2 className="text-xl font-semibold">Preferences</h2>
+    <DividerWithText text="Account Settings" />
+
+    <div className="space-y-4">
+      <label className="flex items-center">
+        <input type="checkbox" className="mr-2" />
+        Email notifications
+      </label>
+      <label className="flex items-center">
+        <input type="checkbox" className="mr-2" />
+        Marketing emails
+      </label>
+    </div>
+  </div>
+</form>
+```
+
+## Accessibility
+
+The Divider component follows WCAG accessibility guidelines:
+
+### Semantic Markup
+- Uses proper `role="separator"` for dividers
+- Decorative dividers marked with `aria-hidden="true"`
+- Semantic dividers include appropriate ARIA labels
+
+### Screen Reader Support
+- Text and icon content properly announced
+- Section dividers include heading semantics
+- Collapsible sections communicate state changes
+
+### Focus Management
+- Interactive section dividers are keyboard accessible
+- Proper focus indicators for collapsible elements
+- Logical tab order maintained
+
+### Color and Contrast
+- Sufficient color contrast for all variants
+- Visual information not conveyed by color alone
+- High contrast mode support
+
+## Design Guidelines
+
+### When to Use Each Style
+- **Solid**: Standard separation, formal content, clean interfaces
+- **Dashed**: Casual separation, draft content, temporary sections
+- **Dotted**: Subtle separation, decorative elements, light divisions
+- **Double**: Formal separation, important sections, emphasis
+
+### Weight Guidelines
+- **Thin**: Subtle separation, dense layouts, minimal visual disruption
+- **Normal**: Standard separation, balanced visual hierarchy
+- **Thick**: Strong separation, section boundaries, emphasis
+
+### Color Guidelines
+- **Default**: Neutral separation, follows theme colors
+- **Muted**: Subtle separation, background content
+- **Primary**: Important sections, brand-related content
+- **Secondary**: Alternative sections, secondary content
+- **Accent**: Highlighted sections, special content
+- **Destructive**: Warning sections, error content
+
+### Length Guidelines
+- **Short**: Decorative separation, inline content, subtle breaks
+- **Normal**: Standard content separation, balanced layouts
+- **Long**: Prominent separation, section boundaries
+- **Full**: Complete separation, page sections, strong boundaries
+
+## Props Reference
+
+### Divider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Divider orientation |
+| `style` | `'solid' \| 'dashed' \| 'dotted' \| 'double'` | `'solid'` | Line style |
+| `weight` | `'thin' \| 'normal' \| 'thick'` | `'thin'` | Line thickness |
+| `length` | `'short' \| 'normal' \| 'long' \| 'full'` | `'full'` | Divider length |
+| `spacing` | `'tight' \| 'normal' \| 'loose'` | `'normal'` | Spacing around divider |
+| `color` | `'default' \| 'muted' \| 'primary' \| 'secondary' \| 'accent' \| 'destructive'` | `'default'` | Color variant |
+| `decorative` | `boolean` | `true` | Whether divider is decorative (affects ARIA) |
+| `className` | `string` | - | Additional CSS classes |
+
+### DividerWithText Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `text` | `string` | - | Text content |
+| `textPosition` | `'start' \| 'center' \| 'end'` | `'center'` | Text position |
+| `textProps` | `TextProps` | - | Text styling props |
+| All base Divider props | - | - | Inherited from Divider |
+
+### DividerWithIcon Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `ReactNode` | - | Icon element |
+| `textPosition` | `'start' \| 'center' \| 'end'` | `'center'` | Icon position |
+| `iconProps` | `IconProps` | - | Icon styling props |
+| All base Divider props | - | - | Inherited from Divider |
+
+### RecipeDivider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `context` | `'ingredient-group' \| 'instruction-step' \| 'nutrition-group' \| 'recipe-section'` | - | Recipe context |
+| `label` | `string` | - | Optional label text |
+| `showLabel` | `boolean` | `false` | Whether to show label |
+| All base Divider props | - | - | Inherited from Divider |
+
+### SectionDivider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `section` | `'ingredients' \| 'instructions' \| 'nutrition' \| 'metadata'` | - | Section type |
+| `title` | `string` | - | Section title |
+| `subtitle` | `string` | - | Optional subtitle |
+| `icon` | `ReactNode` | - | Optional icon |
+| `collapsible` | `boolean` | `false` | Whether section is collapsible |
+| `onToggleCollapse` | `(collapsed: boolean) => void` | - | Collapse toggle handler |
+| All base Divider props | - | - | Inherited from Divider |
+
+Plus all standard HTML div attributes.

@@ -1,0 +1,444 @@
+# Skeleton Component
+
+A flexible loading placeholder component that provides visual feedback while content is being fetched. Includes multiple animation styles, shape variants, and recipe-specific presets.
+
+## Features
+
+- **Multiple Variants**: Default, text, circular, card, image, and button shapes
+- **Animation Styles**: Pulse, wave, or no animation for accessibility
+- **Auto-sizing**: Automatically adapts to container dimensions
+- **Compound Components**: Pre-built combinations for common patterns
+- **Recipe Presets**: Ready-to-use skeletons for recipe cards, lists, and details
+- **Accessibility**: ARIA labels, screen reader support, respects reduced motion
+- **Customizable**: Flexible dimensions, intensity, and border radius options
+
+## Import
+
+```tsx
+import {
+  Skeleton,
+  SkeletonContainer,
+  SkeletonText,
+  SkeletonAvatar,
+  SkeletonButton,
+  RecipeCardSkeleton,
+  RecipeListSkeleton,
+  RecipeDetailSkeleton,
+  ProfileSkeleton,
+} from '@/components/ui/skeleton';
+```
+
+## Basic Usage
+
+```tsx
+// Simple skeleton
+<Skeleton />
+
+// Custom dimensions
+<Skeleton width={200} height={20} />
+
+// Multiple lines
+<Skeleton count={3} />
+
+// Circular skeleton
+<Skeleton variant="circular" size="lg" />
+```
+
+## Variants
+
+### Default
+Basic rectangular skeleton for general content.
+
+```tsx
+<Skeleton variant="default" />
+```
+
+### Text
+Optimized for text content with appropriate line height.
+
+```tsx
+<Skeleton variant="text" />
+
+// Multiple text lines
+<Skeleton variant="text" count={3} />
+```
+
+### Circular
+Perfect for avatars and profile images.
+
+```tsx
+<Skeleton variant="circular" size="lg" />
+```
+
+### Card
+Container skeleton with padding for card layouts.
+
+```tsx
+<Skeleton variant="card" size="lg" />
+```
+
+### Image
+Square aspect ratio for image placeholders.
+
+```tsx
+<Skeleton variant="image" />
+```
+
+### Button
+Button-shaped skeleton with appropriate dimensions.
+
+```tsx
+<Skeleton variant="button" size="default" />
+```
+
+## Animation Styles
+
+### Pulse (Default)
+Subtle opacity animation for a gentle loading effect.
+
+```tsx
+<Skeleton animation="pulse" />
+```
+
+### Wave
+Shimmer effect that moves across the skeleton.
+
+```tsx
+<Skeleton animation="wave" />
+```
+
+### None
+No animation for users who prefer reduced motion.
+
+```tsx
+<Skeleton animation="none" />
+```
+
+## Sizes
+
+```tsx
+// Small
+<Skeleton size="sm" />
+
+// Default
+<Skeleton size="default" />
+
+// Large
+<Skeleton size="lg" />
+
+// Full width
+<Skeleton size="full" />
+```
+
+## Compound Components
+
+### SkeletonContainer
+Groups multiple skeleton elements with consistent spacing.
+
+```tsx
+<SkeletonContainer spacing="default">
+  <Skeleton variant="text" />
+  <Skeleton variant="text" />
+  <Skeleton variant="text" width="80%" />
+</SkeletonContainer>
+```
+
+### SkeletonText
+Creates multiple lines of text with varied widths.
+
+```tsx
+// Three lines (default)
+<SkeletonText />
+
+// Paragraph (5 lines)
+<SkeletonText lines="paragraph" />
+
+// Custom line count
+<SkeletonText lineCount={7} />
+```
+
+### SkeletonAvatar
+Circular skeleton for user avatars.
+
+```tsx
+<SkeletonAvatar size="lg" />
+
+// With user info
+<div className="flex items-center gap-3">
+  <SkeletonAvatar />
+  <div>
+    <Skeleton variant="text" width={120} />
+    <Skeleton variant="text" size="sm" width={80} />
+  </div>
+</div>
+```
+
+### SkeletonButton
+Button placeholder with proper sizing.
+
+```tsx
+<SkeletonButton size="default" />
+```
+
+## Recipe-Specific Presets
+
+### RecipeCardSkeleton
+Complete skeleton for recipe card components.
+
+```tsx
+<RecipeCardSkeleton />
+```
+
+### RecipeListSkeleton
+Multiple recipe items in a list format.
+
+```tsx
+// Default 3 items
+<RecipeListSkeleton />
+
+// Custom count
+<RecipeListSkeleton count={5} />
+```
+
+### RecipeDetailSkeleton
+Full-page skeleton for recipe details.
+
+```tsx
+<RecipeDetailSkeleton />
+```
+
+### ProfileSkeleton
+User profile with avatar and info.
+
+```tsx
+<ProfileSkeleton />
+```
+
+## Custom Dimensions
+
+Control width and height with precise values.
+
+```tsx
+// Fixed dimensions
+<Skeleton width={200} height={20} />
+
+// Percentage width
+<Skeleton width="50%" height={40} />
+
+// Responsive sizing
+<Skeleton
+  width="100%"
+  height={100}
+  className="md:w-1/2 lg:w-1/3"
+/>
+```
+
+## Accessibility
+
+### Screen Reader Support
+All skeletons include proper ARIA attributes.
+
+```tsx
+<Skeleton aria-label="Loading recipe content..." />
+```
+
+### Reduced Motion
+Animations automatically disabled for users who prefer reduced motion.
+
+```tsx
+// Respects prefers-reduced-motion
+<Skeleton animation="wave" />
+```
+
+## Recipe App Examples
+
+### Loading Recipe Search Results
+```tsx
+function RecipeSearch({ isLoading, recipes }) {
+  if (isLoading) {
+    return <RecipeListSkeleton count={6} />;
+  }
+
+  return (
+    <div className="space-y-4">
+      {recipes.map(recipe => (
+        <RecipeCard key={recipe.id} {...recipe} />
+      ))}
+    </div>
+  );
+}
+```
+
+### Loading Recipe Details
+```tsx
+function RecipeDetail({ isLoading, recipe }) {
+  if (isLoading) {
+    return <RecipeDetailSkeleton />;
+  }
+
+  return <RecipeContent {...recipe} />;
+}
+```
+
+### Inline Loading States
+```tsx
+function RecipeTitle({ title, isLoading }) {
+  return (
+    <h1 className="text-2xl font-bold">
+      {isLoading ? <Skeleton variant="text" /> : title}
+    </h1>
+  );
+}
+```
+
+### Loading User Profile
+```tsx
+function UserProfile({ user, isLoading }) {
+  if (isLoading) {
+    return <ProfileSkeleton />;
+  }
+
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar src={user.avatar} />
+      <div>
+        <h3>{user.name}</h3>
+        <p>{user.bio}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Progressive Loading
+```tsx
+function RecipeCard({ recipe }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  return (
+    <div className="card">
+      {!imageLoaded && <Skeleton variant="image" className="h-48" />}
+      <img
+        src={recipe.image}
+        onLoad={() => setImageLoaded(true)}
+        className={!imageLoaded ? 'hidden' : ''}
+      />
+      <h3>{recipe.title || <Skeleton variant="text" />}</h3>
+      <p>{recipe.description || <SkeletonText lines="two" />}</p>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+### 1. Match Content Layout
+Ensure skeletons accurately represent the final content structure.
+
+```tsx
+// Good - matches actual content
+<div className="space-y-2">
+  <Skeleton variant="text" size="lg" />
+  <SkeletonText lines="two" />
+</div>
+
+// Bad - doesn't match layout
+<Skeleton height={200} />
+```
+
+### 2. Use Appropriate Animations
+Choose animations based on context and duration.
+
+```tsx
+// Quick loads - pulse
+<Skeleton animation="pulse" />
+
+// Longer waits - wave
+<Skeleton animation="wave" />
+
+// Accessibility focus - none
+<Skeleton animation="none" />
+```
+
+### 3. Progressive Enhancement
+Show skeletons for slow-loading content while displaying available data.
+
+```tsx
+<div>
+  <h1>{title}</h1>
+  {content ? (
+    <p>{content}</p>
+  ) : (
+    <SkeletonText lines="paragraph" />
+  )}
+</div>
+```
+
+### 4. Consistent Styling
+Use preset components for common patterns.
+
+```tsx
+// Consistent recipe cards
+<RecipeCardSkeleton />
+
+// Instead of custom each time
+<div className="custom-skeleton">...</div>
+```
+
+## API Reference
+
+### Skeleton Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| variant | `'default' \| 'text' \| 'circular' \| 'card' \| 'image' \| 'button'` | `'default'` | Visual style variant |
+| size | `'sm' \| 'default' \| 'lg' \| 'full'` | `'default'` | Size preset |
+| animation | `'pulse' \| 'wave' \| 'none'` | `'pulse'` | Animation style |
+| rounded | `'none' \| 'sm' \| 'default' \| 'lg' \| 'full'` | `'default'` | Border radius |
+| intensity | `'light' \| 'default' \| 'strong'` | `'default'` | Visual intensity |
+| width | `string \| number` | - | Custom width |
+| height | `string \| number` | - | Custom height |
+| count | `number` | `1` | Number of skeleton lines |
+| circle | `boolean` | `false` | Shorthand for circular variant |
+| aria-label | `string` | `'Loading...'` | Screen reader text |
+
+### SkeletonContainer Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| spacing | `'tight' \| 'default' \| 'loose'` | `'default'` | Gap between children |
+| direction | `'vertical' \| 'horizontal'` | `'vertical'` | Layout direction |
+
+### SkeletonText Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| lines | `'single' \| 'two' \| 'three' \| 'paragraph'` | `'three'` | Preset line counts |
+| lineCount | `number` | - | Custom line count |
+| animation | `'pulse' \| 'wave' \| 'none'` | `'pulse'` | Animation style |
+
+## Performance Tips
+
+1. **Lazy Load Heavy Skeletons**: For complex skeletons, consider lazy loading.
+2. **Minimize Re-renders**: Use React.memo for skeleton containers.
+3. **Batch Updates**: Load multiple items together to reduce skeleton flashing.
+4. **Optimize Animations**: Use CSS animations instead of JavaScript.
+5. **Clean Up**: Remove skeletons promptly when content loads.
+
+## Styling
+
+The skeleton component uses CSS variables for theming:
+
+```css
+/* Light mode */
+--muted: 0 0% 96.1%;
+
+/* Dark mode */
+--muted: 0 0% 14.9%;
+```
+
+Override with custom classes:
+
+```tsx
+<Skeleton className="bg-gray-200 dark:bg-gray-800" />
+```

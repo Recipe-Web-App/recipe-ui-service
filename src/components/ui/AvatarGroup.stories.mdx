@@ -1,0 +1,312 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import { AvatarGroup, AvatarGroupWithContext } from './avatar-group';
+
+<Meta title="UI/AvatarGroup" component={AvatarGroup} />
+
+# AvatarGroup
+
+The AvatarGroup component displays multiple user avatars in various layouts, perfect for showing collaborators on shared recipes, meal plans, or collections.
+
+## Features
+
+- **Multiple Layouts**: Stacked (overlapping), grid, or inline display modes
+- **Overflow Handling**: Elegant "+N more" indicator for large groups
+- **Interactive**: Support for click handlers on individual avatars
+- **Tooltips**: Optional hover tooltips with user information
+- **Status Indicators**: Show online/offline/away status
+- **Animations**: Smooth hover effects and transitions
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **Context Support**: Display with contextual labels for recipes/meal plans
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const users = [
+        { id: '1', name: 'John Doe', avatar: 'https://via.placeholder.com/150' },
+        { id: '2', name: 'Jane Smith', avatar: 'https://via.placeholder.com/150' },
+        { id: '3', name: 'Bob Johnson' },
+        { id: '4', name: 'Alice Brown', avatar: 'https://via.placeholder.com/150' },
+        { id: '5', name: 'Charlie Wilson' },
+      ];
+      return <AvatarGroup users={users} />;
+    }}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Sizes">
+    {() => {
+      const users = [
+        { id: '1', name: 'John Doe', role: 'chef' },
+        { id: '2', name: 'Jane Smith', verified: true },
+        { id: '3', name: 'Bob Johnson' },
+      ];
+      return (
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <span className="w-20 text-sm">XS:</span>
+            <AvatarGroup users={users} size="xs" />
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="w-20 text-sm">SM:</span>
+            <AvatarGroup users={users} size="sm" />
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="w-20 text-sm">MD:</span>
+            <AvatarGroup users={users} size="md" />
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="w-20 text-sm">LG:</span>
+            <AvatarGroup users={users} size="lg" />
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="w-20 text-sm">XL:</span>
+            <AvatarGroup users={users} size="xl" />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Layout Variants
+
+<Canvas>
+  <Story name="Layouts">
+    {() => {
+      const users = [
+        { id: '1', name: 'John Doe', role: 'chef' },
+        { id: '2', name: 'Jane Smith', verified: true },
+        { id: '3', name: 'Bob Johnson' },
+        { id: '4', name: 'Alice Brown', role: 'admin' },
+        { id: '5', name: 'Charlie Wilson' },
+      ];
+      return (
+        <div className="space-y-6">
+          <div>
+            <h3 className="mb-2 font-medium">Stacked (Default)</h3>
+            <AvatarGroup users={users} layout="stacked" />
+          </div>
+          <div>
+            <h3 className="mb-2 font-medium">Grid</h3>
+            <AvatarGroup users={users} layout="grid" />
+          </div>
+          <div>
+            <h3 className="mb-2 font-medium">Inline</h3>
+            <AvatarGroup users={users} layout="inline" />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Overflow Handling
+
+<Canvas>
+  <Story name="Overflow">
+    {() => {
+      const manyUsers = Array.from({ length: 12 }, (_, i) => ({
+        id: `${i + 1}`,
+        name: `User ${i + 1}`,
+      }));
+      return (
+        <div className="space-y-4">
+          <div>
+            <p className="mb-2 text-sm text-gray-600">Max 3 visible:</p>
+            <AvatarGroup users={manyUsers} max={3} />
+          </div>
+          <div>
+            <p className="mb-2 text-sm text-gray-600">Max 5 visible:</p>
+            <AvatarGroup users={manyUsers} max={5} />
+          </div>
+          <div>
+            <p className="mb-2 text-sm text-gray-600">Max 8 visible:</p>
+            <AvatarGroup users={manyUsers} max={8} />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Features
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const users = [
+        { id: '1', name: 'John Doe', status: 'online' },
+        { id: '2', name: 'Jane Smith', status: 'away' },
+        { id: '3', name: 'Bob Johnson', status: 'busy' },
+        { id: '4', name: 'Alice Brown', status: 'offline' },
+        { id: '5', name: 'Charlie Wilson', status: 'online' },
+      ];
+      return (
+        <div className="space-y-6">
+          <div>
+            <h3 className="mb-2 font-medium">With Tooltips</h3>
+            <AvatarGroup users={users} showTooltip animated />
+          </div>
+          <div>
+            <h3 className="mb-2 font-medium">With Status Indicators</h3>
+            <AvatarGroup users={users} showStatus animated />
+          </div>
+          <div>
+            <h3 className="mb-2 font-medium">Clickable Avatars</h3>
+            <AvatarGroup
+              users={users}
+              animated
+              onUserClick={(user) => alert(`Clicked: ${user.name}`)}
+              onOverflowClick={() => alert('Show all users')}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Context
+
+<Canvas>
+  <Story name="WithContext">
+    {() => {
+      const recipeCollaborators = [
+        { id: '1', name: 'Head Chef', role: 'chef' },
+        { id: '2', name: 'Sous Chef', verified: true },
+        { id: '3', name: 'Line Cook' },
+      ];
+      const mealPlanUsers = [
+        { id: '1', name: 'Family Member 1' },
+        { id: '2', name: 'Family Member 2' },
+        { id: '3', name: 'Family Member 3' },
+        { id: '4', name: 'Family Member 4' },
+      ];
+      return (
+        <div className="space-y-4">
+          <AvatarGroupWithContext
+            users={recipeCollaborators}
+            context={{
+              type: 'recipe',
+              title: 'Grandma\'s Secret Recipe',
+              isPublic: false,
+            }}
+          />
+          <AvatarGroupWithContext
+            users={mealPlanUsers}
+            context={{
+              type: 'meal-plan',
+              title: 'Weekly Family Meals',
+              isPublic: true,
+            }}
+            max={3}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Integration Examples
+
+<Canvas>
+  <Story name="RecipeExamples">
+    {() => {
+      const chefTeam = [
+        { id: '1', name: 'Gordon Ramsay', role: 'chef', verified: true },
+        { id: '2', name: 'Jamie Oliver', role: 'chef', verified: true },
+        { id: '3', name: 'Julia Child', role: 'chef' },
+      ];
+      const contributors = [
+        { id: '1', name: 'Alice Cooper', status: 'online' },
+        { id: '2', name: 'Bob Dylan', status: 'away' },
+        { id: '3', name: 'Charlie Puth' },
+        { id: '4', name: 'David Bowie' },
+        { id: '5', name: 'Eddie Vedder' },
+        { id: '6', name: 'Frank Sinatra' },
+      ];
+      return (
+        <div className="space-y-6">
+          <div className="rounded-lg border p-4">
+            <h3 className="mb-3 font-semibold">Recipe Card Header</h3>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">Created by:</span>
+              <AvatarGroup users={chefTeam} size="sm" showTooltip animated />
+            </div>
+          </div>
+          <div className="rounded-lg border p-4">
+            <h3 className="mb-3 font-semibold">Community Contributors</h3>
+            <AvatarGroup
+              users={contributors}
+              max={4}
+              showStatus
+              animated
+              onOverflowClick={() => alert('View all contributors')}
+            />
+          </div>
+          <div className="rounded-lg border bg-orange-50 p-4">
+            <h3 className="mb-3 font-semibold">Featured Chef Collection</h3>
+            <AvatarGroup
+              users={chefTeam}
+              size="lg"
+              layout="inline"
+              showTooltip
+              animated
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Overflow Render
+
+<Canvas>
+  <Story name="CustomOverflow">
+    {() => {
+      const users = Array.from({ length: 10 }, (_, i) => ({
+        id: `${i + 1}`,
+        name: `User ${i + 1}`,
+      }));
+      return (
+        <AvatarGroup
+          users={users}
+          max={3}
+          renderOverflow={(count) => (
+            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-sm font-medium text-white hover:bg-blue-600">
+              +{count}
+            </button>
+          )}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Props
+
+<ArgsTable of={AvatarGroup} />
+
+## Accessibility
+
+The AvatarGroup component is fully accessible with:
+
+- **ARIA labels** for group and individual avatars
+- **Keyboard navigation** support for interactive avatars
+- **Screen reader** friendly descriptions
+- **Focus indicators** for keyboard users
+- **Semantic HTML** structure
+
+## Best Practices
+
+1. **Performance**: Limit the number of visible avatars using the `max` prop for large groups
+2. **User Experience**: Use tooltips to show full names when avatars display initials
+3. **Visual Hierarchy**: Use size variants appropriately based on context importance
+4. **Accessibility**: Always provide meaningful alt text and aria-labels
+5. **Responsiveness**: Consider using smaller sizes on mobile devices

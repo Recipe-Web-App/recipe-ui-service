@@ -1,0 +1,443 @@
+# Drawer Component
+
+A comprehensive off-canvas drawer system built with Radix UI Dialog primitives and class-variance-authority for type-safe variants.
+
+## Features
+
+- **Multiple Positions**: Left, right, top, bottom drawer positions
+- **Multiple Sizes**: Six size variants from xs to full-width/height
+- **Specialized Components**: NavigationDrawer, RecipeDrawer, MobileMenuDrawer
+- **Recipe-Specific Features**: Ingredient checklists, cooking instructions, shopping lists
+- **Full Accessibility**: ARIA attributes, keyboard navigation, focus management, screen reader support
+- **Animation Support**: Smooth slide-in/out transitions with proper state management
+- **Overlay Controls**: Configurable background overlay with click-to-close
+- **Type Safety**: Full TypeScript support with comprehensive type definitions
+- **Customizable**: Easy to extend with custom classes and content
+
+## Import
+
+```tsx
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  DrawerClose,
+  DrawerTitle,
+  DrawerDescription,
+  NavigationDrawer,
+  RecipeDrawer,
+  MobileMenuDrawer,
+} from '@/components/ui/drawer';
+```
+
+## Basic Usage
+
+```tsx
+// Basic drawer
+<Drawer>
+  <DrawerTrigger asChild>
+    <Button>Open Drawer</Button>
+  </DrawerTrigger>
+  <DrawerOverlay />
+  <DrawerContent position="right" size="md">
+    <DrawerHeader>
+      <DrawerTitle>Drawer Title</DrawerTitle>
+      <DrawerDescription>Drawer description</DrawerDescription>
+    </DrawerHeader>
+    <DrawerBody>
+      <p>Drawer content goes here</p>
+    </DrawerBody>
+    <DrawerFooter>
+      <DrawerClose asChild>
+        <Button variant="outline">Close</Button>
+      </DrawerClose>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+## Positions
+
+### Left Drawer
+Slides in from the left side of the screen.
+
+```tsx
+<DrawerContent position="left" size="md">
+  <DrawerHeader>
+    <DrawerTitle>Left Drawer</DrawerTitle>
+  </DrawerHeader>
+  <DrawerBody>
+    <p>Content slides in from the left</p>
+  </DrawerBody>
+</DrawerContent>
+```
+
+### Right Drawer
+Slides in from the right side of the screen.
+
+```tsx
+<DrawerContent position="right" size="md">
+  <DrawerHeader>
+    <DrawerTitle>Right Drawer</DrawerTitle>
+  </DrawerHeader>
+  <DrawerBody>
+    <p>Content slides in from the right</p>
+  </DrawerBody>
+</DrawerContent>
+```
+
+### Top Drawer
+Slides down from the top of the screen.
+
+```tsx
+<DrawerContent position="top" size="sm">
+  <DrawerHeader>
+    <DrawerTitle>Top Drawer</DrawerTitle>
+  </DrawerHeader>
+  <DrawerBody>
+    <p>Content slides down from the top</p>
+  </DrawerBody>
+</DrawerContent>
+```
+
+### Bottom Drawer
+Slides up from the bottom of the screen.
+
+```tsx
+<DrawerContent position="bottom" size="sm">
+  <DrawerHeader>
+    <DrawerTitle>Bottom Drawer</DrawerTitle>
+  </DrawerHeader>
+  <DrawerBody>
+    <p>Content slides up from the bottom</p>
+  </DrawerBody>
+</DrawerContent>
+```
+
+## Sizes
+
+### Extra Small (xs)
+Compact drawer for minimal content.
+
+```tsx
+<DrawerContent position="right" size="xs">
+  {/* 240px width for left/right, 240px height for top/bottom */}
+</DrawerContent>
+```
+
+### Small (sm)
+Small drawer for focused content.
+
+```tsx
+<DrawerContent position="right" size="sm">
+  {/* 288px width for left/right, 288px height for top/bottom */}
+</DrawerContent>
+```
+
+### Medium (md) - Default
+Standard drawer size for most content.
+
+```tsx
+<DrawerContent position="right" size="md">
+  {/* 384px width for left/right, 384px height for top/bottom */}
+</DrawerContent>
+```
+
+### Large (lg)
+Large drawer for complex content.
+
+```tsx
+<DrawerContent position="right" size="lg">
+  {/* 512px width for left/right, 512px height for top/bottom */}
+</DrawerContent>
+```
+
+### Extra Large (xl)
+Extra large drawer for extensive content.
+
+```tsx
+<DrawerContent position="right" size="xl">
+  {/* 640px width for left/right, 640px height for top/bottom */}
+</DrawerContent>
+```
+
+### Full Size
+Full-width or full-height drawer.
+
+```tsx
+<DrawerContent position="right" size="full">
+  {/* 100% width for left/right, 100% height for top/bottom */}
+</DrawerContent>
+```
+
+## Navigation Drawer
+
+Specialized drawer for app navigation with menu items, user profiles, and structured navigation.
+
+```tsx
+const navigationItems = [
+  {
+    id: 'home',
+    label: 'Home',
+    icon: 'home',
+    href: '/',
+    isActive: true,
+  },
+  {
+    id: 'recipes',
+    label: 'Recipes',
+    icon: 'book-open',
+    href: '/recipes',
+    badge: '24',
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: 'settings',
+    href: '/settings',
+  },
+];
+
+<NavigationDrawer
+  items={navigationItems}
+  activeItemId="home"
+  showProfile
+  userProfile={{
+    name: 'John Chef',
+    email: 'john@example.com',
+  }}
+  onItemClick={(item) => console.log('Clicked:', item)}
+>
+  <DrawerTrigger asChild>
+    <Button variant="outline">Menu</Button>
+  </DrawerTrigger>
+</NavigationDrawer>
+```
+
+## Recipe Drawer
+
+Specialized drawer for recipe-related content including ingredients, instructions, and shopping lists.
+
+### Ingredients Checklist
+
+```tsx
+const ingredients = [
+  {
+    id: '1',
+    name: 'Spaghetti pasta',
+    amount: 1,
+    unit: 'lb',
+    isChecked: false,
+  },
+  {
+    id: '2',
+    name: 'Parmesan cheese',
+    amount: 1,
+    unit: 'cup',
+    notes: 'freshly grated',
+    isChecked: true,
+  },
+];
+
+<RecipeDrawer
+  recipeTitle="Pasta Carbonara"
+  ingredients={ingredients}
+  showIngredientChecklist
+  onIngredientCheck={(id, checked) => console.log(id, checked)}
+  type="ingredients"
+>
+  <DrawerTrigger asChild>
+    <Button>View Ingredients</Button>
+  </DrawerTrigger>
+</RecipeDrawer>
+```
+
+### Cooking Instructions
+
+```tsx
+const instructions = [
+  {
+    id: '1',
+    stepNumber: 1,
+    instruction: 'Boil water in a large pot',
+    duration: 5,
+    isCompleted: true,
+  },
+  {
+    id: '2',
+    stepNumber: 2,
+    instruction: 'Add pasta and cook until al dente',
+    duration: 10,
+    isCompleted: false,
+  },
+];
+
+<RecipeDrawer
+  recipeTitle="Pasta Carbonara"
+  instructions={instructions}
+  showInstructionProgress
+  onInstructionComplete={(id, completed) => console.log(id, completed)}
+  type="instructions"
+>
+  <DrawerTrigger asChild>
+    <Button>View Instructions</Button>
+  </DrawerTrigger>
+</RecipeDrawer>
+```
+
+### Shopping List
+
+```tsx
+const shoppingList = [
+  {
+    id: '1',
+    name: 'Milk',
+    quantity: 1,
+    unit: 'gallon',
+    isChecked: false,
+    recipeName: 'Pancakes',
+  },
+  {
+    id: '2',
+    name: 'Eggs',
+    quantity: 12,
+    unit: 'count',
+    isChecked: true,
+    recipeName: 'Carbonara',
+  },
+];
+
+<RecipeDrawer
+  shoppingList={shoppingList}
+  onShoppingItemCheck={(id, checked) => console.log(id, checked)}
+  type="shopping"
+>
+  <DrawerTrigger asChild>
+    <Button>Shopping List</Button>
+  </DrawerTrigger>
+</RecipeDrawer>
+```
+
+## Mobile Menu Drawer
+
+Specialized drawer for mobile navigation with search and notifications.
+
+```tsx
+<MobileMenuDrawer
+  items={navigationItems}
+  showSearch
+  searchPlaceholder="Search recipes..."
+  showNotifications
+  notificationCount={5}
+  showProfile
+  userProfile={{
+    name: 'Jane Chef',
+    email: 'jane@example.com',
+  }}
+  onItemClick={(item) => console.log('Clicked:', item)}
+  onSearchChange={(value) => console.log('Search:', value)}
+>
+  <DrawerTrigger asChild>
+    <Button>Mobile Menu</Button>
+  </DrawerTrigger>
+</MobileMenuDrawer>
+```
+
+## Controlled vs Uncontrolled
+
+### Controlled
+Manage the open state externally.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Drawer open={open} onOpenChange={setOpen}>
+  <DrawerTrigger asChild>
+    <Button>Open Controlled</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Controlled Drawer</DrawerTitle>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+```
+
+### Uncontrolled
+Let the component manage its own state.
+
+```tsx
+<Drawer defaultOpen={false}>
+  <DrawerTrigger asChild>
+    <Button>Open Uncontrolled</Button>
+  </DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Uncontrolled Drawer</DrawerTitle>
+    </DrawerHeader>
+  </DrawerContent>
+</Drawer>
+```
+
+## Accessibility
+
+- **Keyboard Navigation**: Full keyboard support with proper focus management
+- **Screen Reader Support**: ARIA labels, descriptions, and announcements
+- **Focus Trapping**: Focus is trapped within the drawer when open
+- **Focus Restoration**: Focus returns to trigger element when closed
+- **Escape Key**: Closes drawer when escape is pressed (configurable)
+- **Overlay Click**: Closes drawer when overlay is clicked (configurable)
+
+## Recipe App Patterns
+
+### Navigation Pattern
+Use NavigationDrawer for main app navigation with recipe categories and user actions.
+
+### Ingredient Management
+Use RecipeDrawer with ingredient type for shopping list management and cooking preparation.
+
+### Cooking Mode
+Use RecipeDrawer with instructions type for step-by-step cooking guidance with progress tracking.
+
+### Mobile Experience
+Use MobileMenuDrawer for responsive navigation with search functionality.
+
+## Props Reference
+
+### Drawer Props
+- `open?: boolean` - Controls drawer open state
+- `onOpenChange?: (open: boolean) => void` - Callback when open state changes
+- `defaultOpen?: boolean` - Default open state for uncontrolled usage
+- `showOverlay?: boolean` - Whether to show background overlay
+- `closeOnOverlayClick?: boolean` - Close when overlay is clicked
+- `closeOnEscape?: boolean` - Close when escape key is pressed
+- `preventScroll?: boolean` - Prevent body scrolling when open
+
+### DrawerContent Props
+- `position?: 'left' | 'right' | 'top' | 'bottom'` - Drawer position
+- `size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'` - Drawer size
+- `variant?: 'default' | 'elevated' | 'minimal' | 'overlay'` - Style variant
+- `showClose?: boolean` - Show close button in header
+
+### NavigationDrawer Props
+- `items: NavigationItem[]` - Array of navigation items
+- `activeItemId?: string` - Currently active item ID
+- `showProfile?: boolean` - Show user profile section
+- `userProfile?: object` - User profile data
+- `onItemClick?: (item: NavigationItem) => void` - Item click handler
+
+### RecipeDrawer Props
+- `recipeTitle?: string` - Recipe title to display
+- `ingredients?: DrawerIngredient[]` - Array of recipe ingredients
+- `instructions?: DrawerInstruction[]` - Array of cooking instructions
+- `shoppingList?: ShoppingListItem[]` - Array of shopping list items
+- `type?: 'ingredients' | 'instructions' | 'shopping' | 'notes'` - Content type
+- `showIngredientChecklist?: boolean` - Enable ingredient checking
+- `showInstructionProgress?: boolean` - Show instruction progress
+- `onIngredientCheck?: (id: string, checked: boolean) => void` - Ingredient check handler
+- `onInstructionComplete?: (id: string, completed: boolean) => void` - Instruction complete handler
+- `onShoppingItemCheck?: (id: string, checked: boolean) => void` - Shopping item check handler

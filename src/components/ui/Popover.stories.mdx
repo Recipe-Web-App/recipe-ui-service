@@ -1,0 +1,657 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  SimplePopover,
+  MenuPopover,
+  FormPopover,
+  ConfirmPopover,
+} from './popover';
+
+<Meta
+  title="UI/Popover"
+  component={Popover}
+  parameters={{
+    docs: {
+      description: {
+        component: 'A floating content container that appears on demand, providing contextual information, actions, and forms in the recipe application.',
+      },
+    },
+  }}
+/>
+
+# Popover Component
+
+The Popover component provides a versatile floating container for displaying contextual content, menus, forms, and confirmations. Built on Radix UI's popover primitive, it offers full accessibility, keyboard navigation, and flexible positioning.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Basic">
+    <div className="flex justify-center p-8">
+      <SimplePopover
+        content={
+          <div className="space-y-2">
+            <h3 className="font-semibold">Recipe Options</h3>
+            <p className="text-sm text-gray-600">
+              Quick actions for managing your recipes.
+            </p>
+          </div>
+        }
+      >
+        <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+          Open Popover
+        </button>
+      </SimplePopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Variants
+
+The Popover component supports multiple visual variants for different contexts:
+
+<Canvas>
+  <Story name="Variants">
+    <div className="flex flex-wrap gap-4 p-8">
+      <SimplePopover content="Default popover content" variant="default">
+        <button className="rounded border px-3 py-1.5 text-sm">Default</button>
+      </SimplePopover>
+
+      <SimplePopover content="Light themed popover with enhanced shadow" variant="light">
+        <button className="rounded border px-3 py-1.5 text-sm">Light</button>
+      </SimplePopover>
+
+      <SimplePopover content="Accent colored popover for emphasis" variant="accent">
+        <button className="rounded border px-3 py-1.5 text-sm">Accent</button>
+      </SimplePopover>
+
+      <SimplePopover content="Success message popover" variant="success">
+        <button className="rounded border px-3 py-1.5 text-sm">Success</button>
+      </SimplePopover>
+
+      <SimplePopover content="Warning notification popover" variant="warning">
+        <button className="rounded border px-3 py-1.5 text-sm">Warning</button>
+      </SimplePopover>
+
+      <SimplePopover content="Error message popover" variant="error">
+        <button className="rounded border px-3 py-1.5 text-sm">Error</button>
+      </SimplePopover>
+
+      <SimplePopover content="Informational popover" variant="info">
+        <button className="rounded border px-3 py-1.5 text-sm">Info</button>
+      </SimplePopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Sizes
+
+Different size options accommodate various content requirements:
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="flex flex-wrap items-center gap-4 p-8">
+      <SimplePopover content="Small popover" size="sm">
+        <button className="rounded bg-gray-200 px-2 py-1 text-xs">Small</button>
+      </SimplePopover>
+
+      <SimplePopover content="Default size popover with standard content" size="default">
+        <button className="rounded bg-gray-200 px-3 py-1.5 text-sm">Default</button>
+      </SimplePopover>
+
+      <SimplePopover
+        content="Large popover that can contain more detailed information and complex layouts"
+        size="lg"
+      >
+        <button className="rounded bg-gray-200 px-4 py-2 text-base">Large</button>
+      </SimplePopover>
+
+      <SimplePopover
+        content={
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Extra Large Popover</h3>
+            <p>
+              This size is perfect for comprehensive information, detailed forms,
+              and complex content that requires more space.
+            </p>
+          </div>
+        }
+        size="xl"
+      >
+        <button className="rounded bg-gray-200 px-5 py-2.5 text-lg">Extra Large</button>
+      </SimplePopover>
+
+      <SimplePopover
+        content={
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Full Width Popover</h3>
+            <p>
+              Expands to use available width while maintaining maximum constraints.
+              Perfect for detailed forms and comprehensive content.
+            </p>
+          </div>
+        }
+        size="full"
+      >
+        <button className="rounded bg-gray-200 px-6 py-3 text-lg">Full Width</button>
+      </SimplePopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Positioning
+
+Popovers can be positioned in various locations relative to their trigger:
+
+<Canvas>
+  <Story name="Positioning">
+    <div className="flex justify-center p-16">
+      <div className="grid grid-cols-3 gap-8">
+        <div />
+        <SimplePopover content="Top positioned" side="top">
+          <button className="rounded border px-3 py-1.5 text-sm">Top</button>
+        </SimplePopover>
+        <div />
+
+        <SimplePopover content="Left positioned" side="left">
+          <button className="rounded border px-3 py-1.5 text-sm">Left</button>
+        </SimplePopover>
+
+        <div className="rounded border border-dashed px-3 py-1.5 text-center text-sm text-gray-400">
+          Center
+        </div>
+
+        <SimplePopover content="Right positioned" side="right">
+          <button className="rounded border px-3 py-1.5 text-sm">Right</button>
+        </SimplePopover>
+
+        <div />
+        <SimplePopover content="Bottom positioned" side="bottom">
+          <button className="rounded border px-3 py-1.5 text-sm">Bottom</button>
+        </SimplePopover>
+        <div />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Menu Popover
+
+The MenuPopover component provides a quick action menu with keyboard shortcuts:
+
+<Canvas>
+  <Story name="Menu">
+    <div className="flex justify-center gap-4 p-8">
+      <MenuPopover
+        items={[
+          {
+            label: 'Edit Recipe',
+            icon: '✏️',
+            onClick: () => console.log('Edit'),
+            shortcut: 'Ctrl+E'
+          },
+          {
+            label: 'Duplicate',
+            icon: '📋',
+            onClick: () => console.log('Duplicate'),
+            shortcut: 'Ctrl+D'
+          },
+          { divider: true },
+          {
+            label: 'Share',
+            icon: '📤',
+            onClick: () => console.log('Share'),
+            shortcut: 'Ctrl+S'
+          },
+          {
+            label: 'Print',
+            icon: '🖨️',
+            onClick: () => console.log('Print'),
+            shortcut: 'Ctrl+P'
+          },
+          { divider: true },
+          {
+            label: 'Delete',
+            icon: '🗑️',
+            onClick: () => console.log('Delete'),
+            shortcut: 'Del'
+          },
+        ]}
+      >
+        <button className="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-700">
+          Recipe Actions
+        </button>
+      </MenuPopover>
+
+      <MenuPopover
+        variant="accent"
+        items={[
+          { label: 'Breakfast', onClick: () => console.log('Breakfast') },
+          { label: 'Lunch', onClick: () => console.log('Lunch') },
+          { label: 'Dinner', onClick: () => console.log('Dinner') },
+          { label: 'Snack', onClick: () => console.log('Snack') },
+          { label: 'Dessert', onClick: () => console.log('Dessert') },
+        ]}
+      >
+        <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+          Categories
+        </button>
+      </MenuPopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Form Popover
+
+Inline editing with the FormPopover component:
+
+<Canvas>
+  <Story name="Form">
+    <div className="flex justify-center gap-4 p-8">
+      <FormPopover
+        title="Edit Recipe Name"
+        description="Enter a new name for your recipe"
+        form={
+          <div className="space-y-3">
+            <input
+              type="text"
+              placeholder="Recipe name..."
+              className="w-full rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              defaultValue="Beef Bourguignon"
+            />
+            <textarea
+              placeholder="Description (optional)..."
+              className="w-full rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              rows={3}
+            />
+          </div>
+        }
+        onSubmit={(e) => console.log('Form submitted', e)}
+      >
+        <button className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+          Edit Recipe
+        </button>
+      </FormPopover>
+
+      <FormPopover
+        title="Add Ingredient"
+        form={
+          <div className="space-y-3">
+            <input
+              type="text"
+              placeholder="Ingredient name..."
+              className="w-full rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+            />
+            <div className="flex gap-2">
+              <input
+                type="number"
+                placeholder="Amount"
+                className="flex-1 rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              />
+              <select className="flex-1 rounded border px-3 py-2 text-sm focus:border-blue-500 focus:outline-none">
+                <option>cups</option>
+                <option>tbsp</option>
+                <option>tsp</option>
+                <option>oz</option>
+                <option>lb</option>
+              </select>
+            </div>
+          </div>
+        }
+        submitLabel="Add"
+        onSubmit={(e) => console.log('Ingredient added', e)}
+      >
+        <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+          Add Ingredient
+        </button>
+      </FormPopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Confirmation Popover
+
+Use ConfirmPopover for destructive or important actions:
+
+<Canvas>
+  <Story name="Confirmation">
+    <div className="flex justify-center gap-4 p-8">
+      <ConfirmPopover
+        title="Delete Recipe?"
+        description="This action cannot be undone. The recipe will be permanently deleted."
+        confirmLabel="Delete"
+        confirmVariant="danger"
+        onConfirm={() => console.log('Recipe deleted')}
+      >
+        <button className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+          Delete Recipe
+        </button>
+      </ConfirmPopover>
+
+      <ConfirmPopover
+        title="Clear Shopping List?"
+        description="Remove all items from your shopping list. You can add them back later."
+        confirmLabel="Clear All"
+        confirmVariant="warning"
+        onConfirm={() => console.log('List cleared')}
+      >
+        <button className="rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700">
+          Clear List
+        </button>
+      </ConfirmPopover>
+
+      <ConfirmPopover
+        description="Save changes to your meal plan?"
+        confirmLabel="Save Changes"
+        onConfirm={() => console.log('Changes saved')}
+      >
+        <button className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+          Save Meal Plan
+        </button>
+      </ConfirmPopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe-Specific Examples
+
+### Recipe Card Actions
+
+<Canvas>
+  <Story name="Recipe Card">
+    <div className="flex justify-center p-8">
+      <div className="w-80 rounded-lg border p-4">
+        <div className="mb-3 flex items-start justify-between">
+          <div>
+            <h3 className="font-semibold">Classic Beef Stew</h3>
+            <p className="text-sm text-gray-600">Prep: 30 min • Cook: 2 hours</p>
+          </div>
+          <MenuPopover
+            variant="light"
+            items={[
+              { label: 'View Recipe', icon: '👁️' },
+              { label: 'Add to Meal Plan', icon: '📅' },
+              { label: 'Add to Favorites', icon: '❤️' },
+              { divider: true },
+              { label: 'Edit', icon: '✏️' },
+              { label: 'Share', icon: '📤' },
+              { label: 'Print', icon: '🖨️' },
+              { divider: true },
+              { label: 'Delete', icon: '🗑️' },
+            ]}
+          >
+            <button className="rounded p-1 hover:bg-gray-100">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+          </MenuPopover>
+        </div>
+        <p className="text-sm text-gray-700">
+          A hearty and warming beef stew with tender meat and vegetables in a rich gravy.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <SimplePopover
+            content={
+              <div className="space-y-2">
+                <h4 className="font-semibold">Nutrition per serving</h4>
+                <div className="text-sm">
+                  <div>Calories: 320</div>
+                  <div>Protein: 28g</div>
+                  <div>Carbs: 22g</div>
+                  <div>Fat: 14g</div>
+                </div>
+              </div>
+            }
+            variant="info"
+            size="sm"
+          >
+            <button className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-700 hover:bg-blue-200">
+              Nutrition Info
+            </button>
+          </SimplePopover>
+
+          <SimplePopover
+            content={
+              <div className="space-y-2">
+                <h4 className="font-semibold">Dietary Info</h4>
+                <div className="flex flex-wrap gap-1">
+                  <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-700">
+                    Gluten-Free
+                  </span>
+                  <span className="rounded bg-orange-100 px-2 py-1 text-xs text-orange-700">
+                    Dairy-Free
+                  </span>
+                  <span className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-700">
+                    High Protein
+                  </span>
+                </div>
+              </div>
+            }
+            variant="light"
+            size="sm"
+          >
+            <button className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 hover:bg-gray-200">
+              Dietary Tags
+            </button>
+          </SimplePopover>
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+### Ingredient Details
+
+<Canvas>
+  <Story name="Ingredient Details">
+    <div className="flex justify-center p-8">
+      <div className="w-96 rounded-lg bg-gray-50 p-4">
+        <h3 className="mb-3 font-semibold">Ingredients</h3>
+        <ul className="space-y-2 text-sm">
+          <li className="flex items-center justify-between">
+            <span>2 lbs beef chuck roast</span>
+            <SimplePopover
+              content={
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Beef Chuck Roast</h4>
+                  <p className="text-sm">
+                    A tough cut that becomes tender when slow-cooked. Perfect for stews.
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-medium">Substitutions:</div>
+                    <ul className="ml-4 list-disc">
+                      <li>Beef round roast</li>
+                      <li>Lamb shoulder</li>
+                      <li>Pork shoulder</li>
+                    </ul>
+                  </div>
+                </div>
+              }
+              variant="light"
+            >
+              <button className="text-blue-600 hover:text-blue-800">ⓘ</button>
+            </SimplePopover>
+          </li>
+          <li className="flex items-center justify-between">
+            <span>4 cups beef broth</span>
+            <SimplePopover
+              content={
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Beef Broth</h4>
+                  <p className="text-sm">
+                    Adds depth of flavor to the stew. Use low-sodium for better control.
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-medium">Substitutions:</div>
+                    <ul className="ml-4 list-disc">
+                      <li>Vegetable broth (vegetarian)</li>
+                      <li>Chicken broth</li>
+                      <li>Red wine + water (1:1)</li>
+                    </ul>
+                  </div>
+                </div>
+              }
+              variant="light"
+            >
+              <button className="text-blue-600 hover:text-blue-800">ⓘ</button>
+            </SimplePopover>
+          </li>
+          <li className="flex items-center justify-between">
+            <span>3 tbsp tomato paste</span>
+            <SimplePopover
+              content={
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Tomato Paste</h4>
+                  <p className="text-sm">
+                    Concentrated tomato flavor that adds umami and richness.
+                  </p>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-medium">Substitutions:</div>
+                    <ul className="ml-4 list-disc">
+                      <li>2 tbsp ketchup</li>
+                      <li>1/4 cup tomato sauce (reduced)</li>
+                      <li>1 tbsp soy sauce (different flavor)</li>
+                    </ul>
+                  </div>
+                </div>
+              }
+              variant="light"
+            >
+              <button className="text-blue-600 hover:text-blue-800">ⓘ</button>
+            </SimplePopover>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Complex Content
+
+Popovers can contain rich, interactive content:
+
+<Canvas>
+  <Story name="Complex Content">
+    <div className="flex justify-center p-8">
+      <SimplePopover
+        content={
+          <div className="space-y-4">
+            <div>
+              <h3 className="mb-2 text-lg font-semibold">Recipe Timer</h3>
+              <p className="text-sm text-gray-600">
+                Set timers for each cooking step
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between rounded bg-gray-50 p-2">
+                <span className="text-sm">Prep vegetables</span>
+                <button className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                  15 min
+                </button>
+              </div>
+              <div className="flex items-center justify-between rounded bg-gray-50 p-2">
+                <span className="text-sm">Brown meat</span>
+                <button className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                  10 min
+                </button>
+              </div>
+              <div className="flex items-center justify-between rounded bg-gray-50 p-2">
+                <span className="text-sm">Simmer stew</span>
+                <button className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                  2 hours
+                </button>
+              </div>
+            </div>
+
+            <div className="flex gap-2 border-t pt-3">
+              <button className="flex-1 rounded bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-700">
+                Start All
+              </button>
+              <button className="flex-1 rounded border px-3 py-1.5 text-sm hover:bg-gray-50">
+                Clear All
+              </button>
+            </div>
+          </div>
+        }
+        size="lg"
+        variant="light"
+      >
+        <button className="rounded bg-purple-600 px-4 py-2 text-white hover:bg-purple-700">
+          ⏱️ Cooking Timers
+        </button>
+      </SimplePopover>
+    </div>
+  </Story>
+</Canvas>
+
+## Controlled State
+
+Example of controlled popover state:
+
+<Canvas>
+  <Story name="Controlled">
+    {() => {
+      const [open, setOpen] = React.useState(false);
+
+      return (
+        <div className="flex flex-col items-center gap-4 p-8">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setOpen(true)}
+              className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+            >
+              Open Popover
+            </button>
+            <button
+              onClick={() => setOpen(false)}
+              className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+            >
+              Close Popover
+            </button>
+          </div>
+
+          <SimplePopover
+            content="This is a controlled popover"
+            open={open}
+            onOpenChange={setOpen}
+          >
+            <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+              Controlled Trigger
+            </button>
+          </SimplePopover>
+
+          <p className="text-sm text-gray-600">
+            Popover is: <strong>{open ? 'Open' : 'Closed'}</strong>
+          </p>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Popover} />
+
+## Best Practices
+
+1. **Use appropriate variants** - Choose variants that match the content context (info for information, warning for cautions, etc.)
+2. **Keep content concise** - Popovers should contain focused, relevant information
+3. **Provide keyboard support** - Ensure all interactive elements are keyboard accessible
+4. **Consider mobile users** - Test popover positioning on smaller screens
+5. **Use confirmation for destructive actions** - Always confirm before deleting or removing data
+6. **Add close buttons for complex content** - Help users dismiss popovers with rich content
+7. **Test positioning** - Ensure popovers don't get cut off near viewport edges
+
+## Accessibility
+
+- Full keyboard navigation support (Tab, Enter, Escape)
+- ARIA attributes for screen readers
+- Focus management and restoration
+- Proper role and state announcements
+- High contrast mode support
+- Respects prefers-reduced-motion

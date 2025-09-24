@@ -1,0 +1,694 @@
+# Collapse Component
+
+A utility component for expanding/collapsing content with smooth animation. Perfect for recipe sections, FAQ items, cooking tips, and other collapsible content with full accessibility support.
+
+## Features
+
+- **Smooth Animations**: CSS transitions for expand/collapse with configurable duration
+- **Multiple Variants**: Default, outlined, minimal, elevated, and card styles
+- **Recipe-Specific**: Pre-configured components for cooking use cases
+- **Full Accessibility**: ARIA attributes, keyboard navigation, screen reader support
+- **Controlled/Uncontrolled**: Support both usage patterns
+- **Icon Support**: Customizable icons with rotation animations
+- **Height Transitions**: Automatic height calculations for smooth animations
+- **Type Safety**: Full TypeScript support with variant props
+
+## Import
+
+```tsx
+import {
+  Collapse,
+  CollapseTrigger,
+  CollapseContent,
+  RecipeCollapse,
+  KitchenTipsCollapse,
+  FAQCollapse,
+  IngredientNotesCollapse,
+  CollapseGroup,
+} from '@/components/ui/collapse';
+```
+
+## Basic Usage
+
+```tsx
+// Simple question and answer
+<Collapse>
+  <CollapseTrigger>What ingredients do I need?</CollapseTrigger>
+  <CollapseContent>
+    <p>This recipe requires: flour, eggs, milk, butter, salt, and sugar.</p>
+  </CollapseContent>
+</Collapse>
+
+// Using trigger prop for simpler syntax
+<Collapse trigger="How long does this take?">
+  <CollapseContent>
+    <p>Total time is about 45 minutes including prep and cooking.</p>
+  </CollapseContent>
+</Collapse>
+
+// Open by default
+<Collapse defaultOpen>
+  <CollapseTrigger>Important note</CollapseTrigger>
+  <CollapseContent>
+    <p>This content is visible by default.</p>
+  </CollapseContent>
+</Collapse>
+
+// Controlled usage
+<Collapse open={isOpen} onOpenChange={setIsOpen}>
+  <CollapseTrigger>Controlled collapse</CollapseTrigger>
+  <CollapseContent>
+    <p>This collapse is controlled by external state.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Variants
+
+### Default
+Clean white background with subtle border and shadow.
+
+```tsx
+<Collapse variant="default">
+  <CollapseTrigger>Standard collapse style</CollapseTrigger>
+  <CollapseContent>
+    <p>Clean white background with subtle border and shadow.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Outlined
+Transparent background with defined border.
+
+```tsx
+<Collapse variant="outlined">
+  <CollapseTrigger>Outlined border style</CollapseTrigger>
+  <CollapseContent>
+    <p>Transparent background with defined border.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Minimal
+No borders or background - just content.
+
+```tsx
+<Collapse variant="minimal">
+  <CollapseTrigger>Clean minimal style</CollapseTrigger>
+  <CollapseContent>
+    <p>No borders or background - just content.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Elevated
+Enhanced shadow for prominent sections.
+
+```tsx
+<Collapse variant="elevated">
+  <CollapseTrigger>Elevated shadow style</CollapseTrigger>
+  <CollapseContent>
+    <p>Enhanced shadow for prominent sections.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Card
+Subtle gray background for grouped content.
+
+```tsx
+<Collapse variant="card">
+  <CollapseTrigger>Card background style</CollapseTrigger>
+  <CollapseContent>
+    <p>Subtle gray background for grouped content.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Sizes
+
+### Small
+Compact size for secondary information.
+
+```tsx
+<Collapse size="sm">
+  <CollapseTrigger>Quick tip</CollapseTrigger>
+  <CollapseContent>
+    <p className="text-xs">Always taste as you cook and adjust seasonings.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Medium (Default)
+Standard size for most use cases.
+
+```tsx
+<Collapse size="default">
+  <CollapseTrigger>Cooking instructions</CollapseTrigger>
+  <CollapseContent>
+    <p>Heat the pan over medium heat before adding ingredients.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Large
+Prominent size for important information.
+
+```tsx
+<Collapse size="lg">
+  <CollapseTrigger>Detailed explanation</CollapseTrigger>
+  <CollapseContent>
+    <p className="text-lg">This technique requires careful attention to timing.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Icons and Customization
+
+### Default Chevron
+Standard chevron that rotates when opened.
+
+```tsx
+<Collapse>
+  <CollapseTrigger>Click to expand</CollapseTrigger>
+  <CollapseContent>
+    <p>Content with default chevron icon.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Custom Icon
+Use any icon with proper sizing.
+
+```tsx
+import { HelpCircle } from 'lucide-react';
+
+<Collapse>
+  <CollapseTrigger icon={<HelpCircle />}>
+    Need help with this step?
+  </CollapseTrigger>
+  <CollapseContent>
+    <p>Custom help icon indicates this is assistance content.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Icon Position
+Control icon placement.
+
+```tsx
+import { Lightbulb } from 'lucide-react';
+
+<Collapse>
+  <CollapseTrigger icon={<Lightbulb />} iconPosition="left">
+    Pro cooking tip
+  </CollapseTrigger>
+  <CollapseContent>
+    <p>Icon on the left draws attention to important tips.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### No Icon
+Clean look without any icon.
+
+```tsx
+<Collapse>
+  <CollapseTrigger showIcon={false}>
+    Simple collapse
+  </CollapseTrigger>
+  <CollapseContent>
+    <p>Sometimes a minimal approach is preferred.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Animation Control
+
+### Animation Speed
+Control the speed of icon rotation and content transitions.
+
+```tsx
+// Fast animation (150ms)
+<Collapse animationDuration={150}>
+  <CollapseTrigger animationSpeed="fast">
+    Fast animation
+  </CollapseTrigger>
+  <CollapseContent animationSpeed="fast">
+    <p>Quick transitions for snappy interactions.</p>
+  </CollapseContent>
+</Collapse>
+
+// Slow animation (500ms)
+<Collapse animationDuration={500}>
+  <CollapseTrigger animationSpeed="slow">
+    Slow animation
+  </CollapseTrigger>
+  <CollapseContent animationSpeed="slow">
+    <p>Slower transitions for dramatic effect.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Custom Animation Easing
+Control the animation timing function.
+
+```tsx
+<Collapse>
+  <CollapseTrigger>Custom easing</CollapseTrigger>
+  <CollapseContent animationEasing="ease-in">
+    <p>Content with ease-in timing function.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Disable Smooth Transitions
+For instant show/hide behavior.
+
+```tsx
+<Collapse smoothTransitions={false}>
+  <CollapseTrigger>No smooth transitions</CollapseTrigger>
+  <CollapseContent>
+    <p>Instant show/hide without smooth height transitions.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Recipe-Specific Components
+
+### Recipe Sections
+Pre-configured collapses for different recipe sections.
+
+```tsx
+// Ingredients section with count and time
+<RecipeCollapse
+  section="ingredients"
+  count={8}
+  estimatedTime="5 min prep"
+>
+  <CollapseTrigger>Ingredients</CollapseTrigger>
+  <CollapseContent>
+    <ul>
+      <li>2 cups all-purpose flour</li>
+      <li>1 teaspoon salt</li>
+      <li>1/2 cup cold butter</li>
+    </ul>
+  </CollapseContent>
+</RecipeCollapse>
+
+// Instructions with step count
+<RecipeCollapse section="instructions" count={6}>
+  <CollapseTrigger>Instructions</CollapseTrigger>
+  <CollapseContent>
+    <ol>
+      <li>Mix dry ingredients</li>
+      <li>Cut in cold butter</li>
+      <li>Add ice water gradually</li>
+    </ol>
+  </CollapseContent>
+</RecipeCollapse>
+
+// Equipment needed
+<RecipeCollapse section="equipment" count={4}>
+  <CollapseTrigger>Required Equipment</CollapseTrigger>
+  <CollapseContent>
+    <p>Large mixing bowl, pastry cutter, rolling pin, pie pan</p>
+  </CollapseContent>
+</RecipeCollapse>
+
+// Nutrition information
+<RecipeCollapse section="nutrition" count={8}>
+  <CollapseTrigger>Nutrition Facts</CollapseTrigger>
+  <CollapseContent>
+    <p>Per serving: 220 calories, 12g fat, 24g carbs, 3g protein</p>
+  </CollapseContent>
+</RecipeCollapse>
+```
+
+### Kitchen Tips with Difficulty Levels
+Specialized collapses for cooking tips with difficulty indicators.
+
+```tsx
+// Beginner tip with green styling
+<KitchenTipsCollapse
+  tipType="technique"
+  difficulty="beginner"
+  estimatedTime="2 min"
+>
+  <CollapseTrigger>How to measure flour correctly</CollapseTrigger>
+  <CollapseContent>
+    <p>Spoon flour into measuring cup and level off with a knife.</p>
+  </CollapseContent>
+</KitchenTipsCollapse>
+
+// Advanced technique with red styling
+<KitchenTipsCollapse
+  tipType="technique"
+  difficulty="advanced"
+  estimatedTime="10 min"
+  proTip
+>
+  <CollapseTrigger>Professional knife techniques</CollapseTrigger>
+  <CollapseContent>
+    <p>Advanced cutting techniques for precise ingredient preparation.</p>
+  </CollapseContent>
+</KitchenTipsCollapse>
+
+// Safety tip with warning styling
+<KitchenTipsCollapse
+  tipType="safety"
+  difficulty="beginner"
+>
+  <CollapseTrigger>Food safety reminder</CollapseTrigger>
+  <CollapseContent>
+    <p>Always wash hands before handling food and cook to safe temperatures.</p>
+  </CollapseContent>
+</KitchenTipsCollapse>
+```
+
+## FAQ Components
+
+### Featured FAQ
+Highlighted important questions with special styling.
+
+```tsx
+<FAQCollapse
+  question="How do I store leftover ingredients?"
+  category="storage"
+  featured
+>
+  <CollapseContent>
+    <p>Store dry ingredients in airtight containers and refrigerate perishables.</p>
+  </CollapseContent>
+</FAQCollapse>
+```
+
+### Categorized FAQ
+Organized by category with color coding.
+
+```tsx
+<FAQCollapse
+  question="What if I don't have a specific tool?"
+  category="cooking"
+>
+  <CollapseContent>
+    <p>Most tools have substitutes - check our equipment alternatives section.</p>
+  </CollapseContent>
+</FAQCollapse>
+```
+
+### Custom Question ID
+For deep linking and navigation.
+
+```tsx
+<FAQCollapse
+  question="Can I freeze this recipe?"
+  questionId="freezing-instructions"
+  category="storage"
+>
+  <CollapseContent>
+    <p>Yes, this recipe freezes well for up to 3 months.</p>
+  </CollapseContent>
+</FAQCollapse>
+```
+
+## Ingredient Notes
+
+### Substitution Notes
+Important ingredient substitution information.
+
+```tsx
+<IngredientNotesCollapse
+  ingredient="Butter"
+  noteType="substitution"
+  importance="high"
+>
+  <CollapseTrigger>Butter substitutions</CollapseTrigger>
+  <CollapseContent>
+    <p>Can substitute with vegetable shortening, coconut oil, or vegan butter.</p>
+  </CollapseContent>
+</IngredientNotesCollapse>
+```
+
+### Allergen Warnings
+Critical allergen information with warning styling.
+
+```tsx
+<IngredientNotesCollapse
+  ingredient="Eggs"
+  noteType="allergen"
+  importance="high"
+  allergenWarning
+>
+  <CollapseTrigger>Allergen information</CollapseTrigger>
+  <CollapseContent>
+    <p>This recipe contains eggs. Suitable egg substitutes are available.</p>
+  </CollapseContent>
+</IngredientNotesCollapse>
+```
+
+### Quality Tips
+Ingredient selection and quality information.
+
+```tsx
+<IngredientNotesCollapse
+  ingredient="Flour"
+  noteType="quality"
+  importance="medium"
+>
+  <CollapseTrigger>Flour selection tips</CollapseTrigger>
+  <CollapseContent>
+    <p>Use unbleached all-purpose flour for best texture and flavor.</p>
+  </CollapseContent>
+</IngredientNotesCollapse>
+```
+
+## Grouped Collapses
+
+### Multiple Open (Default)
+Allow multiple collapses to be open simultaneously.
+
+```tsx
+<CollapseGroup spacing="normal" allowMultiple>
+  <Collapse variant="outlined">
+    <CollapseTrigger>Recipe Overview</CollapseTrigger>
+    <CollapseContent>
+      <p>This classic recipe creates a tender, flaky result.</p>
+    </CollapseContent>
+  </Collapse>
+
+  <Collapse variant="outlined">
+    <CollapseTrigger>Preparation Tips</CollapseTrigger>
+    <CollapseContent>
+      <p>Keep ingredients cold and work quickly for best results.</p>
+    </CollapseContent>
+  </Collapse>
+
+  <Collapse variant="outlined">
+    <CollapseTrigger>Storage Instructions</CollapseTrigger>
+    <CollapseContent>
+      <p>Store in refrigerator for up to 3 days.</p>
+    </CollapseContent>
+  </Collapse>
+</CollapseGroup>
+```
+
+### Accordion Style (Single Open)
+Only one collapse can be open at a time.
+
+```tsx
+<CollapseGroup
+  spacing="tight"
+  allowMultiple={false}
+  defaultOpenItems={[0]}
+>
+  <Collapse variant="outlined">
+    <CollapseTrigger>Beginner Level</CollapseTrigger>
+    <CollapseContent>
+      <p>Perfect for first-time cooks with detailed instructions.</p>
+    </CollapseContent>
+  </Collapse>
+
+  <Collapse variant="outlined">
+    <CollapseTrigger>Intermediate Level</CollapseTrigger>
+    <CollapseContent>
+      <p>For those comfortable with basic techniques.</p>
+    </CollapseContent>
+  </Collapse>
+
+  <Collapse variant="outlined">
+    <CollapseTrigger>Advanced Level</CollapseTrigger>
+    <CollapseContent>
+      <p>Professional techniques and troubleshooting.</p>
+    </CollapseContent>
+  </Collapse>
+</CollapseGroup>
+```
+
+### Controlled Group
+External control over which items are open.
+
+```tsx
+<CollapseGroup
+  openItems={openItems}
+  onOpenItemsChange={setOpenItems}
+  allowMultiple
+>
+  {/* Collapse items */}
+</CollapseGroup>
+```
+
+## States and Behaviors
+
+### Disabled State
+Prevent interaction when needed.
+
+```tsx
+<Collapse disabled>
+  <CollapseTrigger>This collapse is disabled</CollapseTrigger>
+  <CollapseContent>
+    <p>This content won't be accessible.</p>
+  </CollapseContent>
+</Collapse>
+
+// Disable just the trigger
+<Collapse>
+  <CollapseTrigger disabled>Disabled trigger only</CollapseTrigger>
+  <CollapseContent>
+    <p>The trigger is disabled but collapse isn't.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Force Mount Content
+Keep content in DOM even when collapsed.
+
+```tsx
+<Collapse>
+  <CollapseTrigger>SEO-friendly content</CollapseTrigger>
+  <CollapseContent forceMount>
+    <p>This content stays in DOM even when collapsed (good for SEO).</p>
+  </CollapseContent>
+</Collapse>
+```
+
+### Partial Collapse
+Show partial content when collapsed.
+
+```tsx
+<Collapse>
+  <CollapseTrigger>Partial content preview</CollapseTrigger>
+  <CollapseContent collapsedHeight={40}>
+    <p>This content shows 40px height when collapsed...</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Accessibility
+
+The Collapse component includes comprehensive accessibility features:
+
+- **ARIA Attributes**: Proper `aria-expanded`, `aria-controls`, and `aria-labelledby`
+- **Keyboard Navigation**: Full support for Tab, Enter, and Space keys
+- **Screen Reader Support**: Content regions properly labeled
+- **Focus Management**: Logical focus flow and visible focus indicators
+- **Height Transitions**: Smooth animations that don't interfere with screen readers
+
+### Keyboard Navigation
+
+- **Tab**: Focus the trigger button
+- **Enter/Space**: Toggle expanded/collapsed state
+- **Tab (when expanded)**: Move focus to content area
+- **Escape**: Close if currently expanded (optional behavior)
+
+### Screen Reader Behavior
+
+Screen readers will announce:
+- Button role and current expanded state
+- Content region when opened
+- Proper labeling relationships between trigger and content
+- State changes during expand/collapse actions
+
+## Best Practices
+
+### Content Structure
+- Keep trigger text concise and descriptive
+- Use semantic HTML within content areas
+- Provide clear visual hierarchy
+- Consider content length for smooth animations
+
+### Performance
+- Use `forceMount` sparingly (only when needed for SEO)
+- Prefer CSS transitions over JavaScript animations
+- Consider using `smoothTransitions={false}` for very large content
+- Monitor animation performance on lower-end devices
+
+### Recipe Context Usage
+- Use `RecipeCollapse` for cooking-related content
+- Choose appropriate section type (ingredients, instructions, etc.)
+- Include counts and time estimates when relevant
+- Use custom icons to enhance recognition
+
+### Grouping
+- Use `CollapseGroup` for related sets of collapses
+- Choose appropriate spacing (tight, normal, loose)
+- Consider allowing multiple open vs accordion behavior
+- Provide external controls when needed
+
+### Animation Guidelines
+- Use fast animations (150ms) for simple content
+- Use normal animations (300ms) for most cases
+- Use slow animations (500ms) for large or complex content
+- Match animation speed to content complexity
+
+## Advanced Usage
+
+### Custom Height Calculations
+The collapse component automatically calculates content height for smooth transitions. For complex content that changes size, consider:
+
+```tsx
+// Force remeasurement when content changes
+<Collapse key={contentVersion}>
+  <CollapseTrigger>Dynamic content</CollapseTrigger>
+  <CollapseContent>
+    {/* Content that might change size */}
+  </CollapseContent>
+</Collapse>
+```
+
+### Integration with Forms
+Collapse works well with form sections:
+
+```tsx
+<Collapse>
+  <CollapseTrigger>Advanced Options</CollapseTrigger>
+  <CollapseContent>
+    <div className="space-y-4">
+      <input type="text" placeholder="Custom setting" />
+      <textarea placeholder="Additional notes" />
+    </div>
+  </CollapseContent>
+</Collapse>
+```
+
+### Custom Styling
+Extend with additional classes for unique designs:
+
+```tsx
+<Collapse className="border-2 border-blue-500">
+  <CollapseTrigger className="bg-blue-50 hover:bg-blue-100">
+    Custom styled trigger
+  </CollapseTrigger>
+  <CollapseContent className="bg-blue-25">
+    <p>Custom styled content area.</p>
+  </CollapseContent>
+</Collapse>
+```
+
+## Related Components
+
+- **Disclosure**: Similar component with simpler API for basic show/hide
+- **Accordion**: For multiple related collapsible sections
+- **Tabs**: For mutually exclusive content sections
+- **Modal**: For overlay content that requires user action
+- **Tooltip**: For brief contextual information

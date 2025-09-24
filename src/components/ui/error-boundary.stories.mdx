@@ -1,0 +1,489 @@
+import { Meta, Story, Canvas, ArgsTable, Source } from '@storybook/addon-docs';
+import { AlertTriangle, Home, Mail, RefreshCw } from 'lucide-react';
+import {
+  ErrorBoundary,
+  InlineErrorBoundary,
+  CardErrorBoundary,
+  PageErrorBoundary,
+  ToastErrorBoundary,
+  DefaultErrorFallback,
+} from './error-boundary';
+import { ErrorBoundaryProvider } from '../../hooks/ui/error-boundary-provider';
+
+<Meta
+  title="UI Components/ErrorBoundary"
+  component={ErrorBoundary}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['inline', 'card', 'page', 'toast', 'minimal'],
+      description: 'Visual variant of the error boundary',
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg'],
+      description: 'Size variant of the error boundary',
+    },
+    enableRetry: {
+      control: { type: 'boolean' },
+      description: 'Enable retry functionality',
+    },
+    maxRetries: {
+      control: { type: 'number' },
+      description: 'Maximum number of retry attempts',
+    },
+    showDetails: {
+      control: { type: 'boolean' },
+      description: 'Show expandable error details',
+    },
+  }}
+/>
+
+# ErrorBoundary
+
+A comprehensive error boundary component system that gracefully catches and displays JavaScript errors in React component trees.
+
+## Features
+
+- **Multiple Variants**: Inline, card, page, toast, and minimal display options
+- **Retry Mechanism**: Configurable retry functionality with exponential backoff
+- **Error Logging**: Built-in error reporting and logging capabilities
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Customizable**: Custom fallback components and error handlers
+- **Provider Pattern**: Global error handling with context
+
+## Error Throwing Component (For Demo)
+
+```jsx
+const ErrorThrowingComponent = ({ shouldThrow = false, message = 'Demo error' }) => {
+  if (shouldThrow) {
+    throw new Error(message);
+  }
+  return <div className="p-4 bg-green-50 text-green-900 rounded">✅ Component working normally</div>;
+};
+```
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const ErrorThrowingComponent = ({ shouldThrow = false }) => {
+        if (shouldThrow) {
+          throw new Error('Something went wrong in this component!');
+        }
+        return <div className="p-4 bg-green-50 text-green-900 rounded">✅ Component working normally</div>;
+      };
+
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Working Component</h3>
+          <ErrorBoundary>
+            <ErrorThrowingComponent shouldThrow={false} />
+          </ErrorBoundary>
+
+          <h3 className="text-lg font-semibold">Component with Error</h3>
+          <ErrorBoundary>
+            <ErrorThrowingComponent shouldThrow={true} />
+          </ErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+### Inline ErrorBoundary
+
+Perfect for small error displays within forms or content sections.
+
+<Canvas>
+  <Story name="Inline Variant">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Inline error example');
+      };
+
+      return (
+        <div className="space-y-4">
+          <InlineErrorBoundary>
+            <ErrorComponent />
+          </InlineErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Card ErrorBoundary
+
+Standard error display with detailed information and actions.
+
+<Canvas>
+  <Story name="Card Variant">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Card error with detailed information');
+      };
+
+      return (
+        <CardErrorBoundary showDetails={true}>
+          <ErrorComponent />
+        </CardErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Page ErrorBoundary
+
+Full-page error display for critical failures with navigation options.
+
+<Canvas>
+  <Story name="Page Variant">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Critical page error');
+      };
+
+      return (
+        <div className="min-h-[400px]">
+          <PageErrorBoundary
+            homeUrl="/"
+            contactUrl="/contact"
+            title="Page Not Available"
+            description="We're sorry, but this page is currently unavailable. Our team has been notified and is working to resolve the issue."
+          >
+            <ErrorComponent />
+          </PageErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Toast ErrorBoundary
+
+Notification-style error display with auto-dismiss functionality.
+
+<Canvas>
+  <Story name="Toast Variant">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Toast notification error');
+      };
+
+      return (
+        <div className="relative h-64">
+          <ToastErrorBoundary
+            position="top-right"
+            duration={0} // Disable auto-close for demo
+            autoClose={false}
+          >
+            <ErrorComponent />
+          </ToastErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Minimal ErrorBoundary
+
+Compact error display for tight spaces.
+
+<Canvas>
+  <Story name="Minimal Variant">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Minimal error');
+      };
+
+      return (
+        <InlineErrorBoundary variant="minimal">
+          <ErrorComponent />
+        </InlineErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Retry Functionality
+
+<Canvas>
+  <Story name="Retry Mechanism">
+    {() => {
+      let errorCount = 0;
+
+      const FlakyComponent = () => {
+        errorCount++;
+        if (errorCount <= 2) {
+          throw new Error(`Attempt ${errorCount}: Service temporarily unavailable`);
+        }
+        return (
+          <div className="p-4 bg-green-50 text-green-900 rounded">
+            ✅ Success! (After {errorCount - 1} retries)
+          </div>
+        );
+      };
+
+      return (
+        <ErrorBoundary
+          enableRetry={true}
+          maxRetries={3}
+          retryDelay={1000}
+          onRetry={(error) => console.log('Retrying after error:', error)}
+        >
+          <FlakyComponent />
+        </ErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Fallback Component
+
+<Canvas>
+  <Story name="Custom Fallback">
+    {() => {
+      const CustomFallback = ({ error, resetErrorBoundary }) => (
+        <div className="p-6 bg-purple-50 border border-purple-200 rounded-lg">
+          <div className="flex items-center gap-3 mb-4">
+            <AlertTriangle className="h-6 w-6 text-purple-600" />
+            <h3 className="text-lg font-semibold text-purple-900">Custom Error Handler</h3>
+          </div>
+          <p className="text-purple-800 mb-4">
+            Our custom error handler caught: {error.message}
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={resetErrorBoundary}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            >
+              🔄 Try Again
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+            >
+              🔄 Reload Page
+            </button>
+          </div>
+        </div>
+      );
+
+      const ErrorComponent = () => {
+        throw new Error('This error is handled by a custom fallback component');
+      };
+
+      return (
+        <ErrorBoundary fallback={CustomFallback}>
+          <ErrorComponent />
+        </ErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Error Provider Pattern
+
+<Canvas>
+  <Story name="Error Provider">
+    {() => {
+      const ComponentWithHook = () => {
+        const [errors, setErrors] = React.useState([]);
+
+        return (
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  try {
+                    throw new Error('Manual error report');
+                  } catch (error) {
+                    setErrors(prev => [...prev, error.message]);
+                  }
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Report Error
+              </button>
+              <button
+                onClick={() => setErrors([])}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+              >
+                Clear Errors
+              </button>
+            </div>
+
+            {errors.length > 0 && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded">
+                <h4 className="font-semibold text-red-900">Global Errors ({errors.length})</h4>
+                <ul className="mt-2 text-red-800">
+                  {errors.map((error, index) => (
+                    <li key={index}>• {error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        );
+      };
+
+      return (
+        <ErrorBoundaryProvider
+          onError={(error, errorInfo) => console.log('Global error caught:', error)}
+          enableLogging={true}
+          maxGlobalErrors={5}
+        >
+          <ComponentWithHook />
+        </ErrorBoundaryProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Size Variants">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Size variant demonstration');
+      };
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <h4 className="text-sm font-medium mb-2">Small</h4>
+            <ErrorBoundary size="sm">
+              <ErrorComponent />
+            </ErrorBoundary>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-medium mb-2">Default</h4>
+            <ErrorBoundary size="default">
+              <ErrorComponent />
+            </ErrorBoundary>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-medium mb-2">Large</h4>
+            <ErrorBoundary size="lg">
+              <ErrorComponent />
+            </ErrorBoundary>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Reset Strategies
+
+<Canvas>
+  <Story name="Reset Strategies">
+    {() => {
+      const [resetKey, setResetKey] = React.useState(1);
+      const [shouldError, setShouldError] = React.useState(true);
+
+      const ConditionalErrorComponent = () => {
+        if (shouldError) {
+          throw new Error('Component error - use reset strategies to recover');
+        }
+        return (
+          <div className="p-4 bg-green-50 text-green-900 rounded">
+            ✅ Component recovered! Reset key: {resetKey}
+          </div>
+        );
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                setShouldError(false);
+                setResetKey(prev => prev + 1);
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Fix & Reset by Key
+            </button>
+            <button
+              onClick={() => {
+                setShouldError(true);
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Break Component
+            </button>
+          </div>
+
+          <ErrorBoundary
+            resetKeys={[resetKey]}
+            resetOnPropsChange={true}
+          >
+            <ConditionalErrorComponent />
+          </ErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## API Reference
+
+### ErrorBoundary Props
+
+<ArgsTable of={ErrorBoundary} />
+
+### Component Variants
+
+| Component | Use Case | Features |
+|-----------|----------|----------|
+| `ErrorBoundary` | General purpose | All features, configurable variants |
+| `InlineErrorBoundary` | Form fields, content sections | Compact display, minimal features |
+| `CardErrorBoundary` | Standard errors | Detailed info, error details toggle |
+| `PageErrorBoundary` | Full page errors | Navigation actions, large display |
+| `ToastErrorBoundary` | Notifications | Auto-dismiss, positioning |
+
+### Error Boundary Features
+
+- **Retry Logic**: Configurable retry attempts with exponential backoff
+- **Error Logging**: Built-in console logging and external service reporting
+- **Reset Strategies**: Reset on prop changes, key changes, or manual triggers
+- **Isolation**: Optional component isolation to prevent error propagation
+- **Accessibility**: Full ARIA support and keyboard navigation
+- **TypeScript**: Complete type safety with detailed interfaces
+
+### Best Practices
+
+1. **Use appropriate variants** for different contexts
+2. **Configure retry limits** to prevent infinite loops
+3. **Provide meaningful error messages** for users
+4. **Log errors** for debugging and monitoring
+5. **Test error scenarios** thoroughly in development
+6. **Use isolation** for unstable third-party components
+7. **Implement global error handling** with ErrorBoundaryProvider
+
+### Example Usage in Recipe App
+
+```jsx
+// Wrap recipe components with appropriate error boundaries
+<CardErrorBoundary>
+  <RecipeCard recipe={recipe} />
+</CardErrorBoundary>
+
+// Page-level error handling
+<PageErrorBoundary homeUrl="/recipes" contactUrl="/support">
+  <RecipeDetailPage recipeId={id} />
+</PageErrorBoundary>
+
+// Inline errors for form validation
+<InlineErrorBoundary variant="minimal">
+  <RecipeIngredientsList ingredients={ingredients} />
+</InlineErrorBoundary>
+```

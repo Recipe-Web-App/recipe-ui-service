@@ -285,7 +285,7 @@ describe('useSearchFilterStore', () => {
       const id = useSearchFilterStore.getState().saveSearch('Original Name');
 
       // Small delay to ensure updatedAt is different from createdAt
-      await new Promise(resolve => setTimeout(resolve, 1));
+      await new Promise(resolve => setTimeout(resolve, 10));
 
       useSearchFilterStore
         .getState()

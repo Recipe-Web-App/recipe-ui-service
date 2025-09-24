@@ -113,6 +113,993 @@ space-16: 4rem; /* 64px */
 - `ghost`: Minimal styling for icon buttons
 - `destructive`: Delete or remove actions
 
+#### Badge Component
+
+```tsx
+// Basic badge for labels and categories
+<Badge>New Recipe</Badge>
+
+// Recipe category badges
+<Badge variant="info">Breakfast</Badge>
+<Badge variant="info">Vegetarian</Badge>
+<Badge variant="info">Quick</Badge>
+
+// Difficulty level indicators
+<Badge variant="success">Easy</Badge>
+<Badge variant="warning">Medium</Badge>
+<Badge variant="destructive">Hard</Badge>
+
+// Status indicators
+<Badge variant="success">Published</Badge>
+<Badge variant="warning">Draft</Badge>
+<Badge variant="secondary">Private</Badge>
+
+// Cooking time badges
+<Badge variant="outline" size="sm">30 min</Badge>
+<Badge variant="outline" size="sm">1 hour</Badge>
+
+// Dietary restriction tags
+<Badge variant="outline">Gluten-Free</Badge>
+<Badge variant="outline">Vegan</Badge>
+<Badge variant="outline">Keto</Badge>
+
+// Interactive badges (polymorphic usage)
+<Badge asChild>
+  <Link href="/category/dessert">Dessert</Link>
+</Badge>
+```
+
+**Badge Variants:**
+
+- `default`: Primary brand badges for featured content
+- `secondary`: Less prominent tags and secondary categories
+- `destructive`: Error states, warnings, expired content
+- `outline`: Subtle emphasis, filter states, dietary restrictions
+- `success`: Published recipes, positive indicators, easy difficulty
+- `warning`: Draft content, pending states, medium difficulty
+- `info`: New content, informational badges, recipe categories
+
+**Badge Sizes:**
+
+- `sm`: Compact badges for dense layouts (cooking times, small tags)
+- `default`: Standard size for most use cases
+- `lg`: Prominent badges for emphasis and featured content
+
+**Recipe App Use Cases:**
+
+- **Recipe Categories**: Breakfast, Lunch, Dinner, Dessert, Snack
+- **Difficulty Levels**: Easy (success), Medium (warning), Hard (destructive)
+- **Dietary Restrictions**: Vegetarian, Vegan, Gluten-Free, Dairy-Free, Keto
+- **Recipe Status**: Published (success), Draft (warning), Private (secondary)
+- **Cooking Times**: "15 min", "30 min", "1 hour" (outline, small size)
+- **Tags and Labels**: Any custom user-generated or system tags
+
+#### Dropdown Component
+
+```tsx
+// Basic action menu
+<DropdownMenu>
+  <DropdownMenuTrigger>Recipe Actions</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>View Recipe</DropdownMenuItem>
+    <DropdownMenuItem>Edit Recipe</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Delete Recipe</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// Recipe filter menu with checkbox items
+<DropdownMenu>
+  <DropdownMenuTrigger variant="outline">Filter Options</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>Display Options</DropdownMenuLabel>
+    <DropdownMenuCheckboxItem checked={showBookmarked} onCheckedChange={setShowBookmarked}>
+      Show Only Bookmarked
+    </DropdownMenuCheckboxItem>
+    <DropdownMenuCheckboxItem checked={showNutrition} onCheckedChange={setShowNutrition}>
+      Show Nutrition Panel
+    </DropdownMenuCheckboxItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// Dietary preference selector with radio items
+<DropdownMenu>
+  <DropdownMenuTrigger variant="outline">Diet: {selectedDiet || 'All'}</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>Dietary Restrictions</DropdownMenuLabel>
+    <DropdownMenuRadioGroup value={selectedDiet} onValueChange={setSelectedDiet}>
+      <DropdownMenuRadioItem value="">All Recipes</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="vegetarian">Vegetarian</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="vegan">Vegan</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="gluten-free">Gluten-Free</DropdownMenuRadioItem>
+    </DropdownMenuRadioGroup>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+// User profile menu with keyboard shortcuts
+<DropdownMenu>
+  <DropdownMenuTrigger variant="ghost">Chef John</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuItem>
+      Profile Settings
+      <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>
+    </DropdownMenuItem>
+    <DropdownMenuItem>My Recipes</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>Export Recipe</DropdownMenuSubTrigger>
+      <DropdownMenuSubContent>
+        <DropdownMenuItem>PDF Document</DropdownMenuItem>
+        <DropdownMenuItem>Text File</DropdownMenuItem>
+        <DropdownMenuItem>Recipe Card (PNG)</DropdownMenuItem>
+      </DropdownMenuSubContent>
+    </DropdownMenuSub>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+**Dropdown Variants:**
+
+**Trigger Variants:**
+
+- `default`: Primary brand styling for main action menus
+- `secondary`: Less prominent styling for secondary actions
+- `outline`: Subtle border styling for filter and option menus
+- `ghost`: Minimal styling for user menus and inline actions
+
+**Content Variants:**
+
+- `default`: Standard dropdown content styling
+- `secondary`: Alternative styling for specialized contexts
+
+**Sizes:**
+
+- `sm`: Compact size for dense layouts and toolbar actions
+- `default`: Standard size for most use cases
+- `lg`: Larger size for prominent menus and touch interfaces
+
+**Recipe App Use Cases:**
+
+- **Recipe Actions**: View, edit, duplicate, share, delete recipes
+- **Filter Menus**: Category filters, difficulty selectors, dietary restrictions
+- **User Menus**: Profile settings, account actions, preferences
+- **Bulk Actions**: Multi-select recipe operations
+- **Sort Options**: Recipe ordering and view preferences
+- **Export Options**: Multiple format downloads with sub-menus
+- **Collection Management**: Add to collections, organize recipes
+- **Quick Settings**: View options, display preferences
+
+**Interactive Elements:**
+
+- **DropdownMenuCheckboxItem**: For toggleable options like "Show only favorites"
+- **DropdownMenuRadioItem**: For exclusive selections like dietary preferences
+- **DropdownMenuSeparator**: To group related actions logically
+- **DropdownMenuLabel**: For section headers and organization
+- **DropdownMenuShortcut**: Keyboard shortcuts for power users
+- **Sub-menus**: For complex hierarchical actions like export options
+
+#### Tabs Component
+
+```tsx
+// Basic recipe content tabs
+<Tabs defaultValue="ingredients">
+  <TabsList>
+    <TabsTrigger value="ingredients">Ingredients</TabsTrigger>
+    <TabsTrigger value="instructions">Instructions</TabsTrigger>
+    <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
+  </TabsList>
+  <TabsContent value="ingredients">
+    <IngredientsList ingredients={recipe.ingredients} />
+  </TabsContent>
+  <TabsContent value="instructions">
+    <InstructionsList steps={recipe.steps} />
+  </TabsContent>
+  <TabsContent value="nutrition">
+    <NutritionPanel nutrition={recipe.nutrition} />
+  </TabsContent>
+</Tabs>
+
+// User profile sections with line variant
+<Tabs defaultValue="account" variant="line">
+  <TabsList>
+    <TabsTrigger value="account">Account</TabsTrigger>
+    <TabsTrigger value="recipes">My Recipes</TabsTrigger>
+    <TabsTrigger value="favorites">Favorites</TabsTrigger>
+    <TabsTrigger value="collections">Collections</TabsTrigger>
+  </TabsList>
+  <TabsContent value="account">
+    <AccountSettings />
+  </TabsContent>
+  <TabsContent value="recipes">
+    <UserRecipesList />
+  </TabsContent>
+  <TabsContent value="favorites">
+    <FavoriteRecipesList />
+  </TabsContent>
+  <TabsContent value="collections">
+    <RecipeCollections />
+  </TabsContent>
+</Tabs>
+
+// Recipe management dashboard with pills variant
+<Tabs defaultValue="published" variant="pills" size="lg">
+  <TabsList>
+    <TabsTrigger value="published">Published (12)</TabsTrigger>
+    <TabsTrigger value="drafts">Drafts (3)</TabsTrigger>
+    <TabsTrigger value="pending">Pending Review (1)</TabsTrigger>
+  </TabsList>
+  <TabsContent value="published" variant="card">
+    <PublishedRecipesList />
+  </TabsContent>
+  <TabsContent value="drafts" variant="card">
+    <DraftRecipesList />
+  </TabsContent>
+  <TabsContent value="pending" variant="card">
+    <PendingRecipesList />
+  </TabsContent>
+</Tabs>
+
+// Compact recipe details view
+<Tabs defaultValue="overview" size="sm">
+  <TabsList variant="line">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="reviews">Reviews (24)</TabsTrigger>
+    <TabsTrigger value="related">Similar</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">
+    <RecipeOverview recipe={recipe} />
+  </TabsContent>
+  <TabsContent value="reviews">
+    <RecipeReviews recipeId={recipe.id} />
+  </TabsContent>
+  <TabsContent value="related">
+    <RelatedRecipes tags={recipe.tags} />
+  </TabsContent>
+</Tabs>
+```
+
+**Tabs Variants:**
+
+**List Variants:**
+
+- `default`: Standard contained tabs with background and shadow styling
+- `line`: Minimal underlined tabs for clean layouts and secondary content
+- `pills`: Rounded pill-style tabs for modern card-based interfaces
+
+**Trigger Variants:**
+
+- `default`: Standard trigger styling matching the list variant
+- `line`: Underlined triggers for minimal interfaces
+- `pills`: Rounded pill triggers with accent colors
+
+**Content Variants:**
+
+- `default`: Standard content with subtle border and padding
+- `line`: Minimal content styling with just top padding
+- `pills`: Soft background content matching pill aesthetic
+- `card`: Elevated card-style content with shadow and background
+
+**Sizes:**
+
+- `sm`: Compact tabs for dense layouts (height: 24px, text: xs)
+- `default`: Standard size for most use cases (height: 28px, text: sm)
+- `lg`: Larger tabs for prominent sections (height: 32px, text: base)
+
+**Recipe App Use Cases:**
+
+- **Recipe Content Organization**: Ingredients, instructions, nutrition, reviews sections
+- **User Profile Management**: Account settings, recipes, favorites, collections
+- **Recipe Management Dashboard**: Published/drafts/pending recipe states
+- **Content Categorization**: Browse by meal type, difficulty, dietary restrictions
+- **Recipe Details**: Overview, reviews, similar recipes, cooking tips
+- **Admin Interfaces**: User management, content moderation, analytics
+- **Search Results**: Filter views by relevance, date, popularity
+- **Recipe Creation**: Basic info, ingredients, steps, settings tabs
+
+**Accessibility Features:**
+
+- Full keyboard navigation with arrow keys and tab/shift+tab
+- ARIA attributes for screen reader support
+- Automatic focus management when switching tabs
+- Clear focus indicators and active state styling
+- Semantic HTML structure with proper heading hierarchy
+
+#### Tooltip Component
+
+```tsx
+// Basic tooltip with simple content
+<SimpleTooltip content="This is a helpful tooltip">
+  <Button>Hover me</Button>
+</SimpleTooltip>
+
+// Cooking term tooltip with pronunciation and category
+<CookingTermTooltip
+  term="Julienne"
+  definition="A knife cut in which the food item is cut into long thin strips resembling matchsticks"
+  pronunciation="zhoo-lee-EHN"
+  category="technique"
+>
+  <span>Cut vegetables into julienne</span>
+</CookingTermTooltip>
+
+// Help icon tooltip for UI assistance
+<HelpTooltip
+  helpText="This setting controls how recipes are displayed in your feed"
+  iconVariant="default"
+  iconSize="default"
+/>
+
+// Info icon tooltip with additional context
+<InfoTooltip
+  infoText="Premium feature: Get personalized recipe recommendations based on your cooking history"
+  iconVariant="accent"
+  iconSize="lg"
+/>
+
+// Keyboard shortcut tooltip for power users
+<KeyboardTooltip
+  shortcut={["Ctrl", "S"]}
+  description="Save recipe"
+  side="bottom"
+>
+  <Button>Save Recipe</Button>
+</KeyboardTooltip>
+
+// Metric tooltip with unit conversions
+<MetricTooltip
+  metric="Temperature"
+  value={180}
+  unit="°C"
+  conversion={{ value: 356, unit: "°F", system: "imperial" }}
+>
+  <span>Preheat oven to 180°C</span>
+</MetricTooltip>
+
+// Advanced tooltip with custom positioning
+<SimpleTooltip
+  content="Recipe saved to your favorites"
+  variant="success"
+  size="lg"
+  side="top"
+  align="center"
+  delayDuration={200}
+  showArrow={true}
+>
+  <FavoriteButton />
+</SimpleTooltip>
+
+// Tooltip with rich content
+<SimpleTooltip
+  content={
+    <div className="space-y-2">
+      <h4 className="font-semibold">Recipe Rating</h4>
+      <p className="text-sm">Based on 24 reviews</p>
+      <div className="flex items-center gap-1">
+        <StarIcon className="h-4 w-4 fill-yellow-400" />
+        <span className="text-sm">4.5 out of 5 stars</span>
+      </div>
+    </div>
+  }
+  variant="light"
+  size="xl"
+>
+  <RatingDisplay rating={4.5} reviews={24} />
+</SimpleTooltip>
+```
+
+**Tooltip Variants:**
+
+**Content Variants:**
+
+- `default`: Dark gray background with white text for standard tooltips
+- `light`: White background with dark text for complex content and forms
+- `accent`: Blue background for informational tooltips and feature highlights
+- `success`: Green background for positive feedback and confirmations
+- `warning`: Yellow background for cautions and important notices
+- `error`: Red background for error messages and destructive actions
+- `info`: Blue background for neutral information and help content
+
+**Content Sizes:**
+
+- `sm`: Compact tooltips for simple text (max-width: 200px, text: xs)
+- `default`: Standard size for most use cases (max-width: 300px, text: sm)
+- `lg`: Larger tooltips for detailed explanations (max-width: 400px, text: base)
+- `xl`: Extra large for rich content and complex information (max-width: 500px, text: base)
+
+**Specialized Tooltip Components:**
+
+**SimpleTooltip**: General-purpose tooltip wrapper for any content
+
+- Supports all content variants and sizes
+- Configurable positioning (side, align)
+- Customizable delay and animation settings
+- Optional arrow display
+- Controlled and uncontrolled modes
+
+**CookingTermTooltip**: Enhanced tooltips for culinary terminology
+
+- Category icons: 👨‍🍳 technique, 🥗 ingredient, 🔪 equipment, ⚖️ measurement, 📖 general
+- Pronunciation guides with phonetic notation
+- Color-coded category badges
+- Optimized for recipe content and cooking instructions
+- Default large size for comprehensive information display
+
+**HelpTooltip**: Question mark icon tooltips for UI guidance
+
+- Clickable help icon with consistent styling
+- Customizable icon variants (default, subtle, accent, success, warning, error)
+- Configurable icon sizes (sm, default, lg)
+- Custom aria-label support for accessibility
+- Integrated with help documentation systems
+
+**InfoTooltip**: Information icon tooltips for additional context
+
+- Info icon with accent styling by default
+- Uses info variant for consistent information display
+- Perfect for feature explanations and contextual help
+- Supports all icon customization options
+
+**KeyboardTooltip**: Keyboard shortcut display tooltips
+
+- Single shortcut: `shortcut="Ctrl+S"`
+- Multiple keys: `shortcut={["Ctrl", "Shift", "S"]}`
+- Styled keyboard key representations
+- Optional description text above shortcuts
+- Bottom placement by default for better visibility
+
+**MetricTooltip**: Unit conversion and measurement tooltips
+
+- Primary metric display with value and unit
+- Optional conversion to different unit systems
+- Metric/imperial conversion support
+- Perfect for recipe measurements and cooking temperatures
+- Accent variant styling for measurement emphasis
+
+**Recipe App Use Cases:**
+
+- **Cooking Terms**: Explain culinary techniques, ingredients, and equipment with CookingTermTooltip
+- **Measurements**: Show unit conversions (Celsius/Fahrenheit, metric/imperial) with MetricTooltip
+- **UI Help**: Provide contextual assistance for complex features with HelpTooltip
+- **Feature Info**: Introduce new features and premium content with InfoTooltip
+- **Shortcuts**: Display keyboard shortcuts for recipe management with KeyboardTooltip
+- **Recipe Details**: Show additional information about ratings, cook times, difficulty with SimpleTooltip
+- **Dietary Information**: Explain dietary restrictions, allergens, and nutritional content
+- **Equipment**: Describe cooking tools and equipment requirements
+- **Technique Instructions**: Provide detailed explanations for cooking methods
+
+**Positioning Options:**
+
+- `side`: 'top' | 'right' | 'bottom' | 'left' - Position relative to trigger
+- `align`: 'start' | 'center' | 'end' - Alignment along the chosen side
+- `sideOffset`: Number - Distance from trigger element (default: 4px)
+
+**Timing & Behavior:**
+
+- `delayDuration`: Hover delay before showing (default: 200ms)
+- `skipDelayDuration`: Reduced delay for subsequent tooltips (default: 100ms)
+- `showArrow`: Boolean - Display pointing arrow (default: true)
+- `open`: Boolean - Controlled open state
+- `onOpenChange`: Callback for open state changes
+
+**Content Guidelines:**
+
+- Keep tooltip content concise and scannable
+- Use hierarchy with headings for complex tooltips
+- Include conversion information for measurements
+- Provide pronunciation for unfamiliar culinary terms
+- Use appropriate icons to reinforce content categories
+- Ensure color contrast meets accessibility standards
+
+**Accessibility Features:**
+
+- Full keyboard navigation support with Escape key
+- Screen reader announcements with proper ARIA labeling
+- Focus management and return focus handling
+- High contrast support for visibility
+- Semantic markup with role attributes
+- Alternative interaction methods for touch interfaces
+
+#### Select Component
+
+```tsx
+// Basic category selection
+<Select>
+  <SelectTrigger className="w-[200px]">
+    <SelectValue placeholder="Select category" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="breakfast">Breakfast</SelectItem>
+    <SelectItem value="lunch">Lunch</SelectItem>
+    <SelectItem value="dinner">Dinner</SelectItem>
+    <SelectItem value="dessert">Dessert</SelectItem>
+  </SelectContent>
+</Select>
+
+// Grouped recipe categories with labels and separators
+<Select>
+  <SelectTrigger className="w-[250px]">
+    <SelectValue placeholder="Choose category" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Meal Types</SelectLabel>
+      <SelectItem value="breakfast">🍳 Breakfast</SelectItem>
+      <SelectItem value="lunch">🥗 Lunch</SelectItem>
+      <SelectItem value="dinner">🍽️ Dinner</SelectItem>
+      <SelectSeparator />
+      <SelectLabel>Other</SelectLabel>
+      <SelectItem value="appetizer">🥙 Appetizer</SelectItem>
+      <SelectItem value="dessert">🍰 Dessert</SelectItem>
+      <SelectItem value="snack">🥨 Snack</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
+// Dietary restrictions selector
+<Select>
+  <SelectTrigger className="w-[280px]">
+    <SelectValue placeholder="Dietary preferences" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectLabel>Plant-Based</SelectLabel>
+      <SelectItem value="vegetarian">🥬 Vegetarian</SelectItem>
+      <SelectItem value="vegan">🌱 Vegan</SelectItem>
+      <SelectSeparator />
+      <SelectLabel>Dietary Restrictions</SelectLabel>
+      <SelectItem value="gluten-free">🌾 Gluten-Free</SelectItem>
+      <SelectItem value="dairy-free">🥛 Dairy-Free</SelectItem>
+      <SelectItem value="nut-free">🥜 Nut-Free</SelectItem>
+      <SelectItem value="keto">🥓 Keto</SelectItem>
+      <SelectItem value="paleo">🦴 Paleo</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+
+// Complete form field with label and error handling
+<SelectField
+  label="Recipe Category"
+  placeholder="Choose a category"
+  required
+  error="Please select a category"
+>
+  <SelectGroup>
+    <SelectLabel>Main Meals</SelectLabel>
+    <SelectItem value="breakfast">Breakfast</SelectItem>
+    <SelectItem value="lunch">Lunch</SelectItem>
+    <SelectItem value="dinner">Dinner</SelectItem>
+    <SelectSeparator />
+    <SelectLabel>Other</SelectLabel>
+    <SelectItem value="snack">Snack</SelectItem>
+    <SelectItem value="dessert">Dessert</SelectItem>
+  </SelectGroup>
+</SelectField>
+
+// Filter controls with different variants
+<Select>
+  <SelectTrigger variant="outline" size="sm" className="w-[150px]">
+    <SelectValue placeholder="Sort by" />
+  </SelectTrigger>
+  <SelectContent size="sm">
+    <SelectItem value="newest">📅 Newest</SelectItem>
+    <SelectItem value="popular">⭐ Popular</SelectItem>
+    <SelectItem value="rating">🏆 Top Rated</SelectItem>
+    <SelectItem value="cook-time">⏱️ Quick</SelectItem>
+  </SelectContent>
+</Select>
+
+// Cooking time filter
+<Select>
+  <SelectTrigger variant="filled" className="w-[180px]">
+    <SelectValue placeholder="Cook time" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="15">⚡ Under 15 min</SelectItem>
+    <SelectItem value="30">⏱️ 15-30 min</SelectItem>
+    <SelectItem value="60">⏰ 30-60 min</SelectItem>
+    <SelectItem value="120">🕰️ 1-2 hours</SelectItem>
+    <SelectItem value="240">⏳ Over 2 hours</SelectItem>
+  </SelectContent>
+</Select>
+
+// Difficulty level with different styling
+<Select>
+  <SelectTrigger className="w-[160px]">
+    <SelectValue placeholder="Difficulty" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="easy">🟢 Easy</SelectItem>
+    <SelectItem value="medium">🟡 Medium</SelectItem>
+    <SelectItem value="hard">🔴 Hard</SelectItem>
+    <SelectItem value="expert">⚫ Expert</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+**Select Variants:**
+
+**Trigger Variants:**
+
+- `default`: Standard border styling with gray borders and white background
+- `outline`: Emphasized border styling with hover effects for form controls
+- `ghost`: Transparent styling for inline selections and minimal interfaces
+- `filled`: Filled background styling for form fields and input areas
+
+**Content Variants:**
+
+- `default`: Clean white background with subtle shadows for dropdowns
+- `secondary`: Alternative gray background for secondary selection contexts
+
+**Sizes:**
+
+- `sm`: Compact size for dense layouts and toolbar controls (height: 32px, text: xs)
+- `default`: Standard size for most form and filter use cases (height: 36px, text: sm)
+- `lg`: Larger size for prominent selections and touch interfaces (height: 40px, text: base)
+
+**Error States:**
+
+- `error={true}`: Red border styling with error state indicators for validation
+- Automatic `aria-invalid` and `aria-describedby` attributes for accessibility
+
+**Recipe App Use Cases:**
+
+- **Category Selection**: Meal types, cuisine categories, recipe classifications
+- **Filter Controls**: Dietary restrictions, cooking time, difficulty levels, ingredients
+- **Sort Options**: Recipe ordering preferences, date sorting, popularity ranking
+- **User Preferences**: Default dietary restrictions, favorite cuisines, portion sizes
+- **Recipe Creation**: Category assignment, difficulty setting, cuisine selection
+- **Search Refinement**: Advanced filtering, multi-criteria selection
+- **Bulk Operations**: Apply actions to multiple recipes with category selection
+- **Settings**: User preference configuration, display options
+
+**Grouped Selection Examples:**
+
+- **Meal Planning**: Breakfast/Lunch/Dinner with sub-categories like Quick/Elaborate
+- **Dietary Needs**: Plant-based options separated from allergy restrictions
+- **Recipe Attributes**: Time-based vs. skill-based vs. equipment-based filtering
+- **Content Organization**: Published/Draft/Private with sub-status indicators
+
+**Accessibility Features:**
+
+- Full keyboard navigation with arrow keys, Enter, and Escape
+- Screen reader support with proper ARIA labeling and announcements
+- Focus management and visual focus indicators
+- Error state announcements with `role="alert"`
+- Proper labeling association with `SelectField` wrapper
+- Semantic grouping with `SelectGroup` and `SelectLabel`
+- Required field indication and validation feedback
+
+**Form Integration:**
+
+- `SelectField` wrapper component for complete form integration
+- Built-in label association and error message handling
+- Controlled and uncontrolled component support
+- Validation state management with visual and accessible feedback
+- Seamless integration with form libraries like React Hook Form
+
+#### Avatar Component
+
+```tsx
+// Basic avatar with image and fallback
+<Avatar>
+  <AvatarImage
+    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    alt="John Doe"
+  />
+  <AvatarFallback>JD</AvatarFallback>
+</Avatar>
+
+// User avatar with automatic initials and role styling
+<UserAvatar
+  name="Chef Gordon Ramsay"
+  role="chef"
+  src="/chef-avatar.jpg"
+  status="chef"
+  showStatus={true}
+  size="lg"
+/>
+
+// Recipe author with complete profile information
+<RecipeAuthor
+  author={{
+    id: "1",
+    name: "Gordon Ramsay",
+    avatar: "/gordon-avatar.jpg",
+    role: "chef",
+    verified: true,
+    rating: 4.9,
+    recipeCount: 127
+  }}
+  variant="chef"
+  interactive={true}
+  onClick={() => viewProfile(author.id)}
+/>
+
+// Avatar group for recipe collaborations
+<AvatarGroup max={4} totalCount={12}>
+  <UserAvatar name="Alice Johnson" role="user" size="default" />
+  <UserAvatar name="Bob Smith" role="chef" size="default" />
+  <UserAvatar name="Carol Williams" role="user" size="default" />
+  <UserAvatar name="David Brown" role="user" size="default" />
+  <UserAvatar name="Eve Davis" role="user" size="default" />
+</AvatarGroup>
+
+// Avatar with status indicators
+<Avatar variant="chef">
+  <AvatarFallback variant="chef">CH</AvatarFallback>
+  <AvatarStatus status="chef" aria-label="Verified Chef" />
+</Avatar>
+```
+
+**Avatar Variants:**
+
+**Container Variants:**
+
+- `default`: Standard gray border for general user avatars
+- `outlined`: Enhanced border styling for emphasized profiles
+- `success`: Green border for positive indicators and achievements
+- `warning`: Yellow border for cautions and pending states
+- `error`: Red border for error states and blocked users
+- `accent`: Blue border for featured users and highlights
+- `chef`: Orange border with shadow for professional chefs
+- `premium`: Purple border with shadow for premium/admin users
+
+**Status Indicators:**
+
+- `online`: Green indicator for active users
+- `offline`: Gray indicator for inactive users
+- `away`: Yellow indicator for temporarily away users
+- `busy`: Red indicator for do-not-disturb status
+- `verified`: Blue indicator for verified accounts
+- `chef`: Orange indicator for professional chef status
+- `premium`: Purple indicator for premium/admin status
+
+**Sizes:**
+
+- `xs`: Extra small (24px) for compact layouts and dense lists
+- `sm`: Small (32px) for sidebar lists and inline mentions
+- `default`: Standard (40px) for most use cases and recipe cards
+- `lg`: Large (48px) for profile headers and detailed views
+- `xl`: Extra large (64px) for main profile displays
+- `2xl`: Double extra large (80px) for hero sections
+- `3xl`: Triple extra large (96px) for prominent profile features
+
+**Specialized Avatar Components:**
+
+**UserAvatar**: Automatic user profile avatars with role-based styling
+
+- Generates initials from full names (first + last initial)
+- Role-based variant selection (user, chef, admin, guest)
+- Optional status indicators for verification and online presence
+- Automatic alt text generation for accessibility
+- Fallback handling for missing images
+
+**AvatarGroup**: Collaborative avatar displays with overflow indicators
+
+- Configurable maximum visible avatars with "+N" overflow
+- Overlapping layout with proper z-index stacking
+- Consistent sizing across all child avatars
+- Optional total count display for accurate overflow calculation
+- Responsive spacing adjustments for different screen sizes
+
+**RecipeAuthor**: Complete recipe attribution profiles
+
+- Author metadata including ratings, recipe counts, and verification
+- Role display with emoji indicators (👨‍🍳 Chef, 👑 Admin, Home Cook)
+- Interactive mode for clickable profile links
+- Configurable information display (stats, role, verification)
+- Variant styling for different contexts (chef, premium, outlined, simple)
+
+**Recipe App Use Cases:**
+
+- **Recipe Attribution**: Show recipe creators with chef credentials and verification badges
+- **User Profiles**: Display user information in comments, reviews, and social features
+- **Chef Showcases**: Highlight professional chefs with special styling and status indicators
+- **Collaboration Lists**: Show multiple recipe contributors and modification history
+- **Review Systems**: Display reviewer profiles with ratings and verification status
+- **Recipe Collections**: Show collection owners and collaborators
+- **Cooking Communities**: Member avatars for forums, groups, and cooking challenges
+- **Recipe Cards**: Compact author information on recipe previews
+- **Profile Management**: User account displays with status and role indicators
+
+**Status Integration:**
+
+- **Chef Verification**: Orange badges and borders for professional chefs
+- **Account Verification**: Blue checkmarks for verified users
+- **Premium Features**: Purple styling for premium/admin accounts
+- **Activity Status**: Online/offline indicators for community features
+- **Role Display**: Visual distinction between users, chefs, and administrators
+
+**Accessibility Features:**
+
+- Automatic ARIA labeling for status indicators with descriptive text
+- Proper alt text for all avatar images with fallback descriptions
+- Keyboard navigation support for interactive avatar components
+- Screen reader announcements for status changes and interactions
+- High contrast support with sufficient color differentiation
+- Focus indicators for interactive elements
+- Semantic markup with appropriate roles and landmarks
+
+#### Progress Component
+
+```tsx
+// Basic progress bar with percentage
+<Progress value={65} showPercentage />
+
+// Upload progress with detailed information
+<UploadProgress
+  fileName="recipe-hero-image.jpg"
+  fileSize="3.2 MB"
+  progress={85}
+  state="uploading"
+  speed="2.1 MB/s"
+  timeRemaining="2s"
+  onPause={() => handlePause()}
+  onCancel={() => handleCancel()}
+/>
+
+// Cooking progress tracker for multi-step recipes
+<CookingProgress
+  currentStep={2}
+  steps={[
+    {
+      id: '1',
+      title: 'Prep ingredients',
+      description: 'Wash, chop, and measure everything',
+      duration: '10 min',
+      isCompleted: true,
+    },
+    {
+      id: '2',
+      title: 'Preheat oven',
+      description: 'Heat oven to 350°F (175°C)',
+      duration: '5 min',
+    },
+    {
+      id: '3',
+      title: 'Make the batter',
+      description: 'Mix all ingredients until smooth',
+      duration: '8 min',
+    },
+  ]}
+  onStepClick={(index) => goToStep(index)}
+/>
+
+// Cooking timer for baking and preparation
+<TimerProgress
+  totalTime={1800}
+  remainingTime={420}
+  isRunning={true}
+  label="Baking Timer"
+  size="lg"
+  onComplete={() => playTimerSound()}
+/>
+
+// Individual cooking step with state indicators
+<CookingStep
+  stepNumber={1}
+  title="Preheat oven to 375°F"
+  description="Make sure your oven is properly preheated"
+  duration="5 min"
+  isCompleted={true}
+/>
+
+// Animated progress with different effects
+<Progress
+  value={45}
+  barAnimation="shimmer"
+  barVariant="cooking"
+  label="Processing recipe data"
+  showLabel
+  showPercentage
+/>
+```
+
+**Progress Variants:**
+
+**Container Variants:**
+
+- `default`: Standard gray background for general progress indicators
+- `subtle`: Light gray background for minimal interfaces
+- `outlined`: Transparent with border for card-based layouts
+- `elevated`: Shadow styling for prominent progress displays
+
+**Bar Variants:**
+
+- `default`: Blue progress bar for standard operations
+- `success`: Green bar for completed or successful operations
+- `warning`: Yellow bar for caution states and moderate progress
+- `error`: Red bar for failed operations and error states
+- `info`: Light blue bar for informational progress
+- `cooking`: Orange bar for cooking-related progress (recipe-specific)
+- `upload`: Blue bar optimized for file upload progress
+- `download`: Purple bar for download operations
+
+**Animation Types:**
+
+- `none`: Static progress bar without animation
+- `pulse`: Subtle pulsing effect for active operations
+- `shimmer`: Shimmer effect across the progress bar for uploads
+- `glow`: Glowing effect for emphasized progress indicators
+
+**Sizes:**
+
+- `xs`: Extra small (4px height) for compact layouts and status bars
+- `sm`: Small (8px height) for dense information displays
+- `default`: Standard (12px height) for most use cases
+- `lg`: Large (16px height) for prominent progress indicators
+- `xl`: Extra large (24px height) for hero sections
+- `2xl`: Double extra large (32px height) for dashboard displays
+
+**Specialized Progress Components:**
+
+**UploadProgress**: File upload progress with detailed controls
+
+- Real-time upload progress with speed and time estimates
+- State management for uploading, paused, completed, and error states
+- Interactive controls: pause, resume, cancel, and retry functionality
+- File information display: name, size, and upload status
+- Compact and detailed variants for different layout needs
+
+**CookingProgress**: Multi-step cooking workflow tracker
+
+- Visual progress overview with completion percentage
+- Individual step management with state tracking
+- Interactive step navigation and completion marking
+- Duration estimates and step descriptions
+- Support for completed, active, pending, and skipped states
+
+**CookingStep**: Individual cooking step with rich state indicators
+
+- Step numbering with automatic state icons (checkmark, dash, number)
+- Title, description, and duration information
+- Visual state differentiation (pending, active, completed, skipped)
+- Optional custom icons for specialized steps
+- Click handlers for interactive step navigation
+
+**TimerProgress**: Circular countdown timers for cooking
+
+- Visual countdown with circular progress indicator
+- Multiple timer states: running, paused, completed, warning
+- Time formatting with minutes and seconds or seconds only
+- Size variants for different contexts (ingredient prep, baking, etc.)
+- Completion callbacks for sound alerts and next-step triggers
+
+**Recipe App Use Cases:**
+
+- **File Uploads**: Recipe images, videos, PDFs with detailed progress tracking
+- **Recipe Processing**: Nutritional analysis, ingredient parsing, cooking instruction generation
+- **Cooking Workflows**: Step-by-step recipe execution with progress tracking
+- **Baking Timers**: Circular timers for precise cooking durations
+- **Batch Operations**: Multiple recipe imports, exports, or processing operations
+- **Data Synchronization**: Recipe data sync across devices with progress indication
+- **Image Processing**: Recipe photo optimization and thumbnail generation
+- **Video Transcoding**: Cooking video processing for different quality levels
+
+**State Management:**
+
+- **Upload States**: uploading, paused, completed, error with appropriate icons
+- **Cooking States**: pending, active, completed, skipped with visual indicators
+- **Timer States**: running, paused, completed, warning with color coding
+- **Progress States**: active, paused, completed, error with animation control
+
+**Interactive Features:**
+
+- **Upload Controls**: Pause, resume, cancel, and retry functionality
+- **Step Navigation**: Click-to-jump between cooking steps
+- **Timer Controls**: Start, pause, reset for cooking timers
+- **Progress Tracking**: Real-time updates with smooth animations
+
+**Accessibility Features:**
+
+- Full ARIA support with proper role and state attributes
+- Keyboard navigation for interactive progress components
+- Screen reader announcements for progress changes and state updates
+- High contrast support for visual progress indicators
+- Descriptive labels for complex progress operations
+- Focus management for interactive step navigation
+
 #### Input Components
 
 ```tsx
@@ -129,15 +1116,6 @@ space-16: 4rem; /* 64px */
   placeholder="Search recipes..."
   onSearch={handleSearch}
   icon={<SearchIcon />}
-/>
-
-// Select dropdown
-<Select
-  label="Category"
-  options={categories}
-  placeholder="Select category"
-  value={selectedCategory}
-  onChange={setSelectedCategory}
 />
 ```
 
@@ -206,6 +1184,622 @@ space-16: 4rem; /* 64px */
   ))}
 </RecipeGrid>
 ```
+
+#### Accordion Component
+
+```tsx
+// Basic accordion for collapsible content
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Recipe Details</AccordionTrigger>
+    <AccordionContent>
+      Recipe details and description content...
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Multiple items with single selection (default)
+<Accordion type="single" collapsible>
+  <AccordionItem value="ingredients">
+    <AccordionTrigger>Ingredients</AccordionTrigger>
+    <AccordionContent>
+      List of recipe ingredients...
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="instructions">
+    <AccordionTrigger>Instructions</AccordionTrigger>
+    <AccordionContent>
+      Step-by-step cooking instructions...
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Multiple selection accordion for complex recipes
+<Accordion type="multiple" defaultValue={['ingredients', 'notes']}>
+  <AccordionItem value="ingredients">
+    <AccordionTrigger>Ingredients</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="instructions">
+    <AccordionTrigger>Instructions</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="notes">
+    <AccordionTrigger>Chef's Notes</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
+
+// Recipe-specific accordion with specialized components
+<Accordion type="multiple" variant="elevated">
+  <RecipeSection
+    value="ingredients"
+    title="Ingredients"
+    section="ingredients"
+    icon={<ChefIcon />}
+  >
+    <RecipeIngredients
+      ingredients={ingredients}
+      showCheckboxes
+      groupByCategory
+      onIngredientCheck={handleCheck}
+      checkedIngredients={checkedItems}
+    />
+  </RecipeSection>
+
+  <RecipeSection
+    value="instructions"
+    title="Instructions"
+    section="instructions"
+    icon={<ListIcon />}
+  >
+    <RecipeInstructions
+      instructions={instructions}
+      showStepNumbers
+      currentStep={currentStep}
+      onStepClick={handleStepClick}
+    />
+  </RecipeSection>
+
+  <RecipeSection
+    value="nutrition"
+    title="Nutrition Facts"
+    section="nutrition"
+    icon={<NutritionIcon />}
+  >
+    <NutritionTable nutritionData={nutrition} />
+  </RecipeSection>
+</Accordion>
+
+// Controlled accordion for complex interactions
+<Accordion
+  type="single"
+  value={activeSection}
+  onValueChange={setActiveSection}
+  variant="card"
+  size="lg"
+>
+  <AccordionItem value="prep" disabled={!canViewPrep}>
+    <AccordionTrigger>Preparation Steps</AccordionTrigger>
+    <AccordionContent>...</AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+**Accordion Variants:**
+
+- `default`: Clean white background with subtle borders
+- `outlined`: Transparent background with stronger borders
+- `elevated`: White background with shadow for emphasis
+- `minimal`: Borderless design for clean layouts
+- `card`: Gray background with enhanced borders
+
+**Accordion Sizes:**
+
+- `sm`: Compact accordion for dense layouts (small text, tight spacing)
+- `default`: Standard size for most recipe content
+- `lg`: Large accordion for prominence and readability
+
+**Recipe-Specific Components:**
+
+- **RecipeSection**: Styled accordion item with recipe-specific theming
+- **RecipeIngredients**: Interactive ingredient list with checkboxes and categorization
+- **RecipeInstructions**: Step-by-step instructions with progress tracking
+
+**Recipe App Use Cases:**
+
+- **Recipe Details**: Collapsible ingredient lists, instructions, nutrition facts
+- **Shopping Mode**: Interactive ingredient checklist for grocery shopping
+- **Cooking Mode**: Step-by-step instructions with progress tracking
+- **Recipe Categories**: Grouping related content (prep, cooking, storage)
+- **Advanced Features**: Notes, tips, variations, nutrition information
+- **Meal Planning**: Recipe summaries and quick access to key details
+
+#### Textarea Component
+
+```tsx
+// Basic textarea for multi-line text input
+<Textarea
+  label="Recipe Description"
+  placeholder="Describe your recipe..."
+  helperText="Write a brief description of your recipe"
+/>
+
+// Textarea with character counting and validation
+<Textarea
+  label="Recipe Notes"
+  placeholder="Add your notes..."
+  maxLength={500}
+  showCharacterCount
+  required
+  errorMessage="This field is required"
+/>
+
+// Different variants for various states
+<Textarea
+  variant="success"
+  label="Approved Content"
+  successMessage="This content has been approved"
+  defaultValue="This recipe has been reviewed and approved."
+/>
+
+<Textarea
+  variant="warning"
+  label="Review Required"
+  warningMessage="Please review this content"
+  defaultValue="Content that needs attention"
+/>
+
+<Textarea
+  variant="destructive"
+  label="Error State"
+  errorMessage="Please fix the errors below"
+  defaultValue="Invalid content"
+/>
+
+// Auto-expanding textarea that grows with content
+<AutoTextarea
+  label="Dynamic Content"
+  placeholder="Start typing and watch this expand..."
+  minRows={3}
+  maxRows={8}
+  helperText="This textarea will grow as you type"
+/>
+
+// Recipe-specific textarea with enhanced features
+<RecipeTextarea
+  type="description"
+  label="Recipe Description"
+  showCharacterCount
+  maxLength={500}
+  placeholder="What makes this recipe special?"
+/>
+
+<RecipeTextarea
+  type="instructions"
+  label="Cooking Instructions"
+  showWordCount
+  minWords={20}
+  autoResize
+  placeholder="Provide detailed step-by-step instructions"
+/>
+
+<RecipeTextarea
+  type="notes"
+  label="Chef's Notes"
+  showCharacterCount
+  maxLength={300}
+  placeholder="Tips, substitutions, or observations"
+/>
+
+<RecipeTextarea
+  type="tips"
+  label="Pro Tips"
+  showWordCount
+  maxWords={50}
+  placeholder="Share your cooking wisdom"
+/>
+
+<RecipeTextarea
+  type="review"
+  label="Your Experience"
+  showWordCount
+  minWords={5}
+  maxWords={100}
+  placeholder="How did this recipe turn out?"
+/>
+
+// Complete recipe form example
+<div className="space-y-6">
+  <RecipeTextarea
+    type="description"
+    label="Recipe Description"
+    required
+    showCharacterCount
+    maxLength={500}
+  />
+
+  <RecipeTextarea
+    type="instructions"
+    label="Cooking Instructions"
+    required
+    showWordCount
+    minWords={20}
+    autoResize
+  />
+
+  <div className="grid md:grid-cols-2 gap-4">
+    <RecipeTextarea
+      type="notes"
+      label="Chef's Notes"
+      showCharacterCount
+      maxLength={300}
+    />
+
+    <RecipeTextarea
+      type="tips"
+      label="Pro Tips"
+      showWordCount
+      maxWords={30}
+    />
+  </div>
+</div>
+```
+
+**Textarea Variants:**
+
+- `default`: Standard styling with blue focus states
+- `destructive`: Red styling for error states and validation failures
+- `success`: Green styling for valid states and confirmations
+- `warning`: Yellow styling for warnings and cautions
+- `ghost`: Minimal styling with transparent background
+
+**Textarea Sizes:**
+
+- `sm`: Compact size for dense layouts (smaller text, reduced padding)
+- `default`: Standard size for most use cases
+- `lg`: Large size for prominent fields and better readability
+
+**Recipe-Specific Types:**
+
+- **description**: Recipe overview and backstory (blue theme, 6rem min-height)
+- **instructions**: Step-by-step cooking directions (green theme, 8rem min-height)
+- **notes**: Chef's notes and tips (yellow theme, 4rem min-height)
+- **tips**: Pro tips and techniques (purple theme, 4rem min-height)
+- **review**: User reviews and experiences (orange theme, 5rem min-height)
+
+**Advanced Features:**
+
+- **Character Counting**: Real-time character count with warning states
+- **Word Counting**: Word count validation for recipe content
+- **Auto-Resize**: Dynamic height adjustment based on content
+- **Validation States**: Min/max word limits with helpful feedback
+- **Contextual Placeholders**: Recipe-type specific placeholder text
+- **Enhanced Accessibility**: Full ARIA support and screen reader compatibility
+
+**Recipe App Use Cases:**
+
+- **Recipe Creation**: Multi-line descriptions, detailed instructions
+- **Content Editing**: Notes, tips, variations, and reviews
+- **Form Validation**: Character/word limits with real-time feedback
+- **User Reviews**: Experience sharing with word count guidance
+- **Recipe Import**: Large text areas for pasting external content
+- **Collaborative Editing**: Multiple contributors with validation
+- **Mobile-Friendly**: Responsive design with touch-optimized controls
+
+#### Alert Component
+
+```tsx
+// Basic alert for notifications and status messages
+<BaseAlert
+  variant="success"
+  title="Recipe Saved"
+  description="Your recipe has been saved successfully."
+  icon={<CheckCircle className="w-4 h-4" />}
+  dismissible
+/>
+
+// Different alert variants for various message types
+<BaseAlert
+  variant="warning"
+  title="Update Available"
+  description="A new version of the recipe app is available."
+  icon={<Download className="w-4 h-4" />}
+  actions={
+    <>
+      <AlertButton intent="secondary" size="sm">Later</AlertButton>
+      <AlertButton intent="primary" size="sm">Update Now</AlertButton>
+    </>
+  }
+/>
+
+// Recipe-specific alerts with contextual messaging
+<RecipeAlert
+  type="recipe-published"
+  recipeName="Chocolate Chip Cookies"
+  dismissible
+/>
+
+<RecipeAlert
+  type="cooking-tip"
+  title="Pro Tip"
+  description="Let your cookie dough chill for 30 minutes before baking."
+  dismissible
+/>
+
+// Toast notifications with auto-dismiss
+<ToastAlert
+  variant="info"
+  title="Auto-save Enabled"
+  description="Your changes are being saved automatically."
+  position="top-right"
+  duration={3000}
+/>
+
+// Banner alerts for system-wide announcements
+<BannerAlert
+  variant="maintenance"
+  title="Scheduled Maintenance"
+  description="System maintenance tonight from 2-4 AM EST."
+  position="top"
+/>
+
+// Inline alerts for form validation and contextual feedback
+<InlineAlert
+  variant="destructive"
+  icon={<XCircle className="w-3 h-3" />}
+  description="Please enter a valid email address."
+/>
+
+// Global alert provider for application-wide notifications
+<AlertProvider maxAlerts={5}>
+  <App />
+</AlertProvider>
+
+// Using the global alert system
+const { showAlert, showToast, showBanner } = useAlert();
+
+showToast({
+  variant: 'success',
+  title: 'Recipe Published',
+  description: 'Your recipe is now live!',
+  duration: 4000,
+});
+```
+
+**Alert Variants:**
+
+- `default`: General information and neutral messages
+- `info`: Helpful information and tips for users
+- `success`: Successful operations and positive confirmations
+- `warning`: Important information requiring user attention
+- `destructive`: Errors, failures, and critical issues
+- `secondary`: Less prominent information and subtle notifications
+
+**Alert Sizes:**
+
+- `sm`: Compact alerts for dense layouts and subtle notifications
+- `default`: Standard size for most notification scenarios
+- `lg`: Prominent alerts for important messages and emphasis
+
+**Alert Types:**
+
+- **BaseAlert**: General-purpose alert component for any notification
+- **RecipeAlert**: Recipe-specific alerts with contextual icons and messaging
+- **ToastAlert**: Floating notifications with auto-dismiss functionality
+- **BannerAlert**: Full-width alerts for system announcements
+- **InlineAlert**: Compact alerts for form validation and inline feedback
+
+**Recipe Alert Types:**
+
+- `recipe-saved`: Confirmation when recipes are saved
+- `recipe-published`: Notification when recipes go live
+- `recipe-shared`: Confirmation for recipe sharing actions
+- `recipe-imported`: Success message for recipe imports
+- `recipe-error`: Error handling for recipe operations
+- `cooking-tip`: Helpful cooking tips and suggestions
+- `nutritional-info`: Nutrition calculation notifications
+- `seasonal-suggestion`: Seasonal ingredient recommendations
+
+**Recipe App Use Cases:**
+
+- **Recipe Operations**: Save confirmations, publish notifications, sharing updates
+- **System Notifications**: Maintenance alerts, feature announcements, status updates
+- **Form Validation**: Real-time feedback for recipe creation and editing forms
+- **Cooking Guidance**: Tips, suggestions, and helpful information during recipe viewing
+- **Error Handling**: Clear communication of issues with recipe operations
+- **Progress Updates**: Auto-save notifications, import status, processing updates
+- **User Feedback**: Success confirmations, operation results, action acknowledgments
+- **Contextual Help**: Inline guidance and information throughout the recipe experience
+
+**Accessibility Features:**
+
+- **ARIA Support**: Proper `role="alert"` and `aria-live` attributes for screen readers
+- **Keyboard Navigation**: Full keyboard support for interactive elements
+- **Focus Management**: Proper focus handling for dismissible alerts
+- **High Contrast**: Clear visual distinction for all alert variants
+- **Screen Reader Friendly**: Descriptive text and proper semantic structure
+
+**Global Alert Management:**
+
+The `AlertProvider` enables application-wide alert management:
+
+- **Centralized Control**: Manage all alerts from a single provider
+- **Auto-cleanup**: Automatic removal with configurable limits
+- **Multiple Types**: Support for alerts, toasts, and banners
+- **Position Control**: Flexible positioning for different alert types
+- **Queue Management**: Intelligent handling of multiple simultaneous alerts
+
+#### Dialog Component
+
+```tsx
+// Basic dialog for confirmations and alerts
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Confirm Action</DialogTitle>
+      <DialogDescription>
+        Are you sure you want to perform this action?
+      </DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogButton intent="secondary" onClick={() => setOpen(false)}>
+        Cancel
+      </DialogButton>
+      <DialogButton intent="primary" onClick={handleConfirm}>
+        Confirm
+      </DialogButton>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+// Confirmation dialog with contextual styling
+<ConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete Recipe"
+  description="This action cannot be undone."
+  type="delete"
+  icon={<Trash2 className="w-6 h-6" />}
+  onConfirm={handleDelete}
+  onCancel={() => setOpen(false)}
+/>
+
+// Recipe-specific confirmation with auto-generated content
+<RecipeConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  action="delete-recipe"
+  recipeName="Chocolate Chip Cookies"
+  onConfirm={handleRecipeDelete}
+  onCancel={() => setOpen(false)}
+/>
+
+// Simple alert dialog for notifications
+<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Success!"
+  description="Your recipe has been saved successfully."
+  variant="success"
+  onAction={() => setOpen(false)}
+/>
+
+// Dialog with custom content and icon
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent variant="warning" size="lg">
+    <DialogHeader>
+      <DialogIcon variant="warning">
+        <AlertTriangle className="w-6 h-6" />
+      </DialogIcon>
+      <DialogTitle>Unsaved Changes</DialogTitle>
+      <DialogDescription>
+        You have unsaved changes that will be lost if you continue.
+      </DialogDescription>
+    </DialogHeader>
+    <div className="py-4">
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <h4 className="font-medium text-yellow-900 mb-1">What will be lost:</h4>
+        <ul className="text-sm text-yellow-700 space-y-1">
+          <li>• Recipe title and description changes</li>
+          <li>• Ingredient modifications</li>
+          <li>• Instruction updates</li>
+        </ul>
+      </div>
+    </div>
+    <DialogFooter>
+      <DialogButton intent="secondary" onClick={handleSave}>
+        Save Changes
+      </DialogButton>
+      <DialogButton intent="destructive" onClick={handleDiscard}>
+        Discard Changes
+      </DialogButton>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+// Loading state dialog
+<ConfirmationDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Processing Recipe"
+  description="Saving your recipe to the database..."
+  isLoading={isLoading}
+  onConfirm={handleProcess}
+/>
+```
+
+**Key Features:**
+
+- **Radix UI Foundation**: Built on accessible, headless components
+- **Multiple Variants**: Basic, confirmation, recipe-specific, and alert dialogs
+- **Contextual Styling**: Variant-based styling (default, destructive, success, warning, info)
+- **Size Options**: Small to full-screen dialog sizes
+- **Animation Support**: Smooth enter/exit animations with backdrop blur
+- **Icon Integration**: Support for contextual icons and visual indicators
+- **Loading States**: Built-in loading handling for async operations
+- **Focus Management**: Automatic focus trapping and restoration
+- **Keyboard Navigation**: Full keyboard support (Tab, Escape, Enter)
+
+**Advanced Features:**
+
+- **Recipe Actions**: Pre-built confirmations for delete, save, publish, share, export, duplicate
+- **Auto-Generated Content**: Smart titles and descriptions based on recipe context
+- **Accessibility**: Full ARIA attributes, screen reader support, focus management
+- **Error Handling**: Proper error states and validation feedback
+- **Responsive Design**: Mobile-optimized touch targets and layouts
+- **Backdrop Handling**: Click-outside and escape key closing
+- **Portal Rendering**: Renders outside DOM tree for proper stacking
+
+**Dialog Types and Use Cases:**
+
+**Basic Dialog**: Custom content, forms, complex interactions
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>{/* Custom content */}</DialogContent>
+</Dialog>
+```
+
+**Confirmation Dialog**: Destructive actions, important decisions
+
+```tsx
+<ConfirmationDialog
+  type="delete" // delete, save, discard, publish, archive
+  title="Delete Recipe"
+  onConfirm={handleAction}
+/>
+```
+
+**Recipe Confirmation**: Recipe-specific actions with contextual styling
+
+```tsx
+<RecipeConfirmationDialog
+  action="delete-recipe" // delete-recipe, save-recipe, publish-recipe, etc.
+  recipeName="Recipe Name"
+  onConfirm={handleRecipeAction}
+/>
+```
+
+**Alert Dialog**: Simple notifications, single-action confirmations
+
+```tsx
+<AlertDialog
+  variant="success" // default, success, warning, destructive
+  title="Success"
+  description="Operation completed"
+/>
+```
+
+**Recipe App Use Cases:**
+
+- **Recipe Management**: Delete, save, publish, duplicate recipe confirmations
+- **Data Loss Prevention**: Unsaved changes warnings with save/discard options
+- **Import/Export**: Progress dialogs for file operations
+- **User Actions**: Account deletion, subscription changes, data export
+- **Error Handling**: Network errors, validation failures, permission issues
+- **Success Feedback**: Recipe saved, published, shared confirmations
+- **Batch Operations**: Multiple recipe actions with progress indicators
 
 ### Specialized Components
 

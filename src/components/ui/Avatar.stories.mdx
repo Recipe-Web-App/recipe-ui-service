@@ -1,0 +1,447 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  AvatarStatus,
+  AvatarGroup,
+  UserAvatar,
+  RecipeAuthor,
+} from './avatar.tsx';
+
+<Meta title="UI Components/Avatar" component={Avatar} />
+
+# Avatar
+
+Avatar components for displaying user profiles, chef attribution, and recipe creators with comprehensive variants and status indicators.
+
+## Basic Avatar
+
+<Canvas>
+  <Story name="Basic">
+    <div className="flex items-center gap-4">
+      <Avatar>
+        <AvatarImage
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+          alt="John Doe"
+        />
+        <AvatarFallback>JD</AvatarFallback>
+      </Avatar>
+      <Avatar>
+        <AvatarFallback>AB</AvatarFallback>
+      </Avatar>
+    </div>
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="flex items-center gap-4">
+      <Avatar size="xs">
+        <AvatarFallback size="xs">XS</AvatarFallback>
+      </Avatar>
+      <Avatar size="sm">
+        <AvatarFallback size="sm">SM</AvatarFallback>
+      </Avatar>
+      <Avatar size="default">
+        <AvatarFallback size="default">MD</AvatarFallback>
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarFallback size="lg">LG</AvatarFallback>
+      </Avatar>
+      <Avatar size="xl">
+        <AvatarFallback size="xl">XL</AvatarFallback>
+      </Avatar>
+      <Avatar size="2xl">
+        <AvatarFallback size="2xl">2XL</AvatarFallback>
+      </Avatar>
+      <Avatar size="3xl">
+        <AvatarFallback size="3xl">3XL</AvatarFallback>
+      </Avatar>
+    </div>
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    <div className="flex items-center gap-4">
+      <Avatar variant="default">
+        <AvatarFallback>DF</AvatarFallback>
+      </Avatar>
+      <Avatar variant="outlined">
+        <AvatarFallback>OL</AvatarFallback>
+      </Avatar>
+      <Avatar variant="success">
+        <AvatarFallback>SC</AvatarFallback>
+      </Avatar>
+      <Avatar variant="warning">
+        <AvatarFallback>WR</AvatarFallback>
+      </Avatar>
+      <Avatar variant="error">
+        <AvatarFallback>ER</AvatarFallback>
+      </Avatar>
+      <Avatar variant="accent">
+        <AvatarFallback>AC</AvatarFallback>
+      </Avatar>
+      <Avatar variant="chef">
+        <AvatarFallback variant="chef">CH</AvatarFallback>
+      </Avatar>
+      <Avatar variant="premium">
+        <AvatarFallback variant="admin">PR</AvatarFallback>
+      </Avatar>
+    </div>
+  </Story>
+</Canvas>
+
+## Status Indicators
+
+<Canvas>
+  <Story name="Status">
+    <div className="flex items-center gap-4">
+      <Avatar>
+        <AvatarFallback variant="user">ON</AvatarFallback>
+        <AvatarStatus status="online" aria-label="Online" />
+      </Avatar>
+      <Avatar>
+        <AvatarFallback variant="user">OF</AvatarFallback>
+        <AvatarStatus status="offline" aria-label="Offline" />
+      </Avatar>
+      <Avatar>
+        <AvatarFallback variant="user">AW</AvatarFallback>
+        <AvatarStatus status="away" aria-label="Away" />
+      </Avatar>
+      <Avatar>
+        <AvatarFallback variant="user">BY</AvatarFallback>
+        <AvatarStatus status="busy" aria-label="Busy" />
+      </Avatar>
+      <Avatar variant="chef">
+        <AvatarFallback variant="chef">CH</AvatarFallback>
+        <AvatarStatus status="chef" aria-label="Verified Chef" />
+      </Avatar>
+      <Avatar variant="premium">
+        <AvatarFallback variant="admin">VF</AvatarFallback>
+        <AvatarStatus status="verified" aria-label="Verified User" />
+      </Avatar>
+    </div>
+  </Story>
+</Canvas>
+
+## User Avatars
+
+<Canvas>
+  <Story name="User Avatars">
+    <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <UserAvatar
+          name="John Doe"
+          role="user"
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+        />
+        <UserAvatar
+          name="Chef Gordon Ramsay"
+          role="chef"
+          status="chef"
+          showStatus={true}
+          src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=150&h=150&fit=crop&crop=face"
+        />
+        <UserAvatar
+          name="Admin User"
+          role="admin"
+          status="verified"
+          showStatus={true}
+        />
+        <UserAvatar
+          name="Guest Cook"
+          role="guest"
+        />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <UserAvatar
+          name="Emily Chen"
+          role="user"
+          status="online"
+          showStatus={true}
+          size="lg"
+        />
+        <UserAvatar
+          name="Marco Silva"
+          role="chef"
+          status="chef"
+          showStatus={true}
+          size="lg"
+        />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Avatar Groups
+
+<Canvas>
+  <Story name="Avatar Groups">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-2 font-medium">Small Group</h4>
+        <AvatarGroup>
+          <UserAvatar name="Alice Johnson" role="user" size="default" />
+          <UserAvatar name="Bob Smith" role="chef" size="default" />
+          <UserAvatar name="Carol Williams" role="user" size="default" />
+        </AvatarGroup>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Large Group (with overflow)</h4>
+        <AvatarGroup max={4} totalCount={12}>
+          <UserAvatar name="Alice Johnson" role="user" size="default" />
+          <UserAvatar name="Bob Smith" role="chef" size="default" />
+          <UserAvatar name="Carol Williams" role="user" size="default" />
+          <UserAvatar name="David Brown" role="user" size="default" />
+          <UserAvatar name="Eve Davis" role="user" size="default" />
+          <UserAvatar name="Frank Miller" role="chef" size="default" />
+        </AvatarGroup>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Different Sizes</h4>
+        <div className="flex items-center gap-6">
+          <AvatarGroup size="sm">
+            <UserAvatar name="Small One" role="user" size="sm" />
+            <UserAvatar name="Small Two" role="chef" size="sm" />
+            <UserAvatar name="Small Three" role="user" size="sm" />
+          </AvatarGroup>
+
+          <AvatarGroup size="lg">
+            <UserAvatar name="Large One" role="user" size="lg" />
+            <UserAvatar name="Large Two" role="chef" size="lg" />
+            <UserAvatar name="Large Three" role="user" size="lg" />
+          </AvatarGroup>
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Authors
+
+<Canvas>
+  <Story name="Recipe Authors">
+    <div className="max-w-md space-y-4">
+      <RecipeAuthor
+        author={{
+          id: "1",
+          name: "Gordon Ramsay",
+          avatar: "https://images.unsplash.com/photo-1583394293214-28ded15ee548?w=150&h=150&fit=crop&crop=face",
+          role: "chef",
+          verified: true,
+          rating: 4.9,
+          recipeCount: 127
+        }}
+        variant="chef"
+        showStats={true}
+        showRole={true}
+      />
+
+      <RecipeAuthor
+        author={{
+          id: "2",
+          name: "Maria Rodriguez",
+          role: "user",
+          verified: true,
+          rating: 4.6,
+          recipeCount: 23
+        }}
+        variant="outlined"
+        showStats={true}
+        showRole={true}
+      />
+
+      <RecipeAuthor
+        author={{
+          id: "3",
+          name: "Premium Chef",
+          role: "chef",
+          verified: true,
+          rating: 4.8,
+          recipeCount: 89
+        }}
+        variant="premium"
+        showStats={true}
+        showRole={true}
+      />
+
+      <RecipeAuthor
+        author={{
+          id: "4",
+          name: "Home Cook",
+          role: "user",
+          rating: 4.2,
+          recipeCount: 8
+        }}
+        variant="simple"
+        showStats={false}
+        showRole={false}
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Interactive Recipe Authors
+
+<Canvas>
+  <Story name="Interactive Authors">
+    <div className="max-w-md space-y-3">
+      <RecipeAuthor
+        author={{
+          id: "1",
+          name: "Jamie Oliver",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+          role: "chef",
+          verified: true,
+          rating: 4.8,
+          recipeCount: 156
+        }}
+        variant="chef"
+        interactive={true}
+        onClick={() => alert('Clicked Jamie Oliver')}
+      />
+
+      <RecipeAuthor
+        author={{
+          id: "2",
+          name: "Sarah Wilson",
+          role: "user",
+          verified: true,
+          rating: 4.5,
+          recipeCount: 34
+        }}
+        variant="outlined"
+        interactive={true}
+        onClick={() => alert('Clicked Sarah Wilson')}
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe-Specific Examples
+
+<Canvas>
+  <Story name="Recipe Examples">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-3 font-medium">Recipe Contributors</h4>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between rounded-lg border p-3">
+            <span className="text-sm font-medium">Original Recipe</span>
+            <UserAvatar
+              name="Nonna Isabella"
+              role="chef"
+              status="chef"
+              showStatus={true}
+              size="sm"
+            />
+          </div>
+
+          <div className="flex items-center justify-between rounded-lg border p-3">
+            <span className="text-sm font-medium">Modified by</span>
+            <AvatarGroup size="sm" max={3}>
+              <UserAvatar name="Alice" role="user" size="sm" />
+              <UserAvatar name="Bob" role="user" size="sm" />
+              <UserAvatar name="Carol" role="chef" size="sm" />
+              <UserAvatar name="David" role="user" size="sm" />
+            </AvatarGroup>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 className="mb-3 font-medium">Recipe Reviews</h4>
+        <div className="space-y-3">
+          <div className="flex gap-3 rounded-lg border p-3">
+            <UserAvatar
+              name="Food Critic Pro"
+              role="admin"
+              status="verified"
+              showStatus={true}
+              size="sm"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-sm">Food Critic Pro</span>
+                <div className="flex text-yellow-400">
+                  {'★'.repeat(5)}
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mt-1">
+                "Absolutely fantastic recipe! The flavors were perfectly balanced."
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 rounded-lg border p-3">
+            <UserAvatar
+              name="Home Baker"
+              role="user"
+              size="sm"
+            />
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="font-medium text-sm">Home Baker</span>
+                <div className="flex text-yellow-400">
+                  {'★'.repeat(4)}
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mt-1">
+                "Great recipe! I substituted almond flour and it turned out wonderful."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Props
+
+### Avatar
+
+<ArgsTable of={Avatar} />
+
+### UserAvatar
+
+<ArgsTable of={UserAvatar} />
+
+### RecipeAuthor
+
+<ArgsTable of={RecipeAuthor} />
+
+## Usage Guidelines
+
+### Best Practices
+
+- Use appropriate sizes for context (sm for lists, lg for profiles)
+- Always provide meaningful alt text for images
+- Use status indicators sparingly and meaningfully
+- Ensure proper contrast for accessibility
+- Provide fallback initials for users without avatars
+
+### Recipe App Specific
+
+- Use chef variant for professional chefs
+- Show verification badges for trusted contributors
+- Group avatars for recipe collaborations
+- Display author information prominently on recipe cards
+- Use status indicators to show chef credentials
+
+### Accessibility
+
+- All avatars include proper ARIA labels
+- Status indicators have descriptive aria-labels
+- Images include alt text
+- Interactive elements are keyboard accessible
+- Color combinations meet WCAG contrast requirements

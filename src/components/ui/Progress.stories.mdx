@@ -1,0 +1,518 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import {
+  Progress,
+  CookingStep,
+  CookingProgress,
+  UploadProgress,
+  TimerProgress,
+} from './progress.tsx';
+
+<Meta title="UI Components/Progress" component={Progress} />
+
+# Progress
+
+Progress components for upload progress, cooking progress indicators, timers, and multi-step workflows in the Recipe App.
+
+## Basic Progress Bar
+
+<Canvas>
+  <Story name="Basic">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-2 font-medium">Default Progress</h4>
+        <Progress value={65} showPercentage />
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">With Label</h4>
+        <Progress value={45} label="Downloading recipe images" showLabel showPercentage />
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Different Variants</h4>
+        <div className="space-y-3">
+          <Progress value={75} barVariant="success" showPercentage />
+          <Progress value={50} barVariant="warning" showPercentage />
+          <Progress value={25} barVariant="error" showPercentage />
+          <Progress value={80} barVariant="cooking" showPercentage />
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Progress Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-4">
+      <div>
+        <span className="text-sm text-gray-600">Extra Small</span>
+        <Progress value={40} size="xs" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-600">Small</span>
+        <Progress value={50} size="sm" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-600">Default</span>
+        <Progress value={60} size="default" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-600">Large</span>
+        <Progress value={70} size="lg" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-600">Extra Large</span>
+        <Progress value={80} size="xl" />
+      </div>
+      <div>
+        <span className="text-sm text-gray-600">2X Large</span>
+        <Progress value={90} size="2xl" />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Animated Progress
+
+<Canvas>
+  <Story name="Animations">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-2 font-medium">Shimmer Animation</h4>
+        <Progress value={45} barAnimation="shimmer" showPercentage />
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Pulse Animation</h4>
+        <Progress value={65} barAnimation="pulse" showPercentage />
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Glow Animation</h4>
+        <Progress value={75} barAnimation="glow" showPercentage />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Upload Progress
+
+<Canvas>
+  <Story name="Upload Progress">
+    <div className="max-w-md space-y-4">
+      <UploadProgress
+        fileName="recipe-hero-image.jpg"
+        fileSize="2.3 MB"
+        progress={35}
+        state="uploading"
+        speed="1.2 MB/s"
+        timeRemaining="2s"
+        onPause={() => alert('Paused')}
+        onCancel={() => alert('Cancelled')}
+      />
+
+      <UploadProgress
+        fileName="cooking-video.mp4"
+        fileSize="15.7 MB"
+        progress={100}
+        state="completed"
+      />
+
+      <UploadProgress
+        fileName="ingredient-photo.png"
+        fileSize="850 KB"
+        progress={67}
+        state="paused"
+        onResume={() => alert('Resumed')}
+        onCancel={() => alert('Cancelled')}
+      />
+
+      <UploadProgress
+        fileName="recipe-document.pdf"
+        fileSize="1.1 MB"
+        progress={23}
+        state="error"
+        onRetry={() => alert('Retrying')}
+        onCancel={() => alert('Cancelled')}
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Cooking Steps
+
+<Canvas>
+  <Story name="Cooking Steps">
+    <div className="max-w-lg space-y-3">
+      <CookingStep
+        stepNumber={1}
+        title="Preheat oven to 375°F"
+        description="Make sure your oven is properly preheated before starting"
+        duration="5 min"
+        isCompleted={true}
+      />
+
+      <CookingStep
+        stepNumber={2}
+        title="Prepare the ingredients"
+        description="Wash, chop, and measure all ingredients according to the recipe"
+        duration="15 min"
+        isActive={true}
+      />
+
+      <CookingStep
+        stepNumber={3}
+        title="Mix wet ingredients"
+        description="Combine eggs, milk, and vanilla in a large bowl"
+        duration="3 min"
+      />
+
+      <CookingStep
+        stepNumber={4}
+        title="Combine dry ingredients"
+        description="In a separate bowl, whisk together flour, baking powder, and salt"
+        duration="2 min"
+      />
+
+      <CookingStep
+        stepNumber={5}
+        title="Optional: Add chocolate chips"
+        description="For extra sweetness, fold in chocolate chips"
+        duration="1 min"
+        isSkipped={true}
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Complete Cooking Progress
+
+<Canvas>
+  <Story name="Cooking Progress">
+    <div className="max-w-2xl">
+      <CookingProgress
+        currentStep={2}
+        steps={[
+          {
+            id: '1',
+            title: 'Prep ingredients',
+            description: 'Wash, chop, and measure everything',
+            duration: '10 min',
+            isCompleted: true,
+          },
+          {
+            id: '2',
+            title: 'Preheat oven',
+            description: 'Heat oven to 350°F (175°C)',
+            duration: '5 min',
+            isCompleted: true,
+          },
+          {
+            id: '3',
+            title: 'Make the batter',
+            description: 'Mix all ingredients until smooth',
+            duration: '8 min',
+          },
+          {
+            id: '4',
+            title: 'Bake the cake',
+            description: 'Bake for 25-30 minutes until golden',
+            duration: '30 min',
+          },
+          {
+            id: '5',
+            title: 'Cool and serve',
+            description: 'Let cool for 10 minutes before serving',
+            duration: '10 min',
+          },
+        ]}
+        onStepClick={(index) => alert(`Clicked step ${index + 1}`)}
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Cooking Timers
+
+<Canvas>
+  <Story name="Timers">
+    <div className="flex flex-wrap gap-8 items-center">
+      <TimerProgress
+        totalTime={300}
+        remainingTime={185}
+        isRunning={true}
+        label="Baking Timer"
+        size="sm"
+      />
+
+      <TimerProgress
+        totalTime={600}
+        remainingTime={420}
+        isRunning={true}
+        label="Marinating"
+        size="default"
+      />
+
+      <TimerProgress
+        totalTime={180}
+        remainingTime={15}
+        isRunning={true}
+        label="Almost Done!"
+        size="lg"
+      />
+
+      <TimerProgress
+        totalTime={120}
+        remainingTime={0}
+        isRunning={false}
+        label="Completed"
+        size="default"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Timer States
+
+<Canvas>
+  <Story name="Timer States">
+    <div className="flex flex-wrap gap-6 items-center">
+      <div className="text-center">
+        <TimerProgress
+          totalTime={300}
+          remainingTime={180}
+          isRunning={true}
+          label="Running"
+        />
+      </div>
+
+      <div className="text-center">
+        <TimerProgress
+          totalTime={300}
+          remainingTime={120}
+          isPaused={true}
+          label="Paused"
+        />
+      </div>
+
+      <div className="text-center">
+        <TimerProgress
+          totalTime={300}
+          remainingTime={25}
+          isRunning={true}
+          label="Warning"
+        />
+      </div>
+
+      <div className="text-center">
+        <TimerProgress
+          totalTime={300}
+          remainingTime={0}
+          label="Completed"
+        />
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe-Specific Examples
+
+<Canvas>
+  <Story name="Recipe Examples">
+    <div className="space-y-8">
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Recipe Upload Progress</h3>
+        <div className="max-w-md space-y-3">
+          <UploadProgress
+            fileName="chocolate-chip-cookies.jpg"
+            fileSize="3.2 MB"
+            progress={85}
+            state="uploading"
+            speed="2.1 MB/s"
+            timeRemaining="1s"
+            onPause={() => {}}
+            onCancel={() => {}}
+          />
+          <UploadProgress
+            fileName="ingredients-list.pdf"
+            fileSize="245 KB"
+            progress={100}
+            state="completed"
+            showDetails={false}
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Multi-Course Meal Progress</h3>
+        <CookingProgress
+          currentStep={1}
+          steps={[
+            {
+              id: 'appetizer',
+              title: 'Prepare appetizer',
+              description: 'Bruschetta with tomato and basil',
+              duration: '15 min',
+              isCompleted: true,
+            },
+            {
+              id: 'main-prep',
+              title: 'Prep main course',
+              description: 'Season the chicken and prepare vegetables',
+              duration: '20 min',
+            },
+            {
+              id: 'main-cook',
+              title: 'Cook main course',
+              description: 'Roast chicken with vegetables',
+              duration: '45 min',
+            },
+            {
+              id: 'dessert',
+              title: 'Prepare dessert',
+              description: 'Chocolate mousse (can be done ahead)',
+              duration: '10 min',
+              isSkipped: true,
+            },
+          ]}
+        />
+      </div>
+
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Bread Baking Timers</h3>
+        <div className="flex gap-6">
+          <div className="text-center">
+            <TimerProgress
+              totalTime={7200}
+              remainingTime={3600}
+              isRunning={true}
+              label="First Rise"
+              showMinutes={true}
+            />
+          </div>
+          <div className="text-center">
+            <TimerProgress
+              totalTime={3600}
+              remainingTime={1800}
+              isRunning={true}
+              label="Second Rise"
+              showMinutes={true}
+            />
+          </div>
+          <div className="text-center">
+            <TimerProgress
+              totalTime={2400}
+              remainingTime={600}
+              isRunning={true}
+              label="Baking"
+              showMinutes={true}
+              size="lg"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Compact Upload List
+
+<Canvas>
+  <Story name="Upload List">
+    <div className="max-w-lg">
+      <h4 className="mb-3 font-medium text-gray-900">Uploading Recipe Assets</h4>
+      <div className="space-y-2">
+        <UploadProgress
+          fileName="hero-image.jpg"
+          fileSize="4.2 MB"
+          progress={100}
+          state="completed"
+          variant="compact"
+          showDetails={false}
+        />
+        <UploadProgress
+          fileName="step-1-photo.jpg"
+          fileSize="1.8 MB"
+          progress={75}
+          state="uploading"
+          variant="compact"
+          showDetails={false}
+        />
+        <UploadProgress
+          fileName="step-2-photo.jpg"
+          fileSize="2.1 MB"
+          progress={45}
+          state="uploading"
+          variant="compact"
+          showDetails={false}
+        />
+        <UploadProgress
+          fileName="ingredients-video.mp4"
+          fileSize="12.5 MB"
+          progress={20}
+          state="uploading"
+          variant="compact"
+          showDetails={false}
+        />
+        <UploadProgress
+          fileName="nutrition-facts.pdf"
+          fileSize="156 KB"
+          progress={0}
+          state="uploading"
+          variant="compact"
+          showDetails={false}
+        />
+      </div>
+      <div className="mt-4 text-sm text-gray-600">
+        Uploading 5 files • 2 completed • 3 remaining
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Props
+
+### Progress
+
+<ArgsTable of={Progress} />
+
+### CookingProgress
+
+<ArgsTable of={CookingProgress} />
+
+### UploadProgress
+
+<ArgsTable of={UploadProgress} />
+
+### TimerProgress
+
+<ArgsTable of={TimerProgress} />
+
+## Usage Guidelines
+
+### Best Practices
+
+- Use appropriate progress variants for different contexts (cooking, upload, etc.)
+- Provide clear labels and time estimates when possible
+- Use animations sparingly and only when they add value
+- Ensure progress indicators are accessible with proper ARIA labels
+- Show meaningful progress states (uploading, paused, error, completed)
+
+### Recipe App Specific
+
+- **Cooking Progress**: Track multi-step recipe preparation with clear visual indicators
+- **Upload Progress**: Show file upload status for recipe images, videos, and documents
+- **Cooking Timers**: Display countdown timers for baking, marinating, and cooking steps
+- **Batch Operations**: Show progress for bulk recipe imports or exports
+- **Recipe Processing**: Indicate progress for recipe analysis or nutritional calculations
+
+### Accessibility
+
+- All progress components include proper ARIA attributes
+- Timer components announce state changes
+- Upload progress provides detailed status information
+- Keyboard navigation support for interactive elements
+- High contrast support for visual indicators
+- Screen reader compatible with descriptive labels

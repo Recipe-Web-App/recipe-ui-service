@@ -1,0 +1,553 @@
+# Chip Component
+
+Interactive tag component with delete, selection, and click actions. Perfect for managing recipe ingredients, dietary restrictions, and dynamic tags with full accessibility support.
+
+## Features
+
+- **Multiple Variants**: Default, outlined, and filled styles
+- **Multiple Sizes**: Small, medium, and large sizes
+- **Color Options**: 7 different color variants including primary, success, warning, and destructive
+- **Interactive States**: Selection, deletion, click actions, and disabled state
+- **Icon Support**: Leading icons and avatar support
+- **Full Accessibility**: Proper ARIA attributes, keyboard navigation
+- **Recipe-Specific**: Specialized variants for ingredients, dietary restrictions, categories, and tags
+- **Group Management**: ChipGroup component for organized layouts
+- **Input Component**: ChipInput for dynamic tag creation with validation
+
+## Import
+
+```tsx
+import {
+  Chip,
+  ChipGroup,
+  ChipInput,
+  RecipeChip
+} from '@/components/ui/chip';
+```
+
+## Basic Usage
+
+```tsx
+// Simple chip
+<Chip>Basic Chip</Chip>
+
+// With click handler
+<Chip onClick={() => console.log('Clicked!')}>
+  Clickable Chip
+</Chip>
+
+// Deletable chip
+<Chip onDelete={() => console.log('Deleted!')}>
+  Deletable Chip
+</Chip>
+```
+
+## Variants
+
+### Default
+The standard chip style for general use.
+
+```tsx
+<Chip variant="default">Default Chip</Chip>
+```
+
+### Outlined
+A subtle chip with border, good for secondary information.
+
+```tsx
+<Chip variant="outlined">Outlined Chip</Chip>
+```
+
+### Filled
+A prominent chip with solid background.
+
+```tsx
+<Chip variant="filled">Filled Chip</Chip>
+```
+
+## Sizes
+
+### Small
+Compact size for tight spaces or less important tags.
+
+```tsx
+<Chip size="sm">Small</Chip>
+```
+
+### Medium (Default)
+Standard size for most use cases.
+
+```tsx
+<Chip size="md">Medium</Chip>
+```
+
+### Large
+Prominent size for important tags or hero sections.
+
+```tsx
+<Chip size="lg">Large</Chip>
+```
+
+## Colors
+
+The chip component supports multiple color variants:
+
+```tsx
+<Chip color="default">Default</Chip>
+<Chip color="primary">Primary</Chip>
+<Chip color="secondary">Secondary</Chip>
+<Chip color="success">Success</Chip>
+<Chip color="warning">Warning</Chip>
+<Chip color="destructive">Destructive</Chip>
+<Chip color="info">Info</Chip>
+```
+
+## Interactive Features
+
+### Deletable Chips
+Add a delete button with the `onDelete` prop.
+
+```tsx
+<Chip onDelete={() => handleDelete('tomato')}>
+  Tomato
+</Chip>
+<Chip onDelete={() => handleDelete('onion')} variant="outlined">
+  Onion
+</Chip>
+<Chip onDelete={() => handleDelete('garlic')} variant="filled" size="lg">
+  Garlic
+</Chip>
+```
+
+### Selectable Chips
+Use the `selected` prop and `onClick` handler for selection.
+
+```tsx
+const [selected, setSelected] = useState(['easy']);
+const difficulties = ['Easy', 'Medium', 'Hard'];
+
+return (
+  <div className="flex gap-3">
+    {difficulties.map(difficulty => (
+      <Chip
+        key={difficulty}
+        selected={selected.includes(difficulty.toLowerCase())}
+        onClick={() => toggleSelection(difficulty.toLowerCase())}
+        variant="outlined"
+      >
+        {difficulty}
+      </Chip>
+    ))}
+  </div>
+);
+```
+
+### With Icons
+Add leading icons to provide visual context.
+
+```tsx
+<Chip icon={<Clock className="h-3 w-3" />}>
+  30 min
+</Chip>
+<Chip
+  icon={<Leaf className="h-3 w-3" />}
+  variant="outlined"
+  color="success"
+>
+  Vegetarian
+</Chip>
+<Chip
+  icon={<ChefHat className="h-3 w-3" />}
+  onDelete={() => handleDelete()}
+  variant="filled"
+>
+  Chef's Special
+</Chip>
+```
+
+### With Avatars
+Use avatars for user tags or profile chips.
+
+```tsx
+<Chip
+  avatar={
+    <div className="flex h-full w-full items-center justify-center bg-slate-300 text-xs font-bold">
+      U
+    </div>
+  }
+>
+  John Doe
+</Chip>
+<Chip
+  avatar={
+    <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center text-xs">
+      JD
+    </div>
+  }
+  onDelete={() => handleDelete()}
+>
+  Jane Doe
+</Chip>
+```
+
+## Chip Group
+
+Use `ChipGroup` to organize multiple chips with consistent spacing.
+
+```tsx
+// Tight spacing for compact layouts
+<ChipGroup spacing="tight">
+  <Chip size="sm">React</Chip>
+  <Chip size="sm">TypeScript</Chip>
+  <Chip size="sm">Next.js</Chip>
+  <Chip size="sm">Tailwind</Chip>
+</ChipGroup>
+
+// Normal spacing (default)
+<ChipGroup spacing="normal">
+  <Chip>Breakfast</Chip>
+  <Chip>Lunch</Chip>
+  <Chip>Dinner</Chip>
+  <Chip>Dessert</Chip>
+</ChipGroup>
+
+// Loose spacing for prominent display
+<ChipGroup spacing="loose">
+  <Chip variant="filled">Easy</Chip>
+  <Chip variant="filled">Quick</Chip>
+  <Chip variant="filled">Healthy</Chip>
+</ChipGroup>
+```
+
+### Chip Group with Overflow
+Limit displayed chips and show overflow indicator.
+
+```tsx
+<ChipGroup maxDisplay={3}>
+  <Chip>Italian</Chip>
+  <Chip>Mexican</Chip>
+  <Chip>Chinese</Chip>
+  <Chip>Indian</Chip>
+  <Chip>Thai</Chip>
+  <Chip>Japanese</Chip>
+</ChipGroup>
+```
+
+## Chip Input
+
+The `ChipInput` component allows users to dynamically create and manage chips.
+
+### Basic Input
+```tsx
+const [ingredients, setIngredients] = useState(['Tomato', 'Onion']);
+
+return (
+  <ChipInput
+    value={ingredients}
+    onChange={setIngredients}
+    placeholder="Add ingredient..."
+    maxChips={8}
+  />
+);
+```
+
+### With Validation
+Add custom validation for input values.
+
+```tsx
+const [tags, setTags] = useState(['recipe', 'cooking']);
+
+const validateTag = (value) => {
+  if (value.length < 3) return 'Tag must be at least 3 characters';
+  if (value.length > 15) return 'Tag must be less than 15 characters';
+  if (!/^[a-zA-Z0-9-]+$/.test(value)) return 'Only letters, numbers, and hyphens allowed';
+  return true;
+};
+
+return (
+  <ChipInput
+    value={tags}
+    onChange={setTags}
+    placeholder="Add tag..."
+    validate={validateTag}
+    maxChips={10}
+  />
+);
+```
+
+### With Suggestions
+Provide suggestions for faster input.
+
+```tsx
+const [selected, setSelected] = useState([]);
+const suggestions = [
+  'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free',
+  'Keto', 'Low-Carb', 'Sugar-Free', 'Paleo', 'Mediterranean'
+];
+
+return (
+  <ChipInput
+    value={selected}
+    onChange={setSelected}
+    placeholder="Type to see suggestions..."
+    suggestions={suggestions}
+  />
+);
+```
+
+## Recipe-Specific Chips
+
+Use `RecipeChip` for recipe-related contexts with optimized styling.
+
+### Ingredient Context
+```tsx
+<RecipeChip context="ingredient" onDelete={() => handleDelete()}>
+  2 cups flour
+</RecipeChip>
+<RecipeChip context="ingredient" onDelete={() => handleDelete()}>
+  1 tsp salt
+</RecipeChip>
+<RecipeChip context="ingredient" onDelete={() => handleDelete()}>
+  3 eggs
+</RecipeChip>
+```
+
+### Dietary Restrictions
+```tsx
+<RecipeChip context="dietary" selected>
+  Vegetarian
+</RecipeChip>
+<RecipeChip context="dietary">
+  Gluten-Free
+</RecipeChip>
+<RecipeChip context="dietary">
+  Dairy-Free
+</RecipeChip>
+```
+
+### Categories
+```tsx
+<RecipeChip context="category">Breakfast</RecipeChip>
+<RecipeChip context="category">Quick Meals</RecipeChip>
+<RecipeChip context="category">Comfort Food</RecipeChip>
+```
+
+### Tags
+```tsx
+<RecipeChip context="tag" onDelete={() => handleDelete()}>
+  summer
+</RecipeChip>
+<RecipeChip context="tag" onDelete={() => handleDelete()}>
+  bbq
+</RecipeChip>
+<RecipeChip context="tag" onDelete={() => handleDelete()}>
+  outdoor
+</RecipeChip>
+```
+
+## Advanced Usage
+
+### Filter Interface
+Create interactive filter interfaces with chips.
+
+```tsx
+const [filters, setFilters] = useState({
+  difficulty: ['Easy'],
+  time: [],
+  category: ['Dinner']
+});
+
+const toggleFilter = (category, value) => {
+  setFilters(prev => {
+    const currentValues = prev[category];
+    const newValues = currentValues.includes(value)
+      ? currentValues.filter(v => v !== value)
+      : [...currentValues, value];
+    return { ...prev, [category]: newValues };
+  });
+};
+
+return (
+  <div className="space-y-4">
+    <div>
+      <p className="text-xs text-muted-foreground mb-2">Difficulty</p>
+      <div className="flex gap-2">
+        {['Easy', 'Medium', 'Hard'].map(level => (
+          <Chip
+            key={level}
+            variant="outlined"
+            selected={filters.difficulty.includes(level)}
+            onClick={() => toggleFilter('difficulty', level)}
+            color={level === 'Easy' ? 'success' : level === 'Medium' ? 'warning' : 'destructive'}
+          >
+            {level}
+          </Chip>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p className="text-xs text-muted-foreground mb-2">Cook Time</p>
+      <div className="flex gap-2">
+        {['< 30 min', '30-60 min', '1+ hour'].map(time => (
+          <Chip
+            key={time}
+            variant="outlined"
+            selected={filters.time.includes(time)}
+            onClick={() => toggleFilter('time', time)}
+            icon={<Timer className="h-3 w-3" />}
+          >
+            {time}
+          </Chip>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+```
+
+### Recipe Card Integration
+Use chips within recipe cards for metadata display.
+
+```tsx
+<div className="bg-card w-96 rounded-lg border p-4">
+  <h3 className="mb-2 text-lg font-semibold">Spaghetti Carbonara</h3>
+  <p className="text-muted-foreground mb-4 text-sm">
+    Classic Italian pasta dish with eggs, cheese, and pancetta
+  </p>
+
+  <div className="space-y-3">
+    <div className="flex flex-wrap gap-2">
+      <Chip size="sm" variant="outlined" icon={<Clock className="h-3 w-3" />}>
+        25 min
+      </Chip>
+      <Chip size="sm" variant="filled" color="warning">
+        Medium
+      </Chip>
+      <Chip size="sm" variant="filled" color="info">
+        Italian
+      </Chip>
+    </div>
+
+    <div className="flex flex-wrap gap-1">
+      <Chip size="sm" variant="outlined" color="success">
+        Contains Dairy
+      </Chip>
+      <Chip size="sm" variant="outlined" color="warning">
+        Contains Gluten
+      </Chip>
+    </div>
+
+    <div className="flex items-center justify-between border-t pt-3">
+      <div className="flex gap-2">
+        <Chip size="sm" icon={<Heart className="h-3 w-3" />}>
+          234
+        </Chip>
+        <Chip size="sm" icon={<Scale className="h-3 w-3" />}>
+          420 cal
+        </Chip>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+## States
+
+### Disabled State
+Prevent interaction and provide visual feedback.
+
+```tsx
+<Chip disabled>Disabled</Chip>
+<Chip disabled variant="outlined">Disabled Outlined</Chip>
+<Chip disabled onDelete={() => {}}>Disabled with Delete</Chip>
+<Chip disabled selected>Disabled Selected</Chip>
+```
+
+## Accessibility
+
+The Chip component follows WCAG accessibility guidelines:
+
+### Keyboard Navigation
+- **Enter** and **Space** keys trigger chip actions
+- **Delete** and **Backspace** keys trigger deletion when focused
+- Proper focus management with visible focus indicators
+- Tab navigation support for interactive chips
+
+### Screen Reader Support
+- Proper ARIA attributes for all states (`aria-selected`, `aria-disabled`)
+- Delete buttons have descriptive `aria-label` attributes
+- Selected state communicated via `aria-pressed="true"`
+- Group semantics with proper ARIA roles
+
+### Focus Management
+- Clear focus indicators with ring styles
+- Focus-visible support for keyboard vs mouse interaction
+- Logical tab order within chip groups
+- Focus restoration after deletion
+
+## Design Guidelines
+
+### When to Use Each Variant
+- **Default**: General purpose tags, neutral information
+- **Outlined**: Secondary information, filter options, selectable states
+- **Filled**: Important tags, selected states, prominent categories
+
+### Color Guidelines
+- **Primary**: Important actions, main categories
+- **Success**: Positive attributes (vegetarian, healthy, easy)
+- **Warning**: Cautionary information (medium difficulty, allergens)
+- **Destructive**: Negative actions (delete, remove, hard difficulty)
+- **Info**: Neutral information (categories, metadata)
+
+### Size Guidelines
+- **Small**: Dense layouts, metadata, less important information
+- **Medium**: Standard size for most use cases
+- **Large**: Important tags, hero sections, prominent categories
+
+## Props Reference
+
+### Chip Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'default' \| 'outlined' \| 'filled'` | `'default'` | Visual style variant |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the chip |
+| `color` | `'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'` | Color variant |
+| `selected` | `boolean` | `false` | Whether the chip is selected |
+| `disabled` | `boolean` | `false` | Whether the chip is disabled |
+| `icon` | `ReactNode` | - | Leading icon element |
+| `avatar` | `ReactNode` | - | Avatar element (replaces icon) |
+| `onDelete` | `() => void` | - | Delete handler (shows delete button) |
+| `onClick` | `() => void` | - | Click handler |
+| `children` | `ReactNode` | - | Chip content |
+
+### ChipGroup Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `spacing` | `'tight' \| 'normal' \| 'loose'` | `'normal'` | Spacing between chips |
+| `maxDisplay` | `number` | - | Maximum chips to display before overflow |
+| `children` | `ReactNode` | - | Chip elements |
+
+### ChipInput Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string[]` | - | Array of current values |
+| `onChange` | `(values: string[]) => void` | - | Change handler |
+| `placeholder` | `string` | - | Input placeholder text |
+| `maxChips` | `number` | - | Maximum number of chips allowed |
+| `validate` | `(value: string) => boolean \| string` | - | Validation function |
+| `suggestions` | `string[]` | - | Array of suggestion values |
+
+### RecipeChip Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `context` | `'ingredient' \| 'dietary' \| 'category' \| 'tag'` | - | Recipe-specific context |
+| `selected` | `boolean` | `false` | Whether the chip is selected |
+| `onDelete` | `() => void` | - | Delete handler |
+| `children` | `ReactNode` | - | Chip content |
+
+Plus all standard chip props and HTML attributes.

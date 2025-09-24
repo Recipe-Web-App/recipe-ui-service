@@ -1,0 +1,497 @@
+# Disclosure Component
+
+A simple toggle for showing/hiding a single section of content. Perfect for FAQ items, recipe notes, cooking tips, and other collapsible content.
+
+## Features
+
+- **Simple API**: Easy to use compound component pattern
+- **Smooth Animations**: CSS transitions for expand/collapse
+- **Multiple Variants**: Default, outlined, minimal, elevated, and card styles
+- **Recipe-Specific**: Pre-configured components for cooking use cases
+- **Full Accessibility**: ARIA attributes, keyboard navigation, screen reader support
+- **Controlled/Uncontrolled**: Support both usage patterns
+- **Icon Support**: Customizable icons with rotation animations
+- **Type Safety**: Full TypeScript support with variant props
+
+## Import
+
+```tsx
+import {
+  Disclosure,
+  DisclosureTrigger,
+  DisclosureContent,
+  RecipeDisclosure,
+  KitchenTipsDisclosure,
+  FAQDisclosure,
+  IngredientNotesDisclosure,
+  DisclosureGroup,
+} from '@/components/ui/disclosure';
+```
+
+## Basic Usage
+
+```tsx
+// Simple question and answer
+<Disclosure>
+  <DisclosureTrigger>What ingredients do I need?</DisclosureTrigger>
+  <DisclosureContent>
+    <p>This recipe requires: flour, eggs, milk, butter, salt, and sugar.</p>
+  </DisclosureContent>
+</Disclosure>
+
+// Open by default
+<Disclosure defaultOpen>
+  <DisclosureTrigger>Important note</DisclosureTrigger>
+  <DisclosureContent>
+    <p>This content is visible by default.</p>
+  </DisclosureContent>
+</Disclosure>
+
+// Controlled usage
+<Disclosure open={isOpen} onOpenChange={setIsOpen}>
+  <DisclosureTrigger>Controlled disclosure</DisclosureTrigger>
+  <DisclosureContent>
+    <p>This disclosure is controlled by external state.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Variants
+
+### Default
+Clean white background with subtle border and shadow.
+
+```tsx
+<Disclosure variant="default">
+  <DisclosureTrigger>Standard disclosure style</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Clean white background with subtle border and shadow.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Outlined
+Transparent background with defined border.
+
+```tsx
+<Disclosure variant="outlined">
+  <DisclosureTrigger>Outlined border style</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Transparent background with defined border.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Minimal
+No borders or background - just content.
+
+```tsx
+<Disclosure variant="minimal">
+  <DisclosureTrigger>Clean minimal style</DisclosureTrigger>
+  <DisclosureContent>
+    <p>No borders or background - just content.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Elevated
+Enhanced shadow for prominent sections.
+
+```tsx
+<Disclosure variant="elevated">
+  <DisclosureTrigger>Elevated shadow style</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Enhanced shadow for prominent sections.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Card
+Subtle gray background for grouped content.
+
+```tsx
+<Disclosure variant="card">
+  <DisclosureTrigger>Card background style</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Subtle gray background for grouped content.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Sizes
+
+### Small
+Compact size for secondary information.
+
+```tsx
+<Disclosure size="sm">
+  <DisclosureTrigger>Quick tip</DisclosureTrigger>
+  <DisclosureContent>
+    <p className="text-xs">Always taste as you cook and adjust seasonings.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Medium (Default)
+Standard size for most use cases.
+
+```tsx
+<Disclosure size="md">
+  <DisclosureTrigger>Cooking instructions</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Heat the pan over medium heat before adding ingredients.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Large
+Prominent size for important information.
+
+```tsx
+<Disclosure size="lg">
+  <DisclosureTrigger>Detailed explanation</DisclosureTrigger>
+  <DisclosureContent>
+    <p className="text-lg">This technique requires careful attention to timing.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Icons
+
+### Default Chevron
+Standard chevron that rotates when opened.
+
+```tsx
+<Disclosure>
+  <DisclosureTrigger>Click to expand</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Content with default chevron icon.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Custom Icon
+Use any icon with proper sizing.
+
+```tsx
+import { HelpCircle } from 'lucide-react';
+
+<Disclosure>
+  <DisclosureTrigger icon={<HelpCircle />}>
+    Need help with this step?
+  </DisclosureTrigger>
+  <DisclosureContent>
+    <p>Custom help icon indicates this is assistance content.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Icon Position
+Control icon placement.
+
+```tsx
+import { Lightbulb } from 'lucide-react';
+
+<Disclosure>
+  <DisclosureTrigger icon={<Lightbulb />} iconPosition="left">
+    Pro cooking tip
+  </DisclosureTrigger>
+  <DisclosureContent>
+    <p>Icon on the left draws attention to important tips.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### No Icon
+Clean look without any icon.
+
+```tsx
+<Disclosure>
+  <DisclosureTrigger showIcon={false}>
+    Simple disclosure
+  </DisclosureTrigger>
+  <DisclosureContent>
+    <p>Sometimes a minimal approach is preferred.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Recipe-Specific Components
+
+### Cooking Tips
+Pre-configured for cooking tips with proper styling.
+
+```tsx
+<RecipeDisclosure context="tips" badge="Pro Tip">
+  <DisclosureTrigger>How to get the perfect sear?</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Make sure your pan is hot before adding the protein.</p>
+  </DisclosureContent>
+</RecipeDisclosure>
+```
+
+### Ingredient Notes
+For ingredient information and substitutions.
+
+```tsx
+<RecipeDisclosure context="notes">
+  <DisclosureTrigger>About the flour choice</DisclosureTrigger>
+  <DisclosureContent>
+    <p>All-purpose flour works best for proper gluten development.</p>
+  </DisclosureContent>
+</RecipeDisclosure>
+```
+
+### Substitutions
+Highlighted substitution options.
+
+```tsx
+<RecipeDisclosure context="substitutions">
+  <DisclosureTrigger>Dairy-free alternatives</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Replace butter with coconut oil and milk with oat milk.</p>
+  </DisclosureContent>
+</RecipeDisclosure>
+```
+
+### Nutrition Information
+Styled for nutritional data.
+
+```tsx
+<RecipeDisclosure context="nutrition">
+  <DisclosureTrigger>Nutritional breakdown</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Per serving: 280 calories, 12g protein, 8g fat, 35g carbs</p>
+  </DisclosureContent>
+</RecipeDisclosure>
+```
+
+## Kitchen Tips with Difficulty Levels
+
+### Beginner Tips
+Simple techniques with green styling.
+
+```tsx
+<KitchenTipsDisclosure
+  tipType="cooking"
+  difficulty="beginner"
+  estimatedTime="2 min"
+>
+  <DisclosureTrigger>How to tell when oil is hot</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Drop a small piece of food - if it sizzles, the oil is ready.</p>
+  </DisclosureContent>
+</KitchenTipsDisclosure>
+```
+
+### Advanced Techniques
+Complex techniques with red styling.
+
+```tsx
+<KitchenTipsDisclosure
+  tipType="technique"
+  difficulty="advanced"
+  estimatedTime="10 min"
+>
+  <DisclosureTrigger>Proper knife skills</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Cut vegetables into precise julienne strips using proper technique.</p>
+  </DisclosureContent>
+</KitchenTipsDisclosure>
+```
+
+### Food Safety
+Safety information with yellow styling.
+
+```tsx
+<KitchenTipsDisclosure tipType="safety" difficulty="beginner">
+  <DisclosureTrigger>Safe internal temperatures</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Chicken: 165°F, Beef: 135°F (medium-rare), Pork: 145°F</p>
+  </DisclosureContent>
+</KitchenTipsDisclosure>
+```
+
+## FAQ Components
+
+### Featured FAQ
+Highlighted important questions.
+
+```tsx
+<FAQDisclosure
+  question="How do I store leftover ingredients?"
+  category="storage"
+  featured
+>
+  <DisclosureContent>
+    <p>Store dry ingredients in airtight containers and refrigerate perishables.</p>
+  </DisclosureContent>
+</FAQDisclosure>
+```
+
+### Categorized FAQ
+Organized by category with color coding.
+
+```tsx
+<FAQDisclosure
+  question="What if I don&apos;t have a specific tool?"
+  category="cooking"
+>
+  <DisclosureContent>
+    <p>Most tools have substitutes - check our equipment alternatives section.</p>
+  </DisclosureContent>
+</FAQDisclosure>
+```
+
+## Grouped Disclosures
+
+Group related disclosures with consistent spacing.
+
+```tsx
+<DisclosureGroup spacing="normal">
+  <FAQDisclosure
+    question="How long does this recipe take?"
+    category="general"
+  >
+    <DisclosureContent>
+      <p>Total time is about 45 minutes including prep and cooking.</p>
+    </DisclosureContent>
+  </FAQDisclosure>
+
+  <FAQDisclosure
+    question="Can I make this vegan?"
+    category="ingredients"
+  >
+    <DisclosureContent>
+      <p>Yes! Replace dairy with plant-based alternatives.</p>
+    </DisclosureContent>
+  </FAQDisclosure>
+
+  <FAQDisclosure
+    question="How should I store leftovers?"
+    category="storage"
+    featured
+  >
+    <DisclosureContent>
+      <p>Store in refrigerator for up to 3 days in airtight container.</p>
+    </DisclosureContent>
+  </FAQDisclosure>
+</DisclosureGroup>
+```
+
+## States and Behaviors
+
+### Disabled State
+Prevent interaction when needed.
+
+```tsx
+<Disclosure disabled>
+  <DisclosureTrigger>This disclosure is disabled</DisclosureTrigger>
+  <DisclosureContent>
+    <p>This content won&apos;t be accessible.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Non-collapsible
+Open but cannot be closed.
+
+```tsx
+<Disclosure defaultOpen collapsible={false}>
+  <DisclosureTrigger>This opens but doesn&apos;t close</DisclosureTrigger>
+  <DisclosureContent>
+    <p>Once opened, this cannot be collapsed.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Accessibility
+
+The Disclosure component includes comprehensive accessibility features:
+
+- **ARIA Attributes**: Proper `aria-expanded`, `aria-controls`, and `aria-labelledby`
+- **Keyboard Navigation**: Full support for Tab, Enter, and Space keys
+- **Screen Reader Support**: Content regions properly labeled
+- **Focus Management**: Logical focus flow and visible focus indicators
+
+### Keyboard Navigation
+
+- **Tab**: Focus the trigger button
+- **Enter/Space**: Toggle open/closed state
+- **Tab (when open)**: Move focus to content area
+
+### Screen Reader Behavior
+
+Screen readers will announce:
+- Button role and expanded state
+- Content region when opened
+- Proper labeling relationships between trigger and content
+
+## Best Practices
+
+### Content Structure
+- Keep trigger text concise and descriptive
+- Use semantic HTML within content areas
+- Provide clear visual hierarchy
+
+### Performance
+- Use `forceMount` sparingly (only when needed for SEO)
+- Prefer CSS transitions over JavaScript animations
+- Consider content length for smooth animations
+
+### Recipe Context Usage
+- Use `RecipeDisclosure` for cooking-related content
+- Choose appropriate context (tips, notes, substitutions, etc.)
+- Add badges for important information
+
+### Grouping
+- Use `DisclosureGroup` for related sets of disclosures
+- Choose appropriate spacing (tight, normal, loose)
+- Consider allowing multiple open disclosures vs single
+
+## Advanced Usage
+
+### Force Mount Content
+Keep content in DOM for SEO or complex animations.
+
+```tsx
+<Disclosure>
+  <DisclosureTrigger>SEO-friendly content</DisclosureTrigger>
+  <DisclosureContent forceMount>
+    <p>This content stays in DOM even when closed.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Custom Animation Duration
+Control transition timing.
+
+```tsx
+<Disclosure>
+  <DisclosureTrigger>Custom timing</DisclosureTrigger>
+  <DisclosureContent animationDuration={500}>
+    <p>Slower animation for dramatic effect.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+### Custom Styling
+Extend with additional classes.
+
+```tsx
+<Disclosure className="border-2 border-blue-500">
+  <DisclosureTrigger className="bg-blue-50">
+    Custom styled trigger
+  </DisclosureTrigger>
+  <DisclosureContent className="bg-blue-25">
+    <p>Custom styled content area.</p>
+  </DisclosureContent>
+</Disclosure>
+```
+
+## Related Components
+
+- **Accordion**: For multiple related collapsible sections
+- **Tabs**: For mutually exclusive content sections
+- **Modal**: For overlay content that requires user action
+- **Tooltip**: For brief contextual information

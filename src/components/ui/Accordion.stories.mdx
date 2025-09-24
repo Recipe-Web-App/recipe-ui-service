@@ -1,0 +1,608 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  RecipeSection,
+  RecipeIngredients,
+  RecipeInstructions,
+} from './accordion.tsx';
+
+<Meta title="UI Components/Accordion" component={Accordion} />
+
+# Accordion
+
+Accordion components for collapsible content sections, specifically designed for recipe ingredients, instructions, and other expandable recipe information.
+
+## Basic Accordion
+
+<Canvas>
+  <Story name="Basic">
+    <Accordion defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Basic Information</AccordionTrigger>
+        <AccordionContent>
+          <p>This is the basic accordion content. It can contain any type of content including text, images, or other components.</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Additional Details</AccordionTrigger>
+        <AccordionContent>
+          <p>This section contains additional details that are revealed when expanded. The accordion allows users to focus on relevant sections.</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="item-3">
+        <AccordionTrigger>Advanced Settings</AccordionTrigger>
+        <AccordionContent>
+          <p>Advanced settings and configurations can be hidden under accordion sections to keep the interface clean and organized.</p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </Story>
+</Canvas>
+
+## Accordion Variants
+
+<Canvas>
+  <Story name="Variants">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-2 font-medium">Default</h4>
+        <Accordion variant="default" defaultValue="default-1">
+          <AccordionItem value="default-1">
+            <AccordionTrigger>Default Accordion</AccordionTrigger>
+            <AccordionContent>Content with default styling and white background.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Outlined</h4>
+        <Accordion variant="outlined" defaultValue="outlined-1">
+          <AccordionItem value="outlined-1">
+            <AccordionTrigger>Outlined Accordion</AccordionTrigger>
+            <AccordionContent>Content with outlined styling and thicker borders.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Elevated</h4>
+        <Accordion variant="elevated" defaultValue="elevated-1">
+          <AccordionItem value="elevated-1">
+            <AccordionTrigger>Elevated Accordion</AccordionTrigger>
+            <AccordionContent>Content with elevated styling and shadow effects.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Minimal</h4>
+        <Accordion variant="minimal" defaultValue="minimal-1">
+          <AccordionItem value="minimal-1">
+            <AccordionTrigger>Minimal Accordion</AccordionTrigger>
+            <AccordionContent>Content with minimal styling, no borders or background.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Multiple Selection
+
+<Canvas>
+  <Story name="Multiple">
+    <Accordion type="multiple" defaultValue={["multi-1", "multi-3"]}>
+      <AccordionItem value="multi-1">
+        <AccordionTrigger>First Section (Initially Open)</AccordionTrigger>
+        <AccordionContent>
+          <p>This accordion allows multiple sections to be open at the same time. Users can expand multiple items simultaneously.</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="multi-2">
+        <AccordionTrigger>Second Section</AccordionTrigger>
+        <AccordionContent>
+          <p>Multiple selection is useful when users need to compare content across different sections or work with multiple areas at once.</p>
+        </AccordionContent>
+      </AccordionItem>
+
+      <AccordionItem value="multi-3">
+        <AccordionTrigger>Third Section (Initially Open)</AccordionTrigger>
+        <AccordionContent>
+          <p>This type of accordion is particularly useful for recipes where users might want to see both ingredients and instructions at the same time.</p>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </Story>
+</Canvas>
+
+## Recipe Sections
+
+<Canvas>
+  <Story name="Recipe Sections">
+    <Accordion type="multiple" defaultValue={["ingredients", "instructions"]}>
+      <RecipeSection
+        value="ingredients"
+        title="Ingredients"
+        section="ingredients"
+        count={8}
+      >
+        <p className="text-gray-600 mb-3">Everything you need to make this delicious recipe.</p>
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <span>2 cups all-purpose flour</span>
+          </div>
+          <div className="flex justify-between">
+            <span>1 tsp baking powder</span>
+          </div>
+          <div className="flex justify-between">
+            <span>1/2 tsp salt</span>
+          </div>
+          <div className="flex justify-between">
+            <span>1 cup milk</span>
+          </div>
+        </div>
+      </RecipeSection>
+
+      <RecipeSection
+        value="instructions"
+        title="Instructions"
+        section="instructions"
+        count={6}
+      >
+        <p className="text-gray-600 mb-3">Step-by-step instructions to prepare your meal.</p>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white text-sm font-semibold">1</span>
+            <span>Preheat your oven to 350°F (175°C).</span>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white text-sm font-semibold">2</span>
+            <span>In a large bowl, whisk together flour, baking powder, and salt.</span>
+          </div>
+          <div className="flex gap-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white text-sm font-semibold">3</span>
+            <span>Gradually add milk and mix until smooth.</span>
+          </div>
+        </div>
+      </RecipeSection>
+
+      <RecipeSection
+        value="nutrition"
+        title="Nutrition Facts"
+        section="nutrition"
+      >
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <span className="font-medium">Calories:</span> 245
+          </div>
+          <div>
+            <span className="font-medium">Protein:</span> 8g
+          </div>
+          <div>
+            <span className="font-medium">Carbs:</span> 45g
+          </div>
+          <div>
+            <span className="font-medium">Fat:</span> 4g
+          </div>
+        </div>
+      </RecipeSection>
+
+      <RecipeSection
+        value="tips"
+        title="Chef's Tips"
+        section="tips"
+        count={3}
+      >
+        <ul className="space-y-2">
+          <li>• For best results, use room temperature ingredients</li>
+          <li>• Don't overmix the batter to avoid tough texture</li>
+          <li>• Check doneness with a toothpick inserted in center</li>
+        </ul>
+      </RecipeSection>
+    </Accordion>
+  </Story>
+</Canvas>
+
+## Recipe Ingredients List
+
+<Canvas>
+  <Story name="Ingredients List">
+    <div className="max-w-2xl">
+      <Accordion defaultValue="ingredients">
+        <RecipeSection
+          value="ingredients"
+          title="Ingredients"
+          section="ingredients"
+          count={12}
+        >
+          <RecipeIngredients
+            showCheckboxes={true}
+            ingredients={[
+              {
+                id: "1",
+                name: "all-purpose flour",
+                amount: "2",
+                unit: "cups",
+                category: "dry ingredients"
+              },
+              {
+                id: "2",
+                name: "baking powder",
+                amount: "2",
+                unit: "tsp"
+              },
+              {
+                id: "3",
+                name: "salt",
+                amount: "1/2",
+                unit: "tsp"
+              },
+              {
+                id: "4",
+                name: "granulated sugar",
+                amount: "1/4",
+                unit: "cup",
+                category: "dry ingredients"
+              },
+              {
+                id: "5",
+                name: "large eggs",
+                amount: "2",
+                unit: "whole",
+                category: "wet ingredients"
+              },
+              {
+                id: "6",
+                name: "whole milk",
+                amount: "1 1/4",
+                unit: "cups",
+                category: "wet ingredients"
+              },
+              {
+                id: "7",
+                name: "unsalted butter",
+                amount: "4",
+                unit: "tbsp",
+                notes: "melted and cooled",
+                category: "wet ingredients"
+              },
+              {
+                id: "8",
+                name: "vanilla extract",
+                amount: "1",
+                unit: "tsp",
+                optional: true,
+                category: "wet ingredients"
+              }
+            ]}
+          />
+        </RecipeSection>
+      </Accordion>
+    </div>
+  </Story>
+</Canvas>
+
+## Recipe Instructions List
+
+<Canvas>
+  <Story name="Instructions List">
+    <div className="max-w-2xl">
+      <Accordion defaultValue="instructions">
+        <RecipeSection
+          value="instructions"
+          title="Instructions"
+          section="instructions"
+          count={8}
+        >
+          <RecipeInstructions
+            currentStep={3}
+            instructions={[
+              {
+                id: "1",
+                step: 1,
+                text: "Preheat your oven to 425°F (220°C). Line a baking sheet with parchment paper.",
+                temperature: "425°F (220°C)",
+                time: "5 min"
+              },
+              {
+                id: "2",
+                step: 2,
+                text: "In a large mixing bowl, whisk together flour, baking powder, salt, and sugar until well combined.",
+                time: "2 min"
+              },
+              {
+                id: "3",
+                step: 3,
+                text: "In a separate bowl, beat the eggs and then whisk in the milk, melted butter, and vanilla extract.",
+                time: "3 min",
+                notes: "Make sure the butter has cooled slightly to prevent cooking the eggs"
+              },
+              {
+                id: "4",
+                step: 4,
+                text: "Pour the wet ingredients into the dry ingredients and gently fold together until just combined. Don't overmix.",
+                time: "1 min",
+                notes: "Lumps are okay - overmixing will make tough pancakes"
+              },
+              {
+                id: "5",
+                step: 5,
+                text: "Heat a non-stick pan or griddle over medium heat. Lightly grease with butter or oil.",
+                temperature: "Medium heat"
+              },
+              {
+                id: "6",
+                step: 6,
+                text: "Pour 1/4 cup of batter for each pancake. Cook until bubbles form on surface and edges look set, about 2-3 minutes.",
+                time: "2-3 min per side"
+              },
+              {
+                id: "7",
+                step: 7,
+                text: "Flip carefully and cook until golden brown on the other side, about 1-2 minutes more.",
+                time: "1-2 min"
+              },
+              {
+                id: "8",
+                step: 8,
+                text: "Serve immediately with your favorite toppings like maple syrup, fresh berries, or whipped cream.",
+                notes: "Best served hot and fresh!"
+              }
+            ]}
+          />
+        </RecipeSection>
+      </Accordion>
+    </div>
+  </Story>
+</Canvas>
+
+## Complete Recipe Example
+
+<Canvas>
+  <Story name="Complete Recipe">
+    <div className="max-w-4xl">
+      <Accordion type="multiple" defaultValue={["ingredients"]}>
+        <RecipeSection
+          value="ingredients"
+          title="Ingredients"
+          section="ingredients"
+          count={10}
+        >
+          <RecipeIngredients
+            showCheckboxes={true}
+            ingredients={[
+              { id: "1", name: "boneless chicken breasts", amount: "4", unit: "pieces", category: "protein" },
+              { id: "2", name: "olive oil", amount: "2", unit: "tbsp", category: "cooking" },
+              { id: "3", name: "garlic cloves", amount: "3", unit: "cloves", notes: "minced", category: "aromatics" },
+              { id: "4", name: "yellow onion", amount: "1", unit: "medium", notes: "diced", category: "aromatics" },
+              { id: "5", name: "bell peppers", amount: "2", unit: "large", notes: "sliced", category: "vegetables" },
+              { id: "6", name: "cherry tomatoes", amount: "1", unit: "cup", category: "vegetables" },
+              { id: "7", name: "Italian seasoning", amount: "1", unit: "tsp", category: "seasonings" },
+              { id: "8", name: "salt", amount: "1", unit: "tsp", category: "seasonings" },
+              { id: "9", name: "black pepper", amount: "1/2", unit: "tsp", category: "seasonings" },
+              { id: "10", name: "fresh basil", amount: "2", unit: "tbsp", optional: true, notes: "chopped", category: "herbs" }
+            ]}
+          />
+        </RecipeSection>
+
+        <RecipeSection
+          value="instructions"
+          title="Cooking Instructions"
+          section="instructions"
+          count={6}
+        >
+          <RecipeInstructions
+            currentStep={1}
+            showStepNumbers={true}
+            instructions={[
+              {
+                id: "1",
+                step: 1,
+                text: "Season chicken breasts with salt, pepper, and Italian seasoning on both sides.",
+                time: "5 min"
+              },
+              {
+                id: "2",
+                step: 2,
+                text: "Heat olive oil in a large skillet over medium-high heat.",
+                temperature: "Medium-high heat",
+                time: "2 min"
+              },
+              {
+                id: "3",
+                step: 3,
+                text: "Add chicken to the skillet and cook until golden brown and cooked through, about 6-7 minutes per side.",
+                time: "12-14 min",
+                temperature: "165°F internal",
+                notes: "Use a meat thermometer to ensure chicken reaches safe internal temperature"
+              },
+              {
+                id: "4",
+                step: 4,
+                text: "Remove chicken from skillet and set aside to rest. Cover with foil to keep warm.",
+                time: "5 min rest"
+              },
+              {
+                id: "5",
+                step: 5,
+                text: "In the same skillet, add onions and bell peppers. Sauté until softened, about 5-6 minutes.",
+                time: "5-6 min"
+              },
+              {
+                id: "6",
+                step: 6,
+                text: "Add garlic and cherry tomatoes, cook for 2 more minutes. Slice chicken and serve over vegetables, garnished with fresh basil.",
+                time: "2 min",
+                notes: "Slice chicken against the grain for tender pieces"
+              }
+            ]}
+          />
+        </RecipeSection>
+
+        <RecipeSection
+          value="nutrition"
+          title="Nutrition Information"
+          section="nutrition"
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-3 bg-purple-100 rounded-lg">
+              <div className="text-2xl font-bold text-purple-900">285</div>
+              <div className="text-sm text-purple-700">Calories</div>
+            </div>
+            <div className="text-center p-3 bg-purple-100 rounded-lg">
+              <div className="text-2xl font-bold text-purple-900">35g</div>
+              <div className="text-sm text-purple-700">Protein</div>
+            </div>
+            <div className="text-center p-3 bg-purple-100 rounded-lg">
+              <div className="text-2xl font-bold text-purple-900">8g</div>
+              <div className="text-sm text-purple-700">Carbs</div>
+            </div>
+            <div className="text-center p-3 bg-purple-100 rounded-lg">
+              <div className="text-2xl font-bold text-purple-900">12g</div>
+              <div className="text-sm text-purple-700">Fat</div>
+            </div>
+          </div>
+        </RecipeSection>
+
+        <RecipeSection
+          value="tips"
+          title="Chef's Tips"
+          section="tips"
+          count={4}
+        >
+          <div className="space-y-3">
+            <div className="flex gap-3 p-3 bg-orange-100 rounded-lg">
+              <span className="text-orange-600">💡</span>
+              <p><strong>Chicken Prep:</strong> Pound chicken breasts to even thickness for more uniform cooking.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-orange-100 rounded-lg">
+              <span className="text-orange-600">🔥</span>
+              <p><strong>Temperature:</strong> Don't move the chicken too early - let it develop a good sear first.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-orange-100 rounded-lg">
+              <span className="text-orange-600">🥗</span>
+              <p><strong>Serving:</strong> Great served over rice, pasta, or with a simple green salad.</p>
+            </div>
+            <div className="flex gap-3 p-3 bg-orange-100 rounded-lg">
+              <span className="text-orange-600">❄️</span>
+              <p><strong>Storage:</strong> Leftovers keep well in the refrigerator for up to 3 days.</p>
+            </div>
+          </div>
+        </RecipeSection>
+
+        <RecipeSection
+          value="variations"
+          title="Recipe Variations"
+          section="variations"
+          count={3}
+        >
+          <div className="space-y-4">
+            <div className="border border-pink-200 p-4 rounded-lg">
+              <h4 className="font-semibold text-pink-900 mb-2">Mediterranean Style</h4>
+              <p className="text-gray-700">Add olives, sun-dried tomatoes, and feta cheese. Use oregano instead of Italian seasoning.</p>
+            </div>
+            <div className="border border-pink-200 p-4 rounded-lg">
+              <h4 className="font-semibold text-pink-900 mb-2">Spicy Version</h4>
+              <p className="text-gray-700">Include jalapeños and red pepper flakes. Finish with a squeeze of lime juice.</p>
+            </div>
+            <div className="border border-pink-200 p-4 rounded-lg">
+              <h4 className="font-semibold text-pink-900 mb-2">Low-Carb Option</h4>
+              <p className="text-gray-700">Serve over cauliflower rice or zucchini noodles instead of regular rice or pasta.</p>
+            </div>
+          </div>
+        </RecipeSection>
+      </Accordion>
+    </div>
+  </Story>
+</Canvas>
+
+## Accordion Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-6">
+      <div>
+        <h4 className="mb-2 font-medium">Small</h4>
+        <Accordion size="sm" defaultValue="small-1">
+          <AccordionItem value="small-1">
+            <AccordionTrigger>Small Size Accordion</AccordionTrigger>
+            <AccordionContent>Compact accordion with smaller text and padding.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Default</h4>
+        <Accordion size="default" defaultValue="default-1">
+          <AccordionItem value="default-1">
+            <AccordionTrigger>Default Size Accordion</AccordionTrigger>
+            <AccordionContent>Standard accordion size suitable for most content.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
+      <div>
+        <h4 className="mb-2 font-medium">Large</h4>
+        <Accordion size="lg" defaultValue="large-1">
+          <AccordionItem value="large-1">
+            <AccordionTrigger>Large Size Accordion</AccordionTrigger>
+            <AccordionContent>Larger accordion with increased text size and spacing.</AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  </Story>
+</Canvas>
+
+## Props
+
+### Accordion
+
+<ArgsTable of={Accordion} />
+
+### RecipeSection
+
+<ArgsTable of={RecipeSection} />
+
+### RecipeIngredients
+
+<ArgsTable of={RecipeIngredients} />
+
+### RecipeInstructions
+
+<ArgsTable of={RecipeInstructions} />
+
+## Usage Guidelines
+
+### Best Practices
+
+- Use descriptive trigger text that clearly indicates the content
+- Group related information together in logical sections
+- Consider using multiple-type accordions for recipe pages where users might want to reference multiple sections
+- Include item counts in section headers when helpful
+- Use recipe-specific sections for ingredients, instructions, nutrition, and tips
+- Provide checkboxes for ingredients to help users track their shopping or preparation
+- Show step numbers for instructions to help users follow along
+
+### Recipe App Specific
+
+- **Ingredients Section**: Use checkboxes for shopping lists and preparation tracking
+- **Instructions Section**: Number steps clearly and include timing and temperature information
+- **Nutrition Section**: Display nutritional information in an easy-to-scan format
+- **Tips Section**: Provide helpful cooking tips and suggestions
+- **Variations Section**: Show alternative preparation methods or ingredient substitutions
+- **Notes Section**: Allow for personal notes and modifications
+
+### Accessibility
+
+- All accordion components include proper ARIA attributes
+- Keyboard navigation support with Enter and Space keys
+- Screen reader compatible with proper labeling
+- Focus management for interactive elements
+- High contrast support for visual indicators

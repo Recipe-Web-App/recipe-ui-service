@@ -1,0 +1,630 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  RadioGroup,
+  RadioGroupRoot,
+  RadioInput,
+  RadioLabel,
+  RadioDescription,
+  RadioField,
+  RecipeRadioGroup,
+  AnimatedRadio,
+  RadioCard,
+} from './radio';
+import { useState } from 'react';
+import {
+  ChefHat,
+  Clock,
+  Utensils,
+  Gauge,
+  Heart,
+  Leaf,
+  Pizza,
+  Coffee,
+  Cookie,
+  Star,
+  Users,
+  Timer,
+} from 'lucide-react';
+
+<Meta title="Components/Radio" component={RadioGroup} />
+
+# Radio
+
+Exclusive selection controls for recipe preferences and form inputs with comprehensive variants and accessibility features.
+
+## Basic Usage
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [selectedCuisine, setSelectedCuisine] = useState('italian');
+      const cuisineOptions = [
+        { id: 'italian', value: 'italian', label: 'Italian' },
+        { id: 'mexican', value: 'mexican', label: 'Mexican' },
+        { id: 'asian', value: 'asian', label: 'Asian' },
+        { id: 'mediterranean', value: 'mediterranean', label: 'Mediterranean' },
+      ];
+      return (
+        <RadioGroup
+          options={cuisineOptions}
+          value={selectedCuisine}
+          onValueChange={setSelectedCuisine}
+          orientation="vertical"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story name="Sizes">
+    {() => {
+      const [selected, setSelected] = useState('md');
+      const sizeOptions = [
+        { id: 'sm', value: 'sm', label: 'Small radio' },
+        { id: 'md', value: 'md', label: 'Medium radio (default)' },
+        { id: 'lg', value: 'lg', label: 'Large radio' },
+        { id: 'xl', value: 'xl', label: 'Extra large radio' },
+      ];
+      return (
+        <div className="space-y-4">
+          <RadioGroup
+            options={[sizeOptions[0]]}
+            defaultValue="sm"
+            size="sm"
+          />
+          <RadioGroup
+            options={[sizeOptions[1]]}
+            defaultValue="md"
+            size="md"
+          />
+          <RadioGroup
+            options={[sizeOptions[2]]}
+            defaultValue="lg"
+            size="lg"
+          />
+          <RadioGroup
+            options={[sizeOptions[3]]}
+            defaultValue="xl"
+            size="xl"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variants
+
+<Canvas>
+  <Story name="Variants">
+    {() => {
+      const variantOptions = [
+        { id: 'default', value: 'default', label: 'Default' },
+        { id: 'success', value: 'success', label: 'Success' },
+        { id: 'warning', value: 'warning', label: 'Warning' },
+        { id: 'danger', value: 'danger', label: 'Danger' },
+        { id: 'info', value: 'info', label: 'Info' },
+        { id: 'subtle', value: 'subtle', label: 'Subtle' },
+      ];
+      return (
+        <div className="space-y-4">
+          <RadioGroup options={[variantOptions[0]]} defaultValue="default" variant="default" />
+          <RadioGroup options={[variantOptions[1]]} defaultValue="success" variant="success" />
+          <RadioGroup options={[variantOptions[2]]} defaultValue="warning" variant="warning" />
+          <RadioGroup options={[variantOptions[3]]} defaultValue="danger" variant="danger" />
+          <RadioGroup options={[variantOptions[4]]} defaultValue="info" variant="info" />
+          <RadioGroup options={[variantOptions[5]]} defaultValue="subtle" variant="subtle" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Description
+
+<Canvas>
+  <Story name="With Description">
+    {() => {
+      const [selectedDiet, setSelectedDiet] = useState('vegetarian');
+      const dietOptions = [
+        {
+          id: 'vegetarian',
+          value: 'vegetarian',
+          label: 'Vegetarian',
+          description: 'Plant-based with dairy and eggs',
+          icon: <Leaf className="h-3 w-3" />,
+        },
+        {
+          id: 'vegan',
+          value: 'vegan',
+          label: 'Vegan',
+          description: 'Entirely plant-based',
+          icon: <Heart className="h-3 w-3" />,
+        },
+        {
+          id: 'omnivore',
+          value: 'omnivore',
+          label: 'Omnivore',
+          description: 'No restrictions',
+        },
+      ];
+      return (
+        <RadioGroup
+          options={dietOptions}
+          value={selectedDiet}
+          onValueChange={setSelectedDiet}
+          orientation="vertical"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Icons
+
+<Canvas>
+  <Story name="With Icons">
+    {() => {
+      const [selectedMeal, setSelectedMeal] = useState('breakfast');
+      const mealOptions = [
+        {
+          id: 'breakfast',
+          value: 'breakfast',
+          label: 'Breakfast',
+          description: 'Morning meals',
+          icon: <Coffee className="h-3 w-3" />,
+        },
+        {
+          id: 'lunch',
+          value: 'lunch',
+          label: 'Lunch',
+          description: 'Midday meals',
+          icon: <Utensils className="h-3 w-3" />,
+        },
+        {
+          id: 'dinner',
+          value: 'dinner',
+          label: 'Dinner',
+          description: 'Evening meals',
+          icon: <ChefHat className="h-3 w-3" />,
+        },
+        {
+          id: 'dessert',
+          value: 'dessert',
+          label: 'Dessert',
+          description: 'Sweet treats',
+          icon: <Cookie className="h-3 w-3" />,
+        },
+      ];
+      return (
+        <RadioGroup
+          options={mealOptions}
+          value={selectedMeal}
+          onValueChange={setSelectedMeal}
+          orientation="vertical"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Orientations
+
+<Canvas>
+  <Story name="Orientations">
+    {() => {
+      const [horizontalValue, setHorizontalValue] = useState('2-4');
+      const [verticalValue, setVerticalValue] = useState('easy');
+
+      const servingSizeOptions = [
+        { id: '1-2', value: '1-2', label: '1-2 people' },
+        { id: '2-4', value: '2-4', label: '2-4 people' },
+        { id: '4-6', value: '4-6', label: '4-6 people' },
+      ];
+
+      const difficultyOptions = [
+        { id: 'easy', value: 'easy', label: 'Easy', description: 'Beginner friendly' },
+        { id: 'medium', value: 'medium', label: 'Medium', description: 'Some experience needed' },
+        { id: 'hard', value: 'hard', label: 'Hard', description: 'Advanced techniques' },
+      ];
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <h4 className="mb-3 font-medium">Horizontal Layout</h4>
+            <RadioGroup
+              options={servingSizeOptions}
+              value={horizontalValue}
+              onValueChange={setHorizontalValue}
+              orientation="horizontal"
+            />
+          </div>
+          <div>
+            <h4 className="mb-3 font-medium">Vertical Layout</h4>
+            <RadioGroup
+              options={difficultyOptions}
+              value={verticalValue}
+              onValueChange={setVerticalValue}
+              orientation="vertical"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## States
+
+<Canvas>
+  <Story name="States">
+    {() => {
+      const stateOptions = [
+        { id: 'enabled', value: 'enabled', label: 'Enabled option' },
+        { id: 'disabled', value: 'disabled', label: 'Disabled option', disabled: true },
+      ];
+      return (
+        <div className="space-y-4">
+          <RadioGroup
+            options={stateOptions}
+            defaultValue="enabled"
+            orientation="vertical"
+          />
+          <RadioGroup
+            options={[{ id: 'required', value: 'required', label: 'Required field' }]}
+            required
+            error="This field is required"
+          />
+          <RadioGroup
+            options={[{ id: 'helper', value: 'helper', label: 'With helper text' }]}
+            helperText="Choose your preferred option"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Form Field
+
+<Canvas>
+  <Story name="Form Field">
+    {() => {
+      const [difficulty, setDifficulty] = useState('');
+      const [servingSize, setServingSize] = useState('2-4');
+
+      const difficultyOptions = [
+        { id: 'easy', value: 'easy', label: 'Easy', description: 'Beginner friendly' },
+        { id: 'medium', value: 'medium', label: 'Medium', description: 'Some experience needed' },
+        { id: 'hard', value: 'hard', label: 'Hard', description: 'Advanced techniques' },
+      ];
+
+      const servingOptions = [
+        { id: '1-2', value: '1-2', label: '1-2 people' },
+        { id: '2-4', value: '2-4', label: '2-4 people' },
+        { id: '4-6', value: '4-6', label: '4-6 people' },
+      ];
+
+      return (
+        <div className="space-y-6">
+          <RadioField
+            options={difficultyOptions}
+            value={difficulty}
+            onValueChange={setDifficulty}
+            label="Recipe Difficulty"
+            helperText="Choose the skill level required"
+            required
+            error={!difficulty ? 'Please select a difficulty level' : undefined}
+          />
+          <RadioField
+            options={servingOptions}
+            value={servingSize}
+            onValueChange={setServingSize}
+            label="Serving Size"
+            helperText="How many people will this serve?"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recipe Radio Group
+
+<Canvas>
+  <Story name="Recipe Radio Group">
+    {() => {
+      const [mealType, setMealType] = useState('dinner');
+      const [cookingTime, setCookingTime] = useState('30');
+
+      const mealTypeOptions = [
+        {
+          id: 'breakfast',
+          value: 'breakfast',
+          label: 'Breakfast',
+          description: 'Morning meals',
+          count: 45,
+          context: 'meal-type',
+          icon: <Coffee className="h-3 w-3" />,
+        },
+        {
+          id: 'lunch',
+          value: 'lunch',
+          label: 'Lunch',
+          description: 'Midday meals',
+          count: 62,
+          context: 'meal-type',
+        },
+        {
+          id: 'dinner',
+          value: 'dinner',
+          label: 'Dinner',
+          description: 'Evening meals',
+          count: 128,
+          context: 'meal-type',
+        },
+      ];
+
+      const cookingTimeOptions = [
+        {
+          id: '15',
+          value: '15',
+          label: 'Under 15 min',
+          description: 'Quick recipes',
+          count: 23,
+          context: 'preparation-time',
+        },
+        {
+          id: '30',
+          value: '30',
+          label: '15-30 min',
+          description: 'Standard prep',
+          count: 67,
+          context: 'preparation-time',
+        },
+        {
+          id: '60',
+          value: '60',
+          label: '30-60 min',
+          description: 'More involved',
+          count: 45,
+          context: 'preparation-time',
+        },
+      ];
+
+      return (
+        <div className="space-y-6">
+          <RecipeRadioGroup
+            variant="categories"
+            title="Meal Type"
+            options={mealTypeOptions}
+            value={mealType}
+            onValueChange={setMealType}
+            showCounts
+          />
+          <RecipeRadioGroup
+            variant="time"
+            title="Cooking Time"
+            options={cookingTimeOptions}
+            value={cookingTime}
+            onValueChange={setCookingTime}
+            showCounts
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Radio Cards
+
+<Canvas>
+  <Story name="Radio Cards">
+    {() => {
+      const [selectedRecipe, setSelectedRecipe] = useState('curry');
+
+      return (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <RadioCard
+            value="carbonara"
+            label="Spaghetti Carbonara"
+            description="Classic Italian pasta with eggs, cheese, and pancetta"
+            icon={<ChefHat className="h-5 w-5 text-gray-400" />}
+            selected={selectedRecipe === 'carbonara'}
+            onSelect={setSelectedRecipe}
+          />
+          <RadioCard
+            value="curry"
+            label="Thai Green Curry"
+            description="Aromatic Thai curry with coconut milk and vegetables"
+            icon={<Utensils className="h-5 w-5 text-gray-400" />}
+            badge={
+              <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
+                Popular
+              </span>
+            }
+            selected={selectedRecipe === 'curry'}
+            onSelect={setSelectedRecipe}
+          />
+          <RadioCard
+            value="tacos"
+            label="Street Tacos"
+            description="Authentic Mexican tacos with fresh toppings"
+            icon={<Heart className="h-5 w-5 text-gray-400" />}
+            selected={selectedRecipe === 'tacos'}
+            onSelect={setSelectedRecipe}
+          />
+          <RadioCard
+            value="sushi"
+            label="Sushi Platter"
+            description="Assorted fresh sushi and sashimi"
+            icon={<Leaf className="h-5 w-5 text-gray-400" />}
+            selected={selectedRecipe === 'sushi'}
+            disabled
+            onSelect={setSelectedRecipe}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Compound Components
+
+<Canvas>
+  <Story name="Compound Components">
+    {() => {
+      const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
+      return (
+        <RadioGroupRoot
+          value={selectedDifficulty}
+          onValueChange={setSelectedDifficulty}
+        >
+          <div className="space-y-4">
+            <div className="flex items-start gap-3 rounded-lg border p-4 hover:bg-gray-50">
+              <RadioInput value="easy" size="lg" variant="success" />
+              <div className="flex-1">
+                <RadioLabel size="lg" className="font-semibold text-gray-900">
+                  Easy
+                </RadioLabel>
+                <RadioDescription size="lg" className="mt-1 text-gray-600">
+                  Perfect for beginners. Simple ingredients and basic techniques.
+                </RadioDescription>
+                <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                  <Gauge className="h-4 w-4" />
+                  <span>Beginner</span>
+                  <span className="text-gray-400">•</span>
+                  <Clock className="h-4 w-4" />
+                  <span>15-30 min</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-lg border p-4 hover:bg-gray-50">
+              <RadioInput value="medium" size="lg" variant="warning" />
+              <div className="flex-1">
+                <RadioLabel size="lg" className="font-semibold text-gray-900">
+                  Medium
+                </RadioLabel>
+                <RadioDescription size="lg" className="mt-1 text-gray-600">
+                  Requires some cooking experience. Multiple steps and techniques.
+                </RadioDescription>
+                <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                  <Gauge className="h-4 w-4" />
+                  <span>Intermediate</span>
+                  <span className="text-gray-400">•</span>
+                  <Clock className="h-4 w-4" />
+                  <span>30-60 min</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-lg border p-4 hover:bg-gray-50">
+              <RadioInput value="hard" size="lg" variant="danger" />
+              <div className="flex-1">
+                <RadioLabel size="lg" className="font-semibold text-gray-900">
+                  Hard
+                </RadioLabel>
+                <RadioDescription size="lg" className="mt-1 text-gray-600">
+                  Advanced techniques required. Complex preparations and precise timing.
+                </RadioDescription>
+                <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                  <Gauge className="h-4 w-4" />
+                  <span>Advanced</span>
+                  <span className="text-gray-400">•</span>
+                  <Clock className="h-4 w-4" />
+                  <span>60+ min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </RadioGroupRoot>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Features
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => {
+      const [selected, setSelected] = useState('option1');
+      const accessibilityOptions = [
+        {
+          id: 'option1',
+          value: 'option1',
+          label: 'Screen reader friendly',
+          description: 'Includes proper ARIA attributes',
+        },
+        {
+          id: 'option2',
+          value: 'option2',
+          label: 'Keyboard navigation',
+          description: 'Fully keyboard accessible with arrow keys',
+        },
+        {
+          id: 'option3',
+          value: 'option3',
+          label: 'Focus management',
+          description: 'Proper focus indicators and management',
+        },
+      ];
+
+      return (
+        <div className="space-y-4">
+          <RadioGroup
+            options={accessibilityOptions}
+            value={selected}
+            onValueChange={setSelected}
+            orientation="vertical"
+            aria-label="Accessibility features demonstration"
+          />
+          <div className="text-sm text-gray-600 mt-4">
+            <p>Keyboard navigation:</p>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>Use arrow keys to navigate between options</li>
+              <li>Press Space or Enter to select an option</li>
+              <li>Tab to move focus to the radio group</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={RadioGroup} />
+
+## Usage Guidelines
+
+### When to use
+- For exclusive selection from a list of options
+- When users need to choose one option from 2-7 choices
+- In forms for single-choice questions
+- For filtering and categorization
+- In recipe preference selection
+
+### Best practices
+- Always provide clear labels
+- Use descriptions for complex options
+- Group related options together
+- Limit to 7 or fewer options for usability
+- Use appropriate variants for visual hierarchy
+- Ensure keyboard accessibility
+- Provide clear visual feedback for selection state
+- Use Radio Cards for rich content selection
+- Use Recipe Radio Groups for domain-specific filtering
+
+### Accessibility
+- Full keyboard navigation support
+- Screen reader compatible
+- Proper ARIA attributes
+- Focus management
+- High contrast support
+- Clickable labels and descriptions
