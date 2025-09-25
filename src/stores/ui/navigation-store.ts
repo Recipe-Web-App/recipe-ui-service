@@ -2,131 +2,95 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { NavigationState, Breadcrumb } from '@/types/ui/navigation';
 
-interface NavigationStoreState extends NavigationState {
+interface NavigationStore extends NavigationState {
   // Actions
   toggleSidebar: () => void;
-  setSidebarOpen: (open: boolean) => void;
+  collapseSidebar: (collapsed: boolean) => void;
   toggleMobileMenu: () => void;
-  setMobileMenuOpen: (open: boolean) => void;
+  closeMobileMenu: () => void;
+  setActiveRoute: (route: string) => void;
   setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => void;
-  addToBreadcrumbs: (crumb: Breadcrumb) => void;
-  removeBreadcrumb: (id: string) => void;
-  setCurrentPage: (page: string) => void;
-  addToHistory: (page: string) => void;
-  clearHistory: () => void;
-
-  // Utility methods
-  getBreadcrumbIndex: (id: string) => number;
-  canGoBack: () => boolean;
-  getLastPage: () => string | null;
-  getPreviousPage: () => string | null;
+  pushToHistory: (route: string) => void;
 }
 
-const MAX_HISTORY_SIZE = 50;
+const MAX_HISTORY_SIZE = 10;
 
-export const useNavigationStore = create<NavigationStoreState>()(
+export const useNavigationStore = create<NavigationStore>()(
   persist(
     (set, get) => ({
-      sidebarOpen: true, // Default to open on desktop
-      mobileMenuOpen: false,
+      // Initial state
+      isSidebarOpen: true,
+      isSidebarCollapsed: false,
+      isMobileMenuOpen: false,
       breadcrumbs: [],
-      currentPage: '/',
+      activeRoute: '/',
       navigationHistory: [],
 
-      toggleSidebar: () => {
-        set(state => ({ sidebarOpen: !state.sidebarOpen }));
-      },
-
-      setSidebarOpen: (open: boolean) => {
-        set({ sidebarOpen: open });
-      },
-
-      toggleMobileMenu: () => {
-        set(state => ({ mobileMenuOpen: !state.mobileMenuOpen }));
-      },
-
-      setMobileMenuOpen: (open: boolean) => {
-        set({ mobileMenuOpen: open });
-      },
-
-      setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => {
-        set({ breadcrumbs });
-      },
-
-      addToBreadcrumbs: (crumb: Breadcrumb) => {
+      // Action implementations
+      toggleSidebar: () =>
         set(state => ({
-          breadcrumbs: [...state.breadcrumbs, crumb],
-        }));
-      },
+          isSidebarOpen: !state.isSidebarOpen,
+        })),
 
-      removeBreadcrumb: (id: string) => {
+      collapseSidebar: (collapsed: boolean) =>
+        set({
+          isSidebarCollapsed: collapsed,
+        }),
+
+      toggleMobileMenu: () =>
         set(state => ({
-          breadcrumbs: state.breadcrumbs.filter(crumb => crumb.id !== id),
-        }));
-      },
+          isMobileMenuOpen: !state.isMobileMenuOpen,
+        })),
 
-      setCurrentPage: (page: string) => {
-        const currentPage = get().currentPage;
+      closeMobileMenu: () =>
+        set({
+          isMobileMenuOpen: false,
+        }),
 
-        set({ currentPage: page });
+      setActiveRoute: (route: string) => {
+        const currentRoute = get().activeRoute;
 
-        // Add previous page to history if it's different
-        if (currentPage && currentPage !== page) {
-          get().addToHistory(currentPage);
+        // Update active route
+        set({ activeRoute: route });
+
+        // Add previous route to history if it's different
+        if (currentRoute && currentRoute !== route) {
+          get().pushToHistory(currentRoute);
         }
 
         // Auto-close mobile menu when navigating
-        if (get().mobileMenuOpen) {
-          get().setMobileMenuOpen(false);
+        if (get().isMobileMenuOpen) {
+          get().closeMobileMenu();
         }
       },
 
-      addToHistory: (page: string) => {
+      setBreadcrumbs: (breadcrumbs: Breadcrumb[]) =>
+        set({
+          breadcrumbs,
+        }),
+
+      pushToHistory: (route: string) =>
         set(state => {
           let newHistory = [...state.navigationHistory];
 
-          // Remove page if it already exists in history
-          newHistory = newHistory.filter(p => p !== page);
+          // Remove route if it already exists in history
+          newHistory = newHistory.filter(r => r !== route);
 
-          // Add page to the end
-          newHistory.push(page);
+          // Add route to the end
+          newHistory.push(route);
 
-          // Limit history size
+          // Limit history size to MAX_HISTORY_SIZE
           if (newHistory.length > MAX_HISTORY_SIZE) {
             newHistory = newHistory.slice(-MAX_HISTORY_SIZE);
           }
 
           return { navigationHistory: newHistory };
-        });
-      },
-
-      clearHistory: () => {
-        set({ navigationHistory: [] });
-      },
-
-      getBreadcrumbIndex: (id: string) => {
-        return get().breadcrumbs.findIndex(crumb => crumb.id === id);
-      },
-
-      canGoBack: () => {
-        return get().navigationHistory.length > 0;
-      },
-
-      getLastPage: () => {
-        const history = get().navigationHistory;
-        return history.length > 0 ? history[history.length - 1] : null;
-      },
-
-      getPreviousPage: () => {
-        const history = get().navigationHistory;
-        return history.length > 1 ? history[history.length - 2] : null;
-      },
+        }),
     }),
     {
       name: 'navigation-storage',
       partialize: state => ({
-        sidebarOpen: state.sidebarOpen,
-        navigationHistory: state.navigationHistory.slice(-10), // Only persist last 10 items
+        isSidebarCollapsed: state.isSidebarCollapsed,
       }),
     }
   )

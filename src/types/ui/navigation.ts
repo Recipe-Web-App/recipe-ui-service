@@ -1,16 +1,22 @@
-// Navigation Types
+import type { LucideIcon } from 'lucide-react';
+
 export interface Breadcrumb {
   id: string;
   label: string;
   href?: string;
-  onClick?: () => void;
-  icon?: string;
+  icon?: LucideIcon;
 }
 
 export interface NavigationState {
-  sidebarOpen: boolean;
-  mobileMenuOpen: boolean;
+  // Sidebar state
+  isSidebarOpen: boolean;
+  isSidebarCollapsed: boolean;
+
+  // Mobile state
+  isMobileMenuOpen: boolean;
+
+  // Navigation tracking
   breadcrumbs: Breadcrumb[];
-  currentPage: string;
+  activeRoute: string;
   navigationHistory: string[];
 }
