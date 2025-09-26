@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { NavigationState, Breadcrumb } from '@/types/ui/navigation';
+import type { NavigationState, Breadcrumb, NavItem } from '@/types/navigation';
 
 interface NavigationStore extends NavigationState {
-  // Actions
+  // Actions from NavigationState interface
   toggleSidebar: () => void;
   collapseSidebar: (collapsed: boolean) => void;
   toggleMobileMenu: () => void;
@@ -11,6 +11,8 @@ interface NavigationStore extends NavigationState {
   setActiveRoute: (route: string) => void;
   setBreadcrumbs: (breadcrumbs: Breadcrumb[]) => void;
   pushToHistory: (route: string) => void;
+  setTopLevelNavigation: (navigation: NavItem[]) => void;
+  setCurrentSubNavigation: (navigation: NavItem[]) => void;
 }
 
 const MAX_HISTORY_SIZE = 10;
@@ -25,6 +27,8 @@ export const useNavigationStore = create<NavigationStore>()(
       breadcrumbs: [],
       activeRoute: '/',
       navigationHistory: [],
+      topLevelNavigation: [],
+      currentSubNavigation: [],
 
       // Action implementations
       toggleSidebar: () =>
@@ -85,6 +89,16 @@ export const useNavigationStore = create<NavigationStore>()(
           }
 
           return { navigationHistory: newHistory };
+        }),
+
+      setTopLevelNavigation: (navigation: NavItem[]) =>
+        set({
+          topLevelNavigation: navigation,
+        }),
+
+      setCurrentSubNavigation: (navigation: NavItem[]) =>
+        set({
+          currentSubNavigation: navigation,
         }),
     }),
     {
