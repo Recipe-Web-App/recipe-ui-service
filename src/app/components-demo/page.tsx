@@ -347,6 +347,14 @@ const components = [
     variants: 3,
     status: 'ready',
   },
+  {
+    name: 'Content',
+    path: '/components-demo/content',
+    description:
+      'Flexible content layout system with multiple view modes and responsive behavior',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [

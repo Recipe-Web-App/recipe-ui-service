@@ -29,7 +29,7 @@ jest.mock('@/components/ui/badge', () => ({
 }));
 
 jest.mock('@/components/ui/tooltip', () => ({
-  Tooltip: ({
+  SimpleTooltip: ({
     children,
     content,
   }: {
@@ -72,10 +72,15 @@ describe('GlobalNav', () => {
   it('renders navigation items', () => {
     render(<GlobalNav />);
 
-    // Should render some navigation items from topLevelNavigation
+    // Should render non-auth navigation items from topLevelNavigation
+    // (when isAuthenticated: false from mock)
+    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Recipes')).toBeInTheDocument();
-    expect(screen.getByText('Favorites')).toBeInTheDocument();
+    expect(screen.getByText('Meal Plans')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
+
+    // Favorites requires auth, should not be visible when not authenticated
+    expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
   });
 
   it('highlights active navigation item', () => {
@@ -109,11 +114,29 @@ describe('GlobalNav', () => {
   });
 
   it('renders badges when showBadges is true', () => {
-    render(<GlobalNav showBadges />);
+    // Mock NODE_ENV to development to make components-demo visible with its badge
+    const originalEnv = process.env.NODE_ENV;
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'development',
+      configurable: true,
+    });
 
-    // Should render badges for items that have them
-    const badges = screen.queryAllByTestId('badge');
-    expect(badges.length).toBeGreaterThan(0);
+    try {
+      render(<GlobalNav showBadges />);
+
+      // Should render badges for items that have them (components-demo has "Dev" badge)
+      const badges = screen.queryAllByTestId('badge');
+      expect(badges.length).toBeGreaterThan(0);
+
+      // Check that the specific badge is rendered
+      const devBadge = screen.getByText('Dev');
+      expect(devBadge).toBeInTheDocument();
+    } finally {
+      Object.defineProperty(process.env, 'NODE_ENV', {
+        value: originalEnv,
+        configurable: true,
+      });
+    }
   });
 
   it('does not render badges when showBadges is false', () => {

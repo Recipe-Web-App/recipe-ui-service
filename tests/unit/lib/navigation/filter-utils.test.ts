@@ -348,9 +348,11 @@ describe('filter-utils', () => {
         includeDisabled: true,
       });
 
-      // Should count: public, auth-required, admin-only, premium-feature, mobile-hidden, disabled,
-      // parent-with-children, child-public, child-auth = 9 items
-      expect(count).toBe(9);
+      // Should count: public, auth-required, premium-feature, mobile-hidden, disabled,
+      // parent-with-children, child-public, child-auth = 8 items
+      // (admin-only is excluded because no admin role provided)
+      // (desktop-hidden is excluded because showInDesktop: false)
+      expect(count).toBe(8);
     });
 
     it('should return 0 for empty array', () => {

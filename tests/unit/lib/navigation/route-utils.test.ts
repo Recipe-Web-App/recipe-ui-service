@@ -177,7 +177,12 @@ describe('route-utils', () => {
     it('should filter out mobile-hidden items', () => {
       const items = getTopLevelNavItems(mockNavItems, true);
       const mealPlans = items.find(item => item.id === 'meal-plans');
-      expect(mealPlans).toBeTruthy(); // showInMobile is not explicitly false
+      // meal-plans has showInMobile: false, so it should be filtered out on mobile
+      expect(mealPlans).toBeUndefined();
+
+      // But other items without explicit mobile restrictions should be included
+      const home = items.find(item => item.id === 'home');
+      expect(home).toBeTruthy();
     });
 
     it('should include items with no display preferences', () => {

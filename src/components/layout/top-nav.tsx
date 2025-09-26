@@ -90,7 +90,7 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
           </div>
 
           {/* Desktop Navigation */}
-          {!isMobile && variant !== 'minimal' && (
+          {!isMobile && !isTablet && variant !== 'minimal' && (
             <nav
               className="hidden flex-1 items-center justify-between lg:flex"
               role="navigation"

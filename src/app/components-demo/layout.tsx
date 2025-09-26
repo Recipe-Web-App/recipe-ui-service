@@ -17,6 +17,7 @@ const components = [
   { name: 'Chip', path: '/components-demo/chip' },
   { name: 'Collapse', path: '/components-demo/collapse' },
   { name: 'Command Palette', path: '/components-demo/command-palette' },
+  { name: 'Content', path: '/components-demo/content' },
   { name: 'Copy Button', path: '/components-demo/copy-button' },
   { name: 'Date Picker', path: '/components-demo/datepicker' },
   { name: 'Dialog', path: '/components-demo/dialog' },

@@ -121,21 +121,21 @@ export const buildBreadcrumbs = (
         },
       ];
 
-      // Check if this is the target item
-      if (item.href && isRouteActive(item.href, targetPath)) {
-        return newBreadcrumbs;
-      }
-
-      // Search in children
+      // First check if any children match (for deepest match preference)
       if (item.children && item.children.length > 0) {
-        const result = findPathToItem(
+        const childResult = findPathToItem(
           item.children,
           targetPath,
           newBreadcrumbs
         );
-        if (result) {
-          return result;
+        if (childResult) {
+          return childResult;
         }
+      }
+
+      // Check if this item matches the target
+      if (item.href && isRouteActive(item.href, targetPath)) {
+        return newBreadcrumbs;
       }
     }
 
@@ -145,12 +145,12 @@ export const buildBreadcrumbs = (
   const pathBreadcrumbs = findPathToItem(navItems, currentPath, []);
 
   if (pathBreadcrumbs) {
-    // Don't duplicate Home if it's already there
+    // Add all breadcrumbs from the path, excluding any duplicate Home entries
     const filteredBreadcrumbs = pathBreadcrumbs.filter(
-      (breadcrumb, index) => index === 0 || breadcrumb.href !== '/'
+      breadcrumb => breadcrumb.href !== '/' || breadcrumbs.length === 0
     );
 
-    breadcrumbs.push(...filteredBreadcrumbs.slice(currentPath === '/' ? 0 : 1));
+    breadcrumbs.push(...filteredBreadcrumbs);
   } else {
     // Fallback: create breadcrumbs from URL segments
     const segments = currentPath.split('/').filter(Boolean);
