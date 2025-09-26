@@ -42,6 +42,7 @@ const components = [
   { name: 'Rating', path: '/components-demo/rating' },
   { name: 'Search Input', path: '/components-demo/search-input' },
   { name: 'Select', path: '/components-demo/select' },
+  { name: 'Sidebar', path: '/components-demo/sidebar' },
   { name: 'Skeleton', path: '/components-demo/skeleton' },
   { name: 'Slider', path: '/components-demo/slider' },
   { name: 'Spinner', path: '/components-demo/spinner' },

@@ -339,6 +339,14 @@ const components = [
     variants: 15,
     status: 'ready',
   },
+  {
+    name: 'Sidebar',
+    path: '/components-demo/sidebar',
+    description:
+      'Multi-level navigation sidebar with sub-package architecture support',
+    variants: 3,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
