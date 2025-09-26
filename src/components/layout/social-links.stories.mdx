@@ -1,0 +1,320 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { SocialLinks } from './social-links';
+
+<Meta
+  title="Layout Components/SocialLinks"
+  component={SocialLinks}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The SocialLinks component displays a row of social media icon links with hover effects and accessibility features.
+It supports multiple platforms and provides a clean, consistent way to link to social media profiles.
+
+## Features
+
+- Support for major social platforms (GitHub, Twitter, YouTube, LinkedIn, Facebook)
+- Three icon sizes: small (sm), medium (md), and large (lg)
+- Hover animations and scaling effects
+- Custom link configurations
+- Full accessibility support with ARIA labels
+- Secure external link handling
+- TypeScript support with strict typing
+- Responsive design-friendly
+
+## Usage
+
+Use SocialLinks for:
+- Footer social media links
+- Author/profile social connections
+- Community and contact sections
+- Marketing and outreach areas
+- Any location requiring social media presence
+        `
+      }
+    }
+  }}
+  argTypes={{
+    iconSize: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the social media icons',
+      defaultValue: 'sm'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# SocialLinks
+
+<Description of={SocialLinks} />
+
+## Default Links (GitHub & Twitter)
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Different Icon Sizes
+
+<Canvas>
+  <Story name="Icon Sizes">
+    {() => (
+      <div className="p-6 bg-background border rounded space-y-6">
+        <div>
+          <div className="text-sm font-medium mb-2">Small (sm)</div>
+          <SocialLinks iconSize="sm" />
+        </div>
+        <div>
+          <div className="text-sm font-medium mb-2">Medium (md)</div>
+          <SocialLinks iconSize="md" />
+        </div>
+        <div>
+          <div className="text-sm font-medium mb-2">Large (lg)</div>
+          <SocialLinks iconSize="lg" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Platform Links
+
+<Canvas>
+  <Story name="Custom Platforms">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks
+          links={[
+            { platform: 'youtube', href: 'https://youtube.com/@recipeapp', label: 'YouTube Channel' },
+            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp', label: 'LinkedIn' },
+            { platform: 'facebook', href: 'https://facebook.com/recipeapp', label: 'Facebook Page' },
+          ]}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## All Platforms
+
+<Canvas>
+  <Story name="All Platforms">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks
+          iconSize="md"
+          links={[
+            { platform: 'github', href: 'https://github.com/recipeapp' },
+            { platform: 'twitter', href: 'https://twitter.com/recipeapp' },
+            { platform: 'youtube', href: 'https://youtube.com/@recipeapp' },
+            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp' },
+            { platform: 'facebook', href: 'https://facebook.com/recipeapp' },
+          ]}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Custom Labels
+
+<Canvas>
+  <Story name="Custom Labels">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks
+          links={[
+            {
+              platform: 'github',
+              href: 'https://github.com/recipeapp',
+              label: 'Source Code Repository'
+            },
+            {
+              platform: 'twitter',
+              href: 'https://twitter.com/recipeapp',
+              label: 'Latest Updates and News'
+            },
+            {
+              platform: 'youtube',
+              href: 'https://youtube.com/@recipeapp',
+              label: 'Cooking Videos and Tutorials'
+            },
+          ]}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Footer Integration
+
+<Canvas>
+  <Story name="Footer Integration">
+    {() => (
+      <div className="p-6 bg-background border rounded">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
+          <div className="text-sm text-muted-foreground">
+            © 2024 Recipe App. All rights reserved.
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="text-xs text-muted-foreground">Follow us:</div>
+            <SocialLinks />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Layout
+
+<Canvas>
+  <Story name="Mobile Layout">
+    {() => (
+      <div className="max-w-xs p-4 bg-background border rounded">
+        <div className="space-y-3">
+          <div className="text-sm font-medium">Connect with us</div>
+          <SocialLinks iconSize="md" />
+          <div className="text-xs text-muted-foreground">
+            Follow for recipes and updates
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Styling">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks
+          className="justify-center space-x-6 p-4 bg-muted rounded-lg"
+          iconSize="lg"
+          links={[
+            { platform: 'github', href: 'https://github.com/recipeapp' },
+            { platform: 'twitter', href: 'https://twitter.com/recipeapp' },
+            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp' },
+          ]}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Empty State
+
+<Canvas>
+  <Story name="Empty State">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <div className="space-y-2">
+          <div className="text-sm">When no links are provided:</div>
+          <SocialLinks links={[]} />
+          <div className="text-xs text-muted-foreground">
+            Component renders empty navigation container
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Hover Effects Demo
+
+<Canvas>
+  <Story name="Hover Effects">
+    {() => (
+      <div className="p-6 bg-background border rounded">
+        <div className="space-y-4">
+          <div className="text-sm font-medium">
+            Hover over the icons to see the scale animation:
+          </div>
+          <SocialLinks
+            iconSize="lg"
+            links={[
+              { platform: 'github', href: 'https://github.com/recipeapp' },
+              { platform: 'twitter', href: 'https://twitter.com/recipeapp' },
+              { platform: 'youtube', href: 'https://youtube.com/@recipeapp' },
+            ]}
+          />
+          <div className="text-xs text-muted-foreground">
+            Icons scale to 110% on hover with smooth transitions
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="p-4 bg-background border rounded">
+        <SocialLinks {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={SocialLinks} />
+
+## Supported Platforms
+
+| Platform  | Icon       | Description                    |
+|-----------|------------|--------------------------------|
+| github    | GitHub     | Code repositories and projects |
+| twitter   | Twitter/X  | Social updates and news        |
+| youtube   | YouTube    | Video content and tutorials    |
+| linkedin  | LinkedIn   | Professional networking        |
+| facebook  | Facebook   | Community and social presence  |
+
+## Accessibility Features
+
+- **ARIA Labels**: Each link includes descriptive aria-label text
+- **Screen Reader Support**: Clear context about destination and purpose
+- **Keyboard Navigation**: All links are keyboard accessible with proper focus indicators
+- **External Link Safety**: All links include `rel="noopener noreferrer"` for security
+- **Icon Accessibility**: Icons are marked as decorative with `aria-hidden="true"`
+
+## Design Guidelines
+
+### Icon Sizes
+- **Small (sm)**: 16px - Best for footers and compact areas
+- **Medium (md)**: 20px - Good for sidebars and general use
+- **Large (lg)**: 24px - Ideal for hero sections and prominent placement
+
+### Spacing
+- Consistent 16px gap between icons
+- Adequate touch targets for mobile devices
+- Proper alignment with surrounding content
+
+### Hover Effects
+- Smooth scale animation (1.1x on hover)
+- Color transitions for visual feedback
+- Maintains accessibility during animations
+
+## Implementation Notes
+
+- The component uses a safe object access pattern to prevent injection attacks
+- All links automatically open in new tabs for external platforms
+- Default links include GitHub and Twitter if no custom links are provided
+- Icons are sourced from the Lucide React library for consistency
+- The component gracefully handles invalid platform names by skipping them
+- TypeScript interfaces ensure type safety for platform names and configurations
