@@ -9,10 +9,12 @@ export interface NavMetadata {
   /** Badge variant for styling */
   badgeVariant?:
     | 'default'
-    | 'primary'
     | 'secondary'
     | 'destructive'
-    | 'outline';
+    | 'outline'
+    | 'success'
+    | 'warning'
+    | 'info';
   /** Whether authentication is required to access this item */
   requiredAuth?: boolean;
   /** Required user roles to access this item */

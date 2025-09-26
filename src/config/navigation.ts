@@ -194,7 +194,7 @@ export const recipeSubNavigation: NavItem[] = [
       requiredAuth: true,
       featureFlag: 'ENABLE_RECIPE_IMPORT',
       badge: 'New',
-      badgeVariant: 'primary',
+      badgeVariant: 'info',
     },
   },
   {
