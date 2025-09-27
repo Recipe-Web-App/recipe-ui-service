@@ -10,6 +10,7 @@ import { TopNav } from './top-nav';
 import { Sidebar } from './sidebar';
 import { Footer } from './footer';
 import { ContentPane } from '@/components/ui/content';
+import { Toaster } from '@/components/ui/toaster';
 import type { LayoutVariant } from './layout-provider';
 import type { ContentPaneProps } from '@/types/ui/content';
 
@@ -109,8 +110,8 @@ const InternalLayout = React.forwardRef<HTMLDivElement, LayoutProps>(
           />
         )}
 
-        {/* Toast Notifications - TODO: Implement proper toast manager */}
-        {/* <Toast /> */}
+        {/* Toast Notifications */}
+        <Toaster position="top-right" />
       </div>
     );
   }

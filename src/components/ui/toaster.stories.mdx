@@ -1,0 +1,770 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Toaster, useToaster } from './toaster';
+import { useToast } from '@/hooks/ui/use-toast';
+
+<Meta
+  title="UI Components/Toaster"
+  component={Toaster}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Toaster component provides a complete toast notification system with portal rendering,
+animations, and flexible positioning. It integrates seamlessly with the toast store to
+display notifications outside the normal DOM flow.
+
+## Features
+
+- **Portal Rendering**: Renders outside DOM tree to avoid z-index conflicts
+- **Flexible Positioning**: 6 positioning options (corners and centers)
+- **Smooth Animations**: Enter/exit animations with proper timing
+- **Auto-dismiss**: Integration with toast store auto-dismiss system
+- **Action Support**: Toast notifications can include action buttons
+- **Accessibility**: Proper ARIA attributes and screen reader support
+- **Responsive**: Adapts to mobile and desktop layouts
+- **Limit Control**: Configure maximum visible toasts
+- **Theme Integration**: Works with existing design system
+
+## Positioning Options
+
+- **top-left**: Top-left corner
+- **top-center**: Top center
+- **top-right**: Top-right corner (default)
+- **bottom-left**: Bottom-left corner
+- **bottom-center**: Bottom center
+- **bottom-right**: Bottom-right corner
+
+## Integration
+
+The Toaster automatically connects to the global toast store and displays
+all active notifications. Use the \`useToast\` hook to trigger notifications
+from anywhere in your application.
+
+## Usage
+
+The Toaster is typically placed once in your layout and will handle all
+toast notifications throughout your application lifecycle.
+        `
+      }
+    }
+  }}
+  argTypes={{
+    position: {
+      control: { type: 'select' },
+      options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
+      description: 'Position of the toast container',
+      defaultValue: 'top-right'
+    },
+    limit: {
+      control: { type: 'number', min: 1, max: 10 },
+      description: 'Maximum number of toasts to show',
+    },
+    gap: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Gap between toasts',
+      defaultValue: 'md'
+    },
+    animated: {
+      control: { type: 'boolean' },
+      description: 'Enable animations',
+      defaultValue: true
+    }
+  }}
+/>
+
+# Toaster
+
+<Description of={Toaster} />
+
+## Basic Usage
+
+The Toaster component displays all active toast notifications in a fixed position.
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const toast = useToast();
+
+      const triggerToast = (type) => {
+        switch (type) {
+          case 'success':
+            toast.success('Operation completed successfully!');
+            break;
+          case 'error':
+            toast.error('Something went wrong. Please try again.');
+            break;
+          case 'warning':
+            toast.warning('This action cannot be undone.');
+            break;
+          case 'info':
+            toast.info('New features are now available.');
+            break;
+          default:
+            toast.default('This is a default notification.');
+        }
+      };
+
+      return (
+        <div className="space-y-4 p-6">
+          <h3 className="text-lg font-semibold">Toast Notifications</h3>
+          <p className="text-muted-foreground">
+            Click the buttons below to trigger different types of toast notifications.
+            The Toaster will display them in the top-right corner.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => triggerToast('success')}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Success Toast
+            </button>
+            <button
+              onClick={() => triggerToast('error')}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Error Toast
+            </button>
+            <button
+              onClick={() => triggerToast('warning')}
+              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+            >
+              Warning Toast
+            </button>
+            <button
+              onClick={() => triggerToast('info')}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Info Toast
+            </button>
+            <button
+              onClick={() => triggerToast('default')}
+              className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+            >
+              Default Toast
+            </button>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={toast.clear}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear All Toasts
+            </button>
+          </div>
+
+          <Toaster position="top-right" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Positioning Options
+
+The Toaster can be positioned in any of the 6 available positions.
+
+<Canvas>
+  <Story name="Positioning">
+    {() => {
+      const toast = useToast();
+      const [position, setPosition] = React.useState('top-right');
+
+      const positions = [
+        { value: 'top-left', label: 'Top Left' },
+        { value: 'top-center', label: 'Top Center' },
+        { value: 'top-right', label: 'Top Right' },
+        { value: 'bottom-left', label: 'Bottom Left' },
+        { value: 'bottom-center', label: 'Bottom Center' },
+        { value: 'bottom-right', label: 'Bottom Right' },
+      ];
+
+      const triggerPositionedToast = () => {
+        toast.info(`Toast notification from ${position.replace('-', ' ')}`);
+      };
+
+      return (
+        <div className="space-y-6 p-6">
+          <h3 className="text-lg font-semibold">Toast Positioning</h3>
+          <p className="text-muted-foreground">
+            Select a position and click "Show Toast" to see where notifications appear.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Position:</label>
+              <select
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                className="px-3 py-2 border rounded-md bg-background"
+              >
+                {positions.map((pos) => (
+                  <option key={pos.value} value={pos.value}>
+                    {pos.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              onClick={triggerPositionedToast}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+            >
+              Show Toast
+            </button>
+
+            <div className="mt-4">
+              <button
+                onClick={toast.clear}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <Toaster position={position} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Toast Limits and Stacking
+
+Control the maximum number of visible toasts and see how they stack.
+
+<Canvas>
+  <Story name="Limits and Stacking">
+    {() => {
+      const toast = useToast();
+      const [limit, setLimit] = React.useState(3);
+      const { count } = useToaster();
+
+      const addMultipleToasts = () => {
+        toast.success('First toast notification');
+        setTimeout(() => toast.info('Second toast notification'), 200);
+        setTimeout(() => toast.warning('Third toast notification'), 400);
+        setTimeout(() => toast.error('Fourth toast notification'), 600);
+        setTimeout(() => toast.default('Fifth toast notification'), 800);
+      };
+
+      return (
+        <div className="space-y-6 p-6">
+          <h3 className="text-lg font-semibold">Toast Limits and Stacking</h3>
+          <p className="text-muted-foreground">
+            Configure the maximum number of visible toasts and see how they stack.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Toast Limit: {limit}
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="6"
+                value={limit}
+                onChange={(e) => setLimit(Number(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <span className="text-sm">Current toasts: {count}</span>
+              <span className="text-sm text-muted-foreground">
+                Limit: {limit}
+              </span>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={addMultipleToasts}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+              >
+                Add 5 Toasts
+              </button>
+              <button
+                onClick={() => toast.info('Single toast')}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Add One Toast
+              </button>
+              <button
+                onClick={toast.clear}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <Toaster position="top-right" limit={limit} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Action Buttons
+
+Toasts can include action buttons for user interaction.
+
+<Canvas>
+  <Story name="Action Buttons">
+    {() => {
+      const toast = useToast();
+
+      const triggerActionToast = () => {
+        toast.error('Failed to save changes', {
+          action: {
+            label: 'Retry',
+            onClick: () => {
+              toast.success('Retrying save operation...');
+            }
+          }
+        });
+      };
+
+      const triggerUndoToast = () => {
+        toast.warning('Item deleted successfully', {
+          action: {
+            label: 'Undo',
+            onClick: () => {
+              toast.info('Item restored');
+            }
+          }
+        });
+      };
+
+      const triggerViewToast = () => {
+        toast.success('Report generated successfully', {
+          action: {
+            label: 'View',
+            onClick: () => {
+              toast.info('Opening report...');
+            }
+          }
+        });
+      };
+
+      return (
+        <div className="space-y-4 p-6">
+          <h3 className="text-lg font-semibold">Toast Action Buttons</h3>
+          <p className="text-muted-foreground">
+            Toast notifications can include action buttons for user interaction.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={triggerActionToast}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Error with Retry
+            </button>
+            <button
+              onClick={triggerUndoToast}
+              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+            >
+              Delete with Undo
+            </button>
+            <button
+              onClick={triggerViewToast}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Success with View
+            </button>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={toast.clear}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear All Toasts
+            </button>
+          </div>
+
+          <Toaster position="top-right" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Loading States
+
+Demonstrate loading toasts that can be updated based on async operations.
+
+<Canvas>
+  <Story name="Loading States">
+    {() => {
+      const toast = useToast();
+
+      const simulateAsyncOperation = async () => {
+        const loadingToast = toast.loading('Saving changes...');
+
+        // Simulate async operation
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Randomly succeed or fail
+        if (Math.random() > 0.5) {
+          loadingToast.success('Changes saved successfully!');
+        } else {
+          loadingToast.error('Failed to save changes');
+        }
+      };
+
+      const simulatePromiseToast = async () => {
+        const mockApiCall = new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (Math.random() > 0.3) {
+              resolve({ id: 123, name: 'Document.pdf' });
+            } else {
+              reject(new Error('Network timeout'));
+            }
+          }, 3000);
+        });
+
+        try {
+          await toast.promise(mockApiCall, {
+            loading: 'Uploading file...',
+            success: (data) => `${data.name} uploaded successfully!`,
+            error: (error) => `Upload failed: ${error.message}`,
+          });
+        } catch (error) {
+          // Promise was rejected, toast already shows error
+        }
+      };
+
+      const manualLoadingExample = () => {
+        const loadingToast = toast.loading('Processing request...');
+
+        // Update the loading message
+        setTimeout(() => {
+          loadingToast.update('Validating data...');
+        }, 1000);
+
+        // Update again
+        setTimeout(() => {
+          loadingToast.update('Finalizing...');
+        }, 2000);
+
+        // Complete with success
+        setTimeout(() => {
+          loadingToast.success('Request processed successfully!');
+        }, 3000);
+      };
+
+      return (
+        <div className="space-y-4 p-6">
+          <h3 className="text-lg font-semibold">Loading Toast States</h3>
+          <p className="text-muted-foreground">
+            Toast notifications can show loading states and update based on async operations.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={simulateAsyncOperation}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Async Operation
+            </button>
+            <button
+              onClick={simulatePromiseToast}
+              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            >
+              Promise Toast
+            </button>
+            <button
+              onClick={manualLoadingExample}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Manual Updates
+            </button>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={toast.clear}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear All Toasts
+            </button>
+          </div>
+
+          <Toaster position="top-right" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Durations
+
+Configure different durations for toast notifications.
+
+<Canvas>
+  <Story name="Custom Durations">
+    {() => {
+      const toast = useToast();
+
+      const showQuickToast = () => {
+        toast.info('Quick toast (2s)', { duration: 2000 });
+      };
+
+      const showNormalToast = () => {
+        toast.info('Normal toast (5s)', { duration: 5000 });
+      };
+
+      const showLongToast = () => {
+        toast.info('Long toast (10s)', { duration: 10000 });
+      };
+
+      const showPersistentToast = () => {
+        toast.warning('Persistent toast (manual dismiss only)', { duration: 0 });
+      };
+
+      return (
+        <div className="space-y-4 p-6">
+          <h3 className="text-lg font-semibold">Custom Toast Durations</h3>
+          <p className="text-muted-foreground">
+            Configure how long toast notifications remain visible.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={showQuickToast}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Quick (2s)
+            </button>
+            <button
+              onClick={showNormalToast}
+              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Normal (5s)
+            </button>
+            <button
+              onClick={showLongToast}
+              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+            >
+              Long (10s)
+            </button>
+            <button
+              onClick={showPersistentToast}
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Persistent
+            </button>
+          </div>
+
+          <div className="mt-6">
+            <button
+              onClick={toast.clear}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear All Toasts
+            </button>
+          </div>
+
+          <Toaster position="top-right" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Gap and Styling
+
+Customize the spacing between toasts and overall styling.
+
+<Canvas>
+  <Story name="Gap and Styling">
+    {() => {
+      const toast = useToast();
+      const [gap, setGap] = React.useState('md');
+
+      const addSampleToasts = () => {
+        toast.success('First notification');
+        setTimeout(() => toast.info('Second notification'), 200);
+        setTimeout(() => toast.warning('Third notification'), 400);
+      };
+
+      return (
+        <div className="space-y-6 p-6">
+          <h3 className="text-lg font-semibold">Toast Gap and Styling</h3>
+          <p className="text-muted-foreground">
+            Customize the spacing between stacked toast notifications.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Gap Size:</label>
+              <select
+                value={gap}
+                onChange={(e) => setGap(e.target.value)}
+                className="px-3 py-2 border rounded-md bg-background"
+              >
+                <option value="sm">Small</option>
+                <option value="md">Medium</option>
+                <option value="lg">Large</option>
+              </select>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={addSampleToasts}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+              >
+                Add Sample Toasts
+              </button>
+              <button
+                onClick={toast.clear}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <Toaster position="top-right" gap={gap} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => {
+      const toast = useToast();
+      const { count } = useToaster();
+
+      const triggerToast = () => {
+        toast.info('Interactive toast notification', {
+          duration: 5000,
+          action: {
+            label: 'Action',
+            onClick: () => toast.success('Action clicked!')
+          }
+        });
+      };
+
+      return (
+        <div className="space-y-4 p-6">
+          <h3 className="text-lg font-semibold">Interactive Toaster</h3>
+          <p className="text-muted-foreground">
+            Use the controls panel to experiment with different Toaster configurations.
+          </p>
+
+          <div className="flex items-center gap-4">
+            <span className="text-sm">Active toasts: {count}</span>
+            <button
+              onClick={triggerToast}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+            >
+              Add Toast
+            </button>
+            <button
+              onClick={toast.clear}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+            >
+              Clear All
+            </button>
+          </div>
+
+          <Toaster {...args} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Toaster} />
+
+## Usage with useToast Hook
+
+### Basic Usage
+
+```typescript
+import { useToast } from '@/hooks/ui/use-toast';
+
+const MyComponent = () => {
+  const toast = useToast();
+
+  const handleSuccess = () => {
+    toast.success('Operation completed!');
+  };
+
+  const handleError = () => {
+    toast.error('Something went wrong');
+  };
+
+  return (
+    <div>
+      <button onClick={handleSuccess}>Success</button>
+      <button onClick={handleError}>Error</button>
+    </div>
+  );
+};
+```
+
+### Advanced Usage
+
+```typescript
+// Loading states
+const loadingToast = toast.loading('Processing...');
+loadingToast.success('Done!');
+
+// Promise integration
+await toast.promise(apiCall(), {
+  loading: 'Saving...',
+  success: 'Saved successfully!',
+  error: 'Failed to save',
+});
+
+// Action buttons
+toast.error('Failed to delete', {
+  action: {
+    label: 'Retry',
+    onClick: () => handleRetry()
+  }
+});
+
+// Custom duration
+toast.info('Important message', { duration: 0 }); // Persistent
+```
+
+## Accessibility Features
+
+- **ARIA Live Regions**: Toasts are announced to screen readers
+- **Keyboard Navigation**: Focus management for action buttons
+- **High Contrast**: Works with theme system
+- **Semantic Roles**: Proper alert/status roles based on toast type
+- **Dismissible**: All toasts can be dismissed manually
+
+## Performance Considerations
+
+- **Portal Rendering**: Avoids re-renders in main component tree
+- **Animation Optimization**: CSS transitions for smooth performance
+- **Memory Management**: Automatic cleanup of dismissed toasts
+- **Batch Updates**: Store updates are batched for performance
+- **Lazy Loading**: Portal container only created when needed
+
+## Integration with Layout
+
+The Toaster is automatically included in all layout variants:
+
+- **Default Layout**: Full functionality with all features
+- **Focused Layout**: Positioned to not interfere with content
+- **Minimal Layout**: Simplified positioning for auth pages
+
+Position the Toaster once in your layout and it will handle all notifications throughout your application.
