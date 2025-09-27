@@ -1,0 +1,568 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { SearchBar, SearchResults } from './search-bar';
+import { useLayoutStore } from '@/stores/ui/layout-store';
+
+<Meta
+  title="Layout Components/SearchBar"
+  component={SearchBar}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[300px] items-start justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The SearchBar component provides search functionality with command palette integration.
+It adapts to different screen sizes and provides both direct search and command palette access.
+
+## Features
+
+- Full search input on desktop with integrated command palette trigger
+- Compact search button on mobile/tablet
+- Command palette integration (⌘K / Ctrl+K keyboard shortcut)
+- Debounced search functionality for performance
+- Responsive design that adapts to breakpoints
+- Keyboard shortcuts and accessibility support
+- SearchInput component integration with advanced features
+- Clear button and search icon support
+- TypeScript support with strict typing
+
+## Usage
+
+Use SearchBar for:
+- Top navigation search functionality
+- Global application search
+- Recipe and ingredient discovery
+- Command palette access point
+- Mobile-friendly search interfaces
+- Responsive search implementations
+        `
+      }
+    }
+  }}
+  argTypes={{
+    compact: {
+      control: { type: 'boolean' },
+      description: 'Force compact mode (search button only)',
+      defaultValue: false
+    },
+    placeholder: {
+      control: { type: 'text' },
+      description: 'Search input placeholder text',
+      defaultValue: 'Search recipes, ingredients...'
+    },
+    onSearch: {
+      action: 'searched',
+      description: 'Callback fired when search is performed'
+    },
+    onCommandPaletteOpen: {
+      action: 'command palette opened',
+      description: 'Callback fired when command palette opens'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# SearchBar
+
+<Description of={SearchBar} />
+
+## Desktop Mode (Full Search Bar)
+
+<Canvas>
+  <Story name="Desktop">
+    {() => {
+      const [searchQuery, setSearchQuery] = React.useState('');
+
+      return (
+        <div className="w-full max-w-2xl space-y-4">
+          <div className="text-sm text-muted-foreground">
+            Full search bar with command palette integration:
+          </div>
+          <SearchBar
+            onSearch={(query) => {
+              setSearchQuery(query);
+              console.log('Search:', query);
+            }}
+            onCommandPaletteOpen={() => console.log('Command palette opened')}
+          />
+          {searchQuery && (
+            <div className="text-xs text-muted-foreground">
+              Last search: "{searchQuery}"
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Compact Mode (Mobile/Button)
+
+<Canvas>
+  <Story name="Compact">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Compact mode shows search button with command palette:
+        </div>
+        <SearchBar
+          compact
+          onSearch={(query) => console.log('Search:', query)}
+          onCommandPaletteOpen={() => console.log('Command palette opened')}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Placeholder
+
+<Canvas>
+  <Story name="Custom Placeholder">
+    {() => (
+      <div className="w-full max-w-md space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Custom placeholder text:
+        </div>
+        <SearchBar
+          placeholder="Find your favorite recipes..."
+          onSearch={(query) => console.log('Search:', query)}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Navigation Context
+
+<Canvas>
+  <Story name="Navigation Context">
+    {() => (
+      <div className="w-full">
+        {/* Simulated top navigation */}
+        <nav className="border-b bg-background/95 backdrop-blur">
+          <div className="flex h-16 items-center justify-between px-6">
+            <div className="flex items-center space-x-4">
+              <div className="text-xl font-bold">Recipe App</div>
+              <div className="hidden md:flex space-x-6 text-sm">
+                <a href="#" className="text-muted-foreground hover:text-foreground">Recipes</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Collections</a>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <SearchBar />
+              <div className="h-8 w-8 rounded-full bg-muted" />
+            </div>
+          </div>
+        </nav>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Navigation Context
+
+<Canvas>
+  <Story name="Mobile Navigation">
+    {() => (
+      <div className="max-w-sm mx-auto">
+        <div className="border rounded-lg bg-background">
+          {/* Mobile header */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center space-x-3">
+              <div className="h-6 w-6 bg-muted rounded" />
+              <div className="text-lg font-semibold">Recipe App</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <SearchBar compact />
+              <div className="h-8 w-8 rounded-full bg-muted" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Search with Results Demo
+
+<Canvas>
+  <Story name="Search with Results">
+    {() => {
+      const [searchQuery, setSearchQuery] = React.useState('');
+      const [showResults, setShowResults] = React.useState(false);
+
+      const handleSearch = (query) => {
+        setSearchQuery(query);
+        setShowResults(query.length > 0);
+      };
+
+      return (
+        <div className="w-full max-w-md space-y-4 relative">
+          <div className="text-sm text-muted-foreground">
+            Type to search and see results:
+          </div>
+
+          <div className="relative">
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Search for pasta recipes..."
+            />
+
+            {showResults && (
+              <SearchResults
+                query={searchQuery}
+                onClose={() => {
+                  setShowResults(false);
+                  setSearchQuery('');
+                }}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Different States Demo
+
+<Canvas>
+  <Story name="Different States">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Empty state:</div>
+          <SearchBar placeholder="Start typing to search..." />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">With custom styling:</div>
+          <SearchBar
+            className="border-2 border-primary rounded-full"
+            placeholder="Styled search bar..."
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Compact with custom styling:</div>
+          <SearchBar
+            compact
+            className="border border-accent rounded-full"
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Keyboard Shortcuts Demo
+
+<Canvas>
+  <Story name="Keyboard Shortcuts">
+    {() => {
+      const [lastAction, setLastAction] = React.useState('');
+
+      return (
+        <div className="w-full max-w-md space-y-4">
+          <div className="text-sm text-muted-foreground">
+            Try these keyboard shortcuts:
+          </div>
+
+          <div className="space-y-2 text-sm">
+            <div>• <kbd className="bg-muted px-1 rounded">⌘K</kbd> or <kbd className="bg-muted px-1 rounded">Ctrl+K</kbd> - Open command palette</div>
+            <div>• <kbd className="bg-muted px-1 rounded">Esc</kbd> - Close command palette</div>
+            <div>• <kbd className="bg-muted px-1 rounded">Enter</kbd> - Submit search</div>
+          </div>
+
+          <SearchBar
+            onSearch={(query) => setLastAction(`Searched: "${query}"`)}
+            onCommandPaletteOpen={() => setLastAction('Command palette opened')}
+          />
+
+          {lastAction && (
+            <div className="text-xs text-muted-foreground">
+              Last action: {lastAction}
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Responsive Breakpoints Demo
+
+<Canvas>
+  <Story name="Responsive Demo">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Simulated responsive breakpoints:
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Mobile (< 768px):</div>
+            <div className="max-w-xs border rounded p-4">
+              <SearchBar compact />
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Tablet (768px - 1024px):</div>
+            <div className="max-w-md border rounded p-4">
+              <SearchBar />
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Desktop (> 1024px):</div>
+            <div className="max-w-2xl border rounded p-4">
+              <SearchBar />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Integration with Layout
+
+<Canvas>
+  <Story name="Layout Integration">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Different layout contexts:
+        </div>
+
+        {/* Header layout */}
+        <div className="border rounded-lg">
+          <div className="border-b bg-muted/20 p-3 text-sm font-medium">
+            Top Navigation Layout
+          </div>
+          <div className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-lg font-semibold">App Name</div>
+              <SearchBar />
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar layout */}
+        <div className="border rounded-lg flex">
+          <div className="w-64 border-r">
+            <div className="border-b bg-muted/20 p-3 text-sm font-medium">
+              Sidebar
+            </div>
+            <div className="p-4">
+              <SearchBar compact />
+            </div>
+          </div>
+          <div className="flex-1 p-4">
+            <div className="text-sm text-muted-foreground">Main content area</div>
+          </div>
+        </div>
+
+        {/* Floating layout */}
+        <div className="border rounded-lg bg-muted/10 p-8 relative">
+          <div className="text-sm text-muted-foreground mb-4">Content area</div>
+          <div className="absolute top-4 right-4">
+            <SearchBar compact />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Command Palette Integration
+
+<Canvas>
+  <Story name="Command Palette">
+    {() => {
+      const [paletteOpen, setPaletteOpen] = React.useState(false);
+
+      return (
+        <div className="w-full max-w-md space-y-4">
+          <div className="text-sm text-muted-foreground">
+            Click the command button or use ⌘K:
+          </div>
+
+          <SearchBar
+            onCommandPaletteOpen={() => {
+              setPaletteOpen(true);
+              console.log('Command palette opened');
+            }}
+            onSearch={(query) => console.log('Search:', query)}
+          />
+
+          <div className="text-xs text-muted-foreground">
+            Command palette state: {paletteOpen ? 'Open' : 'Closed'}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Performance Demo
+
+<Canvas>
+  <Story name="Performance Demo">
+    {() => {
+      const [searchCount, setSearchCount] = React.useState(0);
+      const [lastSearch, setLastSearch] = React.useState('');
+
+      const handleSearch = (query) => {
+        setSearchCount(prev => prev + 1);
+        setLastSearch(query);
+      };
+
+      return (
+        <div className="w-full max-w-md space-y-4">
+          <div className="text-sm text-muted-foreground">
+            Debounced search (300ms delay):
+          </div>
+
+          <SearchBar
+            onSearch={handleSearch}
+            placeholder="Type quickly to test debouncing..."
+          />
+
+          <div className="space-y-1 text-xs text-muted-foreground">
+            <div>Search count: {searchCount}</div>
+            <div>Last search: "{lastSearch}"</div>
+            <div>Note: Searches are debounced to improve performance</div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="w-full max-w-md space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Use the controls below to configure SearchBar:
+        </div>
+        <SearchBar {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={SearchBar} />
+
+## Search Functionality
+
+### Desktop Mode Features
+- Full search input with placeholder text
+- Integrated command palette trigger button
+- Real-time search with debouncing (300ms)
+- Clear button for easy input clearing
+- Search icon for visual clarity
+- Keyboard shortcuts display
+
+### Compact Mode Features
+- Space-efficient search button
+- Tooltip with keyboard shortcut hint
+- Command palette opens on click
+- Mobile-optimized sizing
+- Accessible button labeling
+
+## Keyboard Shortcuts
+
+- **⌘K / Ctrl+K**: Open command palette
+- **Escape**: Close command palette
+- **Enter**: Submit search query
+- **Tab**: Navigate through interface elements
+
+## Accessibility Features
+
+- **Keyboard Navigation**: Full keyboard support for all interactions
+- **Screen Reader Support**: Proper ARIA labels and descriptions
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Semantic HTML**: Proper input and button elements
+- **Keyboard Shortcuts**: Standard platform conventions
+- **Action Feedback**: Clear feedback for all user interactions
+
+## Responsive Behavior
+
+### Mobile (< 768px)
+- Compact button mode by default
+- Optimized button sizing
+- Touch-friendly interactions
+- Command palette for search
+
+### Tablet (768px - 1024px)
+- Full search bar available
+- Standard sizing and spacing
+- Balanced layout integration
+
+### Desktop (> 1024px)
+- Full feature set
+- Command palette integration
+- Optimal sizing and spacing
+- Advanced keyboard shortcuts
+
+## Integration Patterns
+
+### Top Navigation
+- Centered or right-aligned placement
+- Integrated with other navigation elements
+- Responsive sizing and behavior
+
+### Sidebar
+- Compact mode in sidebar headers
+- Full mode in sidebar content areas
+- Consistent spacing with other elements
+
+### Mobile Headers
+- Compact button placement
+- Space-efficient design
+- Touch-optimized interactions
+
+## Performance Considerations
+
+### Debouncing
+- 300ms delay for search queries
+- Prevents excessive API calls
+- Improves user experience
+
+### Event Handling
+- Efficient keyboard event listeners
+- Proper cleanup on unmount
+- Optimized re-render patterns
+
+### Bundle Size
+- Tree-shakeable imports
+- Minimal dependencies
+- Efficient component structure
+
+## Implementation Notes
+
+- Uses SearchInput component for advanced input features
+- Integrates with CommandPalette for enhanced search
+- Responsive through layout store integration
+- Keyboard shortcut handling with proper cleanup
+- Type-safe with comprehensive TypeScript interfaces
+- Follows design system conventions consistently
+- Optimized for performance with proper memoization patterns

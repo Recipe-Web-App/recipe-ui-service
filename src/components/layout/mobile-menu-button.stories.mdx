@@ -1,0 +1,697 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { MobileMenuButton, AlternativeMobileMenuButton } from './mobile-menu-button';
+import { useNavigationStore } from '@/stores/ui/navigation-store';
+
+<Meta
+  title="Layout Components/MobileMenuButton"
+  component={MobileMenuButton}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[200px] items-center justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The MobileMenuButton component provides an animated hamburger menu button for mobile navigation.
+It features smooth animations between hamburger and X states with full accessibility support.
+
+## Features
+
+- Smooth animation between hamburger and X states
+- Integration with navigation store for state management
+- Touch-friendly sizing with proper minimum touch targets
+- Multiple size variants (sm, default, lg)
+- Accessible button with proper ARIA labels and states
+- Custom animation using CSS transforms
+- Alternative variants with different icon styles
+- Screen reader support with descriptive labels
+- TypeScript support with strict typing
+
+## Usage
+
+Use MobileMenuButton for:
+- Mobile navigation triggers in headers
+- Hamburger menu buttons in responsive layouts
+- Touch-friendly navigation controls
+- Accessible mobile menu interactions
+- Animated navigation state indicators
+- Integration with mobile navigation drawers
+        `
+      }
+    }
+  }}
+  argTypes={{
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg'],
+      description: 'Button size variant',
+      defaultValue: 'default'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# MobileMenuButton
+
+<Description of={MobileMenuButton} />
+
+## Default Button
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const [isOpen, setIsOpen] = React.useState(false);
+
+      return (
+        <div className="space-y-4">
+          <div className="text-sm text-muted-foreground">
+            Click to see animation between states:
+          </div>
+          <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="cursor-pointer"
+          >
+            <MobileMenuButton />
+          </div>
+          <div className="text-xs text-muted-foreground">
+            State: {isOpen ? 'Open (X)' : 'Closed (Hamburger)'}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Size Variants">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-6">
+          <div className="space-y-2 text-center">
+            <MobileMenuButton size="sm" />
+            <div className="text-xs text-muted-foreground">Small</div>
+          </div>
+
+          <div className="space-y-2 text-center">
+            <MobileMenuButton size="default" />
+            <div className="text-xs text-muted-foreground">Default</div>
+          </div>
+
+          <div className="space-y-2 text-center">
+            <MobileMenuButton size="lg" />
+            <div className="text-xs text-muted-foreground">Large</div>
+          </div>
+        </div>
+
+        <div className="text-xs text-muted-foreground text-center">
+          All sizes maintain minimum 44px touch target for accessibility
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Animation States Demo
+
+<Canvas>
+  <Story name="Animation States">
+    {() => {
+      const [states, setStates] = React.useState({
+        button1: false,
+        button2: false,
+        button3: false,
+      });
+
+      return (
+        <div className="space-y-6">
+          <div className="text-sm text-muted-foreground">
+            Click each button to see different animation timings:
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, button1: !prev.button1 }))}
+                className="cursor-pointer"
+              >
+                <MobileMenuButton />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {states.button1 ? 'Open State' : 'Closed State'}
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, button2: !prev.button2 }))}
+                className="cursor-pointer"
+              >
+                <MobileMenuButton size="lg" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {states.button2 ? 'Large Open' : 'Large Closed'}
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, button3: !prev.button3 }))}
+                className="cursor-pointer"
+              >
+                <MobileMenuButton size="sm" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {states.button3 ? 'Small Open' : 'Small Closed'}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Alternative Variants
+
+<Canvas>
+  <Story name="Alternative Variants">
+    {() => {
+      const [states, setStates] = React.useState({
+        hamburger: false,
+        dots: false,
+        arrow: false,
+      });
+
+      return (
+        <div className="space-y-6">
+          <div className="text-sm text-muted-foreground">
+            Different animation and icon styles:
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, hamburger: !prev.hamburger }))}
+                className="cursor-pointer"
+              >
+                <AlternativeMobileMenuButton variant="hamburger" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Hamburger Variant
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, dots: !prev.dots }))}
+                className="cursor-pointer"
+              >
+                <AlternativeMobileMenuButton variant="dots" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Dots Variant
+              </div>
+            </div>
+
+            <div className="text-center space-y-3">
+              <div
+                onClick={() => setStates(prev => ({ ...prev, arrow: !prev.arrow }))}
+                className="cursor-pointer"
+              >
+                <AlternativeMobileMenuButton variant="arrow" />
+              </div>
+              <div className="text-xs text-muted-foreground">
+                Arrow Variant
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Mobile Header Context
+
+<Canvas>
+  <Story name="Mobile Header">
+    {() => (
+      <div className="max-w-sm mx-auto">
+        <div className="border rounded-lg bg-background overflow-hidden">
+          {/* Mobile header */}
+          <div className="flex items-center justify-between p-4 bg-background border-b">
+            <div className="flex items-center space-x-3">
+              <div className="h-6 w-6 bg-primary rounded" />
+              <div className="text-lg font-semibold">Recipe App</div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full bg-muted" />
+              <MobileMenuButton />
+            </div>
+          </div>
+
+          {/* Mobile content area */}
+          <div className="p-4">
+            <div className="text-sm text-muted-foreground">
+              Mobile content area with hamburger menu in header
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Touch Target Demonstration
+
+<Canvas>
+  <Story name="Touch Targets">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          All buttons maintain minimum 44px touch targets for mobile accessibility:
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="text-center space-y-3">
+            <div className="relative">
+              <MobileMenuButton size="sm" />
+              <div className="absolute inset-0 border-2 border-dashed border-red-300 pointer-events-none" />
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Small (44×44px minimum)
+            </div>
+          </div>
+
+          <div className="text-center space-y-3">
+            <div className="relative">
+              <MobileMenuButton size="default" />
+              <div className="absolute inset-0 border-2 border-dashed border-blue-300 pointer-events-none" />
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Default (44×44px minimum)
+            </div>
+          </div>
+
+          <div className="text-center space-y-3">
+            <div className="relative">
+              <MobileMenuButton size="lg" />
+              <div className="absolute inset-0 border-2 border-dashed border-green-300 pointer-events-none" />
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Large (48×48px)
+            </div>
+          </div>
+        </div>
+
+        <div className="text-xs text-muted-foreground text-center">
+          Dashed lines show actual touch target areas
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Integration with Navigation
+
+<Canvas>
+  <Story name="Navigation Integration">
+    {() => {
+      const [menuOpen, setMenuOpen] = React.useState(false);
+
+      return (
+        <div className="max-w-md mx-auto border rounded-lg overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 bg-background border-b">
+            <div className="text-lg font-semibold">Mobile App</div>
+            <div onClick={() => setMenuOpen(!menuOpen)} className="cursor-pointer">
+              <MobileMenuButton />
+            </div>
+          </div>
+
+          {/* Conditional menu */}
+          {menuOpen && (
+            <div className="bg-muted/20 border-b">
+              <div className="space-y-1 p-2">
+                {['Home', 'Recipes', 'Collections', 'Settings'].map((item) => (
+                  <div
+                    key={item}
+                    className="px-4 py-2 text-sm hover:bg-accent rounded cursor-pointer"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="p-4">
+            <div className="text-sm text-muted-foreground">
+              Menu state: {menuOpen ? 'Open' : 'Closed'}
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Responsive Breakpoint Demo
+
+<Canvas>
+  <Story name="Responsive Demo">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Button adapts to different screen contexts:
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Mobile/Tablet Context:</div>
+            <div className="max-w-sm border rounded-lg p-4 bg-background">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Mobile Header</span>
+                <MobileMenuButton />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Hidden on Desktop:</div>
+            <div className="border rounded-lg p-4 bg-muted/10">
+              <div className="text-sm text-muted-foreground text-center">
+                Button hidden on desktop
+                <br />
+                <span className="text-xs">(Uses full navigation instead)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">Custom styling examples:</div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="text-center space-y-2">
+            <MobileMenuButton className="border-2 border-primary rounded-full" />
+            <div className="text-xs text-muted-foreground">Bordered</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <MobileMenuButton className="bg-primary text-primary-foreground" />
+            <div className="text-xs text-muted-foreground">Colored Background</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <MobileMenuButton className="shadow-lg border" />
+            <div className="text-xs text-muted-foreground">Shadow & Border</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <MobileMenuButton className="rounded-none bg-accent" />
+            <div className="text-xs text-muted-foreground">Square Style</div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Animation Timing Demo
+
+<Canvas>
+  <Story name="Animation Timing">
+    {() => {
+      const [isAnimating, setIsAnimating] = React.useState(false);
+
+      const handleAnimate = () => {
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 1500);
+      };
+
+      return (
+        <div className="space-y-6">
+          <div className="text-sm text-muted-foreground">
+            Animation timing and easing demonstration:
+          </div>
+
+          <div className="text-center space-y-4">
+            <div className={isAnimating ? 'animate-pulse' : ''}>
+              <MobileMenuButton />
+            </div>
+
+            <button
+              onClick={handleAnimate}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded text-sm"
+            >
+              Trigger Animation Cycle
+            </button>
+
+            <div className="text-xs text-muted-foreground">
+              • 300ms duration with ease-in-out timing
+              <br />
+              • Smooth transforms for optimal performance
+              <br />
+              • No layout shift during animation
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Demo
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => {
+      const [menuState, setMenuState] = React.useState(false);
+
+      return (
+        <div className="space-y-6">
+          <div className="text-sm text-muted-foreground">
+            Accessibility features demonstration:
+          </div>
+
+          <div className="max-w-md mx-auto border rounded-lg p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Mobile Navigation</span>
+              <div onClick={() => setMenuState(!menuState)} className="cursor-pointer">
+                <MobileMenuButton />
+              </div>
+            </div>
+
+            <div className="space-y-2 text-xs text-muted-foreground">
+              <div>• ARIA label: {menuState ? '"Close mobile menu"' : '"Open mobile menu"'}</div>
+              <div>• ARIA expanded: {menuState ? 'true' : 'false'}</div>
+              <div>• Role: button</div>
+              <div>• Keyboard accessible (Enter/Space)</div>
+              <div>• Screen reader announcement</div>
+              <div>• Minimum 44px touch target</div>
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Dark Theme
+
+<Canvas>
+  <Story name="Dark Theme">
+    {() => (
+      <div className="dark">
+        <div className="bg-background border rounded-lg p-6">
+          <div className="space-y-4">
+            <div className="text-foreground text-sm">Dark theme mobile button:</div>
+
+            <div className="flex items-center justify-center space-x-6">
+              <div className="space-y-2 text-center">
+                <MobileMenuButton />
+                <div className="text-xs text-muted-foreground">Default</div>
+              </div>
+
+              <div className="space-y-2 text-center">
+                <AlternativeMobileMenuButton variant="dots" />
+                <div className="text-xs text-muted-foreground">Dots</div>
+              </div>
+
+              <div className="space-y-2 text-center">
+                <AlternativeMobileMenuButton variant="arrow" />
+                <div className="text-xs text-muted-foreground">Arrow</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Performance Demo
+
+<Canvas>
+  <Story name="Performance">
+    {() => {
+      const [clickCount, setClickCount] = React.useState(0);
+      const [renderCount, setRenderCount] = React.useState(0);
+
+      React.useEffect(() => {
+        setRenderCount(prev => prev + 1);
+      });
+
+      return (
+        <div className="space-y-4">
+          <div className="text-center space-y-4">
+            <div onClick={() => setClickCount(prev => prev + 1)} className="cursor-pointer">
+              <MobileMenuButton />
+            </div>
+
+            <div className="space-y-1 text-xs text-muted-foreground">
+              <div>Click count: {clickCount}</div>
+              <div>Render count: {renderCount}</div>
+              <div>Optimized with CSS transforms for smooth 60fps animation</div>
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Use the controls below to configure MobileMenuButton:
+        </div>
+        <div className="text-center">
+          <MobileMenuButton {...args} />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={MobileMenuButton} />
+
+## Animation Details
+
+### Hamburger to X Transformation
+- **Top Line**: Rotates 45° and moves to center
+- **Middle Line**: Scales to 0 and fades out
+- **Bottom Line**: Rotates -45° and moves to center
+- **Duration**: 300ms with ease-in-out timing
+- **Performance**: Uses CSS transforms for GPU acceleration
+
+### Animation States
+- **Closed State**: Three horizontal lines (hamburger)
+- **Open State**: Two diagonal lines forming X
+- **Transition**: Smooth transform animation
+- **Easing**: CSS ease-in-out for natural feel
+
+## Accessibility Features
+
+### ARIA Support
+- **aria-label**: Descriptive button purpose
+- **aria-expanded**: Current menu state (true/false)
+- **aria-haspopup**: Indicates menu popup ("menu")
+- **aria-controls**: References controlled menu element
+
+### Keyboard Support
+- **Enter Key**: Triggers menu toggle
+- **Space Key**: Triggers menu toggle
+- **Tab Navigation**: Proper focus order
+- **Focus Indicators**: Clear visual focus states
+
+### Touch Accessibility
+- **Minimum Touch Target**: 44×44px minimum for all sizes
+- **Touch-friendly Spacing**: Adequate spacing from other elements
+- **Visual Feedback**: Clear hover and active states
+- **No Accidental Activation**: Proper touch target sizing
+
+## Size Variants
+
+### Small (sm)
+- **Visual Size**: 32×32px
+- **Touch Target**: 44×44px minimum
+- **Use Case**: Compact layouts, secondary actions
+
+### Default
+- **Visual Size**: 36×36px
+- **Touch Target**: 44×44px minimum
+- **Use Case**: Standard mobile headers
+
+### Large (lg)
+- **Visual Size**: 40×40px
+- **Touch Target**: 48×48px
+- **Use Case**: Primary navigation, accessibility needs
+
+## Integration Patterns
+
+### Mobile Header
+- Right-aligned in mobile headers
+- Paired with logo/brand on left
+- Consistent with other header controls
+
+### Navigation Drawer
+- Triggers mobile navigation drawer
+- State synchronized with drawer visibility
+- Closes drawer when menu items selected
+
+### Responsive Layout
+- Hidden on desktop (>= 1024px)
+- Visible on tablet and mobile (< 1024px)
+- Replaces desktop navigation menu
+
+## Performance Considerations
+
+### Animation Optimization
+- CSS transforms for GPU acceleration
+- No layout recalculation during animation
+- Efficient paint and composite layers
+- 60fps smooth animation performance
+
+### Bundle Impact
+- Minimal JavaScript for button logic
+- CSS-only animations
+- No external animation libraries
+- Small component footprint
+
+## Implementation Notes
+
+- Pure CSS animations for optimal performance
+- Integration with navigation store for state management
+- Touch-friendly design with proper accessibility
+- Multiple variant support for different use cases
+- Type-safe with comprehensive TypeScript interfaces
+- Follows design system conventions consistently
+- Screen reader compatible with proper announcements

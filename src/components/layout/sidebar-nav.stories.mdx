@@ -1,0 +1,179 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { SidebarNav } from './sidebar-nav';
+
+<Meta
+  title="Layout Components/SidebarNav"
+  component={SidebarNav}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[400px] bg-background">
+        <div className="w-64 border-r p-4">
+          <Story />
+        </div>
+        <div className="flex-1 p-8">
+          <div className="text-muted-foreground text-sm">
+            Main content area - SidebarNav appears in the sidebar to the left
+          </div>
+        </div>
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The SidebarNav component renders multi-level navigation items in the sidebar with support for
+nested navigation, collapsible sections, and active route highlighting.
+
+## Features
+
+- Multi-level nested navigation with unlimited depth
+- Collapsible sections with smooth animations
+- Active route highlighting with smart parent highlighting
+- Badge support for navigation items
+- Tooltip support when sidebar is collapsed
+- Keyboard navigation and accessibility
+- Responsive design with mobile considerations
+- TypeScript support with strict typing
+
+## Usage
+
+Use SidebarNav for:
+- Sidebar navigation with hierarchical structure
+- Multi-level menu systems
+- Collapsible navigation sections
+- Context-sensitive navigation
+- Accessible navigation with screen reader support
+        `
+      }
+    }
+  }}
+  argTypes={{
+    collapsed: {
+      control: { type: 'boolean' },
+      description: 'Whether the sidebar is in collapsed state',
+      defaultValue: false
+    },
+    maxDepth: {
+      control: { type: 'number', min: 1, max: 5 },
+      description: 'Maximum nesting depth to prevent infinite recursion',
+      defaultValue: 3
+    },
+    activeRoute: {
+      control: { type: 'text' },
+      description: 'Current active route for highlighting'
+    },
+    onItemClick: {
+      action: 'item clicked',
+      description: 'Callback when navigation item is clicked'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# SidebarNav
+
+<Description of={SidebarNav} />
+
+## Default Navigation
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      const sampleItems = [
+        {
+          id: 'dashboard',
+          label: 'Dashboard',
+          href: '/dashboard',
+          icon: 'BarChart3',
+        },
+        {
+          id: 'recipes',
+          label: 'Recipes',
+          href: '/recipes',
+          icon: 'ChefHat',
+          children: [
+            { id: 'all', label: 'All Recipes', href: '/recipes' },
+            { id: 'favorites', label: 'Favorites', href: '/recipes/favorites' },
+            { id: 'my-recipes', label: 'My Recipes', href: '/recipes/mine' },
+          ],
+        },
+        {
+          id: 'settings',
+          label: 'Settings',
+          href: '/settings',
+          icon: 'Settings',
+        },
+      ];
+
+      return <SidebarNav items={sampleItems} collapsed={false} />;
+    }}
+  </Story>
+</Canvas>
+
+## Collapsed State
+
+<Canvas>
+  <Story name="Collapsed">
+    {() => {
+      const sampleItems = [
+        { id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: 'BarChart3' },
+        { id: 'recipes', label: 'Recipes', href: '/recipes', icon: 'ChefHat' },
+        { id: 'settings', label: 'Settings', href: '/settings', icon: 'Settings' },
+      ];
+
+      return (
+        <div className="w-16">
+          <SidebarNav items={sampleItems} collapsed={true} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => {
+      const sampleItems = [
+        {
+          id: 'home',
+          label: 'Home',
+          href: '/',
+          icon: 'Home',
+        },
+        {
+          id: 'products',
+          label: 'Products',
+          href: '/products',
+          icon: 'Package',
+          children: [
+            { id: 'all-products', label: 'All Products', href: '/products' },
+            { id: 'categories', label: 'Categories', href: '/products/categories' },
+            { id: 'new-product', label: 'Add Product', href: '/products/new' },
+          ],
+        },
+        {
+          id: 'users',
+          label: 'Users',
+          href: '/users',
+          icon: 'Users',
+          children: [
+            { id: 'all-users', label: 'All Users', href: '/users' },
+            { id: 'roles', label: 'Roles', href: '/users/roles' },
+          ],
+        },
+      ];
+
+      return <SidebarNav items={sampleItems} {...args} />;
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={SidebarNav} />

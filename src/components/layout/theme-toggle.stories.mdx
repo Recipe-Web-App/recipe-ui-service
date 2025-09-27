@@ -1,0 +1,548 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { ThemeToggle, ThemeSelector } from './theme-toggle';
+import { useThemeStore } from '@/stores/ui/theme-store';
+
+<Meta
+  title="Layout Components/ThemeToggle"
+  component={ThemeToggle}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[200px] items-center justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The ThemeToggle component provides theme switching functionality with smooth animations.
+It cycles through Light → Dark → System → Light themes and includes both toggle and selector variants.
+
+## Features
+
+- Cycles through light, dark, and system themes
+- Visual icons for each theme state (Sun, Moon, Monitor)
+- Smooth transition animations
+- Accessible button with proper labels
+- Tooltip showing current and next theme
+- Integration with theme store
+- Multiple size variants (sm, default, lg)
+- Optional label display
+- ThemeSelector variant with all options visible
+- TypeScript support with strict typing
+
+## Usage
+
+Use ThemeToggle for:
+- Top navigation theme switching
+- Settings panels and preferences
+- Mobile header controls
+- Sidebar theme options
+- Any context requiring theme selection
+- System-wide theme management
+        `
+      }
+    }
+  }}
+  argTypes={{
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg'],
+      description: 'Button size',
+      defaultValue: 'default'
+    },
+    showLabel: {
+      control: { type: 'boolean' },
+      description: 'Show theme name label alongside icon',
+      defaultValue: false
+    },
+    variant: {
+      control: { type: 'select' },
+      options: ['ghost', 'outline', 'secondary'],
+      description: 'Button visual variant',
+      defaultValue: 'ghost'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# ThemeToggle
+
+<Description of={ThemeToggle} />
+
+## Default Toggle
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Click to cycle through themes:</div>
+        <ThemeToggle />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Size Variants">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Small:</span>
+          <ThemeToggle size="sm" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Default:</span>
+          <ThemeToggle size="default" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Large:</span>
+          <ThemeToggle size="lg" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Labels
+
+<Canvas>
+  <Story name="With Labels">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Small:</span>
+          <ThemeToggle size="sm" showLabel />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Default:</span>
+          <ThemeToggle size="default" showLabel />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Large:</span>
+          <ThemeToggle size="lg" showLabel />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Button Variants
+
+<Canvas>
+  <Story name="Button Variants">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-20">Ghost:</span>
+          <ThemeToggle variant="ghost" showLabel />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-20">Outline:</span>
+          <ThemeToggle variant="outline" showLabel />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-20">Secondary:</span>
+          <ThemeToggle variant="secondary" showLabel />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Theme Selector (All Options Visible)
+
+<Canvas>
+  <Story name="Theme Selector">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          All theme options visible at once:
+        </div>
+        <ThemeSelector />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Theme Selector Sizes
+
+<Canvas>
+  <Story name="Theme Selector Sizes">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Small:</span>
+          <ThemeSelector size="sm" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Default:</span>
+          <ThemeSelector size="default" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Large:</span>
+          <ThemeSelector size="lg" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Theme Selector Orientations
+
+<Canvas>
+  <Story name="Theme Selector Orientations">
+    {() => (
+      <div className="space-y-6">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Horizontal (default):</div>
+          <ThemeSelector orientation="horizontal" />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Vertical:</div>
+          <ThemeSelector orientation="vertical" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Navigation Context
+
+<Canvas>
+  <Story name="Navigation Context">
+    {() => (
+      <div className="w-full">
+        {/* Simulated top navigation */}
+        <nav className="border-b bg-background/95 backdrop-blur">
+          <div className="flex h-16 items-center justify-between px-6">
+            <div className="flex items-center space-x-4">
+              <div className="text-xl font-bold">Recipe App</div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <div className="w-px h-6 bg-border" />
+              <div className="h-8 w-8 rounded-full bg-muted" />
+            </div>
+          </div>
+        </nav>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Settings Panel Context
+
+<Canvas>
+  <Story name="Settings Panel">
+    {() => (
+      <div className="max-w-md border rounded-lg p-6 bg-background">
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold">Appearance</h3>
+            <p className="text-sm text-muted-foreground">
+              Customize how the app looks and feels
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="font-medium">Theme</div>
+                <div className="text-sm text-muted-foreground">
+                  Choose your preferred theme
+                </div>
+              </div>
+              <ThemeSelector />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="font-medium">Quick Toggle</div>
+                <div className="text-sm text-muted-foreground">
+                  Cycle through themes
+                </div>
+              </div>
+              <ThemeToggle showLabel />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Layout
+
+<Canvas>
+  <Story name="Mobile Layout">
+    {() => (
+      <div className="max-w-sm mx-auto">
+        <div className="border rounded-lg bg-background">
+          {/* Mobile header */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <div className="text-lg font-semibold">Settings</div>
+            <ThemeToggle size="sm" />
+          </div>
+
+          {/* Mobile content */}
+          <div className="p-4 space-y-4">
+            <div className="space-y-2">
+              <div className="font-medium">Theme Preference</div>
+              <ThemeSelector size="sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Sidebar Context
+
+<Canvas>
+  <Story name="Sidebar Context">
+    {() => (
+      <div className="w-64 border-r bg-background">
+        <div className="flex h-full flex-col">
+          <div className="border-b p-4">
+            <div className="text-lg font-semibold">Settings</div>
+          </div>
+
+          <div className="flex-1 p-4 space-y-6">
+            <div className="space-y-3">
+              <div className="text-sm font-medium">Appearance</div>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Theme:</span>
+                  <ThemeToggle size="sm" />
+                </div>
+                <div>
+                  <div className="text-xs text-muted-foreground mb-2">
+                    Or choose directly:
+                  </div>
+                  <ThemeSelector size="sm" orientation="vertical" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## All Theme States Demo
+
+<Canvas>
+  <Story name="Theme States Demo">
+    {() => {
+      const [currentTheme, setCurrentTheme] = React.useState('light');
+
+      const themes = [
+        { value: 'light', label: 'Light Theme', class: '' },
+        { value: 'dark', label: 'Dark Theme', class: 'dark' },
+        { value: 'system', label: 'System Theme', class: '' }
+      ];
+
+      return (
+        <div className="space-y-6">
+          <div className="text-sm text-muted-foreground">
+            Preview all theme states:
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {themes.map((theme) => (
+              <div
+                key={theme.value}
+                className={`border rounded-lg p-4 ${theme.class}`}
+              >
+                <div className="bg-background text-foreground space-y-3">
+                  <div className="text-sm font-medium">{theme.label}</div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Toggle:</span>
+                    <ThemeToggle size="sm" />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Selector:</span>
+                    <ThemeSelector size="sm" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">Custom styling examples:</div>
+
+        <div className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <span className="text-sm w-24">Colored:</span>
+            <ThemeToggle className="text-blue-600 hover:text-blue-700" />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm w-24">Bordered:</span>
+            <ThemeToggle className="border-2 border-primary rounded-full" />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm w-24">Background:</span>
+            <ThemeToggle className="bg-accent" showLabel />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm w-24">Selector:</span>
+            <ThemeSelector className="border-2 border-primary" />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Tooltip Demonstration
+
+<Canvas>
+  <Story name="Tooltip Demo">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Hover over the buttons to see tooltips:
+        </div>
+        <div className="flex items-center space-x-6">
+          <div className="space-y-2 text-center">
+            <ThemeToggle />
+            <div className="text-xs text-muted-foreground">Icon only</div>
+          </div>
+          <div className="space-y-2 text-center">
+            <ThemeToggle showLabel />
+            <div className="text-xs text-muted-foreground">With label</div>
+          </div>
+          <div className="space-y-2 text-center">
+            <ThemeSelector />
+            <div className="text-xs text-muted-foreground">Selector</div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Use the controls below to configure ThemeToggle:
+        </div>
+        <ThemeToggle {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={ThemeToggle} />
+
+## Theme Cycle Behavior
+
+The ThemeToggle cycles through themes in this order:
+
+1. **Light** → **Dark** → **System** → **Light** (repeat)
+
+### Theme States
+
+- **Light Theme**: Explicit light mode with sun icon
+- **Dark Theme**: Explicit dark mode with moon icon
+- **System Theme**: Follows OS preference with monitor icon
+
+## Accessibility Features
+
+- **Keyboard Navigation**: Fully keyboard accessible with proper focus indicators
+- **Screen Reader Support**: Descriptive ARIA labels for all states
+- **Tooltip Information**: Context about current and next theme
+- **Role Attributes**: Proper button and radiogroup roles for selector
+- **State Announcement**: Current theme state clearly communicated
+- **Focus Management**: Logical tab order and visible focus indicators
+
+## Design Guidelines
+
+### Icon Usage
+- **Sun Icon**: Light theme - bright, clear representation
+- **Moon Icon**: Dark theme - calm, night-time association
+- **Monitor Icon**: System theme - represents device/OS preference
+
+### Animation & Transitions
+- Smooth 300ms icon transitions
+- Hover state changes with proper timing
+- Focus indicators with appropriate easing
+- No jarring or distracting animations
+
+### Size Guidelines
+- **Small (sm)**: Mobile contexts, compact layouts
+- **Default**: Most common use cases, navigation bars
+- **Large (lg)**: Prominent placement, accessibility needs
+
+## Implementation Notes
+
+### Theme Toggle Component
+- Cycles through themes automatically
+- Shows appropriate icon for current theme
+- Tooltip indicates next theme in cycle
+- Optional label display alongside icon
+
+### Theme Selector Component
+- Shows all three options simultaneously
+- Radio group behavior with visual selection
+- Horizontal or vertical orientation
+- Individual tooltips for each option
+
+### Store Integration
+- Integrates with theme store for state management
+- Automatic theme application across application
+- Persistent theme preference storage
+- System theme detection and following
+
+### Performance Considerations
+- Minimal re-renders through proper memoization
+- Efficient icon loading from Lucide React
+- No heavy animations or complex transitions
+- Optimized for frequent theme switching
+
+## Browser Support
+
+- Works across all modern browsers
+- Graceful fallback for older browsers
+- Respects system theme preferences
+- Supports manual theme override
+- Compatible with SSR/Next.js environments

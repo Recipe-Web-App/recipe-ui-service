@@ -1,0 +1,118 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { SidebarFooter } from './sidebar-footer';
+
+<Meta
+  title="Layout Components/SidebarFooter"
+  component={SidebarFooter}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[200px] bg-background">
+        <div className="w-64 border-r border-t p-4 bg-background">
+          <Story />
+        </div>
+        <div className="flex-1 p-8">
+          <div className="text-muted-foreground text-sm">
+            SidebarFooter component - typically appears at bottom of sidebar
+          </div>
+        </div>
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The SidebarFooter component provides footer functionality for the sidebar including
+collapse/expand toggle and optional version information display.
+
+## Features
+
+- Collapse/expand toggle button with appropriate icons
+- Tooltip support when collapsed for better UX
+- Optional version information display
+- Integration with navigation store for state management
+- Keyboard accessible controls
+- Responsive design that adapts to sidebar state
+- TypeScript support with strict typing
+
+## Usage
+
+Use SidebarFooter for:
+- Sidebar collapse/expand controls
+- Version information display
+- Footer actions in sidebar layouts
+- Consistent sidebar state management
+        `
+      }
+    }
+  }}
+  argTypes={{
+    collapsed: {
+      control: { type: 'boolean' },
+      description: 'Whether the sidebar is in collapsed state',
+      defaultValue: false
+    },
+    showVersion: {
+      control: { type: 'boolean' },
+      description: 'Whether to show version information',
+      defaultValue: true
+    },
+    versionText: {
+      control: { type: 'text' },
+      description: 'Custom version text to display',
+      defaultValue: 'v1.0.0'
+    },
+    onToggleCollapse: {
+      action: 'toggle collapse',
+      description: 'Custom collapse toggle handler'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# SidebarFooter
+
+<Description of={SidebarFooter} />
+
+## Default Footer
+
+<Canvas>
+  <Story name="Default">
+    {() => <SidebarFooter collapsed={false} />}
+  </Story>
+</Canvas>
+
+## Collapsed State
+
+<Canvas>
+  <Story name="Collapsed">
+    {() => (
+      <div className="w-16">
+        <SidebarFooter collapsed={true} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Without Version
+
+<Canvas>
+  <Story name="Without Version">
+    {() => <SidebarFooter collapsed={false} showVersion={false} />}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => <SidebarFooter {...args} />}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={SidebarFooter} />
