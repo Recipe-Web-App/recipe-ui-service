@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useSubNavigation } from '@/hooks/use-sub-navigation';
 import { useNavigationStore } from '@/stores/ui/navigation-store';
+import { topLevelNavigation } from '@/config/navigation';
 import type { NavItem } from '@/types/navigation';
 
 /**
@@ -81,10 +82,15 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({
   // Update navigation store with current sub-navigation
   const { setCurrentSubNavigation } = useNavigationStore();
 
-  // Sync sub-navigation with store
+  // Use top-level navigation if no sub-navigation is available
+  const effectiveNavigation = React.useMemo(() => {
+    return subNavigation.length > 0 ? subNavigation : topLevelNavigation;
+  }, [subNavigation]);
+
+  // Sync navigation with store
   React.useEffect(() => {
-    setCurrentSubNavigation(subNavigation);
-  }, [subNavigation, setCurrentSubNavigation]);
+    setCurrentSubNavigation(effectiveNavigation);
+  }, [effectiveNavigation, setCurrentSubNavigation]);
 
   // Adjust sidebar/footer visibility based on variant
   React.useEffect(() => {
@@ -111,12 +117,12 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({
       variant,
       showSidebar,
       showFooter,
-      subNavigation,
+      subNavigation: effectiveNavigation,
       setVariant,
       toggleSidebar: () => setShowSidebar(prev => !prev),
       toggleFooter: () => setShowFooter(prev => !prev),
     }),
-    [variant, showSidebar, showFooter, subNavigation]
+    [variant, showSidebar, showFooter, effectiveNavigation]
   );
 
   return (

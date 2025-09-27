@@ -1,0 +1,250 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import AuthLayout from './layout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
+import { ChefHat } from 'lucide-react';
+
+<Meta
+  title="App Router/Auth Layout"
+  component={AuthLayout}
+  decorators={[
+    (Story) => (
+      <div style={{ height: '100vh', width: '100vw' }}>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Authentication Layout component for the (auth) route group. This layout applies
+the minimal layout variant to provide a clean, focused experience for authentication flows.
+
+## Features
+
+- **Minimal Layout**: TopNav only (no sidebar or footer)
+- **Centered Content**: Authentication forms are centered vertically and horizontally
+- **Clean Design**: Removes distractions to focus on authentication
+- **Responsive**: Works perfectly on all device sizes
+
+## Usage
+
+This layout is automatically applied to all pages within the \`(auth)\` route group.
+It's perfect for login, registration, password reset, and similar authentication flows.
+
+## Route Group Structure
+
+\`\`\`
+src/app/(auth)/
+├── layout.tsx          # This component
+├── login/
+│   └── page.tsx
+├── register/
+│   └── page.tsx
+├── forgot-password/
+│   └── page.tsx
+└── ...
+\`\`\`
+
+The layout provides:
+- Minimal chrome for focus
+- Responsive centered container
+- Consistent spacing and typography
+- Integration with the theme system
+        `,
+      },
+    },
+  }}
+/>
+
+# Auth Layout
+
+The minimal layout for authentication flows.
+
+## Login Form Example
+
+<Canvas>
+  <Story name="Login Form">
+    {() => (
+      <AuthLayout>
+        <Card className="p-8">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <ChefHat className="h-10 w-10 text-primary" />
+            </div>
+            <h1 className="text-2xl font-bold">Welcome Back</h1>
+            <p className="text-muted-foreground">Sign in to your Recipe App account</p>
+          </div>
+
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium mb-1">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <Button type="submit" className="w-full">
+              Sign In
+            </Button>
+          </form>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
+              Don't have an account?{' '}
+              <a href="#" className="text-primary hover:underline">
+                Sign up
+              </a>
+            </p>
+          </div>
+        </Card>
+      </AuthLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Registration Form Example
+
+<Canvas>
+  <Story name="Registration Form">
+    {() => (
+      <AuthLayout>
+        <Card className="p-8">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center mb-4">
+              <ChefHat className="h-10 w-10 text-primary" />
+            </div>
+            <h1 className="text-2xl font-bold">Create Account</h1>
+            <p className="text-muted-foreground">Join the Recipe App community</p>
+          </div>
+
+          <form className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium mb-1">
+                  First Name
+                </label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="First name"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium mb-1">
+                  Last Name
+                </label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Last name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="regEmail" className="block text-sm font-medium mb-1">
+                Email
+              </label>
+              <Input
+                id="regEmail"
+                type="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="regPassword" className="block text-sm font-medium mb-1">
+                Password
+              </label>
+              <Input
+                id="regPassword"
+                type="password"
+                placeholder="Create a password"
+                required
+              />
+            </div>
+
+            <Button type="submit" className="w-full">
+              Create Account
+            </Button>
+          </form>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <a href="#" className="text-primary hover:underline">
+                Sign in
+              </a>
+            </p>
+          </div>
+        </Card>
+      </AuthLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Component Props
+
+<ArgsTable of={AuthLayout} />
+
+## Layout Behavior
+
+### All Screen Sizes
+- TopNav only (minimal variant)
+- Centered content container
+- Maximum width of 448px (28rem)
+- Consistent vertical and horizontal padding
+- Clean, distraction-free design
+
+## Design Principles
+
+### Focus
+- Removes all non-essential UI elements
+- Centers attention on the authentication form
+- Minimal navigation to reduce cognitive load
+
+### Accessibility
+- Proper form labeling and structure
+- High contrast ratios for text and backgrounds
+- Keyboard navigation support
+- Screen reader friendly
+
+### Responsive Design
+- Works perfectly on mobile devices
+- Scales appropriately for tablets and desktop
+- Maintains readability at all sizes
+
+## Integration Notes
+
+This layout integrates with:
+
+- **Layout System**: Uses the minimal layout variant
+- **Theme Provider**: Respects light/dark mode preferences
+- **Error Boundaries**: Provides graceful error handling
+- **Navigation**: Maintains TopNav for brand recognition
+
+The centered container ensures authentication forms look great on all
+devices while maintaining focus on the task at hand.

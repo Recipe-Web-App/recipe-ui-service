@@ -68,7 +68,7 @@ export const contentPaneVariants = cva(
       },
       contentWidth: {
         full: ['w-full'],
-        contained: ['mx-auto', 'max-w-7xl', 'w-full'],
+        contained: ['w-full'],
       },
       scrollable: {
         true: ['overflow-auto'],

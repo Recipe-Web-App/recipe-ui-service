@@ -175,7 +175,7 @@ export const SearchBar = React.forwardRef<HTMLDivElement, SearchBarProps>(
             showClearButton
             autoComplete="off"
             autoCorrect="off"
-            autoCapitalize="off"
+            autoCapitalize="none"
             spellCheck={false}
           />
 

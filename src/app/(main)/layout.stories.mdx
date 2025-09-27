@@ -1,0 +1,133 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import MainLayout from './layout';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+
+<Meta
+  title="App Router/Main Layout"
+  component={MainLayout}
+  decorators={[
+    (Story) => (
+      <div style={{ height: '100vh', width: '100vw' }}>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Main Layout component for the (main) route group. This layout applies the default
+layout variant to all pages within the main application area.
+
+## Features
+
+- **Full Layout**: TopNav + Sidebar + ContentPane + Footer
+- **Sub-Navigation**: Contextual navigation based on current section
+- **Responsive Design**: Adapts to mobile, tablet, and desktop
+- **Theme Integration**: Works with the application theme system
+
+## Usage
+
+This layout is automatically applied to all pages within the \`(main)\` route group.
+It provides the standard application experience with full navigation and footer.
+
+## Route Group Structure
+
+\`\`\`
+src/app/(main)/
+├── layout.tsx          # This component
+├── page.tsx            # Homepage
+├── recipes/
+│   └── page.tsx
+├── meal-plans/
+│   └── page.tsx
+└── ...
+\`\`\`
+
+The layout automatically handles:
+- Navigation state management
+- Sub-navigation population based on current route
+- Responsive sidebar behavior
+- Theme provider integration
+        `,
+      },
+    },
+  }}
+/>
+
+# Main Layout
+
+The primary layout for the main application area.
+
+## Default Story
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <MainLayout>
+        <div className="p-6">
+          <h1 className="text-2xl font-bold mb-4">Main Application Content</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">Recipe Card</h3>
+              <p className="text-muted-foreground mb-4">
+                This is how content appears within the main layout.
+              </p>
+              <Button size="sm">View Recipe</Button>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">Meal Plan Card</h3>
+              <p className="text-muted-foreground mb-4">
+                The layout provides consistent spacing and typography.
+              </p>
+              <Button size="sm" variant="outline">Plan Meals</Button>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">Shopping List</h3>
+              <p className="text-muted-foreground mb-4">
+                All content benefits from the responsive grid system.
+              </p>
+              <Button size="sm" variant="secondary">Create List</Button>
+            </Card>
+          </div>
+        </div>
+      </MainLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Component Props
+
+<ArgsTable of={MainLayout} />
+
+## Layout Behavior
+
+### Desktop (1024px+)
+- Full sidebar navigation visible
+- TopNav with global navigation
+- Footer with complete link sections
+- Content area with comfortable padding
+
+### Tablet (768px - 1023px)
+- Collapsible sidebar
+- Simplified footer
+- Responsive content grid
+
+### Mobile (< 768px)
+- Mobile drawer for navigation
+- Compact TopNav
+- Single-column content layout
+- Minimal footer
+
+## Integration Notes
+
+This layout integrates with several key systems:
+
+- **Navigation Store**: Manages sidebar state and sub-navigation
+- **Layout Store**: Handles view modes and responsive behavior
+- **Theme Provider**: Applies consistent theming
+- **Error Boundaries**: Provides graceful error handling
+
+The layout automatically populates sub-navigation based on the current route
+and provides a consistent experience across all main application pages.

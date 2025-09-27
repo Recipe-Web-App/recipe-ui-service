@@ -161,8 +161,8 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
           )}
         </div>
 
-        {/* Mobile Navigation Drawer */}
-        <MobileNavDrawer />
+        {/* Mobile Navigation Drawer - Only render on mobile */}
+        {isMobile && <MobileNavDrawer />}
       </header>
     );
   }

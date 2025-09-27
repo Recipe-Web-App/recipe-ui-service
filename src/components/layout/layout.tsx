@@ -85,18 +85,12 @@ const InternalLayout = React.forwardRef<HTMLDivElement, LayoutProps>(
 
           {/* Content Pane */}
           <ContentPane
-            viewMode="grid"
+            viewMode="list"
             contentWidth="contained"
             scrollable={true}
-            padding={true}
+            padding={false}
             {...contentProps}
-            className={cn(
-              'flex-1',
-              // Adjust spacing based on layout variant
-              variant === 'minimal' && 'px-6 py-8',
-              variant === 'focused' && 'px-8 py-6',
-              contentProps.className
-            )}
+            className={cn('flex-1 p-4', contentProps.className)}
           >
             {children}
           </ContentPane>

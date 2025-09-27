@@ -162,7 +162,13 @@ describe('TopNav', () => {
     expect(header).toHaveClass('custom-class');
   });
 
-  it('renders mobile navigation drawer', () => {
+  it('renders mobile navigation drawer on mobile', () => {
+    // Set breakpoint to mobile so the drawer renders
+    mockUseLayoutStore.mockReturnValue({
+      ...mockLayoutStore,
+      breakpoint: 'mobile',
+    });
+
     render(<TopNav />);
 
     expect(screen.getByTestId('mobile-nav-drawer')).toBeInTheDocument();
