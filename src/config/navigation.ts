@@ -141,7 +141,7 @@ export const topLevelNavigation: NavItem[] = [
   },
   {
     id: 'components-demo',
-    label: 'Components',
+    label: 'Components Demo',
     href: '/components-demo',
     icon: Palette,
     metadata: {
@@ -150,8 +150,6 @@ export const topLevelNavigation: NavItem[] = [
       showInDesktop: true,
       tooltip: 'UI component demonstrations',
       featureFlag: 'SHOW_COMPONENTS_DEMO',
-      badge: 'Dev',
-      badgeVariant: 'secondary',
     },
   },
 ];
@@ -351,6 +349,404 @@ export const settingsSubNavigation: NavItem[] = [
 ];
 
 /**
+ * Components Demo section sub-navigation
+ */
+export const componentsDemoSubNavigation: NavItem[] = [
+  {
+    id: 'components-overview',
+    label: 'Overview',
+    href: '/components-demo',
+    metadata: {
+      sortOrder: 0,
+    },
+  },
+  {
+    id: 'components-accordion',
+    label: 'Accordion',
+    href: '/components-demo/accordion',
+    metadata: {
+      sortOrder: 10,
+    },
+  },
+  {
+    id: 'components-alert',
+    label: 'Alert',
+    href: '/components-demo/alert',
+    metadata: {
+      sortOrder: 20,
+    },
+  },
+  {
+    id: 'components-avatar',
+    label: 'Avatar',
+    href: '/components-demo/avatar',
+    metadata: {
+      sortOrder: 30,
+    },
+  },
+  {
+    id: 'components-avatar-group',
+    label: 'Avatar Group',
+    href: '/components-demo/avatar-group',
+    metadata: {
+      sortOrder: 40,
+    },
+  },
+  {
+    id: 'components-badge',
+    label: 'Badge',
+    href: '/components-demo/badge',
+    metadata: {
+      sortOrder: 50,
+    },
+  },
+  {
+    id: 'components-breadcrumb',
+    label: 'Breadcrumb',
+    href: '/components-demo/breadcrumb',
+    metadata: {
+      sortOrder: 60,
+    },
+  },
+  {
+    id: 'components-button',
+    label: 'Button',
+    href: '/components-demo/button',
+    metadata: {
+      sortOrder: 70,
+    },
+  },
+  {
+    id: 'components-card',
+    label: 'Card',
+    href: '/components-demo/card',
+    metadata: {
+      sortOrder: 80,
+    },
+  },
+  {
+    id: 'components-checkbox',
+    label: 'Checkbox',
+    href: '/components-demo/checkbox',
+    metadata: {
+      sortOrder: 90,
+    },
+  },
+  {
+    id: 'components-chip',
+    label: 'Chip',
+    href: '/components-demo/chip',
+    metadata: {
+      sortOrder: 100,
+    },
+  },
+  {
+    id: 'components-collapse',
+    label: 'Collapse',
+    href: '/components-demo/collapse',
+    metadata: {
+      sortOrder: 110,
+    },
+  },
+  {
+    id: 'components-command-palette',
+    label: 'Command Palette',
+    href: '/components-demo/command-palette',
+    metadata: {
+      sortOrder: 120,
+    },
+  },
+  {
+    id: 'components-content',
+    label: 'Content',
+    href: '/components-demo/content',
+    metadata: {
+      sortOrder: 130,
+    },
+  },
+  {
+    id: 'components-copy-button',
+    label: 'Copy Button',
+    href: '/components-demo/copy-button',
+    metadata: {
+      sortOrder: 140,
+    },
+  },
+  {
+    id: 'components-datepicker',
+    label: 'Date Picker',
+    href: '/components-demo/datepicker',
+    metadata: {
+      sortOrder: 150,
+    },
+  },
+  {
+    id: 'components-dialog',
+    label: 'Dialog',
+    href: '/components-demo/dialog',
+    metadata: {
+      sortOrder: 160,
+    },
+  },
+  {
+    id: 'components-disclosure',
+    label: 'Disclosure',
+    href: '/components-demo/disclosure',
+    metadata: {
+      sortOrder: 170,
+    },
+  },
+  {
+    id: 'components-divider',
+    label: 'Divider',
+    href: '/components-demo/divider',
+    metadata: {
+      sortOrder: 180,
+    },
+  },
+  {
+    id: 'components-drawer',
+    label: 'Drawer',
+    href: '/components-demo/drawer',
+    metadata: {
+      sortOrder: 190,
+    },
+  },
+  {
+    id: 'components-dropdown',
+    label: 'Dropdown',
+    href: '/components-demo/dropdown',
+    metadata: {
+      sortOrder: 200,
+    },
+  },
+  {
+    id: 'components-empty-state',
+    label: 'Empty State',
+    href: '/components-demo/empty-state',
+    metadata: {
+      sortOrder: 210,
+    },
+  },
+  {
+    id: 'components-error-boundary',
+    label: 'Error Boundary',
+    href: '/components-demo/error-boundary',
+    metadata: {
+      sortOrder: 220,
+    },
+  },
+  {
+    id: 'components-fab',
+    label: 'FAB',
+    href: '/components-demo/fab',
+    metadata: {
+      sortOrder: 230,
+    },
+  },
+  {
+    id: 'components-file-upload',
+    label: 'File Upload',
+    href: '/components-demo/file-upload',
+    metadata: {
+      sortOrder: 240,
+    },
+  },
+  {
+    id: 'components-icon',
+    label: 'Icon',
+    href: '/components-demo/icon',
+    metadata: {
+      sortOrder: 250,
+    },
+  },
+  {
+    id: 'components-image-gallery',
+    label: 'Image Gallery',
+    href: '/components-demo/image-gallery',
+    metadata: {
+      sortOrder: 260,
+    },
+  },
+  {
+    id: 'components-infinite-scroll',
+    label: 'Infinite Scroll',
+    href: '/components-demo/infinite-scroll',
+    metadata: {
+      sortOrder: 270,
+    },
+  },
+  {
+    id: 'components-input',
+    label: 'Input',
+    href: '/components-demo/input',
+    metadata: {
+      sortOrder: 280,
+    },
+  },
+  {
+    id: 'components-list',
+    label: 'List',
+    href: '/components-demo/list',
+    metadata: {
+      sortOrder: 290,
+    },
+  },
+  {
+    id: 'components-modal',
+    label: 'Modal',
+    href: '/components-demo/modal',
+    metadata: {
+      sortOrder: 300,
+    },
+  },
+  {
+    id: 'components-pagination',
+    label: 'Pagination',
+    href: '/components-demo/pagination',
+    metadata: {
+      sortOrder: 310,
+    },
+  },
+  {
+    id: 'components-popover',
+    label: 'Popover',
+    href: '/components-demo/popover',
+    metadata: {
+      sortOrder: 320,
+    },
+  },
+  {
+    id: 'components-progress',
+    label: 'Progress',
+    href: '/components-demo/progress',
+    metadata: {
+      sortOrder: 330,
+    },
+  },
+  {
+    id: 'components-radio',
+    label: 'Radio Group',
+    href: '/components-demo/radio',
+    metadata: {
+      sortOrder: 340,
+    },
+  },
+  {
+    id: 'components-rating',
+    label: 'Rating',
+    href: '/components-demo/rating',
+    metadata: {
+      sortOrder: 350,
+    },
+  },
+  {
+    id: 'components-search-input',
+    label: 'Search Input',
+    href: '/components-demo/search-input',
+    metadata: {
+      sortOrder: 360,
+    },
+  },
+  {
+    id: 'components-select',
+    label: 'Select',
+    href: '/components-demo/select',
+    metadata: {
+      sortOrder: 370,
+    },
+  },
+  {
+    id: 'components-sidebar',
+    label: 'Sidebar',
+    href: '/components-demo/sidebar',
+    metadata: {
+      sortOrder: 380,
+    },
+  },
+  {
+    id: 'components-skeleton',
+    label: 'Skeleton',
+    href: '/components-demo/skeleton',
+    metadata: {
+      sortOrder: 390,
+    },
+  },
+  {
+    id: 'components-slider',
+    label: 'Slider',
+    href: '/components-demo/slider',
+    metadata: {
+      sortOrder: 400,
+    },
+  },
+  {
+    id: 'components-spinner',
+    label: 'Spinner',
+    href: '/components-demo/spinner',
+    metadata: {
+      sortOrder: 410,
+    },
+  },
+  {
+    id: 'components-stepper',
+    label: 'Stepper',
+    href: '/components-demo/stepper',
+    metadata: {
+      sortOrder: 420,
+    },
+  },
+  {
+    id: 'components-switch',
+    label: 'Switch',
+    href: '/components-demo/switch',
+    metadata: {
+      sortOrder: 430,
+    },
+  },
+  {
+    id: 'components-table',
+    label: 'Table',
+    href: '/components-demo/table',
+    metadata: {
+      sortOrder: 440,
+    },
+  },
+  {
+    id: 'components-tabs',
+    label: 'Tabs',
+    href: '/components-demo/tabs',
+    metadata: {
+      sortOrder: 450,
+    },
+  },
+  {
+    id: 'components-textarea',
+    label: 'Text Area',
+    href: '/components-demo/textarea',
+    metadata: {
+      sortOrder: 460,
+    },
+  },
+  {
+    id: 'components-toast',
+    label: 'Toast',
+    href: '/components-demo/toast',
+    metadata: {
+      sortOrder: 470,
+    },
+  },
+  {
+    id: 'components-tooltip',
+    label: 'Tooltip',
+    href: '/components-demo/tooltip',
+    metadata: {
+      sortOrder: 480,
+    },
+  },
+];
+
+/**
  * Sub-navigation mapping by section ID
  * Maps top-level navigation IDs to their respective sub-navigation items
  */
@@ -359,6 +755,7 @@ export const subNavigationMap: Record<string, NavItem[]> = {
   'meal-plans': mealPlanSubNavigation,
   social: socialSubNavigation,
   settings: settingsSubNavigation,
+  'components-demo': componentsDemoSubNavigation,
 };
 
 /**
