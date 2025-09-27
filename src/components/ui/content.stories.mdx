@@ -1,0 +1,683 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Content,
+  ContentProvider,
+  ContentPane,
+  ContentHeader,
+  ContentSkeleton,
+  ContentError,
+  ContentSection,
+  ContentGrid,
+  ContentList,
+  ContentActions,
+} from './content';
+import { Button } from './button';
+import { Badge } from './badge';
+
+<Meta
+  title="UI Components/Content"
+  component={ContentPane}
+  subcomponents={{
+    Content,
+    ContentProvider,
+    ContentHeader,
+    ContentSkeleton,
+    ContentError,
+    ContentSection,
+    ContentGrid,
+    ContentList,
+    ContentActions,
+  }}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[500px] bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Content component system provides a comprehensive set of layout and content management components
+for building consistent, responsive content areas with loading states, error handling, and flexible layouts.
+
+## Features
+
+- **Content Pane**: Main content container with flexible view modes
+- **Content Header**: Header with title, description, breadcrumbs, and actions
+- **Content Skeleton**: Loading skeletons that adapt to different view modes
+- **Content Error**: Error display with recovery actions and contextual messaging
+- **Content Section**: Sectioned content with optional collapsible functionality
+- **Content Grid**: Responsive grid container for content items
+- **Content List**: List container with dividers and hover effects
+- **Content Actions**: Action bar with alignment and styling options
+- **Content Provider**: Context provider for managing view modes and preferences
+
+## Usage
+
+Use Content components for:
+- Application main content areas
+- Dashboard layouts with multiple sections
+- Data display with loading and error states
+- Responsive content grids and lists
+- Consistent page headers and navigation
+- Collapsible content sections
+        `
+      }
+    }
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'contained', 'fluid'],
+      description: 'Content pane variant',
+      defaultValue: 'default'
+    },
+    viewMode: {
+      control: { type: 'select' },
+      options: ['grid', 'card', 'list', 'table'],
+      description: 'Content view mode',
+      defaultValue: 'grid'
+    },
+    contentWidth: {
+      control: { type: 'select' },
+      options: ['contained', 'fluid', 'narrow'],
+      description: 'Content width constraint',
+      defaultValue: 'contained'
+    },
+    loading: {
+      control: { type: 'boolean' },
+      description: 'Show loading state',
+      defaultValue: false
+    },
+    scrollable: {
+      control: { type: 'boolean' },
+      description: 'Enable scrolling',
+      defaultValue: true
+    },
+    padding: {
+      control: { type: 'boolean' },
+      description: 'Apply default padding',
+      defaultValue: true
+    }
+  }}
+/>
+
+# Content
+
+<Description of={ContentPane} />
+
+## Basic Content Pane
+
+<Canvas>
+  <Story name="Basic Content Pane">
+    {() => (
+      <ContentPane
+        header={
+          <ContentHeader
+            title="Sample Content"
+            description="This is a basic content pane with header and sample content"
+          />
+        }
+      >
+        <div className="space-y-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="p-4 bg-muted/20 rounded border">
+              <h3 className="font-medium mb-2">Content Item {i + 1}</h3>
+              <p className="text-sm text-muted-foreground">
+                Sample content that would appear in the main content area.
+              </p>
+            </div>
+          ))}
+        </div>
+      </ContentPane>
+    )}
+  </Story>
+</Canvas>
+
+## Content Header Variants
+
+<Canvas>
+  <Story name="Content Headers">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Basic header:</div>
+          <ContentHeader
+            title="Page Title"
+            description="A brief description of what this page contains"
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Header with breadcrumbs:</div>
+          <ContentHeader
+            title="Recipe Details"
+            description="View and edit recipe information"
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Recipes', href: '/recipes' },
+              { label: 'Chocolate Cake', current: true },
+            ]}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Header with actions:</div>
+          <ContentHeader
+            title="User Management"
+            description="Manage user accounts and permissions"
+            actions={
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">Export</Button>
+                <Button size="sm">Add User</Button>
+              </div>
+            }
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Loading States
+
+<Canvas>
+  <Story name="Loading States">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Grid view skeleton:</div>
+          <ContentSkeleton viewMode="grid" count={6} />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">List view skeleton:</div>
+          <ContentSkeleton viewMode="list" count={4} />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Table view skeleton:</div>
+          <ContentSkeleton viewMode="table" count={5} />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Error States
+
+<Canvas>
+  <Story name="Error States">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Generic error:</div>
+          <ContentError
+            error="Something went wrong"
+            onRetry={() => console.log('Retry clicked')}
+            onGoBack={() => console.log('Go back clicked')}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Network error:</div>
+          <ContentError
+            error={{
+              type: 'network',
+              message: 'Unable to connect to the server',
+              details: 'Please check your internet connection and try again'
+            }}
+            onRetry={() => console.log('Retry clicked')}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">404 error:</div>
+          <ContentError
+            error={{
+              type: '404',
+              message: 'The page you are looking for could not be found',
+              code: 'PAGE_NOT_FOUND'
+            }}
+            onGoBack={() => console.log('Go back clicked')}
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Content Sections
+
+<Canvas>
+  <Story name="Content Sections">
+    {() => (
+      <div className="space-y-6">
+        <ContentSection
+          title="Basic Section"
+          description="A simple content section with title and description"
+        >
+          <div className="p-4 bg-muted/20 rounded">
+            <p className="text-sm">Section content goes here</p>
+          </div>
+        </ContentSection>
+
+        <ContentSection
+          title="Collapsible Section"
+          description="This section can be collapsed and expanded"
+          collapsible
+          headerActions={<Badge variant="secondary">New</Badge>}
+        >
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="p-3 bg-muted/20 rounded">
+                <p className="text-sm">Collapsible content item {i + 1}</p>
+              </div>
+            ))}
+          </div>
+        </ContentSection>
+
+        <ContentSection
+          title="Section with Actions"
+          description="Section with header actions"
+          headerActions={
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">Edit</Button>
+              <Button variant="ghost" size="sm">Delete</Button>
+            </div>
+          }
+        >
+          <div className="p-4 bg-muted/20 rounded">
+            <p className="text-sm">Section with actions in the header</p>
+          </div>
+        </ContentSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Content Grids
+
+<Canvas>
+  <Story name="Content Grids">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">3-column responsive grid:</div>
+          <ContentGrid columns={3} responsive>
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div key={i} className="p-4 bg-muted/20 rounded border">
+                <h4 className="font-medium mb-2">Grid Item {i + 1}</h4>
+                <p className="text-sm text-muted-foreground">
+                  Content for grid item {i + 1}
+                </p>
+              </div>
+            ))}
+          </ContentGrid>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">4-column grid with large gap:</div>
+          <ContentGrid columns={4} gap="xl">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="p-3 bg-muted/20 rounded border text-center">
+                <div className="text-lg font-semibold">{i + 1}</div>
+              </div>
+            ))}
+          </ContentGrid>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Content Lists
+
+<Canvas>
+  <Story name="Content Lists">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">Basic list:</div>
+          <ContentList>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="p-3">
+                <h4 className="font-medium">List Item {i + 1}</h4>
+                <p className="text-sm text-muted-foreground">Description for item {i + 1}</p>
+              </div>
+            ))}
+          </ContentList>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">Divided list with hover:</div>
+          <ContentList divided hover>
+            {['Dashboard', 'Analytics', 'Reports', 'Settings', 'Help'].map((item, i) => (
+              <div key={i} className="p-4 flex items-center justify-between">
+                <div>
+                  <h4 className="font-medium">{item}</h4>
+                  <p className="text-sm text-muted-foreground">Navigate to {item.toLowerCase()}</p>
+                </div>
+                <Button variant="ghost" size="sm">View</Button>
+              </div>
+            ))}
+          </ContentList>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Content Actions
+
+<Canvas>
+  <Story name="Content Actions">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">Left-aligned actions:</div>
+          <ContentActions align="left">
+            <Button variant="outline">Cancel</Button>
+            <Button>Save Changes</Button>
+          </ContentActions>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">Right-aligned actions with border:</div>
+          <ContentActions align="right" border>
+            <Button variant="ghost">Reset</Button>
+            <Button variant="outline">Preview</Button>
+            <Button>Publish</Button>
+          </ContentActions>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-4">Space-between actions:</div>
+          <ContentActions align="between" border>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">Export</Button>
+              <Button variant="outline" size="sm">Import</Button>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="ghost">Cancel</Button>
+              <Button>Apply</Button>
+            </div>
+          </ContentActions>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Complete Page Layout
+
+<Canvas>
+  <Story name="Complete Page Layout">
+    {() => (
+      <ContentPane
+        header={
+          <ContentHeader
+            title="Project Dashboard"
+            description="Overview of all your projects and recent activity"
+            breadcrumbs={[
+              { label: 'Home', href: '/' },
+              { label: 'Dashboard', current: true },
+            ]}
+            actions={
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">Export Data</Button>
+                <Button size="sm">New Project</Button>
+              </div>
+            }
+          />
+        }
+        actions={
+          <ContentActions align="between">
+            <div className="text-sm text-muted-foreground">
+              Showing 12 of 24 projects
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm">Previous</Button>
+              <Button variant="outline" size="sm">Next</Button>
+            </div>
+          </ContentActions>
+        }
+      >
+        <div className="space-y-8">
+          <ContentSection
+            title="Active Projects"
+            description="Projects currently in development"
+            headerActions={<Badge>6 active</Badge>}
+          >
+            <ContentGrid columns={3} responsive>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="p-4 bg-background rounded border">
+                  <div className="flex items-start justify-between mb-3">
+                    <h4 className="font-medium">Project {i + 1}</h4>
+                    <Badge variant="secondary">Active</Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Project description and current status information.
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-muted-foreground">Updated 2 days ago</span>
+                    <Button variant="ghost" size="sm">View</Button>
+                  </div>
+                </div>
+              ))}
+            </ContentGrid>
+          </ContentSection>
+
+          <ContentSection
+            title="Recent Activity"
+            description="Latest updates and changes"
+            collapsible
+          >
+            <ContentList divided>
+              {[
+                'Project Alpha was updated',
+                'New team member added to Beta',
+                'Gamma project milestone completed',
+                'Delta project status changed',
+                'Echo project created'
+              ].map((activity, i) => (
+                <div key={i} className="p-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">{activity}</p>
+                    <p className="text-xs text-muted-foreground">{i + 1} hour{i !== 0 ? 's' : ''} ago</p>
+                  </div>
+                  <Button variant="ghost" size="sm">Details</Button>
+                </div>
+              ))}
+            </ContentList>
+          </ContentSection>
+        </div>
+      </ContentPane>
+    )}
+  </Story>
+</Canvas>
+
+## View Mode Examples
+
+<Canvas>
+  <Story name="View Modes">
+    {() => {
+      const [viewMode, setViewMode] = React.useState('grid');
+
+      return (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            {['grid', 'list', 'card'].map((mode) => (
+              <Button
+                key={mode}
+                variant={viewMode === mode ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode(mode)}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </Button>
+            ))}
+          </div>
+
+          <ContentPane
+            viewMode={viewMode}
+            header={
+              <ContentHeader
+                title={`${viewMode.charAt(0).toUpperCase() + viewMode.slice(1)} View`}
+                description={`Content displayed in ${viewMode} layout`}
+              />
+            }
+          >
+            {viewMode === 'grid' && (
+              <ContentGrid columns={3} responsive>
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div key={i} className="p-4 bg-muted/20 rounded border">
+                    <h4 className="font-medium mb-2">Card {i + 1}</h4>
+                    <p className="text-sm text-muted-foreground">Grid layout content</p>
+                  </div>
+                ))}
+              </ContentGrid>
+            )}
+
+            {viewMode === 'list' && (
+              <ContentList divided>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="p-4 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium">List Item {i + 1}</h4>
+                      <p className="text-sm text-muted-foreground">List layout content</p>
+                    </div>
+                    <Button variant="ghost" size="sm">Action</Button>
+                  </div>
+                ))}
+              </ContentList>
+            )}
+
+            {viewMode === 'card' && (
+              <ContentGrid columns={2} responsive>
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="p-6 bg-muted/20 rounded-lg border">
+                    <h4 className="font-medium mb-3">Card {i + 1}</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Card layout with more detailed content and larger spacing.
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm">Secondary</Button>
+                      <Button size="sm">Primary</Button>
+                    </div>
+                  </div>
+                ))}
+              </ContentGrid>
+            )}
+          </ContentPane>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <ContentPane
+        {...args}
+        header={
+          <ContentHeader
+            title="Interactive Content Pane"
+            description="Use the controls below to configure the content pane"
+          />
+        }
+      >
+        <ContentGrid columns={3} responsive>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="p-4 bg-muted/20 rounded border">
+              <h4 className="font-medium mb-2">Item {i + 1}</h4>
+              <p className="text-sm text-muted-foreground">
+                Configurable content item
+              </p>
+            </div>
+          ))}
+        </ContentGrid>
+      </ContentPane>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={ContentPane} />
+
+## Sub-Components
+
+### ContentHeader
+Header component with title, description, breadcrumbs, and actions.
+
+### ContentSkeleton
+Loading skeleton that adapts to different view modes (grid, list, table).
+
+### ContentError
+Error display with recovery actions and contextual messaging for different error types.
+
+### ContentSection
+Sectioned content with optional collapsible functionality and header actions.
+
+### ContentGrid
+Responsive grid container with configurable columns and gaps.
+
+### ContentList
+List container with optional dividers and hover effects.
+
+### ContentActions
+Action bar with different alignment options (left, right, between, center).
+
+### ContentProvider
+Context provider for managing global view modes and content width preferences.
+
+## Design Guidelines
+
+### Layout Hierarchy
+- Use ContentHeader for page/section titles and navigation
+- Organize content with ContentSection for logical groupings
+- Apply ContentGrid or ContentList for data display
+- Include ContentActions for user interactions
+
+### Responsive Behavior
+- ContentGrid automatically adapts column count on smaller screens
+- ContentHeader stacks elements vertically on mobile
+- ContentActions reflow to prevent overflow
+- All components respect responsive spacing patterns
+
+### Error Handling
+- Use appropriate error types (network, 404, 500, unauthorized, validation)
+- Provide clear recovery actions (retry, go back, home)
+- Include helpful error messages and optional error codes
+- Consider error context and user journey
+
+### Loading States
+- Match skeleton layout to actual content structure
+- Use appropriate skeleton variants for different view modes
+- Include header skeletons when needed
+- Maintain proper loading state transitions
+
+## Accessibility Features
+
+- Semantic HTML with proper landmarks (main, header, section)
+- ARIA labels and roles for complex interactions
+- Keyboard navigation support for all interactive elements
+- Screen reader friendly error announcements
+- Proper heading hierarchy and structure
+- Focus management for collapsible sections
+
+## Implementation Notes
+
+- Integrates with layout store for view mode and width preferences
+- Supports both controlled and uncontrolled usage patterns
+- Error handling with comprehensive error type system
+- Responsive design with mobile-first approach
+- Type-safe with comprehensive TypeScript interfaces
+- Performance optimized with proper memoization
+- Follows design system conventions consistently

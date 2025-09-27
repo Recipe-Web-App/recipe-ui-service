@@ -1,0 +1,693 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Icon, IconContainer, RecipeIcon } from './icon';
+
+<Meta
+  title="UI Components/Icon"
+  component={Icon}
+  subcomponents={{ IconContainer, RecipeIcon }}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[200px] items-center justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Icon component provides a unified interface for all Lucide React icons with comprehensive
+styling, theming, and accessibility support. It includes specialized variants for different
+use cases and ensures consistent icon usage across the application.
+
+## Features
+
+- **Type-safe icon names** from centralized registry
+- **Multiple size variants** (xs, sm, default, lg, xl, 2xl)
+- **Color system integration** with theme-aware colors
+- **Animation support** (spin, pulse, bounce, ping)
+- **Accessibility built-in** with proper ARIA attributes
+- **Recipe-specific styling** variants for domain-specific usage
+- **Interactive states** and event handling support
+- **Container component** for grouping multiple icons
+- **Performance optimized** with icon registry and tree-shaking
+- **TypeScript support** with strict typing
+
+## Usage
+
+Use Icon for:
+- User interface elements and navigation
+- Status indicators and feedback
+- Content categorization and labeling
+- Interactive buttons and controls
+- Decorative elements with semantic meaning
+- Recipe and cooking-related content visualization
+        `
+      }
+    }
+  }}
+  argTypes={{
+    name: {
+      control: { type: 'text' },
+      description: 'Icon name from Lucide React library',
+      defaultValue: 'star'
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['xs', 'sm', 'default', 'lg', 'xl', '2xl'],
+      description: 'Icon size variant',
+      defaultValue: 'default'
+    },
+    color: {
+      control: { type: 'select' },
+      options: ['default', 'muted', 'primary', 'secondary', 'accent', 'destructive', 'success', 'warning'],
+      description: 'Icon color from theme system',
+      defaultValue: 'default'
+    },
+    animation: {
+      control: { type: 'select' },
+      options: ['none', 'spin', 'pulse', 'bounce', 'ping'],
+      description: 'Animation type',
+      defaultValue: 'none'
+    },
+    state: {
+      control: { type: 'select' },
+      options: ['default', 'hover', 'active', 'disabled'],
+      description: 'Interactive state',
+      defaultValue: 'default'
+    }
+  }}
+/>
+
+# Icon
+
+<Description of={Icon} />
+
+## Basic Icons
+
+<Canvas>
+  <Story name="Basic">
+    {() => (
+      <div className="flex items-center space-x-4">
+        <Icon name="star" />
+        <Icon name="heart" />
+        <Icon name="home" />
+        <Icon name="user" />
+        <Icon name="settings" />
+        <Icon name="search" />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Sizes">
+    {() => (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-6">
+          <div className="text-center space-y-2">
+            <Icon name="star" size="xs" />
+            <div className="text-xs text-muted-foreground">xs (12px)</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon name="star" size="sm" />
+            <div className="text-xs text-muted-foreground">sm (16px)</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon name="star" size="default" />
+            <div className="text-xs text-muted-foreground">default (20px)</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon name="star" size="lg" />
+            <div className="text-xs text-muted-foreground">lg (24px)</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon name="star" size="xl" />
+            <div className="text-xs text-muted-foreground">xl (32px)</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon name="star" size="2xl" />
+            <div className="text-xs text-muted-foreground">2xl (48px)</div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Color Variants
+
+<Canvas>
+  <Story name="Colors">
+    {() => (
+      <div className="grid grid-cols-4 gap-6">
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="default" size="lg" />
+          <div className="text-xs text-muted-foreground">Default</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="muted" size="lg" />
+          <div className="text-xs text-muted-foreground">Muted</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="primary" size="lg" />
+          <div className="text-xs text-muted-foreground">Primary</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="secondary" size="lg" />
+          <div className="text-xs text-muted-foreground">Secondary</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="accent" size="lg" />
+          <div className="text-xs text-muted-foreground">Accent</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="destructive" size="lg" />
+          <div className="text-xs text-muted-foreground">Destructive</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="success" size="lg" />
+          <div className="text-xs text-muted-foreground">Success</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" color="warning" size="lg" />
+          <div className="text-xs text-muted-foreground">Warning</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Animations
+
+<Canvas>
+  <Story name="Animations">
+    {() => (
+      <div className="flex items-center space-x-8">
+        <div className="text-center space-y-2">
+          <Icon name="loader-2" animation="spin" size="lg" />
+          <div className="text-xs text-muted-foreground">Spin</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="activity" animation="pulse" size="lg" />
+          <div className="text-xs text-muted-foreground">Pulse</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="heart" animation="bounce" size="lg" color="destructive" />
+          <div className="text-xs text-muted-foreground">Bounce</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="bell" animation="ping" size="lg" color="warning" />
+          <div className="text-xs text-muted-foreground">Ping</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Icons
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const [liked, setLiked] = React.useState(false);
+      const [bookmarked, setBookmarked] = React.useState(false);
+
+      return (
+        <div className="flex items-center space-x-6">
+          <div className="text-center space-y-2">
+            <Icon
+              name={liked ? "heart" : "heart"}
+              color={liked ? "destructive" : "muted"}
+              size="lg"
+              onClick={() => setLiked(!liked)}
+              aria-label={liked ? "Unlike" : "Like"}
+              className="hover:scale-110 transition-transform"
+            />
+            <div className="text-xs text-muted-foreground">Like Button</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon
+              name={bookmarked ? "bookmark" : "bookmark"}
+              color={bookmarked ? "primary" : "muted"}
+              size="lg"
+              onClick={() => setBookmarked(!bookmarked)}
+              aria-label={bookmarked ? "Remove bookmark" : "Add bookmark"}
+              className="hover:scale-110 transition-transform"
+            />
+            <div className="text-xs text-muted-foreground">Bookmark</div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <Icon
+              name="share"
+              color="muted"
+              size="lg"
+              onClick={() => console.log('Share clicked')}
+              aria-label="Share content"
+              className="hover:scale-110 hover:text-primary transition-all"
+            />
+            <div className="text-xs text-muted-foreground">Share</div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Icon States
+
+<Canvas>
+  <Story name="States">
+    {() => (
+      <div className="flex items-center space-x-8">
+        <div className="text-center space-y-2">
+          <Icon name="star" state="default" size="lg" />
+          <div className="text-xs text-muted-foreground">Default</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="star" state="hover" size="lg" />
+          <div className="text-xs text-muted-foreground">Hover</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="star" state="active" size="lg" />
+          <div className="text-xs text-muted-foreground">Active</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <Icon name="star" state="disabled" size="lg" />
+          <div className="text-xs text-muted-foreground">Disabled</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Icon Containers
+
+<Canvas>
+  <Story name="Icon Containers">
+    {() => (
+      <div className="space-y-6">
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Basic container:</div>
+          <IconContainer spacing="default">
+            <Icon name="star" />
+            <Icon name="heart" />
+            <Icon name="bookmark" />
+            <Icon name="share" />
+          </IconContainer>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Tight spacing:</div>
+          <IconContainer spacing="tight">
+            <Icon name="star" size="sm" />
+            <Icon name="heart" size="sm" />
+            <Icon name="bookmark" size="sm" />
+            <Icon name="share" size="sm" />
+          </IconContainer>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Loose spacing:</div>
+          <IconContainer spacing="loose">
+            <Icon name="star" />
+            <Icon name="heart" />
+            <Icon name="bookmark" />
+            <Icon name="share" />
+          </IconContainer>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">With background:</div>
+          <IconContainer spacing="default" background="accent" className="p-2 rounded">
+            <Icon name="star" />
+            <Icon name="heart" />
+            <Icon name="bookmark" />
+            <Icon name="share" />
+          </IconContainer>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Recipe Icons
+
+<Canvas>
+  <Story name="Recipe Icons">
+    {() => (
+      <div className="space-y-6">
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Cooking category:</div>
+          <div className="flex items-center space-x-4">
+            <RecipeIcon name="chef-hat" category="cooking" />
+            <RecipeIcon name="utensils" category="cooking" />
+            <RecipeIcon name="flame" category="cooking" />
+            <RecipeIcon name="timer" category="cooking" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Ingredients category:</div>
+          <div className="flex items-center space-x-4">
+            <RecipeIcon name="wheat" category="ingredients" />
+            <RecipeIcon name="egg" category="ingredients" />
+            <RecipeIcon name="fish" category="ingredients" />
+            <RecipeIcon name="carrot" category="ingredients" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Diet category:</div>
+          <div className="flex items-center space-x-4">
+            <RecipeIcon name="leaf" category="diet" />
+            <RecipeIcon name="heart" category="diet" />
+            <RecipeIcon name="shield" category="diet" />
+            <RecipeIcon name="zap" category="diet" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Emphasized variants:</div>
+          <div className="flex items-center space-x-4">
+            <RecipeIcon name="star" category="cooking" emphasis="high" size="lg" />
+            <RecipeIcon name="award" category="cooking" emphasis="high" size="lg" />
+            <RecipeIcon name="trophy" category="cooking" emphasis="high" size="lg" />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Common UI Patterns
+
+<Canvas>
+  <Story name="UI Patterns">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm font-medium mb-4">Navigation Icons:</div>
+          <div className="flex items-center space-x-6">
+            <Icon name="home" size="lg" />
+            <Icon name="search" size="lg" />
+            <Icon name="heart" size="lg" />
+            <Icon name="user" size="lg" />
+            <Icon name="settings" size="lg" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Status Icons:</div>
+          <div className="flex items-center space-x-6">
+            <Icon name="check-circle" color="success" size="lg" />
+            <Icon name="x-circle" color="destructive" size="lg" />
+            <Icon name="alert-circle" color="warning" size="lg" />
+            <Icon name="info" color="primary" size="lg" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Loading Icons:</div>
+          <div className="flex items-center space-x-6">
+            <Icon name="loader-2" animation="spin" size="lg" />
+            <Icon name="refresh-cw" animation="spin" size="lg" />
+            <Icon name="circle-dashed" animation="spin" size="lg" />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Action Icons:</div>
+          <div className="flex items-center space-x-6">
+            <Icon name="edit" size="lg" />
+            <Icon name="trash-2" color="destructive" size="lg" />
+            <Icon name="download" size="lg" />
+            <Icon name="share" size="lg" />
+            <Icon name="copy" size="lg" />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Accessibility Demo
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => (
+      <div className="space-y-6">
+        <div>
+          <div className="text-sm font-medium mb-4">Decorative Icons (aria-hidden):</div>
+          <div className="flex items-center space-x-2">
+            <Icon name="star" aria-hidden />
+            <span>Featured Recipe</span>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Meaningful Icons (with aria-label):</div>
+          <div className="flex items-center space-x-4">
+            <Icon
+              name="heart"
+              aria-label="Add to favorites"
+              onClick={() => console.log('Added to favorites')}
+              className="cursor-pointer hover:text-red-500"
+            />
+            <Icon
+              name="share"
+              aria-label="Share recipe"
+              onClick={() => console.log('Share recipe')}
+              className="cursor-pointer hover:text-blue-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Status with Screen Reader Text:</div>
+          <div className="flex items-center space-x-2">
+            <Icon name="check-circle" color="success" aria-label="Success" />
+            <span className="sr-only">Recipe saved successfully</span>
+            <span>Recipe Saved</span>
+          </div>
+        </div>
+
+        <div className="text-sm text-muted-foreground space-y-2">
+          <div className="font-medium">Accessibility Features:</div>
+          <ul className="space-y-1 text-xs">
+            <li>• Proper ARIA labels for meaningful icons</li>
+            <li>• aria-hidden for decorative icons</li>
+            <li>• Keyboard navigation for interactive icons</li>
+            <li>• Focus indicators and hover states</li>
+            <li>• Screen reader compatible titles</li>
+            <li>• Semantic role attributes</li>
+          </ul>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Real-world Examples
+
+<Canvas>
+  <Story name="Real-world Examples">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm font-medium mb-4">Recipe Card Actions:</div>
+          <div className="border rounded-lg p-4 bg-background">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium">Chocolate Chip Cookies</h3>
+              <div className="flex items-center space-x-2">
+                <Icon name="clock" size="sm" color="muted" />
+                <span className="text-sm text-muted-foreground">30 min</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Icon name="star" color="warning" size="sm" />
+                <span className="text-sm">4.8</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Icon
+                  name="heart"
+                  color="muted"
+                  size="sm"
+                  onClick={() => console.log('Toggle favorite')}
+                  className="cursor-pointer hover:text-red-500"
+                />
+                <Icon
+                  name="bookmark"
+                  color="muted"
+                  size="sm"
+                  onClick={() => console.log('Toggle bookmark')}
+                  className="cursor-pointer hover:text-blue-500"
+                />
+                <Icon
+                  name="share"
+                  color="muted"
+                  size="sm"
+                  onClick={() => console.log('Share recipe')}
+                  className="cursor-pointer hover:text-green-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Form Validation:</div>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <Icon name="check-circle" color="success" size="sm" />
+              <span className="text-sm">Valid email address</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Icon name="x-circle" color="destructive" size="sm" />
+              <span className="text-sm">Password must be at least 8 characters</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Icon name="alert-triangle" color="warning" size="sm" />
+              <span className="text-sm">Username already taken</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Loading States:</div>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <Icon name="loader-2" animation="spin" size="sm" />
+              <span className="text-sm">Loading recipes...</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Icon name="upload" animation="pulse" size="sm" />
+              <span className="text-sm">Uploading image...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive Example">
+    {(args) => (
+      <div className="text-center">
+        <Icon {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Icon} />
+
+## Icon Registry
+
+The Icon component uses a centralized registry system that provides:
+
+### Type Safety
+- All icon names are type-checked at compile time
+- IntelliSense support for available icons
+- Runtime validation with helpful error messages
+
+### Performance
+- Tree-shaking support for unused icons
+- Lazy loading capabilities
+- Optimized bundle size
+
+### Common Icons
+Popular icons available in the registry:
+- **Navigation**: home, menu, search, settings, user
+- **Actions**: edit, delete, save, copy, share, download
+- **Status**: check, x, alert, info, warning, success
+- **Media**: play, pause, stop, volume, image, video
+- **Communication**: mail, phone, message, notification
+- **Content**: star, heart, bookmark, tag, category
+
+## Accessibility Guidelines
+
+### Decorative Icons
+Use `aria-hidden` for icons that are purely decorative:
+```jsx
+<Icon name="star" aria-hidden /> Featured Recipe
+```
+
+### Meaningful Icons
+Provide `aria-label` for icons that convey meaning:
+```jsx
+<Icon name="heart" aria-label="Add to favorites" onClick={handleFavorite} />
+```
+
+### Interactive Icons
+Include proper keyboard support and focus indicators:
+```jsx
+<Icon
+  name="share"
+  onClick={handleShare}
+  aria-label="Share recipe"
+  className="cursor-pointer"
+/>
+```
+
+## Design Guidelines
+
+### Size Guidelines
+- **xs (12px)**: Inline text, small badges
+- **sm (16px)**: Form inputs, small buttons
+- **default (20px)**: Standard UI elements
+- **lg (24px)**: Prominent actions, headers
+- **xl (32px)**: Large buttons, feature highlights
+- **2xl (48px)**: Hero sections, empty states
+
+### Color Guidelines
+- **Default**: Standard text color
+- **Muted**: Secondary information
+- **Primary**: Brand-related actions
+- **Success**: Positive feedback
+- **Warning**: Caution or attention
+- **Destructive**: Errors or dangerous actions
+
+### Animation Guidelines
+- **Spin**: Loading states, refresh actions
+- **Pulse**: Ongoing processes, breathing effect
+- **Bounce**: Attention-grabbing, playful interactions
+- **Ping**: Notifications, alerts
+
+## Implementation Notes
+
+- Built on Lucide React for comprehensive icon library
+- Centralized registry for type safety and performance
+- Automatic accessibility attributes based on usage
+- Theme integration for consistent coloring
+- Recipe-specific variants for domain styling
+- Performance optimized with proper memoization
+- Supports both decorative and semantic usage patterns

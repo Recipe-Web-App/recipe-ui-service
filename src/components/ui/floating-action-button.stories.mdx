@@ -1,0 +1,662 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { FloatingActionButton } from './floating-action-button';
+import { Plus, Edit, Share, Heart, MessageCircle, Mail, Phone, Search } from 'lucide-react';
+
+<Meta
+  title="UI Components/FloatingActionButton"
+  component={FloatingActionButton}
+  decorators={[
+    (Story) => (
+      <div className="relative min-h-[300px] bg-background border rounded-lg overflow-hidden">
+        <div className="p-8">
+          <div className="text-muted-foreground text-sm mb-4">
+            Floating Action Button appears positioned relative to this container.
+            In a real app, it would be positioned relative to the viewport.
+          </div>
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <p>Sample content area where the FAB provides quick access to primary actions.</p>
+            <p>The button floats above the content and is always accessible.</p>
+          </div>
+        </div>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The FloatingActionButton (FAB) component provides quick access to primary actions in a
+Material Design-inspired floating interface. It supports multiple variants, positions,
+and advanced features like speed dial functionality.
+
+## Features
+
+- Multiple variants (primary, secondary, destructive, success, outline, surface)
+- Multiple sizes (sm, md, lg) for different use cases
+- Extended mode with text labels
+- Configurable screen positioning (9 positions)
+- Portal rendering for proper z-index layering
+- Loading states with spinner animation
+- Speed dial support for multiple related actions
+- Full keyboard accessibility and screen reader support
+- Touch-friendly design with proper target sizes
+- TypeScript support with strict typing
+
+## Usage
+
+Use FloatingActionButton for:
+- Primary actions like "Add New" or "Create"
+- Quick access to frequently used functions
+- Mobile-first interfaces where screen space is limited
+- Call-to-action buttons that should always be visible
+- Speed dial menus for related action groups
+- Overlay interfaces and modal-like experiences
+        `
+      }
+    }
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'destructive', 'success', 'outline', 'surface'],
+      description: 'Visual variant of the FAB',
+      defaultValue: 'primary'
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the FAB',
+      defaultValue: 'md'
+    },
+    position: {
+      control: { type: 'select' },
+      options: [
+        'top-left', 'top-center', 'top-right',
+        'center-left', 'center', 'center-right',
+        'bottom-left', 'bottom-center', 'bottom-right'
+      ],
+      description: 'Position on screen',
+      defaultValue: 'bottom-right'
+    },
+    extended: {
+      control: { type: 'boolean' },
+      description: 'Show as extended FAB with label',
+      defaultValue: false
+    },
+    loading: {
+      control: { type: 'boolean' },
+      description: 'Show loading state',
+      defaultValue: false
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      description: 'Disable the button',
+      defaultValue: false
+    },
+    usePortal: {
+      control: { type: 'boolean' },
+      description: 'Render using portal (for proper positioning)',
+      defaultValue: false
+    },
+    label: {
+      control: { type: 'text' },
+      description: 'Label text for extended mode'
+    },
+    ariaLabel: {
+      control: { type: 'text' },
+      description: 'Accessible label for screen readers'
+    },
+    offset: {
+      control: { type: 'number', min: 0, max: 100 },
+      description: 'Distance from screen edge in pixels',
+      defaultValue: 16
+    }
+  }}
+/>
+
+# FloatingActionButton
+
+<Description of={FloatingActionButton} />
+
+## Basic FAB
+
+<Canvas>
+  <Story name="Basic">
+    {() => (
+      <FloatingActionButton
+        icon={<Plus className="h-6 w-6" />}
+        ariaLabel="Add new item"
+        usePortal={false}
+        position="bottom-right"
+        onClick={() => console.log('FAB clicked')}
+      />
+    )}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Sizes">
+    {() => (
+      <div className="flex items-center space-x-8">
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Plus className="h-4 w-4" />}
+            size="sm"
+            usePortal={false}
+            position="center"
+            ariaLabel="Small FAB"
+          />
+          <div className="text-xs text-muted-foreground">Small</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            size="md"
+            usePortal={false}
+            position="center"
+            ariaLabel="Medium FAB"
+          />
+          <div className="text-xs text-muted-foreground">Medium</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Plus className="h-6 w-6" />}
+            size="lg"
+            usePortal={false}
+            position="center"
+            ariaLabel="Large FAB"
+          />
+          <div className="text-xs text-muted-foreground">Large</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Variant Styles
+
+<Canvas>
+  <Story name="Variants">
+    {() => (
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            variant="primary"
+            usePortal={false}
+            position="center"
+            ariaLabel="Primary FAB"
+          />
+          <div className="text-xs text-muted-foreground">Primary</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Edit className="h-5 w-5" />}
+            variant="secondary"
+            usePortal={false}
+            position="center"
+            ariaLabel="Secondary FAB"
+          />
+          <div className="text-xs text-muted-foreground">Secondary</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Heart className="h-5 w-5" />}
+            variant="destructive"
+            usePortal={false}
+            position="center"
+            ariaLabel="Destructive FAB"
+          />
+          <div className="text-xs text-muted-foreground">Destructive</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<MessageCircle className="h-5 w-5" />}
+            variant="success"
+            usePortal={false}
+            position="center"
+            ariaLabel="Success FAB"
+          />
+          <div className="text-xs text-muted-foreground">Success</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Share className="h-5 w-5" />}
+            variant="outline"
+            usePortal={false}
+            position="center"
+            ariaLabel="Outline FAB"
+          />
+          <div className="text-xs text-muted-foreground">Outline</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Search className="h-5 w-5" />}
+            variant="surface"
+            usePortal={false}
+            position="center"
+            ariaLabel="Surface FAB"
+          />
+          <div className="text-xs text-muted-foreground">Surface</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Extended FAB
+
+<Canvas>
+  <Story name="Extended">
+    {() => (
+      <div className="space-y-8">
+        <div className="text-center">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            label="Add Recipe"
+            extended
+            usePortal={false}
+            position="center"
+            ariaLabel="Add new recipe"
+          />
+        </div>
+
+        <div className="text-center">
+          <FloatingActionButton
+            icon={<MessageCircle className="h-5 w-5" />}
+            label="Start Chat"
+            extended
+            variant="secondary"
+            usePortal={false}
+            position="center"
+            ariaLabel="Start new chat"
+          />
+        </div>
+
+        <div className="text-center">
+          <FloatingActionButton
+            icon={<Mail className="h-5 w-5" />}
+            label="Send Email"
+            extended
+            size="lg"
+            variant="outline"
+            usePortal={false}
+            position="center"
+            ariaLabel="Send email"
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Position Examples
+
+<Canvas>
+  <Story name="Positions">
+    {() => (
+      <div className="grid grid-cols-3 gap-4 text-center">
+        {[
+          'top-left', 'top-center', 'top-right',
+          'center-left', 'center', 'center-right',
+          'bottom-left', 'bottom-center', 'bottom-right'
+        ].map((position) => (
+          <div key={position} className="relative h-20 border border-dashed border-border rounded">
+            <FloatingActionButton
+              icon={<Plus className="h-4 w-4" />}
+              position={position}
+              size="sm"
+              usePortal={false}
+              offset={8}
+              ariaLabel={`FAB at ${position}`}
+            />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-xs text-muted-foreground bg-background px-1">
+                {position}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Loading State
+
+<Canvas>
+  <Story name="Loading">
+    {() => {
+      const [loading, setLoading] = React.useState(false);
+
+      const handleClick = () => {
+        setLoading(true);
+        setTimeout(() => setLoading(false), 2000);
+      };
+
+      return (
+        <div className="text-center space-y-4">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            label="Create Item"
+            extended
+            loading={loading}
+            usePortal={false}
+            position="center"
+            onClick={handleClick}
+            ariaLabel="Create new item"
+          />
+          <div className="text-sm text-muted-foreground">
+            Click to trigger loading state
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Disabled State
+
+<Canvas>
+  <Story name="Disabled">
+    {() => (
+      <div className="flex items-center space-x-8">
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            disabled
+            usePortal={false}
+            position="center"
+            ariaLabel="Disabled FAB"
+          />
+          <div className="text-xs text-muted-foreground">Disabled</div>
+        </div>
+
+        <div className="text-center space-y-2">
+          <FloatingActionButton
+            icon={<Edit className="h-5 w-5" />}
+            label="Edit"
+            extended
+            disabled
+            usePortal={false}
+            position="center"
+            ariaLabel="Disabled extended FAB"
+          />
+          <div className="text-xs text-muted-foreground">Disabled Extended</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Real-world Examples
+
+<Canvas>
+  <Story name="Real-world Examples">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm font-medium mb-4">E-commerce App:</div>
+          <div className="relative h-32 bg-muted/20 rounded border">
+            <FloatingActionButton
+              icon={<Plus className="h-5 w-5" />}
+              label="Add to Cart"
+              extended
+              variant="primary"
+              position="bottom-right"
+              usePortal={false}
+              offset={16}
+              ariaLabel="Add item to cart"
+            />
+            <div className="p-4">
+              <p className="text-sm text-muted-foreground">Product details and reviews...</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Chat Application:</div>
+          <div className="relative h-32 bg-muted/20 rounded border">
+            <FloatingActionButton
+              icon={<MessageCircle className="h-5 w-5" />}
+              variant="secondary"
+              position="bottom-right"
+              usePortal={false}
+              offset={16}
+              ariaLabel="Start new conversation"
+            />
+            <div className="p-4">
+              <p className="text-sm text-muted-foreground">Chat messages and conversation history...</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-medium mb-4">Recipe App:</div>
+          <div className="relative h-32 bg-muted/20 rounded border">
+            <FloatingActionButton
+              icon={<Plus className="h-5 w-5" />}
+              label="New Recipe"
+              extended
+              variant="success"
+              position="bottom-center"
+              usePortal={false}
+              offset={16}
+              ariaLabel="Create new recipe"
+            />
+            <div className="p-4">
+              <p className="text-sm text-muted-foreground">Recipe cards and collection views...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Layout
+
+<Canvas>
+  <Story name="Mobile Layout">
+    {() => (
+      <div className="max-w-sm mx-auto">
+        <div className="relative h-96 bg-background border rounded-lg overflow-hidden">
+          {/* Mock mobile header */}
+          <div className="bg-primary text-primary-foreground p-4">
+            <h1 className="text-lg font-semibold">Mobile App</h1>
+          </div>
+
+          {/* Mock content */}
+          <div className="p-4 space-y-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="p-3 bg-muted/20 rounded">
+                <div className="font-medium">List Item {i + 1}</div>
+                <div className="text-sm text-muted-foreground">Sample content</div>
+              </div>
+            ))}
+          </div>
+
+          {/* FAB */}
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            position="bottom-right"
+            usePortal={false}
+            offset={16}
+            ariaLabel="Add new item"
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Multiple FABs
+
+<Canvas>
+  <Story name="Multiple FABs">
+    {() => (
+      <div className="relative h-48 bg-muted/20 rounded border">
+        <div className="p-4">
+          <p className="text-sm text-muted-foreground">
+            Multiple FABs can be used for different primary actions.
+            Each should have a clear, distinct purpose.
+          </p>
+        </div>
+
+        <FloatingActionButton
+          icon={<Plus className="h-4 w-4" />}
+          size="sm"
+          position="top-right"
+          usePortal={false}
+          offset={12}
+          ariaLabel="Add item"
+        />
+
+        <FloatingActionButton
+          icon={<Edit className="h-4 w-4" />}
+          variant="secondary"
+          size="sm"
+          position="center-right"
+          usePortal={false}
+          offset={12}
+          ariaLabel="Edit content"
+        />
+
+        <FloatingActionButton
+          icon={<MessageCircle className="h-4 w-4" />}
+          variant="outline"
+          size="sm"
+          position="bottom-right"
+          usePortal={false}
+          offset={12}
+          ariaLabel="Send message"
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Accessibility Demo
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => (
+      <div className="space-y-6">
+        <div className="relative h-32 bg-muted/20 rounded border">
+          <FloatingActionButton
+            icon={<Plus className="h-5 w-5" />}
+            position="bottom-right"
+            usePortal={false}
+            ariaLabel="Add new recipe to your collection"
+            onClick={() => console.log('Accessible FAB clicked')}
+          />
+          <div className="p-4">
+            <p className="text-sm text-muted-foreground">
+              FAB with proper ARIA label for screen readers
+            </p>
+          </div>
+        </div>
+
+        <div className="text-sm text-muted-foreground space-y-2">
+          <div className="font-medium">Accessibility Features:</div>
+          <ul className="space-y-1 text-xs">
+            <li>• Proper ARIA labels for screen readers</li>
+            <li>• Keyboard navigation support (Tab and Enter)</li>
+            <li>• Focus indicators for keyboard users</li>
+            <li>• Descriptive tooltips on hover</li>
+            <li>• Disabled state properly announced</li>
+            <li>• Loading state with appropriate feedback</li>
+          </ul>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="text-center">
+        <FloatingActionButton
+          {...args}
+          icon={<Plus className="h-5 w-5" />}
+          usePortal={false}
+          position="center"
+          onClick={() => console.log('Interactive FAB clicked')}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={FloatingActionButton} />
+
+## Design Guidelines
+
+### When to Use
+- **Primary Actions**: Use FAB for the most important action on a screen
+- **Consistent Action**: The same type of action appears throughout the app flow
+- **Quick Access**: Actions users perform frequently and need quick access to
+- **Mobile-First**: Especially important for mobile interfaces with limited space
+
+### When Not to Use
+- **Multiple Primary Actions**: Avoid multiple FABs competing for attention
+- **Destructive Actions**: Generally avoid for delete or other destructive actions
+- **Navigation**: FABs shouldn't be used for navigation between screens
+- **Complex Actions**: Actions requiring multiple steps or extensive input
+
+### Positioning Guidelines
+- **Bottom-Right**: Most common and natural position for primary actions
+- **Bottom-Center**: Good for actions that affect the entire screen content
+- **Context-Sensitive**: Position based on the content and user workflow
+
+### Size Guidelines
+- **Small (sm)**: Secondary actions or constrained layouts
+- **Medium (md)**: Standard size for most use cases
+- **Large (lg)**: Primary actions needing emphasis or accessibility
+
+## Accessibility Features
+
+- **Keyboard Navigation**: Fully accessible via keyboard (Tab, Enter, Space)
+- **Screen Reader Support**: Comprehensive ARIA labels and announcements
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Touch Targets**: Minimum 44px touch targets for mobile accessibility
+- **State Announcements**: Loading and disabled states properly communicated
+- **High Contrast**: Works well with all theme variants and accessibility modes
+
+## Animation Guidelines
+
+### Micro-interactions
+- **Hover**: Subtle elevation and color changes
+- **Press**: Gentle scale down effect
+- **Loading**: Smooth spinner animation
+- **Appearance**: Gentle scale-in animation when appearing
+
+### Performance
+- **GPU Acceleration**: Uses transform animations for smooth performance
+- **Reduced Motion**: Respects user preferences for reduced motion
+- **Smooth Transitions**: 200-300ms timing for natural feel
+
+## Implementation Notes
+
+- **Portal Rendering**: Uses React Portal for proper z-index layering
+- **Position Calculation**: Automatic positioning based on screen edges
+- **Responsive Design**: Adapts to different screen sizes and orientations
+- **Event Handling**: Proper event delegation and cleanup
+- **Type Safety**: Comprehensive TypeScript interfaces
+- **Performance**: Optimized rendering with proper memoization
+- **Accessibility**: WCAG 2.1 AA compliant implementation
