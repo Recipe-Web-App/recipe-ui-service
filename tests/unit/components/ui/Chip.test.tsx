@@ -67,7 +67,7 @@ describe('Chip', () => {
     test('applies filled variant classes', () => {
       renderChip({ variant: 'filled' });
       const chip = screen.getByText('Test Chip').parentElement;
-      expect(chip).toHaveClass('bg-blue-600', 'text-white');
+      expect(chip).toHaveClass('bg-primary', 'text-primary-foreground');
     });
   });
 
@@ -107,13 +107,13 @@ describe('Chip', () => {
         const chip = screen.getByText('Test Chip').parentElement;
         const expectedColor =
           color === 'destructive'
-            ? 'red'
+            ? 'destructive'
             : color === 'success'
-              ? 'green'
+              ? 'basil'
               : color === 'warning'
-                ? 'yellow'
+                ? 'citrus'
                 : color === 'info'
-                  ? 'blue'
+                  ? 'primary'
                   : color;
         expect(chip?.className).toContain(expectedColor);
       });
@@ -652,19 +652,19 @@ describe('RecipeChip', () => {
   test('applies ingredient context styles', () => {
     render(<RecipeChip context="ingredient">Tomato</RecipeChip>);
     const chip = screen.getByText('Tomato').parentElement;
-    expect(chip).toHaveClass('bg-blue-600');
+    expect(chip).toHaveClass('bg-primary');
   });
 
   test('applies dietary context styles', () => {
     render(<RecipeChip context="dietary">Vegetarian</RecipeChip>);
     const chip = screen.getByText('Vegetarian').parentElement;
-    expect(chip?.className).toContain('green');
+    expect(chip?.className).toContain('basil');
   });
 
   test('applies category context styles', () => {
     render(<RecipeChip context="category">Breakfast</RecipeChip>);
     const chip = screen.getByText('Breakfast').parentElement;
-    expect(chip?.className).toContain('blue');
+    expect(chip?.className).toContain('primary');
   });
 
   test('inherits chip functionality', async () => {

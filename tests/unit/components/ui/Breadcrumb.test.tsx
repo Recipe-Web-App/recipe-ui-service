@@ -385,24 +385,27 @@ describe('Breadcrumb Component', () => {
         <RecipeBreadcrumb workflow="planning" items={workflowItems} />
       );
 
-      expect(container.firstChild).toHaveClass('border-blue-200', 'bg-blue-50');
+      expect(container.firstChild).toHaveClass(
+        'border-primary/20',
+        'bg-primary/10'
+      );
 
       rerender(<RecipeBreadcrumb workflow="shopping" items={workflowItems} />);
       expect(container.firstChild).toHaveClass(
-        'border-green-200',
-        'bg-green-50'
+        'border-basil/20',
+        'bg-basil/10'
       );
 
       rerender(<RecipeBreadcrumb workflow="cooking" items={workflowItems} />);
       expect(container.firstChild).toHaveClass(
-        'border-orange-200',
-        'bg-orange-50'
+        'border-accent/30',
+        'bg-accent/10'
       );
 
       rerender(<RecipeBreadcrumb workflow="serving" items={workflowItems} />);
       expect(container.firstChild).toHaveClass(
-        'border-purple-200',
-        'bg-purple-50'
+        'border-secondary/20',
+        'bg-secondary/10'
       );
     });
 

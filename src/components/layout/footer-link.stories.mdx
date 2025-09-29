@@ -1,0 +1,201 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { FooterLink } from './footer-link';
+
+<Meta
+  title="Layout Components/FooterLink"
+  component={FooterLink}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The FooterLink component provides styled links for use in footers and navigation areas.
+It automatically handles internal and external link behavior with appropriate styling and accessibility.
+
+## Features
+
+- Automatic internal/external link detection
+- External link indicators with icons
+- Consistent hover and focus states
+- Full accessibility support with ARIA labels
+- TypeScript support with strict typing
+- Responsive design-friendly styling
+
+## Usage
+
+Use FooterLink for:
+- Footer navigation links
+- Legal and policy links
+- Social media and external resource links
+- Any link that needs consistent footer styling
+- Accessible link patterns throughout the application
+        `
+      }
+    }
+  }}
+  argTypes={{
+    href: {
+      control: { type: 'text' },
+      description: 'The URL the link points to',
+      defaultValue: '/about'
+    },
+    external: {
+      control: { type: 'boolean' },
+      description: 'Force link to be treated as external (opens in new tab)',
+      defaultValue: false
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    },
+    'aria-label': {
+      control: { type: 'text' },
+      description: 'Accessible label for screen readers'
+    }
+  }}
+/>
+
+# FooterLink
+
+<Description of={FooterLink} />
+
+## Basic Internal Link
+
+<Canvas>
+  <Story name="Internal Link">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <FooterLink href="/about">About Us</FooterLink>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## External Link with Icon
+
+<Canvas>
+  <Story name="External Link">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <FooterLink href="https://github.com/example" external>
+          GitHub Repository
+        </FooterLink>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Auto-detected External Link
+
+<Canvas>
+  <Story name="Auto External">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <FooterLink href="https://docs.example.com">
+          Documentation
+        </FooterLink>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <FooterLink
+          href="/privacy"
+          className="text-blue-600 hover:text-blue-800 font-semibold"
+        >
+          Privacy Policy
+        </FooterLink>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Accessibility Label
+
+<Canvas>
+  <Story name="With ARIA Label">
+    {() => (
+      <div className="p-4 bg-background border rounded">
+        <FooterLink
+          href="/contact"
+          aria-label="Contact us for support and inquiries"
+        >
+          Contact
+        </FooterLink>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Footer Context Example
+
+<Canvas>
+  <Story name="Footer Context">
+    {() => (
+      <div className="p-6 bg-background border rounded">
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold tracking-wider uppercase mb-3">
+            Company
+          </h3>
+          <div className="flex flex-col space-y-2">
+            <FooterLink href="/about">About</FooterLink>
+            <FooterLink href="/careers">Careers</FooterLink>
+            <FooterLink href="/press">Press</FooterLink>
+            <FooterLink href="https://blog.example.com" external>
+              Blog
+            </FooterLink>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Hover and Focus States
+
+<Canvas>
+  <Story name="Interactive States">
+    {() => (
+      <div className="p-4 bg-background border rounded space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Hover and focus these links to see the interactive states:
+        </p>
+        <div className="space-y-2">
+          <div>
+            <FooterLink href="/terms">Terms of Service</FooterLink>
+          </div>
+          <div>
+            <FooterLink href="https://support.example.com" external>
+              Support Center
+            </FooterLink>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={FooterLink} />
+
+## Accessibility Features
+
+- **Keyboard Navigation**: All links are keyboard accessible with proper focus indicators
+- **Screen Reader Support**: External links include screen reader text for "opens in new tab"
+- **ARIA Labels**: Support for custom accessibility labels
+- **Semantic HTML**: Uses proper `<a>` elements for all links
+- **Focus Management**: Clear focus indicators for keyboard navigation
+
+## Implementation Notes
+
+- Links starting with `http` are automatically treated as external
+- External links include `target="_blank"` and `rel="noopener noreferrer"` for security
+- The component uses Next.js `Link` for internal navigation optimization
+- All styling uses CSS variables for theme consistency
+- Hover and focus states provide clear visual feedback

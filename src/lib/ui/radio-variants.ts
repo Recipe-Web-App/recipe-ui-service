@@ -36,58 +36,40 @@ export const radioInputVariants = cva(
       },
       variant: {
         default: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-blue-500',
-          'data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-blue-400 dark:data-[state=checked]:bg-blue-500',
+          'border-input bg-background text-primary-foreground',
+          'hover:border-primary/40',
+          'focus:ring-primary/20',
+          'data-[state=checked]:border-primary data-[state=checked]:bg-primary',
         ],
         success: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-green-500',
-          'data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-green-400 dark:data-[state=checked]:bg-green-500',
+          'border-input bg-background text-white',
+          'hover:border-success/40',
+          'focus:ring-success/20',
+          'data-[state=checked]:border-success data-[state=checked]:bg-success',
         ],
         warning: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-amber-500',
-          'data-[state=checked]:border-amber-500 data-[state=checked]:bg-amber-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-amber-400 dark:data-[state=checked]:bg-amber-500',
+          'border-input bg-background text-neutral-800',
+          'hover:border-warning/40',
+          'focus:ring-warning/20',
+          'data-[state=checked]:border-warning data-[state=checked]:bg-warning',
         ],
         danger: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-red-500',
-          'data-[state=checked]:border-red-500 data-[state=checked]:bg-red-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-red-400 dark:data-[state=checked]:bg-red-500',
+          'border-input bg-background text-destructive-foreground',
+          'hover:border-destructive/40',
+          'focus:ring-destructive/20',
+          'data-[state=checked]:border-destructive data-[state=checked]:bg-destructive',
         ],
         info: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-cyan-500',
-          'data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-cyan-400 dark:data-[state=checked]:bg-cyan-500',
+          'border-input bg-background text-primary-foreground',
+          'hover:border-primary/40',
+          'focus:ring-primary/20',
+          'data-[state=checked]:border-primary data-[state=checked]:bg-primary',
         ],
         subtle: [
-          'border-gray-200 bg-gray-50 text-gray-700',
-          'hover:border-gray-300 hover:bg-gray-100',
-          'focus:ring-gray-500',
-          'data-[state=checked]:border-gray-400 data-[state=checked]:bg-gray-300',
-          'dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
-          'dark:hover:border-gray-600 dark:hover:bg-gray-800',
-          'dark:data-[state=checked]:border-gray-500 dark:data-[state=checked]:bg-gray-700',
+          'border-border bg-muted text-muted-foreground',
+          'hover:border-border hover:bg-muted/80',
+          'focus:ring-ring/20',
+          'data-[state=checked]:border-muted-foreground data-[state=checked]:bg-muted-foreground data-[state=checked]:text-background',
         ],
       },
       disabled: {
@@ -105,7 +87,7 @@ export const radioInputVariants = cva(
 
 // Radio label variants
 export const radioLabelVariants = cva(
-  'text-gray-900 dark:text-gray-100 font-medium leading-6 transition-colors',
+  'text-foreground font-medium leading-6 transition-colors',
   {
     variants: {
       size: {
@@ -115,7 +97,7 @@ export const radioLabelVariants = cva(
         xl: 'text-xl',
       },
       required: {
-        true: "after:content-['*'] after:ml-1 after:text-red-500",
+        true: "after:content-['*'] after:ml-1 after:text-destructive",
         false: '',
       },
     },
@@ -127,46 +109,40 @@ export const radioLabelVariants = cva(
 );
 
 // Radio description variants
-export const radioDescriptionVariants = cva(
-  'text-gray-600 dark:text-gray-400 leading-5',
-  {
-    variants: {
-      size: {
-        sm: 'text-xs',
-        md: 'text-sm',
-        lg: 'text-base',
-        xl: 'text-lg',
-      },
+export const radioDescriptionVariants = cva('text-muted-foreground leading-5', {
+  variants: {
+    size: {
+      sm: 'text-xs',
+      md: 'text-sm',
+      lg: 'text-base',
+      xl: 'text-lg',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 // Radio error message variants
-export const radioErrorVariants = cva(
-  'text-red-600 dark:text-red-400 font-medium',
-  {
-    variants: {
-      size: {
-        sm: 'text-xs',
-        md: 'text-sm',
-        lg: 'text-base',
-        xl: 'text-lg',
-      },
+export const radioErrorVariants = cva('text-destructive font-medium', {
+  variants: {
+    size: {
+      sm: 'text-xs',
+      md: 'text-sm',
+      lg: 'text-base',
+      xl: 'text-lg',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 // Radio field wrapper variants
 export const radioFieldVariants = cva('space-y-2', {
   variants: {
     error: {
-      true: 'text-red-600',
+      true: 'text-destructive',
       false: '',
     },
   },
@@ -177,19 +153,15 @@ export const radioFieldVariants = cva('space-y-2', {
 
 // Radio group container variants for recipe filters
 export const recipeRadioGroupVariants = cva(
-  'rounded-lg border bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800',
+  'rounded-lg border bg-card p-4 shadow-sm',
   {
     variants: {
       variant: {
-        categories:
-          'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950',
-        dietary:
-          'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950',
-        difficulty:
-          'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950',
-        time: 'border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950',
-        options:
-          'border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900',
+        categories: 'border-primary/20 bg-primary/10',
+        dietary: 'border-success/20 bg-success/10',
+        difficulty: 'border-warning/30 bg-warning/10',
+        time: 'border-secondary/20 bg-secondary/10',
+        options: 'border-border bg-muted',
       },
       layout: {
         vertical: 'space-y-3',
@@ -228,28 +200,28 @@ export const recipeRadioVariants = cva('', {
   variants: {
     context: {
       cuisine: [
-        'data-[state=checked]:border-orange-500 data-[state=checked]:bg-orange-500',
-        'focus:ring-orange-500',
+        'data-[state=checked]:border-warning data-[state=checked]:bg-warning',
+        'focus:ring-warning/20',
       ],
       'dietary-restriction': [
         'data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500',
         'focus:ring-green-500',
       ],
       difficulty: [
-        'data-[state=checked]:border-amber-500 data-[state=checked]:bg-amber-500',
-        'focus:ring-amber-500',
+        'data-[state=checked]:border-warning data-[state=checked]:bg-warning',
+        'focus:ring-warning/20',
       ],
       'preparation-time': [
-        'data-[state=checked]:border-purple-500 data-[state=checked]:bg-purple-500',
-        'focus:ring-purple-500',
+        'data-[state=checked]:border-secondary data-[state=checked]:bg-secondary',
+        'focus:ring-secondary/20',
       ],
       'meal-type': [
-        'data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-500',
-        'focus:ring-blue-500',
+        'data-[state=checked]:border-primary data-[state=checked]:bg-primary',
+        'focus:ring-primary/20',
       ],
       'serving-size': [
-        'data-[state=checked]:border-teal-500 data-[state=checked]:bg-teal-500',
-        'focus:ring-teal-500',
+        'data-[state=checked]:border-success data-[state=checked]:bg-success',
+        'focus:ring-success/20',
       ],
     },
   },
@@ -271,14 +243,14 @@ export const animatedRadioVariants = cva('', {
         'transition-all duration-200 hover:animate-pulse data-[state=checked]:animate-pulse',
       glow: [
         'transition-all duration-300',
-        'data-[state=checked]:shadow-lg data-[state=checked]:shadow-blue-500/25',
-        'hover:shadow-md hover:shadow-blue-500/20',
+        'data-[state=checked]:shadow-lg data-[state=checked]:shadow-primary/25',
+        'hover:shadow-md hover:shadow-primary/20',
       ],
     },
     loading: {
       true: [
         'opacity-75 cursor-wait',
-        'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-gray-300 after:border-t-blue-500 after:animate-spin',
+        'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-border after:border-t-primary after:animate-spin',
       ],
       false: '',
     },
@@ -318,9 +290,8 @@ export const radioCardVariants = cva(
   {
     variants: {
       selected: {
-        true: 'border-blue-500 bg-blue-50 shadow-md dark:border-blue-400 dark:bg-blue-950',
-        false:
-          'border-gray-200 bg-white hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600',
+        true: 'border-primary bg-primary/10 shadow-md',
+        false: 'border-border bg-background hover:border-primary/40',
       },
       size: {
         sm: 'p-3',

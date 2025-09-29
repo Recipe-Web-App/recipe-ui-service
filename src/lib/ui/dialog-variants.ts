@@ -50,7 +50,8 @@ export const dialogContentVariants = cva(
     'translate-y-[-50%]',
     'gap-4',
     'border',
-    'bg-white',
+    'bg-card',
+    'text-card-foreground',
     'p-6',
     'shadow-lg',
     'duration-200',
@@ -69,30 +70,40 @@ export const dialogContentVariants = cva(
   {
     variants: {
       variant: {
-        default: ['border-gray-200', 'bg-white', 'text-gray-900', 'shadow-lg'],
+        default: [
+          'border-border',
+          'bg-card',
+          'text-card-foreground',
+          'shadow-lg',
+        ],
         destructive: [
-          'border-red-200',
-          'bg-red-50',
-          'text-red-900',
-          'shadow-red-100',
+          'border-destructive/20',
+          'bg-destructive/10',
+          'text-destructive',
+          'dark:bg-destructive/5',
+          'dark:border-destructive/15',
         ],
         success: [
-          'border-green-200',
-          'bg-green-50',
-          'text-green-900',
-          'shadow-green-100',
+          'border-success/20',
+          'bg-success/10',
+          'text-success',
+          'dark:bg-success/5',
+          'dark:border-success/15',
         ],
         warning: [
-          'border-yellow-200',
-          'bg-yellow-50',
-          'text-yellow-900',
-          'shadow-yellow-100',
+          'border-warning/30',
+          'bg-warning/10',
+          'text-neutral-800',
+          'dark:bg-warning/5',
+          'dark:border-warning/15',
+          'dark:text-warning',
         ],
         info: [
-          'border-blue-200',
-          'bg-blue-50',
-          'text-blue-900',
-          'shadow-blue-100',
+          'border-primary/20',
+          'bg-primary/10',
+          'text-primary',
+          'dark:bg-primary/5',
+          'dark:border-primary/15',
         ],
       },
       size: {
@@ -121,10 +132,10 @@ export const dialogHeaderVariants = cva(
     variants: {
       variant: {
         default: [],
-        destructive: ['text-red-900'],
-        success: ['text-green-900'],
-        warning: ['text-yellow-900'],
-        info: ['text-blue-900'],
+        destructive: ['text-destructive'],
+        success: ['text-success'],
+        warning: ['text-neutral-800', 'dark:text-warning'],
+        info: ['text-primary'],
       },
     },
     defaultVariants: {
@@ -143,11 +154,11 @@ export const dialogTitleVariants = cva(
   {
     variants: {
       variant: {
-        default: ['text-gray-900'],
-        destructive: ['text-red-900'],
-        success: ['text-green-900'],
-        warning: ['text-yellow-900'],
-        info: ['text-blue-900'],
+        default: ['text-foreground'],
+        destructive: ['text-destructive'],
+        success: ['text-success'],
+        warning: ['text-neutral-800', 'dark:text-warning'],
+        info: ['text-primary'],
       },
       size: {
         sm: ['text-base'],
@@ -167,20 +178,23 @@ export const dialogTitleVariants = cva(
  *
  * Provides styling for dialog descriptions with proper text hierarchy.
  */
-export const dialogDescriptionVariants = cva(['text-sm', 'text-gray-500'], {
-  variants: {
-    variant: {
-      default: ['text-gray-500'],
-      destructive: ['text-red-600'],
-      success: ['text-green-600'],
-      warning: ['text-yellow-600'],
-      info: ['text-blue-600'],
+export const dialogDescriptionVariants = cva(
+  ['text-sm', 'text-muted-foreground'],
+  {
+    variants: {
+      variant: {
+        default: ['text-muted-foreground'],
+        destructive: ['text-destructive/80'],
+        success: ['text-success/80'],
+        warning: ['text-neutral-700', 'dark:text-warning/80'],
+        info: ['text-primary/80'],
+      },
     },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
 
 /**
  * Dialog footer variants using class-variance-authority
@@ -224,41 +238,41 @@ export const dialogCloseVariants = cva(
     'top-4',
     'rounded-sm',
     'opacity-70',
-    'ring-offset-white',
+    'ring-offset-background',
     'transition-opacity',
     'hover:opacity-100',
     'focus:outline-none',
     'focus:ring-2',
-    'focus:ring-gray-950',
+    'focus:ring-ring',
     'focus:ring-offset-2',
     'disabled:pointer-events-none',
-    'data-[state=open]:bg-gray-100',
-    'data-[state=open]:text-gray-500',
+    'data-[state=open]:bg-muted',
+    'data-[state=open]:text-muted-foreground',
   ],
   {
     variants: {
       variant: {
         default: [
-          'text-gray-500',
-          'hover:text-gray-900',
-          'focus:ring-gray-950',
+          'text-muted-foreground',
+          'hover:text-foreground',
+          'focus:ring-ring',
         ],
         destructive: [
-          'text-red-500',
-          'hover:text-red-700',
-          'focus:ring-red-500',
+          'text-destructive',
+          'hover:text-destructive/80',
+          'focus:ring-destructive',
         ],
         success: [
-          'text-green-500',
-          'hover:text-green-700',
-          'focus:ring-green-500',
+          'text-success',
+          'hover:text-success/80',
+          'focus:ring-success',
         ],
         warning: [
-          'text-yellow-500',
-          'hover:text-yellow-700',
-          'focus:ring-yellow-500',
+          'text-warning',
+          'hover:text-warning/80',
+          'focus:ring-warning',
         ],
-        info: ['text-blue-500', 'hover:text-blue-700', 'focus:ring-blue-500'],
+        info: ['text-primary', 'hover:text-primary/80', 'focus:ring-primary'],
       },
     },
     defaultVariants: {
@@ -275,11 +289,20 @@ export const dialogCloseVariants = cva(
 export const confirmationDialogVariants = cva(['text-center', 'sm:text-left'], {
   variants: {
     type: {
-      delete: ['border-red-200', 'bg-red-50', 'text-red-900'],
-      save: ['border-green-200', 'bg-green-50', 'text-green-900'],
-      discard: ['border-yellow-200', 'bg-yellow-50', 'text-yellow-900'],
-      publish: ['border-blue-200', 'bg-blue-50', 'text-blue-900'],
-      archive: ['border-gray-200', 'bg-gray-50', 'text-gray-900'],
+      delete: [
+        'border-destructive/20',
+        'bg-destructive/10',
+        'text-destructive',
+      ],
+      save: ['border-success/20', 'bg-success/10', 'text-success'],
+      discard: [
+        'border-warning/30',
+        'bg-warning/10',
+        'text-neutral-800',
+        'dark:text-warning',
+      ],
+      publish: ['border-primary/20', 'bg-primary/10', 'text-primary'],
+      archive: ['border-border', 'bg-muted', 'text-muted-foreground'],
     },
     severity: {
       low: ['shadow-sm'],
@@ -315,11 +338,11 @@ export const dialogIconVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-gray-100', 'text-gray-600'],
-        destructive: ['bg-red-100', 'text-red-600'],
-        success: ['bg-green-100', 'text-green-600'],
-        warning: ['bg-yellow-100', 'text-yellow-600'],
-        info: ['bg-blue-100', 'text-blue-600'],
+        default: ['bg-muted', 'text-muted-foreground'],
+        destructive: ['bg-destructive/10', 'text-destructive'],
+        success: ['bg-success/10', 'text-success'],
+        warning: ['bg-warning/10', 'text-warning'],
+        info: ['bg-primary/10', 'text-primary'],
       },
       size: {
         sm: ['h-8', 'w-8'],
@@ -342,23 +365,28 @@ export const dialogIconVariants = cva(
 export const recipeDialogVariants = cva(['border-l-4', 'pl-4'], {
   variants: {
     action: {
-      'delete-recipe': ['border-l-red-500', 'bg-red-50', 'text-red-900'],
-      'save-recipe': ['border-l-green-500', 'bg-green-50', 'text-green-900'],
-      'publish-recipe': ['border-l-blue-500', 'bg-blue-50', 'text-blue-900'],
+      'delete-recipe': [
+        'border-l-destructive',
+        'bg-destructive/10',
+        'text-destructive',
+      ],
+      'save-recipe': ['border-l-success', 'bg-success/10', 'text-success'],
+      'publish-recipe': ['border-l-primary', 'bg-primary/10', 'text-primary'],
       'share-recipe': [
-        'border-l-purple-500',
-        'bg-purple-50',
-        'text-purple-900',
+        'border-l-secondary',
+        'bg-secondary/10',
+        'text-secondary-foreground',
       ],
       'export-recipe': [
-        'border-l-orange-500',
-        'bg-orange-50',
-        'text-orange-900',
+        'border-l-warning',
+        'bg-warning/10',
+        'text-neutral-800',
+        'dark:text-warning',
       ],
       'duplicate-recipe': [
-        'border-l-indigo-500',
-        'bg-indigo-50',
-        'text-indigo-900',
+        'border-l-primary',
+        'bg-primary/5',
+        'text-primary/80',
       ],
     },
   },
@@ -380,7 +408,7 @@ export const dialogButtonVariants = cva(
     'rounded-md',
     'text-sm',
     'font-medium',
-    'ring-offset-white',
+    'ring-offset-background',
     'transition-colors',
     'focus-visible:outline-none',
     'focus-visible:ring-2',
@@ -394,36 +422,32 @@ export const dialogButtonVariants = cva(
     variants: {
       intent: {
         primary: [
-          'bg-blue-600',
-          'text-white',
-          'hover:bg-blue-700',
-          'focus-visible:ring-blue-500',
+          'bg-primary',
+          'text-primary-foreground',
+          'hover:bg-primary/90',
+          'focus-visible:ring-primary',
         ],
         destructive: [
-          'bg-red-600',
-          'text-white',
-          'hover:bg-red-700',
-          'focus-visible:ring-red-500',
+          'bg-destructive',
+          'text-destructive-foreground',
+          'hover:bg-destructive/90',
+          'focus-visible:ring-destructive',
         ],
         success: [
-          'bg-green-600',
+          'bg-success',
           'text-white',
-          'hover:bg-green-700',
-          'focus-visible:ring-green-500',
+          'hover:bg-success/90',
+          'focus-visible:ring-success',
         ],
         secondary: [
           'border',
-          'border-gray-300',
-          'bg-white',
-          'text-gray-700',
-          'hover:bg-gray-50',
-          'focus-visible:ring-gray-500',
+          'border-border',
+          'bg-background',
+          'text-foreground',
+          'hover:bg-muted',
+          'focus-visible:ring-ring',
         ],
-        ghost: [
-          'text-gray-700',
-          'hover:bg-gray-100',
-          'focus-visible:ring-gray-500',
-        ],
+        ghost: ['text-foreground', 'hover:bg-muted', 'focus-visible:ring-ring'],
       },
       size: {
         sm: ['h-8', 'px-3', 'text-xs'],

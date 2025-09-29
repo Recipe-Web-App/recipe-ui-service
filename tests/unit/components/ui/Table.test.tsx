@@ -265,7 +265,7 @@ describe('Table Components', () => {
       render(<IngredientsTable ingredients={sampleIngredients} />);
 
       const vanillaText = screen.getByText('Vanilla Extract');
-      expect(vanillaText).toHaveClass('italic', 'text-gray-600');
+      expect(vanillaText).toHaveClass('italic', 'text-text-secondary');
       expect(screen.getByText('optional')).toBeInTheDocument();
     });
 
@@ -386,9 +386,9 @@ describe('Table Components', () => {
       const vitaminTag = screen.getByText('vitamin');
       const mineralTag = screen.getByText('mineral');
 
-      expect(macroTag).toHaveClass('bg-green-100', 'text-green-800');
-      expect(vitaminTag).toHaveClass('bg-yellow-100', 'text-yellow-800');
-      expect(mineralTag).toHaveClass('bg-purple-100', 'text-purple-800');
+      expect(macroTag).toHaveClass('bg-success-light', 'text-success');
+      expect(vitaminTag).toHaveClass('bg-warning-light', 'text-warning');
+      expect(mineralTag).toHaveClass('bg-info-light', 'text-info');
     });
 
     it('renders empty state when no nutrition data', () => {

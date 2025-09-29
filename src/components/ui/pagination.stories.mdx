@@ -1,0 +1,730 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Pagination } from './pagination';
+
+<Meta
+  title="UI Components/Pagination"
+  component={Pagination}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[200px] items-center justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Pagination component provides comprehensive navigation controls for paginated content
+with customizable display options, accessibility features, and responsive design.
+
+## Features
+
+- **Complete pagination controls** with first, previous, next, and last navigation
+- **Intelligent page number display** with ellipsis for large page counts
+- **Page size selector** for adjusting items per page
+- **Page jump functionality** for direct navigation to specific pages
+- **Item count information** showing current range and total items
+- **Multiple visual variants** (default, outline, ghost)
+- **Responsive design** that adapts to different screen sizes
+- **Full accessibility support** with proper ARIA labels and keyboard navigation
+- **Customizable labels** and internationalization support
+- **TypeScript support** with strict typing
+
+## Usage
+
+Use Pagination for:
+- Table and list pagination
+- Search result navigation
+- Content browsing interfaces
+- Data grid controls
+- Blog post navigation
+- Product listing pagination
+        `
+      }
+    }
+  }}
+  argTypes={{
+    currentPage: {
+      control: { type: 'number', min: 1 },
+      description: 'Current active page number',
+      defaultValue: 1
+    },
+    totalPages: {
+      control: { type: 'number', min: 1 },
+      description: 'Total number of pages',
+      defaultValue: 10
+    },
+    pageSize: {
+      control: { type: 'number', min: 1 },
+      description: 'Number of items per page',
+      defaultValue: 10
+    },
+    totalItems: {
+      control: { type: 'number', min: 0 },
+      description: 'Total number of items',
+      defaultValue: 100
+    },
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'outline', 'ghost'],
+      description: 'Visual variant',
+      defaultValue: 'default'
+    },
+    showFirstLast: {
+      control: { type: 'boolean' },
+      description: 'Show first and last page buttons',
+      defaultValue: true
+    },
+    showPrevNext: {
+      control: { type: 'boolean' },
+      description: 'Show previous and next buttons',
+      defaultValue: true
+    },
+    showPageNumbers: {
+      control: { type: 'boolean' },
+      description: 'Show individual page number buttons',
+      defaultValue: true
+    },
+    showPageInfo: {
+      control: { type: 'boolean' },
+      description: 'Show page information text',
+      defaultValue: true
+    },
+    showPageSizeSelector: {
+      control: { type: 'boolean' },
+      description: 'Show page size selector',
+      defaultValue: false
+    },
+    showPageJump: {
+      control: { type: 'boolean' },
+      description: 'Show page jump input',
+      defaultValue: false
+    },
+    maxPageButtons: {
+      control: { type: 'number', min: 3, max: 15 },
+      description: 'Maximum number of page buttons to show',
+      defaultValue: 7
+    }
+  }}
+/>
+
+# Pagination
+
+<Description of={Pagination} />
+
+## Basic Pagination
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={10}
+          onPageChange={setCurrentPage}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Page Information
+
+<Canvas>
+  <Story name="With Page Info">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const pageSize = 10;
+      const totalItems = 100;
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(totalItems / pageSize)}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          showPageInfo
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Variant Styles
+
+<Canvas>
+  <Story name="Variants">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(5);
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Default variant:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              variant="default"
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Outline variant:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              variant="outline"
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Ghost variant:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              variant="ghost"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Page Size Selector
+
+<Canvas>
+  <Story name="Page Size Selector">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const [pageSize, setPageSize] = React.useState(10);
+      const totalItems = 250;
+
+      const handlePageSizeChange = (newPageSize) => {
+        setPageSize(newPageSize);
+        setCurrentPage(1); // Reset to first page
+      };
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(totalItems / pageSize)}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={handlePageSizeChange}
+          pageSizeOptions={[10, 25, 50, 100]}
+          showPageInfo
+          showPageSizeSelector
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Page Jump
+
+<Canvas>
+  <Story name="Page Jump">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={50}
+          totalItems={500}
+          pageSize={10}
+          onPageChange={setCurrentPage}
+          showPageInfo
+          showPageJump
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Complete Pagination
+
+<Canvas>
+  <Story name="Complete">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const [pageSize, setPageSize] = React.useState(20);
+      const totalItems = 456;
+
+      const handlePageSizeChange = (newPageSize) => {
+        setPageSize(newPageSize);
+        setCurrentPage(1);
+      };
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(totalItems / pageSize)}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={handlePageSizeChange}
+          pageSizeOptions={[10, 20, 50, 100]}
+          showPageInfo
+          showPageSizeSelector
+          showPageJump
+          maxPageButtons={7}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Different Page Counts
+
+<Canvas>
+  <Story name="Different Page Counts">
+    {() => {
+      const [currentPage1, setCurrentPage1] = React.useState(1);
+      const [currentPage2, setCurrentPage2] = React.useState(5);
+      const [currentPage3, setCurrentPage3] = React.useState(15);
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Small dataset (3 pages):</div>
+            <Pagination
+              currentPage={currentPage1}
+              totalPages={3}
+              onPageChange={setCurrentPage1}
+              showPageInfo
+              totalItems={30}
+              pageSize={10}
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Medium dataset (10 pages):</div>
+            <Pagination
+              currentPage={currentPage2}
+              totalPages={10}
+              onPageChange={setCurrentPage2}
+              showPageInfo
+              totalItems={100}
+              pageSize={10}
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Large dataset (100 pages):</div>
+            <Pagination
+              currentPage={currentPage3}
+              totalPages={100}
+              onPageChange={setCurrentPage3}
+              showPageInfo
+              totalItems={1000}
+              pageSize={10}
+              maxPageButtons={5}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Minimal Pagination
+
+<Canvas>
+  <Story name="Minimal">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(3);
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Previous/Next only:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              showFirstLast={false}
+              showPageNumbers={false}
+              showPageInfo={false}
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Page numbers only:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              showFirstLast={false}
+              showPrevNext={false}
+              showPageInfo={false}
+            />
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Info only:</div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={10}
+              onPageChange={setCurrentPage}
+              showFirstLast={false}
+              showPrevNext={false}
+              showPageNumbers={false}
+              showPageInfo
+              totalItems={100}
+              pageSize={10}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Edge Cases
+
+<Canvas>
+  <Story name="Edge Cases">
+    {() => (
+      <div className="space-y-8">
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Single page:</div>
+          <Pagination
+            currentPage={1}
+            totalPages={1}
+            onPageChange={() => {}}
+            showPageInfo
+            totalItems={5}
+            pageSize={10}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">First page (10 total):</div>
+          <Pagination
+            currentPage={1}
+            totalPages={10}
+            onPageChange={() => {}}
+            showPageInfo
+            totalItems={100}
+            pageSize={10}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Last page (10 total):</div>
+          <Pagination
+            currentPage={10}
+            totalPages={10}
+            onPageChange={() => {}}
+            showPageInfo
+            totalItems={100}
+            pageSize={10}
+          />
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-3">Empty dataset:</div>
+          <Pagination
+            currentPage={1}
+            totalPages={0}
+            onPageChange={() => {}}
+            showPageInfo
+            totalItems={0}
+            pageSize={10}
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Table Integration Example
+
+<Canvas>
+  <Story name="Table Integration">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const [pageSize, setPageSize] = React.useState(10);
+
+      // Mock data
+      const totalItems = 156;
+      const totalPages = Math.ceil(totalItems / pageSize);
+      const startItem = (currentPage - 1) * pageSize + 1;
+      const endItem = Math.min(currentPage * pageSize, totalItems);
+
+      const handlePageSizeChange = (newPageSize) => {
+        setPageSize(newPageSize);
+        setCurrentPage(1);
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="text-sm font-medium">Recipe Table</div>
+
+          {/* Mock table */}
+          <div className="border rounded-lg">
+            <div className="grid grid-cols-4 gap-4 p-4 border-b bg-muted/20 font-medium text-sm">
+              <div>Recipe Name</div>
+              <div>Category</div>
+              <div>Rating</div>
+              <div>Cook Time</div>
+            </div>
+
+            {Array.from({ length: Math.min(pageSize, endItem - startItem + 1) }).map((_, i) => (
+              <div key={i} className="grid grid-cols-4 gap-4 p-4 border-b last:border-b-0 text-sm">
+                <div>Recipe {startItem + i}</div>
+                <div className="text-muted-foreground">Category {((startItem + i - 1) % 5) + 1}</div>
+                <div>★ {(4.0 + Math.random()).toFixed(1)}</div>
+                <div>{15 + ((startItem + i - 1) % 30)} min</div>
+              </div>
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            onPageSizeChange={handlePageSizeChange}
+            pageSizeOptions={[5, 10, 25, 50]}
+            showPageInfo
+            showPageSizeSelector
+            showPageJump
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Mobile Responsive
+
+<Canvas>
+  <Story name="Mobile Responsive">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(5);
+
+      return (
+        <div className="space-y-6">
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Mobile view (simulated):</div>
+            <div className="max-w-sm mx-auto">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={20}
+                onPageChange={setCurrentPage}
+                maxPageButtons={3}
+                showPageInfo
+                totalItems={200}
+                pageSize={10}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="text-sm text-muted-foreground mb-3">Tablet view (simulated):</div>
+            <div className="max-w-md mx-auto">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={20}
+                onPageChange={setCurrentPage}
+                maxPageButtons={5}
+                showPageInfo
+                showPageSizeSelector
+                totalItems={200}
+                pageSize={10}
+                pageSizeOptions={[10, 25, 50]}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Demo
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(3);
+
+      return (
+        <div className="space-y-6">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={10}
+            onPageChange={setCurrentPage}
+            showPageInfo
+            totalItems={100}
+            pageSize={10}
+            aria-label="Recipe search results pagination"
+          />
+
+          <div className="text-sm text-muted-foreground space-y-2">
+            <div className="font-medium">Accessibility Features:</div>
+            <ul className="space-y-1 text-xs">
+              <li>• Proper ARIA labels for all navigation elements</li>
+              <li>• Keyboard navigation support (Tab, Enter, Space)</li>
+              <li>• Screen reader announcements for page changes</li>
+              <li>• Focus indicators for all interactive elements</li>
+              <li>• Semantic HTML with navigation landmarks</li>
+              <li>• Current page clearly indicated to assistive technology</li>
+              <li>• Disabled state properly communicated</li>
+            </ul>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Labels
+
+<Canvas>
+  <Story name="Custom Labels">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(3);
+
+      return (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={10}
+          onPageChange={setCurrentPage}
+          showPageInfo
+          totalItems={100}
+          pageSize={10}
+          firstLabel="First"
+          lastLabel="Last"
+          previousLabel="Prev"
+          nextLabel="Next"
+          pageSizeLabel="Items per page:"
+          pageJumpLabel="Go to page:"
+          pageInfoLabel={(start, end, total) =>
+            `Showing ${start} to ${end} of ${total} recipes`
+          }
+          showPageSizeSelector
+          showPageJump
+          pageSizeOptions={[10, 25, 50]}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => {
+      const [currentPage, setCurrentPage] = React.useState(args.currentPage || 1);
+
+      return (
+        <Pagination
+          {...args}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Pagination} />
+
+## Page Range Algorithm
+
+The pagination component uses an intelligent algorithm to display page numbers:
+
+### Small datasets (≤ maxPageButtons)
+Shows all page numbers: `1 2 3 4 5`
+
+### Large datasets (> maxPageButtons)
+Uses ellipsis to indicate hidden pages:
+- `1 2 3 4 5 ... 20` (near beginning)
+- `1 ... 8 9 10 11 12 ... 20` (middle)
+- `1 ... 16 17 18 19 20` (near end)
+
+### Responsive considerations
+- Mobile: Reduce `maxPageButtons` to 3-5
+- Tablet: Use 5-7 page buttons
+- Desktop: Use 7-10 page buttons for optimal UX
+
+## Accessibility Features
+
+### Keyboard Navigation
+- **Tab**: Navigate through pagination controls
+- **Enter/Space**: Activate buttons and links
+- **Arrow Keys**: Navigate between page numbers
+- **Home/End**: Jump to first/last page
+
+### Screen Reader Support
+- Proper ARIA labels for all navigation elements
+- Current page announced as "current page"
+- Page ranges and totals clearly communicated
+- Navigation landmarks for page structure
+
+### Focus Management
+- Clear focus indicators on all interactive elements
+- Logical tab order through pagination controls
+- Focus restoration after page changes
+- Skip links for efficient navigation
+
+## Design Guidelines
+
+### When to Use
+- **Tables**: Paginate large datasets in tables
+- **Search Results**: Break up search results into manageable chunks
+- **Content Lists**: Navigate through blog posts, articles, products
+- **Data Grids**: Handle large amounts of structured data
+
+### When Not to Use
+- **Small Datasets**: Avoid pagination for < 25 items
+- **Infinite Scroll**: Consider infinite scroll for social feeds
+- **Real-time Data**: Use filters instead of pagination
+- **Mobile-first**: Consider "Load More" buttons for mobile
+
+### Page Size Guidelines
+- **Default**: 10-25 items per page
+- **Tables**: 10-50 rows depending on complexity
+- **Cards**: 12-24 cards per page
+- **Lists**: 20-50 items per page
+
+## Performance Considerations
+
+### Optimization Strategies
+- Memoize page calculations to avoid recalculation
+- Lazy load pagination controls for large datasets
+- Debounce page size changes to prevent excessive API calls
+- Use URL state for shareable pagination state
+
+### Bundle Impact
+- Minimal JavaScript for basic pagination
+- Tree-shakeable components and utilities
+- Efficient re-render patterns
+- Optimized for server-side rendering
+
+## Implementation Notes
+
+- Supports both controlled and uncontrolled usage patterns
+- Automatic page range calculation with ellipsis handling
+- Responsive design with mobile-first approach
+- URL integration for shareable pagination state
+- Type-safe with comprehensive TypeScript interfaces
+- Internationalization support with custom labels
+- Performance optimized with proper memoization
+- WCAG 2.1 AA compliant accessibility implementation

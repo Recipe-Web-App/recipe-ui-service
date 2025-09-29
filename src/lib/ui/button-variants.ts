@@ -30,39 +30,74 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Primary action - Tomato Red
         default: [
           'bg-primary',
           'text-primary-foreground',
           'shadow',
           'hover:bg-primary/90',
+          'active:bg-primary/80',
         ],
+        // Destructive action - Also Tomato Red
         destructive: [
           'bg-destructive',
           'text-destructive-foreground',
           'shadow-sm',
           'hover:bg-destructive/90',
+          'active:bg-destructive/80',
         ],
+        // Outlined button - subtle with recipe accent
         outline: [
           'border',
-          'border-input',
+          'border-border',
           'bg-background',
           'shadow-sm',
-          'hover:bg-accent',
-          'hover:text-accent-foreground',
+          'hover:bg-primary/10',
+          'hover:text-primary',
+          'hover:border-primary/50',
         ],
+        // Success action - Basil Green
         secondary: [
           'bg-secondary',
           'text-secondary-foreground',
           'shadow-sm',
-          'hover:bg-secondary/80',
+          'hover:bg-secondary/90',
+          'active:bg-secondary/80',
         ],
-        ghost: ['hover:bg-accent', 'hover:text-accent-foreground'],
-        link: ['text-primary', 'underline-offset-4', 'hover:underline'],
+        // Ghost button - minimal with recipe theme
+        ghost: [
+          'hover:bg-primary/10',
+          'hover:text-primary',
+          'active:bg-primary/20',
+        ],
+        // Link button - tomato red text
+        link: [
+          'text-primary',
+          'underline-offset-4',
+          'hover:underline',
+          'hover:text-primary/80',
+        ],
+        // New: Success variant - Basil Green
+        success: [
+          'bg-success',
+          'text-white',
+          'shadow-sm',
+          'hover:bg-success/90',
+          'active:bg-success/80',
+        ],
+        // New: Warning variant - Citrus Yellow
+        warning: [
+          'bg-warning',
+          'text-neutral-800',
+          'shadow-sm',
+          'hover:bg-warning/90',
+          'active:bg-warning/80',
+        ],
       },
       size: {
-        default: ['h-9', 'px-4', 'py-2', 'text-button-base'],
-        sm: ['h-8', 'rounded-md', 'px-3', 'text-button-sm'],
-        lg: ['h-10', 'rounded-md', 'px-8', 'text-button-lg'],
+        default: ['h-9', 'px-4', 'py-2', 'text-sm'],
+        sm: ['h-8', 'rounded-md', 'px-3', 'text-xs'],
+        lg: ['h-10', 'rounded-md', 'px-8', 'text-base'],
         icon: ['h-9', 'w-9'],
       },
     },

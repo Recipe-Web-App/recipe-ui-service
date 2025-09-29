@@ -61,14 +61,14 @@ describe('Progress', () => {
     const progressContainer = container.querySelector(
       '[role="progressbar"]'
     )?.parentElement;
-    expect(progressContainer).toHaveClass('border', 'border-gray-300');
+    expect(progressContainer).toHaveClass('border', 'border-border');
   });
 
   it('applies bar variant classes correctly', () => {
     const { container } = render(<Progress value={50} barVariant="success" />);
 
     const progressBar = container.querySelector('[role="progressbar"]');
-    expect(progressBar).toHaveClass('bg-green-600');
+    expect(progressBar).toHaveClass('bg-basil');
   });
 
   it('applies animation classes correctly', () => {
@@ -136,7 +136,7 @@ describe('CookingStep', () => {
       <CookingStep stepNumber={2} title="Active step" isActive={true} />
     );
 
-    expect(container.firstChild).toHaveClass('bg-orange-50', 'text-orange-900');
+    expect(container.firstChild).toHaveClass('bg-accent/10', 'text-foreground');
   });
 
   it('shows skipped state with dash icon', () => {
@@ -444,7 +444,7 @@ describe('TimerProgress', () => {
       <TimerProgress totalTime={300} remainingTime={25} isRunning={true} />
     );
 
-    expect(container.querySelector('.border-red-500')).toBeInTheDocument();
+    expect(container.querySelector('.border-destructive')).toBeInTheDocument();
   });
 
   it('applies size variants correctly', () => {

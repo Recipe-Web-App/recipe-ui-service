@@ -1,0 +1,86 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { MobileNavDrawer } from './mobile-nav-drawer';
+
+<Meta
+  title="Layout Components/MobileNavDrawer"
+  component={MobileNavDrawer}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[400px] bg-background">
+        <div className="text-sm text-muted-foreground p-4 border-b">
+          Mobile Navigation Drawer - slides out from the right side
+        </div>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The MobileNavDrawer component provides a full-screen mobile navigation experience
+that slides out from the right side of the screen.
+
+## Features
+
+- Slide-out navigation from right side
+- User profile section at top when authenticated
+- Complete navigation menu with filtering
+- Sign in prompt when not authenticated
+- Smooth animations and backdrop
+- Auto-close on navigation
+- Touch-friendly design
+- Full accessibility support
+- TypeScript support with strict typing
+
+## Usage
+
+Use MobileNavDrawer for:
+- Mobile navigation experiences
+- Touch-friendly navigation interfaces
+- Full-screen navigation overlays
+- Mobile-first responsive designs
+        `
+      }
+    }
+  }}
+  argTypes={{
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# MobileNavDrawer
+
+<Description of={MobileNavDrawer} />
+
+## Default Drawer
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <div className="text-center p-8">
+        <div className="text-sm text-muted-foreground">
+          MobileNavDrawer is controlled by navigation store state.
+          <br />
+          It slides out from the right when mobile menu is opened.
+        </div>
+        <MobileNavDrawer />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => <MobileNavDrawer {...args} />}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={MobileNavDrawer} />

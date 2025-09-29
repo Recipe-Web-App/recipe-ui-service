@@ -1,0 +1,660 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { DatePicker } from './datepicker';
+
+<Meta
+  title="UI Components/DatePicker"
+  component={DatePicker}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[400px] items-start justify-center p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The DatePicker component provides a comprehensive date selection interface with calendar popup,
+preset options, validation, and full accessibility support.
+
+## Features
+
+- Calendar popup with month/year navigation
+- Date range constraints (min/max dates)
+- Disabled dates and days of week
+- Multiple date format options
+- Preset date options (Today, Yesterday, etc.)
+- Clear functionality for optional dates
+- Full keyboard navigation and accessibility
+- Validation states and error messaging
+- Customizable styling and variants
+- Time picker integration (when enabled)
+- Week numbers and weekend highlighting
+- TypeScript support with strict typing
+
+## Usage
+
+Use DatePicker for:
+- Date selection in forms and filters
+- Event and appointment scheduling
+- Date range configuration
+- Birth date and anniversary inputs
+- Deadline and due date selection
+- Calendar-based data entry
+        `
+      }
+    }
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'outline', 'ghost'],
+      description: 'Visual variant of the date picker',
+      defaultValue: 'default'
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'default', 'lg'],
+      description: 'Size of the date picker',
+      defaultValue: 'default'
+    },
+    state: {
+      control: { type: 'select' },
+      options: ['default', 'error', 'success'],
+      description: 'Validation state',
+      defaultValue: 'default'
+    },
+    placeholder: {
+      control: { type: 'text' },
+      description: 'Placeholder text when no date is selected',
+      defaultValue: 'Select date'
+    },
+    dateFormat: {
+      control: { type: 'select' },
+      options: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'MMM dd, yyyy'],
+      description: 'Date display format',
+      defaultValue: 'MM/dd/yyyy'
+    },
+    label: {
+      control: { type: 'text' },
+      description: 'Label text above the input'
+    },
+    helperText: {
+      control: { type: 'text' },
+      description: 'Helper text below the input'
+    },
+    errorText: {
+      control: { type: 'text' },
+      description: 'Error message text'
+    },
+    disabled: {
+      control: { type: 'boolean' },
+      description: 'Whether the date picker is disabled',
+      defaultValue: false
+    },
+    required: {
+      control: { type: 'boolean' },
+      description: 'Whether the date picker is required',
+      defaultValue: false
+    },
+    clearable: {
+      control: { type: 'boolean' },
+      description: 'Whether the date can be cleared',
+      defaultValue: false
+    },
+    fullWidth: {
+      control: { type: 'boolean' },
+      description: 'Whether to take full width of container',
+      defaultValue: false
+    },
+    showPresets: {
+      control: { type: 'boolean' },
+      description: 'Whether to show preset date options',
+      defaultValue: false
+    },
+    closeOnSelect: {
+      control: { type: 'boolean' },
+      description: 'Whether to close calendar after date selection',
+      defaultValue: true
+    }
+  }}
+/>
+
+# DatePicker
+
+<Description of={DatePicker} />
+
+## Basic DatePicker
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const [date, setDate] = React.useState();
+
+      return (
+        <div className="space-y-2">
+          <DatePicker
+            value={date}
+            onValueChange={setDate}
+            placeholder="Select a date"
+          />
+          {date && (
+            <div className="text-sm text-muted-foreground">
+              Selected: {date.toLocaleDateString()}
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Sizes">
+    {() => (
+      <div className="space-y-4">
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Small:</span>
+          <DatePicker size="sm" placeholder="Small date picker" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Default:</span>
+          <DatePicker size="default" placeholder="Default date picker" />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-muted-foreground w-16">Large:</span>
+          <DatePicker size="lg" placeholder="Large date picker" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Label and Helper Text
+
+<Canvas>
+  <Story name="With Label">
+    {() => (
+      <div className="w-80 space-y-4">
+        <DatePicker
+          label="Birth Date"
+          placeholder="Select your birth date"
+          helperText="This will be used to calculate your age"
+          required
+        />
+
+        <DatePicker
+          label="Event Date"
+          placeholder="Choose event date"
+          helperText="The event date must be in the future"
+          state="default"
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Validation States
+
+<Canvas>
+  <Story name="Validation States">
+    {() => (
+      <div className="w-80 space-y-4">
+        <DatePicker
+          label="Valid Date"
+          placeholder="Select date"
+          state="success"
+          helperText="Date is valid and available"
+          defaultValue={new Date()}
+        />
+
+        <DatePicker
+          label="Invalid Date"
+          placeholder="Select date"
+          state="error"
+          errorText="Please select a valid date"
+        />
+
+        <DatePicker
+          label="Required Date"
+          placeholder="Select date"
+          required
+          helperText="This field is required"
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Date Format Options
+
+<Canvas>
+  <Story name="Date Formats">
+    {() => {
+      const sampleDate = new Date(2024, 5, 15); // June 15, 2024
+
+      return (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-muted-foreground w-32">MM/dd/yyyy:</span>
+            <DatePicker
+              dateFormat="MM/dd/yyyy"
+              defaultValue={sampleDate}
+              placeholder="06/15/2024"
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-muted-foreground w-32">dd/MM/yyyy:</span>
+            <DatePicker
+              dateFormat="dd/MM/yyyy"
+              defaultValue={sampleDate}
+              placeholder="15/06/2024"
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-muted-foreground w-32">yyyy-MM-dd:</span>
+            <DatePicker
+              dateFormat="yyyy-MM-dd"
+              defaultValue={sampleDate}
+              placeholder="2024-06-15"
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-muted-foreground w-32">MMM dd, yyyy:</span>
+            <DatePicker
+              dateFormat="MMM dd, yyyy"
+              defaultValue={sampleDate}
+              placeholder="Jun 15, 2024"
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Preset Options
+
+<Canvas>
+  <Story name="With Presets">
+    {() => {
+      const [date, setDate] = React.useState();
+
+      const presetOptions = [
+        { label: 'Today', value: new Date() },
+        { label: 'Tomorrow', value: new Date(Date.now() + 24 * 60 * 60 * 1000) },
+        { label: 'Next Week', value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+        { label: 'Next Month', value: new Date(new Date().setMonth(new Date().getMonth() + 1)) },
+      ];
+
+      return (
+        <div className="space-y-2">
+          <DatePicker
+            value={date}
+            onValueChange={setDate}
+            placeholder="Select or choose preset"
+            showPresets
+            presetOptions={presetOptions}
+            clearable
+          />
+          {date && (
+            <div className="text-sm text-muted-foreground">
+              Selected: {date.toLocaleDateString()}
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Date Constraints
+
+<Canvas>
+  <Story name="Date Constraints">
+    {() => {
+      const today = new Date();
+      const minDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+      const maxDate = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+
+      return (
+        <div className="w-80 space-y-4">
+          <DatePicker
+            label="Future Dates Only"
+            placeholder="Select future date"
+            minDate={new Date()}
+            helperText="Only future dates are selectable"
+          />
+
+          <DatePicker
+            label="Past 30 Days"
+            placeholder="Select recent date"
+            minDate={minDate}
+            maxDate={today}
+            helperText="Select from the past 30 days"
+          />
+
+          <DatePicker
+            label="Next 30 Days"
+            placeholder="Select upcoming date"
+            minDate={today}
+            maxDate={maxDate}
+            helperText="Select within the next 30 days"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Disabled States
+
+<Canvas>
+  <Story name="Disabled States">
+    {() => (
+      <div className="w-80 space-y-4">
+        <DatePicker
+          label="Disabled DatePicker"
+          placeholder="Cannot select date"
+          disabled
+          helperText="This field is currently disabled"
+        />
+
+        <DatePicker
+          label="Read-only DatePicker"
+          placeholder="Read-only date"
+          readOnly
+          defaultValue={new Date()}
+          helperText="This field is read-only"
+        />
+
+        <DatePicker
+          label="Weekends Disabled"
+          placeholder="Business days only"
+          disabledDaysOfWeek={[0, 6]} // Sunday and Saturday
+          helperText="Weekends are not selectable"
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Clearable DatePicker
+
+<Canvas>
+  <Story name="Clearable">
+    {() => {
+      const [date, setDate] = React.useState(new Date());
+
+      return (
+        <div className="w-80 space-y-2">
+          <DatePicker
+            label="Clearable Date"
+            value={date}
+            onValueChange={setDate}
+            clearable
+            helperText="Click the X to clear the selected date"
+          />
+          <div className="text-sm text-muted-foreground">
+            Current value: {date ? date.toLocaleDateString() : 'None selected'}
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Full Width
+
+<Canvas>
+  <Story name="Full Width">
+    {() => (
+      <div className="w-full max-w-md space-y-4">
+        <DatePicker
+          label="Full Width DatePicker"
+          placeholder="Select a date"
+          fullWidth
+          helperText="This date picker takes the full width of its container"
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <DatePicker
+            label="Start Date"
+            placeholder="From"
+            fullWidth
+          />
+          <DatePicker
+            label="End Date"
+            placeholder="To"
+            fullWidth
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Form Integration
+
+<Canvas>
+  <Story name="Form Integration">
+    {() => {
+      const [formData, setFormData] = React.useState({
+        birthDate: null,
+        startDate: null,
+        endDate: null,
+        eventDate: null,
+      });
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submitted:', formData);
+      };
+
+      return (
+        <form onSubmit={handleSubmit} className="max-w-md space-y-6">
+          <DatePicker
+            label="Birth Date"
+            placeholder="Select your birth date"
+            value={formData.birthDate}
+            onValueChange={(date) => setFormData(prev => ({ ...prev, birthDate: date }))}
+            required
+            maxDate={new Date()}
+            helperText="Must be a past date"
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <DatePicker
+              label="Start Date"
+              placeholder="From"
+              value={formData.startDate}
+              onValueChange={(date) => setFormData(prev => ({ ...prev, startDate: date }))}
+              fullWidth
+            />
+            <DatePicker
+              label="End Date"
+              placeholder="To"
+              value={formData.endDate}
+              onValueChange={(date) => setFormData(prev => ({ ...prev, endDate: date }))}
+              minDate={formData.startDate}
+              fullWidth
+            />
+          </div>
+
+          <DatePicker
+            label="Event Date"
+            placeholder="Select event date"
+            value={formData.eventDate}
+            onValueChange={(date) => setFormData(prev => ({ ...prev, eventDate: date }))}
+            showPresets
+            presetOptions={[
+              { label: 'Tomorrow', value: new Date(Date.now() + 24 * 60 * 60 * 1000) },
+              { label: 'Next Week', value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+            ]}
+            clearable
+          />
+
+          <div className="flex gap-2 pt-4">
+            <button
+              type="button"
+              className="px-4 py-2 text-sm border border-border rounded hover:bg-accent"
+              onClick={() => setFormData({ birthDate: null, startDate: null, endDate: null, eventDate: null })}
+            >
+              Reset
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
+            >
+              Submit
+            </button>
+          </div>
+
+          <div className="text-xs text-muted-foreground">
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
+          </div>
+        </form>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Accessibility Demo
+
+<Canvas>
+  <Story name="Accessibility">
+    {() => (
+      <div className="w-80 space-y-4">
+        <DatePicker
+          label="Accessible DatePicker"
+          placeholder="Select date"
+          aria-label="Choose your preferred date"
+          aria-describedby="date-help"
+          helperText="Use arrow keys to navigate the calendar"
+          id="date-help"
+        />
+
+        <div className="text-sm text-muted-foreground space-y-2">
+          <div className="font-medium">Keyboard Navigation:</div>
+          <ul className="space-y-1 text-xs">
+            <li>• <kbd className="bg-muted px-1 rounded">Space/Enter</kbd> - Open calendar</li>
+            <li>• <kbd className="bg-muted px-1 rounded">Arrow Keys</kbd> - Navigate dates</li>
+            <li>• <kbd className="bg-muted px-1 rounded">Home/End</kbd> - First/Last day of month</li>
+            <li>• <kbd className="bg-muted px-1 rounded">Page Up/Down</kbd> - Previous/Next month</li>
+            <li>• <kbd className="bg-muted px-1 rounded">Escape</kbd> - Close calendar</li>
+          </ul>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => {
+      const [date, setDate] = React.useState();
+
+      return (
+        <div className="w-80 space-y-2">
+          <DatePicker
+            {...args}
+            value={date}
+            onValueChange={setDate}
+          />
+          {date && (
+            <div className="text-sm text-muted-foreground">
+              Selected: {date.toLocaleDateString()}
+            </div>
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={DatePicker} />
+
+## Date Utilities
+
+The DatePicker includes several built-in utilities for date manipulation:
+
+### Format Options
+- **MM/dd/yyyy**: US format (06/15/2024)
+- **dd/MM/yyyy**: European format (15/06/2024)
+- **yyyy-MM-dd**: ISO format (2024-06-15)
+- **MMM dd, yyyy**: Long format (Jun 15, 2024)
+
+### Constraint Options
+- **minDate/maxDate**: Restrict selectable date range
+- **disabledDates**: Array of specific disabled dates
+- **disabledDaysOfWeek**: Disable specific days (0=Sunday, 6=Saturday)
+
+### Preset Options
+Common preset configurations:
+- Today, Tomorrow, Yesterday
+- Next/Previous Week/Month
+- Custom date calculations
+- Business-specific presets
+
+## Accessibility Features
+
+- **Keyboard Navigation**: Full keyboard support with arrow key navigation
+- **Screen Reader Support**: Proper ARIA labels and announcements
+- **Focus Management**: Clear focus indicators and logical tab order
+- **Date Announcements**: Selected dates announced to screen readers
+- **Calendar Grid**: Proper table semantics for calendar layout
+- **Error States**: Accessible error messaging with aria-describedby
+
+## Validation Patterns
+
+### Required Fields
+Use `required` prop with visual indicators and error states.
+
+### Date Range Validation
+Combine `minDate` and `maxDate` for range constraints.
+
+### Business Rules
+Use `disabledDaysOfWeek` for business day requirements.
+
+### Custom Validation
+Implement custom validation with `disabledDates` array.
+
+## Integration Patterns
+
+### Form Libraries
+Works seamlessly with React Hook Form, Formik, and other form libraries.
+
+### State Management
+Controlled component pattern with `value` and `onValueChange`.
+
+### Date Libraries
+Compatible with date-fns, moment.js, and native Date objects.
+
+## Performance Considerations
+
+- Calendar rendering optimized for smooth interactions
+- Minimal re-renders with proper memoization
+- Efficient date calculations and comparisons
+- Lazy loading of calendar months
+- Optimized popup positioning and scrolling
+
+## Implementation Notes
+
+- Built on Radix UI Popover primitive for accessibility
+- Uses native Date objects for broad compatibility
+- Responsive design with mobile-first approach
+- Type-safe with comprehensive TypeScript interfaces
+- Follows design system conventions consistently
+- Supports internationalization patterns for localization

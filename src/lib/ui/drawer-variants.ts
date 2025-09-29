@@ -29,8 +29,7 @@ export const drawerContentVariants = cva(
   [
     'fixed',
     'z-50',
-    'bg-white',
-    'dark:bg-gray-900',
+    'bg-background',
     'text-foreground',
     'border',
     'border-border',
@@ -105,14 +104,9 @@ export const drawerContentVariants = cva(
       },
       variant: {
         default: ['shadow-lg'],
-        elevated: [
-          'shadow-xl',
-          'drop-shadow-lg',
-          'bg-gray-50',
-          'dark:bg-gray-800',
-        ],
+        elevated: ['shadow-xl', 'drop-shadow-lg', 'bg-muted'],
         minimal: ['shadow-sm', 'border-muted'],
-        overlay: ['shadow-2xl', 'bg-gray-100', 'dark:bg-gray-950'],
+        overlay: ['shadow-2xl', 'bg-card'],
       },
     },
     compoundVariants: [
@@ -191,26 +185,13 @@ export const drawerContentVariants = cva(
  * Drawer header variants for title and close button areas
  */
 export const drawerHeaderVariants = cva(
-  [
-    'flex',
-    'items-center',
-    'p-4',
-    'border-b',
-    'border-border',
-    'bg-gray-50',
-    'dark:bg-gray-800',
-  ],
+  ['flex', 'items-center', 'p-4', 'border-b', 'border-border', 'bg-muted'],
   {
     variants: {
       variant: {
         default: ['justify-between'],
         minimal: ['border-b-0', 'bg-transparent', 'pb-2', 'justify-between'],
-        prominent: [
-          'p-6',
-          'bg-gray-100',
-          'dark:bg-gray-700',
-          'justify-between',
-        ],
+        prominent: ['p-6', 'bg-card', 'justify-between'],
       },
       layout: {
         default: [],
@@ -257,8 +238,7 @@ export const drawerFooterVariants = cva(
     'p-4',
     'border-t',
     'border-border',
-    'bg-gray-50',
-    'dark:bg-gray-800',
+    'bg-muted',
   ],
   {
     variants: {
@@ -295,24 +275,19 @@ export const drawerCloseVariants = cva(
     'p-2',
     'flex-shrink-0',
     'z-50',
-    'bg-white/95',
+    'bg-background/95',
     'backdrop-blur-md',
     'shadow-md',
-    'text-gray-500',
-    'hover:text-gray-700',
-    'hover:bg-gray-200',
-    'dark:bg-gray-800/95',
-    'dark:text-gray-400',
-    'dark:hover:text-gray-200',
-    'dark:hover:bg-gray-700',
+    'text-muted-foreground',
+    'hover:text-foreground',
+    'hover:bg-muted',
     'focus:outline-none',
     'focus:ring-2',
-    'focus:ring-blue-500',
+    'focus:ring-ring',
     'transition-colors',
     'duration-200',
     'border',
-    'border-gray-200',
-    'dark:border-gray-600',
+    'border-border',
   ],
   {
     variants: {
@@ -320,11 +295,9 @@ export const drawerCloseVariants = cva(
         default: [],
         ghost: ['hover:bg-transparent'],
         destructive: [
-          'text-red-500',
-          'hover:text-white',
-          'hover:bg-red-500',
-          'dark:text-red-400',
-          'dark:hover:bg-red-600',
+          'text-destructive',
+          'hover:text-destructive-foreground',
+          'hover:bg-destructive',
         ],
       },
       size: {
@@ -403,10 +376,10 @@ export const navigationItemVariants = cva(
 export const recipeDrawerVariants = cva(['space-y-4'], {
   variants: {
     type: {
-      ingredients: ['bg-green-50/50', 'dark:bg-green-950/20'],
-      instructions: ['bg-blue-50/50', 'dark:bg-blue-950/20'],
-      shopping: ['bg-orange-50/50', 'dark:bg-orange-950/20'],
-      notes: ['bg-purple-50/50', 'dark:bg-purple-950/20'],
+      ingredients: ['bg-basil/5'],
+      instructions: ['bg-primary/5'],
+      shopping: ['bg-accent/10'],
+      notes: ['bg-secondary/5'],
     },
   },
   defaultVariants: {

@@ -339,6 +339,22 @@ const components = [
     variants: 15,
     status: 'ready',
   },
+  {
+    name: 'Sidebar',
+    path: '/components-demo/sidebar',
+    description:
+      'Multi-level navigation sidebar with sub-package architecture support',
+    variants: 3,
+    status: 'ready',
+  },
+  {
+    name: 'Content',
+    path: '/components-demo/content',
+    description:
+      'Flexible content layout system with multiple view modes and responsive behavior',
+    variants: 10,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -403,7 +419,7 @@ export default function ComponentsDemoOverview() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{component.name}</CardTitle>
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                    <span className="bg-success-light text-success rounded-full px-2 py-1 text-xs font-medium dark:bg-green-900/30 dark:text-green-400">
                       Ready
                     </span>
                   </div>

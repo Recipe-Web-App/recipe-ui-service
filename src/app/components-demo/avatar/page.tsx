@@ -103,7 +103,7 @@ export default function AvatarDemo() {
       <div className="space-y-8">
         <div>
           <h1 className="mb-2 text-3xl font-bold">Avatar Component Demo</h1>
-          <p className="text-gray-600">
+          <p className="text-text-secondary">
             Interactive examples of the Avatar component for user profiles, chef
             attribution, and recipe collaboration in the Recipe App.
           </p>
@@ -208,16 +208,16 @@ export default function AvatarDemo() {
                   />
                   <div>
                     <h4 className="font-medium">{user.name}</h4>
-                    <p className="text-sm text-gray-600 capitalize">
+                    <p className="text-text-secondary text-sm capitalize">
                       {user.role === 'chef'
                         ? '👨‍🍳 Chef'
                         : user.role === 'admin'
                           ? '👑 Admin'
                           : 'Home Cook'}
                     </p>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                    <div className="text-text-tertiary mt-1 flex items-center gap-2 text-xs">
                       {user.verified && (
-                        <span className="flex items-center gap-1 text-blue-600">
+                        <span className="text-info flex items-center gap-1">
                           <svg
                             className="h-3 w-3"
                             fill="currentColor"
@@ -289,13 +289,15 @@ export default function AvatarDemo() {
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">{recipe.title}</h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-text-secondary text-sm">
                           by {recipe.author.name}
                         </p>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-xs text-gray-500">Collaborators</p>
+                          <p className="text-text-tertiary text-xs">
+                            Collaborators
+                          </p>
                           <AvatarGroup
                             max={3}
                             totalCount={recipe.collaborators.length}
@@ -329,7 +331,9 @@ export default function AvatarDemo() {
               <h3 className="mb-3 font-medium">Different Group Sizes</h3>
               <div className="flex items-center gap-8">
                 <div>
-                  <p className="mb-2 text-sm text-gray-600">Small (max 2)</p>
+                  <p className="text-text-secondary mb-2 text-sm">
+                    Small (max 2)
+                  </p>
                   <AvatarGroup size="sm" max={2}>
                     <UserAvatar name="User One" role="user" size="sm" />
                     <UserAvatar name="User Two" role="chef" size="sm" />
@@ -338,7 +342,9 @@ export default function AvatarDemo() {
                 </div>
 
                 <div>
-                  <p className="mb-2 text-sm text-gray-600">Medium (max 4)</p>
+                  <p className="text-text-secondary mb-2 text-sm">
+                    Medium (max 4)
+                  </p>
                   <AvatarGroup max={4}>
                     <UserAvatar name="User One" role="user" />
                     <UserAvatar name="User Two" role="chef" />
@@ -350,7 +356,9 @@ export default function AvatarDemo() {
                 </div>
 
                 <div>
-                  <p className="mb-2 text-sm text-gray-600">Large (max 6)</p>
+                  <p className="text-text-secondary mb-2 text-sm">
+                    Large (max 6)
+                  </p>
                   <AvatarGroup size="lg" max={6} totalCount={12}>
                     <UserAvatar name="User One" role="user" size="lg" />
                     <UserAvatar name="User Two" role="chef" size="lg" />
@@ -386,15 +394,17 @@ export default function AvatarDemo() {
                     <div className="flex text-sm text-yellow-400">
                       {'★'.repeat(5)}
                     </div>
-                    <span className="text-xs text-gray-500">2 hours ago</span>
+                    <span className="text-text-tertiary text-xs">
+                      2 hours ago
+                    </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-700">
+                  <p className="text-text-secondary mt-1 text-sm">
                     &quot;Absolutely fantastic recipe! The flavors were
                     perfectly balanced and the instructions were crystal clear.
                     This will definitely become a regular in our dinner
                     rotation.&quot;
                   </p>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                  <div className="text-text-tertiary mt-2 flex items-center gap-4 text-xs">
                     <button className="hover:text-blue-600">👍 12</button>
                     <button className="hover:text-blue-600">Reply</button>
                   </div>
@@ -413,14 +423,16 @@ export default function AvatarDemo() {
                     <div className="flex text-sm text-yellow-400">
                       {'★'.repeat(4)}
                     </div>
-                    <span className="text-xs text-gray-500">1 day ago</span>
+                    <span className="text-text-tertiary text-xs">
+                      1 day ago
+                    </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-700">
+                  <p className="text-text-secondary mt-1 text-sm">
                     &quot;Great recipe! I substituted almond flour for regular
                     flour and it turned out wonderful. Perfect for my
                     gluten-free family members.&quot;
                   </p>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                  <div className="text-text-tertiary mt-2 flex items-center gap-4 text-xs">
                     <button className="hover:text-blue-600">👍 8</button>
                     <button className="hover:text-blue-600">Reply</button>
                   </div>
@@ -444,14 +456,16 @@ export default function AvatarDemo() {
                     <div className="flex text-sm text-yellow-400">
                       {'★'.repeat(5)}
                     </div>
-                    <span className="text-xs text-gray-500">3 days ago</span>
+                    <span className="text-text-tertiary text-xs">
+                      3 days ago
+                    </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-700">
+                  <p className="text-text-secondary mt-1 text-sm">
                     &quot;As a professional chef, I can say this recipe is spot
                     on. The technique for the sauce is exactly what we use in
                     our restaurant. Well done!&quot;
                   </p>
-                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                  <div className="text-text-tertiary mt-2 flex items-center gap-4 text-xs">
                     <button className="hover:text-blue-600">👍 24</button>
                     <button className="hover:text-blue-600">Reply</button>
                   </div>

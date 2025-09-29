@@ -186,11 +186,13 @@ const CookingStep = React.forwardRef<HTMLDivElement, CookingStepProps>(
           <div className="flex items-center justify-between">
             <h4 className="truncate font-medium">{title}</h4>
             {duration && (
-              <span className="ml-2 text-xs text-gray-500">{duration}</span>
+              <span className="text-text-tertiary ml-2 text-xs">
+                {duration}
+              </span>
             )}
           </div>
           {description && (
-            <p className="mt-1 text-sm text-gray-600">{description}</p>
+            <p className="text-text-secondary mt-1 text-sm">{description}</p>
           )}
         </div>
       </div>
@@ -234,7 +236,7 @@ const CookingProgress = React.forwardRef<HTMLDivElement, CookingProgressProps>(
         <div className="mb-6">
           <div className="mb-2 flex items-center justify-between">
             <h3 className="text-lg font-semibold">Cooking Progress</h3>
-            <span className="text-sm text-gray-600">
+            <span className="text-text-secondary text-sm">
               {completedSteps} of {totalSteps} steps
             </span>
           </div>
@@ -331,7 +333,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
         case 'completed':
           return (
             <svg
-              className="h-5 w-5 text-green-600"
+              className="text-success h-5 w-5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -345,7 +347,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
         case 'error':
           return (
             <svg
-              className="h-5 w-5 text-red-600"
+              className="text-error h-5 w-5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -359,7 +361,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
         case 'paused':
           return (
             <svg
-              className="h-5 w-5 text-yellow-600"
+              className="text-warning h-5 w-5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -373,7 +375,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
         default:
           return (
             <svg
-              className="h-5 w-5 animate-spin text-blue-600"
+              className="text-info h-5 w-5 animate-spin"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -405,9 +407,13 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
           <div className="flex-shrink-0">{getStateIcon()}</div>
           <div className="min-w-0 flex-1">
             <div className="mb-2 flex items-center justify-between">
-              <h4 className="truncate font-medium text-gray-900">{fileName}</h4>
+              <h4 className="text-text-primary truncate font-medium">
+                {fileName}
+              </h4>
               {fileSize && (
-                <span className="ml-2 text-sm text-gray-500">{fileSize}</span>
+                <span className="text-text-tertiary ml-2 text-sm">
+                  {fileSize}
+                </span>
               )}
             </div>
             <Progress
@@ -418,7 +424,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
               size="sm"
             />
             {showDetails && (
-              <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+              <div className="text-text-tertiary mt-2 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-4">
                   {speed && <span>Speed: {speed}</span>}
                   {timeRemaining && (
@@ -429,7 +435,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
                   {state === 'uploading' && onPause && (
                     <button
                       onClick={onPause}
-                      className="text-yellow-600 hover:text-yellow-700"
+                      className="text-warning hover:text-warning/80"
                     >
                       Pause
                     </button>
@@ -437,7 +443,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
                   {state === 'paused' && onResume && (
                     <button
                       onClick={onResume}
-                      className="text-blue-600 hover:text-blue-700"
+                      className="text-info hover:text-info/80"
                     >
                       Resume
                     </button>
@@ -445,7 +451,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
                   {state === 'error' && onRetry && (
                     <button
                       onClick={onRetry}
-                      className="text-blue-600 hover:text-blue-700"
+                      className="text-info hover:text-info/80"
                     >
                       Retry
                     </button>
@@ -453,7 +459,7 @@ const UploadProgress = React.forwardRef<HTMLDivElement, UploadProgressProps>(
                   {onCancel && state !== 'completed' && (
                     <button
                       onClick={onCancel}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-error hover:text-error/80"
                     >
                       Cancel
                     </button>

@@ -1,0 +1,306 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Footer } from './footer';
+import { useLayoutStore } from '@/stores/ui/layout-store';
+
+<Meta
+  title="Layout Components/Footer"
+  component={Footer}
+  decorators={[
+    (Story) => (
+      <div className="min-h-screen flex flex-col">
+        <div className="flex-1 p-8 bg-muted/20">
+          <div className="text-center text-muted-foreground">
+            Main content area - scroll down to see footer
+          </div>
+        </div>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Footer component is a comprehensive footer solution that includes navigation links, company information,
+build details, and social media links. It automatically adapts to different screen sizes and provides
+a consistent, accessible footer experience across the application.
+
+## Features
+
+- Responsive grid layout (1 column mobile, 2 columns tablet, 4 columns desktop)
+- Organized navigation sections: Product, Resources, Community, Legal
+- Build information display with version and environment
+- Social media links with platform icons
+- Dynamic copyright year
+- Full accessibility support with proper landmarks
+- Theme consistency with design system
+- TypeScript support with strict typing
+
+## Usage
+
+Use Footer for:
+- Application-wide footer navigation
+- Legal and policy link organization
+- Build and version information display
+- Social media presence and community links
+- Consistent branding and information architecture
+        `
+      }
+    }
+  }}
+  argTypes={{
+    showBuildInfo: {
+      control: { type: 'boolean' },
+      description: 'Whether to show build/version information',
+      defaultValue: true
+    },
+    showSocialLinks: {
+      control: { type: 'boolean' },
+      description: 'Whether to show social media links',
+      defaultValue: true
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# Footer
+
+<Description of={Footer} />
+
+## Complete Footer
+
+<Canvas>
+  <Story name="Complete">
+    {() => <Footer />}
+  </Story>
+</Canvas>
+
+## Without Build Info
+
+<Canvas>
+  <Story name="No Build Info">
+    {() => <Footer showBuildInfo={false} />}
+  </Story>
+</Canvas>
+
+## Without Social Links
+
+<Canvas>
+  <Story name="No Social Links">
+    {() => <Footer showSocialLinks={false} />}
+  </Story>
+</Canvas>
+
+## Minimal Footer
+
+<Canvas>
+  <Story name="Minimal">
+    {() => <Footer showBuildInfo={false} showSocialLinks={false} />}
+  </Story>
+</Canvas>
+
+## Mobile Layout Simulation
+
+<Canvas>
+  <Story name="Mobile Layout">
+    {() => {
+      // Mock mobile breakpoint
+      const mockLayoutStore = {
+        breakpoint: 'mobile'
+      };
+
+      // Note: In a real implementation, you'd mock the store properly
+      return (
+        <div className="max-w-sm mx-auto">
+          <Footer />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Tablet Layout Simulation
+
+<Canvas>
+  <Story name="Tablet Layout">
+    {() => (
+      <div className="max-w-2xl mx-auto">
+        <Footer />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Desktop Layout (Full Width)
+
+<Canvas>
+  <Story name="Desktop Layout">
+    {() => (
+      <div className="w-full">
+        <Footer />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <Footer className="bg-muted border-2 border-primary" />
+    )}
+  </Story>
+</Canvas>
+
+## Dark Theme Example
+
+<Canvas>
+  <Story name="Dark Theme">
+    {() => (
+      <div className="dark">
+        <Footer />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Page Layout Context
+
+<Canvas>
+  <Story name="Page Context">
+    {() => (
+      <div className="min-h-screen flex flex-col">
+        {/* Header */}
+        <header className="bg-primary text-primary-foreground p-4">
+          <h1 className="text-xl font-bold">Recipe App</h1>
+        </header>
+
+        {/* Main Content */}
+        <main className="flex-1 p-8 bg-background">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Welcome to Recipe App</h2>
+            <p className="text-muted-foreground">
+              This demonstrates how the footer sits at the bottom of a full page layout.
+              The footer automatically pushes to the bottom using flexbox.
+            </p>
+            <p className="text-muted-foreground">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <Footer />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => <Footer {...args} />}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Footer} />
+
+## Footer Sections
+
+### Product Section
+- **About** - Company information and mission
+- **Features** - Product capabilities and benefits
+- **Pricing** - Subscription and pricing details
+- **Changelog** - Product updates and release notes
+
+### Resources Section
+- **Documentation** - User guides and API docs
+- **Blog** - Articles and tutorials
+- **Support** - Help center and contact
+- **API Reference** - Technical documentation
+
+### Community Section
+- **Forum** - Community discussions
+- **Discord** - Real-time chat and support
+- **Contribute** - Open source contributions
+- **Events** - Workshops and community events
+
+### Legal Section
+- **Privacy Policy** - Data protection and privacy
+- **Terms of Service** - Usage terms and conditions
+- **Cookie Policy** - Cookie usage and preferences
+- **License** - Software licensing information
+
+## Responsive Behavior
+
+### Mobile (< 768px)
+- Single column layout
+- Stacked sections with full width
+- Compact spacing
+- Vertical layout for bottom section
+
+### Tablet (768px - 1024px)
+- Two column grid layout
+- Balanced section distribution
+- Medium spacing
+- Horizontal bottom section
+
+### Desktop (> 1024px)
+- Four column grid layout
+- All sections in one row
+- Full spacing
+- Horizontal bottom section with justified content
+
+## Accessibility Features
+
+- **Semantic HTML**: Uses `<footer>` element with `role="contentinfo"`
+- **Navigation Landmarks**: Proper navigation structure for screen readers
+- **Keyboard Navigation**: All links are keyboard accessible
+- **ARIA Labels**: Descriptive labels for all interactive elements
+- **High Contrast**: Works well with all theme variants
+- **Screen Reader Support**: Clear section boundaries and link purposes
+
+## Design Guidelines
+
+### Layout Principles
+- **Consistency**: Uniform spacing and typography throughout
+- **Hierarchy**: Clear visual hierarchy with section titles
+- **Balance**: Even distribution of content across sections
+- **Flexibility**: Adapts to different content amounts
+
+### Typography
+- Section titles use uppercase with letter spacing
+- Links use consistent sizing and color
+- Copyright text uses muted styling
+- Build info uses small, technical styling
+
+### Spacing
+- Consistent vertical rhythm between sections
+- Appropriate margins and padding
+- Responsive spacing that scales with screen size
+- Clean separation between different content areas
+
+## Implementation Notes
+
+- The footer automatically sticks to the bottom using `mt-auto` class
+- Responsive layout is handled by Tailwind's responsive grid classes
+- Current year is calculated dynamically for copyright
+- Social links are pre-configured for the Recipe App brand
+- Build information reads from environment variables
+- All external links include security attributes (`rel="noopener noreferrer"`)
+- The component integrates seamlessly with the layout store for responsive behavior
+
+## Performance Considerations
+
+- All icons are loaded from the Lucide React library (tree-shakeable)
+- No external resources or heavy assets
+- Minimal re-renders through proper component structure
+- Efficient responsive layout without JavaScript media queries

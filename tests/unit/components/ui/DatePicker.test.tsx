@@ -638,7 +638,7 @@ describe('DatePicker Components', () => {
 
         // The className is passed to the DatePicker which applies it to the trigger button
         const trigger = screen.getByRole('button');
-        expect(trigger).toHaveClass('meal-plan-picker', 'border-yellow-200');
+        expect(trigger).toHaveClass('meal-plan-picker', 'border-warning/20');
       });
 
       it('has meal planning presets', async () => {

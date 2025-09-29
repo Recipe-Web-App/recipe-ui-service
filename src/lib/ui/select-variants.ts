@@ -39,16 +39,16 @@ export const selectTriggerVariants = cva(
     variants: {
       variant: {
         default: [
-          'border-gray-300',
-          'hover:border-gray-400',
-          'focus:border-blue-500',
-          'focus:ring-blue-200',
+          'border-input',
+          'hover:border-primary/40',
+          'focus:border-primary',
+          'focus:ring-primary/20',
         ],
         outline: [
-          'border-gray-300',
-          'hover:border-gray-400',
-          'focus:border-blue-500',
-          'focus:ring-blue-200',
+          'border-input',
+          'hover:border-primary/40',
+          'focus:border-primary',
+          'focus:ring-primary/20',
         ],
         ghost: [
           'border-transparent',
@@ -61,11 +61,11 @@ export const selectTriggerVariants = cva(
         ],
         filled: [
           'border-transparent',
-          'bg-gray-100',
-          'hover:bg-gray-200',
-          'focus:bg-white',
-          'focus:border-blue-500',
-          'focus:ring-blue-200',
+          'bg-muted',
+          'hover:bg-muted/80',
+          'focus:bg-background',
+          'focus:border-primary',
+          'focus:ring-primary/20',
         ],
       },
       size: {
@@ -75,10 +75,10 @@ export const selectTriggerVariants = cva(
       },
       error: {
         true: [
-          'border-red-500',
-          'text-red-900',
-          'focus:border-red-500',
-          'focus:ring-red-200',
+          'border-destructive',
+          'text-destructive',
+          'focus:border-destructive',
+          'focus:ring-destructive/20',
         ],
       },
     },
@@ -103,9 +103,9 @@ export const selectContentVariants = cva(
     'overflow-hidden',
     'rounded-md',
     'border',
-    'border-gray-200',
-    'bg-white',
-    'text-gray-900',
+    'border-border',
+    'bg-card',
+    'text-card-foreground',
     'shadow-md',
     // Animation classes for enter/exit
     'data-[state=open]:animate-in',
@@ -122,8 +122,8 @@ export const selectContentVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-white', 'text-gray-900'],
-        secondary: ['bg-gray-50', 'text-gray-700'],
+        default: ['bg-card', 'text-card-foreground'],
+        secondary: ['bg-muted', 'text-muted-foreground'],
       },
       size: {
         sm: ['min-w-[6rem]', 'text-xs'],
@@ -161,8 +161,8 @@ export const selectItemVariants = cva(
     'transition-all',
     'duration-150',
     'ease-in-out',
-    'focus:bg-blue-50',
-    'focus:text-blue-900',
+    'focus:bg-accent',
+    'focus:text-accent-foreground',
     'data-[disabled]:pointer-events-none',
     'data-[disabled]:opacity-50',
     '[&_svg]:pointer-events-none',
@@ -173,17 +173,17 @@ export const selectItemVariants = cva(
     variants: {
       variant: {
         default: [
-          'hover:bg-blue-50',
-          'hover:text-blue-900',
-          'data-[highlighted]:bg-blue-50',
-          'data-[highlighted]:text-blue-900',
+          'hover:bg-accent',
+          'hover:text-accent-foreground',
+          'data-[highlighted]:bg-accent',
+          'data-[highlighted]:text-accent-foreground',
         ],
         destructive: [
-          'text-red-600',
-          'hover:bg-red-50',
-          'hover:text-red-700',
-          'data-[highlighted]:bg-red-50',
-          'data-[highlighted]:text-red-700',
+          'text-destructive',
+          'hover:bg-destructive/10',
+          'hover:text-destructive',
+          'data-[highlighted]:bg-destructive/10',
+          'data-[highlighted]:text-destructive',
         ],
       },
     },

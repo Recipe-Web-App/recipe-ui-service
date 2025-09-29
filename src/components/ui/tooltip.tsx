@@ -194,14 +194,14 @@ const CookingTermTooltip = React.forwardRef<
         <div
           className={`inline-block rounded-full px-2 py-1 text-xs ${
             category === 'technique'
-              ? 'bg-orange-100 text-orange-800'
+              ? 'bg-warning-light text-warning'
               : category === 'ingredient'
-                ? 'bg-green-100 text-green-800'
+                ? 'bg-success-light text-success'
                 : category === 'equipment'
-                  ? 'bg-blue-100 text-blue-800'
+                  ? 'bg-info-light text-info'
                   : category === 'measurement'
-                    ? 'bg-purple-100 text-purple-800'
-                    : 'bg-gray-100 text-gray-800'
+                    ? 'bg-accent text-accent-foreground'
+                    : 'bg-muted text-text-secondary'
           }`}
         >
           {category}
@@ -367,7 +367,7 @@ const KeyboardTooltip = React.forwardRef<
         {shortcuts.map((key, index) => (
           <React.Fragment key={key}>
             {index > 0 && <span className="text-xs">+</span>}
-            <kbd className="rounded border border-gray-300 bg-gray-100 px-1.5 py-0.5 text-xs font-semibold text-gray-800">
+            <kbd className="border-code-border bg-code text-code-text rounded border px-1.5 py-0.5 text-xs font-semibold">
               {key}
             </kbd>
           </React.Fragment>

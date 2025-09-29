@@ -174,11 +174,11 @@ describe('RadioGroup Components', () => {
       );
 
       const option1 = screen.getByLabelText('Option 1');
-      expect(option1).toHaveClass('data-[state=checked]:bg-green-500');
+      expect(option1).toHaveClass('data-[state=checked]:bg-success');
 
       rerender(<RadioGroup options={mockOptions} variant="danger" />);
       expect(screen.getByLabelText('Option 1')).toHaveClass(
-        'data-[state=checked]:bg-red-500'
+        'data-[state=checked]:bg-destructive'
       );
     });
 
@@ -294,7 +294,7 @@ describe('RadioGroup Components', () => {
       render(<RecipeRadioGroup options={recipeOptions} variant="dietary" />);
 
       const radioGroup = screen.getByRole('radiogroup').parentElement;
-      expect(radioGroup).toHaveClass('border-green-200');
+      expect(radioGroup).toHaveClass('border-success/20');
     });
 
     it('supports different layouts', () => {
@@ -409,7 +409,7 @@ describe('RadioGroup Components', () => {
       );
 
       const card = screen.getByRole('button');
-      expect(card).toHaveClass('border-blue-500');
+      expect(card).toHaveClass('border-primary');
     });
 
     it('handles disabled state', () => {

@@ -1,0 +1,414 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Layout } from './layout';
+import { DefaultLayout, FocusedLayout, MinimalLayout } from './layout-variants';
+import { LayoutProvider } from './layout-provider';
+import { useSubNavigation } from '@/hooks/use-sub-navigation';
+
+<Meta
+  title="Layout Components/Layout"
+  component={Layout}
+  decorators={[
+    (Story) => (
+      <div style={{ height: '100vh', width: '100vw' }}>
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Layout component is the main orchestrator for the entire application layout system.
+It provides a complete, responsive layout with TopNav, Sidebar, ContentPane, and Footer
+components that work together seamlessly.
+
+## Features
+
+- **Multiple Layout Variants**: Support for default, focused, and minimal layouts
+- **Responsive Design**: Adapts to mobile, tablet, and desktop viewports
+- **Sub-Navigation Integration**: Automatically displays contextual navigation
+- **Error Boundary Protection**: Graceful error handling with fallback UI
+- **Theme Integration**: Works with the application theme system
+- **Store Integration**: Connects with navigation and layout stores
+
+## Layout Variants
+
+### Default Layout
+Full layout with all components: TopNav + Sidebar + ContentPane + Footer.
+Perfect for main application pages with navigation.
+
+### Focused Layout
+Streamlined layout for content focus: TopNav + ContentPane + minimal Footer.
+Ideal for article reading, detail pages, or content consumption.
+
+### Minimal Layout
+Bare essentials: TopNav + ContentPane only.
+Perfect for authentication pages, modals, or standalone views.
+
+## Usage
+
+Use Layout for:
+- Main application pages
+- Page templates and wrappers
+- Route-level layout management
+- Consistent user experience across the app
+
+The component automatically handles:
+- Sub-navigation based on current route
+- Responsive behavior across devices
+- Theme consistency
+- Error boundaries
+- Toast notifications
+        `
+      }
+    }
+  }}
+  argTypes={{
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'focused', 'minimal'],
+      description: 'Layout variant that controls which components are shown',
+      defaultValue: 'default'
+    },
+    showSidebar: {
+      control: { type: 'boolean' },
+      description: 'Whether to show the sidebar (managed by layout provider)',
+      defaultValue: true
+    },
+    showFooter: {
+      control: { type: 'boolean' },
+      description: 'Whether to show the footer (managed by layout provider)',
+      defaultValue: true
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes for the root container'
+    }
+  }}
+/>
+
+# Layout
+
+<Description of={Layout} />
+
+## Default Layout
+
+<Canvas>
+  <Story name="Default">
+    {() => (
+      <DefaultLayout>
+        <div className="p-8">
+          <h1 className="text-3xl font-bold mb-4">Welcome to Recipe App</h1>
+          <p className="text-muted-foreground mb-6">
+            This is the default layout with full navigation and footer.
+            Perfect for main application pages.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="p-4 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-2">Content Card {i + 1}</h3>
+                <p className="text-sm text-muted-foreground">
+                  Sample content to demonstrate the layout structure.
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </DefaultLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Focused Layout
+
+<Canvas>
+  <Story name="Focused">
+    {() => (
+      <FocusedLayout>
+        <div className="max-w-4xl mx-auto p-8">
+          <h1 className="text-4xl font-bold mb-6">Recipe: Perfect Pasta</h1>
+          <div className="prose prose-gray max-w-none">
+            <p className="text-lg text-muted-foreground mb-8">
+              This focused layout removes the sidebar to provide more space for content consumption.
+              Perfect for article reading, recipe details, or any content-focused experience.
+            </p>
+
+            <h2>Ingredients</h2>
+            <ul>
+              <li>400g pasta</li>
+              <li>2 tbsp olive oil</li>
+              <li>3 cloves garlic</li>
+              <li>Fresh basil leaves</li>
+              <li>Parmesan cheese</li>
+            </ul>
+
+            <h2>Instructions</h2>
+            <ol>
+              <li>Bring a large pot of salted water to boil</li>
+              <li>Cook pasta according to package directions</li>
+              <li>Meanwhile, heat olive oil in a large pan</li>
+              <li>Add minced garlic and cook until fragrant</li>
+              <li>Toss pasta with garlic oil and fresh basil</li>
+              <li>Serve with grated Parmesan cheese</li>
+            </ol>
+          </div>
+        </div>
+      </FocusedLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Minimal Layout
+
+<Canvas>
+  <Story name="Minimal">
+    {() => (
+      <MinimalLayout>
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <div className="w-full max-w-md p-8 space-y-6 bg-card border rounded-lg shadow-lg">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold">Sign In</h1>
+              <p className="text-muted-foreground mt-2">
+                Welcome back! Please sign in to your account.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                  type="email"
+                  className="w-full px-3 py-2 border rounded-md bg-background"
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Password</label>
+                <input
+                  type="password"
+                  className="w-full px-3 py-2 border rounded-md bg-background"
+                  placeholder="Enter your password"
+                />
+              </div>
+
+              <button className="w-full bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary/90">
+                Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      </MinimalLayout>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Responsive Demo
+
+<Canvas>
+  <Story name="Mobile Responsive">
+    {() => (
+      <div className="max-w-sm mx-auto border rounded-lg overflow-hidden">
+        <DefaultLayout>
+          <div className="p-4">
+            <h1 className="text-xl font-bold mb-4">Mobile View</h1>
+            <p className="text-sm text-muted-foreground mb-4">
+              On mobile devices, the sidebar automatically converts to a drawer menu
+              accessible via the hamburger button in the top navigation.
+            </p>
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="p-3 border rounded bg-card">
+                  <h3 className="font-medium text-sm">Mobile Card {i + 1}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Optimized for mobile viewing
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DefaultLayout>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Content Props
+
+<Canvas>
+  <Story name="Custom Content Props">
+    {() => (
+      <Layout
+        variant="default"
+        contentProps={{
+          viewMode: "list",
+          contentWidth: "full",
+          padding: false
+        }}
+      >
+        <div className="p-8 bg-muted/20">
+          <h1 className="text-3xl font-bold mb-4">Custom Content Configuration</h1>
+          <p className="text-muted-foreground mb-6">
+            This example shows how to customize the ContentPane behavior by passing
+            custom props. Here we're using list view mode, full width, and custom padding.
+          </p>
+
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-4 p-4 bg-background border rounded-lg">
+                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold">{i + 1}</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold">List Item {i + 1}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    This demonstrates the list view mode with custom content configuration.
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Layout>
+    )}
+  </Story>
+</Canvas>
+
+## Loading State
+
+<Canvas>
+  <Story name="Loading State">
+    {() => (
+      <Layout contentProps={{ loading: true }}>
+        {/* Content won't be shown when loading is true */}
+        <div>This content is hidden during loading</div>
+      </Layout>
+    )}
+  </Story>
+</Canvas>
+
+## Error State
+
+<Canvas>
+  <Story name="Error State">
+    {() => (
+      <Layout
+        contentProps={{
+          error: {
+            type: 'network',
+            message: 'Unable to load content',
+            code: 'NETWORK_ERROR'
+          }
+        }}
+      >
+        {/* Content won't be shown when error is present */}
+        <div>This content is hidden during error state</div>
+      </Layout>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <Layout {...args}>
+        <div className="p-8">
+          <h1 className="text-3xl font-bold mb-4">Interactive Layout</h1>
+          <p className="text-muted-foreground mb-6">
+            Use the controls below to experiment with different layout configurations.
+            Try changing the variant, toggling sidebar/footer visibility, and adding custom classes.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 border rounded-lg bg-card">
+              <h3 className="font-semibold mb-2">Layout Controls</h3>
+              <p className="text-sm text-muted-foreground">
+                The controls panel allows you to test different layout configurations
+                and see how they affect the overall page structure.
+              </p>
+            </div>
+
+            <div className="p-4 border rounded-lg bg-card">
+              <h3 className="font-semibold mb-2">Responsive Behavior</h3>
+              <p className="text-sm text-muted-foreground">
+                Resize your browser window to see how the layout adapts to different
+                screen sizes automatically.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Layout} />
+
+## Layout Architecture
+
+### Component Hierarchy
+
+```
+Layout (Wrapper)
+├── LayoutProvider (Context)
+├── ErrorBoundary (Protection)
+└── InternalLayout
+    ├── TopNav (Header)
+    ├── Main Container
+    │   ├── Sidebar (Navigation)
+    │   └── ContentPane (Content)
+    ├── Footer
+    └── Toaster (Notifications)
+```
+
+### Variant Behavior
+
+| Variant | TopNav | Sidebar | ContentPane | Footer | Use Case |
+|---------|--------|---------|-------------|--------|----------|
+| default | ✓ | ✓ | ✓ | ✓ | Main app pages |
+| focused | ✓ | ✗ | ✓ | minimal | Content reading |
+| minimal | ✓ | ✗ | ✓ | ✗ | Auth pages |
+
+### Responsive Breakpoints
+
+| Breakpoint | Sidebar Behavior | Footer Behavior | TopNav Behavior |
+|------------|------------------|-----------------|-----------------|
+| Mobile | Drawer menu | Stacked layout | Simplified nav |
+| Tablet | Collapsible | Standard layout | Standard nav |
+| Desktop | Full sidebar | Standard layout | Full nav |
+
+## Implementation Notes
+
+- The Layout component automatically wraps content with LayoutProvider and ErrorBoundary
+- Sub-navigation is automatically populated based on the current route
+- All layout state is managed through Zustand stores for consistent behavior
+- The component integrates seamlessly with the existing theme system
+- Error boundaries provide graceful fallbacks for layout-related failures
+- Toast notifications are automatically included in all layout variants
+
+## Best Practices
+
+### When to Use Each Variant
+
+- **Default**: Use for main application pages that need full navigation context
+- **Focused**: Use for content consumption pages like articles, recipes, or documentation
+- **Minimal**: Use for standalone pages like authentication, onboarding, or error pages
+
+### Performance Considerations
+
+- Layout components are memoized to prevent unnecessary re-renders
+- Sub-navigation is computed only when the route changes
+- Store subscriptions are optimized to update only relevant components
+- Error boundaries prevent layout failures from crashing the entire application
+
+### Accessibility Features
+
+- Semantic HTML structure with proper landmarks
+- Keyboard navigation support throughout the layout
+- Screen reader friendly with appropriate ARIA labels
+- Focus management between layout sections
+- High contrast support with theme integration

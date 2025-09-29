@@ -18,15 +18,15 @@ describe('Textarea', () => {
   it('applies variant classes correctly', () => {
     const { rerender } = render(<Textarea variant="destructive" />);
     let textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-red-300', 'bg-red-50');
+    expect(textarea).toHaveClass('border-destructive', 'bg-destructive/10');
 
     rerender(<Textarea variant="success" />);
     textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-green-300', 'bg-green-50');
+    expect(textarea).toHaveClass('border-success', 'bg-success/10');
 
     rerender(<Textarea variant="warning" />);
     textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-yellow-300', 'bg-yellow-50');
+    expect(textarea).toHaveClass('border-warning', 'bg-warning/10');
 
     rerender(<Textarea variant="ghost" />);
     textarea = screen.getByRole('textbox');
@@ -52,7 +52,7 @@ describe('Textarea', () => {
   it('renders with required indicator', () => {
     render(<Textarea label="Required Field" required />);
     const label = screen.getByText('Required Field');
-    expect(label).toHaveClass('after:content-["*"]', 'after:text-red-500');
+    expect(label).toHaveClass('after:content-["*"]', 'after:text-destructive');
   });
 
   it('handles controlled value correctly', () => {
@@ -82,21 +82,21 @@ describe('Textarea', () => {
     expect(screen.getByText('This is an error')).toBeInTheDocument();
     const textarea = screen.getByRole('textbox');
     expect(textarea).toHaveAttribute('aria-invalid', 'true');
-    expect(textarea).toHaveClass('border-red-300');
+    expect(textarea).toHaveClass('border-destructive');
   });
 
   it('displays success message', () => {
     render(<Textarea successMessage="This is success" />);
     expect(screen.getByText('This is success')).toBeInTheDocument();
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-green-300');
+    expect(textarea).toHaveClass('border-success');
   });
 
   it('displays warning message', () => {
     render(<Textarea warningMessage="This is a warning" />);
     expect(screen.getByText('This is a warning')).toBeInTheDocument();
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-yellow-300');
+    expect(textarea).toHaveClass('border-warning');
   });
 
   it('shows character count when enabled', () => {
@@ -129,7 +129,7 @@ describe('Textarea', () => {
       'disabled:cursor-not-allowed',
       'disabled:opacity-50'
     );
-    expect(label).toHaveClass('text-gray-400', 'cursor-not-allowed');
+    expect(label).toHaveClass('text-muted-foreground', 'cursor-not-allowed');
   });
 
   it('supports resize variants', () => {
@@ -171,25 +171,25 @@ describe('RecipeTextarea', () => {
   it('renders correctly with recipe type', () => {
     render(<RecipeTextarea type="description" />);
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-blue-200', 'bg-blue-50');
+    expect(textarea).toHaveClass('border-primary/20', 'bg-primary/5');
   });
 
   it('applies correct styling for different recipe types', () => {
     const { rerender } = render(<RecipeTextarea type="instructions" />);
     let textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-green-200', 'bg-green-50');
+    expect(textarea).toHaveClass('border-basil/20', 'bg-basil/5');
 
     rerender(<RecipeTextarea type="notes" />);
     textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-yellow-200', 'bg-yellow-50');
+    expect(textarea).toHaveClass('border-citrus/30', 'bg-citrus/10');
 
     rerender(<RecipeTextarea type="tips" />);
     textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-purple-200', 'bg-purple-50');
+    expect(textarea).toHaveClass('border-secondary/20', 'bg-secondary/5');
 
     rerender(<RecipeTextarea type="review" />);
     textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-orange-200', 'bg-orange-50');
+    expect(textarea).toHaveClass('border-accent/30', 'bg-accent/10');
   });
 
   it('shows appropriate placeholder for recipe types', () => {
@@ -300,7 +300,7 @@ describe('RecipeTextarea', () => {
       <RecipeTextarea type="instructions" minWords={10} defaultValue="short" />
     );
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-red-400', 'bg-red-50');
+    expect(textarea).toHaveClass('border-destructive/40', 'bg-destructive/5');
   });
 
   it('shows success state for validation success', () => {
@@ -312,7 +312,7 @@ describe('RecipeTextarea', () => {
       />
     );
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveClass('border-green-400', 'bg-green-50');
+    expect(textarea).toHaveClass('border-basil/40', 'bg-basil/5');
   });
 });
 

@@ -96,7 +96,7 @@ describe('Tabs Components', () => {
         'items-center',
         'justify-center',
         'rounded-lg',
-        'bg-gray-100',
+        'bg-muted',
         'p-1',
         'h-9',
         'text-sm'
@@ -116,7 +116,7 @@ describe('Tabs Components', () => {
       expect(tablist).toHaveClass(
         'bg-transparent',
         'border-b',
-        'border-gray-200',
+        'border-border',
         'rounded-none',
         'p-0'
       );
@@ -132,7 +132,7 @@ describe('Tabs Components', () => {
       );
 
       const tablist = screen.getByRole('tablist');
-      expect(tablist).toHaveClass('bg-gray-50', 'border', 'border-gray-200');
+      expect(tablist).toHaveClass('bg-card', 'border', 'border-border');
     });
 
     it('renders with small size', () => {
@@ -209,8 +209,8 @@ describe('Tabs Components', () => {
         'py-1',
         'font-medium',
         'transition-all',
-        'hover:bg-gray-50',
-        'hover:text-gray-900',
+        'hover:bg-card',
+        'hover:text-foreground',
         'h-7',
         'text-sm'
       );
@@ -252,8 +252,8 @@ describe('Tabs Components', () => {
       const trigger = screen.getByRole('tab', { name: 'Tab 1' });
       expect(trigger).toHaveClass(
         'rounded-full',
-        'hover:bg-blue-50',
-        'hover:text-blue-700'
+        'hover:bg-primary/10',
+        'hover:text-primary'
       );
     });
 
@@ -386,7 +386,7 @@ describe('Tabs Components', () => {
         'mt-2',
         'rounded-md',
         'border',
-        'border-gray-200',
+        'border-border',
         'p-4',
         'text-base'
       );
@@ -426,7 +426,7 @@ describe('Tabs Components', () => {
       );
 
       const content = screen.getByRole('tabpanel');
-      expect(content).toHaveClass('rounded-lg', 'bg-gray-50', 'p-4');
+      expect(content).toHaveClass('rounded-lg', 'bg-muted', 'p-4');
     });
 
     it('renders with card variant', () => {
@@ -445,8 +445,8 @@ describe('Tabs Components', () => {
       expect(content).toHaveClass(
         'rounded-lg',
         'border',
-        'border-gray-200',
-        'bg-white',
+        'border-border',
+        'bg-card',
         'p-6',
         'shadow-sm'
       );

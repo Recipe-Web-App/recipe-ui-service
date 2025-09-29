@@ -518,7 +518,7 @@ const RecipeIngredients = React.forwardRef<
           ([category, categoryIngredients]) => (
             <div key={category} className="space-y-2">
               {category !== 'main' && (
-                <h4 className="text-sm font-medium tracking-wide text-gray-900 uppercase">
+                <h4 className="text-text-primary text-sm font-medium tracking-wide uppercase">
                   {category}
                 </h4>
               )}
@@ -552,13 +552,13 @@ const RecipeIngredients = React.forwardRef<
                     <div className="flex-1">
                       <div className="flex items-baseline gap-2">
                         {displayAmount && (
-                          <span className="font-medium text-gray-900">
+                          <span className="text-text-primary font-medium">
                             {displayAmount}
                           </span>
                         )}
                         <span
                           className={cn(
-                            'text-gray-700',
+                            'text-text-secondary',
                             ingredient.optional && 'italic'
                           )}
                         >
@@ -567,7 +567,7 @@ const RecipeIngredients = React.forwardRef<
                         </span>
                       </div>
                       {ingredient.notes && (
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="text-text-tertiary mt-1 text-sm">
                           {ingredient.notes}
                         </p>
                       )}
@@ -694,11 +694,11 @@ const RecipeInstructions = React.forwardRef<
                 </div>
               )}
               <div className="flex-1">
-                <p className="leading-relaxed text-gray-700">
+                <p className="text-text-secondary leading-relaxed">
                   {instruction.text}
                 </p>
                 {(instruction.time ?? instruction.temperature) && (
-                  <div className="mt-2 flex gap-4 text-sm text-gray-500">
+                  <div className="text-text-tertiary mt-2 flex gap-4 text-sm">
                     {instruction.time && (
                       <span className="flex items-center gap-1">
                         <svg
@@ -729,7 +729,7 @@ const RecipeInstructions = React.forwardRef<
                   </div>
                 )}
                 {instruction.notes && (
-                  <p className="mt-2 text-sm text-blue-600 italic">
+                  <p className="text-info mt-2 text-sm italic">
                     💡 {instruction.notes}
                   </p>
                 )}

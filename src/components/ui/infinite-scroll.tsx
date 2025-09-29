@@ -873,7 +873,7 @@ const SearchResultsInfiniteScroll = React.forwardRef<
         const match = text.slice(index, index + query.length);
         const afterMatch = text.slice(index + query.length);
 
-        return `${beforeMatch}<mark class="bg-yellow-200 dark:bg-yellow-800">${match}</mark>${afterMatch}`;
+        return `${beforeMatch}<mark class="bg-highlight-light">${match}</mark>${afterMatch}`;
       },
       [highlightQuery]
     );

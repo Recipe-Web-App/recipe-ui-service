@@ -10,14 +10,9 @@ export const tableVariants = cva(
   {
     variants: {
       variant: {
-        default: ['border-gray-200', 'dark:border-gray-800'],
+        default: ['border-border'],
         simple: ['border-none'],
-        lined: [
-          'border-gray-200',
-          'border-separate',
-          'border-spacing-0',
-          'dark:border-gray-800',
-        ],
+        lined: ['border-border', 'border-separate', 'border-spacing-0'],
       },
       size: {
         sm: ['text-xs'],
@@ -33,7 +28,7 @@ export const tableVariants = cva(
         false: [],
       },
       bordered: {
-        true: ['border', 'border-gray-200', 'dark:border-gray-800'],
+        true: ['border', 'border-border'],
         false: [],
       },
     },
@@ -50,21 +45,18 @@ export const tableVariants = cva(
 /**
  * Table header variants
  */
-export const tableHeaderVariants = cva(
-  ['border-b', 'border-gray-200', 'dark:border-gray-800'],
-  {
-    variants: {
-      variant: {
-        default: ['bg-gray-50', 'dark:bg-gray-900'],
-        minimal: ['bg-transparent'],
-        accent: ['bg-blue-50', 'dark:bg-blue-950'],
-      },
+export const tableHeaderVariants = cva(['border-b', 'border-border'], {
+  variants: {
+    variant: {
+      default: ['bg-muted'],
+      minimal: ['bg-transparent'],
+      accent: ['bg-primary/10', 'text-primary'],
     },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
 /**
  * Table body variants
@@ -75,19 +67,12 @@ export const tableBodyVariants = cva(['[&_tr:last-child]:border-0']);
  * Table footer variants
  */
 export const tableFooterVariants = cva(
-  [
-    'border-t',
-    'border-gray-200',
-    'bg-gray-50',
-    'font-medium',
-    'dark:border-gray-800',
-    'dark:bg-gray-900',
-  ],
+  ['border-t', 'border-border', 'bg-muted', 'font-medium'],
   {
     variants: {
       variant: {
         default: [],
-        minimal: ['bg-transparent', 'dark:bg-transparent'],
+        minimal: ['bg-transparent'],
       },
     },
     defaultVariants: {
@@ -100,36 +85,27 @@ export const tableFooterVariants = cva(
  * Table row variants
  */
 export const tableRowVariants = cva(
-  ['border-b', 'border-gray-200', 'transition-colors', 'dark:border-gray-800'],
+  ['border-b', 'border-border', 'transition-colors'],
   {
     variants: {
       variant: {
-        default: ['hover:bg-gray-50', 'dark:hover:bg-gray-900'],
+        default: ['hover:bg-muted/50'],
         interactive: [
-          'hover:bg-gray-50',
-          'data-[state=selected]:bg-gray-100',
-          'focus-visible:bg-gray-50',
+          'hover:bg-muted/50',
+          'data-[state=selected]:bg-accent',
+          'data-[state=selected]:text-accent-foreground',
+          'focus-visible:bg-muted/50',
           'focus-visible:outline-none',
           'focus-visible:ring-2',
-          'focus-visible:ring-blue-500',
+          'focus-visible:ring-ring',
           'focus-visible:ring-offset-2',
-          'dark:hover:bg-gray-900',
-          'dark:data-[state=selected]:bg-gray-800',
-          'dark:focus-visible:bg-gray-900',
         ],
-        striped: [
-          'odd:bg-gray-50',
-          'even:bg-white',
-          'hover:bg-gray-100',
-          'dark:odd:bg-gray-900',
-          'dark:even:bg-gray-950',
-          'dark:hover:bg-gray-800',
-        ],
+        striped: ['odd:bg-muted/30', 'even:bg-background', 'hover:bg-muted/50'],
         highlighted: [
-          'bg-yellow-50',
-          'border-yellow-200',
-          'dark:bg-yellow-950',
-          'dark:border-yellow-800',
+          'bg-warning/10',
+          'border-warning/30',
+          'text-neutral-800',
+          'dark:text-warning',
         ],
       },
     },
@@ -149,8 +125,7 @@ export const tableHeadVariants = cva(
     'text-left',
     'align-middle',
     'font-semibold',
-    'text-gray-900',
-    'dark:text-gray-100',
+    'text-foreground',
     '[&:has([role=checkbox])]:pr-0',
   ],
   {
@@ -159,11 +134,9 @@ export const tableHeadVariants = cva(
         default: [],
         sortable: [
           'cursor-pointer',
-          'hover:bg-gray-100',
-          'focus:bg-gray-100',
+          'hover:bg-muted',
+          'focus:bg-muted',
           'focus:outline-none',
-          'dark:hover:bg-gray-800',
-          'dark:focus:bg-gray-800',
         ],
       },
       align: {
@@ -180,12 +153,10 @@ export const tableHeadVariants = cva(
         true: [
           'cursor-pointer',
           'select-none',
-          'hover:bg-gray-100',
-          'focus:bg-gray-100',
+          'hover:bg-muted',
+          'focus:bg-muted',
           'focus:outline-none',
           'transition-colors',
-          'dark:hover:bg-gray-800',
-          'dark:focus:bg-gray-800',
         ],
         false: [],
       },
@@ -220,7 +191,7 @@ export const tableCellVariants = cva(
         default: [],
         numeric: ['font-mono', 'text-right'],
         emphasized: ['font-semibold'],
-        muted: ['text-gray-600', 'dark:text-gray-400'],
+        muted: ['text-muted-foreground'],
       },
     },
     defaultVariants: {
@@ -235,7 +206,7 @@ export const tableCellVariants = cva(
  * Table caption variants
  */
 export const tableCaptionVariants = cva(
-  ['mt-4', 'text-sm', 'text-gray-500', 'dark:text-gray-400'],
+  ['mt-4', 'text-sm', 'text-muted-foreground'],
   {
     variants: {
       side: {

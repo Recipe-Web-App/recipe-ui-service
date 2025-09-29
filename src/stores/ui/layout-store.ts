@@ -4,6 +4,8 @@ import type {
   LayoutState,
   ViewMode,
   LayoutDensity,
+  LayoutVariant,
+  Breakpoint,
   PaginationState,
   ColumnConfig,
   LayoutConfig,
@@ -13,6 +15,16 @@ interface LayoutStoreState extends LayoutState {
   // View mode actions
   setViewMode: (mode: ViewMode) => void;
   toggleViewMode: () => void;
+
+  // Content width actions
+  setContentWidth: (width: 'full' | 'contained') => void;
+  toggleContentWidth: () => void;
+
+  // Layout variant actions
+  setLayoutVariant: (variant: LayoutVariant) => void;
+
+  // Breakpoint actions
+  setBreakpoint: (breakpoint: Breakpoint) => void;
 
   // Pagination actions
   setPagination: (config: Partial<PaginationState>) => void;
@@ -80,6 +92,9 @@ export const useLayoutStore = create<LayoutStoreState>()(
   persist(
     (set, get) => ({
       viewMode: 'grid',
+      contentWidth: 'contained',
+      layoutVariant: 'default',
+      breakpoint: 'desktop',
       pagination: createDefaultPagination(),
       layoutConfig: createDefaultLayoutConfig(),
       tableColumns: [],
@@ -99,6 +114,24 @@ export const useLayoutStore = create<LayoutStoreState>()(
         const currentIndex = modes.indexOf(currentMode);
         const nextMode = modes[(currentIndex + 1) % modes.length];
         get().setViewMode(nextMode);
+      },
+
+      setContentWidth: (width: 'full' | 'contained') => {
+        set({ contentWidth: width });
+      },
+
+      toggleContentWidth: () => {
+        set(state => ({
+          contentWidth: state.contentWidth === 'full' ? 'contained' : 'full',
+        }));
+      },
+
+      setLayoutVariant: (variant: LayoutVariant) => {
+        set({ layoutVariant: variant });
+      },
+
+      setBreakpoint: (breakpoint: Breakpoint) => {
+        set({ breakpoint });
       },
 
       setPagination: (config: Partial<PaginationState>) => {
@@ -314,6 +347,9 @@ export const useLayoutStore = create<LayoutStoreState>()(
       resetLayout: () => {
         set({
           viewMode: 'grid',
+          contentWidth: 'contained',
+          layoutVariant: 'default',
+          breakpoint: 'desktop',
           layoutConfig: createDefaultLayoutConfig(),
           panelSizes: {},
           collapsedPanels: [],
@@ -325,6 +361,8 @@ export const useLayoutStore = create<LayoutStoreState>()(
       name: 'layout-storage',
       partialize: state => ({
         viewMode: state.viewMode,
+        contentWidth: state.contentWidth,
+        layoutVariant: state.layoutVariant,
         layoutConfig: state.layoutConfig,
         tableColumns: state.tableColumns,
         panelSizes: state.panelSizes,

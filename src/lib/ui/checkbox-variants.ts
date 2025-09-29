@@ -36,70 +36,46 @@ export const checkboxInputVariants = cva(
       },
       variant: {
         default: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-blue-500',
-          'data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-500',
-          'data-[state=indeterminate]:border-blue-500 data-[state=indeterminate]:bg-blue-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-blue-400 dark:data-[state=checked]:bg-blue-500',
-          'dark:data-[state=indeterminate]:border-blue-400 dark:data-[state=indeterminate]:bg-blue-500',
+          'border-input bg-background text-primary-foreground',
+          'hover:border-primary/40',
+          'focus:ring-primary/20',
+          'data-[state=checked]:border-primary data-[state=checked]:bg-primary',
+          'data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary',
         ],
         success: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-green-500',
-          'data-[state=checked]:border-green-500 data-[state=checked]:bg-green-500',
-          'data-[state=indeterminate]:border-green-500 data-[state=indeterminate]:bg-green-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-green-400 dark:data-[state=checked]:bg-green-500',
-          'dark:data-[state=indeterminate]:border-green-400 dark:data-[state=indeterminate]:bg-green-500',
+          'border-input bg-background text-white',
+          'hover:border-success/40',
+          'focus:ring-success/20',
+          'data-[state=checked]:border-success data-[state=checked]:bg-success',
+          'data-[state=indeterminate]:border-success data-[state=indeterminate]:bg-success',
         ],
         warning: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-amber-500',
-          'data-[state=checked]:border-amber-500 data-[state=checked]:bg-amber-500',
-          'data-[state=indeterminate]:border-amber-500 data-[state=indeterminate]:bg-amber-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-amber-400 dark:data-[state=checked]:bg-amber-500',
-          'dark:data-[state=indeterminate]:border-amber-400 dark:data-[state=indeterminate]:bg-amber-500',
+          'border-input bg-background text-neutral-800',
+          'hover:border-warning/40',
+          'focus:ring-warning/20',
+          'data-[state=checked]:border-warning data-[state=checked]:bg-warning',
+          'data-[state=indeterminate]:border-warning data-[state=indeterminate]:bg-warning',
         ],
         danger: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-red-500',
-          'data-[state=checked]:border-red-500 data-[state=checked]:bg-red-500',
-          'data-[state=indeterminate]:border-red-500 data-[state=indeterminate]:bg-red-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-red-400 dark:data-[state=checked]:bg-red-500',
-          'dark:data-[state=indeterminate]:border-red-400 dark:data-[state=indeterminate]:bg-red-500',
+          'border-input bg-background text-destructive-foreground',
+          'hover:border-destructive/40',
+          'focus:ring-destructive/20',
+          'data-[state=checked]:border-destructive data-[state=checked]:bg-destructive',
+          'data-[state=indeterminate]:border-destructive data-[state=indeterminate]:bg-destructive',
         ],
         info: [
-          'border-gray-300 bg-white text-white',
-          'hover:border-gray-400',
-          'focus:ring-sky-500',
-          'data-[state=checked]:border-sky-500 data-[state=checked]:bg-sky-500',
-          'data-[state=indeterminate]:border-sky-500 data-[state=indeterminate]:bg-sky-500',
-          'dark:border-gray-600 dark:bg-gray-800',
-          'dark:hover:border-gray-500',
-          'dark:data-[state=checked]:border-sky-400 dark:data-[state=checked]:bg-sky-500',
-          'dark:data-[state=indeterminate]:border-sky-400 dark:data-[state=indeterminate]:bg-sky-500',
+          'border-input bg-background text-primary-foreground',
+          'hover:border-primary/40',
+          'focus:ring-primary/20',
+          'data-[state=checked]:border-primary data-[state=checked]:bg-primary',
+          'data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary',
         ],
         subtle: [
-          'border-gray-200 bg-gray-50 text-gray-700',
-          'hover:border-gray-300 hover:bg-gray-100',
-          'focus:ring-gray-500',
-          'data-[state=checked]:border-gray-600 data-[state=checked]:bg-gray-600 data-[state=checked]:text-white',
-          'data-[state=indeterminate]:border-gray-600 data-[state=indeterminate]:bg-gray-600 data-[state=indeterminate]:text-white',
-          'dark:border-gray-700 dark:bg-gray-900',
-          'dark:hover:border-gray-600 dark:hover:bg-gray-800',
-          'dark:data-[state=checked]:border-gray-400 dark:data-[state=checked]:bg-gray-500',
-          'dark:data-[state=indeterminate]:border-gray-400 dark:data-[state=indeterminate]:bg-gray-500',
+          'border-border bg-muted text-muted-foreground',
+          'hover:border-border hover:bg-muted/80',
+          'focus:ring-ring/20',
+          'data-[state=checked]:border-muted-foreground data-[state=checked]:bg-muted-foreground data-[state=checked]:text-background',
+          'data-[state=indeterminate]:border-muted-foreground data-[state=indeterminate]:bg-muted-foreground data-[state=indeterminate]:text-background',
         ],
       },
       disabled: {
@@ -127,7 +103,7 @@ export const checkboxLabelVariants = cva(
         xl: 'text-lg',
       },
       required: {
-        true: "after:content-['*'] after:ml-0.5 after:text-red-500",
+        true: "after:content-['*'] after:ml-0.5 after:text-destructive",
         false: '',
       },
     },
@@ -154,7 +130,7 @@ export const checkboxDescriptionVariants = cva('text-muted-foreground', {
 });
 
 // Checkbox error message variants
-export const checkboxErrorVariants = cva('text-sm text-red-600 mt-1', {
+export const checkboxErrorVariants = cva('text-sm text-destructive mt-1', {
   variants: {
     size: {
       sm: 'text-xs',
@@ -172,7 +148,7 @@ export const checkboxErrorVariants = cva('text-sm text-red-600 mt-1', {
 export const checkboxFieldVariants = cva('space-y-1', {
   variants: {
     error: {
-      true: 'text-red-600',
+      true: 'text-destructive',
       false: '',
     },
   },
@@ -187,17 +163,12 @@ export const filterCheckboxGroupVariants = cva(
   {
     variants: {
       variant: {
-        filters:
-          'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950',
-        categories:
-          'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950',
-        tags: 'border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950',
-        options:
-          'border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-950',
-        ingredients:
-          'border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950',
-        dietary:
-          'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950',
+        filters: 'border-primary/20 bg-primary/10',
+        categories: 'border-success/20 bg-success/10',
+        tags: 'border-secondary/20 bg-secondary/10',
+        options: 'border-border bg-muted',
+        ingredients: 'border-warning/30 bg-warning/10',
+        dietary: 'border-warning/30 bg-warning/10',
       },
       layout: {
         vertical: 'flex flex-col',
@@ -216,12 +187,12 @@ export const filterCheckboxGroupVariants = cva(
 export const checkboxGroupTitleVariants = cva('text-lg font-semibold mb-3', {
   variants: {
     variant: {
-      filters: 'text-blue-900 dark:text-blue-100',
-      categories: 'text-green-900 dark:text-green-100',
-      tags: 'text-purple-900 dark:text-purple-100',
-      options: 'text-gray-900 dark:text-gray-100',
-      ingredients: 'text-orange-900 dark:text-orange-100',
-      dietary: 'text-yellow-900 dark:text-yellow-100',
+      filters: 'text-primary',
+      categories: 'text-success',
+      tags: 'text-secondary-foreground',
+      options: 'text-foreground',
+      ingredients: 'text-neutral-800 dark:text-warning',
+      dietary: 'text-neutral-800 dark:text-warning',
     },
   },
   defaultVariants: {
@@ -233,16 +204,16 @@ export const checkboxGroupTitleVariants = cva('text-lg font-semibold mb-3', {
 export const recipeCheckboxVariants = cva('', {
   variants: {
     context: {
-      'recipe-type': 'data-[state=checked]:bg-green-500',
-      cuisine: 'data-[state=checked]:bg-blue-500',
-      'dietary-restriction': 'data-[state=checked]:bg-yellow-500',
-      difficulty: 'data-[state=checked]:bg-purple-500',
-      'cooking-method': 'data-[state=checked]:bg-orange-500',
-      'meal-type': 'data-[state=checked]:bg-pink-500',
-      ingredient: 'data-[state=checked]:bg-teal-500',
-      allergen: 'data-[state=checked]:bg-red-500',
-      nutrition: 'data-[state=checked]:bg-indigo-500',
-      'preparation-time': 'data-[state=checked]:bg-cyan-500',
+      'recipe-type': 'data-[state=checked]:bg-success',
+      cuisine: 'data-[state=checked]:bg-primary',
+      'dietary-restriction': 'data-[state=checked]:bg-warning',
+      difficulty: 'data-[state=checked]:bg-secondary',
+      'cooking-method': 'data-[state=checked]:bg-warning',
+      'meal-type': 'data-[state=checked]:bg-accent',
+      ingredient: 'data-[state=checked]:bg-success',
+      allergen: 'data-[state=checked]:bg-destructive',
+      nutrition: 'data-[state=checked]:bg-primary',
+      'preparation-time': 'data-[state=checked]:bg-accent',
     },
   },
 });
@@ -294,12 +265,12 @@ export const checkboxIconVariants = cva(
 
 // Search checkbox variants (for searchable filter lists)
 export const searchCheckboxVariants = cva(
-  'flex items-center justify-between rounded-md border px-3 py-2 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800',
+  'flex items-center justify-between rounded-md border px-3 py-2 transition-colors hover:bg-muted/50',
   {
     variants: {
       selected: {
-        true: 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-950',
-        false: 'border-gray-200 dark:border-gray-700',
+        true: 'border-primary bg-primary/10',
+        false: 'border-border',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',

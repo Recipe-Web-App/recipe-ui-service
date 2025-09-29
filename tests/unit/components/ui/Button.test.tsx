@@ -70,7 +70,7 @@ describe('Button', () => {
     test('applies outline variant classes', () => {
       renderButton({ variant: 'outline' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border', 'border-input', 'bg-background');
+      expect(button).toHaveClass('border', 'border-border', 'bg-background');
     });
 
     test('applies secondary variant classes', () => {
@@ -84,7 +84,7 @@ describe('Button', () => {
       renderButton({ variant: 'ghost' });
       const button = screen.getByRole('button');
       // Ghost doesn't have background or shadow, check for hover classes presence
-      expect(button.className).toMatch(/hover:bg-accent/);
+      expect(button.className).toMatch(/hover:bg-primary\/10/);
     });
 
     test('applies link variant classes', () => {
@@ -99,19 +99,19 @@ describe('Button', () => {
     test('applies default size classes', () => {
       renderButton({ size: 'default' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-9', 'px-4', 'py-2', 'text-button-base');
+      expect(button).toHaveClass('h-9', 'px-4', 'py-2', 'text-sm');
     });
 
     test('applies small size classes', () => {
       renderButton({ size: 'sm' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-8', 'px-3', 'text-button-sm');
+      expect(button).toHaveClass('h-8', 'px-3', 'text-xs');
     });
 
     test('applies large size classes', () => {
       renderButton({ size: 'lg' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-10', 'px-8', 'text-button-lg');
+      expect(button).toHaveClass('h-10', 'px-8', 'text-base');
     });
 
     test('applies icon size classes', () => {
@@ -427,7 +427,7 @@ describe('Button', () => {
   describe('Integration with Custom Styling', () => {
     test('merges custom classes correctly', () => {
       renderButton({
-        className: 'bg-red-500 custom-class',
+        className: 'bg-destructive custom-class',
         variant: 'default',
       });
       const button = screen.getByRole('button');

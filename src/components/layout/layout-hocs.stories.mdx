@@ -1,0 +1,739 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  withLayout,
+  withDefaultLayout,
+  withFocusedLayout,
+  withMinimalLayout,
+  withLayoutProvider
+} from './layout-hocs';
+import { LayoutProvider } from './layout-provider';
+
+<Meta
+  title="Layout Components/Layout HOCs"
+  parameters={{
+    docs: {
+      description: {
+        component: `
+Higher-Order Components (HOCs) for wrapping pages and components with layout functionality.
+These utilities provide a clean way to apply consistent layout patterns across your application
+without repeating layout setup code.
+
+## Available HOCs
+
+### withLayout(variant)
+A flexible HOC factory that creates layout wrappers for any component. You can specify
+the layout variant to use, making it easy to apply different layout types consistently.
+
+### Pre-configured HOCs
+- **withDefaultLayout** - Wraps components with the default layout variant
+- **withFocusedLayout** - Wraps components with the focused layout variant
+- **withMinimalLayout** - Wraps components with the minimal layout variant
+
+### withLayoutProvider
+Wraps components with just the LayoutProvider context, useful when you need layout
+state management without the full layout structure.
+
+## Benefits
+
+- **Consistency**: Ensures uniform layout application across pages
+- **Reusability**: DRY principle for layout configuration
+- **Type Safety**: Full TypeScript support with proper prop forwarding
+- **Performance**: Memoized components prevent unnecessary re-renders
+- **Debugging**: Clear display names for React DevTools
+
+## Common Patterns
+
+These HOCs are perfect for:
+- Page-level components that need consistent layouts
+- Route-based layout application
+- Component libraries that need layout integration
+- Conditional layout wrapping based on user state or feature flags
+        `
+      }
+    }
+  }}
+/>
+
+# Layout HOCs
+
+<Description />
+
+## withLayout HOC Factory
+
+The `withLayout` HOC factory allows you to create custom layout wrappers for any layout variant.
+
+<Canvas>
+  <Story name="withLayout Factory">
+    {() => {
+      // Sample component to demonstrate HOC wrapping
+      const SamplePage = ({ title = "Sample Page" }) => (
+        <div className="p-8">
+          <h1 className="text-3xl font-bold mb-6">{title}</h1>
+          <p className="text-muted-foreground mb-8">
+            This component has been wrapped with the withLayout HOC factory.
+            The layout variant is applied automatically without the component
+            needing to know about layout concerns.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 border rounded-lg bg-card">
+              <h3 className="font-semibold mb-3">HOC Benefits</h3>
+              <ul className="space-y-2 text-sm">
+                <li>• Automatic layout application</li>
+                <li>• Component stays layout-agnostic</li>
+                <li>• Consistent pattern across pages</li>
+                <li>• Easy to change layout variants</li>
+              </ul>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-card">
+              <h3 className="font-semibold mb-3">Usage Example</h3>
+              <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
+{`const WrappedPage = withLayout('default')(SamplePage);
+
+// Or with custom variant
+const CustomWrapper = withLayout('focused');
+const FocusedPage = CustomWrapper(SamplePage);`}
+              </pre>
+            </div>
+          </div>
+        </div>
+      );
+
+      // Create HOC instances for demonstration
+      const DefaultWrapped = withDefaultLayout(SamplePage);
+      const FocusedWrapped = withFocusedLayout(SamplePage);
+      const MinimalWrapped = withMinimalLayout(SamplePage);
+
+      const [currentVariant, setCurrentVariant] = React.useState('default');
+
+      const ComponentToRender = {
+        default: DefaultWrapped,
+        focused: FocusedWrapped,
+        minimal: MinimalWrapped
+      }[currentVariant];
+
+      return (
+        <div>
+          <div className="p-4 border-b bg-muted/50">
+            <div className="flex items-center gap-4">
+              <span className="font-medium">HOC Variant:</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentVariant('default')}
+                  className={`px-3 py-1 text-sm rounded transition-colors ${
+                    currentVariant === 'default'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  withDefaultLayout
+                </button>
+                <button
+                  onClick={() => setCurrentVariant('focused')}
+                  className={`px-3 py-1 text-sm rounded transition-colors ${
+                    currentVariant === 'focused'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  withFocusedLayout
+                </button>
+                <button
+                  onClick={() => setCurrentVariant('minimal')}
+                  className={`px-3 py-1 text-sm rounded transition-colors ${
+                    currentVariant === 'minimal'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  withMinimalLayout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ComponentToRender title={`Page wrapped with ${currentVariant} layout HOC`} />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Pre-configured HOCs
+
+Each pre-configured HOC applies a specific layout variant consistently.
+
+<Canvas>
+  <Story name="Pre-configured HOCs">
+    {() => {
+      const DashboardPage = () => (
+        <div className="p-8">
+          <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+          <p className="text-muted-foreground mb-8">
+            This dashboard component uses withDefaultLayout HOC to ensure it always
+            appears with the full navigation sidebar and footer.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="p-4 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-2">Widget {i + 1}</h3>
+                <div className="text-2xl font-bold text-primary mb-2">
+                  {Math.floor(Math.random() * 1000)}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Dashboard metrics and data
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+      const ArticlePage = () => (
+        <div className="max-w-4xl mx-auto p-8">
+          <h1 className="text-4xl font-bold mb-6">How to Use Layout HOCs</h1>
+          <p className="text-lg text-muted-foreground mb-8">
+            This article component uses withFocusedLayout HOC to ensure maximum
+            reading space without sidebar distractions.
+          </p>
+
+          <div className="prose prose-gray max-w-none">
+            <h2>Introduction</h2>
+            <p>
+              Layout HOCs provide a clean separation of concerns between your
+              components and the layout they appear in. This article demonstrates
+              how the focused layout gives your content the attention it deserves.
+            </p>
+
+            <h2>Key Benefits</h2>
+            <ul>
+              <li>Components remain layout-agnostic</li>
+              <li>Consistent layout application</li>
+              <li>Easy to refactor layout choices</li>
+              <li>Type-safe prop forwarding</li>
+            </ul>
+
+            <h2>Implementation</h2>
+            <p>
+              The implementation is straightforward - wrap your component with the
+              appropriate HOC and it will automatically receive the correct layout
+              structure around your content.
+            </p>
+          </div>
+        </div>
+      );
+
+      const LoginPage = () => (
+        <div className="flex items-center justify-center min-h-[70vh]">
+          <div className="w-full max-w-sm space-y-6">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold">Sign In</h1>
+              <p className="text-muted-foreground">
+                This login form uses withMinimalLayout HOC
+              </p>
+            </div>
+
+            <div className="space-y-4 p-6 border rounded-lg bg-card">
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full px-3 py-2 border rounded-md bg-background"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full px-3 py-2 border rounded-md bg-background"
+              />
+              <button className="w-full bg-primary text-primary-foreground py-2 rounded-md">
+                Sign In
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+      // Wrap components with HOCs
+      const WrappedDashboard = withDefaultLayout(DashboardPage);
+      const WrappedArticle = withFocusedLayout(ArticlePage);
+      const WrappedLogin = withMinimalLayout(LoginPage);
+
+      const [activeExample, setActiveExample] = React.useState('dashboard');
+
+      const examples = {
+        dashboard: {
+          component: WrappedDashboard,
+          title: 'Dashboard with Default Layout',
+          description: 'Full navigation experience for application pages'
+        },
+        article: {
+          component: WrappedArticle,
+          title: 'Article with Focused Layout',
+          description: 'Content-focused layout for reading experiences'
+        },
+        login: {
+          component: WrappedLogin,
+          title: 'Login with Minimal Layout',
+          description: 'Minimal layout for standalone pages'
+        }
+      };
+
+      const ActiveComponent = examples[activeExample].component;
+
+      return (
+        <div>
+          <div className="p-4 border-b bg-muted/50">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <span className="font-medium">Example:</span>
+                <div className="flex gap-2">
+                  {Object.entries(examples).map(([key, example]) => (
+                    <button
+                      key={key}
+                      onClick={() => setActiveExample(key)}
+                      className={`px-3 py-1 text-sm rounded transition-colors ${
+                        activeExample === key
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                      }`}
+                    >
+                      {example.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {examples[activeExample].description}
+              </p>
+            </div>
+          </div>
+
+          <ActiveComponent />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## withLayoutProvider HOC
+
+The `withLayoutProvider` HOC wraps components with just the layout context, useful when you need
+layout state management without the full layout structure.
+
+<Canvas>
+  <Story name="withLayoutProvider">
+    {() => {
+      const CustomLayoutComponent = () => {
+        const { useLayoutContext } = require('./layout-provider');
+        const { variant, showSidebar, showFooter, toggleSidebar, toggleFooter } = useLayoutContext();
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">Custom Layout Component</h1>
+            <p className="text-muted-foreground">
+              This component is wrapped with withLayoutProvider HOC, giving it access
+              to layout context without applying any layout structure.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-4 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-3">Layout State</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Variant:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{variant}</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Show Sidebar:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{showSidebar.toString()}</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Show Footer:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{showFooter.toString()}</code>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-3">Layout Controls</h3>
+                <div className="space-y-2">
+                  <button
+                    onClick={toggleSidebar}
+                    className="w-full px-3 py-2 text-sm border rounded hover:bg-muted"
+                  >
+                    Toggle Sidebar
+                  </button>
+                  <button
+                    onClick={toggleFooter}
+                    className="w-full px-3 py-2 text-sm border rounded hover:bg-muted"
+                  >
+                    Toggle Footer
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border rounded-lg bg-muted/50">
+              <h4 className="font-medium mb-2">Use Case</h4>
+              <p className="text-sm text-muted-foreground">
+                Use withLayoutProvider when you need to build custom layout components
+                that require access to layout state but don't need the standard layout structure.
+                This is perfect for admin panels, custom dashboards, or specialized interfaces.
+              </p>
+            </div>
+          </div>
+        );
+      };
+
+      const WrappedComponent = withLayoutProvider(CustomLayoutComponent, {
+        variant: 'default',
+        defaultShowSidebar: true,
+        defaultShowFooter: true
+      });
+
+      return <WrappedComponent />;
+    }}
+  </Story>
+</Canvas>
+
+## Code Examples
+
+<Canvas>
+  <Story name="Code Examples">
+    {() => (
+      <div className="p-8 space-y-8">
+        <h1 className="text-3xl font-bold">HOC Usage Examples</h1>
+
+        <div className="space-y-6">
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Basic HOC Usage</h3>
+            <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+{`import { withDefaultLayout, withFocusedLayout, withMinimalLayout } from '@/components/layout';
+
+// Wrap your page components
+const DashboardPage = () => <div>Dashboard Content</div>;
+const ArticlePage = () => <div>Article Content</div>;
+const LoginPage = () => <div>Login Form</div>;
+
+// Apply layout HOCs
+export const Dashboard = withDefaultLayout(DashboardPage);
+export const Article = withFocusedLayout(ArticlePage);
+export const Login = withMinimalLayout(LoginPage);`}
+            </pre>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Custom Layout HOC</h3>
+            <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+{`import { withLayout } from '@/components/layout';
+
+// Create custom layout wrapper
+const withCustomLayout = withLayout('focused');
+
+// Apply to multiple components
+const BlogPost = withCustomLayout(BlogPostComponent);
+const Documentation = withCustomLayout(DocsComponent);
+const Recipe = withCustomLayout(RecipeComponent);
+
+// Or inline usage
+const WrappedComponent = withLayout('minimal')(YourComponent);`}
+            </pre>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Layout Provider HOC</h3>
+            <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+{`import { withLayoutProvider } from '@/components/layout';
+
+const CustomDashboard = () => {
+  const { variant, showSidebar, toggleSidebar } = useLayoutContext();
+
+  return (
+    <div>
+      <button onClick={toggleSidebar}>Toggle Sidebar</button>
+      <div>Custom layout with variant: {variant}</div>
+    </div>
+  );
+};
+
+// Wrap with provider and options
+export const Dashboard = withLayoutProvider(CustomDashboard, {
+  variant: 'default',
+  defaultShowSidebar: true,
+  defaultShowFooter: false
+});`}
+            </pre>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">TypeScript Usage</h3>
+            <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+{`import { withDefaultLayout } from '@/components/layout';
+import type { FC } from 'react';
+
+interface PageProps {
+  title: string;
+  data: Array<{ id: string; name: string }>;
+}
+
+const PageComponent: FC<PageProps> = ({ title, data }) => (
+  <div>
+    <h1>{title}</h1>
+    {data.map(item => <div key={item.id}>{item.name}</div>)}
+  </div>
+);
+
+// HOC maintains full type safety
+export const Page = withDefaultLayout(PageComponent);
+
+// Usage maintains props interface
+<Page title="My Page" data={[{ id: '1', name: 'Item 1' }]} />`}
+            </pre>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Next.js Route Integration</h3>
+            <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+{`// pages/dashboard.tsx
+import { withDefaultLayout } from '@/components/layout';
+
+const DashboardPage = () => <div>Dashboard</div>;
+export default withDefaultLayout(DashboardPage);
+
+// pages/article/[id].tsx
+import { withFocusedLayout } from '@/components/layout';
+
+const ArticlePage = () => <div>Article</div>;
+export default withFocusedLayout(ArticlePage);
+
+// pages/login.tsx
+import { withMinimalLayout } from '@/components/layout';
+
+const LoginPage = () => <div>Login</div>;
+export default withMinimalLayout(LoginPage);`}
+            </pre>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## HOC Comparison
+
+<Canvas>
+  <Story name="HOC Comparison">
+    {() => (
+      <div className="p-8">
+        <h1 className="text-3xl font-bold mb-8">HOC Comparison Guide</h1>
+
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-muted">
+                <th className="border border-gray-300 p-3 text-left">HOC</th>
+                <th className="border border-gray-300 p-3 text-left">Use Case</th>
+                <th className="border border-gray-300 p-3 text-left">Layout Structure</th>
+                <th className="border border-gray-300 p-3 text-left">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-3">
+                  <code className="bg-muted px-2 py-1 rounded">withDefaultLayout</code>
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Main application pages
+                </td>
+                <td className="border border-gray-300 p-3">
+                  TopNav + Sidebar + Content + Footer
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Dashboards, lists, settings pages
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-3">
+                  <code className="bg-muted px-2 py-1 rounded">withFocusedLayout</code>
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Content consumption
+                </td>
+                <td className="border border-gray-300 p-3">
+                  TopNav + Content + Minimal Footer
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Articles, recipes, documentation
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-3">
+                  <code className="bg-muted px-2 py-1 rounded">withMinimalLayout</code>
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Standalone pages
+                </td>
+                <td className="border border-gray-300 p-3">
+                  TopNav + Content only
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Auth pages, errors, onboarding
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-3">
+                  <code className="bg-muted px-2 py-1 rounded">withLayout(variant)</code>
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Custom layout needs
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Configurable based on variant
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Dynamic layouts, component libraries
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 p-3">
+                  <code className="bg-muted px-2 py-1 rounded">withLayoutProvider</code>
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Custom layout implementation
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Context only, no layout structure
+                </td>
+                <td className="border border-gray-300 p-3">
+                  Admin panels, custom dashboards
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-8 p-6 border rounded-lg bg-muted/50">
+          <h3 className="font-semibold mb-3">Selection Guide</h3>
+          <ul className="space-y-2 text-sm">
+            <li><strong>Start with pre-configured HOCs</strong> for 90% of use cases</li>
+            <li><strong>Use withLayout(variant)</strong> when you need dynamic variant selection</li>
+            <li><strong>Use withLayoutProvider</strong> only when building completely custom layouts</li>
+            <li><strong>Consider route-based application</strong> for consistent page layouts</li>
+          </ul>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Performance Considerations
+
+<Canvas>
+  <Story name="Performance">
+    {() => (
+      <div className="p-8 space-y-6">
+        <h1 className="text-3xl font-bold">Performance Characteristics</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Optimization Features</h3>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                Memoized component wrappers
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                Prop forwarding optimization
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                Layout context memoization
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                Minimal re-render triggers
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-card">
+            <h3 className="font-semibold mb-4">Best Practices</h3>
+            <ul className="space-y-2 text-sm">
+              <li>• Apply HOCs at the page level, not component level</li>
+              <li>• Use pre-configured HOCs over withLayout factory</li>
+              <li>• Avoid deeply nested HOC combinations</li>
+              <li>• Consider layout context needs before withLayoutProvider</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="p-6 border rounded-lg bg-muted/50">
+          <h3 className="font-semibold mb-3">Bundle Size Impact</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Layout HOCs add minimal overhead to your bundle:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">~2KB</div>
+              <div className="text-muted-foreground">withLayout core</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">~1KB</div>
+              <div className="text-muted-foreground">Pre-configured HOCs</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">~1.5KB</div>
+              <div className="text-muted-foreground">withLayoutProvider</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">0KB</div>
+              <div className="text-muted-foreground">Runtime overhead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## API Reference
+
+### withLayout(variant)
+
+```typescript
+function withLayout(variant: LayoutVariant = 'default'): <P extends object>(
+  Component: React.ComponentType<P>
+) => React.ForwardRefExoticComponent<P>
+```
+
+**Parameters:**
+- `variant` - Layout variant to apply ('default', 'focused', 'minimal')
+
+**Returns:**
+- Higher-order component that wraps the input component with the specified layout
+
+### Pre-configured HOCs
+
+```typescript
+const withDefaultLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
+const withFocusedLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
+const withMinimalLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
+```
+
+### withLayoutProvider
+
+```typescript
+function withLayoutProvider<P extends object>(
+  Component: React.ComponentType<P>,
+  options: Omit<LayoutProviderProps, 'children'> = {}
+): React.ForwardRefExoticComponent<P>
+```
+
+**Parameters:**
+- `Component` - React component to wrap
+- `options` - LayoutProvider configuration options
+
+**Returns:**
+- Component wrapped with LayoutProvider context

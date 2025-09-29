@@ -1,0 +1,434 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { UserMenu } from './user-menu';
+import { useAuthStore } from '@/stores/auth-store';
+import { useLayoutStore } from '@/stores/ui/layout-store';
+
+<Meta
+  title="Layout Components/UserMenu"
+  component={UserMenu}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[400px] items-start justify-end p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The UserMenu component displays user authentication state and provides access to user actions.
+It shows a sign-in button when unauthenticated and a comprehensive user menu when authenticated.
+
+## Features
+
+- Shows user avatar and info when authenticated
+- Provides sign-in button when not authenticated
+- Dropdown menu with user actions (Profile, Settings, Logout)
+- Compact mode for mobile/tablet layouts
+- Role-based menu items (premium/admin features)
+- Online status indicator
+- Responsive design with proper mobile handling
+- Full accessibility support with proper ARIA labels
+- TypeScript support with strict typing
+
+## Usage
+
+Use UserMenu for:
+- Top navigation authentication UI
+- Mobile header user controls
+- Sidebar user information display
+- Any context requiring user authentication state
+- Profile and account access points
+        `
+      }
+    }
+  }}
+  argTypes={{
+    compact: {
+      control: { type: 'boolean' },
+      description: 'Use compact layout for mobile/smaller spaces',
+      defaultValue: false
+    },
+    showLabel: {
+      control: { type: 'boolean' },
+      description: 'Show user name label alongside avatar',
+      defaultValue: false
+    },
+    align: {
+      control: { type: 'select' },
+      options: ['start', 'center', 'end'],
+      description: 'Menu alignment relative to trigger',
+      defaultValue: 'end'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# UserMenu
+
+<Description of={UserMenu} />
+
+## Unauthenticated State
+
+<Canvas>
+  <Story name="Unauthenticated">
+    {() => {
+      // Mock unauthenticated state
+      const MockedUserMenu = () => {
+        // This would be replaced with proper store mocking in real implementation
+        return <UserMenu />;
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="text-sm text-muted-foreground">When user is not signed in:</div>
+          <MockedUserMenu />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Authenticated State
+
+<Canvas>
+  <Story name="Authenticated">
+    {() => {
+      // Mock authenticated state - in real implementation, you'd mock the store
+      return (
+        <div className="space-y-4">
+          <div className="text-sm text-muted-foreground">When user is signed in:</div>
+          <UserMenu />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Compact Mode
+
+<Canvas>
+  <Story name="Compact">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Compact mode for mobile layouts:</div>
+        <UserMenu compact />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## With Label
+
+<Canvas>
+  <Story name="With Label">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Showing user name alongside avatar:</div>
+        <UserMenu showLabel />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Compact with Label
+
+<Canvas>
+  <Story name="Compact with Label">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Compact mode with user name:</div>
+        <UserMenu compact showLabel />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Different Alignments
+
+<Canvas>
+  <Story name="Menu Alignment">
+    {() => (
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">Start aligned:</div>
+          <UserMenu align="start" />
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div className="text-sm text-muted-foreground mr-4">Center aligned:</div>
+          <UserMenu align="center" />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">End aligned (default):</div>
+          <UserMenu align="end" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mobile Layout Simulation
+
+<Canvas>
+  <Story name="Mobile Layout">
+    {() => (
+      <div className="max-w-sm mx-auto">
+        <div className="border rounded-lg p-4 bg-background">
+          {/* Simulated mobile header */}
+          <div className="flex items-center justify-between">
+            <div className="text-lg font-semibold">Recipe App</div>
+            <UserMenu compact />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Top Navigation Context
+
+<Canvas>
+  <Story name="Top Nav Context">
+    {() => (
+      <div className="w-full">
+        {/* Simulated top navigation */}
+        <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="flex h-16 items-center justify-between px-6">
+            <div className="flex items-center space-x-4">
+              <div className="text-xl font-bold">Recipe App</div>
+              <div className="hidden md:flex space-x-6 text-sm">
+                <a href="#" className="text-muted-foreground hover:text-foreground">Recipes</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Meal Plans</a>
+                <a href="#" className="text-muted-foreground hover:text-foreground">Collections</a>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <UserMenu showLabel />
+            </div>
+          </div>
+        </nav>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Sidebar Context
+
+<Canvas>
+  <Story name="Sidebar Context">
+    {() => (
+      <div className="w-64 border-r bg-background">
+        {/* Simulated sidebar */}
+        <div className="flex h-full flex-col">
+          <div className="border-b p-4">
+            <div className="text-lg font-semibold">Navigation</div>
+          </div>
+
+          <div className="flex-1 p-4">
+            <div className="space-y-2">
+              <div className="text-sm font-medium">Menu Items</div>
+              <div className="space-y-1 text-sm text-muted-foreground">
+                <div>Dashboard</div>
+                <div>Recipes</div>
+                <div>Meal Plans</div>
+              </div>
+            </div>
+          </div>
+
+          {/* User menu at bottom of sidebar */}
+          <div className="border-t p-4">
+            <UserMenu showLabel className="w-full justify-start" />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Custom styling examples:</div>
+        <div className="space-y-3">
+          <UserMenu className="border border-primary rounded-full" />
+          <UserMenu showLabel className="bg-accent px-3 py-1 rounded-md" />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Loading State Simulation
+
+<Canvas>
+  <Story name="Loading State">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">Simulated loading state:</div>
+        <div className="flex items-center space-x-2">
+          <div className="animate-pulse bg-muted rounded-full h-9 w-9" />
+          <div className="text-sm text-muted-foreground">Loading...</div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Premium User Context
+
+<Canvas>
+  <Story name="Premium User">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Premium user with additional menu items (Analytics):
+        </div>
+        <UserMenu />
+        <div className="text-xs text-muted-foreground">
+          Note: Premium features would be visible in the dropdown menu
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Dark Theme Example
+
+<Canvas>
+  <Story name="Dark Theme">
+    {() => (
+      <div className="dark">
+        <div className="bg-background border rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div className="text-foreground">Dark theme context</div>
+            <UserMenu showLabel />
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Use the controls below to configure UserMenu:
+        </div>
+        <UserMenu {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={UserMenu} />
+
+## Menu Items
+
+### Standard User Menu Items
+
+- **Profile** - View and edit user profile information
+- **Favorites** - Access to bookmarked recipes
+- **My Recipes** - User's created recipes
+- **Settings** - Account and application preferences
+
+### Premium/Admin Items
+
+- **Analytics** - Usage analytics and insights (premium/admin only)
+
+### Authentication Actions
+
+- **Sign Out** - Logout with proper cleanup
+
+## Authentication States
+
+### Unauthenticated
+- Shows "Sign In" button with user icon
+- Redirects to login page on click
+- Compact mode available for space-constrained layouts
+
+### Authenticated
+- Shows user avatar with online status indicator
+- Displays user name when `showLabel` is true
+- Provides dropdown menu with user actions
+- Handles logout process with loading states
+
+## Accessibility Features
+
+- **Keyboard Navigation**: All menu items are keyboard accessible
+- **Screen Reader Support**: Proper ARIA labels and descriptions
+- **Focus Management**: Logical tab order and focus indicators
+- **Role Attributes**: Correct menu roles and states
+- **Status Indicators**: Online status properly announced
+- **Action Feedback**: Clear feedback for all user actions
+
+## Responsive Behavior
+
+### Mobile (< 768px)
+- Compact mode recommended
+- Simplified menu descriptions
+- Touch-friendly button sizes
+- Optimized for thumb navigation
+
+### Tablet (768px - 1024px)
+- Standard or compact mode
+- Full menu descriptions
+- Balanced spacing
+
+### Desktop (> 1024px)
+- Full feature set available
+- Complete menu descriptions
+- Optimal spacing and sizing
+
+## Design Guidelines
+
+### Avatar Display
+- Uses UserAvatar component for consistency
+- Fallback to initials when no image available
+- Online status indicator (green dot)
+- Proper alt text for accessibility
+
+### Menu Structure
+- Clear visual hierarchy
+- Consistent iconography
+- Grouped related actions
+- Destructive actions (logout) visually distinct
+
+### Animation & Transitions
+- Smooth popover open/close
+- Hover state transitions
+- Focus indicators
+- Loading state handling
+
+## Implementation Notes
+
+- Integrates with auth store for authentication state
+- Uses layout store for responsive behavior
+- Handles navigation through Next.js router
+- Supports both controlled and uncontrolled usage
+- Optimized for performance with React.memo patterns
+- Type-safe with comprehensive TypeScript interfaces
+- Follows design system conventions consistently
+
+## Security Considerations
+
+- Secure logout process with proper cleanup
+- No sensitive data exposed in UI
+- Proper session management integration
+- Safe navigation handling
+- Input validation on user actions

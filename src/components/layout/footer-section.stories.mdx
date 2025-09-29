@@ -1,0 +1,260 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { FooterSection } from './footer-section';
+import { FooterLink } from './footer-link';
+
+<Meta
+  title="Layout Components/FooterSection"
+  component={FooterSection}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The FooterSection component provides a container for grouping related footer links with optional section titles.
+It handles consistent spacing, typography, and accessibility for footer navigation sections.
+
+## Features
+
+- Optional section titles with consistent styling
+- Flexible container for any footer content
+- Consistent spacing and typography
+- Full accessibility support with navigation landmarks
+- Responsive design-friendly layout
+- TypeScript support with strict typing
+
+## Usage
+
+Use FooterSection for:
+- Grouping related footer links by category
+- Creating organized footer layouts
+- Providing navigation structure in footers
+- Maintaining consistent spacing between footer groups
+- Building accessible footer navigation patterns
+        `
+      }
+    }
+  }}
+  argTypes={{
+    title: {
+      control: { type: 'text' },
+      description: 'Optional section heading text',
+      defaultValue: 'Section Title'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# FooterSection
+
+<Description of={FooterSection} />
+
+## Basic Section with Title
+
+<Canvas>
+  <Story name="With Title">
+    {() => (
+      <div className="p-6 bg-background border rounded max-w-sm">
+        <FooterSection title="Company">
+          <FooterLink href="/about">About Us</FooterLink>
+          <FooterLink href="/careers">Careers</FooterLink>
+          <FooterLink href="/press">Press</FooterLink>
+          <FooterLink href="/contact">Contact</FooterLink>
+        </FooterSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Section without Title
+
+<Canvas>
+  <Story name="Without Title">
+    {() => (
+      <div className="p-6 bg-background border rounded max-w-sm">
+        <FooterSection>
+          <FooterLink href="/privacy">Privacy Policy</FooterLink>
+          <FooterLink href="/terms">Terms of Service</FooterLink>
+          <FooterLink href="/cookies">Cookie Policy</FooterLink>
+        </FooterSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Multiple Sections Layout
+
+<Canvas>
+  <Story name="Multiple Sections">
+    {() => (
+      <div className="p-6 bg-background border rounded">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <FooterSection title="Product">
+            <FooterLink href="/features">Features</FooterLink>
+            <FooterLink href="/pricing">Pricing</FooterLink>
+            <FooterLink href="/demo">Demo</FooterLink>
+            <FooterLink href="/integrations">Integrations</FooterLink>
+          </FooterSection>
+
+          <FooterSection title="Resources">
+            <FooterLink href="/docs">Documentation</FooterLink>
+            <FooterLink href="/api">API Reference</FooterLink>
+            <FooterLink href="/guides">Guides</FooterLink>
+            <FooterLink href="/support">Support</FooterLink>
+          </FooterSection>
+
+          <FooterSection title="Community">
+            <FooterLink href="/forum">Forum</FooterLink>
+            <FooterLink href="https://discord.gg/example" external>Discord</FooterLink>
+            <FooterLink href="https://github.com/example" external>GitHub</FooterLink>
+            <FooterLink href="/events">Events</FooterLink>
+          </FooterSection>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Mixed Content Types
+
+<Canvas>
+  <Story name="Mixed Content">
+    {() => (
+      <div className="p-6 bg-background border rounded max-w-sm">
+        <FooterSection title="Connect">
+          <FooterLink href="/newsletter">Newsletter</FooterLink>
+          <FooterLink href="https://twitter.com/example" external>
+            Twitter
+          </FooterLink>
+          <FooterLink href="https://linkedin.com/company/example" external>
+            LinkedIn
+          </FooterLink>
+          <div className="text-sm text-muted-foreground">
+            Follow us for updates and news
+          </div>
+        </FooterSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="p-6 bg-background border rounded max-w-sm">
+        <FooterSection
+          title="Legal"
+          className="border-l-2 border-primary pl-4"
+        >
+          <FooterLink href="/privacy" className="text-xs">
+            Privacy Policy
+          </FooterLink>
+          <FooterLink href="/terms" className="text-xs">
+            Terms of Service
+          </FooterLink>
+          <FooterLink href="/gdpr" className="text-xs">
+            GDPR Compliance
+          </FooterLink>
+        </FooterSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Responsive Footer Layout
+
+<Canvas>
+  <Story name="Responsive Layout">
+    {() => (
+      <div className="p-6 bg-background border rounded">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <FooterSection title="Product">
+            <FooterLink href="/about">About</FooterLink>
+            <FooterLink href="/features">Features</FooterLink>
+            <FooterLink href="/pricing">Pricing</FooterLink>
+            <FooterLink href="/changelog">Changelog</FooterLink>
+          </FooterSection>
+
+          <FooterSection title="Resources">
+            <FooterLink href="/docs">Documentation</FooterLink>
+            <FooterLink href="/blog">Blog</FooterLink>
+            <FooterLink href="/support">Support</FooterLink>
+            <FooterLink href="/api">API Reference</FooterLink>
+          </FooterSection>
+
+          <FooterSection title="Community">
+            <FooterLink href="/forum">Forum</FooterLink>
+            <FooterLink href="https://discord.gg/example" external>
+              Discord
+            </FooterLink>
+            <FooterLink href="/contribute">Contribute</FooterLink>
+            <FooterLink href="/events">Events</FooterLink>
+          </FooterSection>
+
+          <FooterSection title="Legal">
+            <FooterLink href="/privacy">Privacy Policy</FooterLink>
+            <FooterLink href="/terms">Terms of Service</FooterLink>
+            <FooterLink href="/cookies">Cookie Policy</FooterLink>
+            <FooterLink href="/license">License</FooterLink>
+          </FooterSection>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Empty Section
+
+<Canvas>
+  <Story name="Empty Section">
+    {() => (
+      <div className="p-6 bg-background border rounded max-w-sm">
+        <FooterSection title="Coming Soon">
+          <div className="text-sm text-muted-foreground">
+            More links coming soon...
+          </div>
+        </FooterSection>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={FooterSection} />
+
+## Accessibility Features
+
+- **Navigation Landmark**: Uses `role="navigation"` for screen reader navigation
+- **Aria Labels**: Automatically generates appropriate labels based on title
+- **Semantic Structure**: Uses proper heading hierarchy with `h3` elements
+- **Keyboard Navigation**: All contained links are keyboard accessible
+- **Screen Reader Support**: Clear section boundaries for assistive technology
+
+## Design Guidelines
+
+### Typography
+- Section titles use uppercase styling with letter spacing
+- Consistent font weights and sizes throughout
+- Proper color contrast for accessibility
+
+### Spacing
+- Consistent vertical rhythm between sections
+- Proper spacing between title and links
+- Responsive spacing that adapts to screen size
+
+### Layout
+- Flexible grid system for responsive layouts
+- Consistent alignment and positioning
+- Clean separation between sections
+
+## Implementation Notes
+
+- The component automatically generates accessibility labels based on the title prop
+- When no title is provided, it uses a generic "Footer links" label
+- All contained content is wrapped in a semantic `nav` element
+- The component is fully responsive and works well in grid layouts
+- CSS classes follow the established design system patterns

@@ -1,0 +1,878 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  useLayoutVariant,
+  useSidebarVisibility,
+  useFooterVisibility,
+  useLayoutSubNavigation
+} from './layout-hooks';
+import { LayoutProvider } from './layout-provider';
+
+<Meta
+  title="Layout Components/Layout Hooks"
+  parameters={{
+    docs: {
+      description: {
+        component: `
+Utility hooks for accessing specific parts of the layout context without needing
+to use the full useLayoutContext hook. These hooks provide convenient, focused
+access to layout state and are optimized for performance.
+
+## Available Hooks
+
+### useLayoutVariant()
+Returns the current layout variant ('default', 'focused', 'minimal').
+Useful for conditional rendering based on the active layout type.
+
+### useSidebarVisibility()
+Returns a boolean indicating whether the sidebar should be visible.
+Automatically updates when layout variant changes or when sidebar is toggled.
+
+### useFooterVisibility()
+Returns a boolean indicating whether the footer should be visible.
+Responds to layout variant changes and manual footer toggles.
+
+### useLayoutSubNavigation()
+Returns the current sub-navigation items for the active route.
+Automatically filtered based on authentication, roles, and feature flags.
+
+## Benefits
+
+- **Performance**: Only subscribe to specific layout state slices
+- **Simplicity**: Clean, focused API for common layout needs
+- **Type Safety**: Full TypeScript support with proper return types
+- **Consistency**: Standardized way to access layout information
+
+## Use Cases
+
+These hooks are perfect for:
+- Conditional rendering based on layout state
+- Components that need to adapt to layout changes
+- Building responsive layouts that react to sidebar state
+- Creating layout-aware navigation components
+        `
+      }
+    }
+  }}
+/>
+
+# Layout Hooks
+
+<Description />
+
+## Hook Demonstrations
+
+All layout hooks must be used within a LayoutProvider context. These examples show
+each hook in action with real-time updates.
+
+<Canvas>
+  <Story name="All Hooks Demo">
+    {() => {
+      const HooksDemoComponent = () => {
+        const variant = useLayoutVariant();
+        const showSidebar = useSidebarVisibility();
+        const showFooter = useFooterVisibility();
+        const subNavigation = useLayoutSubNavigation();
+
+        return (
+          <div className="p-8 space-y-8">
+            <h1 className="text-3xl font-bold">Layout Hooks Demo</h1>
+            <p className="text-muted-foreground">
+              This component demonstrates all layout utility hooks in real-time.
+              The values update automatically when the layout context changes.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Hook Values</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">useLayoutVariant():</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{variant}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">useSidebarVisibility():</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{showSidebar.toString()}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">useFooterVisibility():</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{showFooter.toString()}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">useLayoutSubNavigation():</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{subNavigation.length} items</code>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Layout State</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      variant === 'default' ? 'bg-green-500' :
+                      variant === 'focused' ? 'bg-blue-500' :
+                      'bg-purple-500'
+                    }`}></div>
+                    <span className="text-sm">Current variant: {variant}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${showSidebar ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                    <span className="text-sm">Sidebar {showSidebar ? 'visible' : 'hidden'}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${showFooter ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                    <span className="text-sm">Footer {showFooter ? 'visible' : 'hidden'}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${subNavigation.length > 0 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                    <span className="text-sm">Sub-navigation {subNavigation.length > 0 ? 'loaded' : 'empty'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Hook Usage Example</h4>
+              <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`import {
+  useLayoutVariant,
+  useSidebarVisibility,
+  useFooterVisibility,
+  useLayoutSubNavigation
+} from '@/components/layout';
+
+const MyComponent = () => {
+  const variant = useLayoutVariant();
+  const showSidebar = useSidebarVisibility();
+  const showFooter = useFooterVisibility();
+  const subNavigation = useLayoutSubNavigation();
+
+  return (
+    <div>
+      <p>Current layout: {variant}</p>
+      {showSidebar && <p>Sidebar is visible</p>}
+      {showFooter && <p>Footer is visible</p>}
+      <p>Navigation items: {subNavigation.length}</p>
+    </div>
+  );
+};`}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default" defaultShowSidebar={true} defaultShowFooter={true}>
+          <HooksDemoComponent />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## useLayoutVariant Hook
+
+The `useLayoutVariant` hook returns the current layout variant and updates when the variant changes.
+
+<Canvas>
+  <Story name="useLayoutVariant">
+    {() => {
+      const VariantDemo = () => {
+        const variant = useLayoutVariant();
+        const { useLayoutContext } = require('./layout-provider');
+        const { setVariant } = useLayoutContext();
+
+        const variants = [
+          { key: 'default', name: 'Default', color: 'bg-blue-500', description: 'Full layout with sidebar and footer' },
+          { key: 'focused', name: 'Focused', color: 'bg-green-500', description: 'Content-focused without sidebar' },
+          { key: 'minimal', name: 'Minimal', color: 'bg-purple-500', description: 'Minimal layout for standalone pages' }
+        ];
+
+        const currentVariantInfo = variants.find(v => v.key === variant);
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">useLayoutVariant Hook</h1>
+            <p className="text-muted-foreground">
+              This hook returns the current layout variant and allows components
+              to conditionally render based on the active layout type.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Current Variant</h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`w-8 h-8 rounded-full ${currentVariantInfo?.color}`}></div>
+                  <div>
+                    <div className="font-medium">{currentVariantInfo?.name}</div>
+                    <div className="text-sm text-muted-foreground">{currentVariantInfo?.description}</div>
+                  </div>
+                </div>
+                <code className="bg-muted px-3 py-2 rounded text-sm block">
+                  useLayoutVariant() = "{variant}"
+                </code>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Change Variant</h3>
+                <div className="space-y-2">
+                  {variants.map((v) => (
+                    <button
+                      key={v.key}
+                      onClick={() => setVariant(v.key)}
+                      className={`w-full px-4 py-2 text-sm rounded transition-colors ${
+                        variant === v.key
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                      }`}
+                    >
+                      {v.name} Layout
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Conditional Rendering Example</h4>
+              <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`const MyComponent = () => {
+  const variant = useLayoutVariant();
+
+  return (
+    <div>
+      {variant === 'default' && (
+        <div>Full navigation experience</div>
+      )}
+      {variant === 'focused' && (
+        <div>Content-focused layout</div>
+      )}
+      {variant === 'minimal' && (
+        <div>Minimal layout for standalone pages</div>
+      )}
+    </div>
+  );
+};`}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default">
+          <VariantDemo />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## useSidebarVisibility Hook
+
+The `useSidebarVisibility` hook returns whether the sidebar should be visible based on the current layout state.
+
+<Canvas>
+  <Story name="useSidebarVisibility">
+    {() => {
+      const SidebarDemo = () => {
+        const showSidebar = useSidebarVisibility();
+        const { useLayoutContext } = require('./layout-provider');
+        const { variant, toggleSidebar } = useLayoutContext();
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">useSidebarVisibility Hook</h1>
+            <p className="text-muted-foreground">
+              This hook returns the current sidebar visibility state and updates
+              automatically when the layout variant changes or sidebar is toggled.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Sidebar State</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span>Current variant:</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{variant}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Sidebar visible:</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${showSidebar ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <code className="bg-muted px-2 py-1 rounded text-sm">{showSidebar.toString()}</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <button
+                    onClick={toggleSidebar}
+                    disabled={variant === 'minimal' || variant === 'focused'}
+                    className="w-full px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {showSidebar ? 'Hide' : 'Show'} Sidebar
+                  </button>
+                  {(variant === 'minimal' || variant === 'focused') && (
+                    <p className="text-xs text-muted-foreground mt-2 text-center">
+                      Sidebar toggle disabled for {variant} layout
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Layout Behavior</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span><strong>Default:</strong> Sidebar follows toggle state</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span><strong>Focused:</strong> Sidebar always hidden</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                    <span><strong>Minimal:</strong> Sidebar always hidden</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-muted/50 rounded">
+                  <p className="text-xs text-muted-foreground">
+                    The hook automatically returns false for focused and minimal layouts,
+                    regardless of manual toggle state.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Responsive Layout Example</h4>
+              <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`const ResponsiveLayout = () => {
+  const showSidebar = useSidebarVisibility();
+
+  return (
+    <div className="flex">
+      {showSidebar && (
+        <aside className="w-64 bg-muted p-4">
+          <nav>Sidebar Navigation</nav>
+        </aside>
+      )}
+      <main className={\`flex-1 p-4 \${showSidebar ? 'ml-0' : 'ml-auto'}\`}>
+        <div>Main Content</div>
+      </main>
+    </div>
+  );
+};`}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default" defaultShowSidebar={true}>
+          <SidebarDemo />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## useFooterVisibility Hook
+
+The `useFooterVisibility` hook returns whether the footer should be visible based on layout variant and state.
+
+<Canvas>
+  <Story name="useFooterVisibility">
+    {() => {
+      const FooterDemo = () => {
+        const showFooter = useFooterVisibility();
+        const { useLayoutContext } = require('./layout-provider');
+        const { variant, toggleFooter } = useLayoutContext();
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">useFooterVisibility Hook</h1>
+            <p className="text-muted-foreground">
+              This hook returns the current footer visibility state and responds
+              to both layout variant changes and manual footer toggles.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Footer State</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span>Current variant:</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{variant}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Footer visible:</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${showFooter ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <code className="bg-muted px-2 py-1 rounded text-sm">{showFooter.toString()}</code>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <button
+                    onClick={toggleFooter}
+                    disabled={variant === 'minimal'}
+                    className="w-full px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {showFooter ? 'Hide' : 'Show'} Footer
+                  </button>
+                  {variant === 'minimal' && (
+                    <p className="text-xs text-muted-foreground mt-2 text-center">
+                      Footer toggle disabled for minimal layout
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Footer Behavior</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span><strong>Default:</strong> Footer follows toggle state</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span><strong>Focused:</strong> Minimal footer, follows toggle</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                    <span><strong>Minimal:</strong> Footer always hidden</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-muted/50 rounded">
+                  <p className="text-xs text-muted-foreground">
+                    The focused layout shows a minimal footer with reduced information,
+                    while minimal layout never shows a footer.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Conditional Footer Example</h4>
+              <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`const PageLayout = ({ children }) => {
+  const showFooter = useFooterVisibility();
+  const variant = useLayoutVariant();
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <header>Page Header</header>
+      <main className="flex-1">{children}</main>
+      {showFooter && (
+        <footer className={\`mt-auto \${
+          variant === 'focused' ? 'py-4' : 'py-8'
+        }\`}>
+          {variant === 'focused' ? (
+            <div>Minimal footer content</div>
+          ) : (
+            <div>Full footer with links and info</div>
+          )}
+        </footer>
+      )}
+    </div>
+  );
+};`}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default" defaultShowFooter={true}>
+          <FooterDemo />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## useLayoutSubNavigation Hook
+
+The `useLayoutSubNavigation` hook returns the current sub-navigation items for the active route.
+
+<Canvas>
+  <Story name="useLayoutSubNavigation">
+    {() => {
+      const SubNavDemo = () => {
+        const subNavigation = useLayoutSubNavigation();
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">useLayoutSubNavigation Hook</h1>
+            <p className="text-muted-foreground">
+              This hook returns the current sub-navigation items based on the active route,
+              filtered by authentication, roles, and feature flags.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Sub-Navigation State</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span>Items count:</span>
+                    <code className="bg-muted px-2 py-1 rounded text-sm">{subNavigation.length}</code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Status:</span>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${subNavigation.length > 0 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                      <span className="text-sm">{subNavigation.length > 0 ? 'Loaded' : 'Empty'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {subNavigation.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="font-medium mb-2">Navigation Items:</h4>
+                    <div className="space-y-1 max-h-32 overflow-y-auto">
+                      {subNavigation.map((item, index) => (
+                        <div key={index} className="text-sm p-2 bg-muted rounded flex items-center gap-2">
+                          {item.icon && <span className="text-xs">{item.icon}</span>}
+                          <span>{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Navigation Features</h3>
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span>Route-based filtering</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span>Authentication-aware</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                    <span>Role-based access</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                    <span>Feature flag integration</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-muted/50 rounded">
+                  <p className="text-xs text-muted-foreground">
+                    Sub-navigation automatically updates when route changes or
+                    when user authentication state changes.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Dynamic Navigation Example</h4>
+              <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`const DynamicSidebar = () => {
+  const subNavigation = useLayoutSubNavigation();
+
+  if (subNavigation.length === 0) {
+    return <div>No navigation items</div>;
+  }
+
+  return (
+    <nav className="space-y-2">
+      {subNavigation.map((item) => (
+        <a
+          key={item.href}
+          href={item.href}
+          className="flex items-center gap-2 p-2 rounded hover:bg-muted"
+        >
+          {item.icon && <span>{item.icon}</span>}
+          <span>{item.label}</span>
+          {item.badge && (
+            <span className="ml-auto badge">{item.badge}</span>
+          )}
+        </a>
+      ))}
+    </nav>
+  );
+};`}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default">
+          <SubNavDemo />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Performance Optimization
+
+The layout hooks are optimized for performance and only re-render when their specific values change.
+
+<Canvas>
+  <Story name="Performance">
+    {() => {
+      const PerformanceDemo = () => {
+        const [renderCount, setRenderCount] = React.useState(0);
+        const variant = useLayoutVariant();
+        const showSidebar = useSidebarVisibility();
+
+        // Track renders
+        React.useEffect(() => {
+          setRenderCount(count => count + 1);
+        });
+
+        const { useLayoutContext } = require('./layout-provider');
+        const { setVariant, toggleSidebar, toggleFooter } = useLayoutContext();
+
+        return (
+          <div className="p-8 space-y-6">
+            <h1 className="text-3xl font-bold">Hook Performance</h1>
+            <p className="text-muted-foreground">
+              Layout hooks are optimized to only trigger re-renders when their specific
+              values change, not when unrelated layout state updates.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Component Stats</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span>Render count:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{renderCount}</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Current variant:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{variant}</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Sidebar visible:</span>
+                    <code className="bg-muted px-2 py-1 rounded">{showSidebar.toString()}</code>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Actions (Trigger Re-render)</h3>
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setVariant('default')}
+                    className="w-full px-3 py-2 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
+                  >
+                    Set Default Variant
+                  </button>
+                  <button
+                    onClick={() => setVariant('focused')}
+                    className="w-full px-3 py-2 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
+                  >
+                    Set Focused Variant
+                  </button>
+                  <button
+                    onClick={toggleSidebar}
+                    className="w-full px-3 py-2 text-sm bg-secondary text-secondary-foreground rounded hover:bg-secondary/80"
+                  >
+                    Toggle Sidebar
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 border rounded-lg bg-card">
+                <h3 className="font-semibold mb-4">Actions (No Re-render)</h3>
+                <div className="space-y-2">
+                  <button
+                    onClick={toggleFooter}
+                    className="w-full px-3 py-2 text-sm bg-muted text-muted-foreground rounded"
+                  >
+                    Toggle Footer
+                  </button>
+                  <p className="text-xs text-muted-foreground">
+                    This component only uses useLayoutVariant() and useSidebarVisibility(),
+                    so footer changes don't trigger re-renders.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border rounded-lg bg-muted/50">
+              <h4 className="font-semibold mb-3">Performance Benefits</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <ul className="space-y-2">
+                  <li>• Hooks subscribe only to specific state slices</li>
+                  <li>• Memoized selectors prevent unnecessary calculations</li>
+                  <li>• Components re-render only when relevant values change</li>
+                </ul>
+                <ul className="space-y-2">
+                  <li>• Reduced bundle size compared to full context</li>
+                  <li>• Better tree-shaking opportunities</li>
+                  <li>• Optimized for React DevTools profiling</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <LayoutProvider variant="default" defaultShowSidebar={true} defaultShowFooter={true}>
+          <PerformanceDemo />
+        </LayoutProvider>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Error Handling
+
+Layout hooks include proper error handling when used outside of a LayoutProvider context.
+
+<Canvas>
+  <Story name="Error Handling">
+    {() => {
+      const [showError, setShowError] = React.useState(false);
+
+      const ErrorComponent = () => {
+        const variant = useLayoutVariant(); // This will throw an error
+        return <div>Variant: {variant}</div>;
+      };
+
+      const SafeComponent = () => {
+        const variant = useLayoutVariant(); // This works within provider
+        return (
+          <div className="p-4 border rounded-lg bg-green-50">
+            <div className="text-green-700 font-medium">✓ Success</div>
+            <div className="text-sm text-green-600">
+              Hook working correctly. Current variant: {variant}
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="p-8 space-y-6">
+          <h1 className="text-3xl font-bold">Error Handling</h1>
+          <p className="text-muted-foreground">
+            Layout hooks provide clear error messages when used incorrectly.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold mb-2">Correct Usage (Within LayoutProvider)</h3>
+              <LayoutProvider variant="default">
+                <SafeComponent />
+              </LayoutProvider>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-2">Error Demonstration</h3>
+              <button
+                onClick={() => setShowError(!showError)}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mb-3"
+              >
+                {showError ? 'Hide' : 'Show'} Error Example
+              </button>
+
+              {showError && (
+                <div className="p-4 border border-red-300 rounded-lg bg-red-50">
+                  <div className="text-red-700 font-medium mb-2">❌ Error</div>
+                  <div className="text-sm text-red-600 font-mono">
+                    Error: useLayoutContext must be used within a LayoutProvider.
+                    Make sure to wrap your component tree with &lt;LayoutProvider&gt;.
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="p-6 border rounded-lg bg-muted/50">
+            <h4 className="font-semibold mb-3">Error Prevention</h4>
+            <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+{`// ❌ Wrong - Hook used outside provider
+const App = () => {
+  const variant = useLayoutVariant(); // Error!
+  return <div>{variant}</div>;
+};
+
+// ✅ Correct - Hook used within provider
+const App = () => (
+  <LayoutProvider variant="default">
+    <MyComponent />
+  </LayoutProvider>
+);
+
+const MyComponent = () => {
+  const variant = useLayoutVariant(); // Works!
+  return <div>{variant}</div>;
+};`}
+            </pre>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## API Reference
+
+### Hook Signatures
+
+```typescript
+// Returns the current layout variant
+function useLayoutVariant(): LayoutVariant
+
+// Returns whether sidebar should be visible
+function useSidebarVisibility(): boolean
+
+// Returns whether footer should be visible
+function useFooterVisibility(): boolean
+
+// Returns current sub-navigation items
+function useLayoutSubNavigation(): NavItem[]
+```
+
+### Types
+
+```typescript
+type LayoutVariant = 'default' | 'focused' | 'minimal'
+
+interface NavItem {
+  href: string
+  label: string
+  icon?: string
+  badge?: string
+  metadata?: {
+    requiredAuth?: boolean
+    requiredRoles?: string[]
+    featureFlag?: string
+    showInMobile?: boolean
+    showInDesktop?: boolean
+    disabled?: boolean
+    sortOrder?: number
+  }
+}
+```
+
+### Usage Requirements
+
+- All hooks must be used within a `LayoutProvider` context
+- Hooks are memoized and only trigger re-renders when their specific values change
+- TypeScript provides full type safety for all return values
+- Error boundaries will catch context usage errors gracefully

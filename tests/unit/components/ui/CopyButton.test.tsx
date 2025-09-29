@@ -162,7 +162,7 @@ describe('CopyButton', () => {
     test('applies success variant classes', () => {
       renderCopyButton({ variant: 'success' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('bg-green-600');
+      expect(button).toHaveClass('bg-basil');
     });
   });
 
@@ -196,25 +196,25 @@ describe('CopyButton', () => {
     test('applies ingredient recipe variant', () => {
       renderCopyButton({ recipe: 'ingredient' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-4', 'border-l-green-500');
+      expect(button).toHaveClass('border-l-4', 'border-l-basil');
     });
 
     test('applies instruction recipe variant', () => {
       renderCopyButton({ recipe: 'instruction' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-4', 'border-l-blue-500');
+      expect(button).toHaveClass('border-l-4', 'border-l-primary');
     });
 
     test('applies url recipe variant', () => {
       renderCopyButton({ recipe: 'url' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-4', 'border-l-purple-500');
+      expect(button).toHaveClass('border-l-4', 'border-l-accent');
     });
 
     test('applies nutrition recipe variant', () => {
       renderCopyButton({ recipe: 'nutrition' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-4', 'border-l-orange-500');
+      expect(button).toHaveClass('border-l-4', 'border-l-citrus');
     });
   });
 
@@ -353,19 +353,19 @@ describe('RecipeCopyButton', () => {
     test('applies ingredient variant for ingredients copy type', () => {
       renderRecipeCopyButton({ copyType: 'ingredients' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-green-500');
+      expect(button).toHaveClass('border-l-basil');
     });
 
     test('applies instruction variant for instructions copy type', () => {
       renderRecipeCopyButton({ copyType: 'instructions' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-blue-500');
+      expect(button).toHaveClass('border-l-primary');
     });
 
     test('applies url variant for url copy type', () => {
       renderRecipeCopyButton({ copyType: 'recipe-url' });
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-l-purple-500');
+      expect(button).toHaveClass('border-l-accent');
     });
   });
 

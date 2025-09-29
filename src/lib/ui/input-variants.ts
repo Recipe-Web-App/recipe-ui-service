@@ -30,7 +30,7 @@ export const inputVariants = cva(
     'placeholder:text-muted-foreground',
     'focus-visible:outline-none',
     'focus-visible:ring-2',
-    'focus-visible:ring-ring',
+    'focus-visible:ring-primary/50',
     'focus-visible:ring-offset-2',
     'disabled:cursor-not-allowed',
     'disabled:opacity-50',
@@ -62,26 +62,26 @@ export const inputVariants = cva(
         ],
       },
       size: {
-        sm: ['h-8', 'px-2', 'py-1', 'text-input-sm'],
-        default: ['h-9', 'px-3', 'py-2', 'text-input-base'],
-        lg: ['h-11', 'px-4', 'py-3', 'text-input-lg'],
+        sm: ['h-8', 'px-2', 'py-1', 'text-xs'],
+        default: ['h-9', 'px-3', 'py-2', 'text-sm'],
+        lg: ['h-11', 'px-4', 'py-3', 'text-base'],
       },
       state: {
         default: '',
         error: [
           'border-destructive',
           'focus:border-destructive',
-          'focus-visible:ring-destructive',
+          'focus-visible:ring-destructive/50',
         ],
         success: [
-          'border-green-500',
-          'focus:border-green-500',
-          'focus-visible:ring-green-500',
+          'border-success',
+          'focus:border-success',
+          'focus-visible:ring-success/50',
         ],
         warning: [
-          'border-yellow-500',
-          'focus:border-yellow-500',
-          'focus-visible:ring-yellow-500',
+          'border-warning',
+          'focus:border-warning',
+          'focus-visible:ring-warning/50',
         ],
       },
     },
@@ -99,9 +99,9 @@ export const inputVariants = cva(
 export const inputContainerVariants = cva(['relative', 'w-full'], {
   variants: {
     size: {
-      sm: 'text-input-sm',
-      default: 'text-input-base',
-      lg: 'text-input-lg',
+      sm: 'text-xs',
+      default: 'text-sm',
+      lg: 'text-base',
     },
   },
   defaultVariants: {
@@ -123,15 +123,15 @@ export const inputLabelVariants = cva(
   {
     variants: {
       size: {
-        sm: ['text-label-sm', 'mb-1'],
-        default: ['text-label-base', 'mb-1.5'],
-        lg: ['text-label-lg', 'mb-2'],
+        sm: ['text-xs', 'mb-1'],
+        default: ['text-sm', 'mb-1.5'],
+        lg: ['text-base', 'mb-2'],
       },
       state: {
         default: 'text-foreground',
         error: 'text-destructive',
-        success: 'text-green-600',
-        warning: 'text-yellow-600',
+        success: 'text-success',
+        warning: 'text-warning',
         disabled: 'text-muted-foreground cursor-not-allowed',
       },
       required: {
@@ -165,7 +165,7 @@ export const floatingLabelVariants = cva(
     variants: {
       size: {
         sm: [
-          'text-input-sm',
+          'text-xs',
           'top-2',
           'peer-focus:-translate-y-6',
           'peer-focus:scale-75',
@@ -173,7 +173,7 @@ export const floatingLabelVariants = cva(
           'peer-[:not(:placeholder-shown)]:scale-75',
         ],
         default: [
-          'text-input-base',
+          'text-sm',
           'top-2.5',
           'peer-focus:-translate-y-7',
           'peer-focus:scale-75',
@@ -181,7 +181,7 @@ export const floatingLabelVariants = cva(
           'peer-[:not(:placeholder-shown)]:scale-75',
         ],
         lg: [
-          'text-input-lg',
+          'text-base',
           'top-3.5',
           'peer-focus:-translate-y-8',
           'peer-focus:scale-75',
@@ -192,8 +192,8 @@ export const floatingLabelVariants = cva(
       state: {
         default: 'peer-focus:text-primary',
         error: 'peer-focus:text-destructive',
-        success: 'peer-focus:text-green-600',
-        warning: 'peer-focus:text-yellow-600',
+        success: 'peer-focus:text-success',
+        warning: 'peer-focus:text-warning',
       },
     },
     defaultVariants: {
@@ -213,8 +213,8 @@ export const helperTextVariants = cva(
       state: {
         default: 'text-muted-foreground',
         error: 'text-destructive',
-        success: 'text-green-600',
-        warning: 'text-yellow-600',
+        success: 'text-success',
+        warning: 'text-warning',
       },
     },
     defaultVariants: {
@@ -299,7 +299,7 @@ export const characterCounterVariants = cva(
     variants: {
       state: {
         default: 'text-muted-foreground',
-        warning: 'text-yellow-600',
+        warning: 'text-warning',
         error: 'text-destructive',
       },
     },

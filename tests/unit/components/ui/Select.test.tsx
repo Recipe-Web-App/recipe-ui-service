@@ -84,7 +84,7 @@ describe('Select Components', () => {
 
       const trigger = screen.getByRole('combobox');
       expect(trigger).toBeInTheDocument();
-      expect(trigger).toHaveClass('border-gray-300', 'h-9', 'px-3');
+      expect(trigger).toHaveClass('border-input', 'h-9', 'px-3');
     });
 
     it('renders with outline variant', () => {
@@ -97,7 +97,7 @@ describe('Select Components', () => {
       );
 
       const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveClass('border-gray-300', 'hover:border-gray-400');
+      expect(trigger).toHaveClass('border-input', 'hover:border-primary/40');
     });
 
     it('renders with ghost variant', () => {
@@ -123,7 +123,7 @@ describe('Select Components', () => {
       );
 
       const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveClass('border-transparent', 'bg-gray-100');
+      expect(trigger).toHaveClass('border-transparent', 'bg-muted');
     });
 
     it('renders with error state', () => {
@@ -136,7 +136,7 @@ describe('Select Components', () => {
       );
 
       const trigger = screen.getByRole('combobox');
-      expect(trigger).toHaveClass('border-red-500', 'text-red-900');
+      expect(trigger).toHaveClass('border-destructive', 'text-destructive');
       expect(trigger).toHaveAttribute('aria-invalid', 'true');
     });
 
@@ -273,15 +273,15 @@ describe('Select Components', () => {
       // Test the variant system by checking the CSS class generation
       const { selectContentVariants } = require('@/lib/ui/select-variants');
 
-      expect(selectContentVariants()).toContain('bg-white');
-      expect(selectContentVariants()).toContain('text-gray-900');
+      expect(selectContentVariants()).toContain('bg-card');
+      expect(selectContentVariants()).toContain('text-card-foreground');
       expect(selectContentVariants()).toContain('min-w-[8rem]');
 
       expect(selectContentVariants({ variant: 'secondary' })).toContain(
-        'bg-gray-50'
+        'bg-muted'
       );
       expect(selectContentVariants({ variant: 'secondary' })).toContain(
-        'text-gray-700'
+        'text-muted-foreground'
       );
     });
   });
@@ -291,14 +291,14 @@ describe('Select Components', () => {
       // Test the variant system by checking the CSS class generation
       const { selectItemVariants } = require('@/lib/ui/select-variants');
 
-      expect(selectItemVariants()).toContain('hover:bg-blue-50');
-      expect(selectItemVariants()).toContain('hover:text-blue-900');
+      expect(selectItemVariants()).toContain('hover:bg-accent');
+      expect(selectItemVariants()).toContain('hover:text-accent-foreground');
 
       expect(selectItemVariants({ variant: 'destructive' })).toContain(
-        'text-red-600'
+        'text-destructive'
       );
       expect(selectItemVariants({ variant: 'destructive' })).toContain(
-        'hover:bg-red-50'
+        'hover:bg-destructive/10'
       );
     });
   });

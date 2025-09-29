@@ -1,0 +1,733 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { Sidebar } from './sidebar';
+import { useNavigationStore } from '@/stores/ui/navigation-store';
+
+<Meta
+  title="Layout Components/Sidebar"
+  component={Sidebar}
+  decorators={[
+    (Story) => (
+      <div className="flex min-h-[600px] bg-background border rounded-lg overflow-hidden">
+        <Story />
+        <div className="flex-1 p-8">
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Main Content Area</h2>
+            <p className="text-muted-foreground">
+              This is the main content area. The sidebar appears to the left of this content
+              and provides contextual navigation based on the current sub-package.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="p-4 bg-muted/20 rounded border">
+                  <h3 className="font-medium mb-2">Content Card {i + 1}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Sample content that would appear in the main area
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The Sidebar component provides contextual navigation for the application with an extensible sub-package architecture.
+It focuses on presentation while navigation filtering is handled by sub-package extensions.
+
+## Features
+
+- Collapsible sidebar with smooth transitions
+- Multi-level navigation support through sub-packages
+- Mobile responsive (hidden on mobile, uses drawer instead)
+- Keyboard navigation and accessibility support
+- Tooltip support when collapsed for better UX
+- Integration with navigation store for state management
+- Pure presentation component with clean architecture
+- Supports extensible sub-package navigation system
+- TypeScript support with strict typing
+
+## Architecture
+
+- **Presentation Layer**: Sidebar focuses purely on UI and behavior
+- **Filtering Layer**: Sub-package extensions handle authentication and feature flags
+- **State Management**: Navigation store manages sidebar state and items
+- **Extensibility**: Each sub-package can provide filtered navigation items
+- **Responsive**: Hidden on mobile in favor of drawer navigation
+
+## Usage
+
+Use Sidebar for:
+- Desktop application navigation
+- Contextual sub-package navigation
+- Multi-level menu hierarchies
+- Collapsible navigation experiences
+- Accessible navigation with screen reader support
+- Integration with extensible navigation systems
+        `
+      }
+    }
+  }}
+  argTypes={{
+    showFooter: {
+      control: { type: 'boolean' },
+      description: 'Whether to show the footer with collapse toggle',
+      defaultValue: true
+    },
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'minimal'],
+      description: 'Sidebar visual variant',
+      defaultValue: 'default'
+    },
+    items: {
+      control: { type: 'object' },
+      description: 'Override navigation items (optional - uses store by default)'
+    },
+    className: {
+      control: { type: 'text' },
+      description: 'Additional CSS classes to apply'
+    }
+  }}
+/>
+
+# Sidebar
+
+<Description of={Sidebar} />
+
+## Default Sidebar
+
+<Canvas>
+  <Story name="Default">
+    {() => {
+      // Mock navigation store state
+      return (
+        <div className="flex h-96 border rounded-lg overflow-hidden">
+          <Sidebar />
+          <div className="flex-1 p-6">
+            <div className="text-sm text-muted-foreground">
+              Main content area with sidebar navigation
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Expanded vs Collapsed States
+
+<Canvas>
+  <Story name="Collapsed States">
+    {() => (
+      <div className="space-y-6">
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Expanded sidebar:</div>
+          <div className="flex h-80 border rounded-lg overflow-hidden">
+            <Sidebar />
+            <div className="flex-1 p-4">
+              <div className="text-sm text-muted-foreground">
+                Full sidebar with labels and descriptions
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm text-muted-foreground mb-2">Collapsed sidebar:</div>
+          <div className="flex h-80 border rounded-lg overflow-hidden">
+            <Sidebar />
+            <div className="flex-1 p-4">
+              <div className="text-sm text-muted-foreground">
+                Collapsed sidebar with icons only (hover for tooltips)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Without Footer
+
+<Canvas>
+  <Story name="Without Footer">
+    {() => (
+      <div className="flex h-80 border rounded-lg overflow-hidden">
+        <Sidebar showFooter={false} />
+        <div className="flex-1 p-6">
+          <div className="text-sm text-muted-foreground">
+            Sidebar without footer section - navigation only
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Navigation Items
+
+<Canvas>
+  <Story name="Custom Items">
+    {() => {
+      const customItems = [
+        {
+          id: 'dashboard',
+          label: 'Dashboard',
+          href: '/dashboard',
+          icon: 'BarChart3',
+        },
+        {
+          id: 'settings',
+          label: 'Settings',
+          href: '/settings',
+          icon: 'Settings',
+          children: [
+            {
+              id: 'general',
+              label: 'General',
+              href: '/settings/general',
+            },
+            {
+              id: 'security',
+              label: 'Security',
+              href: '/settings/security',
+            },
+          ],
+        },
+        {
+          id: 'help',
+          label: 'Help',
+          href: '/help',
+          icon: 'HelpCircle',
+        },
+      ];
+
+      return (
+        <div className="flex h-80 border rounded-lg overflow-hidden">
+          <Sidebar items={customItems} />
+          <div className="flex-1 p-6">
+            <div className="text-sm text-muted-foreground">
+              Sidebar with custom navigation items structure
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Multi-level Navigation
+
+<Canvas>
+  <Story name="Multi-level Navigation">
+    {() => {
+      const multiLevelItems = [
+        {
+          id: 'recipes',
+          label: 'Recipes',
+          href: '/recipes',
+          icon: 'ChefHat',
+          children: [
+            {
+              id: 'all-recipes',
+              label: 'All Recipes',
+              href: '/recipes',
+            },
+            {
+              id: 'my-recipes',
+              label: 'My Recipes',
+              href: '/recipes/mine',
+            },
+            {
+              id: 'favorites',
+              label: 'Favorites',
+              href: '/recipes/favorites',
+            },
+            {
+              id: 'categories',
+              label: 'Categories',
+              href: '/recipes/categories',
+              children: [
+                {
+                  id: 'breakfast',
+                  label: 'Breakfast',
+                  href: '/recipes/categories/breakfast',
+                },
+                {
+                  id: 'lunch',
+                  label: 'Lunch',
+                  href: '/recipes/categories/lunch',
+                },
+                {
+                  id: 'dinner',
+                  label: 'Dinner',
+                  href: '/recipes/categories/dinner',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 'meal-plans',
+          label: 'Meal Plans',
+          href: '/meal-plans',
+          icon: 'Calendar',
+          children: [
+            {
+              id: 'weekly',
+              label: 'Weekly Plans',
+              href: '/meal-plans/weekly',
+            },
+            {
+              id: 'monthly',
+              label: 'Monthly Plans',
+              href: '/meal-plans/monthly',
+            },
+          ],
+        },
+      ];
+
+      return (
+        <div className="flex h-96 border rounded-lg overflow-hidden">
+          <Sidebar items={multiLevelItems} />
+          <div className="flex-1 p-6">
+            <div className="text-sm text-muted-foreground">
+              Sidebar with multi-level nested navigation structure
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Responsive Behavior
+
+<Canvas>
+  <Story name="Responsive Demo">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Sidebar adapts to different screen sizes:
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Desktop (> 1024px) - Visible:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar />
+              <div className="flex-1 p-4">
+                <div className="text-sm text-muted-foreground">
+                  Sidebar is visible and functional on desktop
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Mobile (< 1024px) - Hidden:</div>
+            <div className="max-w-sm border rounded-lg p-4">
+              <div className="text-sm text-muted-foreground text-center">
+                Sidebar is hidden on mobile/tablet
+                <br />
+                <span className="text-xs">(Uses mobile drawer instead)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Sub-package Navigation Demo
+
+<Canvas>
+  <Story name="Sub-package Navigation">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Different sub-package navigation contexts:
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Recipe Management Package:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar items={[
+                { id: 'recipes', label: 'All Recipes', href: '/recipes' },
+                { id: 'create', label: 'Create Recipe', href: '/recipes/create' },
+                { id: 'categories', label: 'Categories', href: '/recipes/categories' },
+                { id: 'tags', label: 'Tags', href: '/recipes/tags' },
+              ]} />
+              <div className="flex-1 p-3">
+                <div className="text-xs text-muted-foreground">Recipe context</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">User Management Package:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar items={[
+                { id: 'profile', label: 'Profile', href: '/profile' },
+                { id: 'preferences', label: 'Preferences', href: '/profile/preferences' },
+                { id: 'security', label: 'Security', href: '/profile/security' },
+                { id: 'notifications', label: 'Notifications', href: '/profile/notifications' },
+              ]} />
+              <div className="flex-1 p-3">
+                <div className="text-xs text-muted-foreground">User context</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Full Page Layout Context
+
+<Canvas>
+  <Story name="Full Page Layout">
+    {() => (
+      <div className="min-h-[500px] flex flex-col border rounded-lg overflow-hidden">
+        {/* Header */}
+        <div className="bg-muted/20 border-b px-6 py-4">
+          <div className="text-lg font-semibold">Application Header</div>
+        </div>
+
+        {/* Main layout */}
+        <div className="flex flex-1">
+          <Sidebar />
+
+          {/* Main content */}
+          <main className="flex-1 p-6">
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold">Main Content Area</h1>
+                <p className="text-muted-foreground">
+                  This represents the main application content that appears alongside the sidebar.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="p-4 bg-muted/10 rounded border">
+                    <h3 className="font-medium mb-2">Content Section {i + 1}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Sample content that demonstrates the layout with sidebar navigation.
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Different Navigation Depths
+
+<Canvas>
+  <Story name="Navigation Depths">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">
+          Different levels of navigation depth:
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Flat navigation:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar items={[
+                { id: 'home', label: 'Home', href: '/' },
+                { id: 'about', label: 'About', href: '/about' },
+                { id: 'contact', label: 'Contact', href: '/contact' },
+              ]} />
+              <div className="flex-1 p-3">
+                <div className="text-xs text-muted-foreground">Simple flat structure</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Two-level navigation:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar items={[
+                {
+                  id: 'products',
+                  label: 'Products',
+                  href: '/products',
+                  children: [
+                    { id: 'category-a', label: 'Category A', href: '/products/a' },
+                    { id: 'category-b', label: 'Category B', href: '/products/b' },
+                  ],
+                },
+                { id: 'support', label: 'Support', href: '/support' },
+              ]} />
+              <div className="flex-1 p-3">
+                <div className="text-xs text-muted-foreground">Two levels deep</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Three-level navigation:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar items={[
+                {
+                  id: 'admin',
+                  label: 'Admin',
+                  href: '/admin',
+                  children: [
+                    {
+                      id: 'users',
+                      label: 'Users',
+                      href: '/admin/users',
+                      children: [
+                        { id: 'create-user', label: 'Create', href: '/admin/users/create' },
+                        { id: 'manage-users', label: 'Manage', href: '/admin/users/manage' },
+                      ],
+                    },
+                  ],
+                },
+              ]} />
+              <div className="flex-1 p-3">
+                <div className="text-xs text-muted-foreground">Three levels deep</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Tooltip Behavior (Collapsed)
+
+<Canvas>
+  <Story name="Tooltip Behavior">
+    {() => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          When collapsed, hover over items to see tooltips:
+        </div>
+        <div className="flex h-80 border rounded-lg overflow-hidden">
+          <Sidebar />
+          <div className="flex-1 p-6">
+            <div className="space-y-2">
+              <div className="text-sm font-medium">Tooltip Features:</div>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Hover over collapsed sidebar items</li>
+                <li>• Tooltips show full navigation labels</li>
+                <li>• Positioned to the right of the sidebar</li>
+                <li>• Includes keyboard navigation support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Dark Theme
+
+<Canvas>
+  <Story name="Dark Theme">
+    {() => (
+      <div className="dark">
+        <div className="flex h-80 bg-background border rounded-lg overflow-hidden">
+          <Sidebar />
+          <div className="flex-1 p-6 bg-background">
+            <div className="space-y-4">
+              <h2 className="text-foreground text-lg font-semibold">Dark Theme Sidebar</h2>
+              <p className="text-muted-foreground text-sm">
+                Sidebar automatically adapts to dark theme with proper contrast and visual hierarchy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Custom Styling
+
+<Canvas>
+  <Story name="Custom Style">
+    {() => (
+      <div className="space-y-6">
+        <div className="text-sm text-muted-foreground">Custom styling examples:</div>
+
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Custom background:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar className="bg-accent border-r-2 border-primary" />
+              <div className="flex-1 p-4">
+                <div className="text-sm text-muted-foreground">Custom background color</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs text-muted-foreground mb-2">Custom width:</div>
+            <div className="flex h-64 border rounded-lg overflow-hidden">
+              <Sidebar className="w-80" />
+              <div className="flex-1 p-4">
+                <div className="text-sm text-muted-foreground">Wider sidebar (320px)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Performance Demo
+
+<Canvas>
+  <Story name="Performance">
+    {() => {
+      const [renderCount, setRenderCount] = React.useState(0);
+
+      React.useEffect(() => {
+        setRenderCount(prev => prev + 1);
+      });
+
+      return (
+        <div className="space-y-4">
+          <div className="flex h-64 border rounded-lg overflow-hidden">
+            <Sidebar />
+            <div className="flex-1 p-6">
+              <div className="space-y-2">
+                <div className="text-sm font-medium">Performance Monitoring:</div>
+                <div className="text-sm text-muted-foreground">
+                  Render count: {renderCount}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Should be minimal with proper memoization
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {(args) => (
+      <div className="space-y-4">
+        <div className="text-sm text-muted-foreground">
+          Use the controls below to configure Sidebar:
+        </div>
+        <div className="flex h-80 border rounded-lg overflow-hidden">
+          <Sidebar {...args} />
+          <div className="flex-1 p-6">
+            <div className="text-sm text-muted-foreground">
+              Main content area with configurable sidebar
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={Sidebar} />
+
+## Navigation Architecture
+
+### Sub-package Integration
+- **Presentation Layer**: Sidebar handles UI and interactions
+- **Filtering Layer**: Sub-packages filter navigation based on:
+  - User authentication state
+  - Feature flags and permissions
+  - Current application context
+  - User roles and access levels
+
+### Navigation Store Integration
+- **State Management**: Centralized sidebar state (open/closed, collapsed)
+- **Item Management**: Navigation items provided by sub-packages
+- **Context Switching**: Different navigation per sub-package context
+- **Persistence**: Sidebar state persisted across sessions
+
+## Responsive Behavior
+
+### Desktop (> 1024px)
+- Sidebar visible and functional
+- Full navigation with labels
+- Collapsible with smooth transitions
+- Tooltip support when collapsed
+
+### Tablet/Mobile (< 1024px)
+- Sidebar hidden completely
+- Mobile drawer navigation used instead
+- Touch-friendly mobile experience
+- Preserves screen real estate
+
+## State Management
+
+### Sidebar States
+- **Open/Closed**: Controls sidebar visibility
+- **Expanded/Collapsed**: Controls sidebar width and detail level
+- **Navigation Context**: Current sub-package navigation items
+- **Active State**: Tracks current page/section
+
+### Interaction Patterns
+- **Click to Navigate**: Standard navigation behavior
+- **Hover for Tooltips**: Enhanced UX when collapsed
+- **Keyboard Navigation**: Full keyboard accessibility
+- **Focus Management**: Proper focus indicators and order
+
+## Accessibility Features
+
+- **Semantic HTML**: Proper `<aside>` and navigation landmarks
+- **ARIA Labels**: Comprehensive labeling for screen readers
+- **Keyboard Navigation**: Full keyboard support for all interactions
+- **Focus Management**: Logical tab order and clear focus indicators
+- **Screen Reader Support**: Clear navigation structure and state
+- **High Contrast**: Works with all theme variants
+
+## Performance Considerations
+
+### Optimization Strategies
+- Memoized navigation item rendering
+- Efficient state updates and re-renders
+- Lazy loading for complex navigation trees
+- Minimal DOM updates on state changes
+
+### Bundle Impact
+- Tree-shakeable navigation utilities
+- Efficient icon loading through sub-components
+- Minimal JavaScript for basic functionality
+
+## Implementation Notes
+
+- Pure presentation component with clean separation of concerns
+- Integrates with navigation store for state management
+- Supports extensible sub-package architecture
+- Mobile-first responsive design with progressive enhancement
+- Type-safe with comprehensive TypeScript interfaces
+- Follows design system conventions consistently
+- Optimized for performance with proper memoization patterns
+- Supports internationalization patterns for future expansion

@@ -337,9 +337,7 @@ const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
                 name={currentStatus === 'success' ? successIcon : errorIcon}
                 className={cn(
                   'shrink-0 transition-all duration-300',
-                  currentStatus === 'success'
-                    ? 'text-inherit'
-                    : 'text-red-600 dark:text-red-400'
+                  currentStatus === 'success' ? 'text-inherit' : 'text-error'
                 )}
                 aria-hidden={true}
               />
@@ -347,9 +345,7 @@ const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
                 <span
                   className={cn(
                     'text-xs font-medium whitespace-nowrap',
-                    currentStatus === 'success'
-                      ? 'text-inherit'
-                      : 'text-red-600 dark:text-red-400'
+                    currentStatus === 'success' ? 'text-inherit' : 'text-error'
                   )}
                 >
                   {currentStatus === 'success' ? successMessage : errorMessage}

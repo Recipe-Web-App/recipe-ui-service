@@ -94,13 +94,13 @@ describe('Toast', () => {
 
         // Check that variant-specific classes are applied
         if (variant === 'success') {
-          expect(toast).toHaveClass('bg-green-50');
+          expect(toast).toHaveClass('bg-success/10');
         } else if (variant === 'error') {
-          expect(toast).toHaveClass('bg-red-50');
+          expect(toast).toHaveClass('bg-destructive/10');
         } else if (variant === 'warning') {
-          expect(toast).toHaveClass('bg-yellow-50');
+          expect(toast).toHaveClass('bg-warning/10');
         } else if (variant === 'info') {
-          expect(toast).toHaveClass('bg-blue-50');
+          expect(toast).toHaveClass('bg-primary/10');
         }
       });
 
@@ -710,7 +710,7 @@ describe('Compound Components', () => {
         </ToastRoot>
       );
       const root = screen.getByRole('status');
-      expect(root).toHaveClass('bg-green-50');
+      expect(root).toHaveClass('bg-success/10');
     });
   });
 
@@ -766,7 +766,7 @@ describe('Compound Components', () => {
     test('applies variant styling', () => {
       render(<ToastTitle variant="error">Error Title</ToastTitle>);
       const title = screen.getByText('Error Title');
-      expect(title).toHaveClass('text-red-900');
+      expect(title).toHaveClass('text-destructive');
     });
   });
 
@@ -785,7 +785,7 @@ describe('Compound Components', () => {
         </ToastDescription>
       );
       const description = screen.getByText('Warning Description');
-      expect(description).toHaveClass('text-yellow-700');
+      expect(description).toHaveClass('text-neutral-700');
     });
   });
 

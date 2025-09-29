@@ -216,11 +216,11 @@ export default function PaginationDemoPage() {
                         className={cn(
                           'inline-block rounded-md px-2 py-1 text-xs font-medium',
                           item.status === 'Active' &&
-                            'bg-green-100 text-green-800',
+                            'bg-success-light text-success',
                           item.status === 'Pending' &&
-                            'bg-yellow-100 text-yellow-800',
+                            'bg-warning-light text-warning',
                           item.status === 'Inactive' &&
-                            'bg-gray-100 text-gray-800'
+                            'bg-muted text-text-secondary'
                         )}
                       >
                         {item.status}

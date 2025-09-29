@@ -59,8 +59,7 @@ export const modalContentVariants = cva(
           '!my-0',
           'rounded-none',
           '!border-0',
-          '!bg-white',
-          'dark:!bg-gray-900',
+          '!bg-background',
         ],
         drawer: [
           'rounded-t-lg',

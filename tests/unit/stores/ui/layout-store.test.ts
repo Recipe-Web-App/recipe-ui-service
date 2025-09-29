@@ -1,6 +1,12 @@
 import { act } from '@testing-library/react';
 import { useLayoutStore } from '@/stores/ui/layout-store';
-import type { ViewMode, LayoutDensity, ColumnConfig } from '@/types/ui/layout';
+import type {
+  ViewMode,
+  LayoutVariant,
+  Breakpoint,
+  LayoutDensity,
+  ColumnConfig,
+} from '@/types/ui/layout';
 
 // Mock zustand persist
 jest.mock('zustand/middleware', () => ({
@@ -12,6 +18,9 @@ describe('useLayoutStore', () => {
     // Reset store state
     useLayoutStore.setState({
       viewMode: 'grid',
+      contentWidth: 'contained',
+      layoutVariant: 'default',
+      breakpoint: 'desktop',
       pagination: {
         page: 1,
         pageSize: 10,
@@ -38,6 +47,9 @@ describe('useLayoutStore', () => {
       const state = useLayoutStore.getState();
 
       expect(state.viewMode).toBe('grid');
+      expect(state.contentWidth).toBe('contained');
+      expect(state.layoutVariant).toBe('default');
+      expect(state.breakpoint).toBe('desktop');
       expect(state.pagination).toEqual({
         page: 1,
         pageSize: 10,
@@ -94,6 +106,106 @@ describe('useLayoutStore', () => {
       });
 
       expect(useLayoutStore.getState().viewMode).toBe('grid');
+    });
+  });
+
+  describe('content width management', () => {
+    describe('setContentWidth', () => {
+      it('should set content width to full', () => {
+        act(() => {
+          useLayoutStore.getState().setContentWidth('full');
+        });
+
+        expect(useLayoutStore.getState().contentWidth).toBe('full');
+      });
+
+      it('should set content width to contained', () => {
+        act(() => {
+          useLayoutStore.getState().setContentWidth('contained');
+        });
+
+        expect(useLayoutStore.getState().contentWidth).toBe('contained');
+      });
+    });
+
+    describe('toggleContentWidth', () => {
+      it('should toggle from contained to full', () => {
+        expect(useLayoutStore.getState().contentWidth).toBe('contained');
+
+        act(() => {
+          useLayoutStore.getState().toggleContentWidth();
+        });
+
+        expect(useLayoutStore.getState().contentWidth).toBe('full');
+      });
+
+      it('should toggle from full to contained', () => {
+        act(() => {
+          useLayoutStore.getState().setContentWidth('full');
+        });
+
+        act(() => {
+          useLayoutStore.getState().toggleContentWidth();
+        });
+
+        expect(useLayoutStore.getState().contentWidth).toBe('contained');
+      });
+    });
+  });
+
+  describe('layout variant management', () => {
+    describe('setLayoutVariant', () => {
+      it('should set layout variant to default', () => {
+        act(() => {
+          useLayoutStore.getState().setLayoutVariant('default');
+        });
+
+        expect(useLayoutStore.getState().layoutVariant).toBe('default');
+      });
+
+      it('should set layout variant to focused', () => {
+        act(() => {
+          useLayoutStore.getState().setLayoutVariant('focused');
+        });
+
+        expect(useLayoutStore.getState().layoutVariant).toBe('focused');
+      });
+
+      it('should set layout variant to minimal', () => {
+        act(() => {
+          useLayoutStore.getState().setLayoutVariant('minimal');
+        });
+
+        expect(useLayoutStore.getState().layoutVariant).toBe('minimal');
+      });
+    });
+  });
+
+  describe('breakpoint management', () => {
+    describe('setBreakpoint', () => {
+      it('should set breakpoint to mobile', () => {
+        act(() => {
+          useLayoutStore.getState().setBreakpoint('mobile');
+        });
+
+        expect(useLayoutStore.getState().breakpoint).toBe('mobile');
+      });
+
+      it('should set breakpoint to tablet', () => {
+        act(() => {
+          useLayoutStore.getState().setBreakpoint('tablet');
+        });
+
+        expect(useLayoutStore.getState().breakpoint).toBe('tablet');
+      });
+
+      it('should set breakpoint to desktop', () => {
+        act(() => {
+          useLayoutStore.getState().setBreakpoint('desktop');
+        });
+
+        expect(useLayoutStore.getState().breakpoint).toBe('desktop');
+      });
     });
   });
 
@@ -625,6 +737,9 @@ describe('useLayoutStore', () => {
       // Set up some custom state
       act(() => {
         useLayoutStore.getState().setViewMode('list');
+        useLayoutStore.getState().setContentWidth('full');
+        useLayoutStore.getState().setLayoutVariant('minimal');
+        useLayoutStore.getState().setBreakpoint('mobile');
         useLayoutStore.getState().setDensity('compact');
         useLayoutStore.getState().setPanelSize('sidebar', 250);
         useLayoutStore.getState().collapsePanel('sidebar');
@@ -649,6 +764,9 @@ describe('useLayoutStore', () => {
 
       const state = useLayoutStore.getState();
       expect(state.viewMode).toBe('grid');
+      expect(state.contentWidth).toBe('contained');
+      expect(state.layoutVariant).toBe('default');
+      expect(state.breakpoint).toBe('desktop');
       expect(state.layoutConfig.density).toBe('comfortable');
       expect(state.layoutConfig.columns).toBe(3);
       expect(state.layoutConfig.spacing).toBe(16);

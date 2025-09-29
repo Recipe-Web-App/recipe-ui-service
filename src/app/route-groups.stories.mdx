@@ -1,0 +1,198 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta
+  title="App Router/Route Groups Overview"
+  parameters={{
+    docs: {
+      description: {
+        component: `
+This documentation provides an overview of the App Router integration and route group
+structure implemented for the Recipe Management Application.
+        `,
+      },
+    },
+  }}
+/>
+
+# App Router Integration
+
+The Recipe Management Application uses Next.js 15 App Router with route groups to organize
+different areas of the application with appropriate layouts.
+
+## Route Group Structure
+
+```
+src/app/
+├── layout.tsx                # Root layout with providers
+├── page.tsx                  # Redirects to /main
+├── (main)/                   # Main application route group
+│   ├── layout.tsx           # Default layout with full navigation
+│   ├── page.tsx             # Homepage
+│   ├── recipes/
+│   │   └── page.tsx
+│   ├── meal-plans/
+│   │   └── page.tsx
+│   ├── favorites/
+│   │   └── page.tsx
+│   ├── shopping/
+│   │   └── page.tsx
+│   ├── social/
+│   │   └── page.tsx
+│   ├── profile/
+│   │   └── page.tsx
+│   └── settings/
+│       └── page.tsx
+├── (auth)/                   # Authentication route group
+│   ├── layout.tsx           # Minimal layout for auth flows
+│   └── login/
+│       └── page.tsx
+└── components-demo/          # Component demonstration area
+    ├── layout.tsx           # Focused layout for demos
+    └── ...
+```
+
+## Layout Variants by Route Group
+
+### (main) Route Group
+- **Layout Variant**: `default`
+- **Features**: TopNav + Sidebar + ContentPane + Footer
+- **Use Case**: Main application pages with full navigation
+- **Examples**: Home, Recipes, Meal Plans, Settings
+
+### (auth) Route Group
+- **Layout Variant**: `minimal`
+- **Features**: TopNav only (no sidebar or footer)
+- **Use Case**: Authentication flows requiring focus
+- **Examples**: Login, Registration, Password Reset
+
+### components-demo
+- **Layout Variant**: `focused`
+- **Features**: TopNav + Custom Sidebar + ContentPane (no footer)
+- **Use Case**: Component documentation and testing
+- **Examples**: All UI component demonstrations
+
+## Navigation Integration
+
+### Main Navigation
+The main navigation is defined in `src/config/navigation.ts` and includes:
+
+- **Home** (`/main`) - Application homepage
+- **Recipes** (`/main/recipes`) - Recipe management
+- **Meal Plans** (`/main/meal-plans`) - Meal planning tools
+- **Favorites** (`/main/favorites`) - Favorite recipes
+- **Shopping Lists** (`/main/shopping`) - Shopping list management
+- **Community** (`/main/social`) - Social features
+- **Profile** (`/main/profile`) - User profile management
+- **Settings** (`/main/settings`) - Application settings
+- **Components** (`/components-demo`) - Component demos (dev only)
+
+### Sub-Navigation
+Each main section has contextual sub-navigation defined in the navigation config:
+
+```typescript
+// Example: Recipe sub-navigation
+export const recipeSubNavigation: NavItem[] = [
+  { id: 'recipes-browse', label: 'Browse Recipes', href: '/recipes' },
+  { id: 'recipes-create', label: 'Create Recipe', href: '/recipes/create' },
+  { id: 'recipes-import', label: 'Import Recipe', href: '/recipes/import' },
+  // ... more items
+];
+```
+
+## Feature Flag Integration
+
+The Components Demo section is controlled by feature flags:
+
+```typescript
+{
+  id: 'components-demo',
+  label: 'Components',
+  href: '/components-demo',
+  metadata: {
+    featureFlag: 'SHOW_COMPONENTS_DEMO',
+    badge: 'Dev',
+    showInMobile: false,
+    showInDesktop: true,
+  },
+}
+```
+
+## Responsive Behavior
+
+### Desktop (1024px+)
+- **Main Layout**: Full sidebar, complete footer
+- **Auth Layout**: Centered forms with ample whitespace
+- **Demo Layout**: Custom sidebar for component navigation
+
+### Tablet (768px - 1023px)
+- **Main Layout**: Collapsible sidebar, simplified footer
+- **Auth Layout**: Responsive centered container
+- **Demo Layout**: Collapsible component navigation
+
+### Mobile (< 768px)
+- **Main Layout**: Mobile drawer, minimal footer
+- **Auth Layout**: Full-width forms with mobile optimizations
+- **Demo Layout**: Mobile-friendly component list
+
+## Provider Hierarchy
+
+The application maintains a clean provider hierarchy:
+
+1. **Root Layout** (`app/layout.tsx`)
+   - Font providers (Geist Sans, Geist Mono)
+   - TanStack Query provider
+   - React Query DevTools (development only)
+
+2. **Route Group Layouts**
+   - Layout component with variant-specific configuration
+   - Automatic error boundary wrapping
+   - Theme integration
+
+3. **Page Components**
+   - Business logic and content
+   - Component-specific providers as needed
+
+## Best Practices
+
+### Creating New Pages
+
+1. **Determine Route Group**: Choose based on layout needs
+   - Use `(main)` for standard app pages
+   - Use `(auth)` for authentication flows
+   - Create new route groups for specialized needs
+
+2. **Follow Naming Conventions**:
+   ```
+   src/app/(group)/feature/page.tsx
+   src/app/(group)/feature/[id]/page.tsx
+   src/app/(group)/feature/[...slug]/page.tsx
+   ```
+
+3. **Use Layout Props**: Customize layout behavior when needed
+   ```typescript
+   <Layout
+     variant="focused"
+     showSidebar={false}
+     contentProps={{ viewMode: "list" }}
+   >
+   ```
+
+### Navigation Updates
+
+1. **Add to Navigation Config**: Update `src/config/navigation.ts`
+2. **Create Sub-Navigation**: Define contextual navigation items
+3. **Update Feature Flags**: Control visibility as needed
+4. **Test Responsive Behavior**: Ensure mobile compatibility
+
+## Migration Strategy
+
+The route group implementation preserves the existing components-demo
+functionality while establishing a foundation for the main application:
+
+1. **Phase 1**: Route groups and layouts (✅ Complete)
+2. **Phase 2**: Foundation pages (✅ Complete)
+3. **Phase 3**: Feature implementation
+4. **Phase 4**: Progressive enhancement
+
+This structure provides a scalable foundation for continued development
+while maintaining compatibility with existing tooling and workflows.

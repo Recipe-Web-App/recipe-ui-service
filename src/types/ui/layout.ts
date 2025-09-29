@@ -1,6 +1,8 @@
 // Layout Types
 export type ViewMode = 'grid' | 'list' | 'card' | 'table';
 export type LayoutDensity = 'compact' | 'comfortable' | 'spacious';
+export type LayoutVariant = 'default' | 'focused' | 'minimal';
+export type Breakpoint = 'mobile' | 'tablet' | 'desktop';
 
 export interface PaginationState {
   page: number;
@@ -33,6 +35,9 @@ export interface LayoutConfig {
 
 export interface LayoutState {
   viewMode: ViewMode;
+  contentWidth: 'full' | 'contained';
+  layoutVariant: LayoutVariant;
+  breakpoint: Breakpoint;
   pagination: PaginationState;
   layoutConfig: LayoutConfig;
   tableColumns: ColumnConfig[];

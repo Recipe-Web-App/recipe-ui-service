@@ -100,7 +100,7 @@ describe('Slider Components', () => {
       const range = container.querySelector(
         'span[data-orientation="horizontal"] span[style*="left: 0%"]'
       );
-      expect(range).toHaveClass('bg-green-500');
+      expect(range).toHaveClass('bg-basil');
     });
 
     it('shows ticks when enabled', () => {
@@ -251,7 +251,7 @@ describe('Slider Components', () => {
       const range = container.querySelector(
         'span[data-orientation="horizontal"] span[style*="left: 0%"]'
       );
-      expect(range).toHaveClass('bg-yellow-500');
+      expect(range).toHaveClass('bg-citrus');
     });
   });
 
@@ -450,8 +450,8 @@ describe('Slider Components', () => {
       );
       expect(range).toHaveClass(
         'bg-gradient-to-r',
-        'from-green-500',
-        'to-green-400'
+        'from-basil',
+        'to-basil/80'
       );
     });
 
@@ -461,7 +461,7 @@ describe('Slider Components', () => {
       const range = container.querySelector(
         'span[data-orientation="horizontal"] span[style*="left: 0%"]'
       );
-      expect(range).toHaveClass('bg-green-500');
+      expect(range).toHaveClass('bg-basil');
       expect(range).not.toHaveClass('bg-gradient-to-r');
     });
   });

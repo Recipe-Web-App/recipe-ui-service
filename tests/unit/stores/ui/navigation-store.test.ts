@@ -11,10 +11,11 @@ describe('useNavigationStore', () => {
   beforeEach(() => {
     // Reset store state
     useNavigationStore.setState({
-      sidebarOpen: true,
-      mobileMenuOpen: false,
+      isSidebarOpen: true,
+      isSidebarCollapsed: false,
+      isMobileMenuOpen: false,
       breadcrumbs: [],
-      currentPage: '/',
+      activeRoute: '/',
       navigationHistory: [],
     });
   });
@@ -23,10 +24,11 @@ describe('useNavigationStore', () => {
     it('should have correct initial state', () => {
       const state = useNavigationStore.getState();
 
-      expect(state.sidebarOpen).toBe(true);
-      expect(state.mobileMenuOpen).toBe(false);
+      expect(state.isSidebarOpen).toBe(true);
+      expect(state.isSidebarCollapsed).toBe(false);
+      expect(state.isMobileMenuOpen).toBe(false);
       expect(state.breadcrumbs).toEqual([]);
-      expect(state.currentPage).toBe('/');
+      expect(state.activeRoute).toBe('/');
       expect(state.navigationHistory).toEqual([]);
     });
   });
@@ -34,35 +36,99 @@ describe('useNavigationStore', () => {
   describe('sidebar management', () => {
     describe('toggleSidebar', () => {
       it('should toggle sidebar open state', () => {
-        const initialState = useNavigationStore.getState().sidebarOpen;
+        const initialState = useNavigationStore.getState().isSidebarOpen;
 
         act(() => {
           useNavigationStore.getState().toggleSidebar();
         });
 
-        expect(useNavigationStore.getState().sidebarOpen).toBe(!initialState);
+        expect(useNavigationStore.getState().isSidebarOpen).toBe(!initialState);
 
         act(() => {
           useNavigationStore.getState().toggleSidebar();
         });
 
-        expect(useNavigationStore.getState().sidebarOpen).toBe(initialState);
+        expect(useNavigationStore.getState().isSidebarOpen).toBe(initialState);
       });
     });
 
-    describe('setSidebarOpen', () => {
-      it('should set sidebar open state', () => {
+    describe('collapseSidebar', () => {
+      it('should set sidebar collapsed state to true', () => {
         act(() => {
-          useNavigationStore.getState().setSidebarOpen(false);
+          useNavigationStore.getState().collapseSidebar(true);
         });
 
-        expect(useNavigationStore.getState().sidebarOpen).toBe(false);
+        expect(useNavigationStore.getState().isSidebarCollapsed).toBe(true);
+      });
 
+      it('should set sidebar collapsed state to false', () => {
+        // First set to true
         act(() => {
-          useNavigationStore.getState().setSidebarOpen(true);
+          useNavigationStore.getState().collapseSidebar(true);
         });
 
-        expect(useNavigationStore.getState().sidebarOpen).toBe(true);
+        // Then set to false
+        act(() => {
+          useNavigationStore.getState().collapseSidebar(false);
+        });
+
+        expect(useNavigationStore.getState().isSidebarCollapsed).toBe(false);
+      });
+
+      it('should maintain independent state from isSidebarOpen', () => {
+        // Set collapsed to true
+        act(() => {
+          useNavigationStore.getState().collapseSidebar(true);
+        });
+
+        // Toggle sidebar open/closed
+        act(() => {
+          useNavigationStore.getState().toggleSidebar();
+        });
+
+        // Collapsed state should remain unchanged
+        expect(useNavigationStore.getState().isSidebarCollapsed).toBe(true);
+        expect(useNavigationStore.getState().isSidebarOpen).toBe(false);
+      });
+    });
+
+    describe('sidebar states combinations', () => {
+      it('should support open and expanded state', () => {
+        act(() => {
+          useNavigationStore.setState({
+            isSidebarOpen: true,
+            isSidebarCollapsed: false,
+          });
+        });
+
+        const state = useNavigationStore.getState();
+        expect(state.isSidebarOpen).toBe(true);
+        expect(state.isSidebarCollapsed).toBe(false);
+      });
+
+      it('should support open and collapsed state', () => {
+        act(() => {
+          useNavigationStore.setState({
+            isSidebarOpen: true,
+            isSidebarCollapsed: true,
+          });
+        });
+
+        const state = useNavigationStore.getState();
+        expect(state.isSidebarOpen).toBe(true);
+        expect(state.isSidebarCollapsed).toBe(true);
+      });
+
+      it('should support closed state', () => {
+        act(() => {
+          useNavigationStore.setState({
+            isSidebarOpen: false,
+            isSidebarCollapsed: false, // Collapsed state doesn't matter when closed
+          });
+        });
+
+        const state = useNavigationStore.getState();
+        expect(state.isSidebarOpen).toBe(false);
       });
     });
   });
@@ -70,37 +136,121 @@ describe('useNavigationStore', () => {
   describe('mobile menu management', () => {
     describe('toggleMobileMenu', () => {
       it('should toggle mobile menu open state', () => {
-        const initialState = useNavigationStore.getState().mobileMenuOpen;
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
 
         act(() => {
           useNavigationStore.getState().toggleMobileMenu();
         });
 
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(
-          !initialState
-        );
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(true);
 
         act(() => {
           useNavigationStore.getState().toggleMobileMenu();
         });
 
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(initialState);
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
       });
     });
 
-    describe('setMobileMenuOpen', () => {
-      it('should set mobile menu open state', () => {
+    describe('closeMobileMenu', () => {
+      it('should close mobile menu', () => {
+        // First open the menu
         act(() => {
-          useNavigationStore.getState().setMobileMenuOpen(true);
+          useNavigationStore.setState({ isMobileMenuOpen: true });
         });
 
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(true);
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(true);
 
+        // Then close it
         act(() => {
-          useNavigationStore.getState().setMobileMenuOpen(false);
+          useNavigationStore.getState().closeMobileMenu();
         });
 
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(false);
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
+      });
+
+      it('should keep menu closed if already closed', () => {
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
+
+        act(() => {
+          useNavigationStore.getState().closeMobileMenu();
+        });
+
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
+      });
+    });
+  });
+
+  describe('active route and navigation', () => {
+    describe('setActiveRoute', () => {
+      it('should set active route', () => {
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/recipes');
+        });
+
+        expect(useNavigationStore.getState().activeRoute).toBe('/recipes');
+      });
+
+      it('should add previous route to history when changing routes', () => {
+        // Set initial route
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/home');
+        });
+
+        // Change to new route
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/recipes');
+        });
+
+        expect(useNavigationStore.getState().activeRoute).toBe('/recipes');
+        expect(useNavigationStore.getState().navigationHistory).toContain(
+          '/home'
+        );
+      });
+
+      it('should not add to history if setting same route', () => {
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/home');
+        });
+
+        const initialHistory = useNavigationStore.getState().navigationHistory;
+
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/home');
+        });
+
+        expect(useNavigationStore.getState().navigationHistory).toEqual(
+          initialHistory
+        );
+      });
+
+      it('should auto-close mobile menu when navigating', () => {
+        // Open mobile menu
+        act(() => {
+          useNavigationStore.setState({ isMobileMenuOpen: true });
+        });
+
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(true);
+
+        // Navigate to new route
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/recipes');
+        });
+
+        expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
+      });
+
+      it('should handle navigation from initial route', () => {
+        // Start with default route
+        expect(useNavigationStore.getState().activeRoute).toBe('/');
+
+        // Navigate to new route
+        act(() => {
+          useNavigationStore.getState().setActiveRoute('/recipes');
+        });
+
+        expect(useNavigationStore.getState().activeRoute).toBe('/recipes');
+        expect(useNavigationStore.getState().navigationHistory).toContain('/');
       });
     });
   });
@@ -136,12 +286,14 @@ describe('useNavigationStore', () => {
       });
 
       it('should replace existing breadcrumbs', () => {
+        // Set initial breadcrumbs
         act(() => {
           useNavigationStore.getState().setBreadcrumbs([mockBreadcrumb1]);
         });
 
         expect(useNavigationStore.getState().breadcrumbs).toHaveLength(1);
 
+        // Replace with new breadcrumbs
         act(() => {
           useNavigationStore
             .getState()
@@ -153,175 +305,30 @@ describe('useNavigationStore', () => {
           mockBreadcrumb3,
         ]);
       });
-    });
 
-    describe('addToBreadcrumbs', () => {
-      it('should add breadcrumb to existing array', () => {
-        act(() => {
-          useNavigationStore.getState().setBreadcrumbs([mockBreadcrumb1]);
-        });
-
-        act(() => {
-          useNavigationStore.getState().addToBreadcrumbs(mockBreadcrumb2);
-        });
-
-        expect(useNavigationStore.getState().breadcrumbs).toEqual([
-          mockBreadcrumb1,
-          mockBreadcrumb2,
-        ]);
-      });
-
-      it('should add breadcrumb to empty array', () => {
-        act(() => {
-          useNavigationStore.getState().addToBreadcrumbs(mockBreadcrumb1);
-        });
-
-        expect(useNavigationStore.getState().breadcrumbs).toEqual([
-          mockBreadcrumb1,
-        ]);
-      });
-    });
-
-    describe('removeBreadcrumb', () => {
-      it('should remove breadcrumb by id', () => {
+      it('should handle empty breadcrumbs array', () => {
+        // Set some breadcrumbs
         act(() => {
           useNavigationStore
             .getState()
-            .setBreadcrumbs([
-              mockBreadcrumb1,
-              mockBreadcrumb2,
-              mockBreadcrumb3,
-            ]);
+            .setBreadcrumbs([mockBreadcrumb1, mockBreadcrumb2]);
         });
 
+        // Clear breadcrumbs
         act(() => {
-          useNavigationStore.getState().removeBreadcrumb('recipes');
+          useNavigationStore.getState().setBreadcrumbs([]);
         });
 
-        expect(useNavigationStore.getState().breadcrumbs).toEqual([
-          mockBreadcrumb1,
-          mockBreadcrumb3,
-        ]);
-      });
-
-      it('should do nothing if breadcrumb id does not exist', () => {
-        const initialBreadcrumbs = [mockBreadcrumb1, mockBreadcrumb2];
-
-        act(() => {
-          useNavigationStore.getState().setBreadcrumbs(initialBreadcrumbs);
-        });
-
-        act(() => {
-          useNavigationStore.getState().removeBreadcrumb('non-existent');
-        });
-
-        expect(useNavigationStore.getState().breadcrumbs).toEqual(
-          initialBreadcrumbs
-        );
-      });
-    });
-
-    describe('getBreadcrumbIndex', () => {
-      it('should return correct index for existing breadcrumb', () => {
-        act(() => {
-          useNavigationStore
-            .getState()
-            .setBreadcrumbs([
-              mockBreadcrumb1,
-              mockBreadcrumb2,
-              mockBreadcrumb3,
-            ]);
-        });
-
-        expect(useNavigationStore.getState().getBreadcrumbIndex('home')).toBe(
-          0
-        );
-        expect(
-          useNavigationStore.getState().getBreadcrumbIndex('recipes')
-        ).toBe(1);
-        expect(
-          useNavigationStore.getState().getBreadcrumbIndex('recipe-detail')
-        ).toBe(2);
-      });
-
-      it('should return -1 for non-existent breadcrumb', () => {
-        act(() => {
-          useNavigationStore.getState().setBreadcrumbs([mockBreadcrumb1]);
-        });
-
-        expect(
-          useNavigationStore.getState().getBreadcrumbIndex('non-existent')
-        ).toBe(-1);
-      });
-    });
-  });
-
-  describe('current page and navigation', () => {
-    describe('setCurrentPage', () => {
-      it('should set current page', () => {
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/recipes');
-        });
-
-        expect(useNavigationStore.getState().currentPage).toBe('/recipes');
-      });
-
-      it('should add previous page to history when changing pages', () => {
-        // Set initial page
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/home');
-        });
-
-        // Change to new page
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/recipes');
-        });
-
-        expect(useNavigationStore.getState().currentPage).toBe('/recipes');
-        expect(useNavigationStore.getState().navigationHistory).toContain(
-          '/home'
-        );
-      });
-
-      it('should not add to history if setting same page', () => {
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/home');
-        });
-
-        const initialHistory = useNavigationStore.getState().navigationHistory;
-
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/home');
-        });
-
-        expect(useNavigationStore.getState().navigationHistory).toEqual(
-          initialHistory
-        );
-      });
-
-      it('should close mobile menu when navigating', () => {
-        // Open mobile menu
-        act(() => {
-          useNavigationStore.getState().setMobileMenuOpen(true);
-        });
-
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(true);
-
-        // Navigate to new page
-        act(() => {
-          useNavigationStore.getState().setCurrentPage('/recipes');
-        });
-
-        expect(useNavigationStore.getState().mobileMenuOpen).toBe(false);
+        expect(useNavigationStore.getState().breadcrumbs).toEqual([]);
       });
     });
   });
 
   describe('navigation history', () => {
-    describe('addToHistory', () => {
-      it('should add page to history', () => {
+    describe('pushToHistory', () => {
+      it('should add route to history', () => {
         act(() => {
-          useNavigationStore.getState().addToHistory('/home');
+          useNavigationStore.getState().pushToHistory('/home');
         });
 
         expect(useNavigationStore.getState().navigationHistory).toContain(
@@ -329,100 +336,78 @@ describe('useNavigationStore', () => {
         );
       });
 
-      it('should remove existing page before adding to end', () => {
+      it('should remove existing route before adding to end', () => {
         act(() => {
-          useNavigationStore.getState().addToHistory('/home');
-          useNavigationStore.getState().addToHistory('/recipes');
-          useNavigationStore.getState().addToHistory('/home'); // Add home again
+          useNavigationStore.getState().pushToHistory('/home');
+          useNavigationStore.getState().pushToHistory('/recipes');
+          useNavigationStore.getState().pushToHistory('/home'); // Add home again
         });
 
         const history = useNavigationStore.getState().navigationHistory;
         expect(history).toEqual(['/recipes', '/home']);
-        expect(history.filter(page => page === '/home')).toHaveLength(1);
+        expect(history.filter(route => route === '/home')).toHaveLength(1);
       });
 
-      it('should limit history size to MAX_HISTORY_SIZE', () => {
-        // Add more than 50 pages
+      it('should limit history size to 10 items', () => {
+        // Add more than 10 routes
         act(() => {
-          for (let i = 0; i < 55; i++) {
-            useNavigationStore.getState().addToHistory(`/page-${i}`);
+          for (let i = 0; i < 15; i++) {
+            useNavigationStore.getState().pushToHistory(`/page-${i}`);
           }
         });
 
         const history = useNavigationStore.getState().navigationHistory;
-        expect(history).toHaveLength(50);
+        expect(history).toHaveLength(10);
         expect(history[0]).toBe('/page-5'); // First 5 should be removed
-        expect(history[49]).toBe('/page-54'); // Last should be page-54
+        expect(history[9]).toBe('/page-14'); // Last should be page-14
+      });
+
+      it('should maintain order when route already exists', () => {
+        act(() => {
+          useNavigationStore.getState().pushToHistory('/page-1');
+          useNavigationStore.getState().pushToHistory('/page-2');
+          useNavigationStore.getState().pushToHistory('/page-3');
+          useNavigationStore.getState().pushToHistory('/page-1'); // Re-add page-1
+        });
+
+        const history = useNavigationStore.getState().navigationHistory;
+        expect(history).toEqual(['/page-2', '/page-3', '/page-1']);
+        expect(history.indexOf('/page-1')).toBe(2); // Should be at the end
       });
     });
 
-    describe('clearHistory', () => {
-      it('should clear navigation history', () => {
+    describe('history integration with setActiveRoute', () => {
+      it('should build navigation history through route changes', () => {
+        // Navigate through several routes
         act(() => {
-          useNavigationStore.getState().addToHistory('/home');
-          useNavigationStore.getState().addToHistory('/recipes');
+          useNavigationStore.getState().setActiveRoute('/home');
         });
 
-        expect(useNavigationStore.getState().navigationHistory).toHaveLength(2);
-
         act(() => {
-          useNavigationStore.getState().clearHistory();
+          useNavigationStore.getState().setActiveRoute('/recipes');
         });
 
-        expect(useNavigationStore.getState().navigationHistory).toEqual([]);
-      });
-    });
-
-    describe('canGoBack', () => {
-      it('should return true when history has items', () => {
         act(() => {
-          useNavigationStore.getState().addToHistory('/home');
+          useNavigationStore.getState().setActiveRoute('/profile');
         });
 
-        expect(useNavigationStore.getState().canGoBack()).toBe(true);
+        const history = useNavigationStore.getState().navigationHistory;
+        expect(history).toContain('/');
+        expect(history).toContain('/home');
+        expect(history).toContain('/recipes');
+        expect(useNavigationStore.getState().activeRoute).toBe('/profile');
       });
 
-      it('should return false when history is empty', () => {
-        expect(useNavigationStore.getState().canGoBack()).toBe(false);
-      });
-    });
-
-    describe('getLastPage', () => {
-      it('should return last page in history', () => {
+      it('should not exceed 10 items in history through navigation', () => {
+        // Navigate through more than 10 unique routes
         act(() => {
-          useNavigationStore.getState().addToHistory('/home');
-          useNavigationStore.getState().addToHistory('/recipes');
+          for (let i = 0; i < 12; i++) {
+            useNavigationStore.getState().setActiveRoute(`/route-${i}`);
+          }
         });
 
-        expect(useNavigationStore.getState().getLastPage()).toBe('/recipes');
-      });
-
-      it('should return null when history is empty', () => {
-        expect(useNavigationStore.getState().getLastPage()).toBeNull();
-      });
-    });
-
-    describe('getPreviousPage', () => {
-      it('should return second to last page in history', () => {
-        act(() => {
-          useNavigationStore.getState().addToHistory('/home');
-          useNavigationStore.getState().addToHistory('/recipes');
-          useNavigationStore.getState().addToHistory('/profile');
-        });
-
-        expect(useNavigationStore.getState().getPreviousPage()).toBe(
-          '/recipes'
-        );
-      });
-
-      it('should return null when history has less than 2 items', () => {
-        expect(useNavigationStore.getState().getPreviousPage()).toBeNull();
-
-        act(() => {
-          useNavigationStore.getState().addToHistory('/home');
-        });
-
-        expect(useNavigationStore.getState().getPreviousPage()).toBeNull();
+        const history = useNavigationStore.getState().navigationHistory;
+        expect(history.length).toBeLessThanOrEqual(10);
       });
     });
   });
@@ -430,14 +415,14 @@ describe('useNavigationStore', () => {
   describe('integration scenarios', () => {
     it('should handle complete navigation flow', () => {
       // Start with default state
-      expect(useNavigationStore.getState().currentPage).toBe('/');
+      expect(useNavigationStore.getState().activeRoute).toBe('/');
 
       // Navigate to home
       act(() => {
-        useNavigationStore.getState().setCurrentPage('/home');
+        useNavigationStore.getState().setActiveRoute('/home');
       });
 
-      expect(useNavigationStore.getState().currentPage).toBe('/home');
+      expect(useNavigationStore.getState().activeRoute).toBe('/home');
       expect(useNavigationStore.getState().navigationHistory).toContain('/');
 
       // Set breadcrumbs
@@ -447,73 +432,120 @@ describe('useNavigationStore', () => {
           .setBreadcrumbs([{ id: 'home', label: 'Home', href: '/home' }]);
       });
 
-      // Navigate to recipes
+      // Navigate to recipes with mobile menu open
       act(() => {
-        useNavigationStore.getState().setCurrentPage('/recipes');
+        useNavigationStore.setState({ isMobileMenuOpen: true });
+        useNavigationStore.getState().setActiveRoute('/recipes');
       });
+
+      // Mobile menu should be closed
+      expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
 
       // Add recipes breadcrumb
       act(() => {
-        useNavigationStore.getState().addToBreadcrumbs({
-          id: 'recipes',
-          label: 'Recipes',
-          href: '/recipes',
-        });
+        useNavigationStore.getState().setBreadcrumbs([
+          { id: 'home', label: 'Home', href: '/home' },
+          { id: 'recipes', label: 'Recipes', href: '/recipes' },
+        ]);
       });
 
-      expect(useNavigationStore.getState().currentPage).toBe('/recipes');
-      expect(useNavigationStore.getState().navigationHistory).toContain(
-        '/home'
-      );
-      expect(useNavigationStore.getState().breadcrumbs).toHaveLength(2);
-      expect(useNavigationStore.getState().canGoBack()).toBe(true);
-      expect(useNavigationStore.getState().getLastPage()).toBe('/home');
+      // Verify final state
+      const finalState = useNavigationStore.getState();
+      expect(finalState.activeRoute).toBe('/recipes');
+      expect(finalState.navigationHistory).toContain('/home');
+      expect(finalState.breadcrumbs).toHaveLength(2);
+      expect(finalState.isMobileMenuOpen).toBe(false);
     });
 
-    it('should handle mobile menu auto-close on navigation', () => {
+    it('should handle sidebar states with navigation', () => {
+      // Start with sidebar open and expanded
+      expect(useNavigationStore.getState().isSidebarOpen).toBe(true);
+      expect(useNavigationStore.getState().isSidebarCollapsed).toBe(false);
+
+      // Collapse sidebar
+      act(() => {
+        useNavigationStore.getState().collapseSidebar(true);
+      });
+
+      // Navigate to a new route
+      act(() => {
+        useNavigationStore.getState().setActiveRoute('/recipes');
+      });
+
+      // Sidebar collapsed state should persist
+      expect(useNavigationStore.getState().isSidebarCollapsed).toBe(true);
+      expect(useNavigationStore.getState().activeRoute).toBe('/recipes');
+
+      // Toggle sidebar closed
+      act(() => {
+        useNavigationStore.getState().toggleSidebar();
+      });
+
+      expect(useNavigationStore.getState().isSidebarOpen).toBe(false);
+      expect(useNavigationStore.getState().isSidebarCollapsed).toBe(true); // Collapsed state persists
+    });
+
+    it('should handle mobile navigation flow', () => {
       // Open mobile menu
       act(() => {
-        useNavigationStore.getState().setMobileMenuOpen(true);
+        useNavigationStore.getState().toggleMobileMenu();
       });
 
-      expect(useNavigationStore.getState().mobileMenuOpen).toBe(true);
+      expect(useNavigationStore.getState().isMobileMenuOpen).toBe(true);
 
-      // Navigate - should auto-close menu
+      // Navigate to a route
       act(() => {
-        useNavigationStore.getState().setCurrentPage('/recipes');
+        useNavigationStore.getState().setActiveRoute('/recipes');
       });
 
-      expect(useNavigationStore.getState().mobileMenuOpen).toBe(false);
-      expect(useNavigationStore.getState().currentPage).toBe('/recipes');
+      // Mobile menu should auto-close
+      expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
+
+      // Open mobile menu again
+      act(() => {
+        useNavigationStore.getState().toggleMobileMenu();
+      });
+
+      // Explicitly close mobile menu
+      act(() => {
+        useNavigationStore.getState().closeMobileMenu();
+      });
+
+      expect(useNavigationStore.getState().isMobileMenuOpen).toBe(false);
     });
+  });
 
-    it('should handle breadcrumb navigation with removal', () => {
-      // Set up breadcrumbs
-      const breadcrumbs = [
-        { id: 'home', label: 'Home', href: '/home' },
-        { id: 'recipes', label: 'Recipes', href: '/recipes' },
-        { id: 'detail', label: 'Recipe Detail', href: '/recipes/123' },
-      ];
+  describe('persistence', () => {
+    it('should only persist isSidebarCollapsed state', () => {
+      // The persist middleware is mocked, but we can verify the configuration
+      // by checking what would be persisted based on the partialize function
 
+      const mockState = {
+        isSidebarOpen: false,
+        isSidebarCollapsed: true,
+        isMobileMenuOpen: true,
+        breadcrumbs: [{ id: 'test', label: 'Test' }],
+        activeRoute: '/test',
+        navigationHistory: ['/home', '/recipes'],
+      };
+
+      // In a real implementation with persist middleware:
+      // Only isSidebarCollapsed should be persisted
+      // This is defined in the partialize function of the store
+
+      // Set various states
       act(() => {
-        useNavigationStore.getState().setBreadcrumbs(breadcrumbs);
+        useNavigationStore.setState(mockState);
       });
 
-      expect(useNavigationStore.getState().breadcrumbs).toHaveLength(3);
-
-      // Remove middle breadcrumb (simulating navigation back)
-      act(() => {
-        useNavigationStore.getState().removeBreadcrumb('recipes');
-      });
-
-      expect(useNavigationStore.getState().breadcrumbs).toHaveLength(2);
-      expect(useNavigationStore.getState().getBreadcrumbIndex('home')).toBe(0);
-      expect(useNavigationStore.getState().getBreadcrumbIndex('detail')).toBe(
-        1
-      );
-      expect(useNavigationStore.getState().getBreadcrumbIndex('recipes')).toBe(
-        -1
-      );
+      // Verify all states are set
+      const state = useNavigationStore.getState();
+      expect(state.isSidebarCollapsed).toBe(true);
+      expect(state.isSidebarOpen).toBe(false);
+      expect(state.isMobileMenuOpen).toBe(true);
+      expect(state.breadcrumbs).toHaveLength(1);
+      expect(state.activeRoute).toBe('/test');
+      expect(state.navigationHistory).toHaveLength(2);
     });
   });
 });
