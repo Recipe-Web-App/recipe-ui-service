@@ -20,25 +20,25 @@ export const errorBoundaryVariants = cva(
         inline: [
           'p-3',
           'text-sm',
-          'bg-red-50',
-          'text-red-900',
-          'border-red-200',
+          'bg-destructive/10',
+          'text-foreground',
+          'border-destructive/20',
         ],
         card: [
           'p-6',
           'text-sm',
-          'bg-red-50',
-          'text-red-900',
-          'border-red-200',
+          'bg-destructive/10',
+          'text-foreground',
+          'border-destructive/20',
           'shadow-sm',
         ],
         page: [
           'min-h-[400px]',
           'p-8',
           'text-base',
-          'bg-red-50',
-          'text-red-900',
-          'border-red-200',
+          'bg-destructive/10',
+          'text-foreground',
+          'border-destructive/20',
           'flex',
           'flex-col',
           'items-center',
@@ -48,18 +48,18 @@ export const errorBoundaryVariants = cva(
         toast: [
           'p-4',
           'text-sm',
-          'bg-red-50',
-          'text-red-900',
-          'border-red-200',
+          'bg-destructive/10',
+          'text-foreground',
+          'border-destructive/20',
           'shadow-lg',
           'max-w-sm',
         ],
         minimal: [
           'p-2',
           'text-xs',
-          'bg-red-50',
-          'text-red-800',
-          'border-red-200',
+          'bg-destructive/10',
+          'text-foreground',
+          'border-destructive/20',
           'rounded',
         ],
       },
@@ -82,7 +82,7 @@ export const errorBoundaryVariants = cva(
  * Provides styling for error boundary icons with contextual sizing and colors.
  */
 export const errorBoundaryIconVariants = cva(
-  ['flex-shrink-0', 'text-red-500'],
+  ['flex-shrink-0', 'text-destructive'],
   {
     variants: {
       variant: {
@@ -111,7 +111,7 @@ export const errorBoundaryIconVariants = cva(
  * Provides styling for error boundary titles with proper emphasis and spacing.
  */
 export const errorBoundaryTitleVariants = cva(
-  ['font-semibold', 'text-red-900'],
+  ['font-semibold', 'text-foreground'],
   {
     variants: {
       variant: {
@@ -139,7 +139,7 @@ export const errorBoundaryTitleVariants = cva(
  *
  * Provides styling for error boundary descriptions with proper text hierarchy.
  */
-export const errorBoundaryDescriptionVariants = cva(['text-red-800'], {
+export const errorBoundaryDescriptionVariants = cva(['text-muted-foreground'], {
   variants: {
     variant: {
       inline: ['text-xs', 'mb-2'],
@@ -198,7 +198,7 @@ export const errorBoundaryButtonVariants = cva(
     'justify-center',
     'rounded-md',
     'font-medium',
-    'ring-offset-white',
+    'ring-offset-background',
     'transition-colors',
     'focus-visible:outline-none',
     'focus-visible:ring-2',
@@ -210,29 +210,29 @@ export const errorBoundaryButtonVariants = cva(
     variants: {
       intent: {
         primary: [
-          'bg-red-600',
-          'text-white',
-          'hover:bg-red-700',
-          'focus-visible:ring-red-500',
+          'bg-destructive',
+          'text-destructive-foreground',
+          'hover:bg-destructive/90',
+          'focus-visible:ring-ring',
         ],
         secondary: [
           'border',
-          'border-red-300',
-          'bg-white',
-          'text-red-700',
-          'hover:bg-red-50',
-          'focus-visible:ring-red-500',
+          'border-destructive/30',
+          'bg-background',
+          'text-foreground',
+          'hover:bg-destructive/10',
+          'focus-visible:ring-ring',
         ],
         ghost: [
-          'text-red-700',
-          'hover:bg-red-100',
-          'focus-visible:ring-red-500',
+          'text-foreground',
+          'hover:bg-destructive/10',
+          'focus-visible:ring-ring',
         ],
         link: [
-          'text-red-600',
+          'text-destructive',
           'underline-offset-4',
           'hover:underline',
-          'focus-visible:ring-red-500',
+          'focus-visible:ring-ring',
           'px-0',
           'py-0',
         ],
@@ -292,13 +292,13 @@ export const errorBoundaryDetailsVariants = cva(
   [
     'mt-4',
     'p-3',
-    'bg-red-100',
+    'bg-destructive/5',
     'border',
-    'border-red-200',
+    'border-destructive/20',
     'rounded',
     'text-xs',
     'font-mono',
-    'text-red-900',
+    'text-foreground',
     'overflow-auto',
     'max-h-40',
   ],

@@ -73,7 +73,7 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       <div
         className={cn(
           switchVariants({ orientation, disabled }),
-          error && 'text-red-600',
+          error && 'text-error',
           className
         )}
       >

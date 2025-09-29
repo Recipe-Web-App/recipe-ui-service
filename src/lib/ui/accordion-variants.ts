@@ -9,20 +9,20 @@ export const accordionVariants = cva(
   [
     'w-full',
     'divide-y',
-    'divide-gray-200',
+    'divide-border',
     'border',
-    'border-gray-200',
+    'border-border',
     'rounded-lg',
     'overflow-hidden',
   ],
   {
     variants: {
       variant: {
-        default: ['bg-white'],
+        default: ['bg-card'],
         outlined: ['bg-transparent', 'border-2'],
-        elevated: ['bg-white', 'shadow-md'],
+        elevated: ['bg-card', 'shadow-md'],
         minimal: ['bg-transparent', 'border-0', 'divide-y-0', 'rounded-none'],
-        card: ['bg-gray-50', 'border-gray-300'],
+        card: ['bg-muted', 'border-border'],
       },
       size: {
         sm: ['text-sm'],
@@ -47,11 +47,11 @@ export const accordionItemVariants = cva(
   {
     variants: {
       variant: {
-        default: ['hover:bg-gray-50'],
-        outlined: ['hover:bg-gray-50'],
-        elevated: ['hover:bg-gray-50'],
-        minimal: ['hover:bg-gray-50', 'rounded-lg', 'px-2'],
-        card: ['hover:bg-gray-100'],
+        default: ['hover:bg-muted/50'],
+        outlined: ['hover:bg-muted/50'],
+        elevated: ['hover:bg-muted/50'],
+        minimal: ['hover:bg-muted/50', 'rounded-lg', 'px-2'],
+        card: ['hover:bg-muted'],
       },
       state: {
         open: [],
@@ -82,18 +82,18 @@ export const accordionTriggerVariants = cva(
     'duration-200',
     'focus:outline-none',
     'focus:ring-2',
-    'focus:ring-blue-500',
+    'focus:ring-ring',
     'focus:ring-offset-2',
     'group',
   ],
   {
     variants: {
       variant: {
-        default: ['px-4', 'py-3', 'text-gray-900', 'hover:text-blue-600'],
-        outlined: ['px-4', 'py-3', 'text-gray-900', 'hover:text-blue-600'],
-        elevated: ['px-4', 'py-3', 'text-gray-900', 'hover:text-blue-600'],
-        minimal: ['px-2', 'py-2', 'text-gray-900', 'hover:text-blue-600'],
-        card: ['px-4', 'py-3', 'text-gray-800', 'hover:text-blue-600'],
+        default: ['px-4', 'py-3', 'text-foreground', 'hover:text-primary'],
+        outlined: ['px-4', 'py-3', 'text-foreground', 'hover:text-primary'],
+        elevated: ['px-4', 'py-3', 'text-foreground', 'hover:text-primary'],
+        minimal: ['px-2', 'py-2', 'text-foreground', 'hover:text-primary'],
+        card: ['px-4', 'py-3', 'text-foreground', 'hover:text-primary'],
       },
       size: {
         sm: ['py-2', 'text-sm'],
@@ -126,26 +126,32 @@ export const accordionContentVariants = cva(
         default: [
           'px-4',
           'pb-4',
-          'text-gray-700',
+          'text-muted-foreground',
           'border-t',
-          'border-gray-100',
+          'border-border/50',
         ],
         outlined: [
           'px-4',
           'pb-4',
-          'text-gray-700',
+          'text-muted-foreground',
           'border-t',
-          'border-gray-200',
+          'border-border',
         ],
         elevated: [
           'px-4',
           'pb-4',
-          'text-gray-700',
+          'text-muted-foreground',
           'border-t',
-          'border-gray-100',
+          'border-border/50',
         ],
-        minimal: ['px-2', 'pb-3', 'text-gray-700'],
-        card: ['px-4', 'pb-4', 'text-gray-600', 'border-t', 'border-gray-200'],
+        minimal: ['px-2', 'pb-3', 'text-muted-foreground'],
+        card: [
+          'px-4',
+          'pb-4',
+          'text-muted-foreground',
+          'border-t',
+          'border-border',
+        ],
       },
       size: {
         sm: ['text-sm', 'py-2'],
@@ -206,20 +212,24 @@ export const recipeSectionVariants = cva(
   {
     variants: {
       section: {
-        ingredients: [
-          'border-l-green-500',
-          'bg-green-50',
-          'hover:bg-green-100',
+        ingredients: ['border-l-basil', 'bg-basil/10', 'hover:bg-basil/15'],
+        instructions: [
+          'border-l-primary',
+          'bg-primary/10',
+          'hover:bg-primary/15',
         ],
-        instructions: ['border-l-blue-500', 'bg-blue-50', 'hover:bg-blue-100'],
         nutrition: [
-          'border-l-purple-500',
-          'bg-purple-50',
-          'hover:bg-purple-100',
+          'border-l-secondary',
+          'bg-secondary/10',
+          'hover:bg-secondary/15',
         ],
-        notes: ['border-l-yellow-500', 'bg-yellow-50', 'hover:bg-yellow-100'],
-        tips: ['border-l-orange-500', 'bg-orange-50', 'hover:bg-orange-100'],
-        variations: ['border-l-pink-500', 'bg-pink-50', 'hover:bg-pink-100'],
+        notes: ['border-l-citrus', 'bg-citrus/10', 'hover:bg-citrus/15'],
+        tips: ['border-l-accent', 'bg-accent/10', 'hover:bg-accent/15'],
+        variations: [
+          'border-l-secondary',
+          'bg-secondary/5',
+          'hover:bg-secondary/10',
+        ],
       },
       state: {
         open: ['shadow-sm'],
@@ -267,20 +277,20 @@ export const recipeListItemVariants = cva(
   {
     variants: {
       type: {
-        ingredients: ['hover:bg-green-100', 'rounded-md', 'p-2', '-m-2'],
+        ingredients: ['hover:bg-basil/15', 'rounded-md', 'p-2', '-m-2'],
         instructions: [
-          'hover:bg-blue-100',
+          'hover:bg-primary/15',
           'rounded-md',
           'p-2',
           '-m-2',
           'counter-increment: step-counter',
         ],
-        checklist: ['hover:bg-gray-100', 'rounded-md', 'p-2', '-m-2'],
+        checklist: ['hover:bg-muted', 'rounded-md', 'p-2', '-m-2'],
       },
       state: {
         default: [],
         checked: ['opacity-60', 'line-through'],
-        highlighted: ['bg-yellow-100', 'border-yellow-300', 'border'],
+        highlighted: ['bg-citrus/15', 'border-citrus/30', 'border'],
       },
     },
     defaultVariants: {
@@ -309,14 +319,14 @@ export const recipeStepNumberVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-blue-500', 'h-6', 'w-6'],
-        large: ['bg-blue-500', 'h-8', 'w-8'],
-        minimal: ['bg-gray-300', 'text-gray-700', 'h-6', 'w-6'],
+        default: ['bg-primary', 'h-6', 'w-6'],
+        large: ['bg-primary', 'h-8', 'w-8'],
+        minimal: ['bg-muted', 'text-muted-foreground', 'h-6', 'w-6'],
       },
       state: {
         default: [],
-        active: ['bg-blue-600', 'shadow-md'],
-        completed: ['bg-green-500'],
+        active: ['bg-primary/90', 'shadow-md'],
+        completed: ['bg-basil'],
       },
     },
     defaultVariants: {
@@ -335,9 +345,9 @@ export const ingredientCheckboxVariants = cva(
   [
     'rounded',
     'border-2',
-    'border-gray-300',
-    'text-green-600',
-    'focus:ring-green-500',
+    'border-input',
+    'text-basil',
+    'focus:ring-basil',
     'focus:ring-2',
     'focus:ring-offset-2',
     'transition-colors',

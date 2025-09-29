@@ -220,37 +220,13 @@ export const recipeBreadcrumbVariants = cva(
     variants: {
       workflow: {
         planning: [
-          'border-blue-200',
-          'bg-blue-50',
-          'text-blue-800',
-          'dark:border-blue-800',
-          'dark:bg-blue-950',
-          'dark:text-blue-200',
+          'border-primary/20',
+          'bg-primary/10',
+          'text-primary-foreground',
         ],
-        shopping: [
-          'border-green-200',
-          'bg-green-50',
-          'text-green-800',
-          'dark:border-green-800',
-          'dark:bg-green-950',
-          'dark:text-green-200',
-        ],
-        cooking: [
-          'border-orange-200',
-          'bg-orange-50',
-          'text-orange-800',
-          'dark:border-orange-800',
-          'dark:bg-orange-950',
-          'dark:text-orange-200',
-        ],
-        serving: [
-          'border-purple-200',
-          'bg-purple-50',
-          'text-purple-800',
-          'dark:border-purple-800',
-          'dark:bg-purple-950',
-          'dark:text-purple-200',
-        ],
+        shopping: ['border-basil/20', 'bg-basil/10', 'text-foreground'],
+        cooking: ['border-accent/30', 'bg-accent/10', 'text-foreground'],
+        serving: ['border-secondary/20', 'bg-secondary/10', 'text-foreground'],
       },
       emphasis: {
         subtle: ['opacity-70'],

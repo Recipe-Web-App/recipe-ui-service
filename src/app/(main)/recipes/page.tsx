@@ -123,8 +123,8 @@ export default function RecipesPage() {
                   <Heart
                     className={`h-4 w-4 ${
                       recipe.isFavorite
-                        ? 'fill-red-500 text-red-500'
-                        : 'text-gray-600'
+                        ? 'fill-error text-error'
+                        : 'text-text-secondary'
                     }`}
                   />
                 </Button>
@@ -141,7 +141,7 @@ export default function RecipesPage() {
               <div className="mb-2 flex items-start justify-between">
                 <h3 className="line-clamp-1 font-semibold">{recipe.title}</h3>
                 <div className="ml-2 flex items-center">
-                  <Star className="mr-1 h-4 w-4 text-yellow-500" />
+                  <Star className="text-rating mr-1 h-4 w-4" />
                   <span className="text-sm">{recipe.rating}</span>
                 </div>
               </div>

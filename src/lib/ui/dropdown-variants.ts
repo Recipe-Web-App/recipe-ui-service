@@ -29,11 +29,11 @@ export const dropdownTriggerVariants = cva(
     variants: {
       variant: {
         default: [
-          'bg-gray-900',
-          'text-white',
+          'bg-primary',
+          'text-primary-foreground',
           'shadow',
-          'hover:bg-gray-900/80',
-          'data-[state=open]:bg-gray-900/90',
+          'hover:bg-primary/90',
+          'data-[state=open]:bg-primary/80',
         ],
         secondary: [
           'bg-secondary',
@@ -82,9 +82,9 @@ export const dropdownContentVariants = cva(
     'overflow-hidden',
     'rounded-md',
     'border',
-    'border-gray-200',
-    'bg-white',
-    'text-gray-900',
+    'border-border',
+    'bg-card',
+    'text-card-foreground',
     'shadow-md',
     'p-1',
     // Animation classes for enter/exit
@@ -103,7 +103,7 @@ export const dropdownContentVariants = cva(
     variants: {
       variant: {
         default: [],
-        secondary: ['bg-gray-50', 'text-gray-700'],
+        secondary: ['bg-muted', 'text-muted-foreground'],
       },
       size: {
         sm: ['min-w-[6rem]', 'text-xs'],
@@ -139,10 +139,11 @@ export const dropdownItemVariants = cva(
     'transition-all',
     'duration-150',
     'ease-in-out',
-    'focus:bg-blue-50',
-    'focus:text-blue-900',
+    'focus:bg-accent',
+    'focus:text-accent-foreground',
     'focus:ring-1',
-    'focus:ring-blue-200',
+    'focus:ring-ring',
+    'focus:ring-offset-0',
     'data-[disabled]:pointer-events-none',
     'data-[disabled]:opacity-50',
     '[&_svg]:pointer-events-none',
@@ -153,25 +154,24 @@ export const dropdownItemVariants = cva(
     variants: {
       variant: {
         default: [
-          'hover:bg-blue-50',
-          'hover:text-blue-900',
+          'hover:bg-accent',
+          'hover:text-accent-foreground',
           'hover:shadow-sm',
           'hover:scale-[1.02]',
           'hover:translate-x-0.5',
         ],
         destructive: [
-          'text-red-600',
-          'hover:bg-red-50',
-          'hover:text-red-700',
+          'text-destructive',
+          'hover:bg-destructive/10',
+          'hover:text-destructive',
           'hover:shadow-sm',
           'hover:scale-[1.02]',
           'hover:translate-x-0.5',
-          'focus:bg-red-50',
-          'focus:text-red-700',
-          'focus:ring-red-200',
-          'dark:text-red-400',
-          'dark:hover:bg-red-900/10',
-          'dark:focus:bg-red-900/10',
+          'focus:bg-destructive/10',
+          'focus:text-destructive',
+          'focus:ring-destructive/20',
+          'dark:hover:bg-destructive/5',
+          'dark:focus:bg-destructive/5',
         ],
       },
       inset: {

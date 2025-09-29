@@ -174,12 +174,12 @@ const AvatarGroupItem = React.forwardRef<
         {showStatus && user.status && (
           <div
             className={cn(
-              'absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white dark:border-gray-900',
+              'border-background absolute right-0 bottom-0 h-3 w-3 rounded-full border-2',
               {
-                'bg-green-500': user.status === 'online',
-                'bg-gray-400': user.status === 'offline',
-                'bg-yellow-500': user.status === 'away',
-                'bg-red-500': user.status === 'busy',
+                'bg-online': user.status === 'online',
+                'bg-offline': user.status === 'offline',
+                'bg-away': user.status === 'away',
+                'bg-busy': user.status === 'busy',
               }
             )}
             aria-label={`Status: ${user.status}`}

@@ -83,13 +83,13 @@ export default function MealPlansPage() {
   const getMealTypeColor = (type: string) => {
     switch (type.toLowerCase()) {
       case 'breakfast':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-warning-light text-warning';
       case 'lunch':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-info-light text-info';
       case 'dinner':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-accent text-accent-foreground';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-muted text-text-secondary';
     }
   };
 
@@ -191,8 +191,8 @@ export default function MealPlansPage() {
               </p>
               <p className="text-2xl font-bold">60%</p>
             </div>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100">
-              <div className="h-4 w-4 rounded-full bg-green-500"></div>
+            <div className="bg-success-light flex h-8 w-8 items-center justify-center rounded-full">
+              <div className="bg-success h-4 w-4 rounded-full"></div>
             </div>
           </div>
         </Card>

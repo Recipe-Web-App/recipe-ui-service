@@ -11,9 +11,9 @@ export const tabsListVariants = cva(
     'items-center',
     'justify-center',
     'rounded-lg',
-    'bg-gray-100',
+    'bg-muted',
     'p-1',
-    'text-gray-500',
+    'text-muted-foreground',
   ],
   {
     variants: {
@@ -22,11 +22,11 @@ export const tabsListVariants = cva(
         line: [
           'bg-transparent',
           'border-b',
-          'border-gray-200',
+          'border-border',
           'rounded-none',
           'p-0',
         ],
-        pills: ['bg-gray-50', 'border', 'border-gray-200'],
+        pills: ['bg-card', 'border', 'border-border'],
       },
       size: {
         sm: ['h-8', 'text-xs'],
@@ -72,10 +72,10 @@ export const tabsTriggerVariants = cva(
     variants: {
       variant: {
         default: [
-          'hover:bg-gray-50',
-          'hover:text-gray-900',
-          'data-[state=active]:bg-white',
-          'data-[state=active]:text-gray-900',
+          'hover:bg-card',
+          'hover:text-foreground',
+          'data-[state=active]:bg-background',
+          'data-[state=active]:text-foreground',
         ],
         line: [
           'rounded-none',
@@ -84,18 +84,18 @@ export const tabsTriggerVariants = cva(
           'bg-transparent',
           'pb-2',
           'shadow-none',
-          'hover:text-gray-900',
-          'data-[state=active]:border-blue-500',
+          'hover:text-foreground',
+          'data-[state=active]:border-primary',
           'data-[state=active]:bg-transparent',
-          'data-[state=active]:text-blue-600',
+          'data-[state=active]:text-primary',
           'data-[state=active]:shadow-none',
         ],
         pills: [
           'rounded-full',
-          'hover:bg-blue-50',
-          'hover:text-blue-700',
-          'data-[state=active]:bg-blue-500',
-          'data-[state=active]:text-white',
+          'hover:bg-primary/10',
+          'hover:text-primary',
+          'data-[state=active]:bg-primary',
+          'data-[state=active]:text-primary-foreground',
         ],
       },
       size: {
@@ -128,14 +128,14 @@ export const tabsContentVariants = cva(
   {
     variants: {
       variant: {
-        default: ['rounded-md', 'border', 'border-gray-200', 'p-4'],
+        default: ['rounded-md', 'border', 'border-border', 'p-4'],
         line: ['pt-4'],
-        pills: ['rounded-lg', 'bg-gray-50', 'p-4'],
+        pills: ['rounded-lg', 'bg-muted', 'p-4'],
         card: [
           'rounded-lg',
           'border',
-          'border-gray-200',
-          'bg-white',
+          'border-border',
+          'bg-card',
           'p-6',
           'shadow-sm',
         ],

@@ -92,7 +92,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
         onKeyDown={(e: React.KeyboardEvent) => handleKeyDown(e, setValue)}
         className={cn(
           radioGroupVariants({ orientation, disabled }),
-          error && 'text-red-600',
+          error && 'text-error',
           className
         )}
         dir={dir as 'ltr' | 'rtl' | undefined}
@@ -489,7 +489,7 @@ const RecipeRadioItem = React.forwardRef<
           >
             <span>{label}</span>
             {showCount && count !== undefined && (
-              <span className="ml-2 text-xs text-gray-500">({count})</span>
+              <span className="text-text-tertiary ml-2 text-xs">({count})</span>
             )}
           </label>
           {description && (
@@ -590,24 +590,18 @@ const RadioCard = React.forwardRef<HTMLDivElement, RadioCardProps>(
           )}
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <h4 className="font-medium text-gray-900 dark:text-gray-100">
-                {label}
-              </h4>
+              <h4 className="text-text-primary font-medium">{label}</h4>
               {badge && <div className="ml-2">{badge}</div>}
             </div>
             {description && (
-              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                {description}
-              </p>
+              <p className="text-text-secondary mt-1 text-sm">{description}</p>
             )}
           </div>
-          {icon && (
-            <div className="text-gray-400 dark:text-gray-500">{icon}</div>
-          )}
+          {icon && <div className="text-text-tertiary">{icon}</div>}
         </div>
         {selected && (
           <div className="absolute top-2 right-2">
-            <Circle className="h-3 w-3 fill-blue-500 text-blue-500" />
+            <Circle className="fill-info text-info h-3 w-3" />
           </div>
         )}
       </div>

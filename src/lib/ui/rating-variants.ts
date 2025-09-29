@@ -76,19 +76,19 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'star',
       variant: 'default',
       state: 'filled',
-      className: 'text-yellow-400 fill-current',
+      className: 'text-citrus fill-current',
     },
     {
       type: 'star',
       variant: 'default',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'star',
       variant: 'default',
       state: 'hover',
-      className: 'text-yellow-300 fill-current',
+      className: 'text-citrus/80 fill-current',
     },
     {
       type: 'star',
@@ -100,7 +100,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'star',
       variant: 'accent',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'star',
@@ -112,37 +112,37 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'star',
       variant: 'warning',
       state: 'filled',
-      className: 'text-orange-400 fill-current',
+      className: 'text-accent fill-current',
     },
     {
       type: 'star',
       variant: 'warning',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'star',
       variant: 'warning',
       state: 'hover',
-      className: 'text-orange-300 fill-current',
+      className: 'text-accent/80 fill-current',
     },
     {
       type: 'star',
       variant: 'success',
       state: 'filled',
-      className: 'text-green-500 fill-current',
+      className: 'text-basil fill-current',
     },
     {
       type: 'star',
       variant: 'success',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'star',
       variant: 'success',
       state: 'hover',
-      className: 'text-green-400 fill-current',
+      className: 'text-basil/80 fill-current',
     },
 
     // Heart variants
@@ -150,19 +150,19 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'heart',
       variant: 'default',
       state: 'filled',
-      className: 'text-red-500 fill-current',
+      className: 'text-primary fill-current',
     },
     {
       type: 'heart',
       variant: 'default',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'heart',
       variant: 'default',
       state: 'hover',
-      className: 'text-red-400 fill-current',
+      className: 'text-primary/80 fill-current',
     },
     {
       type: 'heart',
@@ -174,7 +174,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'heart',
       variant: 'accent',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'heart',
@@ -186,37 +186,37 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'heart',
       variant: 'warning',
       state: 'filled',
-      className: 'text-orange-400 fill-current',
+      className: 'text-accent fill-current',
     },
     {
       type: 'heart',
       variant: 'warning',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'heart',
       variant: 'warning',
       state: 'hover',
-      className: 'text-orange-300 fill-current',
+      className: 'text-accent/80 fill-current',
     },
     {
       type: 'heart',
       variant: 'success',
       state: 'filled',
-      className: 'text-green-500 fill-current',
+      className: 'text-basil fill-current',
     },
     {
       type: 'heart',
       variant: 'success',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'heart',
       variant: 'success',
       state: 'hover',
-      className: 'text-green-400 fill-current',
+      className: 'text-basil/80 fill-current',
     },
 
     // Thumbs variants
@@ -224,19 +224,19 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'thumbs',
       variant: 'default',
       state: 'filled',
-      className: 'text-blue-500 fill-current',
+      className: 'text-primary fill-current',
     },
     {
       type: 'thumbs',
       variant: 'default',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'thumbs',
       variant: 'default',
       state: 'hover',
-      className: 'text-blue-400 fill-current',
+      className: 'text-primary/80 fill-current',
     },
     {
       type: 'thumbs',
@@ -248,7 +248,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'thumbs',
       variant: 'accent',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'thumbs',
@@ -260,37 +260,37 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'thumbs',
       variant: 'warning',
       state: 'filled',
-      className: 'text-orange-400 fill-current',
+      className: 'text-accent fill-current',
     },
     {
       type: 'thumbs',
       variant: 'warning',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'thumbs',
       variant: 'warning',
       state: 'hover',
-      className: 'text-orange-300 fill-current',
+      className: 'text-accent/80 fill-current',
     },
     {
       type: 'thumbs',
       variant: 'success',
       state: 'filled',
-      className: 'text-green-500 fill-current',
+      className: 'text-basil fill-current',
     },
     {
       type: 'thumbs',
       variant: 'success',
       state: 'unfilled',
-      className: 'text-gray-300 dark:text-gray-600',
+      className: 'text-muted-foreground/40',
     },
     {
       type: 'thumbs',
       variant: 'success',
       state: 'hover',
-      className: 'text-green-400 fill-current',
+      className: 'text-basil/80 fill-current',
     },
 
     // Star hover states
@@ -298,7 +298,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'star',
       variant: 'default',
       state: 'hover',
-      className: 'text-yellow-300 fill-current',
+      className: 'text-citrus/80 fill-current',
     },
     {
       type: 'star',
@@ -310,13 +310,13 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'star',
       variant: 'warning',
       state: 'hover',
-      className: 'text-orange-300 fill-current',
+      className: 'text-accent/80 fill-current',
     },
     {
       type: 'star',
       variant: 'success',
       state: 'hover',
-      className: 'text-green-400 fill-current',
+      className: 'text-basil/80 fill-current',
     },
 
     // Heart hover states
@@ -324,7 +324,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'heart',
       variant: 'default',
       state: 'hover',
-      className: 'text-red-400 fill-current',
+      className: 'text-primary/80 fill-current',
     },
     {
       type: 'heart',
@@ -336,13 +336,13 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       type: 'heart',
       variant: 'warning',
       state: 'hover',
-      className: 'text-orange-300 fill-current',
+      className: 'text-accent/80 fill-current',
     },
     {
       type: 'heart',
       variant: 'success',
       state: 'hover',
-      className: 'text-green-400 fill-current',
+      className: 'text-basil/80 fill-current',
     },
 
     // Numeric variants - all have consistent sizing to prevent layout shifts
@@ -351,7 +351,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       variant: 'default',
       state: 'filled',
       className:
-        'text-foreground bg-gray-100 dark:bg-gray-800 rounded-md px-3 py-1.5 font-semibold border-2 border-gray-300 dark:border-gray-600 shadow-sm',
+        'text-foreground bg-muted rounded-md px-3 py-1.5 font-semibold border-2 border-border shadow-sm',
     },
     {
       type: 'numeric',
@@ -379,7 +379,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       variant: 'warning',
       state: 'filled',
       className:
-        'text-white bg-orange-500 rounded-md px-3 py-1.5 font-semibold border-2 border-orange-300 shadow-sm',
+        'text-accent-foreground bg-accent rounded-md px-3 py-1.5 font-semibold border-2 border-accent/30 shadow-sm',
     },
     {
       type: 'numeric',
@@ -393,7 +393,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       variant: 'success',
       state: 'filled',
       className:
-        'text-white bg-green-500 rounded-md px-3 py-1.5 font-semibold border-2 border-green-300 shadow-sm',
+        'text-foreground bg-basil rounded-md px-3 py-1.5 font-semibold border-2 border-basil/30 shadow-sm',
     },
     {
       type: 'numeric',
@@ -409,7 +409,7 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       variant: 'default',
       state: 'hover',
       className:
-        'text-foreground bg-gray-200 dark:bg-gray-700 rounded-md px-3 py-1.5 font-medium border-2 border-gray-400 dark:border-gray-500 shadow-sm',
+        'text-foreground bg-muted/70 rounded-md px-3 py-1.5 font-medium border-2 border-border shadow-sm',
     },
     {
       type: 'numeric',
@@ -423,14 +423,14 @@ export const ratingItemVariants = cva('transition-colors duration-150', {
       variant: 'warning',
       state: 'hover',
       className:
-        'text-white bg-orange-600 rounded-md px-3 py-1.5 font-medium border-2 border-orange-400 shadow-sm',
+        'text-accent-foreground bg-accent/90 rounded-md px-3 py-1.5 font-medium border-2 border-accent/50 shadow-sm',
     },
     {
       type: 'numeric',
       variant: 'success',
       state: 'hover',
       className:
-        'text-white bg-green-600 rounded-md px-3 py-1.5 font-medium border-2 border-green-400 shadow-sm',
+        'text-foreground bg-basil/90 rounded-md px-3 py-1.5 font-medium border-2 border-basil/50 shadow-sm',
     },
 
     // Disabled state

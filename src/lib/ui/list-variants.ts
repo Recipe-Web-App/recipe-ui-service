@@ -198,8 +198,8 @@ export const listItemIconVariants = cva(
         muted: ['text-muted-foreground'],
         primary: ['text-primary'],
         destructive: ['text-destructive'],
-        success: ['text-green-600'],
-        warning: ['text-yellow-600'],
+        success: ['text-basil'],
+        warning: ['text-citrus'],
       },
     },
     defaultVariants: {
@@ -216,7 +216,7 @@ export const recipeListVariants = cva(['space-y-1'], {
     context: {
       ingredients: [
         '[&>*]:border-l-2',
-        '[&>*]:border-l-green-200',
+        '[&>*]:border-l-basil/30',
         '[&>*]:pl-4',
       ],
       instructions: [
@@ -241,7 +241,7 @@ export const recipeListVariants = cva(['space-y-1'], {
       ],
       nutrition: ['[&>*]:grid', '[&>*]:grid-cols-[1fr_auto]', '[&>*]:gap-4'],
       categories: ['[&>*]:flex', '[&>*]:items-center', '[&>*]:gap-2'],
-      reviews: ['[&>*]:border-l-4', '[&>*]:border-l-blue-200', '[&>*]:pl-4'],
+      reviews: ['[&>*]:border-l-4', '[&>*]:border-l-primary/30', '[&>*]:pl-4'],
     },
     numbered: {
       true: [

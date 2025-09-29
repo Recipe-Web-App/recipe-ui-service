@@ -184,7 +184,7 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
         )}
 
         {/* Online status indicator */}
-        <div className="border-background absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2 bg-green-500" />
+        <div className="border-background bg-basil absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full border-2" />
       </Button>
     );
 

@@ -12,9 +12,9 @@ export const avatarVariants = cva(
     'shrink-0',
     'overflow-hidden',
     'rounded-full',
-    'bg-gray-100',
+    'bg-muted',
     'border',
-    'border-gray-200',
+    'border-border',
   ],
   {
     variants: {
@@ -28,14 +28,14 @@ export const avatarVariants = cva(
         '3xl': ['h-24', 'w-24'],
       },
       variant: {
-        default: ['border-gray-200'],
-        outlined: ['border-2', 'border-gray-300'],
-        success: ['border-2', 'border-green-500'],
-        warning: ['border-2', 'border-yellow-500'],
-        error: ['border-2', 'border-red-500'],
-        accent: ['border-2', 'border-blue-500'],
-        chef: ['border-2', 'border-orange-500', 'shadow-sm'],
-        premium: ['border-2', 'border-purple-500', 'shadow-md'],
+        default: ['border-border'],
+        outlined: ['border-2', 'border-border'],
+        success: ['border-2', 'border-basil'],
+        warning: ['border-2', 'border-citrus'],
+        error: ['border-2', 'border-destructive'],
+        accent: ['border-2', 'border-primary'],
+        chef: ['border-2', 'border-accent', 'shadow-sm'],
+        premium: ['border-2', 'border-secondary', 'shadow-md'],
       },
     },
     defaultVariants: {
@@ -87,11 +87,11 @@ export const avatarFallbackVariants = cva(
         '3xl': ['text-2xl'],
       },
       variant: {
-        default: ['bg-gray-500'],
-        user: ['bg-blue-500'],
-        chef: ['bg-orange-500'],
-        admin: ['bg-purple-500'],
-        guest: ['bg-gray-400'],
+        default: ['bg-muted-foreground'],
+        user: ['bg-primary'],
+        chef: ['bg-accent'],
+        admin: ['bg-secondary'],
+        guest: ['bg-muted-foreground/70'],
       },
     },
     defaultVariants: {
@@ -107,7 +107,13 @@ export const avatarFallbackVariants = cva(
  * Provides styling for status indicators (online, offline, verified, etc.).
  */
 export const avatarStatusVariants = cva(
-  ['absolute', 'rounded-full', 'border-2', 'border-white', 'bg-gray-400'],
+  [
+    'absolute',
+    'rounded-full',
+    'border-2',
+    'border-background',
+    'bg-muted-foreground',
+  ],
   {
     variants: {
       size: {
@@ -120,13 +126,13 @@ export const avatarStatusVariants = cva(
         '3xl': ['h-6', 'w-6', 'bottom-1', 'right-1'],
       },
       status: {
-        online: ['bg-green-500'],
-        offline: ['bg-gray-400'],
-        away: ['bg-yellow-500'],
-        busy: ['bg-red-500'],
-        verified: ['bg-blue-500'],
-        chef: ['bg-orange-500'],
-        premium: ['bg-purple-500'],
+        online: ['bg-basil'],
+        offline: ['bg-muted-foreground/70'],
+        away: ['bg-citrus'],
+        busy: ['bg-destructive'],
+        verified: ['bg-primary'],
+        chef: ['bg-accent'],
+        premium: ['bg-secondary'],
       },
     },
     defaultVariants: {
@@ -184,24 +190,24 @@ export const recipeAuthorVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-gray-50', 'hover:bg-gray-100'],
+        default: ['bg-muted/50', 'hover:bg-muted'],
         outlined: [
           'border',
-          'border-gray-200',
-          'bg-white',
-          'hover:border-gray-300',
+          'border-border',
+          'bg-background',
+          'hover:border-border/70',
         ],
         chef: [
-          'bg-orange-50',
+          'bg-accent/10',
           'border',
-          'border-orange-200',
-          'hover:bg-orange-100',
+          'border-accent/20',
+          'hover:bg-accent/15',
         ],
         premium: [
-          'bg-purple-50',
+          'bg-secondary/10',
           'border',
-          'border-purple-200',
-          'hover:bg-purple-100',
+          'border-secondary/20',
+          'hover:bg-secondary/15',
         ],
         simple: ['bg-transparent'],
       },

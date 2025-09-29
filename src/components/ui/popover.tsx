@@ -236,10 +236,7 @@ const MenuPopover = React.forwardRef<
       {items.map((item, index) => {
         if (item.divider) {
           return (
-            <div
-              key={`divider-${index}`}
-              className="my-1 h-px bg-gray-200 dark:bg-gray-700"
-            />
+            <div key={`divider-${index}`} className="bg-border my-1 h-px" />
           );
         }
         return (
@@ -251,7 +248,7 @@ const MenuPopover = React.forwardRef<
               'flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm transition-colors outline-none',
               item.disabled
                 ? 'cursor-not-allowed opacity-50'
-                : 'hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-800 dark:focus:bg-gray-800'
+                : 'hover:bg-muted focus:bg-muted'
             )}
           >
             <span className="flex items-center gap-2">
@@ -259,7 +256,7 @@ const MenuPopover = React.forwardRef<
               <span>{item.label}</span>
             </span>
             {item.shortcut && (
-              <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-text-tertiary ml-auto text-xs">
                 {item.shortcut}
               </span>
             )}
@@ -343,22 +340,20 @@ const FormPopover = React.forwardRef<
       <form onSubmit={handleSubmit} className="space-y-4">
         {title && <h3 className="text-lg font-semibold">{title}</h3>}
         {description && (
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            {description}
-          </p>
+          <p className="text-text-secondary text-sm">{description}</p>
         )}
         <div className="space-y-3">{form}</div>
         <div className="flex justify-end gap-2 pt-2">
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="rounded px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="text-text-secondary hover:bg-muted rounded px-3 py-1.5 text-sm font-medium"
           >
             {cancelLabel}
           </button>
           <button
             type="submit"
-            className="rounded bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+            className="bg-info hover:bg-info/90 rounded px-3 py-1.5 text-sm font-medium text-white"
           >
             {submitLabel}
           </button>
@@ -445,9 +440,9 @@ const ConfirmPopover = React.forwardRef<
     const confirmButtonClass = cn(
       'rounded px-3 py-1.5 text-sm font-medium text-white',
       {
-        'bg-blue-600 hover:bg-blue-700': confirmVariant === 'default',
-        'bg-red-600 hover:bg-red-700': confirmVariant === 'danger',
-        'bg-yellow-600 hover:bg-yellow-700': confirmVariant === 'warning',
+        'bg-info hover:bg-info/90': confirmVariant === 'default',
+        'bg-error hover:bg-error/90': confirmVariant === 'danger',
+        'bg-warning hover:bg-warning/90': confirmVariant === 'warning',
       }
     );
 
@@ -461,7 +456,7 @@ const ConfirmPopover = React.forwardRef<
           <button
             type="button"
             onClick={handleCancel}
-            className="rounded px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="text-text-secondary hover:bg-muted rounded px-3 py-1.5 text-sm font-medium"
           >
             {cancelLabel}
           </button>

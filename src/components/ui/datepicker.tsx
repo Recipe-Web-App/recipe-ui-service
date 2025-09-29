@@ -1894,10 +1894,10 @@ const MealPlanDatePicker = React.forwardRef<
         showWeekNumbers={showWeekNumbers}
         className={cn(
           'meal-plan-picker',
-          mealType === 'breakfast' && 'border-yellow-200',
-          mealType === 'lunch' && 'border-orange-200',
+          mealType === 'breakfast' && 'border-warning/20',
+          mealType === 'lunch' && 'border-warning/40',
           mealType === 'dinner' && 'border-blue-200',
-          mealType === 'snack' && 'border-green-200'
+          mealType === 'snack' && 'border-success/20'
         )}
         {...props}
       />
@@ -2084,24 +2084,22 @@ const ExpirationDatePicker = React.forwardRef<
           showPresets={true}
           minDate={today}
           className={cn(
-            expirationStatus === 'expired' && 'border-red-500',
-            expirationStatus === 'warning' && 'border-yellow-500',
-            expirationStatus === 'good' && 'border-green-500'
+            expirationStatus === 'expired' && 'border-error',
+            expirationStatus === 'warning' && 'border-warning',
+            expirationStatus === 'good' && 'border-success'
           )}
           {...props}
         />
         {showExpirationWarning && currentValue && (
           <div className="flex items-center space-x-2 text-xs">
             {expirationStatus === 'expired' && (
-              <span className="font-medium text-red-600">⚠️ Expired</span>
+              <span className="text-error font-medium">⚠️ Expired</span>
             )}
             {expirationStatus === 'warning' && (
-              <span className="font-medium text-yellow-600">
-                ⚠️ Expires soon
-              </span>
+              <span className="text-warning font-medium">⚠️ Expires soon</span>
             )}
             {expirationStatus === 'good' && (
-              <span className="font-medium text-green-600">✓ Fresh</span>
+              <span className="text-success font-medium">✓ Fresh</span>
             )}
             <span className="text-muted-foreground">
               {foodType.charAt(0).toUpperCase() + foodType.slice(1)} item

@@ -533,7 +533,7 @@ const IngredientListItem = React.forwardRef<
               className={cn(
                 'flex h-4 w-4 items-center justify-center rounded border-2 transition-colors',
                 ingredient.checked
-                  ? 'border-green-600 bg-green-600 text-white'
+                  ? 'border-success bg-success text-white'
                   : 'border-muted-foreground'
               )}
             >
@@ -616,7 +616,7 @@ const InstructionListItem = React.forwardRef<
               className={cn(
                 'flex h-4 w-4 items-center justify-center rounded border-2 transition-colors',
                 instruction.completed
-                  ? 'border-green-600 bg-green-600 text-white'
+                  ? 'border-success bg-success text-white'
                   : 'border-muted-foreground'
               )}
             >

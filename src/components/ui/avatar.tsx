@@ -336,7 +336,7 @@ const RecipeAuthor = React.forwardRef<HTMLDivElement, RecipeAuthorProps>(
           ref={ref as React.ForwardedRef<HTMLButtonElement>}
           className={cn(
             recipeAuthorVariants({ variant, size, className }),
-            'cursor-pointer focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none'
+            'focus:ring-focus cursor-pointer focus:ring-2 focus:ring-offset-2 focus:outline-none'
           )}
           onClick={onClick}
           type="button"
@@ -353,10 +353,10 @@ const RecipeAuthor = React.forwardRef<HTMLDivElement, RecipeAuthorProps>(
 
           <div className="flex-1 text-left">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium text-gray-900">{author.name}</h4>
+              <h4 className="text-text-primary font-medium">{author.name}</h4>
               {author.verified && (
                 <svg
-                  className="h-4 w-4 text-blue-500"
+                  className="text-info h-4 w-4"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -370,15 +370,15 @@ const RecipeAuthor = React.forwardRef<HTMLDivElement, RecipeAuthorProps>(
             </div>
 
             {showRole && (
-              <p className="text-sm text-gray-600">{getRoleDisplay()}</p>
+              <p className="text-text-secondary text-sm">{getRoleDisplay()}</p>
             )}
 
             {showStats && (
-              <div className="mt-1 flex items-center gap-4 text-xs text-gray-500">
+              <div className="text-text-tertiary mt-1 flex items-center gap-4 text-xs">
                 {author.rating && (
                   <span className="flex items-center gap-1">
                     <svg
-                      className="h-3 w-3 text-yellow-400"
+                      className="text-rating h-3 w-3"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -414,10 +414,10 @@ const RecipeAuthor = React.forwardRef<HTMLDivElement, RecipeAuthorProps>(
 
         <div className="flex-1 text-left">
           <div className="flex items-center gap-2">
-            <h4 className="font-medium text-gray-900">{author.name}</h4>
+            <h4 className="text-text-primary font-medium">{author.name}</h4>
             {author.verified && (
               <svg
-                className="h-4 w-4 text-blue-500"
+                className="text-info h-4 w-4"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -431,15 +431,15 @@ const RecipeAuthor = React.forwardRef<HTMLDivElement, RecipeAuthorProps>(
           </div>
 
           {showRole && (
-            <p className="text-sm text-gray-600">{getRoleDisplay()}</p>
+            <p className="text-text-secondary text-sm">{getRoleDisplay()}</p>
           )}
 
           {showStats && (
-            <div className="mt-1 flex items-center gap-4 text-xs text-gray-500">
+            <div className="text-text-tertiary mt-1 flex items-center gap-4 text-xs">
               {author.rating && (
                 <span className="flex items-center gap-1">
                   <svg
-                    className="h-3 w-3 text-yellow-400"
+                    className="text-warning h-3 w-3"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >

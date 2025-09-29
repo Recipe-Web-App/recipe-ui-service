@@ -1,67 +1,356 @@
 @import 'tailwindcss';
 
+/* Tailwind CSS v4 Recipe Theme Configuration */
+@theme {
+  /* Recipe Brand Colors - Generate bg-tomato, text-tomato, border-tomato utilities */
+  --color-tomato: oklch(59.18% 0.177 29.23deg); /* Tomato Red #E63946 */
+  --color-basil: oklch(69.04% 0.138 146.71deg); /* Basil Green #4CAF50 */
+  --color-citrus: oklch(87.53% 0.118 91.96deg); /* Citrus Yellow #FFD166 */
+  --color-cream: oklch(98.43% 0.004 106.85deg); /* Warm Cream #FAFAFA */
+
+  /* Dark Mode Recipe Colors */
+  --color-tomato-dark: oklch(62% 0.16 29.23deg); /* Brighter for dark mode */
+  --color-basil-dark: oklch(65% 0.12 146.71deg); /* Darker basil for balance */
+  --color-golden: oklch(82% 0.14 91deg); /* Golden Yellow #FFB703 */
+  --color-dark-bg: oklch(20% 0.01 30deg); /* Warm Dark #1E1E1E */
+
+  /* Neutral Palette */
+  --color-neutral-50: oklch(98% 0.004 106deg);
+  --color-neutral-100: oklch(96.5% 0.004 106deg);
+  --color-neutral-200: oklch(93% 0.004 106deg);
+  --color-neutral-300: oklch(88% 0.004 106deg);
+  --color-neutral-400: oklch(63% 0.004 106deg);
+  --color-neutral-500: oklch(50% 0.004 106deg);
+  --color-neutral-600: oklch(40% 0.004 106deg);
+  --color-neutral-700: oklch(30% 0.004 106deg);
+  --color-neutral-800: oklch(24% 0.004 106deg);
+  --color-neutral-900: oklch(16% 0.004 106deg);
+  --color-neutral-950: oklch(10% 0.004 106deg);
+
+  /* Typography System */
+  --font-family-base: 'Inter', 'Geist Sans', system-ui, sans-serif;
+  --font-family-mono: 'Geist Mono', monospace;
+
+  /* Font Scale */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* Layout */
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Semantic Colors - Generate bg-primary, text-primary, etc. utilities */
+  --color-primary: var(--color-tomato);
+  --color-primary-foreground: var(--color-cream);
+  --color-secondary: var(--color-basil);
+  --color-secondary-foreground: var(--color-cream);
+  --color-accent: var(--color-citrus);
+  --color-accent-foreground: var(--color-neutral-800);
+  --color-destructive: var(--color-tomato);
+  --color-destructive-foreground: var(--color-cream);
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-neutral-900);
+  --color-card: oklch(99.5% 0.002 106.85deg); /* Slightly lighter than cream */
+  --color-card-foreground: var(--color-neutral-900);
+  --color-muted: var(--color-neutral-100);
+  --color-muted-foreground: var(--color-neutral-500);
+  --color-border: var(--color-neutral-200);
+  --color-input: var(--color-neutral-200);
+  --color-input-hover: var(--color-neutral-300);
+  --color-ring: var(--color-tomato);
+
+  /* Status Colors - Complete semantic status system */
+  --color-success: var(--color-basil);
+  --color-success-light: oklch(
+    85% 0.08 146.71deg
+  ); /* Light basil for backgrounds */
+
+  --color-success-foreground: var(--color-cream);
+  --color-warning: var(--color-citrus);
+  --color-warning-light: oklch(
+    93% 0.08 91.96deg
+  ); /* Light citrus for backgrounds */
+
+  --color-warning-foreground: var(--color-neutral-800);
+  --color-info: oklch(65% 0.12 220deg); /* Soft blue for info */
+  --color-info-light: oklch(88% 0.06 220deg); /* Light blue for backgrounds */
+  --color-info-foreground: var(--color-cream);
+  --color-error: var(--color-tomato);
+  --color-error-light: oklch(
+    85% 0.08 29.23deg
+  ); /* Light tomato for backgrounds */
+
+  --color-error-foreground: var(--color-cream);
+
+  /* Text Hierarchy - For consistent text coloring */
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-tertiary: var(--color-neutral-500);
+  --color-text-quaternary: var(--color-neutral-400);
+  --color-text-inverse: var(--color-cream);
+
+  /* Interactive States */
+  --color-hover: oklch(95% 0.004 106deg); /* Subtle hover state */
+  --color-hover-secondary: var(--color-neutral-100);
+  --color-focus: var(--color-tomato);
+  --color-focus-ring: var(--color-tomato);
+  --color-active: var(--color-neutral-200);
+
+  /* Special Purpose Colors */
+  --color-highlight: var(--color-citrus); /* Search highlights */
+  --color-highlight-light: oklch(93% 0.08 91.96deg); /* Light highlight bg */
+  --color-rating: var(--color-citrus); /* Star ratings */
+  --color-code: var(--color-neutral-100); /* Code blocks/kbd background */
+  --color-code-border: var(--color-neutral-300);
+  --color-code-text: var(--color-neutral-700);
+
+  /* Status Indicators - For user presence, etc */
+  --color-online: var(--color-basil);
+  --color-offline: var(--color-neutral-400);
+  --color-away: var(--color-citrus);
+  --color-busy: var(--color-tomato);
+
+  /* Badge & Tag Colors - Semantic variations */
+  --color-badge-default: var(--color-neutral-100);
+  --color-badge-default-foreground: var(--color-neutral-700);
+  --color-badge-success: var(--color-success-light);
+  --color-badge-success-foreground: var(--color-basil);
+  --color-badge-warning: var(--color-warning-light);
+  --color-badge-warning-foreground: var(--color-citrus);
+  --color-badge-error: var(--color-error-light);
+  --color-badge-error-foreground: var(--color-tomato);
+  --color-badge-info: var(--color-info-light);
+  --color-badge-info-foreground: oklch(45% 0.12 220deg);
+}
+
 @layer base {
+  /* Semantic Color Mapping - Maps semantic names to recipe theme colors */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --input-hover: 0 0% 80%;
-    --ring: 0 0% 3.9%;
+    /* Background & Foreground */
+    --background: var(--color-cream);
+    --foreground: var(--color-neutral-900);
+
+    /* Card & Popovers */
+    --card: oklch(99.5% 0.002 106.85deg); /* Slightly lighter than cream */
+    --card-foreground: var(--color-neutral-900);
+    --popover: var(--card);
+    --popover-foreground: var(--card-foreground);
+
+    /* Recipe Brand Semantic Colors */
+    --primary: var(--color-tomato); /* Tomato Red for primary actions */
+    --primary-foreground: var(--color-cream);
+    --secondary: var(--color-basil); /* Basil Green for secondary actions */
+    --secondary-foreground: var(--color-cream);
+    --accent: var(--color-citrus); /* Citrus Yellow for accents */
+    --accent-foreground: var(--color-neutral-800);
+
+    /* Status Colors */
+    --destructive: var(--color-tomato); /* Tomato Red for errors */
+    --destructive-foreground: var(--color-cream);
+    --success: var(--color-basil); /* Basil Green for success */
+    --success-light: oklch(85% 0.08 146.71deg);
+    --success-foreground: var(--color-cream);
+    --warning: var(--color-citrus); /* Citrus Yellow for warnings */
+    --warning-light: oklch(93% 0.08 91.96deg);
+    --warning-foreground: var(--color-neutral-800);
+    --info: oklch(65% 0.12 220deg); /* Soft blue for info */
+    --info-light: oklch(88% 0.06 220deg);
+    --info-foreground: var(--color-cream);
+    --error: var(--color-tomato);
+    --error-light: oklch(85% 0.08 29.23deg);
+    --error-foreground: var(--color-cream);
+
+    /* Text Hierarchy */
+    --text-primary: var(--color-neutral-900);
+    --text-secondary: var(--color-neutral-600);
+    --text-tertiary: var(--color-neutral-500);
+    --text-quaternary: var(--color-neutral-400);
+
+    /* Interactive States */
+    --hover: oklch(95% 0.004 106deg);
+    --hover-secondary: var(--color-neutral-100);
+    --focus: var(--color-tomato);
+    --active: var(--color-neutral-200);
+
+    /* Special Purpose */
+    --highlight: var(--color-citrus);
+    --highlight-light: oklch(93% 0.08 91.96deg);
+    --rating: var(--color-citrus);
+    --code: var(--color-neutral-100);
+    --code-border: var(--color-neutral-300);
+    --code-text: var(--color-neutral-700);
+
+    /* Status Indicators */
+    --online: var(--color-basil);
+    --offline: var(--color-neutral-400);
+    --away: var(--color-citrus);
+    --busy: var(--color-tomato);
+
+    /* UI Elements */
+    --muted: var(--color-neutral-100);
+    --muted-foreground: var(--color-neutral-500);
+    --border: var(--color-neutral-200);
+    --input: var(--color-neutral-100);
+    --input-hover: var(--color-neutral-200);
+    --ring: var(--color-primary); /* Primary color focus ring */
+
+    /* Legacy radius */
     --radius: 0.5rem;
+
+    /* Legacy font variables */
     --font-geist-sans: 'Geist Sans', sans-serif;
     --font-geist-mono: 'Geist Mono', monospace;
   }
 
+  /* Dark Mode Semantic Color Mapping */
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --input-hover: 0 0% 20%;
-    --ring: 0 0% 83.1%;
-  }
-}
+    /* Background & Foreground */
+    --background: var(--color-dark-bg);
+    --foreground: var(--color-neutral-50);
 
-@layer base {
+    /* Card & Popovers */
+    --card: oklch(22% 0.01 30deg); /* Slightly lighter than dark bg */
+    --card-foreground: var(--color-neutral-50);
+    --popover: var(--card);
+    --popover-foreground: var(--card-foreground);
+
+    /* Recipe Brand Semantic Colors - Dark Mode */
+    --primary: var(--color-tomato-dark); /* Brighter Tomato Red */
+    --primary-foreground: var(--color-dark-bg);
+    --secondary: var(--color-basil-dark); /* Darker Basil Green */
+    --secondary-foreground: var(--color-neutral-50);
+    --accent: var(--color-golden); /* Golden Yellow */
+    --accent-foreground: var(--color-dark-bg);
+
+    /* Status Colors - Dark Mode */
+    --destructive: var(--color-tomato-dark);
+    --destructive-foreground: var(--color-neutral-50);
+    --success: var(--color-basil-dark);
+    --success-light: oklch(25% 0.06 146.71deg);
+    --success-foreground: var(--color-neutral-50);
+    --warning: var(--color-golden);
+    --warning-light: oklch(30% 0.08 91deg);
+    --warning-foreground: var(--color-dark-bg);
+    --info: oklch(60% 0.12 220deg);
+    --info-light: oklch(28% 0.06 220deg);
+    --info-foreground: var(--color-neutral-50);
+    --error: var(--color-tomato-dark);
+    --error-light: oklch(28% 0.08 29.23deg);
+    --error-foreground: var(--color-neutral-50);
+
+    /* Text Hierarchy - Dark Mode */
+    --text-primary: var(--color-neutral-50);
+    --text-secondary: var(--color-neutral-300);
+    --text-tertiary: var(--color-neutral-400);
+    --text-quaternary: var(--color-neutral-500);
+
+    /* Interactive States - Dark Mode */
+    --hover: oklch(28% 0.01 30deg);
+    --hover-secondary: var(--color-neutral-800);
+    --focus: var(--color-tomato-dark);
+    --active: var(--color-neutral-700);
+
+    /* Special Purpose - Dark Mode */
+    --highlight: var(--color-golden);
+    --highlight-light: oklch(30% 0.08 91deg);
+    --rating: var(--color-golden);
+    --code: var(--color-neutral-800);
+    --code-border: var(--color-neutral-600);
+    --code-text: var(--color-neutral-200);
+
+    /* Status Indicators - Dark Mode */
+    --online: var(--color-basil-dark);
+    --offline: var(--color-neutral-600);
+    --away: var(--color-golden);
+    --busy: var(--color-tomato-dark);
+
+    /* UI Elements - Dark Mode */
+    --muted: var(--color-neutral-800);
+    --muted-foreground: var(--color-neutral-400);
+    --border: var(--color-neutral-700);
+    --input: var(--color-neutral-800);
+    --input-hover: var(--color-neutral-700);
+    --ring: var(--color-tomato-dark); /* Brighter Tomato Red focus */
+  }
+
+  /* Base Element Styles */
   * {
-    border-color: hsl(var(--border));
+    border-color: var(--border);
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family-base);
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
+  }
+
+  /* Typography Styles */
+  h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+  }
+
+  h3 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
+  }
+
+  h4 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+  }
+
+  h5 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+  }
+
+  h6 {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-normal);
+  }
+
+  p {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+  }
+
+  small {
+    font-size: var(--font-size-sm);
   }
 }
 

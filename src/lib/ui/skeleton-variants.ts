@@ -15,8 +15,7 @@ export const skeletonVariants = cva(
     // Base styles
     'relative',
     'overflow-hidden',
-    'bg-gray-200',
-    'dark:bg-gray-800',
+    'bg-muted',
     'rounded-md',
     'before:absolute',
     'before:inset-0',
@@ -35,12 +34,12 @@ export const skeletonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-gray-200 dark:bg-gray-800',
-        text: 'h-4 bg-gray-200 dark:bg-gray-800',
-        circular: 'bg-gray-200 dark:bg-gray-800',
-        card: 'bg-gray-200 dark:bg-gray-800',
-        image: 'aspect-square bg-gray-200 dark:bg-gray-800',
-        button: 'h-10 px-4 bg-gray-200 dark:bg-gray-800',
+        default: 'bg-muted',
+        text: 'h-4 bg-muted',
+        circular: 'bg-muted',
+        card: 'bg-muted',
+        image: 'aspect-square bg-muted',
+        button: 'h-10 px-4 bg-muted',
       },
       size: {
         sm: '',

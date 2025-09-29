@@ -135,7 +135,7 @@ export const MobileNavDrawer = React.forwardRef<
                   </div>
                 )}
               </div>
-              <div className="h-2 w-2 rounded-full bg-green-500" />
+              <div className="bg-basil h-2 w-2 rounded-full" />
             </Link>
           </div>
         ) : (

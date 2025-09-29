@@ -505,9 +505,9 @@ const ContentError = React.forwardRef<HTMLDivElement, ContentErrorProps>(
         case '500':
           return <Server className="text-destructive h-12 w-12" />;
         case 'unauthorized':
-          return <AlertCircle className="h-12 w-12 text-yellow-600" />;
+          return <AlertCircle className="text-warning h-12 w-12" />;
         case 'validation':
-          return <AlertCircle className="h-12 w-12 text-orange-600" />;
+          return <AlertCircle className="text-warning h-12 w-12" />;
         default:
           return <AlertCircle className="text-muted-foreground h-12 w-12" />;
       }

@@ -36,36 +36,34 @@ export const switchTrackVariants = cva(
       },
       variant: {
         default: [
-          'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-          'data-[state=checked]:bg-blue-500 dark:data-[state=checked]:bg-blue-400',
-          'focus:ring-blue-500',
+          'data-[state=unchecked]:bg-input',
+          'data-[state=checked]:bg-primary',
+          'focus:ring-primary/20',
         ],
         success: [
-          'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-          'data-[state=checked]:bg-green-500 dark:data-[state=checked]:bg-green-400',
-          'focus:ring-green-500',
+          'data-[state=unchecked]:bg-input',
+          'data-[state=checked]:bg-success',
+          'focus:ring-success/20',
         ],
         warning: [
-          'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-          'data-[state=checked]:bg-amber-500 dark:data-[state=checked]:bg-amber-400',
-          'focus:ring-amber-500',
+          'data-[state=unchecked]:bg-input',
+          'data-[state=checked]:bg-warning',
+          'focus:ring-warning/20',
         ],
         danger: [
-          'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-          'data-[state=checked]:bg-red-500 dark:data-[state=checked]:bg-red-400',
-          'focus:ring-red-500',
+          'data-[state=unchecked]:bg-input',
+          'data-[state=checked]:bg-destructive',
+          'focus:ring-destructive/20',
         ],
         info: [
-          'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-          'data-[state=checked]:bg-sky-500 dark:data-[state=checked]:bg-sky-400',
-          'focus:ring-sky-500',
+          'data-[state=unchecked]:bg-input',
+          'data-[state=checked]:bg-primary',
+          'focus:ring-primary/20',
         ],
         subtle: [
-          'data-[state=unchecked]:bg-gray-200',
-          'data-[state=checked]:bg-gray-600',
-          'focus:ring-gray-500',
-          'dark:data-[state=unchecked]:bg-gray-700',
-          'dark:data-[state=checked]:bg-gray-400',
+          'data-[state=unchecked]:bg-muted',
+          'data-[state=checked]:bg-muted-foreground',
+          'focus:ring-ring/20',
         ],
       },
       disabled: {
@@ -111,7 +109,7 @@ export const switchLabelVariants = cva(
         xl: 'text-lg',
       },
       required: {
-        true: "after:content-['*'] after:ml-0.5 after:text-red-500",
+        true: "after:content-['*'] after:ml-0.5 after:text-destructive",
         false: '',
       },
     },
@@ -161,15 +159,11 @@ export const recipeSwitchGroupVariants = cva(
   {
     variants: {
       variant: {
-        preferences:
-          'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950',
-        dietary:
-          'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950',
-        notifications:
-          'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950',
-        privacy: 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950',
-        features:
-          'border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-950',
+        preferences: 'border-success/20 bg-success/10',
+        dietary: 'border-warning/30 bg-warning/10',
+        notifications: 'border-primary/20 bg-primary/10',
+        privacy: 'border-destructive/20 bg-destructive/10',
+        features: 'border-secondary/20 bg-secondary/10',
       },
     },
     defaultVariants: {
@@ -182,16 +176,16 @@ export const recipeSwitchGroupVariants = cva(
 export const recipeSwitchVariants = cva('', {
   variants: {
     context: {
-      'auto-save': 'data-[state=checked]:bg-green-500',
-      'public-profile': 'data-[state=checked]:bg-blue-500',
-      'email-notifications': 'data-[state=checked]:bg-purple-500',
-      'weekly-meal-plan': 'data-[state=checked]:bg-orange-500',
-      'dietary-restrictions': 'data-[state=checked]:bg-amber-500',
-      'metric-units': 'data-[state=checked]:bg-teal-500',
-      'dark-mode': 'data-[state=checked]:bg-slate-500',
-      'show-nutrition': 'data-[state=checked]:bg-pink-500',
-      'recipe-suggestions': 'data-[state=checked]:bg-indigo-500',
-      'shopping-list': 'data-[state=checked]:bg-sky-500',
+      'auto-save': 'data-[state=checked]:bg-success',
+      'public-profile': 'data-[state=checked]:bg-primary',
+      'email-notifications': 'data-[state=checked]:bg-secondary',
+      'weekly-meal-plan': 'data-[state=checked]:bg-warning',
+      'dietary-restrictions': 'data-[state=checked]:bg-warning',
+      'metric-units': 'data-[state=checked]:bg-success',
+      'dark-mode': 'data-[state=checked]:bg-muted-foreground',
+      'show-nutrition': 'data-[state=checked]:bg-accent',
+      'recipe-suggestions': 'data-[state=checked]:bg-primary',
+      'shopping-list': 'data-[state=checked]:bg-accent',
     },
   },
 });
@@ -200,11 +194,11 @@ export const recipeSwitchVariants = cva('', {
 export const switchGroupTitleVariants = cva('text-lg font-semibold mb-3', {
   variants: {
     variant: {
-      preferences: 'text-green-900 dark:text-green-100',
-      dietary: 'text-yellow-900 dark:text-yellow-100',
-      notifications: 'text-blue-900 dark:text-blue-100',
-      privacy: 'text-red-900 dark:text-red-100',
-      features: 'text-purple-900 dark:text-purple-100',
+      preferences: 'text-success',
+      dietary: 'text-neutral-800 dark:text-warning',
+      notifications: 'text-primary',
+      privacy: 'text-destructive',
+      features: 'text-secondary-foreground',
     },
   },
   defaultVariants: {
@@ -229,7 +223,7 @@ export const animatedSwitchVariants = cva('', {
 export const switchFieldVariants = cva('space-y-1', {
   variants: {
     error: {
-      true: 'text-red-600',
+      true: 'text-destructive',
       false: '',
     },
   },
@@ -239,7 +233,7 @@ export const switchFieldVariants = cva('space-y-1', {
 });
 
 // Switch error message variants
-export const switchErrorVariants = cva('text-sm text-red-600 mt-1', {
+export const switchErrorVariants = cva('text-sm text-destructive mt-1', {
   variants: {
     size: {
       sm: 'text-xs',

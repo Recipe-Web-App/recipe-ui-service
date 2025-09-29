@@ -11,7 +11,7 @@ export const progressVariants = cva(
     'w-full',
     'overflow-hidden',
     'rounded-full',
-    'bg-gray-200',
+    'bg-muted',
     'transition-all',
     'duration-300',
   ],
@@ -26,10 +26,10 @@ export const progressVariants = cva(
         '2xl': ['h-8'],
       },
       variant: {
-        default: ['bg-gray-200'],
-        subtle: ['bg-gray-100'],
-        outlined: ['bg-transparent', 'border', 'border-gray-300'],
-        elevated: ['bg-gray-200', 'shadow-sm'],
+        default: ['bg-muted'],
+        subtle: ['bg-muted/50'],
+        outlined: ['bg-transparent', 'border', 'border-border'],
+        elevated: ['bg-muted', 'shadow-sm'],
       },
     },
     defaultVariants: {
@@ -49,14 +49,14 @@ export const progressBarVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-blue-600'],
-        success: ['bg-green-600'],
-        warning: ['bg-yellow-500'],
-        error: ['bg-red-600'],
-        info: ['bg-blue-500'],
-        cooking: ['bg-orange-500'],
-        upload: ['bg-blue-600'],
-        download: ['bg-purple-600'],
+        default: ['bg-primary'],
+        success: ['bg-basil'],
+        warning: ['bg-citrus'],
+        error: ['bg-destructive'],
+        info: ['bg-primary'],
+        cooking: ['bg-accent'],
+        upload: ['bg-primary'],
+        download: ['bg-secondary'],
       },
       animation: {
         none: [],
@@ -70,15 +70,15 @@ export const progressBarVariants = cva(
           'animate-[shimmer_2s_infinite]',
         ],
         glow: [
-          'shadow-[0_0_10px_rgba(59,130,246,0.5)]',
+          'shadow-[0_0_10px_oklch(59.18%_0.177_29.23deg/0.5)]',
           'animate-[glow_2s_ease-in-out_infinite_alternate]',
         ],
       },
       state: {
         active: [],
         paused: ['opacity-75'],
-        completed: ['bg-green-600'],
-        error: ['bg-red-600'],
+        completed: ['bg-basil'],
+        error: ['bg-destructive'],
       },
     },
     defaultVariants: {
@@ -98,7 +98,7 @@ export const progressLabelVariants = cva(
   [
     'text-sm',
     'font-medium',
-    'text-gray-700',
+    'text-foreground',
     'transition-colors',
     'duration-200',
   ],
@@ -125,9 +125,9 @@ export const progressLabelVariants = cva(
         '2xl': ['text-xl'],
       },
       variant: {
-        default: ['text-gray-700'],
+        default: ['text-foreground'],
         light: ['text-white'],
-        dark: ['text-gray-900'],
+        dark: ['text-foreground'],
         contrast: ['text-white', 'font-semibold', 'drop-shadow-sm'],
       },
     },
@@ -157,15 +157,15 @@ export const cookingStepVariants = cva(
   {
     variants: {
       state: {
-        pending: ['bg-gray-50', 'text-gray-600'],
+        pending: ['bg-muted/50', 'text-muted-foreground'],
         active: [
-          'bg-orange-50',
-          'text-orange-900',
+          'bg-accent/10',
+          'text-foreground',
           'border',
-          'border-orange-200',
+          'border-accent/30',
         ],
-        completed: ['bg-green-50', 'text-green-900'],
-        skipped: ['bg-gray-50', 'text-gray-400'],
+        completed: ['bg-basil/10', 'text-foreground'],
+        skipped: ['bg-muted/50', 'text-muted-foreground/70'],
       },
       size: {
         sm: ['p-2', 'gap-2'],
@@ -199,10 +199,10 @@ export const stepIndicatorVariants = cva(
   {
     variants: {
       state: {
-        pending: ['bg-gray-200', 'text-gray-600'],
-        active: ['bg-orange-500', 'text-white', 'shadow-md'],
-        completed: ['bg-green-500', 'text-white'],
-        skipped: ['bg-gray-100', 'text-gray-400'],
+        pending: ['bg-muted', 'text-muted-foreground'],
+        active: ['bg-accent', 'text-accent-foreground', 'shadow-md'],
+        completed: ['bg-basil', 'text-foreground'],
+        skipped: ['bg-muted/50', 'text-muted-foreground/70'],
       },
       size: {
         sm: ['h-6', 'w-6', 'text-xs'],
@@ -227,10 +227,10 @@ export const uploadProgressVariants = cva(
   {
     variants: {
       state: {
-        uploading: ['border-blue-200', 'bg-blue-50'],
-        completed: ['border-green-200', 'bg-green-50'],
-        error: ['border-red-200', 'bg-red-50'],
-        paused: ['border-yellow-200', 'bg-yellow-50'],
+        uploading: ['border-primary/20', 'bg-primary/10'],
+        completed: ['border-basil/20', 'bg-basil/10'],
+        error: ['border-destructive/20', 'bg-destructive/10'],
+        paused: ['border-citrus/30', 'bg-citrus/10'],
       },
       variant: {
         default: [],
@@ -264,10 +264,10 @@ export const timerProgressVariants = cva(
   {
     variants: {
       state: {
-        running: ['border-orange-500', 'text-orange-900'],
-        paused: ['border-yellow-500', 'text-yellow-900'],
-        completed: ['border-green-500', 'text-green-900'],
-        warning: ['border-red-500', 'text-red-900', 'animate-pulse'],
+        running: ['border-accent', 'text-foreground'],
+        paused: ['border-citrus', 'text-foreground'],
+        completed: ['border-basil', 'text-foreground'],
+        warning: ['border-destructive', 'text-foreground', 'animate-pulse'],
       },
       size: {
         sm: ['h-16', 'w-16', 'text-sm'],

@@ -165,7 +165,7 @@ function RecipeTableComponent(
   } = props;
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-32 items-center justify-center text-sm text-gray-500">
+      <div className="text-text-tertiary flex h-32 items-center justify-center text-sm">
         {emptyMessage}
       </div>
     );
@@ -245,11 +245,11 @@ const IngredientsTable = React.forwardRef<
         align: 'left' as const,
         render: (value: unknown, row: Ingredient) => (
           <div className="flex items-center gap-2">
-            <span className={row.optional ? 'text-gray-600 italic' : ''}>
+            <span className={row.optional ? 'text-text-secondary italic' : ''}>
               {row.name}
             </span>
             {row.optional && (
-              <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-600">
+              <span className="bg-muted text-text-secondary rounded px-1.5 py-0.5 text-xs">
                 optional
               </span>
             )}
@@ -277,7 +277,7 @@ const IngredientsTable = React.forwardRef<
         width: '120px',
         render: (value: unknown) =>
           value ? (
-            <span className="rounded bg-blue-100 px-2 py-1 text-xs text-blue-800">
+            <span className="bg-info-light text-info-foreground rounded px-2 py-1 text-xs">
               {String(value)}
             </span>
           ) : (
@@ -293,7 +293,7 @@ const IngredientsTable = React.forwardRef<
         align: 'left' as const,
         render: (value: unknown) =>
           value ? (
-            <span className="text-sm text-gray-600">{String(value)}</span>
+            <span className="text-text-secondary text-sm">{String(value)}</span>
           ) : (
             <span />
           ),
@@ -366,12 +366,12 @@ const NutritionTable = React.forwardRef<HTMLTableElement, NutritionTableProps>(
                 className={cn(
                   'rounded px-1.5 py-0.5 text-xs',
                   row.category === 'macronutrient'
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-success-light text-success'
                     : row.category === 'vitamin'
-                      ? 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-warning-light text-warning'
                       : row.category === 'mineral'
-                        ? 'bg-purple-100 text-purple-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-info-light text-info'
+                        : 'bg-muted text-text-secondary'
                 )}
               >
                 {row.category}
@@ -388,7 +388,7 @@ const NutritionTable = React.forwardRef<HTMLTableElement, NutritionTableProps>(
         render: (value: unknown, row: NutritionItem) => (
           <span className="font-mono">
             {row.amount}
-            <span className="ml-1 text-sm text-gray-600">{row.unit}</span>
+            <span className="text-text-secondary ml-1 text-sm">{row.unit}</span>
           </span>
         ),
       },
@@ -404,10 +404,10 @@ const NutritionTable = React.forwardRef<HTMLTableElement, NutritionTableProps>(
           value ? (
             <span className="font-mono">
               {String(value)}
-              <span className="ml-1 text-sm text-gray-600">%</span>
+              <span className="text-text-secondary ml-1 text-sm">%</span>
             </span>
           ) : (
-            <span className="text-gray-400">—</span>
+            <span className="text-text-quaternary">—</span>
           ),
       });
     }

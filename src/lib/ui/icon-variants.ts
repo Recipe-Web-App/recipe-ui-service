@@ -20,9 +20,9 @@ export const iconVariants = cva('inline-flex items-center justify-center', {
       primary: 'text-primary',
       secondary: 'text-secondary-foreground',
       destructive: 'text-destructive',
-      success: 'text-green-600 dark:text-green-400',
-      warning: 'text-amber-600 dark:text-amber-400',
-      info: 'text-blue-600 dark:text-blue-400',
+      success: 'text-basil',
+      warning: 'text-citrus',
+      info: 'text-primary',
       inherit: 'text-inherit',
     },
     animation: {
@@ -70,11 +70,9 @@ export const iconContainerVariants = cva(
         primary: 'bg-primary text-primary-foreground rounded-md p-1',
         destructive:
           'bg-destructive text-destructive-foreground rounded-md p-1',
-        success:
-          'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-md p-1',
-        warning:
-          'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-md p-1',
-        info: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded-md p-1',
+        success: 'bg-basil/10 text-foreground rounded-md p-1',
+        warning: 'bg-citrus/10 text-foreground rounded-md p-1',
+        info: 'bg-primary/10 text-foreground rounded-md p-1',
       },
     },
     defaultVariants: {
@@ -92,14 +90,14 @@ export const recipeIconVariants = cva(
   {
     variants: {
       category: {
-        cooking: 'text-orange-600 dark:text-orange-400',
-        time: 'text-blue-600 dark:text-blue-400',
-        difficulty: 'text-purple-600 dark:text-purple-400',
-        serving: 'text-green-600 dark:text-green-400',
-        temperature: 'text-red-600 dark:text-red-400',
-        rating: 'text-yellow-600 dark:text-yellow-400',
-        nutrition: 'text-teal-600 dark:text-teal-400',
-        diet: 'text-indigo-600 dark:text-indigo-400',
+        cooking: 'text-accent',
+        time: 'text-primary',
+        difficulty: 'text-secondary',
+        serving: 'text-basil',
+        temperature: 'text-destructive',
+        rating: 'text-citrus',
+        nutrition: 'text-basil',
+        diet: 'text-primary',
       },
       emphasis: {
         subtle: 'opacity-70',

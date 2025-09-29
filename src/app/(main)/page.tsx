@@ -127,7 +127,7 @@ export default function HomePage() {
                 <div key={index} className="flex items-center justify-between">
                   <span className="text-sm">{recipe.name}</span>
                   <div className="flex items-center">
-                    <Star className="mr-1 h-4 w-4 text-yellow-500" />
+                    <Star className="text-rating mr-1 h-4 w-4" />
                     <span className="text-sm">{recipe.rating}</span>
                   </div>
                 </div>

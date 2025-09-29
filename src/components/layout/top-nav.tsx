@@ -52,7 +52,7 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
       }
     }, [position]);
 
-    // Variant classes
+    // Variant classes with recipe theme
     const variantClasses = React.useMemo(() => {
       switch (variant) {
         case 'minimal':
@@ -61,7 +61,7 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
           return 'bg-transparent';
         case 'default':
         default:
-          return 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border';
+          return 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 border-b border-border shadow-sm';
       }
     }, [variant]);
 
@@ -81,10 +81,13 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
           <div className="mr-4 flex lg:mr-6">
             <Link
               href="/"
-              className="hover:text-foreground/80 flex items-center space-x-2 transition-colors"
+              className="hover:text-primary group flex items-center space-x-2 transition-colors"
               aria-label="Recipe App Home"
             >
-              <ChefHat className="h-6 w-6" aria-hidden="true" />
+              <ChefHat
+                className="text-primary h-6 w-6 transition-transform group-hover:scale-110"
+                aria-hidden="true"
+              />
               <span className="font-bold tracking-tight">Recipe App</span>
             </Link>
           </div>

@@ -419,7 +419,7 @@ export default function ComponentsDemoOverview() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{component.name}</CardTitle>
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                    <span className="bg-success-light text-success rounded-full px-2 py-1 text-xs font-medium dark:bg-green-900/30 dark:text-green-400">
                       Ready
                     </span>
                   </div>

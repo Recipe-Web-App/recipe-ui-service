@@ -801,7 +801,7 @@ const RecipeStepper = React.forwardRef<HTMLDivElement, RecipeStepperProps>(
 
           {isDraft && (
             <div className="flex items-center gap-2">
-              <span className="rounded bg-yellow-100 px-2 py-1 text-xs text-yellow-700">
+              <span className="bg-highlight-light text-warning rounded px-2 py-1 text-xs">
                 Draft
               </span>
               {onSave && (
@@ -891,8 +891,8 @@ const CookingStepper = React.forwardRef<HTMLDivElement, CookingStepperProps>(
           )}
 
           {instruction.tips && (
-            <div className="rounded border-l-4 border-blue-200 bg-blue-50 p-3">
-              <p className="text-sm text-blue-800">
+            <div className="border-info/20 bg-highlight-light rounded border-l-4 p-3">
+              <p className="text-info text-sm">
                 <strong>Tip:</strong> {instruction.tips}
               </p>
             </div>

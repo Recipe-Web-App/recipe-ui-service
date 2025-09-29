@@ -87,10 +87,10 @@ export const sliderTrackVariants = cva(
       },
       variant: {
         default: 'bg-muted border-border',
-        success: 'bg-green-100 border-green-200',
-        warning: 'bg-yellow-100 border-yellow-200',
-        danger: 'bg-red-100 border-red-200',
-        info: 'bg-blue-100 border-blue-200',
+        success: 'bg-basil/10 border-basil/20',
+        warning: 'bg-citrus/10 border-citrus/30',
+        danger: 'bg-destructive/10 border-destructive/20',
+        info: 'bg-primary/10 border-primary/20',
       },
     },
     compoundVariants: [
@@ -146,10 +146,10 @@ export const sliderRangeVariants = cva('absolute rounded-full', {
     },
     variant: {
       default: 'bg-primary',
-      success: 'bg-green-500',
-      warning: 'bg-yellow-500',
-      danger: 'bg-red-500',
-      info: 'bg-blue-500',
+      success: 'bg-basil',
+      warning: 'bg-citrus',
+      danger: 'bg-destructive',
+      info: 'bg-primary',
     },
     gradient: {
       true: '',
@@ -166,22 +166,22 @@ export const sliderRangeVariants = cva('absolute rounded-full', {
     {
       variant: 'success',
       gradient: true,
-      class: 'bg-gradient-to-r from-green-500 to-green-400',
+      class: 'bg-gradient-to-r from-basil to-basil/80',
     },
     {
       variant: 'warning',
       gradient: true,
-      class: 'bg-gradient-to-r from-yellow-500 to-yellow-400',
+      class: 'bg-gradient-to-r from-citrus to-citrus/80',
     },
     {
       variant: 'danger',
       gradient: true,
-      class: 'bg-gradient-to-r from-red-500 to-red-400',
+      class: 'bg-gradient-to-r from-destructive to-destructive/80',
     },
     {
       variant: 'info',
       gradient: true,
-      class: 'bg-gradient-to-r from-blue-500 to-blue-400',
+      class: 'bg-gradient-to-r from-primary to-primary/80',
     },
   ],
   defaultVariants: {
@@ -204,11 +204,11 @@ export const sliderThumbVariants = cva(
         lg: 'h-5 w-5',
       },
       variant: {
-        default: 'bg-slate-900 border-slate-900',
-        success: 'bg-green-500 border-green-500',
-        warning: 'bg-yellow-500 border-yellow-500',
-        danger: 'bg-red-500 border-red-500',
-        info: 'bg-blue-500 border-blue-500',
+        default: 'bg-primary border-primary',
+        success: 'bg-basil border-basil',
+        warning: 'bg-citrus border-citrus',
+        danger: 'bg-destructive border-destructive',
+        info: 'bg-primary border-primary',
       },
       interactive: {
         true: 'hover:scale-110 active:scale-95',
@@ -265,10 +265,10 @@ export const sliderValueVariants = cva(
       },
       variant: {
         default: 'border-border text-foreground',
-        success: 'border-green-200 bg-green-50 text-green-700',
-        warning: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-        danger: 'border-red-200 bg-red-50 text-red-700',
-        info: 'border-blue-200 bg-blue-50 text-blue-700',
+        success: 'border-basil/20 bg-basil/10 text-foreground',
+        warning: 'border-citrus/30 bg-citrus/10 text-foreground',
+        danger: 'border-destructive/20 bg-destructive/10 text-foreground',
+        info: 'border-primary/20 bg-primary/10 text-foreground',
       },
       size: {
         sm: 'px-1.5 py-0.5 text-xs',

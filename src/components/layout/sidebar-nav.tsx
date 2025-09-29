@@ -214,9 +214,9 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
                 onClick={() => handleItemClick(item)}
                 className={cn(
                   'group flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors',
-                  'hover:bg-accent hover:text-accent-foreground',
-                  'focus:bg-accent focus:text-accent-foreground focus:outline-none',
-                  isActive && 'bg-accent text-accent-foreground',
+                  'hover:bg-primary/10 hover:text-primary',
+                  'focus:bg-primary/10 focus:text-primary focus:ring-primary/50 focus:ring-2 focus:outline-none',
+                  isActive && 'bg-primary/15 text-primary font-medium',
                   item.metadata?.disabled &&
                     'pointer-events-none cursor-not-allowed opacity-50',
                   collapsed && 'justify-center px-2',
@@ -236,8 +236,8 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
                 <CollapseTrigger
                   className={cn(
                     'group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors',
-                    'hover:bg-accent hover:text-accent-foreground',
-                    'focus:bg-accent focus:text-accent-foreground focus:outline-none',
+                    'hover:bg-primary/10 hover:text-primary',
+                    'focus:bg-primary/10 focus:text-primary focus:ring-primary/50 focus:ring-2 focus:outline-none',
                     collapsed && 'justify-center px-2',
                     // Indentation for nested items
                     !collapsed && itemLevel > 0 && `ml-${itemLevel * 4}`
