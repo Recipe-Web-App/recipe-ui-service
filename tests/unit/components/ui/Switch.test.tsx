@@ -63,15 +63,15 @@ describe('Switch Components', () => {
     it('applies variant classes correctly', () => {
       const { rerender } = render(<Switch variant="default" />);
       let switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveClass('data-[state=unchecked]:bg-gray-300');
+      expect(switchElement).toHaveClass('data-[state=unchecked]:bg-input');
 
       rerender(<Switch variant="success" />);
       switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveClass('data-[state=checked]:bg-green-500');
+      expect(switchElement).toHaveClass('data-[state=checked]:bg-success');
 
       rerender(<Switch variant="danger" />);
       switchElement = screen.getByRole('switch');
-      expect(switchElement).toHaveClass('data-[state=checked]:bg-red-500');
+      expect(switchElement).toHaveClass('data-[state=checked]:bg-destructive');
     });
 
     it('handles checked state', () => {
@@ -255,14 +255,14 @@ describe('Switch Components', () => {
         <RecipeSwitchGroup variant="preferences" switches={testSwitches} />
       );
       expect(screen.getByText('Switch 1').closest('.rounded-lg')).toHaveClass(
-        'border-green-200'
+        'border-success/20'
       );
 
       rerender(
         <RecipeSwitchGroup variant="notifications" switches={testSwitches} />
       );
       expect(screen.getByText('Switch 1').closest('.rounded-lg')).toHaveClass(
-        'border-blue-200'
+        'border-primary/20'
       );
     });
 

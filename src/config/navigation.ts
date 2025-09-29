@@ -150,6 +150,8 @@ export const topLevelNavigation: NavItem[] = [
       showInDesktop: true,
       tooltip: 'UI component demonstrations',
       featureFlag: 'SHOW_COMPONENTS_DEMO',
+      badge: 'Dev',
+      badgeVariant: 'info',
     },
   },
 ];

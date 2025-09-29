@@ -93,7 +93,7 @@ describe('Dialog', () => {
     );
 
     let dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveClass('border-red-200', 'bg-red-50');
+    expect(dialog).toHaveClass('border-destructive/20', 'bg-destructive/10');
 
     rerender(
       <Dialog open={true}>
@@ -104,7 +104,7 @@ describe('Dialog', () => {
     );
 
     dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveClass('border-green-200', 'bg-green-50');
+    expect(dialog).toHaveClass('border-success/20', 'bg-success/10');
   });
 
   it('applies size classes correctly', () => {
@@ -179,7 +179,7 @@ describe('DialogHeader', () => {
     );
 
     const header = screen.getByText('Test Header').closest('div');
-    expect(header).toHaveClass('text-red-900');
+    expect(header).toHaveClass('text-destructive');
   });
 });
 
@@ -196,7 +196,7 @@ describe('DialogTitle', () => {
     );
 
     const title = screen.getByText('Success Title');
-    expect(title).toHaveClass('text-green-900', 'text-xl');
+    expect(title).toHaveClass('text-success', 'text-xl');
   });
 });
 
@@ -213,7 +213,7 @@ describe('DialogDescription', () => {
     );
 
     const description = screen.getByText('Warning description');
-    expect(description).toHaveClass('text-yellow-600');
+    expect(description).toHaveClass('dark:text-warning/80');
   });
 });
 
@@ -247,7 +247,12 @@ describe('DialogIcon', () => {
     );
 
     const icon = screen.getByTestId('dialog-icon');
-    expect(icon).toHaveClass('bg-red-100', 'text-red-600', 'h-12', 'w-12');
+    expect(icon).toHaveClass(
+      'bg-destructive/10',
+      'text-destructive',
+      'h-12',
+      'w-12'
+    );
   });
 });
 
@@ -260,7 +265,12 @@ describe('DialogButton', () => {
     );
 
     const button = screen.getByRole('button');
-    expect(button).toHaveClass('bg-red-600', 'text-white', 'h-10', 'px-6');
+    expect(button).toHaveClass(
+      'bg-destructive',
+      'text-destructive-foreground',
+      'h-10',
+      'px-6'
+    );
   });
 
   it('handles click events', async () => {
@@ -374,12 +384,12 @@ describe('ConfirmationDialog', () => {
     );
 
     let confirmButton = screen.getByRole('button', { name: 'Confirm' });
-    expect(confirmButton).toHaveClass('bg-red-600');
+    expect(confirmButton).toHaveClass('bg-destructive');
 
     rerender(<ConfirmationDialog open={true} title="Save Item" type="save" />);
 
     confirmButton = screen.getByRole('button', { name: 'Confirm' });
-    expect(confirmButton).toHaveClass('bg-green-600');
+    expect(confirmButton).toHaveClass('bg-success');
   });
 
   it('renders custom children content', () => {
@@ -555,7 +565,7 @@ describe('RecipeConfirmationDialog', () => {
 
     expect(screen.getByText('Recipe-specific content')).toBeInTheDocument();
     const content = screen.getByTestId('recipe-content').parentElement;
-    expect(content).toHaveClass('border-l-red-500', 'bg-red-50');
+    expect(content).toHaveClass('border-l-destructive', 'bg-destructive/10');
   });
 });
 
@@ -616,7 +626,7 @@ describe('AlertDialog', () => {
     );
 
     const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveClass('border-red-200', 'bg-red-50');
+    expect(dialog).toHaveClass('border-destructive/20', 'bg-destructive/10');
   });
 });
 

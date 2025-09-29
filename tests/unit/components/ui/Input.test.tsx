@@ -127,19 +127,19 @@ describe('Input', () => {
     test('applies small size classes', () => {
       renderInput({ size: 'sm' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('h-8', 'text-input-sm');
+      expect(input).toHaveClass('h-8', 'text-xs');
     });
 
     test('applies default size classes', () => {
       renderInput({ size: 'default' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('h-9', 'text-input-base');
+      expect(input).toHaveClass('h-9', 'text-sm');
     });
 
     test('applies large size classes', () => {
       renderInput({ size: 'lg' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('h-11', 'text-input-lg');
+      expect(input).toHaveClass('h-11', 'text-base');
     });
   });
 
@@ -153,13 +153,13 @@ describe('Input', () => {
     test('applies success state classes', () => {
       renderInput({ state: 'success' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('border-green-500');
+      expect(input).toHaveClass('border-success');
     });
 
     test('applies warning state classes', () => {
       renderInput({ state: 'warning' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('border-yellow-500');
+      expect(input).toHaveClass('border-warning');
     });
 
     test('error text overrides state', () => {
@@ -419,7 +419,7 @@ describe('Input', () => {
         value: '12345678', // 8 chars, 80% of limit
       });
       const counter = screen.getByText('8/10');
-      expect(counter).toHaveClass('text-yellow-600');
+      expect(counter).toHaveClass('text-warning');
     });
 
     test('shows error state over limit', () => {
@@ -611,14 +611,14 @@ describe('Input', () => {
   describe('Integration with tailwind-merge', () => {
     test('handles conflicting classes correctly', () => {
       renderInput({
-        className: 'border-red-500 h-12',
+        className: 'border-destructive h-12',
         variant: 'default',
         size: 'sm',
       });
       const input = screen.getByRole('textbox');
 
       // Should have custom classes
-      expect(input.className).toContain('border-red-500');
+      expect(input.className).toContain('border-destructive');
       expect(input.className).toContain('h-12');
     });
   });

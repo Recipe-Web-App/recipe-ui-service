@@ -437,7 +437,11 @@ describe('ErrorBoundary Components', () => {
         );
 
         const button = screen.getByTestId('button');
-        expect(button).toHaveClass('border', 'border-red-300', 'bg-white');
+        expect(button).toHaveClass(
+          'border',
+          'border-destructive/30',
+          'bg-background'
+        );
       });
     });
 

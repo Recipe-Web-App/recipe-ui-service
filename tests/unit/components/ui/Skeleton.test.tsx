@@ -34,11 +34,7 @@ describe('Skeleton', () => {
     test('renders with default classes', () => {
       renderSkeleton();
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass(
-        'relative',
-        'overflow-hidden',
-        'bg-gray-200'
-      );
+      expect(skeleton).toHaveClass('relative', 'overflow-hidden', 'bg-muted');
     });
 
     test('includes screen reader text', () => {
@@ -66,37 +62,37 @@ describe('Skeleton', () => {
     test('renders default variant', () => {
       renderSkeleton({ variant: 'default' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('bg-gray-200');
+      expect(skeleton).toHaveClass('bg-muted');
     });
 
     test('renders text variant', () => {
       renderSkeleton({ variant: 'text' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('h-4', 'bg-gray-200');
+      expect(skeleton).toHaveClass('h-4', 'bg-muted');
     });
 
     test('renders circular variant', () => {
       renderSkeleton({ variant: 'circular' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('rounded-full', 'bg-gray-200');
+      expect(skeleton).toHaveClass('rounded-full', 'bg-muted');
     });
 
     test('renders card variant', () => {
       renderSkeleton({ variant: 'card' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('rounded-lg', 'bg-gray-200');
+      expect(skeleton).toHaveClass('rounded-lg', 'bg-muted');
     });
 
     test('renders image variant', () => {
       renderSkeleton({ variant: 'image' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('aspect-square', 'bg-gray-200');
+      expect(skeleton).toHaveClass('aspect-square', 'bg-muted');
     });
 
     test('renders button variant', () => {
       renderSkeleton({ variant: 'button' });
       const skeleton = screen.getByRole('status');
-      expect(skeleton).toHaveClass('h-10', 'px-4', 'rounded-md', 'bg-gray-200');
+      expect(skeleton).toHaveClass('h-10', 'px-4', 'rounded-md', 'bg-muted');
     });
 
     test('circle prop overrides variant to circular', () => {

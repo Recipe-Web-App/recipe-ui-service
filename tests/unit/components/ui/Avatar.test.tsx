@@ -48,7 +48,7 @@ describe('Avatar', () => {
     );
 
     const avatar = container.firstChild;
-    expect(avatar).toHaveClass('border-orange-500');
+    expect(avatar).toHaveClass('border-accent');
   });
 
   it('accepts custom className', () => {
@@ -173,7 +173,7 @@ describe('AvatarFallback', () => {
     );
 
     const fallback = screen.getByText('CH');
-    expect(fallback).toHaveClass('bg-orange-500');
+    expect(fallback).toHaveClass('bg-accent');
   });
 });
 
@@ -200,7 +200,7 @@ describe('AvatarStatus', () => {
     );
 
     const status = screen.getByLabelText('Online');
-    expect(status).toHaveClass('bg-green-500');
+    expect(status).toHaveClass('bg-basil');
   });
 
   it('applies size variants correctly', () => {
@@ -328,7 +328,7 @@ describe('UserAvatar', () => {
     const { container } = render(<UserAvatar name="Chef John" role="chef" />);
 
     expect(
-      container.querySelector('[class*="border-orange-500"]')
+      container.querySelector('[class*="border-accent"]')
     ).toBeInTheDocument();
   });
 
@@ -373,9 +373,10 @@ describe('RecipeAuthor', () => {
   it('shows verification badge when verified', () => {
     render(<RecipeAuthor author={sampleAuthor} />);
 
-    // Check for the SVG verification icon
-    const verificationSvg = document.querySelector('svg.h-4.w-4.text-blue-500');
-    expect(verificationSvg).toBeInTheDocument();
+    // Check for the verification checkmark icon - it should be in the DOM
+    expect(
+      screen.getByLabelText('Gordon Ramsay is verified')
+    ).toBeInTheDocument();
   });
 
   it('hides role when showRole is false', () => {
@@ -434,7 +435,7 @@ describe('RecipeAuthor', () => {
       <RecipeAuthor author={sampleAuthor} variant="chef" />
     );
 
-    expect(container.firstChild).toHaveClass('bg-orange-50');
+    expect(container.firstChild).toHaveClass('bg-accent/10');
   });
 
   it('handles authors without rating or recipe count', () => {

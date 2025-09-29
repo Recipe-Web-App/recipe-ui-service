@@ -79,13 +79,13 @@ describe('Icon Component', () => {
       );
 
       rerender(<Icon name="search" color="success" />);
-      expect(container.querySelector('.lucide')).toHaveClass('text-green-600');
+      expect(container.querySelector('.lucide')).toHaveClass('text-basil');
 
       rerender(<Icon name="search" color="warning" />);
-      expect(container.querySelector('.lucide')).toHaveClass('text-amber-600');
+      expect(container.querySelector('.lucide')).toHaveClass('text-citrus');
 
       rerender(<Icon name="search" color="info" />);
-      expect(container.querySelector('.lucide')).toHaveClass('text-blue-600');
+      expect(container.querySelector('.lucide')).toHaveClass('text-primary');
     });
 
     it('applies animation classes', () => {
@@ -313,14 +313,14 @@ describe('RecipeIcon Component', () => {
       />
     );
     const icon = container.querySelector('.lucide');
-    expect(icon).toHaveClass('text-orange-600');
+    expect(icon).toHaveClass('text-accent');
   });
 
   it('applies category-specific colors', () => {
     const { rerender, container } = render(
       <RecipeIcon name="timer" category="time" aria-label="Timer" />
     );
-    expect(container.querySelector('.lucide')).toHaveClass('text-blue-600');
+    expect(container.querySelector('.lucide')).toHaveClass('text-primary');
 
     rerender(
       <RecipeIcon
@@ -329,10 +329,10 @@ describe('RecipeIcon Component', () => {
         aria-label="Thermometer"
       />
     );
-    expect(container.querySelector('.lucide')).toHaveClass('text-red-600');
+    expect(container.querySelector('.lucide')).toHaveClass('text-destructive');
 
     rerender(<RecipeIcon name="star" category="rating" aria-label="Star" />);
-    expect(container.querySelector('.lucide')).toHaveClass('text-yellow-600');
+    expect(container.querySelector('.lucide')).toHaveClass('text-citrus');
   });
 
   it('applies emphasis variants', () => {
@@ -447,9 +447,7 @@ describe('Convenience Components', () => {
   describe('StatusIcon', () => {
     it('renders correct status icons', () => {
       const { rerender } = render(<StatusIcon status="success" />);
-      expect(screen.getByLabelText('success status')).toHaveClass(
-        'text-green-600'
-      );
+      expect(screen.getByLabelText('success status')).toHaveClass('text-basil');
 
       rerender(<StatusIcon status="error" />);
       expect(screen.getByLabelText('error status')).toHaveClass(
@@ -458,11 +456,11 @@ describe('Convenience Components', () => {
 
       rerender(<StatusIcon status="warning" />);
       expect(screen.getByLabelText('warning status')).toHaveClass(
-        'text-amber-600'
+        'text-citrus'
       );
 
       rerender(<StatusIcon status="info" />);
-      expect(screen.getByLabelText('info status')).toHaveClass('text-blue-600');
+      expect(screen.getByLabelText('info status')).toHaveClass('text-primary');
     });
   });
 });

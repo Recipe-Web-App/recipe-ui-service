@@ -65,15 +65,17 @@ describe('Checkbox Components', () => {
     it('applies variant classes correctly', () => {
       const { rerender } = render(<Checkbox variant="default" />);
       let checkboxElement = screen.getByRole('checkbox');
-      expect(checkboxElement).toHaveClass('border-gray-300');
+      expect(checkboxElement).toHaveClass('border-input');
 
       rerender(<Checkbox variant="success" />);
       checkboxElement = screen.getByRole('checkbox');
-      expect(checkboxElement).toHaveClass('data-[state=checked]:bg-green-500');
+      expect(checkboxElement).toHaveClass('data-[state=checked]:bg-success');
 
       rerender(<Checkbox variant="danger" />);
       checkboxElement = screen.getByRole('checkbox');
-      expect(checkboxElement).toHaveClass('data-[state=checked]:bg-red-500');
+      expect(checkboxElement).toHaveClass(
+        'data-[state=checked]:bg-destructive'
+      );
     });
 
     it('handles checked state', () => {
@@ -298,14 +300,14 @@ describe('Checkbox Components', () => {
         <FilterCheckboxGroup variant="filters" items={testCheckboxes} />
       );
       expect(screen.getByText('Checkbox 1').closest('.rounded-lg')).toHaveClass(
-        'border-blue-200'
+        'border-primary/20'
       );
 
       rerender(
         <FilterCheckboxGroup variant="categories" items={testCheckboxes} />
       );
       expect(screen.getByText('Checkbox 1').closest('.rounded-lg')).toHaveClass(
-        'border-green-200'
+        'border-success/20'
       );
     });
 
@@ -477,7 +479,7 @@ describe('Checkbox Components', () => {
 
       const container = screen
         .getByText('Test')
-        .closest('[class*="border-blue-500"]');
+        .closest('[class*="border-primary"]');
       expect(container).toBeInTheDocument();
     });
   });

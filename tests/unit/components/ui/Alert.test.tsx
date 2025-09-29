@@ -45,9 +45,9 @@ describe('Alert Components', () => {
       );
       const alert = screen.getByTestId('success-alert');
       expect(alert).toHaveClass(
-        'bg-green-50',
-        'text-green-900',
-        'border-green-200'
+        'bg-success/10',
+        'text-success',
+        'border-success/20'
       );
     });
 
@@ -86,7 +86,7 @@ describe('Alert Components', () => {
         </AlertTitle>
       );
       const title = screen.getByTestId('destructive-title');
-      expect(title).toHaveClass('text-red-900');
+      expect(title).toHaveClass('text-destructive');
     });
 
     it('applies size classes correctly', () => {
@@ -117,7 +117,7 @@ describe('Alert Components', () => {
         </AlertDescription>
       );
       const description = screen.getByTestId('warning-description');
-      expect(description).toHaveClass('text-yellow-800');
+      expect(description).toHaveClass('text-neutral-700');
     });
   });
 
@@ -138,7 +138,7 @@ describe('Alert Components', () => {
         </AlertIcon>
       );
       const iconContainer = screen.getByTestId('success-icon');
-      expect(iconContainer).toHaveClass('text-green-600');
+      expect(iconContainer).toHaveClass('text-success');
     });
 
     it('applies size classes correctly', () => {
@@ -190,9 +190,9 @@ describe('Alert Components', () => {
       );
       const button = screen.getByTestId('destructive-button');
       expect(button).toHaveClass(
-        'bg-red-600',
-        'text-white',
-        'hover:bg-red-700'
+        'bg-destructive',
+        'text-destructive-foreground',
+        'hover:bg-destructive/90'
       );
     });
 

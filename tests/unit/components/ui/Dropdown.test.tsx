@@ -34,7 +34,12 @@ describe('Dropdown Components', () => {
 
       const trigger = screen.getByRole('button', { name: 'Open Menu' });
       expect(trigger).toBeInTheDocument();
-      expect(trigger).toHaveClass('bg-gray-900', 'text-white', 'h-9', 'px-4');
+      expect(trigger).toHaveClass(
+        'bg-primary',
+        'text-primary-foreground',
+        'h-9',
+        'px-4'
+      );
     });
 
     it('renders with secondary variant', () => {
@@ -165,7 +170,7 @@ describe('Dropdown Components', () => {
 
       await waitFor(() => {
         const content = screen.getByRole('menu');
-        expect(content).toHaveClass('bg-gray-50', 'text-gray-700');
+        expect(content).toHaveClass('bg-muted', 'text-muted-foreground');
       });
     });
 
@@ -238,7 +243,10 @@ describe('Dropdown Components', () => {
       await waitFor(() => {
         const item = screen.getByRole('menuitem', { name: 'Test Item' });
         expect(item).toBeInTheDocument();
-        expect(item).toHaveClass('hover:bg-blue-50', 'hover:text-blue-900');
+        expect(item).toHaveClass(
+          'hover:bg-accent',
+          'hover:text-accent-foreground'
+        );
       });
     });
 
@@ -256,7 +264,7 @@ describe('Dropdown Components', () => {
 
       await waitFor(() => {
         const item = screen.getByRole('menuitem', { name: 'Delete' });
-        expect(item).toHaveClass('text-red-600', 'hover:bg-red-50');
+        expect(item).toHaveClass('text-destructive', 'hover:bg-destructive/10');
       });
     });
 

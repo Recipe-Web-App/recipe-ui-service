@@ -54,7 +54,7 @@ describe('Badge', () => {
     test('applies default variant classes', () => {
       renderBadge({ variant: 'default' });
       const badge = screen.getByText('Test Badge');
-      expect(badge).toHaveClass('bg-gray-900', 'text-white');
+      expect(badge).toHaveClass('bg-primary', 'text-primary-foreground');
       expect(badge.className).toMatch(/shadow/);
     });
 
@@ -67,7 +67,10 @@ describe('Badge', () => {
     test('applies destructive variant classes', () => {
       renderBadge({ variant: 'destructive' });
       const badge = screen.getByText('Test Badge');
-      expect(badge).toHaveClass('bg-red-500', 'text-white');
+      expect(badge).toHaveClass(
+        'bg-destructive',
+        'text-destructive-foreground'
+      );
       expect(badge.className).toMatch(/shadow/);
     });
 
@@ -75,7 +78,7 @@ describe('Badge', () => {
       renderBadge({ variant: 'outline' });
       const badge = screen.getByText('Test Badge');
       expect(badge).toHaveClass(
-        'border-input',
+        'border-border',
         'bg-background',
         'text-foreground'
       );
@@ -84,21 +87,21 @@ describe('Badge', () => {
     test('applies success variant classes', () => {
       renderBadge({ variant: 'success' });
       const badge = screen.getByText('Test Badge');
-      expect(badge).toHaveClass('bg-green-500', 'text-white');
+      expect(badge).toHaveClass('bg-success', 'text-white');
       expect(badge.className).toMatch(/shadow/);
     });
 
     test('applies warning variant classes', () => {
       renderBadge({ variant: 'warning' });
       const badge = screen.getByText('Test Badge');
-      expect(badge).toHaveClass('bg-yellow-500', 'text-white');
+      expect(badge).toHaveClass('bg-warning', 'text-neutral-800');
       expect(badge.className).toMatch(/shadow/);
     });
 
     test('applies info variant classes', () => {
       renderBadge({ variant: 'info' });
       const badge = screen.getByText('Test Badge');
-      expect(badge).toHaveClass('bg-blue-500', 'text-white');
+      expect(badge).toHaveClass('bg-primary', 'text-primary-foreground');
       expect(badge.className).toMatch(/shadow/);
     });
   });
@@ -209,7 +212,7 @@ describe('Badge', () => {
 
       const button = screen.getByTestId('badge-button');
       expect(button.tagName).toBe('BUTTON');
-      expect(button).toHaveClass('border-input', 'bg-background');
+      expect(button).toHaveClass('border-border', 'bg-background');
     });
   });
 
@@ -320,7 +323,7 @@ describe('Badge', () => {
       });
       const badge = screen.getByLabelText('Difficulty level: Medium');
       expect(badge).toHaveTextContent('Medium');
-      expect(badge).toHaveClass('bg-yellow-500');
+      expect(badge).toHaveClass('bg-warning');
     });
 
     test('renders cooking time badge', () => {
@@ -330,7 +333,7 @@ describe('Badge', () => {
         children: '30 min',
       });
       const badge = screen.getByText('30 min');
-      expect(badge).toHaveClass('h-5', 'border-input');
+      expect(badge).toHaveClass('h-5', 'border-border');
     });
 
     test('renders category badges', () => {
@@ -342,9 +345,9 @@ describe('Badge', () => {
         </div>
       );
 
-      expect(screen.getByText('Breakfast')).toHaveClass('bg-blue-500');
-      expect(screen.getByText('Vegetarian')).toHaveClass('bg-blue-500');
-      expect(screen.getByText('Quick')).toHaveClass('bg-blue-500');
+      expect(screen.getByText('Breakfast')).toHaveClass('bg-primary');
+      expect(screen.getByText('Vegetarian')).toHaveClass('bg-primary');
+      expect(screen.getByText('Quick')).toHaveClass('bg-primary');
     });
 
     test('renders status badges', () => {
@@ -356,8 +359,8 @@ describe('Badge', () => {
         </div>
       );
 
-      expect(screen.getByText('Published')).toHaveClass('bg-green-500');
-      expect(screen.getByText('Draft')).toHaveClass('bg-yellow-500');
+      expect(screen.getByText('Published')).toHaveClass('bg-success');
+      expect(screen.getByText('Draft')).toHaveClass('bg-warning');
       expect(screen.getByText('Private')).toHaveClass('bg-secondary');
     });
   });
@@ -404,7 +407,7 @@ describe('Badge', () => {
       expect(badge).toHaveClass(
         'focus:outline-none',
         'focus:ring-2',
-        'focus:ring-ring',
+        'focus:ring-primary/50',
         'focus:ring-offset-2'
       );
     });
@@ -463,7 +466,7 @@ describe('Badge', () => {
       expect(badge).toHaveClass(
         'focus:outline-none',
         'focus:ring-2',
-        'focus:ring-ring',
+        'focus:ring-primary/50',
         'focus:ring-offset-2'
       );
     });

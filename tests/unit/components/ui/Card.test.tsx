@@ -232,7 +232,7 @@ describe('Card', () => {
       const card = screen.getByText('Test Card');
       expect(card).toHaveClass(
         'focus-visible:ring-2',
-        'focus-visible:ring-ring'
+        'focus-visible:ring-primary/50'
       );
     });
   });

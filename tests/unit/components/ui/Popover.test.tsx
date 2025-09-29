@@ -473,7 +473,7 @@ describe('Popover Component', () => {
       await waitFor(() => {
         const confirmButton = screen.getByText('Delete Item');
         expect(confirmButton).toBeInTheDocument();
-        expect(confirmButton).toHaveClass('bg-red-600');
+        expect(confirmButton).toHaveClass('bg-error');
       });
     });
   });

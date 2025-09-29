@@ -702,7 +702,7 @@ describe('RecipeList Component', () => {
     );
 
     const list = screen.getByRole('list');
-    expect(list).toHaveClass('[&>*]:border-l-2', '[&>*]:border-l-green-200');
+    expect(list).toHaveClass('[&>*]:border-l-2', '[&>*]:border-l-basil/30');
   });
 
   test('applies instruction numbering when context is instructions', () => {

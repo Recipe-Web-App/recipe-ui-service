@@ -140,9 +140,9 @@ describe('Spinner', () => {
           secondary: 'text-secondary',
           muted: 'text-muted-foreground',
           destructive: 'text-destructive',
-          success: 'text-green-600',
-          warning: 'text-yellow-600',
-          info: 'text-blue-600',
+          success: 'text-basil',
+          warning: 'text-citrus',
+          info: 'text-primary',
         };
 
         expect(spinner).toHaveClass(colorClasses[color]);
