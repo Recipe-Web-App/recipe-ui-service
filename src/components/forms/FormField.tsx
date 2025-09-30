@@ -9,6 +9,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { SelectField, SelectItem, SelectContent } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RecipeTextarea } from '@/components/ui/textarea';
 import { getFormFieldProps } from '@/lib/forms/form-utils';
 
 /**
@@ -277,5 +278,56 @@ export function FormErrors<T extends FieldValues>({
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * FormTextarea - Textarea field with react-hook-form integration
+ */
+export interface FormTextareaProps<T extends FieldValues>
+  extends Omit<FormFieldProps<T>, 'children'> {
+  label?: string;
+  placeholder?: string;
+  helperText?: string;
+  className?: string;
+  maxLength?: number;
+  showCharacterCount?: boolean;
+  autoResize?: boolean;
+  type?: 'description' | 'instructions' | 'notes' | 'tips' | 'review';
+  rows?: number;
+}
+
+export function FormTextarea<T extends FieldValues>({
+  label,
+  placeholder,
+  helperText,
+  className,
+  maxLength,
+  showCharacterCount = false,
+  autoResize = true,
+  type = 'description',
+  rows = 3,
+  ...formFieldProps
+}: FormTextareaProps<T>) {
+  return (
+    <FormField {...formFieldProps}>
+      {({ field, fieldState }) => (
+        <RecipeTextarea
+          {...field}
+          label={label}
+          placeholder={placeholder}
+          helperText={fieldState.error ?? helperText}
+          errorMessage={fieldState.error}
+          type={type}
+          maxLength={maxLength}
+          showCharacterCount={showCharacterCount}
+          autoResize={autoResize}
+          rows={rows}
+          disabled={formFieldProps.disabled}
+          required={formFieldProps.required}
+          className={className}
+        />
+      )}
+    </FormField>
   );
 }
