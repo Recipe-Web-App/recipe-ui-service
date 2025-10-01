@@ -571,6 +571,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-error-alert',
+    label: 'Error Alert',
+    href: '/components-demo/error-alert',
+    metadata: {
+      sortOrder: 225,
+    },
+  },
+  {
     id: 'components-fab',
     label: 'FAB',
     href: '/components-demo/fab',

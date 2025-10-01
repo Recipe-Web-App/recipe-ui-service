@@ -1,0 +1,639 @@
+import { Meta, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { ErrorAlert } from './ErrorAlert';
+import { z, ZodError } from 'zod';
+import type { ServiceErrorMetadata } from '@/types/error/service-errors';
+import type { ComponentErrorMetadata } from '@/types/error/component-errors';
+import type { PageErrorMetadata } from '@/types/error/page-errors';
+import { RefreshCw, Mail, Home } from 'lucide-react';
+
+<Meta
+  title="Error Handling/ErrorAlert"
+  component={ErrorAlert}
+  parameters={{
+    layout: 'padded',
+    docs: {
+      description: {
+        component: `
+A specialized component for displaying inline error messages from various sources including form validation, API errors, service errors, and custom messages.
+
+## Features
+
+- **Multiple Error Sources**: Zod validation, Service errors, Component errors, Page errors, Custom messages
+- **Visual Variants**: Inline, Banner, Toast, Card
+- **Severity Levels**: Error, Warning, Info (auto-detected or manual)
+- **Auto-Dismiss**: Configurable timeout for transient errors
+- **Recovery Actions**: Retry, Dismiss, Clear, Custom actions
+- **Multiple Errors**: Display validation errors with collapsible lists
+- **Accessibility**: ARIA live regions, keyboard navigation, screen reader support
+
+## Use Cases
+
+- Form validation errors (Zod integration)
+- API/Service error feedback
+- Network error messages
+- Component error display
+- User feedback messages
+- Success/info notifications
+
+## Difference from Other Components
+
+**ErrorAlert vs Alert**: ErrorAlert is specialized for errors with built-in support for error sources, recovery actions, and validation error lists. Alert is a generic notification component.
+
+**ErrorAlert vs ErrorPage**: ErrorAlert is for inline contextual errors. ErrorPage is for full-page errors (404, 500, etc.).
+
+**ErrorAlert vs Error Boundaries**: ErrorAlert displays controlled error messages. Error Boundaries catch runtime errors.
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    variant: {
+      control: 'select',
+      options: ['inline', 'banner', 'toast', 'card'],
+      description: 'Visual variant of the alert',
+    },
+    severity: {
+      control: 'select',
+      options: ['error', 'warning', 'info'],
+      description: 'Severity level',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size variant',
+    },
+    autoDismiss: {
+      control: 'number',
+      description: 'Auto-dismiss timeout in ms (false to disable)',
+    },
+  }}
+/>
+
+# ErrorAlert
+
+A versatile inline error alert component for all error scenarios.
+
+<Primary />
+
+<Controls />
+
+## Basic Variants
+
+### Inline Variant
+
+<Canvas>
+  <Story name="Inline">
+    <ErrorAlert
+      error="Failed to save recipe. Please try again."
+      variant="inline"
+    />
+  </Story>
+</Canvas>
+
+### Banner Variant
+
+<Canvas>
+  <Story name="Banner">
+    <ErrorAlert
+      error="Service temporarily unavailable. We're working on it!"
+      variant="banner"
+    />
+  </Story>
+</Canvas>
+
+### Card Variant
+
+<Canvas>
+  <Story name="Card">
+    <ErrorAlert
+      error="Unable to connect to the server."
+      variant="card"
+      title="Connection Error"
+    />
+  </Story>
+</Canvas>
+
+### Toast Variant
+
+<Canvas>
+  <Story name="Toast">
+    {() => {
+      const [show, setShow] = useState(false);
+
+      return (
+        <div>
+          <button
+            onClick={() => setShow(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Show Toast Error
+          </button>
+          {show && (
+            <ErrorAlert
+              error="Operation failed!"
+              variant="toast"
+              onDismiss={() => setShow(false)}
+            />
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Severity Levels
+
+<Canvas>
+  <Story name="Severity Levels">
+    <div className="space-y-4">
+      <ErrorAlert
+        error="Critical error occurred"
+        severity="error"
+        title="Error"
+      />
+      <ErrorAlert
+        error="Warning: This action cannot be undone"
+        severity="warning"
+        title="Warning"
+      />
+      <ErrorAlert
+        error="For your information"
+        severity="info"
+        title="Info"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Error Sources
+
+### Zod Validation Errors
+
+<Canvas>
+  <Story name="Zod Validation">
+    {() => {
+      const recipeSchema = z.object({
+        title: z.string().min(3, 'Title must be at least 3 characters'),
+        servings: z.number().min(1, 'Servings must be at least 1'),
+        prepTime: z.number().min(1, 'Prep time is required'),
+      });
+
+      try {
+        recipeSchema.parse({ title: 'A', servings: 0, prepTime: -1 });
+        return null;
+      } catch (error) {
+        return <ErrorAlert zodError={error} variant="inline" />;
+      }
+    }}
+  </Story>
+</Canvas>
+
+### Validation Errors Array
+
+<Canvas>
+  <Story name="Validation Array">
+    <ErrorAlert
+      validationErrors={[
+        { field: 'email', message: 'Invalid email format' },
+        { field: 'password', message: 'Password must be at least 8 characters' },
+        { field: 'confirmPassword', message: 'Passwords do not match' },
+      ]}
+      variant="card"
+    />
+  </Story>
+</Canvas>
+
+### Service Error
+
+<Canvas>
+  <Story name="Service Error">
+    {() => {
+      const serviceError = {
+        serviceType: 'recipe-management',
+        serviceName: 'Recipe Service',
+        endpoint: '/api/recipes',
+        statusCode: 500,
+        timestamp: Date.now(),
+        retryable: true,
+        severity: 'error',
+      };
+
+      return (
+        <ErrorAlert
+          serviceError={serviceError}
+          onRetry={() => console.log('Retrying...')}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Component Error
+
+<Canvas>
+  <Story name="Component Error">
+    {() => {
+      const componentError = {
+        errorType: 'render-error',
+        severity: 'error',
+        componentName: 'RecipeCard',
+        componentDisplayName: 'Recipe Card',
+        message: 'Failed to render recipe card',
+        timestamp: Date.now(),
+        fingerprint: 'recipe-card-render-error',
+        retryable: true,
+        retryCount: 0,
+      };
+
+      return (
+        <ErrorAlert
+          componentError={componentError}
+          onRetry={() => console.log('Retrying...')}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Network Error
+
+<Canvas>
+  <Story name="Network Error">
+    <ErrorAlert
+      error="Network error: Failed to fetch. Please check your internet connection."
+      variant="card"
+      onRetry={() => console.log('Retrying...')}
+    />
+  </Story>
+</Canvas>
+
+## Multiple Errors with Collapsible List
+
+<Canvas>
+  <Story name="Multiple Errors">
+    {() => {
+      const errors = Array.from({ length: 12 }, (_, i) => ({
+        field: `field${i + 1}`,
+        message: `Validation error ${i + 1}`,
+      }));
+
+      return (
+        <ErrorAlert
+          validationErrors={errors}
+          maxErrors={5}
+          collapsible
+          variant="card"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Auto-Dismiss
+
+<Canvas>
+  <Story name="Auto Dismiss">
+    {() => {
+      const [show, setShow] = useState(true);
+
+      return (
+        <div className="space-y-4">
+          <button
+            onClick={() => setShow(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          >
+            Show Auto-Dismiss Alert (3 seconds)
+          </button>
+          {show && (
+            <ErrorAlert
+              error="This alert will automatically dismiss in 3 seconds"
+              severity="info"
+              autoDismiss={3000}
+              onDismiss={() => setShow(false)}
+            />
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Recovery Actions
+
+### Default Actions
+
+<Canvas>
+  <Story name="Default Recovery Actions">
+    <ErrorAlert
+      error="Failed to load data"
+      onRetry={() => console.log('Retry clicked')}
+      onClear={() => console.log('Clear clicked')}
+    />
+  </Story>
+</Canvas>
+
+### Custom Actions
+
+<Canvas>
+  <Story name="Custom Recovery Actions">
+    {() => {
+      const customActions = [
+        {
+          type: 'custom',
+          label: 'Go Home',
+          icon: Home,
+          handler: () => console.log('Go Home'),
+          variant: 'primary',
+        },
+        {
+          type: 'custom',
+          label: 'Contact Support',
+          icon: Mail,
+          handler: () => console.log('Contact Support'),
+          variant: 'secondary',
+        },
+        {
+          type: 'retry',
+          label: 'Try Again',
+          icon: RefreshCw,
+          handler: () => console.log('Retry'),
+          variant: 'outline',
+        },
+      ];
+
+      return (
+        <ErrorAlert
+          error="Something went wrong. What would you like to do?"
+          recoveryActions={customActions}
+          variant="card"
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Hints
+
+<Canvas>
+  <Story name="With Hints">
+    <div className="space-y-4">
+      <ErrorAlert
+        error="Failed to save your changes"
+        hint="Make sure you're connected to the internet and try again."
+        onRetry={() => console.log('Retry')}
+      />
+      <ErrorAlert
+        validationErrors={[
+          { field: 'email', message: 'Invalid email' },
+        ]}
+        hint="Please use a valid email address (e.g., user@example.com)"
+      />
+    </div>
+  </Story>
+</Canvas>
+
+## Size Variants
+
+<Canvas>
+  <Story name="Sizes">
+    <div className="space-y-4">
+      <ErrorAlert error="Small error alert" size="sm" />
+      <ErrorAlert error="Medium error alert (default)" size="md" />
+      <ErrorAlert error="Large error alert" size="lg" />
+    </div>
+  </Story>
+</Canvas>
+
+## Without Icon or Close Button
+
+<Canvas>
+  <Story name="Without Icon">
+    <ErrorAlert
+      error="Error message without icon"
+      showIcon={false}
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Without Close Button">
+    <ErrorAlert
+      error="Error message without close button"
+      showClose={false}
+    />
+  </Story>
+</Canvas>
+
+## Custom Title and Description
+
+<Canvas>
+  <Story name="Custom Content">
+    <ErrorAlert
+      error="Any error"
+      title="Custom Error Title"
+      description="This is a custom description that overrides the default error message. You can provide detailed information here."
+      variant="card"
+    />
+  </Story>
+</Canvas>
+
+## Interactive Demo
+
+<Canvas>
+  <Story name="Interactive Demo">
+    {() => {
+      const [config, setConfig] = useState({
+        variant: 'inline',
+        severity: 'error',
+        size: 'md',
+        showIcon: true,
+        showClose: true,
+        autoDismiss: false,
+        withRetry: true,
+        errorType: 'simple',
+      });
+
+      const simpleError = "Something went wrong. Please try again.";
+
+      const validationErrors = [
+        { field: 'title', message: 'Title is required' },
+        { field: 'servings', message: 'Servings must be positive' },
+        { field: 'prepTime', message: 'Prep time cannot be negative' },
+      ];
+
+      const getError = () => {
+        if (config.errorType === 'simple') return simpleError;
+        if (config.errorType === 'validation') return { validationErrors };
+        if (config.errorType === 'network') return "Network error: Failed to connect";
+        return simpleError;
+      };
+
+      return (
+        <div className="space-y-6">
+          <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg space-y-4">
+            <h3 className="font-semibold text-lg">Configuration</h3>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Variant</label>
+                <select
+                  value={config.variant}
+                  onChange={(e) => setConfig({ ...config, variant: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="inline">Inline</option>
+                  <option value="banner">Banner</option>
+                  <option value="card">Card</option>
+                  <option value="toast">Toast</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Severity</label>
+                <select
+                  value={config.severity}
+                  onChange={(e) => setConfig({ ...config, severity: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="error">Error</option>
+                  <option value="warning">Warning</option>
+                  <option value="info">Info</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Size</label>
+                <select
+                  value={config.size}
+                  onChange={(e) => setConfig({ ...config, size: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="sm">Small</option>
+                  <option value="md">Medium</option>
+                  <option value="lg">Large</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Error Type</label>
+                <select
+                  value={config.errorType}
+                  onChange={(e) => setConfig({ ...config, errorType: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-md"
+                >
+                  <option value="simple">Simple</option>
+                  <option value="validation">Validation</option>
+                  <option value="network">Network</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={config.showIcon}
+                  onChange={(e) => setConfig({ ...config, showIcon: e.target.checked })}
+                  className="rounded"
+                />
+                <label className="text-sm">Show Icon</label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={config.showClose}
+                  onChange={(e) => setConfig({ ...config, showClose: e.target.checked })}
+                  className="rounded"
+                />
+                <label className="text-sm">Show Close</label>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={config.withRetry}
+                  onChange={(e) => setConfig({ ...config, withRetry: e.target.checked })}
+                  className="rounded"
+                />
+                <label className="text-sm">With Retry</label>
+              </div>
+            </div>
+          </div>
+
+          <div className="min-h-[100px]">
+            <ErrorAlert
+              {...(config.errorType === 'simple' && { error: simpleError })}
+              {...(config.errorType === 'validation' && { validationErrors })}
+              {...(config.errorType === 'network' && { error: "Network error: Failed to connect" })}
+              variant={config.variant}
+              severity={config.severity}
+              size={config.size}
+              showIcon={config.showIcon}
+              showClose={config.showClose}
+              onRetry={config.withRetry ? () => console.log('Retry') : undefined}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Best Practices
+
+### Do's ✅
+
+- Use ErrorAlert for inline, contextual error feedback
+- Provide clear, actionable error messages
+- Use appropriate severity levels
+- Include recovery actions when possible
+- Auto-dismiss transient errors
+- Group related validation errors
+- Provide helpful hints for common errors
+
+### Don'ts ❌
+
+- Don't use for full-page errors (use ErrorPage)
+- Don't show technical stack traces in production
+- Don't auto-dismiss critical errors
+- Don't use vague error messages like "Something went wrong"
+- Don't forget accessibility attributes
+- Don't mix error sources (use one at a time)
+
+### Usage Examples
+
+<Source
+  language="tsx"
+  code={`
+// Form validation errors
+const { errors } = useForm({ resolver: zodResolver(schema) });
+<ErrorAlert zodError={errors} variant="inline" />
+
+// API error with retry
+const { error, refetch } = useQuery({ ... });
+<ErrorAlert error={error} onRetry={refetch} />
+
+// Service error
+<ErrorAlert
+  serviceError={serviceError}
+  onRetry={() => refetch()}
+  variant="banner"
+/>
+
+// Success message with auto-dismiss
+<ErrorAlert
+  error="Recipe saved successfully!"
+  severity="info"
+  variant="toast"
+  autoDismiss={3000}
+/>
+
+// Multiple validation errors
+<ErrorAlert
+  validationErrors={validationErrors}
+  maxErrors={5}
+  collapsible
+  variant="card"
+/>
+`}
+/>
