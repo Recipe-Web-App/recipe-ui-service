@@ -289,6 +289,14 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'Service Error Boundary',
+    path: '/components-demo/service-error-boundary',
+    description:
+      'Service-specific error handling with intelligent retry logic and health status',
+    variants: 6,
+    status: 'ready',
+  },
+  {
     name: 'SearchInput',
     path: '/components-demo/search-input',
     description:
