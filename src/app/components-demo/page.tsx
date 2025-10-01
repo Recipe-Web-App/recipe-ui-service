@@ -395,6 +395,14 @@ const components = [
     variants: 10,
     status: 'ready',
   },
+  {
+    name: 'ProtectedRoute',
+    path: '/components-demo/protected-route',
+    description:
+      'Route guard for authentication checks, redirects, and protected content',
+    variants: 7,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -418,7 +426,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">48</div>
+            <div className="text-primary text-3xl font-bold">49</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -426,7 +434,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">407</div>
+            <div className="text-primary text-3xl font-bold">414</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

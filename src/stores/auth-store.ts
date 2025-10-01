@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { AuthorizedUser } from '@/types';
 import type { User as AuthUser, Token } from '@/types/auth';
 
-interface AuthState {
+export interface AuthState {
   user: AuthorizedUser | null;
   authUser: AuthUser | null;
   token: string | null;

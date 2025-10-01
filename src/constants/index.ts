@@ -25,6 +25,12 @@ export const APP_ROUTES = {
   REGISTER: '/register',
 } as const;
 
+export const ROUTE_PROTECTION = {
+  RETURN_URL_PARAM: 'returnUrl',
+  DEFAULT_LOGIN_URL: '/login',
+  DEFAULT_HOME_URL: '/',
+} as const;
+
 export const QUERY_KEYS = {
   RECIPES: ['recipes'],
   RECIPE_DETAIL: ['recipe'],

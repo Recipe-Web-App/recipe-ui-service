@@ -794,6 +794,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 480,
     },
   },
+  {
+    id: 'components-protected-route',
+    label: 'Protected Route',
+    href: '/components-demo/protected-route',
+    metadata: {
+      sortOrder: 490,
+    },
+  },
 ];
 
 /**
