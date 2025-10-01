@@ -321,6 +321,14 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'RetryButton',
+    path: '/components-demo/retry-button',
+    description:
+      'Specialized button for retry operations with cooldown and strategy management',
+    variants: 8,
+    status: 'ready',
+  },
+  {
     name: 'SearchInput',
     path: '/components-demo/search-input',
     description:
@@ -410,7 +418,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">47</div>
+            <div className="text-primary text-3xl font-bold">48</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -418,7 +426,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">399</div>
+            <div className="text-primary text-3xl font-bold">407</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

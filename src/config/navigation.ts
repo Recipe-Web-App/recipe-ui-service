@@ -579,6 +579,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-retry-button',
+    label: 'Retry Button',
+    href: '/components-demo/retry-button',
+    metadata: {
+      sortOrder: 226,
+    },
+  },
+  {
     id: 'components-fab',
     label: 'FAB',
     href: '/components-demo/fab',
