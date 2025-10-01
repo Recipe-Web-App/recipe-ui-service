@@ -403,6 +403,14 @@ const components = [
     variants: 7,
     status: 'ready',
   },
+  {
+    name: 'GuestOnlyRoute',
+    path: '/components-demo/guest-route',
+    description:
+      'Route guard that redirects authenticated users from guest-only pages',
+    variants: 7,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -426,7 +434,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">49</div>
+            <div className="text-primary text-3xl font-bold">50</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -434,7 +442,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">414</div>
+            <div className="text-primary text-3xl font-bold">421</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

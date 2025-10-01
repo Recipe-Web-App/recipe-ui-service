@@ -204,3 +204,46 @@ export const getSafeReturnUrl = (
 
   return url;
 };
+
+/**
+ * Builds a redirect URL for authenticated users on guest-only pages
+ *
+ * Extracts returnUrl from query params (if present) and validates it's safe.
+ * Falls back to provided redirectUrl or default home page.
+ *
+ * @param searchParams - URL search parameters (may contain returnUrl)
+ * @param redirectUrl - Default redirect URL if no returnUrl present
+ * @param paramName - Query parameter name for return URL
+ * @returns Safe redirect URL for authenticated users
+ *
+ * @example
+ * ```ts
+ * // With returnUrl in query
+ * const params = new URLSearchParams('returnUrl=%2Frecipes');
+ * redirectToHome(params, '/'); // '/recipes'
+ *
+ * // Without returnUrl
+ * const params = new URLSearchParams('');
+ * redirectToHome(params, '/dashboard'); // '/dashboard'
+ *
+ * // Unsafe returnUrl falls back to default
+ * const params = new URLSearchParams('returnUrl=https://evil.com');
+ * redirectToHome(params, '/'); // '/'
+ * ```
+ */
+export const redirectToHome = (
+  searchParams: URLSearchParams | string,
+  redirectUrl: string = '/',
+  paramName: string = DEFAULT_RETURN_URL_PARAM
+): string => {
+  // Try to extract returnUrl from query params
+  const returnUrl = extractReturnUrl(searchParams, paramName);
+
+  // If returnUrl exists and is safe, use it
+  if (returnUrl && isSafeReturnUrl(returnUrl)) {
+    return returnUrl;
+  }
+
+  // Otherwise, use the provided redirectUrl
+  return redirectUrl;
+};

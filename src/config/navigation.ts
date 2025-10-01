@@ -802,6 +802,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 490,
     },
   },
+  {
+    id: 'components-guest-route',
+    label: 'Guest Route',
+    href: '/components-demo/guest-route',
+    metadata: {
+      sortOrder: 500,
+    },
+  },
 ];
 
 /**

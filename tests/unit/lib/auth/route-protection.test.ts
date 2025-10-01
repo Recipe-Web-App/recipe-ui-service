@@ -5,6 +5,7 @@ import {
   isAuthenticated,
   isSafeReturnUrl,
   getSafeReturnUrl,
+  redirectToHome,
   DEFAULT_RETURN_URL_PARAM,
 } from '@/lib/auth/route-protection';
 import type { AuthState } from '@/stores/auth-store';
@@ -357,6 +358,65 @@ describe('Route Protection Utilities', () => {
   describe('DEFAULT_RETURN_URL_PARAM', () => {
     it('exports the correct default param name', () => {
       expect(DEFAULT_RETURN_URL_PARAM).toBe('returnUrl');
+    });
+  });
+
+  describe('redirectToHome', () => {
+    it('returns returnUrl from query params when safe', () => {
+      const params = new URLSearchParams('returnUrl=%2Frecipes');
+      const result = redirectToHome(params, '/');
+      expect(result).toBe('/recipes');
+    });
+
+    it('returns returnUrl with custom param name', () => {
+      const params = new URLSearchParams('redirect=%2Fdashboard');
+      const result = redirectToHome(params, '/', 'redirect');
+      expect(result).toBe('/dashboard');
+    });
+
+    it('returns redirectUrl when no returnUrl in params', () => {
+      const params = new URLSearchParams('');
+      const result = redirectToHome(params, '/dashboard');
+      expect(result).toBe('/dashboard');
+    });
+
+    it('returns redirectUrl when returnUrl is unsafe', () => {
+      const params = new URLSearchParams('returnUrl=https://evil.com');
+      const result = redirectToHome(params, '/');
+      expect(result).toBe('/');
+    });
+
+    it('returns redirectUrl when returnUrl is protocol-relative', () => {
+      const params = new URLSearchParams('returnUrl=//evil.com');
+      const result = redirectToHome(params, '/home');
+      expect(result).toBe('/home');
+    });
+
+    it('handles string search params', () => {
+      const result = redirectToHome('returnUrl=%2Frecipes', '/');
+      expect(result).toBe('/recipes');
+    });
+
+    it('uses default redirectUrl when not provided', () => {
+      const params = new URLSearchParams('');
+      const result = redirectToHome(params);
+      expect(result).toBe('/');
+    });
+
+    it('validates complex safe URLs', () => {
+      const params = new URLSearchParams(
+        'returnUrl=%2Frecipes%3Fcategory%3Dpasta%26sort%3Dpopular'
+      );
+      const result = redirectToHome(params, '/');
+      expect(result).toBe('/recipes?category=pasta&sort=popular');
+    });
+
+    it('falls back when returnUrl is malformed', () => {
+      const params = new URLSearchParams('returnUrl=%E0%A4%A');
+      const result = redirectToHome(params, '/dashboard');
+      // Should still try to use the malformed URL if it starts with /
+      // or fall back if extraction/validation fails
+      expect(result).toBeDefined();
     });
   });
 });

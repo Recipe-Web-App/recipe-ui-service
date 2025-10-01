@@ -1,4 +1,5 @@
 import { Layout } from '@/components/layout/layout';
+import { GuestOnlyRoute } from '@/components/auth/GuestOnlyRoute';
 
 /**
  * Authentication Layout
@@ -11,12 +12,16 @@ import { Layout } from '@/components/layout/layout';
  * - No sidebar navigation
  * - No footer
  * - Centered content area
+ * - Guest-only access (authenticated users are redirected)
  *
  * Perfect for:
  * - Login pages
  * - Registration forms
  * - Password reset flows
  * - Account verification
+ *
+ * All pages within this layout are wrapped with GuestOnlyRoute.
+ * Authenticated users will be automatically redirected to the home page.
  */
 export default function AuthLayout({
   children,
@@ -25,9 +30,11 @@ export default function AuthLayout({
 }>) {
   return (
     <Layout variant="minimal" showSidebar={false} showFooter={false}>
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">{children}</div>
-      </div>
+      <GuestOnlyRoute>
+        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+          <div className="w-full max-w-md">{children}</div>
+        </div>
+      </GuestOnlyRoute>
     </Layout>
   );
 }
