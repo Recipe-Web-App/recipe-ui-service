@@ -297,6 +297,14 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'Page Error Boundary',
+    path: '/components-demo/page-error-boundary',
+    description:
+      'Full-page error handling with HTTP status awareness and SEO optimization',
+    variants: 8,
+    status: 'ready',
+  },
+  {
     name: 'SearchInput',
     path: '/components-demo/search-input',
     description:
