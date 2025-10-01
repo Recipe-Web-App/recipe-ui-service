@@ -305,6 +305,14 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'ErrorPage',
+    path: '/components-demo/error-page',
+    description:
+      'Standalone error page displays for HTTP status codes (404, 500, etc.)',
+    variants: 10,
+    status: 'ready',
+  },
+  {
     name: 'SearchInput',
     path: '/components-demo/search-input',
     description:
@@ -394,7 +402,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">45</div>
+            <div className="text-primary text-3xl font-bold">46</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -402,7 +410,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">377</div>
+            <div className="text-primary text-3xl font-bold">387</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
