@@ -1,0 +1,513 @@
+import { Meta, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { AlertCircle, RefreshCw, AlertTriangle, Info } from 'lucide-react';
+import { ComponentErrorBoundary } from './ComponentErrorBoundary';
+import {
+  ComponentErrorType,
+  ComponentErrorSeverity,
+  FallbackMode,
+  RecoveryStrategy,
+} from '@/types/error/component-errors';
+
+<Meta
+  title="Error Handling/ComponentErrorBoundary"
+  component={ComponentErrorBoundary}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+A granular error boundary component for isolating and handling errors in individual components. Provides multiple fallback modes, automatic retry capabilities, and props validation.
+
+## Features
+
+- **Error Isolation**: Prevents errors from bubbling up to parent components
+- **Multiple Fallback Modes**: Skeleton, placeholder, minimal, detailed, and hidden modes
+- **Automatic Retry**: Configurable retry logic with exponential backoff
+- **Props Validation**: Built-in props validation with custom validators
+- **Error Analytics**: Track component errors with custom analytics callbacks
+- **Type Detection**: Automatically detects error types (render, props, data, async, etc.)
+- **Accessibility**: Full ARIA support with proper error announcements
+
+## Fallback Modes
+
+- \`skeleton\` - Shows a loading skeleton (default)
+- \`placeholder\` - Shows a placeholder with optional message
+- \`minimal\` - Shows a minimal error message
+- \`detailed\` - Shows detailed error information for debugging
+- \`hidden\` - Hides the component entirely
+
+## Error Types
+
+The component automatically detects and classifies errors:
+- **Render Errors**: Component rendering failures
+- **Props Errors**: Invalid or missing props
+- **Lifecycle Errors**: Errors during component lifecycle
+- **Data Errors**: Data fetching or parsing failures
+- **State Errors**: State management issues
+- **Event Handler Errors**: Errors in event handlers
+- **Async Errors**: Promise rejections and async failures
+
+## Usage Guidelines
+
+- Use for component-level error isolation
+- Choose appropriate fallback modes based on error severity
+- Enable auto-retry for transient errors (data fetching, async operations)
+- Use props validation to catch issues early
+- Implement analytics callbacks for production error tracking
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    componentName: {
+      control: 'text',
+      description: 'Name of the component being wrapped',
+    },
+    fallbackMode: {
+      control: 'select',
+      options: ['skeleton', 'placeholder', 'minimal', 'detailed', 'hidden'],
+      description: 'Fallback display mode',
+    },
+    isolate: {
+      control: 'boolean',
+      description: 'Whether to prevent error bubbling',
+    },
+  }}
+/>
+
+# ComponentErrorBoundary
+
+A granular error boundary for component-level error isolation and recovery.
+
+<Primary />
+
+<Controls />
+
+## Fallback Modes
+
+<Canvas>
+  <Story name="Fallback Modes">
+    {() => {
+      const ErrorThrower = ({ shouldThrow }) => {
+        if (shouldThrow) {
+          throw new Error('Simulated component error');
+        }
+        return <div className="p-4 bg-green-100 text-green-800 rounded">Component rendered successfully</div>;
+      };
+
+      const modes = [
+        { mode: 'skeleton', label: 'Skeleton' },
+        { mode: 'placeholder', label: 'Placeholder' },
+        { mode: 'minimal', label: 'Minimal' },
+        { mode: 'detailed', label: 'Detailed' },
+      ];
+
+      return (
+        <div className="space-y-6 w-full max-w-2xl">
+          {modes.map(({ mode, label }) => (
+            <div key={mode} className="space-y-2">
+              <h3 className="text-sm font-semibold text-gray-700">{label} Mode</h3>
+              <ComponentErrorBoundary
+                componentName="DemoComponent"
+                fallbackMode={mode}
+                config={{
+                  componentName: 'DemoComponent',
+                  fallbackMode: mode,
+                  skeletonConfig: {
+                    height: '100px',
+                    width: '100%',
+                  },
+                  placeholderConfig: {
+                    title: 'Component Unavailable',
+                    description: 'This component encountered an error and cannot be displayed.',
+                  },
+                }}
+              >
+                <ErrorThrower shouldThrow={true} />
+              </ComponentErrorBoundary>
+            </div>
+          ))}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Error Type Detection
+
+<Canvas>
+  <Story name="Error Type Detection">
+    {() => {
+      const RenderError = () => {
+        throw new Error('Cannot read property "name" of undefined');
+      };
+
+      const PropsError = () => {
+        throw new Error('Invalid prop: expected string but got number');
+      };
+
+      const DataError = () => {
+        throw new Error('Failed to fetch data from API');
+      };
+
+      const errorTypes = [
+        { Component: RenderError, label: 'Render Error', description: 'Property access on undefined' },
+        { Component: PropsError, label: 'Props Error', description: 'Invalid prop type' },
+        { Component: DataError, label: 'Data Error', description: 'Network/API failure' },
+      ];
+
+      return (
+        <div className="space-y-6 w-full max-w-2xl">
+          {errorTypes.map(({ Component, label, description }) => (
+            <div key={label} className="space-y-2">
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700">{label}</h3>
+                <p className="text-xs text-gray-500">{description}</p>
+              </div>
+              <ComponentErrorBoundary
+                componentName={label}
+                fallbackMode="detailed"
+              >
+                <Component />
+              </ComponentErrorBoundary>
+            </div>
+          ))}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Retry Functionality
+
+<Canvas>
+  <Story name="Retry Functionality">
+    {() => {
+      const [attemptCount, setAttemptCount] = useState(0);
+
+      const RetryableComponent = () => {
+        const currentAttempt = attemptCount;
+
+        if (currentAttempt < 2) {
+          throw new Error('Data fetch failed - retry available');
+        }
+
+        return (
+          <div className="p-4 bg-green-100 text-green-800 rounded">
+            <div className="font-semibold">Success!</div>
+            <div className="text-sm">Component loaded after {currentAttempt} retries</div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <div className="p-4 bg-blue-50 rounded">
+            <p className="text-sm text-blue-800">
+              This component will fail twice, then succeed. Click retry to test the retry mechanism.
+            </p>
+          </div>
+          <ComponentErrorBoundary
+            componentName="RetryableComponent"
+            fallbackMode="detailed"
+            config={{
+              componentName: 'RetryableComponent',
+              maxRetries: 5,
+              retryDelay: 1000,
+              enableAutoRetry: false,
+            }}
+            onError={() => setAttemptCount(prev => prev + 1)}
+          >
+            <RetryableComponent />
+          </ComponentErrorBoundary>
+          <button
+            onClick={() => setAttemptCount(0)}
+            className="px-4 py-2 bg-gray-500 text-white rounded text-sm hover:bg-gray-600"
+          >
+            Reset Demo
+          </button>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Props Validation
+
+<Canvas>
+  <Story name="Props Validation">
+    {() => {
+      const ValidatedComponent = ({ name, age }) => {
+        return (
+          <div className="p-4 bg-green-100 text-green-800 rounded">
+            <div>Name: {name}</div>
+            <div>Age: {age}</div>
+          </div>
+        );
+      };
+
+      const validator = (props) => {
+        if (!props.name || typeof props.name !== 'string') {
+          return 'Name must be a non-empty string';
+        }
+        if (typeof props.age !== 'number' || props.age < 0) {
+          return 'Age must be a positive number';
+        }
+        return true;
+      };
+
+      return (
+        <div className="space-y-6 w-full max-w-md">
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-gray-700">Valid Props</h3>
+            <ComponentErrorBoundary
+              componentName="ValidatedComponent"
+              config={{
+                componentName: 'ValidatedComponent',
+                validateProps: validator,
+              }}
+            >
+              <ValidatedComponent name="John Doe" age={30} />
+            </ComponentErrorBoundary>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-gray-700">Invalid Props (check console)</h3>
+            <ComponentErrorBoundary
+              componentName="ValidatedComponent"
+              config={{
+                componentName: 'ValidatedComponent',
+                validateProps: validator,
+              }}
+            >
+              <ValidatedComponent name="" age={-5} />
+            </ComponentErrorBoundary>
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Fallback
+
+<Canvas>
+  <Story name="Custom Fallback">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Custom fallback demonstration');
+      };
+
+      const CustomFallback = ({ error, metadata, retry, resetErrorBoundary }) => {
+        return (
+          <div className="p-6 border-2 border-purple-300 bg-purple-50 rounded-lg">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-purple-900 mb-2">
+                  Custom Error Display
+                </h3>
+                <p className="text-sm text-purple-700 mb-3">
+                  {metadata.message}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={retry}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 text-white rounded text-sm hover:bg-purple-700"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    Try Again
+                  </button>
+                  <button
+                    onClick={resetErrorBoundary}
+                    className="px-3 py-1.5 border border-purple-300 text-purple-700 rounded text-sm hover:bg-purple-100"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="w-full max-w-md">
+          <ComponentErrorBoundary
+            componentName="CustomFallbackDemo"
+            fallbackRender={CustomFallback}
+          >
+            <ErrorComponent />
+          </ComponentErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Error Isolation
+
+<Canvas>
+  <Story name="Error Isolation">
+    {() => {
+      const WorkingComponent = () => (
+        <div className="p-4 bg-green-100 text-green-800 rounded">
+          ✓ This component works fine
+        </div>
+      );
+
+      const BrokenComponent = () => {
+        throw new Error('This component is broken');
+      };
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          <div className="p-4 bg-blue-50 rounded">
+            <p className="text-sm text-blue-800">
+              The error in the second component is isolated and doesn&apos;t affect the first component.
+            </p>
+          </div>
+
+          <ComponentErrorBoundary
+            componentName="WorkingComponent1"
+            fallbackMode="minimal"
+          >
+            <WorkingComponent />
+          </ComponentErrorBoundary>
+
+          <ComponentErrorBoundary
+            componentName="BrokenComponent"
+            fallbackMode="minimal"
+            isolate={true}
+          >
+            <BrokenComponent />
+          </ComponentErrorBoundary>
+
+          <ComponentErrorBoundary
+            componentName="WorkingComponent2"
+            fallbackMode="minimal"
+          >
+            <WorkingComponent />
+          </ComponentErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Skeleton Loading States
+
+<Canvas>
+  <Story name="Skeleton Loading States">
+    {() => {
+      const ErrorComponent = () => {
+        throw new Error('Loading failed');
+      };
+
+      const skeletonConfigs = [
+        { height: '80px', variant: 'rectangular', animation: 'pulse' },
+        { height: '100px', variant: 'rectangular', animation: 'wave' },
+        { height: '60px', width: '60px', variant: 'circular', animation: 'pulse' },
+      ];
+
+      return (
+        <div className="space-y-4 w-full max-w-md">
+          {skeletonConfigs.map((config, idx) => (
+            <ComponentErrorBoundary
+              key={idx}
+              componentName={`SkeletonDemo${idx}`}
+              fallbackMode="skeleton"
+              config={{
+                componentName: `SkeletonDemo${idx}`,
+                fallbackMode: 'skeleton',
+                skeletonConfig: config,
+              }}
+            >
+              <ErrorComponent />
+            </ComponentErrorBoundary>
+          ))}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Best Practices
+
+### Do&apos;s
+- ✅ Use component error boundaries for granular error isolation
+- ✅ Choose appropriate fallback modes based on component importance
+- ✅ Enable retry for transient errors (network, async operations)
+- ✅ Implement props validation for complex components
+- ✅ Add analytics callbacks to track production errors
+- ✅ Use skeleton mode for loading-like states
+
+### Don&apos;ts
+- ❌ Don&apos;t wrap the entire app in a component error boundary
+- ❌ Don&apos;t use detailed mode in production (use minimal/skeleton)
+- ❌ Don&apos;t ignore error metadata in analytics
+- ❌ Don&apos;t set retry limits too high
+- ❌ Don&apos;t forget to handle error state in parent components
+
+### When to Use Each Fallback Mode
+
+**skeleton**: Loading-like states, data fetching components, image galleries
+**placeholder**: Missing data, unavailable features, optional components
+**minimal**: Production errors, user-facing components, non-critical failures
+**detailed**: Development, debugging, critical component failures
+**hidden**: Optional features, progressive enhancement, non-essential UI
+
+<Source
+  language="tsx"
+  code={`
+// Basic usage with skeleton fallback
+<ComponentErrorBoundary
+  componentName="RecipeCard"
+  fallbackMode="skeleton"
+>
+  <RecipeCard recipe={recipe} />
+</ComponentErrorBoundary>
+
+// With retry and custom config
+<ComponentErrorBoundary
+  componentName="RecipeList"
+  config={{
+    componentName: 'RecipeList',
+    fallbackMode: 'minimal',
+    maxRetries: 3,
+    retryDelay: 1000,
+    enableAutoRetry: true,
+  }}
+>
+  <RecipeList recipes={recipes} />
+</ComponentErrorBoundary>
+
+// With props validation
+<ComponentErrorBoundary
+  componentName="UserProfile"
+  config={{
+    componentName: 'UserProfile',
+    validateProps: (props) => {
+      if (!props.userId) return 'userId is required';
+      return true;
+    },
+  }}
+>
+  <UserProfile userId={userId} />
+</ComponentErrorBoundary>
+
+// With custom fallback
+<ComponentErrorBoundary
+  componentName="CustomComponent"
+  fallbackRender={({ error, retry, resetErrorBoundary }) => (
+    <div>
+      <p>Error: {error.message}</p>
+      <button onClick={retry}>Retry</button>
+    </div>
+  )}
+>
+  <CustomComponent />
+</ComponentErrorBoundary>
+`}
+/>

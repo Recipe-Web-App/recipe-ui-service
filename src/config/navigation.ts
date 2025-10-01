@@ -539,6 +539,54 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-service-error-boundary',
+    label: 'Service Error Boundary',
+    href: '/components-demo/service-error-boundary',
+    metadata: {
+      sortOrder: 221,
+    },
+  },
+  {
+    id: 'components-page-error-boundary',
+    label: 'Page Error Boundary',
+    href: '/components-demo/page-error-boundary',
+    metadata: {
+      sortOrder: 222,
+    },
+  },
+  {
+    id: 'components-component-error-boundary',
+    label: 'Component Error Boundary',
+    href: '/components-demo/component-error-boundary',
+    metadata: {
+      sortOrder: 223,
+    },
+  },
+  {
+    id: 'components-error-page',
+    label: 'Error Page',
+    href: '/components-demo/error-page',
+    metadata: {
+      sortOrder: 224,
+    },
+  },
+  {
+    id: 'components-error-alert',
+    label: 'Error Alert',
+    href: '/components-demo/error-alert',
+    metadata: {
+      sortOrder: 225,
+    },
+  },
+  {
+    id: 'components-retry-button',
+    label: 'Retry Button',
+    href: '/components-demo/retry-button',
+    metadata: {
+      sortOrder: 226,
+    },
+  },
+  {
     id: 'components-fab',
     label: 'FAB',
     href: '/components-demo/fab',

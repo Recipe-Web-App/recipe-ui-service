@@ -1,0 +1,510 @@
+import { Meta, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { ErrorPage } from './ErrorPage';
+import {
+  PageErrorType,
+  HttpStatusCode,
+  RecoveryActionType,
+} from '@/types/error/page-errors';
+
+<Meta
+  title="Error Handling/ErrorPage"
+  component={ErrorPage}
+  parameters={{
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+A standalone full-page error display component for common HTTP status codes. Unlike PageErrorBoundary, this component doesn't catch errors - it renders error pages directly based on props.
+
+## Features
+
+- **Direct Rendering**: No error boundary required - renders based on props
+- **HTTP Status Support**: Common status codes (404, 401, 403, 500, 503, etc.)
+- **Context-Aware Actions**: Recovery actions appropriate to error type
+- **Responsive Design**: Mobile-friendly with dark mode support
+- **SEO-Friendly**: Proper error messages and structure
+- **Customizable**: Custom titles, descriptions, and recovery actions
+
+## Use Cases
+
+- Custom Next.js error pages (`not-found.tsx`, `error.tsx`)
+- Static error pages for known error conditions
+- Custom 404/500 pages with branding
+- Maintenance mode pages
+- Authentication error pages
+
+## Difference from PageErrorBoundary
+
+**ErrorPage**: Stateless component that renders error UI based on props. Use when you know an error state exists and want to display it.
+
+**PageErrorBoundary**: React error boundary that catches runtime errors. Use to wrap components and catch unexpected errors.
+
+## Usage Guidelines
+
+- Use for known error states (missing pages, unauthorized access)
+- Use PageErrorBoundary for catching runtime errors
+- Provide homeUrl for navigation
+- Include contactEmail for support in production errors
+- Enable showDetails only in development
+- Customize recovery actions based on context
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    statusCode: {
+      control: 'select',
+      options: [400, 401, 403, 404, 408, 410, 500, 503],
+      description: 'HTTP status code',
+    },
+    errorType: {
+      control: 'select',
+      options: Object.values(PageErrorType),
+      description: 'Error type (alternative to statusCode)',
+    },
+    showDetails: {
+      control: 'boolean',
+      description: 'Show error details (development mode)',
+    },
+  }}
+/>
+
+# ErrorPage
+
+A standalone error page component for displaying HTTP status errors.
+
+<Primary />
+
+<Controls />
+
+## Common HTTP Status Codes
+
+<Canvas>
+  <Story name="Status Codes">
+    {() => {
+      const statusCodes = [
+        { code: 404, label: '404 - Not Found' },
+        { code: 401, label: '401 - Unauthorized' },
+        { code: 403, label: '403 - Forbidden' },
+        { code: 500, label: '500 - Server Error' },
+        { code: 503, label: '503 - Service Unavailable' },
+      ];
+
+      const [selectedCode, setSelectedCode] = useState(404);
+
+      return (
+        <div className="min-h-screen">
+          <div className="p-4 bg-gray-100 border-b border-gray-300">
+            <div className="max-w-4xl mx-auto">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Status Code:
+              </label>
+              <select
+                value={selectedCode}
+                onChange={(e) => setSelectedCode(Number(e.target.value))}
+                className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {statusCodes.map((status) => (
+                  <option key={status.code} value={status.code}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <ErrorPage key={selectedCode} statusCode={selectedCode} homeUrl="/" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## 404 Not Found
+
+<Canvas>
+  <Story name="404 Not Found">
+    <ErrorPage statusCode={404} homeUrl="/" />
+  </Story>
+</Canvas>
+
+## 401 Unauthorized
+
+<Canvas>
+  <Story name="401 Unauthorized">
+    <ErrorPage statusCode={401} homeUrl="/" loginUrl="/login" />
+  </Story>
+</Canvas>
+
+## 403 Forbidden
+
+<Canvas>
+  <Story name="403 Forbidden">
+    <ErrorPage statusCode={403} homeUrl="/" />
+  </Story>
+</Canvas>
+
+## 500 Internal Server Error
+
+<Canvas>
+  <Story name="500 Server Error">
+    <ErrorPage
+      statusCode={500}
+      homeUrl="/"
+      contactEmail="support@example.com"
+    />
+  </Story>
+</Canvas>
+
+## 503 Service Unavailable
+
+<Canvas>
+  <Story name="503 Service Unavailable">
+    <ErrorPage
+      statusCode={503}
+      homeUrl="/"
+      statusPageUrl="https://status.example.com"
+    />
+  </Story>
+</Canvas>
+
+## Maintenance Mode
+
+<Canvas>
+  <Story name="Maintenance Mode">
+    <ErrorPage
+      errorType={PageErrorType.MAINTENANCE}
+      homeUrl="/"
+      maintenanceMessage="We are performing scheduled maintenance. We'll be back soon!"
+      estimatedRecoveryTime={new Date(Date.now() + 3600000)}
+      statusPageUrl="https://status.example.com"
+    />
+  </Story>
+</Canvas>
+
+## Custom Error Messages
+
+<Canvas>
+  <Story name="Custom Messages">
+    <ErrorPage
+      statusCode={404}
+      title="Recipe Not Found"
+      description="The recipe you're looking for doesn't exist or has been removed. Browse our collection to find other delicious recipes!"
+      homeUrl="/"
+    />
+  </Story>
+</Canvas>
+
+## Custom Recovery Actions
+
+<Canvas>
+  <Story name="Custom Actions">
+    {() => {
+      const customActions = [
+        {
+          type: RecoveryActionType.GO_HOME,
+          label: 'Browse Recipes',
+          url: '/recipes',
+          variant: 'primary',
+        },
+        {
+          type: RecoveryActionType.CONTACT_SUPPORT,
+          label: 'Report Issue',
+          url: '/support',
+          variant: 'secondary',
+        },
+      ];
+
+      return (
+        <ErrorPage
+          statusCode={500}
+          title="Something Went Wrong"
+          description="We encountered an unexpected error. Our team has been notified."
+          recoveryActions={customActions}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Error Details (Development)
+
+<Canvas>
+  <Story name="With Error Details">
+    <ErrorPage
+      statusCode={500}
+      homeUrl="/"
+      showDetails={true}
+      errorDetails={`Error: Failed to fetch recipe data
+  at RecipeAPI.getRecipe (recipe-api.ts:45:12)
+  at async RecipePage.loadData (recipe-page.tsx:23:18)
+  at async renderPage (server.ts:89:5)`}
+    />
+  </Story>
+</Canvas>
+
+## Dark Mode
+
+<Canvas>
+  <Story name="Dark Mode">
+    {() => {
+      const [isDark, setIsDark] = useState(false);
+
+      return (
+        <div className={isDark ? 'dark' : ''}>
+          <div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
+            <div className="max-w-4xl mx-auto">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <input
+                  type="checkbox"
+                  checked={isDark}
+                  onChange={(e) => setIsDark(e.target.checked)}
+                  className="rounded"
+                />
+                Dark Mode
+              </label>
+            </div>
+          </div>
+          <ErrorPage statusCode={404} homeUrl="/" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## All Error Types
+
+<Canvas>
+  <Story name="All Error Types">
+    {() => {
+      const errorTypes = [
+        { type: PageErrorType.NOT_FOUND, label: 'Not Found' },
+        { type: PageErrorType.UNAUTHORIZED, label: 'Unauthorized' },
+        { type: PageErrorType.FORBIDDEN, label: 'Forbidden' },
+        { type: PageErrorType.SERVER_ERROR, label: 'Server Error' },
+        { type: PageErrorType.SERVICE_UNAVAILABLE, label: 'Service Unavailable' },
+        { type: PageErrorType.MAINTENANCE, label: 'Maintenance' },
+        { type: PageErrorType.TIMEOUT, label: 'Timeout' },
+        { type: PageErrorType.GONE, label: 'Gone' },
+        { type: PageErrorType.BAD_REQUEST, label: 'Bad Request' },
+      ];
+
+      const [selectedType, setSelectedType] = useState(PageErrorType.NOT_FOUND);
+
+      return (
+        <div className="min-h-screen">
+          <div className="p-4 bg-gray-100 border-b border-gray-300">
+            <div className="max-w-4xl mx-auto">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Error Type:
+              </label>
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value as PageErrorType)}
+                className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {errorTypes.map((type) => (
+                  <option key={type.type} value={type.type}>
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <ErrorPage key={selectedType} errorType={selectedType} homeUrl="/" />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Demo
+
+<Canvas>
+  <Story name="Interactive Demo">
+    {() => {
+      const [config, setConfig] = useState({
+        statusCode: 404,
+        showDetails: false,
+        isDark: false,
+        customTitle: '',
+        customDescription: '',
+      });
+
+      return (
+        <div className={config.isDark ? 'dark' : ''}>
+          <div className="p-6 bg-gray-100 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
+            <div className="max-w-4xl mx-auto space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Configure Error Page
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Status Code
+                  </label>
+                  <select
+                    value={config.statusCode}
+                    onChange={(e) => setConfig({ ...config, statusCode: Number(e.target.value) })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value={400}>400 - Bad Request</option>
+                    <option value={401}>401 - Unauthorized</option>
+                    <option value={403}>403 - Forbidden</option>
+                    <option value={404}>404 - Not Found</option>
+                    <option value={408}>408 - Timeout</option>
+                    <option value={500}>500 - Server Error</option>
+                    <option value={503}>503 - Service Unavailable</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={config.showDetails}
+                      onChange={(e) => setConfig({ ...config, showDetails: e.target.checked })}
+                      className="rounded"
+                    />
+                    Show Details
+                  </label>
+
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <input
+                      type="checkbox"
+                      checked={config.isDark}
+                      onChange={(e) => setConfig({ ...config, isDark: e.target.checked })}
+                      className="rounded"
+                    />
+                    Dark Mode
+                  </label>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Custom Title (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={config.customTitle}
+                    onChange={(e) => setConfig({ ...config, customTitle: e.target.value })}
+                    placeholder="Leave empty for default"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Custom Description (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={config.customDescription}
+                    onChange={(e) => setConfig({ ...config, customDescription: e.target.value })}
+                    placeholder="Leave empty for default"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ErrorPage
+            statusCode={config.statusCode}
+            title={config.customTitle || undefined}
+            description={config.customDescription || undefined}
+            showDetails={config.showDetails}
+            errorDetails={config.showDetails ? 'Sample error stack trace\n  at component (file.tsx:123)\n  at render (file.tsx:456)' : undefined}
+            homeUrl="/"
+            contactEmail="support@example.com"
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Best Practices
+
+### Do&apos;s
+- ✅ Use ErrorPage for known error states (404, unauthorized, etc.)
+- ✅ Provide homeUrl for easy navigation back
+- ✅ Include contactEmail for production errors
+- ✅ Customize messages to match your app's tone
+- ✅ Use maintenance mode for planned downtime
+- ✅ Enable showDetails only in development
+- ✅ Test error pages with real users
+
+### Don&apos;ts
+- ❌ Don&apos;t use ErrorPage to catch runtime errors (use PageErrorBoundary)
+- ❌ Don&apos;t show technical error details in production
+- ❌ Don&apos;t forget to provide recovery actions
+- ❌ Don&apos;t use generic "Something went wrong" messages
+- ❌ Don&apos;t leave users without a way to recover
+- ❌ Don&apos;t ignore accessibility requirements
+
+### When to Use
+
+**ErrorPage**: Known error states, static error pages, custom error pages
+**PageErrorBoundary**: Catching unexpected runtime errors
+**ServiceErrorBoundary**: Service-specific API errors
+**ComponentErrorBoundary**: Component-level error isolation
+
+<Source
+  language="tsx"
+  code={`
+// Next.js not-found.tsx
+export default function NotFound() {
+  return <ErrorPage statusCode={404} homeUrl="/" />;
+}
+
+// Custom 401 page
+export default function UnauthorizedPage() {
+  return (
+    <ErrorPage
+      statusCode={401}
+      title="Please Sign In"
+      description="You need to be signed in to access this page."
+      homeUrl="/"
+      loginUrl="/auth/signin"
+    />
+  );
+}
+
+// Maintenance page
+export default function MaintenancePage() {
+  return (
+    <ErrorPage
+      errorType={PageErrorType.MAINTENANCE}
+      maintenanceMessage="We're upgrading our systems to serve you better!"
+      estimatedRecoveryTime={new Date('2025-01-01T10:00:00Z')}
+      statusPageUrl="https://status.example.com"
+    />
+  );
+}
+
+// Custom error with actions
+<ErrorPage
+  statusCode={500}
+  title="Oops! Something went wrong"
+  description="We're working on fixing this issue."
+  homeUrl="/"
+  contactEmail="support@example.com"
+  recoveryActions={[
+    {
+      type: RecoveryActionType.GO_HOME,
+      label: 'Go Home',
+      url: '/',
+      variant: 'primary',
+    },
+    {
+      type: RecoveryActionType.CONTACT_SUPPORT,
+      label: 'Contact Support',
+      handler: () => window.open('mailto:support@example.com'),
+      variant: 'secondary',
+    },
+  ]}
+/>
+`}
+/>

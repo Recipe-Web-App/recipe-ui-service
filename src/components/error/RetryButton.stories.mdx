@@ -1,0 +1,664 @@
+import { Meta, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { RetryButton } from './RetryButton';
+import { RetryStrategy } from '@/types/error/retry-button';
+
+<Meta
+  title="Error Handling/RetryButton"
+  component={RetryButton}
+  parameters={{
+    layout: 'padded',
+    docs: {
+      description: {
+        component: `
+A specialized button component for retry operations that wraps the base Button component and adds retry-specific functionality.
+
+## Features
+
+- **Retry Management**: Automatic tracking of retry attempts with configurable max attempts
+- **Cooldown System**: Configurable cooldown periods between retries with countdown display
+- **Retry Strategies**: Constant, Exponential backoff, Linear, or Immediate retry
+- **Visual Feedback**: Loading states, disabled states, and spinning icon animations
+- **Attempt Tracking**: Display current attempt count (e.g., "Try Again (2/3)")
+- **Analytics**: Callback hooks for tracking retry events and user behavior
+- **Accessibility**: Dynamic ARIA labels based on state, keyboard support
+- **State Control**: Both controlled and uncontrolled component modes
+
+## Retry Strategies
+
+- **Constant**: Fixed delay between all retries (e.g., 1s, 1s, 1s)
+- **Exponential**: Delay doubles each retry (e.g., 1s, 2s, 4s, 8s)
+- **Linear**: Delay increases linearly (e.g., 1s, 2s, 3s, 4s)
+- **Immediate**: No delay between retries
+
+## Use Cases
+
+- API request retry after network failures
+- Form submission retry after validation errors
+- File upload retry after temporary failures
+- Data synchronization retry
+- Any operation that may fail temporarily
+
+## Difference from Base Button
+
+**RetryButton vs Button**: RetryButton extends Button with retry-specific features like attempt tracking, cooldown timers, max attempts enforcement, and retry strategies. Use Button for general actions, RetryButton for operations that may need multiple attempts.
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    maxAttempts: {
+      control: 'number',
+      description: 'Maximum number of retry attempts',
+    },
+    cooldownMs: {
+      control: 'number',
+      description: 'Cooldown period in milliseconds between retries',
+    },
+    retryStrategy: {
+      control: 'select',
+      options: Object.values(RetryStrategy),
+      description: 'Strategy for calculating retry delays',
+    },
+    showAttemptCount: {
+      control: 'boolean',
+      description: 'Show attempt count in button text (e.g., "Try Again (2/3)")',
+    },
+    showCooldown: {
+      control: 'boolean',
+      description: 'Show cooldown countdown in button text',
+    },
+    showIcon: {
+      control: 'boolean',
+      description: 'Show retry icon (RefreshCw)',
+    },
+    iconPosition: {
+      control: 'select',
+      options: ['left', 'right'],
+      description: 'Position of the retry icon',
+    },
+  }}
+/>
+
+# RetryButton
+
+A specialized button for retry operations with built-in attempt tracking and cooldown management.
+
+<Primary />
+
+<Controls />
+
+---
+
+## Basic Examples
+
+### Simple Retry
+
+Basic retry button with default settings (3 attempts, 1s cooldown):
+
+<Canvas>
+  <RetryButton
+    onRetry={() => {
+      console.log('Retry attempted');
+      return Promise.reject(new Error('Simulated failure'));
+    }}
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={() => {
+    // Your retry logic
+    return fetchData();
+  }}
+/>`}
+  language="tsx"
+/>
+
+### With Attempt Counter
+
+Display the current attempt count to provide user feedback:
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    maxAttempts={5}
+    showAttemptCount
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  maxAttempts={5}
+  showAttemptCount
+/>`}
+  language="tsx"
+/>
+
+### With Cooldown Display
+
+Show countdown timer during cooldown period:
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    cooldownMs={5000}
+    showCooldown
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  cooldownMs={5000}
+  showCooldown
+/>`}
+  language="tsx"
+/>
+
+---
+
+## Retry Strategies
+
+### Constant Delay
+
+Fixed delay between all retries (default strategy):
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    retryStrategy={RetryStrategy.CONSTANT}
+    cooldownMs={2000}
+    showCooldown
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  retryStrategy={RetryStrategy.CONSTANT}
+  cooldownMs={2000}
+  showCooldown
+/>`}
+  language="tsx"
+/>
+
+### Exponential Backoff
+
+Delay doubles with each retry attempt (useful for API rate limiting):
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    retryStrategy={RetryStrategy.EXPONENTIAL}
+    exponentialBackoff
+    cooldownMs={1000}
+    backoffMultiplier={2}
+    showCooldown
+    showAttemptCount
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  retryStrategy={RetryStrategy.EXPONENTIAL}
+  exponentialBackoff
+  cooldownMs={1000}
+  backoffMultiplier={2}
+  showCooldown
+/>`}
+  language="tsx"
+/>
+
+### Linear Backoff
+
+Delay increases linearly with attempt number:
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    retryStrategy={RetryStrategy.LINEAR}
+    cooldownMs={1000}
+    showCooldown
+    showAttemptCount
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  retryStrategy={RetryStrategy.LINEAR}
+  cooldownMs={1000}
+  showCooldown
+/>`}
+  language="tsx"
+/>
+
+### Immediate Retry
+
+No delay between retries (use with caution):
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    retryStrategy={RetryStrategy.IMMEDIATE}
+    maxAttempts={3}
+    showAttemptCount
+  />
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  retryStrategy={RetryStrategy.IMMEDIATE}
+  maxAttempts={3}
+/>`}
+  language="tsx"
+/>
+
+---
+
+## Button Variants
+
+RetryButton inherits all Button variants:
+
+### Default
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    variant="default"
+  />
+</Canvas>
+
+### Destructive
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    variant="destructive"
+  />
+</Canvas>
+
+### Outline
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    variant="outline"
+  />
+</Canvas>
+
+### Secondary
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    variant="secondary"
+  />
+</Canvas>
+
+### Ghost
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    variant="ghost"
+  />
+</Canvas>
+
+---
+
+## Sizes
+
+### Small
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    size="sm"
+    showIcon
+  />
+</Canvas>
+
+### Default
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    size="default"
+    showIcon
+  />
+</Canvas>
+
+### Large
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    size="lg"
+    showIcon
+  />
+</Canvas>
+
+---
+
+## Icon Configuration
+
+### Icon Left (Default)
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    showIcon
+    iconPosition="left"
+  />
+</Canvas>
+
+### Icon Right
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    showIcon
+    iconPosition="right"
+  />
+</Canvas>
+
+### No Icon
+
+<Canvas>
+  <RetryButton
+    onRetry={() => Promise.reject(new Error('Failed'))}
+    showIcon={false}
+  />
+</Canvas>
+
+---
+
+## Analytics Integration
+
+Track retry events for monitoring and analytics:
+
+<Canvas>
+  {() => {
+    const [events, setEvents] = useState([]);
+    return (
+      <div className="space-y-4">
+        <RetryButton
+          onRetry={() => Promise.reject(new Error('Failed'))}
+          maxAttempts={3}
+          cooldownMs={2000}
+          showAttemptCount
+          onAnalytics={(event) => {
+            console.log('Analytics event:', event);
+            setEvents((prev) => [...prev, event]);
+          }}
+        />
+        {events.length > 0 && (
+          <div className="rounded-md bg-muted p-4">
+            <h4 className="mb-2 text-sm font-semibold">Analytics Events:</h4>
+            <pre className="text-xs overflow-auto max-h-40">
+              {JSON.stringify(events, null, 2)}
+            </pre>
+          </div>
+        )}
+      </div>
+    );
+  }}
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  onAnalytics={(event) => {
+    // Track event type: retry-attempted, retry-success, retry-failure,
+    // max-attempts-reached, cooldown-started, cooldown-ended
+    analytics.track(event.type, {
+      attemptNumber: event.attemptNumber,
+      maxAttempts: event.maxAttempts,
+      timestamp: event.timestamp,
+    });
+  }}
+/>`}
+  language="tsx"
+/>
+
+---
+
+## Advanced Patterns
+
+### Controlled Mode
+
+Control attempt number externally for complex retry logic:
+
+<Canvas>
+  {() => {
+    const [attempt, setAttempt] = useState(1);
+    return (
+      <div className="space-y-2">
+        <RetryButton
+          onRetry={() => Promise.reject(new Error('Failed'))}
+          currentAttempt={attempt}
+          maxAttempts={5}
+          showAttemptCount
+          onAfterRetry={() => setAttempt((prev) => prev + 1)}
+        />
+        <button
+          className="ml-2 rounded-md bg-secondary px-3 py-1 text-sm"
+          onClick={() => setAttempt(1)}
+        >
+          Reset Attempts
+        </button>
+      </div>
+    );
+  }}
+</Canvas>
+
+<Source
+  code={`const [attempt, setAttempt] = useState(1);
+
+<RetryButton
+  onRetry={handleRetry}
+  currentAttempt={attempt}
+  maxAttempts={5}
+  onAfterRetry={() => setAttempt(prev => prev + 1)}
+/>
+
+<button onClick={() => setAttempt(1)}>
+  Reset Attempts
+</button>`}
+  language="tsx"
+/>
+
+### With Lifecycle Callbacks
+
+Hook into retry lifecycle for custom behavior:
+
+<Canvas>
+  {() => {
+    const [log, setLog] = useState([]);
+    const addLog = (message) => {
+      setLog((prev) => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    };
+    return (
+      <div className="space-y-4">
+        <RetryButton
+          onRetry={() => Promise.reject(new Error('Failed'))}
+          maxAttempts={3}
+          cooldownMs={2000}
+          showAttemptCount
+          onBeforeRetry={(attempt) => addLog(`Starting attempt ${attempt}`)}
+          onAfterRetry={(result) =>
+            addLog(`Attempt ${result.attemptNumber} ${result.success ? 'succeeded' : 'failed'}`)
+          }
+          onCooldownStart={(ms) => addLog(`Cooldown started (${ms}ms)`)}
+          onCooldownEnd={() => addLog('Cooldown ended')}
+          onMaxAttemptsReached={() => addLog('Max attempts reached!')}
+        />
+        {log.length > 0 && (
+          <div className="rounded-md bg-muted p-4">
+            <h4 className="mb-2 text-sm font-semibold">Event Log:</h4>
+            <div className="space-y-1 text-xs">
+              {log.map((entry, i) => (
+                <div key={i}>{entry}</div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }}
+</Canvas>
+
+<Source
+  code={`<RetryButton
+  onRetry={handleRetry}
+  onBeforeRetry={(attempt) => {
+    console.log(\`Starting attempt \${attempt}\`);
+  }}
+  onAfterRetry={(result) => {
+    console.log(\`Attempt \${result.attemptNumber} \${result.success ? 'succeeded' : 'failed'}\`);
+    if (!result.success) {
+      logError(result.error);
+    }
+  }}
+  onCooldownStart={(ms) => {
+    console.log(\`Cooldown: \${ms}ms\`);
+  }}
+  onMaxAttemptsReached={() => {
+    showErrorDialog('Maximum retry attempts reached');
+  }}
+/>`}
+  language="tsx"
+/>
+
+---
+
+## Real-World Example
+
+Complete example with error handling and user feedback:
+
+<Canvas>
+  {() => {
+    const [status, setStatus] = useState('ready');
+    const [attemptCount, setAttemptCount] = useState(0);
+
+    const simulateApiCall = async () => {
+      setStatus('calling');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Simulate random success/failure
+      const shouldSucceed = Math.random() > 0.7;
+
+      if (shouldSucceed) {
+        setStatus('success');
+        throw new Error('Simulated API success'); // Will resolve the retry
+      } else {
+        setStatus('error');
+        throw new Error('API request failed');
+      }
+    };
+
+    return (
+      <div className="space-y-4">
+        <div className="rounded-md border p-4">
+          <h4 className="mb-2 font-semibold">API Request Simulation</h4>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Status: <span className="font-mono">{status}</span>
+          </p>
+          <RetryButton
+            onRetry={simulateApiCall}
+            maxAttempts={5}
+            cooldownMs={2000}
+            retryStrategy={RetryStrategy.EXPONENTIAL}
+            exponentialBackoff
+            backoffMultiplier={2}
+            showAttemptCount
+            showCooldown
+            variant="default"
+            onAfterRetry={(result) => {
+              setAttemptCount(result.attemptNumber);
+              if (result.success) {
+                setStatus('success');
+              }
+            }}
+            onMaxAttemptsReached={() => {
+              setStatus('failed - max attempts');
+            }}
+          >
+            Call API
+          </RetryButton>
+        </div>
+      </div>
+    );
+  }}
+</Canvas>
+
+---
+
+## Accessibility
+
+RetryButton includes comprehensive accessibility features:
+
+- **Dynamic ARIA Labels**: Labels change based on state (idle, retrying, cooldown, max attempts)
+- **Loading States**: Properly communicated to screen readers
+- **Disabled States**: Clear indication when retry is not available
+- **Keyboard Support**: Full keyboard navigation and activation
+
+Example ARIA labels:
+- Idle: "Retry operation. Attempt 1 of 3"
+- Retrying: "Retrying... Attempt 1 of 3"
+- Cooldown: "Retry available in 5 seconds"
+- Max Attempts: "Retry failed: Maximum retry attempts (3) reached"
+
+---
+
+## Best Practices
+
+### Do's ✅
+
+- Use exponential backoff for API retries to respect rate limits
+- Show attempt count for operations with multiple attempts
+- Display cooldown countdown for long waits (>3 seconds)
+- Set reasonable max attempts (typically 3-5)
+- Track analytics events for monitoring
+- Use appropriate button variants (destructive for critical operations)
+
+### Don'ts ❌
+
+- Don't use immediate retry for external API calls (may cause rate limiting)
+- Don't set max attempts too high (frustrating user experience)
+- Don't hide cooldown for long waits (users need feedback)
+- Don't forget to handle max attempts reached (show alternative actions)
+- Don't use for operations that shouldn't be retried (successful submissions)
+
+---
+
+## Props Reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onRetry` | `() => void \| Promise<void>` | - | Callback to execute on retry (required) |
+| `maxAttempts` | `number` | `3` | Maximum number of retry attempts |
+| `currentAttempt` | `number` | - | Controlled attempt number |
+| `cooldownMs` | `number` | `1000` | Cooldown period in milliseconds |
+| `exponentialBackoff` | `boolean` | `false` | Use exponential backoff |
+| `backoffMultiplier` | `number` | `2` | Multiplier for exponential backoff |
+| `retryStrategy` | `RetryStrategy` | `CONSTANT` | Retry strategy to use |
+| `showAttemptCount` | `boolean` | `false` | Show attempt count in text |
+| `showCooldown` | `boolean` | `false` | Show cooldown countdown |
+| `showIcon` | `boolean` | `true` | Show retry icon |
+| `iconPosition` | `'left' \| 'right'` | `'left'` | Icon position |
+| `retryingText` | `string` | `'Retrying...'` | Text while retrying |
+| `maxAttemptsText` | `string` | `'Max Retries Reached'` | Text when max reached |
+| `onMaxAttemptsReached` | `() => void` | - | Called when max attempts reached |
+| `onBeforeRetry` | `(attempt: number) => void` | - | Called before retry |
+| `onAfterRetry` | `(result: RetryAttempt) => void` | - | Called after retry |
+| `onCooldownStart` | `(ms: number) => void` | - | Called when cooldown starts |
+| `onCooldownEnd` | `() => void` | - | Called when cooldown ends |
+| `onAnalytics` | `(event: RetryAnalyticsEvent) => void` | - | Analytics event callback |
+
+All Button props are also supported (variant, size, className, etc.).

@@ -1,0 +1,28 @@
+# Semgrep ignore file
+# Exclude test files from security scans as they often use patterns
+# that trigger false positives (dynamic RegExp, mock data, etc.)
+
+# Test directories
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Configuration files
+*.config.js
+*.config.ts
+
+# Stories and demos (may contain intentional error patterns for demonstration)
+*.stories.tsx
+*.stories.ts

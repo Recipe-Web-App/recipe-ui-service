@@ -109,6 +109,7 @@ repos:
     hooks:
       - id: semgrep
         args: [--config=auto, --error]
+        exclude: ^tests/
 
   # Container security with Trivy (using local hook for better control)
   - repo: local

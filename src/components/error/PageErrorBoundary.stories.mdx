@@ -1,0 +1,532 @@
+import { Meta, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import { useState } from 'react';
+import { PageErrorBoundary } from './PageErrorBoundary';
+import {
+  PageErrorType,
+  HttpStatusCode,
+  RecoveryActionType,
+} from '@/types/error/page-errors';
+
+<Meta
+  title="Error Handling/PageErrorBoundary"
+  component={PageErrorBoundary}
+  parameters={{
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+A specialized error boundary for handling full-page errors with HTTP status awareness, SEO optimization, and intelligent recovery strategies.
+
+## Features
+
+- **HTTP Status Detection**: Automatically detects and displays appropriate messages for common HTTP status codes (404, 403, 500, 503, etc.)
+- **SEO Optimization**: Generates proper meta tags and structured data for error pages
+- **Recovery Actions**: Provides context-aware actions (go home, retry, sign in, contact support)
+- **Analytics Integration**: Track page errors with custom analytics callbacks
+- **Auto-retry**: Configurable automatic retry for transient errors
+- **Responsive Design**: Mobile-friendly with dark mode support
+- **Accessibility**: Full ARIA support with proper error announcements
+
+## Error Types
+
+- **NOT_FOUND (404)**: Page or resource not found
+- **UNAUTHORIZED (401)**: Authentication required
+- **FORBIDDEN (403)**: Access denied
+- **SERVER_ERROR (500)**: Internal server error
+- **SERVICE_UNAVAILABLE (503)**: Service temporarily unavailable
+- **MAINTENANCE**: Scheduled maintenance mode
+- **TIMEOUT (408)**: Request timeout
+- **GONE (410)**: Resource permanently removed
+- **BAD_REQUEST (400)**: Invalid request
+- **UNKNOWN**: Unclassified errors
+
+## Usage Guidelines
+
+- Use for full-page error handling
+- Wrap entire pages or route components
+- Configure home URL and contact support options
+- Enable analytics tracking in production
+- Use auto-retry for transient errors only
+- Provide clear recovery actions
+        `,
+      },
+    },
+  }}
+  argTypes={{
+    homeUrl: {
+      control: 'text',
+      description: 'URL to navigate for "Go Home" action',
+    },
+    enableSeo: {
+      control: 'boolean',
+      description: 'Enable SEO meta tags for error pages',
+    },
+    enableAnalytics: {
+      control: 'boolean',
+      description: 'Enable analytics tracking',
+    },
+  }}
+/>
+
+# PageErrorBoundary
+
+A full-page error boundary with HTTP status awareness and intelligent recovery.
+
+<Primary />
+
+<Controls />
+
+## HTTP Status Errors
+
+<Canvas>
+  <Story name="HTTP Status Errors">
+    {() => {
+      const statusErrors = [
+        { status: 404, type: PageErrorType.NOT_FOUND, label: '404 - Not Found' },
+        { status: 401, type: PageErrorType.UNAUTHORIZED, label: '401 - Unauthorized' },
+        { status: 403, type: PageErrorType.FORBIDDEN, label: '403 - Forbidden' },
+        { status: 500, type: PageErrorType.SERVER_ERROR, label: '500 - Server Error' },
+        { status: 503, type: PageErrorType.SERVICE_UNAVAILABLE, label: '503 - Service Unavailable' },
+      ];
+
+      const [selectedError, setSelectedError] = useState(statusErrors[0]);
+
+      const ErrorThrower = ({ error }) => {
+        const err = new Error('Simulated error');
+        err.statusCode = error.status;
+        throw err;
+      };
+
+      return (
+        <div className="min-h-screen">
+          <div className="p-4 bg-gray-100 border-b border-gray-300">
+            <div className="max-w-4xl mx-auto">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Error Type:
+              </label>
+              <select
+                value={selectedError.status}
+                onChange={(e) => {
+                  const error = statusErrors.find(err => err.status === Number(e.target.value));
+                  setSelectedError(error);
+                }}
+                className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {statusErrors.map((error) => (
+                  <option key={error.status} value={error.status}>
+                    {error.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <PageErrorBoundary
+            key={selectedError.status}
+            config={{
+              homeUrl: '/',
+              contactEmail: 'support@example.com',
+              enableSeo: true,
+            }}
+          >
+            <ErrorThrower error={selectedError} />
+          </PageErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## 404 Not Found
+
+<Canvas>
+  <Story name="404 Not Found">
+    {() => {
+      const NotFoundComponent = () => {
+        const error = new Error('Page not found');
+        error.statusCode = 404;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            enableSeo: true,
+          }}
+        >
+          <NotFoundComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## 401 Unauthorized
+
+<Canvas>
+  <Story name="401 Unauthorized">
+    {() => {
+      const UnauthorizedComponent = () => {
+        const error = new Error('Authentication required');
+        error.statusCode = 401;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            loginUrl: '/login',
+            enableSeo: true,
+          }}
+        >
+          <UnauthorizedComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## 500 Server Error
+
+<Canvas>
+  <Story name="500 Server Error">
+    {() => {
+      const ServerErrorComponent = () => {
+        const error = new Error('Internal server error occurred');
+        error.statusCode = 500;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            contactEmail: 'support@example.com',
+            enableAutoRetry: true,
+            maxRetries: 3,
+            retryDelay: 2000,
+          }}
+        >
+          <ServerErrorComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## 503 Service Unavailable
+
+<Canvas>
+  <Story name="503 Service Unavailable">
+    {() => {
+      const ServiceUnavailableComponent = () => {
+        const error = new Error('Service temporarily unavailable');
+        error.statusCode = 503;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            statusPageUrl: 'https://status.example.com',
+            enableAutoRetry: true,
+            retryDelay: 5000,
+          }}
+        >
+          <ServiceUnavailableComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Maintenance Mode
+
+<Canvas>
+  <Story name="Maintenance Mode">
+    {() => {
+      const MaintenanceComponent = () => {
+        const error = new Error('System under maintenance');
+        error.type = PageErrorType.MAINTENANCE;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            statusPageUrl: 'https://status.example.com',
+            maintenanceMessage: 'We are performing scheduled maintenance. We will be back soon!',
+            estimatedRecoveryTime: new Date(Date.now() + 3600000), // 1 hour from now
+          }}
+        >
+          <MaintenanceComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Recovery Actions
+
+<Canvas>
+  <Story name="Custom Recovery Actions">
+    {() => {
+      const ErrorComponent = () => {
+        const error = new Error('Custom error with specific recovery actions');
+        error.statusCode = 500;
+        throw error;
+      };
+
+      const handleCustomAction = () => {
+        alert('Custom action triggered!');
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            customRecoveryActions: [
+              {
+                type: RecoveryActionType.CUSTOM,
+                label: 'Clear Cache',
+                handler: handleCustomAction,
+                variant: 'secondary',
+              },
+              {
+                type: RecoveryActionType.CUSTOM,
+                label: 'View Docs',
+                url: 'https://docs.example.com',
+                variant: 'ghost',
+              },
+            ],
+          }}
+        >
+          <ErrorComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Error Details (Development)
+
+<Canvas>
+  <Story name="With Error Details">
+    {() => {
+      const DetailedErrorComponent = () => {
+        const error = new Error('Detailed error with stack trace');
+        error.statusCode = 500;
+        error.stack = `Error: Detailed error with stack trace
+    at DetailedErrorComponent (PageErrorBoundary.stories.mdx:245)
+    at renderWithHooks (react-dom.js:123)
+    at mountIndeterminateComponent (react-dom.js:456)`;
+        throw error;
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            showDetails: true, // Enable in development
+            enableLogging: true,
+          }}
+        >
+          <DetailedErrorComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Auto-retry Functionality
+
+<Canvas>
+  <Story name="Auto-retry">
+    {() => {
+      const [attemptCount, setAttemptCount] = useState(0);
+
+      const RetryableComponent = () => {
+        const currentAttempt = attemptCount;
+
+        if (currentAttempt < 3) {
+          const error = new Error('Temporary server error');
+          error.statusCode = 503;
+          throw error;
+        }
+
+        return (
+          <div className="flex items-center justify-center min-h-screen bg-green-50">
+            <div className="text-center">
+              <div className="text-6xl mb-4">✓</div>
+              <h1 className="text-2xl font-bold text-green-800 mb-2">Success!</h1>
+              <p className="text-green-600">Page loaded after {currentAttempt} retries</p>
+              <button
+                onClick={() => setAttemptCount(0)}
+                className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              >
+                Reset Demo
+              </button>
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <PageErrorBoundary
+          config={{
+            homeUrl: '/',
+            enableAutoRetry: true,
+            maxRetries: 5,
+            retryDelay: 2000,
+          }}
+          onError={() => setAttemptCount(prev => prev + 1)}
+        >
+          <RetryableComponent />
+        </PageErrorBoundary>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Dark Mode Support
+
+<Canvas>
+  <Story name="Dark Mode">
+    {() => {
+      const [isDark, setIsDark] = useState(false);
+
+      const ErrorComponent = () => {
+        const error = new Error('Page not found');
+        error.statusCode = 404;
+        throw error;
+      };
+
+      return (
+        <div className={isDark ? 'dark' : ''}>
+          <div className="p-4 bg-gray-100 dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700">
+            <div className="max-w-4xl mx-auto">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <input
+                  type="checkbox"
+                  checked={isDark}
+                  onChange={(e) => setIsDark(e.target.checked)}
+                  className="rounded"
+                />
+                Dark Mode
+              </label>
+            </div>
+          </div>
+          <PageErrorBoundary
+            config={{
+              homeUrl: '/',
+              enableSeo: true,
+            }}
+          >
+            <ErrorComponent />
+          </PageErrorBoundary>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Best Practices
+
+### Do&apos;s
+- ✅ Use page error boundaries at the page/route level
+- ✅ Configure proper home URL and contact options
+- ✅ Enable SEO meta tags for better search engine handling
+- ✅ Use auto-retry sparingly for transient errors only
+- ✅ Provide clear recovery actions appropriate to error type
+- ✅ Track errors in analytics for monitoring
+- ✅ Test all error states before deployment
+
+### Don&apos;ts
+- ❌ Don&apos;t use page error boundaries for component-level errors
+- ❌ Don&apos;t show detailed error information in production
+- ❌ Don&apos;t enable auto-retry for all error types
+- ❌ Don&apos;t set retry limits too high (max 3-5)
+- ❌ Don&apos;t forget to configure recovery URLs (home, login, etc.)
+- ❌ Don&apos;t ignore error metadata in analytics
+
+### When to Use Each Error Type
+
+**NOT_FOUND (404)**: Missing pages, invalid URLs, deleted resources
+**UNAUTHORIZED (401)**: Protected routes, expired sessions, missing auth
+**FORBIDDEN (403)**: Insufficient permissions, blocked access
+**SERVER_ERROR (500)**: Unhandled exceptions, database errors, API failures
+**SERVICE_UNAVAILABLE (503)**: Temporary outages, overload, maintenance windows
+**MAINTENANCE**: Scheduled maintenance, system upgrades
+**TIMEOUT (408)**: Slow requests, network issues
+**BAD_REQUEST (400)**: Invalid inputs, malformed requests
+
+<Source
+  language="tsx"
+  code={`
+// Basic usage
+<PageErrorBoundary config={{ homeUrl: '/' }}>
+  <YourPageContent />
+</PageErrorBoundary>
+
+// With SEO and recovery options
+<PageErrorBoundary
+  config={{
+    homeUrl: '/',
+    loginUrl: '/login',
+    contactEmail: 'support@example.com',
+    enableSeo: true,
+    enableAnalytics: true,
+  }}
+>
+  <YourPageContent />
+</PageErrorBoundary>
+
+// With auto-retry for transient errors
+<PageErrorBoundary
+  config={{
+    homeUrl: '/',
+    enableAutoRetry: true,
+    maxRetries: 3,
+    retryDelay: 2000,
+  }}
+>
+  <YourPageContent />
+</PageErrorBoundary>
+
+// With custom recovery actions
+<PageErrorBoundary
+  config={{
+    homeUrl: '/',
+    customRecoveryActions: [
+      {
+        type: RecoveryActionType.CUSTOM,
+        label: 'Clear Cache',
+        handler: () => clearCache(),
+        variant: 'secondary',
+      },
+    ],
+  }}
+  onError={(error, metadata) => {
+    // Track in analytics
+    trackError(error, metadata);
+  }}
+>
+  <YourPageContent />
+</PageErrorBoundary>
+
+// Maintenance mode
+<PageErrorBoundary
+  config={{
+    homeUrl: '/',
+    statusPageUrl: 'https://status.example.com',
+    maintenanceMessage: 'Scheduled maintenance in progress',
+    estimatedRecoveryTime: new Date('2025-01-01T10:00:00Z'),
+  }}
+>
+  <YourPageContent />
+</PageErrorBoundary>
+`}
+/>
