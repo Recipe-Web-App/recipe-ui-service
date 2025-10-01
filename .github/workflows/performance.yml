@@ -354,7 +354,7 @@ jobs:
 
       - name: 💬 Comment bundle size on PR
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -494,7 +494,7 @@ jobs:
           echo "*Note: Actual regression detection requires baseline data from the main branch.*" >> regression-report.md
 
       - name: 💬 Comment regression analysis on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
