@@ -555,6 +555,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-component-error-boundary',
+    label: 'Component Error Boundary',
+    href: '/components-demo/component-error-boundary',
+    metadata: {
+      sortOrder: 223,
+    },
+  },
+  {
     id: 'components-fab',
     label: 'FAB',
     href: '/components-demo/fab',
