@@ -11,6 +11,7 @@ import { Sidebar } from './sidebar';
 import { Footer } from './footer';
 import { ContentPane } from '@/components/ui/content';
 import { Toaster } from '@/components/ui/toaster';
+import { BreadcrumbHeader } from './auto-breadcrumb';
 import type { LayoutVariant } from './layout-provider';
 import type { ContentPaneProps } from '@/types/ui/content';
 
@@ -71,6 +72,9 @@ const InternalLayout = React.forwardRef<HTMLDivElement, LayoutProps>(
           variant={variant === 'minimal' ? 'minimal' : 'default'}
           position="sticky"
         />
+
+        {/* Breadcrumbs - Shown below TopNav for default and focused variants */}
+        {variant !== 'minimal' && <BreadcrumbHeader />}
 
         {/* Main Content Area */}
         <div className="flex flex-1">

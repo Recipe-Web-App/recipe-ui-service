@@ -79,6 +79,12 @@ jest.mock('@/components/ui/toast', () => ({
   Toaster: () => <div data-testid="toaster">Toaster</div>,
 }));
 
+jest.mock('@/components/layout/auto-breadcrumb', () => ({
+  BreadcrumbHeader: () => (
+    <div data-testid="breadcrumb-header">BreadcrumbHeader</div>
+  ),
+}));
+
 describe('Layout', () => {
   const mockSubNavigation: NavItem[] = [
     { id: 'nav1', label: 'Nav 1', href: '/nav1' },
