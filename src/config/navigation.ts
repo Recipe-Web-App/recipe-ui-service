@@ -810,6 +810,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 500,
     },
   },
+  {
+    id: 'components-role-guard',
+    label: 'Role Guard',
+    href: '/components-demo/role-guard',
+    metadata: {
+      sortOrder: 510,
+    },
+  },
 ];
 
 /**
