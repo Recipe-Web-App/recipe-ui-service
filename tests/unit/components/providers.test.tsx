@@ -18,6 +18,15 @@ jest.mock('@tanstack/react-query-devtools', () => ({
   ),
 }));
 
+// Mock NavigationProvider
+jest.mock('@/contexts/navigation-error-boundary', () => ({
+  NavigationProviderWithErrorBoundary: ({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) => <div data-testid="navigation-provider">{children}</div>,
+}));
+
 describe('Providers', () => {
   const mockQueryClient = {
     mount: jest.fn(),
