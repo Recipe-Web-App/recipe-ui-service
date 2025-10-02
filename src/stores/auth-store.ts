@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { AuthorizedUser } from '@/types';
 import type { User as AuthUser, Token } from '@/types/auth';
 
-interface AuthState {
+export interface AuthState {
   user: AuthorizedUser | null;
   authUser: AuthUser | null;
   token: string | null;
@@ -39,10 +39,32 @@ export const useAuthStore = create<AuthState>()(
 
       setUser: (user: AuthorizedUser) => {
         set({ user, isAuthenticated: true });
+
+        // Sync user role to cookie for middleware access
+        // Use first role from roles array (primary role)
+        if (
+          typeof window !== 'undefined' &&
+          user.roles &&
+          user.roles.length > 0
+        ) {
+          const primaryRole = user.roles[0];
+          const maxAge = 60 * 60 * 24 * 7; // 7 days
+          document.cookie = `userRole=${primaryRole}; path=/; max-age=${maxAge}; SameSite=Strict`;
+        }
       },
 
       setAuthUser: (authUser: AuthUser) => {
         set({ authUser, isAuthenticated: true });
+
+        // Sync user role to cookie for middleware access if authUser has roles
+        if (typeof window !== 'undefined' && 'roles' in authUser) {
+          const roles = (authUser as { roles?: string[] }).roles;
+          if (roles && roles.length > 0) {
+            const primaryRole = roles[0];
+            const maxAge = 60 * 60 * 24 * 7; // 7 days
+            document.cookie = `userRole=${primaryRole}; path=/; max-age=${maxAge}; SameSite=Strict`;
+          }
+        }
       },
 
       setToken: (token: string) => {
@@ -50,6 +72,11 @@ export const useAuthStore = create<AuthState>()(
         set({ token, tokenExpiresAt: expiresAt });
         if (typeof window !== 'undefined') {
           localStorage.setItem('authToken', token);
+
+          // Also set cookie for middleware access
+          const maxAge = 60 * 60; // 1 hour in seconds
+          document.cookie = `authToken=${token}; path=/; max-age=${maxAge}; SameSite=Strict`;
+          document.cookie = `tokenExpiresAt=${expiresAt}; path=/; max-age=${maxAge}; SameSite=Strict`;
         }
       },
 
@@ -65,6 +92,16 @@ export const useAuthStore = create<AuthState>()(
           localStorage.setItem('authToken', tokenData.access_token);
           if (tokenData.refresh_token) {
             localStorage.setItem('refreshToken', tokenData.refresh_token);
+          }
+
+          // Also set cookies for middleware access
+          const maxAge = tokenData.expires_in; // in seconds
+          document.cookie = `authToken=${tokenData.access_token}; path=/; max-age=${maxAge}; SameSite=Strict`;
+          document.cookie = `tokenExpiresAt=${expiresAt}; path=/; max-age=${maxAge}; SameSite=Strict`;
+
+          if (tokenData.refresh_token) {
+            // Set refresh token cookie with longer expiration (if provided)
+            document.cookie = `refreshToken=${tokenData.refresh_token}; path=/; max-age=${maxAge * 2}; SameSite=Strict`;
           }
         }
       },
@@ -97,6 +134,12 @@ export const useAuthStore = create<AuthState>()(
         if (typeof window !== 'undefined') {
           localStorage.removeItem('authToken');
           localStorage.removeItem('refreshToken');
+
+          // Also clear cookies for middleware
+          document.cookie = 'authToken=; path=/; max-age=0';
+          document.cookie = 'tokenExpiresAt=; path=/; max-age=0';
+          document.cookie = 'refreshToken=; path=/; max-age=0';
+          document.cookie = 'userRole=; path=/; max-age=0';
         }
       },
 

@@ -25,6 +25,12 @@ export const APP_ROUTES = {
   REGISTER: '/register',
 } as const;
 
+export const ROUTE_PROTECTION = {
+  RETURN_URL_PARAM: 'returnUrl',
+  DEFAULT_LOGIN_URL: '/login',
+  DEFAULT_HOME_URL: '/',
+} as const;
+
 export const QUERY_KEYS = {
   RECIPES: ['recipes'],
   RECIPE_DETAIL: ['recipe'],
@@ -195,3 +201,6 @@ export const TOKEN_STORAGE_KEYS = {
   PKCE_VERIFIER: 'pkceVerifier',
   PKCE_STATE: 'pkceState',
 } as const;
+
+// Export route constants
+export * from './routes';
