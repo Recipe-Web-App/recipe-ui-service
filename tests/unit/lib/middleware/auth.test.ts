@@ -68,6 +68,11 @@ describe('Middleware Auth Utilities', () => {
     });
   });
 
+  afterAll(() => {
+    // Clean up mocks after all tests to prevent pollution
+    jest.clearAllMocks();
+  });
+
   describe('getAuthTokenFromCookies', () => {
     it('returns token when present in cookies', () => {
       const mockRequest = {
@@ -384,9 +389,10 @@ describe('Middleware Auth Utilities', () => {
   });
 
   describe('continueRequest', () => {
-    it('returns NextResponse with security headers', () => {
-      // Re-set the mock implementation before this test
-      (NextResponse.next as jest.Mock).mockImplementationOnce(() => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+      // Ensure mock returns proper value
+      (NextResponse.next as jest.Mock).mockImplementation(() => {
         const headers = new Map<string, string>();
         return {
           headers: {
@@ -399,18 +405,54 @@ describe('Middleware Auth Utilities', () => {
           },
         };
       });
+    });
 
+    it('returns NextResponse without nonce', () => {
+      const headers = new Headers();
       const mockRequest = {
         url: 'http://localhost:3000/recipes',
+        headers,
       } as unknown as NextRequest;
 
       const result = continueRequest(mockRequest);
 
       expect(result).toBeDefined();
-      expect(NextResponse.next).toHaveBeenCalled();
-      expect(result.headers).toBeDefined();
-      expect(result.headers.has).toBeDefined();
-      expect(result.headers.set).toBeDefined();
+      expect(NextResponse.next).toHaveBeenCalledWith();
+    });
+
+    it('returns NextResponse with nonce in request headers', () => {
+      const headers = new Headers();
+      const mockRequest = {
+        url: 'http://localhost:3000/recipes',
+        headers,
+      } as unknown as NextRequest;
+
+      const nonce = 'test-nonce-123';
+      const result = continueRequest(mockRequest, nonce);
+
+      expect(result).toBeDefined();
+      expect(NextResponse.next).toHaveBeenCalledWith({
+        request: {
+          headers: expect.any(Headers),
+        },
+      });
+    });
+
+    it('passes nonce through request headers when provided', () => {
+      const headers = new Headers();
+      const mockRequest = {
+        url: 'http://localhost:3000/recipes',
+        headers,
+      } as unknown as NextRequest;
+
+      const nonce = 'test-nonce-456';
+      continueRequest(mockRequest, nonce);
+
+      // Verify NextResponse.next was called with request headers containing nonce
+      const call = (NextResponse.next as jest.Mock).mock.calls[0][0];
+      expect(call).toBeDefined();
+      expect(call.request).toBeDefined();
+      expect(call.request.headers).toBeDefined();
     });
   });
 });

@@ -47,6 +47,11 @@ describe('Middleware Role Utilities', () => {
     jest.clearAllMocks();
   });
 
+  afterAll(() => {
+    // Clean up mocks after all tests to prevent pollution
+    jest.clearAllMocks();
+  });
+
   describe('getUserRoleFromCookies', () => {
     it('returns user role when present in cookies', () => {
       const mockRequest = {

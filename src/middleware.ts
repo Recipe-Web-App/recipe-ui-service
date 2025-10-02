@@ -11,7 +11,8 @@
  * - Auth route redirects (login/register redirect if authenticated)
  * - Protected route guards (require authentication)
  * - Return URL preservation
- * - Security headers
+ * - Security headers with CSP nonce generation
+ * - Role-based access control
  */
 
 import { NextRequest } from 'next/server';
@@ -32,17 +33,25 @@ import {
   checkAdminAccess,
   getUserRoleFromCookies,
 } from '@/lib/middleware/role';
+import {
+  generateNonce,
+  applySecurityHeaders,
+  CUSTOM_HEADERS,
+} from '@/lib/middleware/headers';
 
 /**
  * Main middleware function
  *
  * Checks authentication and redirects based on route type:
- * 1. Excluded routes (API, static) - skip middleware
- * 2. Public routes - allow access regardless of auth
- * 3. Auth routes (login, register) - redirect if already authenticated
- * 4. Protected routes - require authentication
- * 5. Admin routes - require authentication AND admin role
- * 6. Unknown routes - default to requiring authentication
+ * 1. Generate nonce for CSP
+ * 2. Excluded routes (API, static) - skip middleware
+ * 3. Public routes - allow access regardless of auth
+ * 4. Auth routes (login, register) - redirect if already authenticated
+ * 5. Protected routes - require authentication
+ * 6. Admin routes - require authentication AND admin role
+ * 7. Unknown routes - default to requiring authentication
+ *
+ * All responses include security headers with CSP nonce.
  *
  * @param request - Next.js request object
  * @returns NextResponse - redirect or continue
@@ -50,34 +59,46 @@ import {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Skip middleware for API routes, static files, etc.
+  // 1. Generate nonce for Content Security Policy
+  const nonce = generateNonce();
+
+  // Add nonce to request headers so it's accessible in the app
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(CUSTOM_HEADERS.NONCE, nonce);
+
+  // 2. Skip middleware for API routes, static files, etc.
   if (isExcludedRoute(pathname)) {
-    return continueRequest(request);
+    const response = continueRequest(request, nonce);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  // 2. Check authentication status
+  // 3. Check authentication status
   const isAuthenticated = isAuthenticatedMiddleware(request);
 
-  // 3. Public routes - accessible to everyone
+  // 4. Public routes - accessible to everyone
   if (isPublicRoute(pathname)) {
-    return continueRequest(request);
+    const response = continueRequest(request, nonce);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  // 4. Auth routes (login, register) - redirect if already authenticated
+  // 5. Auth routes (login, register) - redirect if already authenticated
   if (isAuthRoute(pathname)) {
     if (isAuthenticated) {
       // User is already logged in, redirect to home or returnUrl
-      return buildHomeRedirect(request);
+      const response = buildHomeRedirect(request);
+      return applySecurityHeaders(request, response, nonce);
     }
     // Allow access to auth pages for non-authenticated users
-    return continueRequest(request);
+    const response = continueRequest(request, nonce);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  // 5. Admin routes - require authentication AND admin role
+  // 6. Admin routes - require authentication AND admin role
   if (isAdminRoute(pathname)) {
     if (!isAuthenticated) {
       // User is not authenticated, redirect to login with returnUrl
-      return buildLoginRedirect(request);
+      const response = buildLoginRedirect(request);
+      return applySecurityHeaders(request, response, nonce);
     }
 
     // Check if user has admin role
@@ -86,30 +107,35 @@ export function middleware(request: NextRequest) {
 
     // If user doesn't have admin role, redirect to forbidden page
     if (adminCheckResult) {
-      return adminCheckResult; // Returns 403 redirect
+      return applySecurityHeaders(request, adminCheckResult, nonce);
     }
 
     // User is authenticated with admin role, allow access
-    return continueRequest(request);
+    const response = continueRequest(request, nonce);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  // 6. Protected routes - require authentication
+  // 7. Protected routes - require authentication
   if (isProtectedRoute(pathname)) {
     if (!isAuthenticated) {
       // User is not authenticated, redirect to login with returnUrl
-      return buildLoginRedirect(request);
+      const response = buildLoginRedirect(request);
+      return applySecurityHeaders(request, response, nonce);
     }
     // User is authenticated, allow access
-    return continueRequest(request);
+    const response = continueRequest(request, nonce);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  // 7. Unknown routes - default to requiring authentication for security
+  // 8. Unknown routes - default to requiring authentication for security
   // If you want unknown routes to be public, change this to continueRequest()
   if (!isAuthenticated) {
-    return buildLoginRedirect(request);
+    const response = buildLoginRedirect(request);
+    return applySecurityHeaders(request, response, nonce);
   }
 
-  return continueRequest(request);
+  const response = continueRequest(request, nonce);
+  return applySecurityHeaders(request, response, nonce);
 }
 
 /**

@@ -163,39 +163,30 @@ export function validateReturnUrl(url: string | null): string | null {
 }
 
 /**
- * Add security headers to response
- *
- * @param response - Next.js response object
- * @returns Response with security headers
- */
-export function addSecurityHeaders(response: NextResponse): NextResponse {
-  // Add security headers if not already present
-  if (!response.headers.has('X-Content-Type-Options')) {
-    response.headers.set('X-Content-Type-Options', 'nosniff');
-  }
-
-  if (!response.headers.has('X-Frame-Options')) {
-    response.headers.set('X-Frame-Options', 'DENY');
-  }
-
-  if (!response.headers.has('X-XSS-Protection')) {
-    response.headers.set('X-XSS-Protection', '1; mode=block');
-  }
-
-  if (!response.headers.has('Referrer-Policy')) {
-    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  }
-
-  return response;
-}
-
-/**
  * Create response that continues to next middleware/page
  *
- * @param _request - Next.js request object (unused, for consistency with other functions)
+ * Security headers are applied by the main middleware using applySecurityHeaders().
+ * This function now accepts an optional nonce parameter to pass through request headers.
+ *
+ * @param request - Next.js request object
+ * @param nonce - Optional nonce for CSP (passed through request headers)
  * @returns NextResponse that continues the chain
  */
-export function continueRequest(_request: NextRequest): NextResponse {
-  const response = NextResponse.next();
-  return addSecurityHeaders(response);
+export function continueRequest(
+  request: NextRequest,
+  nonce?: string
+): NextResponse {
+  // Pass through request with nonce in headers if provided
+  if (nonce) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('X-Nonce', nonce);
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
+  }
+
+  return NextResponse.next();
 }
