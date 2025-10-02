@@ -48,6 +48,13 @@ describe('Auth Store', () => {
     id: '123',
     email: 'test@example.com',
     name: 'Test User',
+    roles: ['ADMIN'],
+  };
+
+  const mockUserWithoutRoles: AuthorizedUser = {
+    id: '123',
+    email: 'test@example.com',
+    name: 'Test User',
   };
 
   const mockToken: Token = {
@@ -85,6 +92,68 @@ describe('Auth Store', () => {
       expect(result.current.user).toEqual(mockUser);
       expect(result.current.isAuthenticated).toBe(true);
     });
+
+    it('should sync role cookie when user has roles', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      // Mock document.cookie setter
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      act(() => {
+        result.current.setUser(mockUser);
+      });
+
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('userRole=ADMIN')
+      );
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('path=/')
+      );
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('SameSite=Strict')
+      );
+    });
+
+    it('should not set role cookie when user has no roles', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      act(() => {
+        result.current.setUser(mockUserWithoutRoles);
+      });
+
+      expect(cookieSetter).not.toHaveBeenCalledWith(
+        expect.stringContaining('userRole=')
+      );
+    });
+
+    it('should not set role cookie when user has empty roles array', () => {
+      const { result } = renderHook(() => useAuthStore());
+      const userWithEmptyRoles = { ...mockUser, roles: [] };
+
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      act(() => {
+        result.current.setUser(userWithEmptyRoles);
+      });
+
+      expect(cookieSetter).not.toHaveBeenCalledWith(
+        expect.stringContaining('userRole=')
+      );
+    });
   });
 
   describe('setAuthUser', () => {
@@ -97,6 +166,43 @@ describe('Auth Store', () => {
 
       expect(result.current.authUser).toEqual(mockAuthUser);
       expect(result.current.isAuthenticated).toBe(true);
+    });
+
+    it('should sync role cookie when authUser has roles', () => {
+      const { result } = renderHook(() => useAuthStore());
+      const authUserWithRoles = { ...mockAuthUser, roles: ['USER'] };
+
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      act(() => {
+        result.current.setAuthUser(authUserWithRoles);
+      });
+
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('userRole=USER')
+      );
+    });
+
+    it('should not set role cookie when authUser has no roles', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      act(() => {
+        result.current.setAuthUser(mockAuthUser);
+      });
+
+      expect(cookieSetter).not.toHaveBeenCalledWith(
+        expect.stringContaining('userRole=')
+      );
     });
   });
 
@@ -244,6 +350,36 @@ describe('Auth Store', () => {
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('authToken');
       expect(localStorageMock.removeItem).toHaveBeenCalledWith('refreshToken');
     });
+
+    it('should clear role cookie when clearing auth', () => {
+      const { result } = renderHook(() => useAuthStore());
+
+      const cookieSetter = jest.fn();
+      Object.defineProperty(document, 'cookie', {
+        set: cookieSetter,
+        configurable: true,
+      });
+
+      // First set some data
+      act(() => {
+        result.current.setUser(mockUser);
+      });
+
+      // Clear the mock to focus on clearAuth calls
+      cookieSetter.mockClear();
+
+      // Then clear it
+      act(() => {
+        result.current.clearAuth();
+      });
+
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('userRole=')
+      );
+      expect(cookieSetter).toHaveBeenCalledWith(
+        expect.stringContaining('max-age=0')
+      );
+    });
   });
 
   describe('isTokenExpired', () => {
@@ -255,7 +391,6 @@ describe('Auth Store', () => {
 
     it('should return true when token is expired', () => {
       const { result } = renderHook(() => useAuthStore());
-      const pastTime = Date.now() - 1000; // 1 second ago
 
       act(() => {
         result.current.setTokenData({

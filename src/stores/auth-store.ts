@@ -39,10 +39,32 @@ export const useAuthStore = create<AuthState>()(
 
       setUser: (user: AuthorizedUser) => {
         set({ user, isAuthenticated: true });
+
+        // Sync user role to cookie for middleware access
+        // Use first role from roles array (primary role)
+        if (
+          typeof window !== 'undefined' &&
+          user.roles &&
+          user.roles.length > 0
+        ) {
+          const primaryRole = user.roles[0];
+          const maxAge = 60 * 60 * 24 * 7; // 7 days
+          document.cookie = `userRole=${primaryRole}; path=/; max-age=${maxAge}; SameSite=Strict`;
+        }
       },
 
       setAuthUser: (authUser: AuthUser) => {
         set({ authUser, isAuthenticated: true });
+
+        // Sync user role to cookie for middleware access if authUser has roles
+        if (typeof window !== 'undefined' && 'roles' in authUser) {
+          const roles = (authUser as { roles?: string[] }).roles;
+          if (roles && roles.length > 0) {
+            const primaryRole = roles[0];
+            const maxAge = 60 * 60 * 24 * 7; // 7 days
+            document.cookie = `userRole=${primaryRole}; path=/; max-age=${maxAge}; SameSite=Strict`;
+          }
+        }
       },
 
       setToken: (token: string) => {
@@ -117,6 +139,7 @@ export const useAuthStore = create<AuthState>()(
           document.cookie = 'authToken=; path=/; max-age=0';
           document.cookie = 'tokenExpiresAt=; path=/; max-age=0';
           document.cookie = 'refreshToken=; path=/; max-age=0';
+          document.cookie = 'userRole=; path=/; max-age=0';
         }
       },
 

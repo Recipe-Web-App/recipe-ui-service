@@ -74,6 +74,11 @@ export const DEFAULT_AUTH_REDIRECT = '/';
 export const DEFAULT_LOGIN_URL = '/login';
 
 /**
+ * Default unauthorized URL for users without required permissions (403 Forbidden)
+ */
+export const DEFAULT_UNAUTHORIZED_URL = '/403';
+
+/**
  * Query parameter name for return URL
  */
 export const RETURN_URL_PARAM = 'returnUrl';
@@ -85,6 +90,7 @@ export const AUTH_COOKIE_NAMES = {
   TOKEN: 'authToken',
   EXPIRES_AT: 'tokenExpiresAt',
   REFRESH_TOKEN: 'refreshToken',
+  ROLE: 'userRole',
 } as const;
 
 /**

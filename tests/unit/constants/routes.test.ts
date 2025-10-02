@@ -4,6 +4,8 @@ import {
   PROTECTED_ROUTES,
   ADMIN_ROUTES,
   EXCLUDED_ROUTES,
+  DEFAULT_UNAUTHORIZED_URL,
+  AUTH_COOKIE_NAMES,
   matchesRoutePattern,
   isPublicRoute,
   isAuthRoute,
@@ -169,6 +171,35 @@ describe('Route Constants', () => {
       expect(isExcludedRoute('/recipes')).toBe(false);
       expect(isExcludedRoute('/login')).toBe(false);
       expect(isExcludedRoute('/')).toBe(false);
+    });
+  });
+
+  describe('DEFAULT_UNAUTHORIZED_URL', () => {
+    it('should be /403', () => {
+      expect(DEFAULT_UNAUTHORIZED_URL).toBe('/403');
+    });
+  });
+
+  describe('AUTH_COOKIE_NAMES', () => {
+    it('should define TOKEN cookie name', () => {
+      expect(AUTH_COOKIE_NAMES.TOKEN).toBe('authToken');
+    });
+
+    it('should define EXPIRES_AT cookie name', () => {
+      expect(AUTH_COOKIE_NAMES.EXPIRES_AT).toBe('tokenExpiresAt');
+    });
+
+    it('should define REFRESH_TOKEN cookie name', () => {
+      expect(AUTH_COOKIE_NAMES.REFRESH_TOKEN).toBe('refreshToken');
+    });
+
+    it('should define ROLE cookie name', () => {
+      expect(AUTH_COOKIE_NAMES.ROLE).toBe('userRole');
+    });
+
+    it('should be read-only', () => {
+      expect(Object.isFrozen(AUTH_COOKIE_NAMES)).toBe(false);
+      // Note: const objects are not frozen in JS, but TypeScript enforces readonly
     });
   });
 

@@ -19,6 +19,7 @@ import {
   isPublicRoute,
   isAuthRoute,
   isProtectedRoute,
+  isAdminRoute,
   isExcludedRoute,
 } from '@/constants/routes';
 import {
@@ -27,6 +28,10 @@ import {
   buildHomeRedirect,
   continueRequest,
 } from '@/lib/middleware/auth';
+import {
+  checkAdminAccess,
+  getUserRoleFromCookies,
+} from '@/lib/middleware/role';
 
 /**
  * Main middleware function
@@ -36,7 +41,8 @@ import {
  * 2. Public routes - allow access regardless of auth
  * 3. Auth routes (login, register) - redirect if already authenticated
  * 4. Protected routes - require authentication
- * 5. Unknown routes - default to requiring authentication
+ * 5. Admin routes - require authentication AND admin role
+ * 6. Unknown routes - default to requiring authentication
  *
  * @param request - Next.js request object
  * @returns NextResponse - redirect or continue
@@ -67,7 +73,27 @@ export function middleware(request: NextRequest) {
     return continueRequest(request);
   }
 
-  // 5. Protected routes - require authentication
+  // 5. Admin routes - require authentication AND admin role
+  if (isAdminRoute(pathname)) {
+    if (!isAuthenticated) {
+      // User is not authenticated, redirect to login with returnUrl
+      return buildLoginRedirect(request);
+    }
+
+    // Check if user has admin role
+    const userRole = getUserRoleFromCookies(request);
+    const adminCheckResult = checkAdminAccess(request, userRole);
+
+    // If user doesn't have admin role, redirect to forbidden page
+    if (adminCheckResult) {
+      return adminCheckResult; // Returns 403 redirect
+    }
+
+    // User is authenticated with admin role, allow access
+    return continueRequest(request);
+  }
+
+  // 6. Protected routes - require authentication
   if (isProtectedRoute(pathname)) {
     if (!isAuthenticated) {
       // User is not authenticated, redirect to login with returnUrl
@@ -77,7 +103,7 @@ export function middleware(request: NextRequest) {
     return continueRequest(request);
   }
 
-  // 6. Unknown routes - default to requiring authentication for security
+  // 7. Unknown routes - default to requiring authentication for security
   // If you want unknown routes to be public, change this to continueRequest()
   if (!isAuthenticated) {
     return buildLoginRedirect(request);
