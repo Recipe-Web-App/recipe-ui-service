@@ -46,7 +46,7 @@ describe('Media Management API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/media-management/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://localhost:3000/api/v1/media-management',
+          baseURL: 'http://media-management.local/api/v1/media-management',
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',

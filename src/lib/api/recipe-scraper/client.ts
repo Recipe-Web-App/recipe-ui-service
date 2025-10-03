@@ -4,9 +4,12 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import type { ErrorResponse } from '@/types/recipe-scraper';
+import { getServiceUrl } from '@/config/services';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL ?? 'http://localhost:8000';
+const baseURL = getServiceUrl(
+  'RECIPE_SCRAPER',
+  'NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL'
+);
 
 export const recipeScraperClient = axios.create({
   baseURL,

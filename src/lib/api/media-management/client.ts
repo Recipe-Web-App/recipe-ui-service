@@ -4,10 +4,12 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { ErrorResponse } from '@/types/media-management';
+import { getServiceUrl } from '@/config/services';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_MEDIA_MANAGEMENT_API_URL ??
-  'http://localhost:3000/api/v1/media-management';
+const baseURL = getServiceUrl(
+  'MEDIA_MANAGEMENT',
+  'NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL'
+);
 
 export const mediaManagementClient = axios.create({
   baseURL,

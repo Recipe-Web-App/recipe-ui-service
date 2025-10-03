@@ -46,7 +46,7 @@ describe('Recipe Management API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/recipe-management/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://localhost:8080/api/v1/recipe-management',
+          baseURL: 'http://recipe-management.local/api/v1/recipe-management',
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',

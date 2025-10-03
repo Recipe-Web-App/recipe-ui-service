@@ -3,10 +3,12 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { getServiceUrl } from '@/config/services';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL ??
-  'http://localhost:8000/api/v1/user-management';
+const baseURL = getServiceUrl(
+  'USER_MANAGEMENT',
+  'NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL'
+);
 
 export const userManagementClient = axios.create({
   baseURL,
