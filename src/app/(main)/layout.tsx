@@ -29,7 +29,7 @@ export default function MainLayout({
   return (
     <ProtectedRoute
       config={{
-        loginUrl: '/auth/login',
+        loginUrl: '/login',
         showLoadingState: false,
       }}
     >

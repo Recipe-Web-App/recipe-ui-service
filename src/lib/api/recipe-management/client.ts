@@ -5,10 +5,7 @@ import axios, {
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl(
-  'RECIPE_MANAGEMENT',
-  'NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL'
-);
+const baseURL = getServiceUrl('RECIPE_MANAGEMENT');
 
 export const recipeManagementClient = axios.create({
   baseURL,
