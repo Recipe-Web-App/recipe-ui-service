@@ -3,10 +3,12 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { getServiceUrl } from '@/config/services';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL ??
-  'http://localhost:3000/api/v1/meal-plan-management';
+const baseURL = getServiceUrl(
+  'MEAL_PLAN_MANAGEMENT',
+  'NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL'
+);
 
 export const mealPlanManagementClient = axios.create({
   baseURL,

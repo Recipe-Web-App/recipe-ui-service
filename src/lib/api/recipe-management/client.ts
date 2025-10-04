@@ -3,10 +3,12 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { getServiceUrl } from '@/config/services';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL ??
-  'http://localhost:8080/api/v1/recipe-management';
+const baseURL = getServiceUrl(
+  'RECIPE_MANAGEMENT',
+  'NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL'
+);
 
 export const recipeManagementClient = axios.create({
   baseURL,

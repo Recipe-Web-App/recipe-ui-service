@@ -85,15 +85,15 @@ export function buildCSPHeader(
     // Note: In production, this should list specific microservice domains
     'connect-src': [
       "'self'",
-      // Allow localhost in development
+      // Allow .local domains for local development with ingress
       ...(isDevelopment
         ? [
-            'http://localhost:8081', // Auth Service
-            'http://localhost:8082', // Recipe Management
-            'http://localhost:8083', // Recipe Scraper
-            'http://localhost:8084', // Media Management
-            'http://localhost:8085', // User Management
-            'http://localhost:8086', // Meal Plan Management
+            'http://auth-service.local',
+            'http://recipe-management.local',
+            'http://recipe-scraper.local',
+            'http://media-management.local',
+            'http://user-management.local',
+            'http://meal-plan-management.local',
             'ws://localhost:*', // WebSocket connections in dev
           ]
         : []),

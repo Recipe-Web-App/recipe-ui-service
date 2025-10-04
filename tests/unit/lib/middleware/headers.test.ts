@@ -144,22 +144,23 @@ describe('Security Headers Utilities', () => {
       expect(csp).not.toContain('report-uri');
     });
 
-    it('includes localhost URLs in development connect-src', () => {
+    it('includes .local domain URLs in development connect-src', () => {
       const devCsp = buildCSPHeader(testNonce, true);
 
-      expect(devCsp).toContain('http://localhost:8081');
-      expect(devCsp).toContain('http://localhost:8082');
-      expect(devCsp).toContain('http://localhost:8083');
-      expect(devCsp).toContain('http://localhost:8084');
-      expect(devCsp).toContain('http://localhost:8085');
-      expect(devCsp).toContain('http://localhost:8086');
+      expect(devCsp).toContain('http://auth-service.local');
+      expect(devCsp).toContain('http://recipe-management.local');
+      expect(devCsp).toContain('http://recipe-scraper.local');
+      expect(devCsp).toContain('http://media-management.local');
+      expect(devCsp).toContain('http://user-management.local');
+      expect(devCsp).toContain('http://meal-plan-management.local');
       expect(devCsp).toContain('ws://localhost:*');
     });
 
-    it('does not include localhost URLs in production', () => {
+    it('does not include .local domain URLs in production', () => {
       const prodCsp = buildCSPHeader(testNonce, false);
 
-      expect(prodCsp).not.toContain('http://localhost');
+      expect(prodCsp).not.toContain('http://auth-service.local');
+      expect(prodCsp).not.toContain('http://recipe-management.local');
       expect(prodCsp).not.toContain('ws://localhost');
     });
 
