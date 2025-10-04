@@ -11,6 +11,7 @@ export interface AuthState {
   tokenExpiresAt: number | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  hasHydrated: boolean;
   pkceVerifier: string | null;
   pkceState: string | null;
   setUser: (user: AuthorizedUser) => void;
@@ -34,6 +35,7 @@ export const useAuthStore = create<AuthState>()(
       tokenExpiresAt: null,
       isAuthenticated: false,
       isLoading: false,
+      hasHydrated: false,
       pkceVerifier: null,
       pkceState: null,
 
@@ -162,6 +164,12 @@ export const useAuthStore = create<AuthState>()(
         tokenExpiresAt: state.tokenExpiresAt,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => state => {
+        // Set hasHydrated to true once rehydration is complete
+        if (state) {
+          state.hasHydrated = true;
+        }
+      },
     }
   )
 );

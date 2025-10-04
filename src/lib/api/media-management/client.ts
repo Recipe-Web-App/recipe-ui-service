@@ -6,10 +6,7 @@ import axios, {
 import { ErrorResponse } from '@/types/media-management';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl(
-  'MEDIA_MANAGEMENT',
-  'NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL'
-);
+const baseURL = getServiceUrl('MEDIA_MANAGEMENT');
 
 export const mediaManagementClient = axios.create({
   baseURL,

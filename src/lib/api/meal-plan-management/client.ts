@@ -5,10 +5,7 @@ import axios, {
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl(
-  'MEAL_PLAN_MANAGEMENT',
-  'NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL'
-);
+const baseURL = getServiceUrl('MEAL_PLAN_MANAGEMENT');
 
 export const mealPlanManagementClient = axios.create({
   baseURL,

@@ -6,10 +6,7 @@ import axios, {
 import type { ErrorResponse } from '@/types/recipe-scraper';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl(
-  'RECIPE_SCRAPER',
-  'NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL'
-);
+const baseURL = getServiceUrl('RECIPE_SCRAPER');
 
 export const recipeScraperClient = axios.create({
   baseURL,

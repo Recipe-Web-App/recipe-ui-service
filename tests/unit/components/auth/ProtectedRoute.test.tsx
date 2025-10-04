@@ -41,6 +41,7 @@ describe('ProtectedRoute', () => {
     tokenExpiresAt: null,
     isAuthenticated: false,
     isLoading: false,
+    hasHydrated: true,
     pkceVerifier: null,
     pkceState: null,
     setUser: jest.fn(),

@@ -84,6 +84,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   } = finalConfig;
 
   useEffect(() => {
+    // Wait for Zustand store to hydrate before checking auth
+    if (!authState.hasHydrated) {
+      return;
+    }
+
     // Perform authentication check
     const checkAuth = () => {
       const authResult = isAuthenticated(authState);
@@ -118,6 +123,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     checkAuth();
   }, [
     authState,
+    authState.hasHydrated,
     loginUrl,
     pathname,
     returnUrlParam,

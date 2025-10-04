@@ -5,7 +5,7 @@ import axios, {
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl('AUTH', 'NEXT_PUBLIC_AUTH_SERVICE_URL');
+const baseURL = getServiceUrl('AUTH');
 
 export const authClient = axios.create({
   baseURL,

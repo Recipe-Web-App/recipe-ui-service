@@ -5,10 +5,7 @@ import axios, {
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
 
-const baseURL = getServiceUrl(
-  'USER_MANAGEMENT',
-  'NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL'
-);
+const baseURL = getServiceUrl('USER_MANAGEMENT');
 
 export const userManagementClient = axios.create({
   baseURL,
