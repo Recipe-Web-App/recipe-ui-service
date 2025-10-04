@@ -27,6 +27,9 @@ import { Divider } from '@/components/ui/divider';
 import { useAuthStore } from '@/stores/auth-store';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
+// Auth hooks
+import { useLogout } from '@/hooks/auth/useAuth';
+
 export interface UserMenuProps {
   className?: string;
   compact?: boolean;
@@ -49,10 +52,10 @@ export interface UserMenuProps {
 export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
   ({ className, compact = false, showLabel = false, align = 'end' }, ref) => {
     const router = useRouter();
-    const { isAuthenticated, user, authUser, clearAuth, setLoading } =
-      useAuthStore();
+    const { isAuthenticated, user, authUser, setLoading } = useAuthStore();
     const { breakpoint } = useLayoutStore();
     const [isOpen, setIsOpen] = React.useState(false);
+    const logoutMutation = useLogout();
 
     const isMobile = breakpoint === 'mobile';
 
@@ -64,8 +67,7 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
     const handleLogout = React.useCallback(async () => {
       try {
         setLoading(true);
-        // Perform any cleanup or API calls here
-        clearAuth();
+        await logoutMutation.mutateAsync();
         router.push('/');
       } catch (error) {
         console.error('Logout error:', error);
@@ -73,7 +75,7 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
         setLoading(false);
         setIsOpen(false);
       }
-    }, [clearAuth, router, setLoading]);
+    }, [logoutMutation, router, setLoading]);
 
     // Handle sign in
     const handleSignIn = React.useCallback(() => {

@@ -1,28 +1,28 @@
 import { Card } from '@/components/ui/card';
-import { LoginForm } from '@/components/forms/LoginForm';
+import { RegisterForm } from '@/components/forms/RegisterForm';
 import { ChefHat } from 'lucide-react';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <Card className="p-8">
       <div className="mb-8 text-center">
         <div className="mb-4 flex items-center justify-center">
           <ChefHat className="text-primary h-10 w-10" />
         </div>
-        <h1 className="text-2xl font-bold">Welcome Back</h1>
+        <h1 className="text-2xl font-bold">Create Your Account</h1>
         <p className="text-muted-foreground">
-          Sign in to your Recipe App account
+          Join Recipe App to save and share your favorite recipes
         </p>
       </div>
 
-      <LoginForm />
+      <RegisterForm />
 
       <div className="mt-6 text-center">
         <p className="text-muted-foreground text-sm">
-          Don&apos;t have an account?{' '}
-          <Link href="/register" className="text-primary hover:underline">
-            Sign up
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary hover:underline">
+            Sign in
           </Link>
         </p>
       </div>
