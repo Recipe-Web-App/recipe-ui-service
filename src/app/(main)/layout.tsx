@@ -27,8 +27,15 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Layout variant="default" showSidebar showFooter>
-      <ProtectedRoute>{children}</ProtectedRoute>
-    </Layout>
+    <ProtectedRoute
+      config={{
+        loginUrl: '/auth/login',
+        showLoadingState: false,
+      }}
+    >
+      <Layout variant="default" showSidebar showFooter>
+        {children}
+      </Layout>
+    </ProtectedRoute>
   );
 }
