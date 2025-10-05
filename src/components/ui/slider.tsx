@@ -316,12 +316,11 @@ const Slider = React.forwardRef<
                         orientation,
                         size,
                         position: tickPosition,
-                      })
+                      }),
+                      orientation === 'horizontal'
+                        ? `[left:${percentage}%]`
+                        : `[bottom:${percentage}%]`
                     )}
-                    style={{
-                      [orientation === 'horizontal' ? 'left' : 'bottom']:
-                        `${percentage}%`,
-                    }}
                   />
                 );
               })}
@@ -341,12 +340,11 @@ const Slider = React.forwardRef<
                       sliderStepLabelVariants({
                         orientation,
                         position: tickPosition === 'above' ? 'above' : 'below',
-                      })
+                      }),
+                      orientation === 'horizontal'
+                        ? `[left:${percentage}%]`
+                        : `[bottom:${percentage}%]`
                     )}
-                    style={{
-                      [orientation === 'horizontal' ? 'left' : 'bottom']:
-                        `${percentage}%`,
-                    }}
                   >
                     {label}
                   </div>

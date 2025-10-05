@@ -424,8 +424,7 @@ export default function AccordionDemo() {
                   </div>
                   <div className="mt-2 h-2 w-full rounded-full bg-green-200">
                     <div
-                      className="h-2 rounded-full bg-green-600 transition-all duration-300"
-                      style={{ width: `${completionPercentage}%` }}
+                      className={`h-2 rounded-full bg-green-600 transition-all duration-300 [width:${completionPercentage}%]`}
                     />
                   </div>
                 </div>

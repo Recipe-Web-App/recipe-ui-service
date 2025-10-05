@@ -45,7 +45,14 @@ export const progressVariants = cva(
  * Provides styling for the actual progress bar with different states and colors.
  */
 export const progressBarVariants = cva(
-  ['h-full', 'rounded-full', 'transition-all', 'duration-500', 'ease-out'],
+  [
+    'h-full',
+    'rounded-full',
+    'transition-all',
+    'duration-500',
+    'ease-out',
+    '[width:var(--progress-width,0%)]',
+  ],
   {
     variants: {
       variant: {

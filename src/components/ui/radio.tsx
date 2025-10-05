@@ -397,9 +397,9 @@ const RecipeRadioGroup = React.forwardRef<
           ref={ref}
           className={cn(
             recipeRadioGroupVariants({ variant, layout }),
+            maxWidth && `[max-width:${maxWidth}]`,
             className
           )}
-          style={{ maxWidth }}
           {...props}
         >
           {title && (
@@ -522,11 +522,9 @@ const AnimatedRadio = React.forwardRef<HTMLDivElement, AnimatedRadioProps>(
         className={cn(
           animatedRadioVariants({ animation, loading }),
           animation === 'scale' && 'transition-transform hover:scale-105',
+          `[transition-duration:${animationDuration}ms]`,
           className
         )}
-        style={{
-          transitionDuration: `${animationDuration}ms`,
-        }}
         {...props}
       />
     );

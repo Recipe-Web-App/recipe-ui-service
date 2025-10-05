@@ -145,7 +145,12 @@ export const disclosureTriggerVariants = cva(
  * Provides styling for disclosure content areas with proper spacing and animations.
  */
 export const disclosureContentVariants = cva(
-  ['overflow-hidden', 'transition-all', 'duration-300', 'ease-in-out'],
+  [
+    'overflow-hidden',
+    'transition-all',
+    '[transition-duration:var(--disclosure-duration,300ms)]',
+    'ease-in-out',
+  ],
   {
     variants: {
       variant: {

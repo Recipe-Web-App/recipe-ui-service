@@ -162,9 +162,11 @@ const RatingItem = React.memo(
                     fill="currentColor"
                     className={cn(
                       overlayIconProps.className,
-                      'absolute inset-0'
+                      'absolute inset-0',
+                      clipPath === 'inset(0 50% 0 0)'
+                        ? '[clip-path:inset(0_50%_0_0)]'
+                        : '[clip-path:inset(0_0_0_0)]'
                     )}
-                    style={{ clipPath }}
                   />
                 </div>
               );
@@ -204,9 +206,11 @@ const RatingItem = React.memo(
                     fill="currentColor"
                     className={cn(
                       overlayIconProps.className,
-                      'absolute inset-0'
+                      'absolute inset-0',
+                      clipPath === 'inset(0 50% 0 0)'
+                        ? '[clip-path:inset(0_50%_0_0)]'
+                        : '[clip-path:inset(0_0_0_0)]'
                     )}
-                    style={{ clipPath }}
                   />
                 </div>
               );

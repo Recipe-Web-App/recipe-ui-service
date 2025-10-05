@@ -70,7 +70,9 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
                 state: barState,
               })
             )}
-            style={{ width: `${percentage}%` }}
+            style={
+              { '--progress-width': `${percentage}%` } as React.CSSProperties
+            }
             role="progressbar"
             aria-valuenow={value}
             aria-valuemin={0}

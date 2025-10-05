@@ -463,9 +463,9 @@ const FilterCheckboxGroup = React.forwardRef<
           ref={ref}
           className={cn(
             filterCheckboxGroupVariants({ variant, layout }),
+            maxHeight && `[max-height:${maxHeight}]`,
             className
           )}
-          style={{ maxHeight }}
           {...props}
         >
           {title && (
@@ -603,11 +603,9 @@ const AnimatedCheckbox = React.forwardRef<
         ref={ref}
         className={cn(
           animatedCheckboxVariants({ animation, loading }),
-          animation === 'scale' && 'transition-transform hover:scale-105'
+          animation === 'scale' && 'transition-transform hover:scale-105',
+          `[transition-duration:${animationDuration}ms]`
         )}
-        style={{
-          transitionDuration: `${animationDuration}ms`,
-        }}
         loading={loading}
         {...props}
       />

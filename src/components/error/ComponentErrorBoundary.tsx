@@ -587,9 +587,10 @@ const ComponentErrorSkeleton: React.FC<ComponentErrorSkeletonProps> = ({
     <div
       className={cn(
         componentErrorSkeletonVariants({ variant, animation }),
+        height && `[height:${height}]`,
+        width && `[width:${width}]`,
         className
       )}
-      style={{ height, width }}
       aria-label="Loading..."
     />
   );

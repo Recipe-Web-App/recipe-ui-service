@@ -181,7 +181,7 @@ function RecipeTableComponent(
               key={String(column.key)}
               align={column.align}
               sortable={column.sortable}
-              style={column.width ? { width: column.width } : undefined}
+              className={column.width ? `[width:${column.width}]` : undefined}
             >
               {column.header}
             </TableHead>

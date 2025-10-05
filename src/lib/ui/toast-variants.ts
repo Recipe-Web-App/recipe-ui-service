@@ -358,6 +358,7 @@ export const toastProgressVariants = cva(
     'transition-all',
     'duration-100',
     'ease-linear',
+    '[width:var(--toast-progress,0%)]',
   ],
   {
     variants: {

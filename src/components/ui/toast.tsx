@@ -395,7 +395,9 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         {showProgress && autoDismiss && (
           <div
             className={cn(toastProgressVariants({ variant }))}
-            style={{ width: `${progress}%` }}
+            style={
+              { '--toast-progress': `${progress}%` } as React.CSSProperties
+            }
             aria-hidden="true"
           />
         )}

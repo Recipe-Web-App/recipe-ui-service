@@ -309,12 +309,10 @@ export const StickyBreadcrumb: React.FC<
       className={cn(
         'sticky border-b',
         'bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur',
+        `[top:${topOffset}px]`,
+        `[z-index:${zIndex}]`,
         className
       )}
-      style={{
-        top: `${topOffset}px`,
-        zIndex,
-      }}
     >
       <AutoBreadcrumb {...props} className="container py-2" />
     </div>

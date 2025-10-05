@@ -125,8 +125,8 @@ const Spinner = React.forwardRef<
           {[0, 1, 2].map(i => (
             <div
               key={i}
-              className="h-2 w-2 animate-bounce rounded-full bg-current"
-              style={{ animationDelay: `${i * 0.1}s` }}
+              className="h-2 w-2 animate-bounce rounded-full bg-current [animation-delay:var(--dot-delay)]"
+              style={{ '--dot-delay': `${i * 0.1}s` } as React.CSSProperties}
             />
           ))}
         </div>
@@ -136,11 +136,13 @@ const Spinner = React.forwardRef<
           {[0, 1, 2, 3, 4].map(i => (
             <div
               key={i}
-              className="h-4 w-1 animate-pulse bg-current"
-              style={{
-                animationDelay: `${i * 0.1}s`,
-                height: `${Math.sin((i / 4) * Math.PI) * 12 + 8}px`,
-              }}
+              className="[height:var(--wave-height)] w-1 animate-pulse bg-current [animation-delay:var(--wave-delay)]"
+              style={
+                {
+                  '--wave-delay': `${i * 0.1}s`,
+                  '--wave-height': `${Math.sin((i / 4) * Math.PI) * 12 + 8}px`,
+                } as React.CSSProperties
+              }
             />
           ))}
         </div>

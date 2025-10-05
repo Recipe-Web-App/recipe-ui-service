@@ -86,11 +86,12 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
             <div
               key={index}
               ref={index === 0 ? ref : undefined}
-              className={cn(baseStyles, className)}
-              style={{
-                ...customStyle,
-                ...(index === count - 1 && { width: '80%' }), // Last line shorter
-              }}
+              className={cn(
+                baseStyles,
+                index === count - 1 && '[width:80%]',
+                className
+              )}
+              style={customStyle}
               aria-hidden="true"
               {...props}
             />
@@ -219,7 +220,7 @@ const SkeletonText = React.forwardRef<HTMLDivElement, SkeletonTextProps>(
             key={index}
             variant="text"
             animation={animation}
-            style={{ width: getWidth(index) }}
+            className={`[width:${getWidth(index)}]`}
           />
         ))}
       </div>
