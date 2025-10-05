@@ -12,7 +12,6 @@ import { checkSync } from 'recheck';
  * These routes can be accessed by anyone, authenticated or not
  */
 export const PUBLIC_ROUTES = [
-  '/',
   '/about',
   '/components-demo',
   '/components-demo/(.*)',
