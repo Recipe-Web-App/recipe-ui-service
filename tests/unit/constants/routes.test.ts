@@ -17,7 +17,6 @@ import {
 describe('Route Constants', () => {
   describe('Route Arrays', () => {
     it('defines public routes', () => {
-      expect(PUBLIC_ROUTES).toContain('/');
       expect(PUBLIC_ROUTES).toContain('/about');
       expect(PUBLIC_ROUTES).toContain('/components-demo');
     });
@@ -86,9 +85,12 @@ describe('Route Constants', () => {
 
   describe('isPublicRoute', () => {
     it('returns true for public routes', () => {
-      expect(isPublicRoute('/')).toBe(true);
       expect(isPublicRoute('/about')).toBe(true);
       expect(isPublicRoute('/components-demo')).toBe(true);
+    });
+
+    it('returns false for root path (now protected)', () => {
+      expect(isPublicRoute('/')).toBe(false);
     });
 
     it('returns true for wildcard public routes', () => {

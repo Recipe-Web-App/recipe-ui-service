@@ -423,11 +423,7 @@ export default function IconDemoPage() {
                   className="flex-shrink-0 transition-transform group-hover:scale-110"
                 />
                 <span
-                  className="text-muted-foreground group-hover:text-foreground w-full text-center leading-tight break-words hyphens-auto"
-                  style={{
-                    fontSize: getIconNameFontSize(iconName.length),
-                    lineHeight: getIconNameLineHeight(iconName.length),
-                  }}
+                  className={`text-muted-foreground group-hover:text-foreground w-full text-center leading-tight break-words hyphens-auto [font-size:${getIconNameFontSize(iconName.length)}] [line-height:${getIconNameLineHeight(iconName.length)}]`}
                 >
                   {iconName}
                 </span>

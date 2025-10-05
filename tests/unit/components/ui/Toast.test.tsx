@@ -404,7 +404,7 @@ describe('Toast', () => {
 
       const toast = screen.getByRole('status');
       const progressBar = toast.querySelector(
-        'div[aria-hidden="true"][style*="width"]'
+        'div[aria-hidden="true"][style*="--toast-progress"]'
       );
       expect(progressBar).toBeInTheDocument();
     });
@@ -447,10 +447,10 @@ describe('Toast', () => {
 
       const toast = screen.getByRole('status');
       const progressBar = toast.querySelector(
-        'div[aria-hidden="true"][style*="width"]'
+        'div[aria-hidden="true"][style*="--toast-progress"]'
       ) as HTMLElement;
 
-      expect(progressBar).toHaveStyle('width: 100%');
+      expect(progressBar).toHaveStyle('--toast-progress: 100%');
 
       // Advance timer by 25%
       jest.advanceTimersByTime(250);

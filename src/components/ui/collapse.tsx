@@ -386,14 +386,14 @@ const CollapseContent = React.forwardRef<HTMLDivElement, CollapseContentProps>(
     }
 
     const styles: React.CSSProperties = smoothTransitions
-      ? {
-          height: open ? height || 'auto' : collapsedHeight,
-          transitionDuration: `${finalAnimationDuration}ms`,
-          transitionTimingFunction: animationEasing,
-          transitionProperty: animatePadding
+      ? ({
+          '--collapse-height': open ? height || 'auto' : collapsedHeight,
+          '--collapse-duration': `${finalAnimationDuration}ms`,
+          '--collapse-timing': animationEasing,
+          '--collapse-property': animatePadding
             ? 'height, padding-top, padding-bottom, opacity'
             : 'height, opacity',
-        }
+        } as React.CSSProperties)
       : {};
 
     return (
@@ -407,6 +407,12 @@ const CollapseContent = React.forwardRef<HTMLDivElement, CollapseContentProps>(
             animationSpeed,
             state: open ? 'open' : 'closed',
           }),
+          smoothTransitions && [
+            '[height:var(--collapse-height)]',
+            '[transition-duration:var(--collapse-duration)]',
+            '[transition-timing-function:var(--collapse-timing)]',
+            '[transition-property:var(--collapse-property)]',
+          ],
           className
         )}
         role="region"

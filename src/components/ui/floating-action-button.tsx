@@ -69,27 +69,39 @@ const FloatingActionButton = React.forwardRef<
     const showExtended = extended && label;
 
     const positionStyles = React.useMemo(() => {
-      const styles: React.CSSProperties = {};
+      const styles: Record<string, string> = {
+        '--fab-offset': `${offset}px`,
+      };
+
+      if (zIndex !== undefined) {
+        styles['--fab-z-index'] = zIndex.toString();
+      }
+
+      return styles as React.CSSProperties;
+    }, [offset, zIndex]);
+
+    const positionClasses = React.useMemo(() => {
+      const classes: string[] = [];
 
       if (position?.includes('bottom')) {
-        styles.bottom = `${offset}px`;
+        classes.push('[bottom:var(--fab-offset)]');
       }
       if (position?.includes('top')) {
-        styles.top = `${offset}px`;
+        classes.push('[top:var(--fab-offset)]');
       }
       if (position?.includes('right')) {
-        styles.right = `${offset}px`;
+        classes.push('[right:var(--fab-offset)]');
       }
       if (position?.includes('left')) {
-        styles.left = `${offset}px`;
+        classes.push('[left:var(--fab-offset)]');
       }
 
-      if (zIndex) {
-        styles.zIndex = zIndex;
+      if (zIndex !== undefined) {
+        classes.push('[z-index:var(--fab-z-index)]');
       }
 
-      return styles;
-    }, [position, offset, zIndex]);
+      return classes;
+    }, [position, zIndex]);
 
     const buttonContent = (
       <>
@@ -135,6 +147,7 @@ const FloatingActionButton = React.forwardRef<
           fabPositionVariants({ position }),
           fabVariants({ variant, size }),
           showExtended && extendedFabVariants({ size }),
+          positionClasses,
           className
         )}
         style={{
@@ -237,34 +250,47 @@ const SpeedDial = React.forwardRef<HTMLDivElement, SpeedDialProps>(
     }, [isOpen, handleToggle]);
 
     const positionStyles = React.useMemo(() => {
-      const styles: React.CSSProperties = {};
+      const styles: Record<string, string> = {
+        '--fab-offset': `${offset}px`,
+      };
+
+      if (zIndex !== undefined) {
+        styles['--fab-z-index'] = zIndex.toString();
+        styles['--fab-z-index-backdrop'] = (zIndex - 1).toString();
+      }
+
+      return styles as React.CSSProperties;
+    }, [offset, zIndex]);
+
+    const positionClasses = React.useMemo(() => {
+      const classes: string[] = [];
 
       if (position?.includes('bottom')) {
-        styles.bottom = `${offset}px`;
+        classes.push('[bottom:var(--fab-offset)]');
       }
       if (position?.includes('top')) {
-        styles.top = `${offset}px`;
+        classes.push('[top:var(--fab-offset)]');
       }
       if (position?.includes('right')) {
-        styles.right = `${offset}px`;
+        classes.push('[right:var(--fab-offset)]');
       }
       if (position?.includes('left')) {
-        styles.left = `${offset}px`;
+        classes.push('[left:var(--fab-offset)]');
       }
 
-      if (zIndex) {
-        styles.zIndex = zIndex;
+      if (zIndex !== undefined) {
+        classes.push('[z-index:var(--fab-z-index)]');
       }
 
-      return styles;
-    }, [position, offset, zIndex]);
+      return classes;
+    }, [position, zIndex]);
 
     const speedDialContent = (
       <>
         {showBackdrop && isOpen && (
           <div
-            className="fixed inset-0 bg-black/20 transition-opacity duration-200"
-            style={{ zIndex: zIndex - 1 }}
+            className="fixed inset-0 [z-index:var(--fab-z-index-backdrop)] bg-black/20 transition-opacity duration-200"
+            style={positionStyles}
             onClick={handleBackdropClick}
             aria-hidden="true"
           />
@@ -274,6 +300,7 @@ const SpeedDial = React.forwardRef<HTMLDivElement, SpeedDialProps>(
           className={cn(
             fabPositionVariants({ position }),
             'relative',
+            positionClasses,
             className
           )}
           style={positionStyles}
@@ -294,8 +321,12 @@ const SpeedDial = React.forwardRef<HTMLDivElement, SpeedDialProps>(
               {actions.map((action, index) => (
                 <div
                   key={action.id}
-                  className="animate-in fade-in-0 zoom-in-95 relative duration-200"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="animate-in fade-in-0 zoom-in-95 relative duration-200 [animation-delay:var(--action-delay)]"
+                  style={
+                    {
+                      '--action-delay': `${index * 50}ms`,
+                    } as React.CSSProperties
+                  }
                 >
                   <button
                     className={cn(speedDialActionVariants({ size }))}
@@ -385,31 +416,41 @@ const FABGroup: React.FC<FABGroupProps> = ({
   }, []);
 
   const positionStyles = React.useMemo(() => {
-    const styles: React.CSSProperties = {};
+    const styles: Record<string, string> = {
+      '--fab-offset': `${offset}px`,
+      '--fab-spacing': `${spacing}px`,
+    };
+
+    return styles as React.CSSProperties;
+  }, [offset, spacing]);
+
+  const positionClasses = React.useMemo(() => {
+    const classes: string[] = [];
 
     if (position?.includes('bottom')) {
-      styles.bottom = `${offset}px`;
+      classes.push('[bottom:var(--fab-offset)]');
     }
     if (position?.includes('top')) {
-      styles.top = `${offset}px`;
+      classes.push('[top:var(--fab-offset)]');
     }
     if (position?.includes('right')) {
-      styles.right = `${offset}px`;
+      classes.push('[right:var(--fab-offset)]');
     }
     if (position?.includes('left')) {
-      styles.left = `${offset}px`;
+      classes.push('[left:var(--fab-offset)]');
     }
 
-    return styles;
-  }, [position, offset]);
+    return classes;
+  }, [position]);
 
   const groupContent = (
     <div
-      className={cn(fabGroupVariants({ position, direction }))}
-      style={{
-        ...positionStyles,
-        gap: `${spacing}px`,
-      }}
+      className={cn(
+        fabGroupVariants({ position, direction }),
+        positionClasses,
+        '[gap:var(--fab-spacing)]'
+      )}
+      style={positionStyles}
     >
       {children}
     </div>

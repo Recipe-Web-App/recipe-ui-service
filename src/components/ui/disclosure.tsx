@@ -290,9 +290,11 @@ const DisclosureContent = React.forwardRef<
         role="region"
         aria-labelledby={triggerId}
         data-state={open ? 'open' : 'closed'}
-        style={{
-          transitionDuration: `${animationDuration}ms`,
-        }}
+        style={
+          {
+            '--disclosure-duration': `${animationDuration}ms`,
+          } as React.CSSProperties
+        }
         {...props}
       >
         {children}

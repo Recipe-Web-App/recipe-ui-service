@@ -392,11 +392,11 @@ const FileUploadProgress: React.FC<FileUploadProgressProps> = ({
     <div className="w-full">
       <div className={cn(fileProgressVariants({ size }), className)}>
         <div
-          className={cn(fileProgressFillVariants({ state: 'active' }))}
-          style={{
-            width: `${clampedValue}%`,
-            backgroundColor: 'rgb(59, 130, 246)', // Force blue color
-          }}
+          className={cn(
+            fileProgressFillVariants({ state: 'active' }),
+            `[width:${clampedValue}%]`,
+            '[background-color:rgb(59,130,246)]' // Force blue color
+          )}
           role="progressbar"
           aria-valuenow={clampedValue}
           aria-valuemin={0}

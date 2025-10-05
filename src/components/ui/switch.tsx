@@ -415,11 +415,14 @@ const AnimatedSwitch = React.forwardRef<HTMLButtonElement, AnimatedSwitchProps>(
         ref={ref}
         className={cn(
           animationType === 'fade' && 'transition-opacity',
-          animationType === 'scale' && 'transition-transform hover:scale-105'
+          animationType === 'scale' && 'transition-transform hover:scale-105',
+          '[transition-duration:var(--switch-duration,200ms)]'
         )}
-        style={{
-          transitionDuration: `${animationDuration}ms`,
-        }}
+        style={
+          {
+            '--switch-duration': `${animationDuration}ms`,
+          } as React.CSSProperties
+        }
         {...props}
       />
     );
