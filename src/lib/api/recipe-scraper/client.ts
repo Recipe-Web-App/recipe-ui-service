@@ -5,6 +5,7 @@ import axios, {
 } from 'axios';
 import type { ErrorResponse } from '@/types/recipe-scraper';
 import { getServiceUrl } from '@/config/services';
+import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
 const baseURL = getServiceUrl('RECIPE_SCRAPER');
 
@@ -56,6 +57,9 @@ recipeScraperClient.interceptors.response.use(
   responseInterceptor,
   responseErrorHandler
 );
+
+// Attach token refresh interceptor (runs after error handler above)
+attachTokenRefreshInterceptor(recipeScraperClient);
 
 export class RecipeScraperApiError extends Error {
   status?: number;

@@ -183,7 +183,7 @@ describe('Media Management API Client', () => {
       global.localStorage = originalLocalStorage;
     });
 
-    it('should handle 401 errors by clearing auth and redirecting to login', async () => {
+    it('should pass through 401 errors (handled by token refresh interceptor)', async () => {
       const error = {
         response: {
           status: 401,
@@ -192,12 +192,13 @@ describe('Media Management API Client', () => {
         message: 'Unauthorized',
       } as AxiosError;
 
+      // 401 errors are now passed through - token refresh interceptor handles them
       await expect(responseErrorHandler(error)).rejects.toBe(error);
-      expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('authToken');
-      // Note: window.location.href assignment is tested in the browser environment
+      // Auth clearing is NOT done in responseErrorHandler anymore
+      expect(mockLocalStorage.removeItem).not.toHaveBeenCalled();
     });
 
-    it('should handle 401 errors in SSR environment', async () => {
+    it('should pass through 401 errors in SSR environment', async () => {
       delete (global as any).window;
 
       const error = {
@@ -208,6 +209,7 @@ describe('Media Management API Client', () => {
         message: 'Unauthorized',
       } as AxiosError;
 
+      // 401 errors are passed through (token refresh interceptor handles them)
       await expect(responseErrorHandler(error)).rejects.toBe(error);
     });
 

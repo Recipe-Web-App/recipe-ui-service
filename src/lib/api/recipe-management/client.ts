@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
+import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
 const baseURL = getServiceUrl('RECIPE_MANAGEMENT');
 
@@ -64,6 +65,9 @@ recipeManagementClient.interceptors.response.use(
   responseInterceptor,
   responseErrorHandler
 );
+
+// Attach token refresh interceptor (runs after error handler above)
+attachTokenRefreshInterceptor(recipeManagementClient);
 
 export class RecipeManagementApiError extends Error {
   status?: number;
