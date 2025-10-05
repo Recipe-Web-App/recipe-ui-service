@@ -70,8 +70,6 @@
   --color-destructive-foreground: var(--color-cream);
   --color-background: var(--color-cream);
   --color-foreground: var(--color-neutral-900);
-  --color-card: oklch(99.5% 0.002 106.85deg); /* Slightly lighter than cream */
-  --color-card-foreground: var(--color-neutral-900);
   --color-muted: var(--color-neutral-100);
   --color-muted-foreground: var(--color-neutral-500);
   --color-border: var(--color-neutral-200);
@@ -141,6 +139,18 @@
   --color-badge-error-foreground: var(--color-tomato);
   --color-badge-info: var(--color-info-light);
   --color-badge-info-foreground: oklch(45% 0.12 220deg);
+
+  /* Card & Popover Colors - Generate bg-card, bg-popover utilities */
+  --color-card: oklch(99.5% 0.002 106.85deg); /* Slightly lighter than cream */
+  --color-card-foreground: var(--color-neutral-900);
+  --color-popover: oklch(99.5% 0.002 106.85deg);
+  --color-popover-foreground: var(--color-neutral-900);
+
+  /* Dark Mode Card & Popover */
+  --color-card-dark: oklch(22% 0.01 30deg); /* Slightly lighter than dark bg */
+  --color-card-dark-foreground: var(--color-neutral-50);
+  --color-popover-dark: oklch(22% 0.01 30deg);
+  --color-popover-dark-foreground: var(--color-neutral-50);
 }
 
 @layer base {
@@ -151,10 +161,10 @@
     --foreground: var(--color-neutral-900);
 
     /* Card & Popovers */
-    --card: oklch(99.5% 0.002 106.85deg); /* Slightly lighter than cream */
-    --card-foreground: var(--color-neutral-900);
-    --popover: var(--card);
-    --popover-foreground: var(--card-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
 
     /* Recipe Brand Semantic Colors */
     --primary: var(--color-tomato); /* Tomato Red for primary actions */
@@ -229,10 +239,10 @@
     --foreground: var(--color-neutral-50);
 
     /* Card & Popovers */
-    --card: oklch(22% 0.01 30deg); /* Slightly lighter than dark bg */
-    --card-foreground: var(--color-neutral-50);
-    --popover: var(--card);
-    --popover-foreground: var(--card-foreground);
+    --card: var(--color-card-dark);
+    --card-foreground: var(--color-card-dark-foreground);
+    --popover: var(--color-popover-dark);
+    --popover-foreground: var(--color-popover-dark-foreground);
 
     /* Recipe Brand Semantic Colors - Dark Mode */
     --primary: var(--color-tomato-dark); /* Brighter Tomato Red */
