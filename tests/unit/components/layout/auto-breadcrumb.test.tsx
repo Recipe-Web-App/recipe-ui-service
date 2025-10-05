@@ -483,18 +483,18 @@ describe('StickyBreadcrumb', () => {
     expect(wrapper).toHaveClass('sticky');
   });
 
-  it('should apply custom z-index via style prop', () => {
+  it('should apply custom z-index via class prop', () => {
     const { container } = render(<StickyBreadcrumb zIndex={50} />);
 
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.style.zIndex).toBe('50');
+    expect(wrapper.className).toContain('[z-index:50]');
   });
 
-  it('should apply custom top offset via style prop', () => {
+  it('should apply custom top offset via class prop', () => {
     const { container } = render(<StickyBreadcrumb topOffset={10} />);
 
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.style.top).toBe('10px');
+    expect(wrapper.className).toContain('[top:10px]');
   });
 });
 

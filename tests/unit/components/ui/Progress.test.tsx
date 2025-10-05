@@ -225,7 +225,7 @@ describe('CookingProgress', () => {
 
     // 1 completed step out of 3 total = 33.33%
     const progressBar = container.querySelector('[role="progressbar"]');
-    expect(progressBar).toHaveStyle('width: 33.33333333333333%');
+    expect(progressBar).toHaveStyle('--progress-width: 33.33333333333333%');
   });
 
   it('handles step click events', async () => {

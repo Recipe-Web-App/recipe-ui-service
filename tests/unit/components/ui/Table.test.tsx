@@ -227,8 +227,8 @@ describe('Table Components', () => {
       const nameHeader = screen.getByRole('columnheader', { name: 'Name' });
       const ageHeader = screen.getByRole('columnheader', { name: 'Age' });
 
-      expect(nameHeader).toHaveStyle('width: 200px');
-      expect(ageHeader).toHaveStyle('width: 100px');
+      expect(nameHeader.className).toContain('[width:200px]');
+      expect(ageHeader.className).toContain('[width:100px]');
     });
   });
 

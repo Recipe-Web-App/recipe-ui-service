@@ -198,7 +198,7 @@ describe('Skeleton', () => {
       renderSkeleton({ count: 3 });
       const container = screen.getByRole('status');
       const skeletons = container.querySelectorAll('[aria-hidden="true"]');
-      expect(skeletons[2]).toHaveStyle({ width: '80%' });
+      expect(skeletons[2].className).toContain('[width:80%]');
     });
 
     test('maintains aria-label for multiple skeletons', () => {
@@ -402,9 +402,9 @@ describe('SkeletonText', () => {
   test('applies varied widths to lines', () => {
     render(<SkeletonText lines="three" />);
     const skeletons = screen.getAllByRole('status');
-    expect(skeletons[0]).toHaveStyle({ width: '100%' });
-    expect(skeletons[1]).toHaveStyle({ width: '100%' });
-    expect(skeletons[2]).toHaveStyle({ width: '80%' });
+    expect(skeletons[0].className).toContain('[width:100%]');
+    expect(skeletons[1].className).toContain('[width:100%]');
+    expect(skeletons[2].className).toContain('[width:80%]');
   });
 
   test('applies custom animation', () => {

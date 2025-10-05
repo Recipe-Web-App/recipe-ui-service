@@ -479,7 +479,7 @@ describe('Collapse', () => {
       );
 
       const content = screen.getByText('Content here');
-      expect(content.style.transitionDuration).toBe('500ms');
+      expect(content).toHaveStyle({ '--collapse-duration': '500ms' });
     });
 
     it('supports custom animation duration on content', () => {
@@ -493,7 +493,7 @@ describe('Collapse', () => {
       );
 
       const content = screen.getByText('Content here');
-      expect(content.style.transitionDuration).toBe('750ms');
+      expect(content).toHaveStyle({ '--collapse-duration': '750ms' });
     });
 
     it('supports different animation speeds on content', () => {
@@ -529,7 +529,7 @@ describe('Collapse', () => {
       );
 
       const content = screen.getByText('Content here');
-      expect(content.style.transitionTimingFunction).toBe('ease-in');
+      expect(content).toHaveStyle({ '--collapse-timing': 'ease-in' });
     });
 
     it('supports collapsed height configuration', () => {
@@ -543,7 +543,7 @@ describe('Collapse', () => {
       );
 
       const content = screen.getByText('Content here');
-      expect(content.style.height).toBe('50px');
+      expect(content).toHaveStyle({ '--collapse-height': '50' });
     });
 
     it('can disable smooth transitions', () => {

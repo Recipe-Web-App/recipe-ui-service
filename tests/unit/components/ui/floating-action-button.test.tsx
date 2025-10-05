@@ -267,7 +267,9 @@ describe('FloatingActionButton', () => {
         />
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveStyle({ bottom: '24px', right: '24px' });
+      expect(button).toHaveStyle({ '--fab-offset': '24px' });
+      expect(button.className).toContain('[bottom:var(--fab-offset)]');
+      expect(button.className).toContain('[right:var(--fab-offset)]');
     });
 
     it('applies custom z-index', () => {
@@ -279,7 +281,8 @@ describe('FloatingActionButton', () => {
         />
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveStyle({ zIndex: 100 });
+      expect(button).toHaveStyle({ '--fab-z-index': '100' });
+      expect(button.className).toContain('[z-index:var(--fab-z-index)]');
     });
   });
 
@@ -874,7 +877,7 @@ describe('FABGroup', () => {
     );
 
     const group = container.querySelector('.fixed');
-    expect(group).toHaveStyle({ gap: '24px' });
+    expect(group).toHaveStyle({ '--fab-spacing': '24px' });
   });
 
   it('applies custom offset', () => {
@@ -885,7 +888,9 @@ describe('FABGroup', () => {
     );
 
     const group = container.querySelector('.fixed');
-    expect(group).toHaveStyle({ bottom: '32px', right: '32px' });
+    expect(group).toHaveStyle({ '--fab-offset': '32px' });
+    expect(group?.className).toContain('[bottom:var(--fab-offset)]');
+    expect(group?.className).toContain('[right:var(--fab-offset)]');
   });
 
   it('handles all positions', () => {
