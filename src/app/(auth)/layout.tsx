@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import { Layout } from '@/components/layout/layout';
 import { GuestOnlyRoute } from '@/components/auth/GuestOnlyRoute';
+import { Spinner } from '@/components/ui/spinner';
 
 /**
  * Authentication Layout
@@ -22,6 +24,9 @@ import { GuestOnlyRoute } from '@/components/auth/GuestOnlyRoute';
  *
  * All pages within this layout are wrapped with GuestOnlyRoute.
  * Authenticated users will be automatically redirected to the home page.
+ *
+ * Note: GuestOnlyRoute is wrapped in Suspense because it uses useSearchParams()
+ * which requires a Suspense boundary during server-side rendering in Next.js 15.
  */
 export default function AuthLayout({
   children,
@@ -30,11 +35,19 @@ export default function AuthLayout({
 }>) {
   return (
     <Layout variant="minimal" showSidebar={false} showFooter={false}>
-      <GuestOnlyRoute>
-        <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-          <div className="w-full max-w-md">{children}</div>
-        </div>
-      </GuestOnlyRoute>
+      <Suspense
+        fallback={
+          <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+            <Spinner size="lg" />
+          </div>
+        }
+      >
+        <GuestOnlyRoute>
+          <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
+            <div className="w-full max-w-md">{children}</div>
+          </div>
+        </GuestOnlyRoute>
+      </Suspense>
     </Layout>
   );
 }

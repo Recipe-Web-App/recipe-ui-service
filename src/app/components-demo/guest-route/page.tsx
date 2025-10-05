@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { GuestOnlyRoute } from '@/components/auth/GuestOnlyRoute';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -95,35 +95,37 @@ export default function GuestRouteDemo() {
           </p>
 
           <div className="bg-muted/50 rounded-lg border p-4">
-            <GuestOnlyRoute
-              config={{
-                redirectUrl: '/recipes',
-                showLoadingState: true,
-                onAuthCheck: authenticated =>
-                  console.log('Auth check:', authenticated),
-                onRedirect: url => console.log('Redirecting to:', url),
-              }}
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="bg-primary h-2 w-2 rounded-full"></div>
-                  <span className="text-sm font-medium">
-                    🔓 This content is for guests only
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-sm">
-                  You can only see this because you are NOT authenticated!
-                </p>
-                <div className="bg-card rounded border p-3">
-                  <p className="text-sm font-medium">
-                    Login Form Would Go Here
+            <Suspense fallback={<div className="text-sm">Loading...</div>}>
+              <GuestOnlyRoute
+                config={{
+                  redirectUrl: '/recipes',
+                  showLoadingState: true,
+                  onAuthCheck: authenticated =>
+                    console.log('Auth check:', authenticated),
+                  onRedirect: url => console.log('Redirecting to:', url),
+                }}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-primary h-2 w-2 rounded-full"></div>
+                    <span className="text-sm font-medium">
+                      🔓 This content is for guests only
+                    </span>
+                  </div>
+                  <p className="text-muted-foreground text-sm">
+                    You can only see this because you are NOT authenticated!
                   </p>
-                  <p className="text-muted-foreground mt-1 text-xs">
-                    (This is just a demo - no actual login form)
-                  </p>
+                  <div className="bg-card rounded border p-3">
+                    <p className="text-sm font-medium">
+                      Login Form Would Go Here
+                    </p>
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      (This is just a demo - no actual login form)
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </GuestOnlyRoute>
+              </GuestOnlyRoute>
+            </Suspense>
           </div>
         </Card>
 
