@@ -207,6 +207,69 @@ describe('Token Refresh Interceptor', () => {
       // Verify only ONE refresh was made
       expect(refreshCallCount).toBe(1);
     });
+
+    it('should reject all queued requests when refresh fails', async () => {
+      attachTokenRefreshInterceptor(axiosInstance);
+
+      // Mock multiple endpoints returning 401
+      mockAdapter.onGet('/resource1').replyOnce(401);
+      mockAdapter.onGet('/resource2').replyOnce(401);
+      mockAdapter.onGet('/resource3').replyOnce(401);
+
+      // Mock refresh endpoint failure
+      globalAxiosMock
+        .onPost(
+          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+        )
+        .replyOnce(500, { error: 'Refresh failed' });
+
+      // Make concurrent requests - all should fail
+      await expect(
+        Promise.all([
+          axiosInstance.get('/resource1'),
+          axiosInstance.get('/resource2'),
+          axiosInstance.get('/resource3'),
+        ])
+      ).rejects.toThrow();
+
+      // Verify auth was cleared
+      expect(mockAuthStore.clearAuth).toHaveBeenCalled();
+    });
+
+    it('should handle queued requests without headers object', async () => {
+      attachTokenRefreshInterceptor(axiosInstance);
+
+      // Mock two 401 responses to trigger queueing
+      mockAdapter.onGet('/first').replyOnce(401);
+      mockAdapter.onGet('/second').replyOnce(401);
+
+      // Mock successful refresh
+      globalAxiosMock
+        .onPost(
+          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+        )
+        .replyOnce(200, {
+          token: {
+            access_token: 'refreshed-token',
+            refresh_token: 'new-refresh-token',
+            token_type: 'Bearer',
+            expires_in: 3600,
+          },
+        });
+
+      // Mock successful retries - capture what happens with headers
+      mockAdapter.onGet('/first').replyOnce(200, { data: 'first' });
+      mockAdapter.onGet('/second').replyOnce(200, { data: 'second' });
+
+      // Make concurrent requests
+      const [res1, res2] = await Promise.all([
+        axiosInstance.get('/first'),
+        axiosInstance.get('/second'),
+      ]);
+
+      expect(res1.data).toEqual({ data: 'first' });
+      expect(res2.data).toEqual({ data: 'second' });
+    });
   });
 
   describe('Refresh Endpoint Protection', () => {
@@ -227,6 +290,21 @@ describe('Token Refresh Interceptor', () => {
       await expect(axiosInstance.get('/protected')).rejects.toThrow();
 
       // Verify auth was cleared (redirect happens but is hard to test in jsdom)
+      expect(mockAuthStore.clearAuth).toHaveBeenCalled();
+    });
+
+    it('should clear auth when direct call to refresh endpoint returns 401', async () => {
+      attachTokenRefreshInterceptor(axiosInstance);
+
+      // Mock a direct call to the refresh endpoint that returns 401
+      mockAdapter
+        .onPost('/auth/refresh')
+        .replyOnce(401, { error: 'Refresh token expired' });
+
+      // Make direct request to refresh endpoint
+      await expect(axiosInstance.post('/auth/refresh')).rejects.toThrow();
+
+      // Verify auth was cleared and no infinite loop occurred
       expect(mockAuthStore.clearAuth).toHaveBeenCalled();
     });
   });
