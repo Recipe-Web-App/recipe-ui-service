@@ -5,6 +5,7 @@ import axios, {
 } from 'axios';
 import { ErrorResponse } from '@/types/media-management';
 import { getServiceUrl } from '@/config/services';
+import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
 const baseURL = getServiceUrl('MEDIA_MANAGEMENT');
 
@@ -39,13 +40,7 @@ mediaManagementClient.interceptors.request.use(
 export const responseInterceptor = (response: AxiosResponse) => response;
 
 export const responseErrorHandler = (error: AxiosError) => {
-  if (error.response?.status === 401) {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('authToken');
-      window.location.href = '/login';
-    }
-  }
-
+  // Token refresh interceptor will handle 401 errors, so we can remove this manual handling
   return Promise.reject(error);
 };
 
@@ -53,6 +48,9 @@ mediaManagementClient.interceptors.response.use(
   responseInterceptor,
   responseErrorHandler
 );
+
+// Attach token refresh interceptor (handles 401 errors automatically)
+attachTokenRefreshInterceptor(mediaManagementClient);
 
 export class MediaManagementApiError extends Error {
   status?: number;

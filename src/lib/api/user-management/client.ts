@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
+import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
 const baseURL = getServiceUrl('USER_MANAGEMENT');
 
@@ -136,6 +137,9 @@ userManagementClient.interceptors.response.use(
   responseInterceptor,
   responseErrorHandler
 );
+
+// Attach token refresh interceptor (runs after error handler above)
+attachTokenRefreshInterceptor(userManagementClient);
 
 export class UserManagementApiError extends Error {
   status?: number;

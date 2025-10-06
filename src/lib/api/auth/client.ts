@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { getServiceUrl } from '@/config/services';
+import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
 const baseURL = getServiceUrl('AUTH');
 
@@ -50,6 +51,9 @@ export const responseErrorHandler = (error: AxiosError) => {
 };
 
 authClient.interceptors.response.use(responseInterceptor, responseErrorHandler);
+
+// Attach token refresh interceptor (runs after error handler above)
+attachTokenRefreshInterceptor(authClient);
 
 export class AuthApiError extends Error {
   status?: number;

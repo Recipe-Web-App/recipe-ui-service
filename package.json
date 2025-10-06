@@ -120,6 +120,7 @@
     "@web/test-runner-puppeteer": "^0.18.0",
     "autocannon": "^8.0.0",
     "axe-core": "^4.10.3",
+    "axios-mock-adapter": "^2.1.0",
     "clinic": "^13.0.0",
     "clsx": "^2.1.1",
     "commitizen": "^4.3.1",
