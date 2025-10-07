@@ -30,7 +30,7 @@ export default function MainLayout({
     <ProtectedRoute
       config={{
         loginUrl: '/login',
-        showLoadingState: false,
+        showLoadingState: true,
       }}
     >
       <Layout variant="default" showSidebar showFooter>
