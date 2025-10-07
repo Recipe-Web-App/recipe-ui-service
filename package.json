@@ -81,7 +81,7 @@
     "react-hook-form": "^7.64.0",
     "recheck": "^4.5.0",
     "sanitize-filename": "^1.6.3",
-    "zod": "^4.1.11",
+    "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
