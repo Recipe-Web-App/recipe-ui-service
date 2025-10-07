@@ -35,6 +35,7 @@ export const AUTH_ROUTES = [
  * Users must be logged in to access these routes
  */
 export const PROTECTED_ROUTES = [
+  '/home',
   '/recipes',
   '/meal-plans',
   '/shopping-lists',

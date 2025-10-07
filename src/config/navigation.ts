@@ -23,7 +23,7 @@ export const topLevelNavigation: NavItem[] = [
   {
     id: 'home',
     label: 'Home',
-    href: '/',
+    href: '/home',
     icon: Home,
     metadata: {
       sortOrder: 0,

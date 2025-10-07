@@ -83,13 +83,21 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setTokenData: (tokenData: Token) => {
+        if (!tokenData?.access_token) {
+          console.error('Invalid token data - missing access_token');
+          return;
+        }
+
         const expiresAt = Date.now() + tokenData.expires_in * 1000;
+
         set({
           token: tokenData.access_token,
           refreshToken: tokenData.refresh_token ?? null,
           tokenExpiresAt: expiresAt,
           isAuthenticated: true,
+          hasHydrated: true,
         });
+
         if (typeof window !== 'undefined') {
           localStorage.setItem('authToken', tokenData.access_token);
           if (tokenData.refresh_token) {
@@ -150,9 +158,18 @@ export const useAuthStore = create<AuthState>()(
       },
 
       isTokenExpired: () => {
-        const { tokenExpiresAt } = get();
+        const { tokenExpiresAt, clearAuth } = get();
         if (!tokenExpiresAt) return true;
-        return Date.now() >= tokenExpiresAt - 5 * 60 * 1000; // 5 minutes buffer
+
+        const isExpired = Date.now() >= tokenExpiresAt - 5 * 60 * 1000; // 5 minutes buffer
+
+        // Auto-clear auth state if token is expired to prevent sync issues
+        // between cookies (used by middleware) and localStorage (used by client)
+        if (isExpired && typeof window !== 'undefined') {
+          clearAuth();
+        }
+
+        return isExpired;
       },
     }),
     {
@@ -160,6 +177,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: state => ({
         user: state.user,
         authUser: state.authUser,
+        token: state.token,
         refreshToken: state.refreshToken,
         tokenExpiresAt: state.tokenExpiresAt,
         isAuthenticated: state.isAuthenticated,
@@ -167,7 +185,75 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => state => {
         // Set hasHydrated to true once rehydration is complete
         if (state) {
+          // SYNC FROM COOKIES: If localStorage is empty but cookies exist, restore from cookies
+          // This handles the case where localStorage was cleared but cookies remain valid
+          if (!state.token && typeof window !== 'undefined') {
+            // Check if we have auth cookies
+            const cookieToken = document.cookie
+              .split('; ')
+              .find(row => row.startsWith('authToken='))
+              ?.split('=')[1];
+            const cookieExpiresAt = document.cookie
+              .split('; ')
+              .find(row => row.startsWith('tokenExpiresAt='))
+              ?.split('=')[1];
+
+            if (cookieToken && cookieExpiresAt) {
+              const expiresAt = Number(cookieExpiresAt);
+              const now = Date.now();
+              const isExpired = now >= expiresAt - 5 * 60 * 1000;
+
+              if (!isExpired) {
+                console.log('Restoring auth state from cookies');
+                state.token = cookieToken;
+                state.tokenExpiresAt = expiresAt;
+                state.isAuthenticated = true;
+              } else {
+                console.log('Cookie token is expired, not restoring');
+              }
+            }
+          }
+
+          // Set hasHydrated BEFORE validation so ProtectedRoute can immediately react
           state.hasHydrated = true;
+
+          const hasToken = Boolean(state.token);
+          const hasUser = Boolean(state.user ?? state.authUser);
+
+          const now = Date.now();
+          const expiresAt = state.tokenExpiresAt ?? 0;
+          const bufferMs = 5 * 60 * 1000;
+          const secondsUntilExpiry = state.tokenExpiresAt
+            ? Math.floor((state.tokenExpiresAt - now) / 1000)
+            : 0;
+
+          const isExpired = state.tokenExpiresAt
+            ? now >= state.tokenExpiresAt - bufferMs
+            : true;
+
+          // Invalid state: marked as authenticated but missing critical data
+          const isInvalidState =
+            state.isAuthenticated && (!hasToken || !hasUser);
+
+          console.log('Token expiration check:', {
+            now: new Date(now).toISOString(),
+            expiresAt: expiresAt ? new Date(expiresAt).toISOString() : 'none',
+            secondsUntilExpiry,
+            bufferMinutes: 5,
+            isExpired,
+            hasToken,
+            hasUser,
+          });
+
+          if (isExpired || isInvalidState) {
+            console.warn('Auth state validation failed during hydration:', {
+              isExpired,
+              isInvalidState,
+              hasToken,
+              hasUser,
+            });
+            state.clearAuth();
+          }
         }
       },
     }

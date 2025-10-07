@@ -1,9 +1,15 @@
+'use client';
+
 import { Card } from '@/components/ui/card';
 import { LoginForm } from '@/components/forms/LoginForm';
 import { ChefHat } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('returnUrl') ?? '/';
+
   return (
     <Card className="p-8">
       <div className="mb-8 text-center">
@@ -16,7 +22,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <LoginForm />
+      <LoginForm redirectUrl={returnUrl} />
 
       <div className="mt-6 text-center">
         <p className="text-muted-foreground text-sm">

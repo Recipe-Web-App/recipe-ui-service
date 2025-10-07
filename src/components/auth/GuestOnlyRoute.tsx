@@ -82,6 +82,10 @@ export const GuestOnlyRoute: React.FC<GuestOnlyRouteProps> = ({
 
   useEffect(() => {
     // Perform authentication check
+    // Note: We don't wait for hydration here (unlike ProtectedRoute) because:
+    // 1. onRehydrateStorage already clears expired tokens
+    // 2. Worst case: brief flash before redirect (acceptable UX for guest pages)
+    // 3. Prevents infinite spinner if hydration doesn't complete
     const checkAuth = () => {
       const authResult = isAuthenticated(authState);
 

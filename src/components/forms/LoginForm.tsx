@@ -37,6 +37,11 @@ export function LoginForm({
     try {
       await loginMutation.mutateAsync(data);
 
+      // CRITICAL: Wait for Zustand persist to complete before redirecting
+      // Without this delay, the redirect can happen before localStorage/cookies are set,
+      // causing the auth state to be incomplete when the next page loads
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Call onSuccess callback if provided
       if (onSuccess) {
         onSuccess();
@@ -45,7 +50,7 @@ export function LoginForm({
       // Redirect to home or specified URL
       router.push(redirectUrl);
     } catch (error) {
-      // Error is handled by the mutation, just log it
+      // Error is handled by the mutation
       console.error('Login failed:', error);
     }
   };
