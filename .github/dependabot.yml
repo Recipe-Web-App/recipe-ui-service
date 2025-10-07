@@ -58,6 +58,7 @@ updates:
       interval: 'weekly'
       day: 'tuesday'
       time: '06:00'
+    open-pull-requests-limit: 100
     assignees:
       - 'jsamuelsen'
     labels:
@@ -74,6 +75,7 @@ updates:
       interval: 'monthly'
       day: 'monday'
       time: '06:00'
+    open-pull-requests-limit: 100
     assignees:
       - 'jsamuelsen'
     labels:
