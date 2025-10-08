@@ -383,16 +383,22 @@ The application is configured to communicate with multiple backend microservices
 ### Project Documentation
 
 - **[Architecture Guide](ARCHITECTURE.md)** - System design and patterns
-- **[API Documentation](API.md)** - Backend integration guide
-- **[Security Guide](SECURITY.md)** - Security best practices
 - **[Performance Guide](PERFORMANCE.md)** - Optimization strategies
 - **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
 - **[Testing Strategy](TESTING.md)** - Comprehensive testing guide
 - **[GitHub Workflows](WORKFLOWS.md)** - CI/CD pipeline documentation
-- **[Contributing Guidelines](CONTRIBUTING.md)** - Development workflow
-- **[Pre-commit Guide](PRECOMMIT_GUIDE.md)** - Quality pipeline setup
+- **[UI/UX Design Guide](UI_GUIDE.md)** - Design system and component library
 - **[Claude Code Guide](CLAUDE.md)** - AI-assisted development
-- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
+
+### Planned Documentation
+
+The following documentation is planned for future releases:
+
+- **API Documentation** - Backend integration guide
+- **Security Guide** - Security best practices and policies
+- **Contributing Guidelines** - Development workflow and contribution process
+- **Pre-commit Guide** - Quality pipeline setup and usage
+- **Troubleshooting** - Common issues and solutions
 
 ### External Resources
 
@@ -499,9 +505,9 @@ npm run format && npm run lint
 - **💬 Discussions**: [GitHub Discussions](https://github.com/jsamuelsen/recipe-web-app/discussions)
 - **📖 Documentation**: Check our comprehensive docs above
 - **🚀 Feature Requests**: Use our issue templates
-- **🔒 Security Issues**: See [SECURITY.md](SECURITY.md) for reporting guidelines
+- **🔒 Security Issues**: Report security vulnerabilities via [GitHub Security](https://github.com/jsamuelsen/recipe-web-app/security)
 
 ---
 
 **Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen)
-**Last Updated**: <!-- AUTO-GENERATED-DATE -->
+**Last Updated**: 2025-10-08
