@@ -1484,7 +1484,7 @@ act -W .github/workflows/ci.yml
 
 **Last Updated**: 2025-10-08
 
-**Maintainer**: [Jonathan Samuelsen](https://github.com/jsamuelsen)
+**Maintainer**: [Jonathan Samuelsen](https://github.com/jsamuelsen11)
 
 **Repository**: [recipe-ui-service](https://github.com/Recipe-Web-App/recipe-ui-service)
 

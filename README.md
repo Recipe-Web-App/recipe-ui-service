@@ -1,10 +1,10 @@
 # Recipe UI Service
 
-[![Build Status](https://github.com/jsamuelsen/recipe-web-app/workflows/CI/badge.svg)](https://github.com/jsamuelsen/recipe-web-app/actions)
-[![Security Scan](https://github.com/jsamuelsen/recipe-web-app/workflows/Security/badge.svg)](https://github.com/jsamuelsen/recipe-web-app/actions)
-[![Test Coverage](https://codecov.io/gh/jsamuelsen/recipe-web-app/branch/main/graph/badge.svg)](https://codecov.io/gh/jsamuelsen/recipe-web-app)
-[![Performance](https://img.shields.io/badge/lighthouse-95%2B-brightgreen)](https://github.com/jsamuelsen/recipe-web-app)
-[![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C250kb-success)](https://github.com/jsamuelsen/recipe-web-app)
+[![Build Status](https://github.com/jsamuelsen11/recipe-web-app/workflows/CI/badge.svg)](https://github.com/jsamuelsen11/recipe-web-app/actions)
+[![Security Scan](https://github.com/jsamuelsen11/recipe-web-app/workflows/Security/badge.svg)](https://github.com/jsamuelsen11/recipe-web-app/actions)
+[![Test Coverage](https://codecov.io/gh/jsamuelsen11/recipe-web-app/branch/main/graph/badge.svg)](https://codecov.io/gh/jsamuelsen11/recipe-web-app)
+[![Performance](https://img.shields.io/badge/lighthouse-95%2B-brightgreen)](https://github.com/jsamuelsen11/recipe-web-app)
+[![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C250kb-success)](https://github.com/jsamuelsen11/recipe-web-app)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A modern, scalable Next.js application for recipe management with server-side rendering, built with
@@ -501,13 +501,13 @@ npm run format && npm run lint
 
 ### Getting Help
 
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/jsamuelsen/recipe-web-app/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/jsamuelsen/recipe-web-app/discussions)
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/jsamuelsen11/recipe-web-app/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/jsamuelsen11/recipe-web-app/discussions)
 - **📖 Documentation**: Check our comprehensive docs above
 - **🚀 Feature Requests**: Use our issue templates
-- **🔒 Security Issues**: Report security vulnerabilities via [GitHub Security](https://github.com/jsamuelsen/recipe-web-app/security)
+- **🔒 Security Issues**: Report security vulnerabilities via [GitHub Security](https://github.com/jsamuelsen11/recipe-web-app/security)
 
 ---
 
-**Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen)
+**Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen11)
 **Last Updated**: 2025-10-08

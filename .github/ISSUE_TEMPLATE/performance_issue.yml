@@ -3,7 +3,7 @@ description: Report a performance problem or slow behavior
 title: '[Performance]: '
 labels: ['performance', 'needs-triage']
 assignees:
-  - jsamuelsen
+  - jsamuelsen11
 body:
   - type: markdown
     attributes:

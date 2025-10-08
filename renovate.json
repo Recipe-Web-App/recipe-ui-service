@@ -13,7 +13,7 @@
   "description": "Renovate configuration for Recipe UI Service - Enterprise-grade dependency management",
 
   "platform": "github",
-  "repositories": ["jsamuelsen/recipe-web-app"],
+  "repositories": ["jsamuelsen11/recipe-web-app"],
   "gitAuthor": "Renovate Bot <noreply@renovatebot.com>",
   "branchPrefix": "renovate/",
   "username": "renovate[bot]",
@@ -43,8 +43,8 @@
 
   "labels": ["dependencies", "renovate"],
   "addLabels": ["🔄 auto-update"],
-  "assignees": ["@jsamuelsen"],
-  "reviewers": ["jsamuelsen"],
+  "assignees": ["@jsamuelsen11"],
+  "reviewers": ["jsamuelsen11"],
 
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "🔄 Dependency Dashboard",
@@ -298,7 +298,7 @@
     "schedule": ["at any time"],
     "labels": ["🚨 security", "vulnerability"],
     "prPriority": 10,
-    "assignees": ["@jsamuelsen"]
+    "assignees": ["@jsamuelsen11"]
   },
 
   "osvVulnerabilityAlerts": true,

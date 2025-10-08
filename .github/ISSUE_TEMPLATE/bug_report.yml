@@ -3,7 +3,7 @@ description: Create a report to help us improve
 title: '[Bug]: '
 labels: ['bug', 'needs-triage']
 assignees:
-  - jsamuelsen
+  - jsamuelsen11
 body:
   - type: markdown
     attributes:
