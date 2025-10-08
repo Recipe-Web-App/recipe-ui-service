@@ -1,0 +1,122 @@
+name: License Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+  schedule:
+    - cron: '0 6 * * 1' # Weekly on Mondays
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  license-check:
+    name: Check Dependency Licenses
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install license-checker
+        run: npm install -g license-checker
+
+      - name: Check for forbidden licenses
+        id: check
+        continue-on-error: true
+        run: |
+          license-checker --production --json --out licenses.json
+          license-checker --production --failOn "GPL-3.0;AGPL-3.0;LGPL-3.0" 2>&1 | tee license-check.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+
+      - name: Generate license report
+        run: |
+          echo "# License Report" > license-report.md
+          echo "" >> license-report.md
+          echo "## All Dependencies" >> license-report.md
+          echo "" >> license-report.md
+          license-checker --production --summary >> license-report.md
+
+      - name: Upload license report
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report
+          path: |
+            license-report.md
+            licenses.json
+          retention-days: 90
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const exitCode = '${{ steps.check.outputs.exit_code }}';
+
+            let body = '';
+
+            if (exitCode !== '0') {
+              const checkOutput = fs.readFileSync('license-check.txt', 'utf8');
+              body = `## ⚠️ License Check Failed
+
+            This PR introduces dependencies with problematic licenses.
+
+            <details>
+            <summary>Forbidden License Details</summary>
+
+            \`\`\`
+            ${checkOutput}
+            \`\`\`
+
+            </details>
+
+            ### Blocked Licenses
+            - GPL-3.0 (copyleft - requires source distribution)
+            - AGPL-3.0 (network copyleft - requires source for SaaS)
+            - LGPL-3.0 (copyleft for libraries)
+
+            Please review these dependencies or seek legal approval.
+              `;
+            } else {
+              body = `## ✅ License Check Passed
+
+            All dependency licenses are compliant.
+
+            [View full license report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              `;
+            }
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: body
+            });
+
+      - name: Fail if forbidden licenses found
+        if: steps.check.outputs.exit_code != '0'
+        run: |
+          echo "❌ Forbidden licenses detected"
+          exit 1

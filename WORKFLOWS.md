@@ -6,7 +6,9 @@ automation.
 
 ## 🎯 Overview
 
-Our workflow system consists of **7 core workflows** that handle every aspect of the development lifecycle:
+Our workflow system consists of **18 comprehensive workflows** organized into two categories:
+
+### Core Development Workflows (7)
 
 1. **🔄 CI Pipeline** - Core continuous integration
 2. **🧪 Advanced Testing** - Comprehensive testing suite
@@ -15,6 +17,20 @@ Our workflow system consists of **7 core workflows** that handle every aspect of
 5. **📦 Release Management** - Automated release creation and distribution
 6. **⚡ Performance Monitoring** - Performance testing and monitoring
 7. **🔧 Maintenance & Monitoring** - Repository health and automated maintenance
+
+### Automation & Developer Experience (11)
+
+1. **🏷️ PR Labeler** - Auto-label PRs based on file changes
+2. **🤖 Dependabot Auto-Merge** - Intelligent dependency update merging
+3. **🗑️ Stale Management** - Automated stale issue/PR management
+4. **🔍 CodeQL Analysis** - Advanced security scanning
+5. **📊 Code Coverage** - Coverage enforcement and reporting
+6. **📜 License Check** - Dependency license compliance
+7. **📏 PR Size Labeler** - PR size classification and warnings
+8. **🔒 Thread Lock** - Lock closed issues and merged PRs
+9. **👋 Contributor Greeting** - Welcome first-time contributors
+10. **🔗 Link Checker** - Documentation link validation
+11. **🧹 Branch Cleanup** - Automatic branch deletion after merge
 
 ## 📊 Workflow Architecture
 
@@ -632,6 +648,465 @@ Deductions:
 
 ---
 
+## 8. 🏷️ PR Labeler (`pr-labeler.yml`)
+
+### Purpose
+
+Automatically label pull requests based on the files changed, improving PR organization and making it easier to
+filter and search for specific types of changes.
+
+### Triggers
+
+- Pull request opened, synchronized, or reopened
+
+### Configuration
+
+Uses `.github/labeler.yml` for label mapping rules based on file patterns.
+
+### Labels Applied
+
+- `dependencies` - package.json, package-lock.json changes
+- `documentation` - Markdown and documentation changes
+- `github-actions` - Workflow file changes
+- `docker` - Docker configuration changes
+- `javascript` - JS/TS source code changes
+- `testing` - Test file changes
+- `frontend` - Component changes
+- `api` - API integration changes
+- And many more based on changed files
+
+### Benefits
+
+- Automatic categorization of PRs
+- Improved searchability and filtering
+- Consistent labeling across the repository
+- Reduced manual labeling effort
+
+---
+
+## 9. 🤖 Dependabot Auto-Merge (`dependabot-auto-merge.yml`)
+
+### Purpose
+
+Intelligently auto-approve and auto-merge safe Dependabot dependency updates, reducing maintenance burden while
+maintaining security.
+
+### Triggers
+
+- Dependabot pull requests (opened, synchronized, reopened)
+
+### Auto-Merge Strategy
+
+#### Patch Updates
+
+- **Action**: Auto-approve and auto-merge
+- **Rationale**: Patch updates are backward-compatible bug fixes
+- **Safety**: All CI checks must pass
+
+#### Minor Updates (Indirect Dependencies)
+
+- **Action**: Auto-approve and auto-merge
+- **Rationale**: Indirect dependencies with minor version bumps are low-risk
+- **Safety**: All CI checks must pass
+
+#### Minor Updates (Direct Dependencies)
+
+- **Action**: Auto-approve only (manual merge required)
+- **Rationale**: Direct dependencies need review for API changes
+- **Safety**: Allows time for testing
+
+#### Major Updates
+
+- **Action**: Comment only (full manual review required)
+- **Comment**: Warns that major version update requires manual review
+- **Rationale**: Breaking changes need careful evaluation
+
+### Safety Mechanisms
+
+- All CI checks must pass before auto-merge
+- Uses Dependabot metadata for intelligent decisions
+- Squash merge to keep clean history
+- Automatic approval from GitHub Actions
+
+---
+
+## 10. 🗑️ Stale Management (`stale.yml`)
+
+### Purpose
+
+Automatically identify and close stale issues and pull requests to keep the repository clean and focused on active work.
+
+### Triggers
+
+- Daily schedule (midnight UTC)
+- Manual dispatch
+
+### Configuration
+
+#### Issues
+
+- **Stale after**: 60 days of inactivity
+- **Close after**: 14 days of being marked stale
+- **Exempt labels**: `pinned`, `security`, `critical`, `in-progress`
+
+#### Pull Requests
+
+- **Stale after**: 60 days of inactivity
+- **Close after**: 14 days of being marked stale
+- **Exempt labels**: `pinned`, `security`, `work-in-progress`, `blocked`
+
+### Behavior
+
+1. **Mark as Stale**: Adds `stale` label and posts helpful comment
+2. **Wait Period**: 14-day grace period for activity
+3. **Close**: Automatically closes if no activity during grace period
+4. **Reopen**: Removing `stale` label or adding comment prevents closure
+
+### Messages
+
+Friendly, helpful messages that:
+
+- Explain why the issue/PR was marked stale
+- Provide clear steps to keep it open
+- Encourage creating new issues with updated information
+
+---
+
+## 11. 🔍 CodeQL Analysis (`codeql.yml`)
+
+### Purpose
+
+Advanced security analysis using GitHub's CodeQL to detect security vulnerabilities, bugs, and code quality issues
+in JavaScript/TypeScript code.
+
+### Triggers
+
+- Push to `main` or `develop` branches
+- Pull requests to `main` or `develop` branches
+- Weekly schedule (Wednesday 6 AM UTC)
+- Manual dispatch
+
+### Analysis Scope
+
+- **Languages**: JavaScript/TypeScript
+- **Queries**: Security and quality queries
+- **Upload**: Results uploaded to GitHub Security tab
+
+### What It Detects
+
+- SQL injection vulnerabilities
+- Cross-site scripting (XSS)
+- Path traversal issues
+- Unsafe deserialization
+- Hardcoded credentials
+- And 100+ other security patterns
+
+### Integration
+
+- Results appear in GitHub Security tab
+- Annotations on pull requests
+- SARIF format for standardized reporting
+- Automatic security advisory creation
+
+---
+
+## 12. 📊 Code Coverage (`coverage.yml`)
+
+### Purpose
+
+Enforce code coverage thresholds and provide visibility into test coverage changes in pull requests.
+
+### Triggers
+
+- Pull requests to `main` or `develop` branches
+- Push to `main` branch
+
+### Coverage Requirements
+
+- **Threshold**: 80% minimum coverage
+- **Enforcement**: Build fails if coverage drops below threshold
+- **Reporting**: Codecov integration for detailed reports
+
+### Features
+
+#### PR Comments
+
+- Coverage diff showing changes
+- Line-by-line coverage information
+- Visual indicators for coverage increase/decrease
+- Links to detailed Codecov reports
+
+#### Coverage Reports
+
+- Uploaded to Codecov for trending analysis
+- Historical coverage tracking
+- Per-file and per-function coverage
+- Coverage artifacts retained for 30 days
+
+### Benefits
+
+- Prevents coverage regressions
+- Visibility into test quality
+- Encourages comprehensive testing
+- Historical coverage trending
+
+---
+
+## 13. 📜 License Check (`license-check.yml`)
+
+### Purpose
+
+Validate that all npm dependencies use acceptable licenses and block problematic licenses that could create legal issues.
+
+### Triggers
+
+- Pull requests modifying `package.json` or `package-lock.json`
+- Weekly schedule (Monday 6 AM UTC)
+- Manual dispatch
+
+### Blocked Licenses
+
+- **GPL-3.0**: Strong copyleft requiring source distribution
+- **AGPL-3.0**: Network copyleft for SaaS applications
+- **LGPL-3.0**: Copyleft for libraries
+
+### Features
+
+#### License Report
+
+- Complete list of all dependency licenses
+- License summary statistics
+- JSON export for analysis
+- 90-day artifact retention
+
+#### PR Integration
+
+- Automatic PR comments on license violations
+- Detailed violation information
+- Suggestions for remediation
+- Build failure on forbidden licenses
+
+### License Compliance
+
+- Allows: MIT, Apache-2.0, BSD, ISC, CC0-1.0
+- Review required: Other permissive licenses
+- Blocked: Copyleft licenses
+
+---
+
+## 14. 📏 PR Size Labeler (`pr-size.yml`)
+
+### Purpose
+
+Automatically label pull requests by size and encourage smaller, more reviewable PRs.
+
+### Triggers
+
+- Pull request opened, reopened, or synchronized
+
+### Size Categories
+
+- **XS**: < 10 lines changed (🟢 Bright Green)
+- **S**: 10-99 lines changed (🟢 Green)
+- **M**: 100-499 lines changed (🟡 Yellow)
+- **L**: 500-999 lines changed (🟠 Orange)
+- **XL**: 1000+ lines changed (🔴 Red)
+
+### Features
+
+#### Automatic Labeling
+
+- Removes old size labels
+- Adds current size label
+- Creates labels if they don't exist
+- Color-coded for easy identification
+
+#### Large PR Warning
+
+- Comments on XL PRs (1000+ lines)
+- Suggests breaking into smaller PRs
+- Explains benefits of smaller PRs
+- Only comments once per PR
+
+### Benefits
+
+- Encourages smaller, focused PRs
+- Easier code reviews
+- Faster feedback cycles
+- Reduced risk of bugs
+- Visual size indicators
+
+---
+
+## 15. 🔒 Thread Lock (`lock.yml`)
+
+### Purpose
+
+Automatically lock closed issues and merged pull requests after a period of inactivity to prevent necroposting and
+keep discussions focused.
+
+### Triggers
+
+- Daily schedule (midnight UTC)
+- Manual dispatch
+
+### Locking Policy
+
+#### Closed Issues
+
+- **Lock after**: 90 days of inactivity
+- **Reason**: `resolved`
+- **Exempt labels**: `pinned`, `security`
+- **Comment**: Helpful message directing to new issues
+
+#### Merged PRs
+
+- **Lock after**: 60 days of inactivity
+- **Reason**: `resolved`
+- **Exempt labels**: `pinned`
+- **Comment**: Helpful message for related concerns
+
+### Benefits
+
+- Prevents necroposting on old issues
+- Encourages new issues with fresh context
+- Keeps discussions relevant
+- Reduces notification noise
+- Maintains clean issue tracker
+
+---
+
+## 16. 👋 Contributor Greeting (`greet.yml`)
+
+### Purpose
+
+Welcome first-time contributors with helpful information and resources, creating a positive first impression.
+
+### Triggers
+
+- First-time issue creation
+- First-time pull request
+
+### Greetings
+
+#### First Issue
+
+- Warm welcome message
+- Explanation of what happens next
+- Response time expectations
+- Links to helpful resources:
+  - Contributing Guide
+  - Code of Conduct
+  - Support Documentation
+
+#### First Pull Request
+
+- Congratulatory message
+- Review process explanation
+- Pre-merge checklist
+- Links to development resources:
+  - Contributing Guide
+  - Development Guide (CLAUDE.md)
+  - PR Template
+
+### Benefits
+
+- Welcoming community atmosphere
+- Reduced confusion for new contributors
+- Sets clear expectations
+- Provides helpful resources upfront
+- Increases contributor retention
+
+---
+
+## 17. 🔗 Link Checker (`links.yml`)
+
+### Purpose
+
+Automatically detect broken links in documentation to ensure all external and internal links remain valid.
+
+### Triggers
+
+- Pull requests modifying markdown files
+- Weekly schedule (Sunday midnight UTC)
+- Manual dispatch
+
+### Scope
+
+- All markdown files (`.md`, `.mdx`)
+- README, CLAUDE.md, and other documentation
+- Maximum depth of 3 levels
+- Configurable patterns via `.github/markdown-link-check.json`
+
+### Features
+
+#### Link Validation
+
+- External URL checking
+- Internal link verification
+- Relative link validation
+- Timeout and retry logic (20s timeout, 3 retries)
+
+#### Reporting
+
+**On Schedule**: Creates issue for broken links
+**On PR**: Comments on PR with broken link details
+
+### Configuration
+
+Ignores localhost URLs and configurable patterns:
+
+- `http://localhost:*`
+- `http://127.0.0.1:*`
+- `https://localhost:*`
+
+### Benefits
+
+- Prevents broken documentation
+- Maintains professional appearance
+- Catches link rot early
+- Automated maintenance
+
+---
+
+## 18. 🧹 Branch Cleanup (`cleanup.yml`)
+
+### Purpose
+
+Automatically delete feature branches after pull requests are merged to keep the repository clean and organized.
+
+### Triggers
+
+- Pull request closed (merged only)
+
+### Behavior
+
+#### Automatic Deletion
+
+- Only deletes branches from same repository (not forks)
+- Protects main branches: `main`, `master`, `develop`, `staging`, `production`
+- Deletes branch immediately after merge
+- Comments on PR confirming deletion
+
+#### Protected Branches
+
+Never deletes:
+
+- `main`, `master`
+- `develop`
+- `staging`, `production`
+- Any branch from forked repository
+
+### Benefits
+
+- Keeps repository clean
+- Reduces clutter
+- No manual cleanup needed
+- Clear branch lifecycle
+- Prevents confusion about active branches
+
+---
+
 ## 🔄 Dependency Management (Renovate)
 
 ### Purpose
@@ -715,6 +1190,56 @@ Major Updates: Sundays 3-5 AM UTC
 - **Test Coverage**: Maintain coverage thresholds
 - **Performance**: Bundle size limits enforced
 - **Security**: No new vulnerabilities introduced
+
+---
+
+## 📋 Workflow Summary Table
+
+Quick reference for all 18 workflows in this repository:
+
+### Core Development Workflows
+
+| #   | Workflow                    | File              | Trigger          | Duration   | Auto/Manual |
+| --- | --------------------------- | ----------------- | ---------------- | ---------- | ----------- |
+| 1   | 🔄 CI Pipeline              | `ci.yml`          | Push/PR          | ~10-15 min | Auto        |
+| 2   | 🧪 Advanced Testing         | `test-suite.yml`  | Push/PR/Schedule | ~20-45 min | Both        |
+| 3   | 🛡️ Security & Compliance    | `security.yml`    | Push/PR/Schedule | ~15-25 min | Both        |
+| 4   | 🚀 Deployment Pipeline      | `deploy.yml`      | Push/Tag         | ~25-40 min | Both        |
+| 5   | 📦 Release Management       | `release.yml`     | Push/Manual      | ~20-35 min | Both        |
+| 6   | ⚡ Performance Monitoring   | `performance.yml` | Push/PR/Schedule | ~20-30 min | Both        |
+| 7   | 🔧 Maintenance & Monitoring | `maintenance.yml` | Schedule         | ~15-25 min | Both        |
+
+### Automation & Developer Experience
+
+| #   | Workflow                 | File                        | Trigger          | Duration  | Auto/Manual |
+| --- | ------------------------ | --------------------------- | ---------------- | --------- | ----------- |
+| 8   | 🏷️ PR Labeler            | `pr-labeler.yml`            | PR               | < 1 min   | Auto        |
+| 9   | 🤖 Dependabot Auto-Merge | `dependabot-auto-merge.yml` | Dependabot PR    | < 1 min   | Auto        |
+| 10  | 🗑️ Stale Management      | `stale.yml`                 | Schedule (daily) | ~2-5 min  | Both        |
+| 11  | 🔍 CodeQL Analysis       | `codeql.yml`                | Push/PR/Schedule | ~5-10 min | Auto        |
+| 12  | 📊 Code Coverage         | `coverage.yml`              | Push/PR          | ~3-5 min  | Auto        |
+| 13  | 📜 License Check         | `license-check.yml`         | PR/Schedule      | ~2-3 min  | Both        |
+| 14  | 📏 PR Size Labeler       | `pr-size.yml`               | PR               | < 1 min   | Auto        |
+| 15  | 🔒 Thread Lock           | `lock.yml`                  | Schedule (daily) | ~1-2 min  | Both        |
+| 16  | 👋 Contributor Greeting  | `greet.yml`                 | First Issue/PR   | < 1 min   | Auto        |
+| 17  | 🔗 Link Checker          | `links.yml`                 | PR/Schedule      | ~2-3 min  | Both        |
+| 18  | 🧹 Branch Cleanup        | `cleanup.yml`               | PR Merged        | < 1 min   | Auto        |
+
+### Workflow Categories
+
+**Development & Quality (7 workflows)**
+
+- Comprehensive CI/CD pipeline
+- Security scanning and compliance
+- Performance monitoring
+- Release automation
+
+**Automation & Experience (11 workflows)**
+
+- Automatic PR management
+- Contributor engagement
+- Repository maintenance
+- Quality enforcement
 
 ---
 
@@ -946,7 +1471,21 @@ act -W .github/workflows/ci.yml
 
 ---
 
-**Generated**: This documentation is automatically updated as workflows evolve. Last updated: $(date)
+## 📈 Statistics
 
-**Maintainer**: [Jonathan Samuelsen](mailto:jsamuelsen11@gmail.com)
-**Support**: [GitHub Issues](https://github.com/your-org/your-repo/issues)
+- **Total Workflows**: 18
+- **Core Development**: 7 workflows
+- **Automation & DX**: 11 workflows
+- **Automated Workflows**: 13
+- **Manual Dispatch**: 11
+- **Scheduled Workflows**: 8
+
+---
+
+**Last Updated**: 2025-10-08
+
+**Maintainer**: [Jonathan Samuelsen](https://github.com/jsamuelsen)
+
+**Repository**: [recipe-ui-service](https://github.com/Recipe-Web-App/recipe-ui-service)
+
+**Support**: [GitHub Issues](https://github.com/Recipe-Web-App/recipe-ui-service/issues) | [Discussions](https://github.com/Recipe-Web-App/recipe-ui-service/discussions)

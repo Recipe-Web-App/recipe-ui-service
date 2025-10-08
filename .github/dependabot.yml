@@ -1,3 +1,4 @@
+---
 # Dependabot configuration for automated dependency updates
 # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
@@ -9,78 +10,70 @@ updates:
     schedule:
       interval: 'weekly'
       day: 'monday'
-      time: '06:00'
+      time: '09:00'
+      timezone: 'US/Eastern'
     open-pull-requests-limit: 100
     assignees:
       - 'jsamuelsen'
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+      include: 'scope'
     labels:
       - 'dependencies'
-      - 'automated'
-    commit-message:
-      prefix: '⬆️'
-      include: 'scope'
-    versioning-strategy: 'increase'
+      - 'javascript'
     groups:
-      # Group security updates for faster merging
-      security-updates:
-        applies-to: security-updates
+      production-minor-patch:
+        dependency-type: 'production'
+        update-types:
+          - 'minor'
+          - 'patch'
+      development-minor-patch:
+        dependency-type: 'development'
+        update-types:
+          - 'minor'
+          - 'patch'
+    versioning-strategy: increase
+    rebase-strategy: auto
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'US/Eastern'
+    open-pull-requests-limit: 100
+    assignees:
+      - 'jsamuelsen'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+    groups:
+      github-actions:
         patterns:
           - '*'
-      # Group React ecosystem updates
-      react:
-        patterns:
-          - 'react*'
-          - '@types/react*'
-      # Group Next.js updates
-      nextjs:
-        patterns:
-          - 'next'
-          - '@next/*'
-      # Group testing dependencies
-      testing:
-        patterns:
-          - 'jest*'
-          - '@testing-library/*'
-          - 'playwright'
-          - '@playwright/*'
-      # Group linting and formatting
-      code-quality:
-        patterns:
-          - 'eslint*'
-          - 'prettier'
-          - '@typescript-eslint/*'
-          - 'stylelint*'
+    rebase-strategy: auto
 
-  # Docker base image updates
+  # Docker
   - package-ecosystem: 'docker'
     directory: '/'
     schedule:
       interval: 'weekly'
-      day: 'tuesday'
-      time: '06:00'
-    open-pull-requests-limit: 100
-    assignees:
-      - 'jsamuelsen'
-    labels:
-      - 'docker'
-      - 'security'
-    commit-message:
-      prefix: '🐳'
-      include: 'scope'
-
-  # GitHub Actions updates
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule:
-      interval: 'monthly'
       day: 'monday'
-      time: '06:00'
+      time: '09:00'
+      timezone: 'US/Eastern'
     open-pull-requests-limit: 100
     assignees:
       - 'jsamuelsen'
-    labels:
-      - 'github-actions'
-      - 'ci-cd'
     commit-message:
-      prefix: '🔧'
+      prefix: 'docker'
       include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'docker'
+    rebase-strategy: auto

@@ -1,0 +1,130 @@
+# PR Labeler Configuration
+# Automatically label pull requests based on changed files
+
+# Dependencies
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'package.json'
+          - 'package-lock.json'
+
+# Documentation
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - '**/*.mdx'
+          - 'docs/**'
+
+# GitHub
+github:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**'
+
+# GitHub Actions
+github-actions:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+
+# Docker
+docker:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'Dockerfile*'
+          - 'docker-compose*.yml'
+          - '.dockerignore'
+
+# Configuration
+configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.yml'
+          - '**/*.yaml'
+          - '**/*.json'
+          - '**/*.config.*'
+          - '.env.example'
+          - 'tsconfig*.json'
+
+# JavaScript/TypeScript
+javascript:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.js'
+          - '**/*.jsx'
+          - '**/*.ts'
+          - '**/*.tsx'
+          - 'src/**'
+
+# Tests
+testing:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.test.*'
+          - '**/*.spec.*'
+          - 'tests/**'
+          - '__tests__/**'
+          - 'test/**'
+          - 'jest.config.*'
+          - 'playwright.config.*'
+          - 'vitest.config.*'
+
+# Components
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/components/**'
+          - 'src/app/**'
+
+# Hooks
+hooks:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/hooks/**'
+
+# API Integration
+api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/lib/api/**'
+
+# State Management
+state-management:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/stores/**'
+
+# Types
+types:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/types/**'
+          - '**/*.d.ts'
+
+# Styles
+styling:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.css'
+          - '**/*.scss'
+          - '**/*.sass'
+          - 'tailwind.config.*'
+          - 'src/styles/**'
+
+# CI/CD
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - '.github/actions/**'
+
+# Security
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'SECURITY.md'
+          - '.github/workflows/security.yml'
+          - '.github/workflows/codeql.yml'
+          - '.secrets.baseline'
+          - '.gitleaks*'

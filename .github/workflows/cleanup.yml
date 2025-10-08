@@ -1,0 +1,60 @@
+name: Cleanup Merged PR Branches
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  delete-branch:
+    name: Delete Merged Branch
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Delete merged branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ref = context.payload.pull_request.head.ref;
+            const repo = context.payload.pull_request.head.repo.full_name;
+            const baseRepo = context.payload.pull_request.base.repo.full_name;
+
+            // Only delete if from same repo (not from forks)
+            if (repo !== baseRepo) {
+              console.log('PR is from a fork, skipping branch deletion');
+              return;
+            }
+
+            // Protected branches
+            const protectedBranches = ['main', 'master', 'develop', 'staging', 'production'];
+
+            if (protectedBranches.includes(ref)) {
+              console.log(`Branch ${ref} is protected, skipping deletion`);
+              return;
+            }
+
+            // Delete the branch
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${ref}`
+              });
+
+              console.log(`Successfully deleted branch: ${ref}`);
+
+              // Comment on PR
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: `🧹 **Branch Cleanup**\n\nThe branch \`${ref}\` has been automatically deleted after merging.`
+              });
+            } catch (error) {
+              console.log(`Error deleting branch ${ref}: ${error.message}`);
+              // Don't fail the workflow if branch deletion fails
+            }
