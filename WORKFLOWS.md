@@ -641,7 +641,7 @@ Deductions:
 
 ### Automated Actions
 
-- **Dependency Updates**: Via Renovate integration
+- **Dependency Updates**: Via Dependabot integration
 - **Security Patches**: Auto-merge critical security updates
 - **Cleanup Tasks**: Old data and artifact removal
 - **Health Reporting**: Regular health status updates
@@ -1107,86 +1107,95 @@ Never deletes:
 
 ---
 
-## 🔄 Dependency Management (Renovate)
+## 🔄 Dependency Management (Dependabot)
 
 ### Purpose
 
-Intelligent dependency management with automated updates, security patching, and compatibility testing.
+Automated dependency updates with GitHub's native Dependabot, providing security vulnerability alerts and version
+updates with intelligent grouping strategies.
 
-### Configuration (`renovate.json`)
+### Configuration (`.github/dependabot.yml`)
 
-Enterprise-grade Renovate configuration with sophisticated update strategies and security-first approach.
+GitHub-native dependency management with security-first approach and intelligent update grouping.
 
 ### Key Features
 
 #### 🚨 Security-First Approach
 
-```json
-{
-  "vulnerabilityAlerts": {
-    "enabled": true,
-    "schedule": ["at any time"],
-    "automerge": true,
-    "prPriority": 10
-  }
-}
-```
+- **Security Alerts**: Automatic security vulnerability detection
+- **Priority Updates**: Security patches prioritized over feature updates
+- **Immediate Action**: Security updates trigger immediately when detected
+- **Integration**: Native GitHub Security tab integration
 
 #### 📦 Intelligent Grouping
 
-- **Security Updates**: Immediate, auto-merged
-- **Dev Dependencies**: Auto-merge patches
-- **Framework Updates**: Careful review (Next.js, React)
-- **Testing Tools**: Grouped updates
-- **Build Tools**: Batched updates
+**Production Dependencies**:
+
+- Minor and patch updates grouped together
+- Reduces PR noise while maintaining safety
+- Careful review for production stability
+
+**Development Dependencies**:
+
+- Minor and patch updates grouped together
+- Faster iteration on dev tooling
+- Independent from production changes
+
+**GitHub Actions**:
+
+- All action updates grouped together
+- Maintains workflow consistency
+- Simplified review process
+
+**Docker**:
+
+- Base image updates tracked separately
+- Security scanning integrated
+- Multi-arch build compatibility
 
 #### ⏰ Smart Scheduling
 
 ```yaml
-Security: At any time (immediate)
-Dev Patches: Immediate
-Production: Weekdays 3-5 AM UTC
-Minor Updates: Mondays 3-5 AM UTC
-Major Updates: Sundays 3-5 AM UTC
+Schedule: Monday 9:00 AM Eastern Time
+Timezone: US/Eastern
+Open PR Limit: 100
+Concurrent PRs: Managed automatically
 ```
 
 #### 🔍 Update Strategy
 
-- **Patch**: Auto-merge for dev dependencies
-- **Minor**: Grouped by category
-- **Major**: Manual review required, 7-day aging
-- **Security**: Immediate with thorough testing
+- **Versioning**: Increase strategy for compatibility
+- **Rebase**: Automatic rebase on conflicts
+- **Commit Messages**: Conventional commits with scope
+  - Production: `deps: update package to vX.Y.Z`
+  - Development: `deps-dev: update package to vX.Y.Z`
+  - CI: `ci: update action to vX.Y.Z`
+  - Docker: `docker: update image to vX.Y.Z`
 
-### Package Categories
+### Package Ecosystems
 
-1. **🚨 Security Updates**
-   - Highest priority
-   - Auto-merge enabled
-   - Immediate deployment
+1. **📦 NPM Dependencies**
+   - Production and development packages
+   - Grouped by dependency type
+   - Weekly updates on Mondays
+   - Conventional commit messages
 
-2. **⚡ Framework Updates**
-   - Next.js, React, Node.js
-   - 5-day minimum aging
-   - Manual review required
+2. **⚙️ GitHub Actions**
+   - Workflow dependency updates
+   - All actions grouped together
+   - Weekly updates on Mondays
+   - Version pinning maintained
 
-3. **🧪 Testing Tools**
-   - Jest, Playwright, Testing Library
-   - Grouped updates on Fridays
-   - Automated compatibility testing
-
-4. **📏 Code Quality**
-   - ESLint, Prettier, TypeScript
-   - Auto-merge enabled
-   - Grouped updates on Thursdays
-
-5. **🎨 UI/Styling**
-   - TailwindCSS, UI libraries
-   - Grouped updates on Saturdays
-   - Visual regression testing
+3. **🐳 Docker Images**
+   - Base image updates
+   - Security scanning integration
+   - Weekly updates on Mondays
+   - Multi-arch compatibility
 
 ### Quality Gates
 
-- **Status Checks**: All CI checks must pass
+- **Status Checks**: All CI checks must pass before merge
+- **Auto-Merge**: Handled by `dependabot-auto-merge.yml` workflow
 - **Test Coverage**: Maintain coverage thresholds
 - **Performance**: Bundle size limits enforced
 - **Security**: No new vulnerabilities introduced
@@ -1294,9 +1303,9 @@ Environments:
   - production (protected)
 ```
 
-### 4. Renovate Setup
+### 4. Dependabot Setup
 
-Enable Renovate app in your repository and ensure the configuration file is present.
+Dependabot is enabled via the `.github/dependabot.yml` configuration file.
 
 ---
 
@@ -1430,7 +1439,7 @@ test: add integration tests for payment flow
 ### Documentation
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Renovate Configuration Reference](https://docs.renovatebot.com/)
+- [Dependabot Configuration Reference](https://docs.github.com/en/code-security/dependabot)
 - [Semantic Versioning Specification](https://semver.org/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 

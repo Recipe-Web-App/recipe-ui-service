@@ -39,7 +39,7 @@ enterprise-grade tooling and best practices.
 - **Security First** with automated scanning and vulnerability detection
 - **Production Ready** with Docker, Kubernetes, and blue-green deployment
 - **Enterprise DevOps** with GitHub Actions and automated workflows
-- **Dependency Management** with Renovate and security patching
+- **Dependency Management** with Dependabot and security patching
 
 ## 📁 Project Structure
 
@@ -120,7 +120,7 @@ src/
 - **TypeScript** - Strict mode with comprehensive type checking
 - **Husky** - Git hooks for quality gates
 - **lint-staged** - Multi-stage pre-commit pipeline
-- **Renovate** - Automated dependency management
+- **Dependabot** - Automated dependency management
 
 ### Testing & Quality Assurance
 
@@ -248,7 +248,7 @@ npm run deps:check  # Check for circular dependencies and unused code
 - **11-stage pre-commit hooks** with security, performance, and quality validation
 - **TypeScript strict mode** with comprehensive type checking
 - **60+ ESLint rules** covering security, performance, and accessibility
-- **Automated dependency management** with Renovate
+- **Automated dependency management** with Dependabot
 
 #### 2. **Comprehensive Testing Strategy**
 
@@ -406,7 +406,7 @@ The following documentation is planned for future releases:
 - [TanStack Query Docs](https://tanstack.com/query/latest)
 - [TailwindCSS Docs](https://tailwindcss.com/docs)
 - [Playwright Testing](https://playwright.dev/)
-- [Renovate Configuration](https://docs.renovatebot.com/)
+- [Dependabot Configuration](https://docs.github.com/en/code-security/dependabot)
 
 ## 🏆 Quality Standards
 
