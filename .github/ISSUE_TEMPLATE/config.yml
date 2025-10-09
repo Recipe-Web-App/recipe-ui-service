@@ -1,14 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 🔒 Critical Security Vulnerability
-    url: mailto:jsamuelsen11@gmail.com
-    about: For critical security issues, please email us directly instead of creating a public issue
-  - name: 💬 General Discussion
-    url: https://github.com/jsamuelsen/recipe-web-app/discussions
-    about: For general questions, ideas, and community discussions
-  - name: 📖 Documentation
-    url: https://github.com/jsamuelsen/recipe-web-app/tree/main/recipe-ui-service
-    about: Check our comprehensive documentation and guides
-  - name: 🚀 Feature Roadmap
-    url: https://github.com/jsamuelsen/recipe-web-app/projects
-    about: View our roadmap and planned features
+  - name: Security Vulnerability
+    url: https://github.com/Recipe-Web-App/recipe-ui-service/security/advisories/new
+    about: Please report security vulnerabilities through GitHub Security Advisories
+  - name: Discussion Forum
+    url: https://github.com/Recipe-Web-App/recipe-ui-service/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: Documentation
+    url: https://github.com/Recipe-Web-App/recipe-ui-service/blob/main/README.md
+    about: View comprehensive documentation and guides

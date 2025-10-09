@@ -34,7 +34,7 @@ This guide covers deployment strategies, configuration, and best practices for t
 
 ```bash
 # Clone and setup
-git clone https://github.com/jsamuelsen/recipe-web-app.git
+git clone https://github.com/jsamuelsen11/recipe-web-app.git
 cd recipe-web-app/recipe-ui-service
 
 # Install dependencies
@@ -453,6 +453,6 @@ kubectl apply -f k8s/production-deployment.yaml
 
 ## 📞 Support
 
-- **Deployment Issues**: [GitHub Issues](https://github.com/jsamuelsen/recipe-web-app/issues)
-- **Documentation**: [GitHub Discussions](https://github.com/jsamuelsen/recipe-web-app/discussions)
+- **Deployment Issues**: [GitHub Issues](https://github.com/jsamuelsen11/recipe-web-app/issues)
+- **Documentation**: [GitHub Discussions](https://github.com/jsamuelsen11/recipe-web-app/discussions)
 - **Emergency Contact**: [jsamuelsen11@gmail.com](mailto:jsamuelsen11@gmail.com)

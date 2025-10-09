@@ -19,7 +19,7 @@ LABEL stage=deps \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.vendor="Recipe App Team" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/jsamuelsen/recipe-web-app"
+      org.opencontainers.image.source="https://github.com/jsamuelsen11/recipe-web-app"
 
 WORKDIR /app
 
@@ -120,8 +120,8 @@ LABEL stage=runner \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.vendor="Recipe App Team" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/jsamuelsen/recipe-web-app" \
-      org.opencontainers.image.documentation="https://github.com/jsamuelsen/recipe-web-app/tree/main/recipe-ui-service" \
+      org.opencontainers.image.source="https://github.com/jsamuelsen11/recipe-web-app" \
+      org.opencontainers.image.documentation="https://github.com/jsamuelsen11/recipe-web-app/tree/main/recipe-ui-service" \
       org.opencontainers.image.authors="Jonathan Samuelsen <jsamuelsen11@gmail.com>" \
       maintainer="Recipe App Team"
 

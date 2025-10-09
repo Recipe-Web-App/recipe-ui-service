@@ -1,10 +1,10 @@
 # Recipe UI Service
 
-[![Build Status](https://github.com/jsamuelsen/recipe-web-app/workflows/CI/badge.svg)](https://github.com/jsamuelsen/recipe-web-app/actions)
-[![Security Scan](https://github.com/jsamuelsen/recipe-web-app/workflows/Security/badge.svg)](https://github.com/jsamuelsen/recipe-web-app/actions)
-[![Test Coverage](https://codecov.io/gh/jsamuelsen/recipe-web-app/branch/main/graph/badge.svg)](https://codecov.io/gh/jsamuelsen/recipe-web-app)
-[![Performance](https://img.shields.io/badge/lighthouse-95%2B-brightgreen)](https://github.com/jsamuelsen/recipe-web-app)
-[![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C250kb-success)](https://github.com/jsamuelsen/recipe-web-app)
+[![Build Status](https://github.com/jsamuelsen11/recipe-web-app/workflows/CI/badge.svg)](https://github.com/jsamuelsen11/recipe-web-app/actions)
+[![Security Scan](https://github.com/jsamuelsen11/recipe-web-app/workflows/Security/badge.svg)](https://github.com/jsamuelsen11/recipe-web-app/actions)
+[![Test Coverage](https://codecov.io/gh/jsamuelsen11/recipe-web-app/branch/main/graph/badge.svg)](https://codecov.io/gh/jsamuelsen11/recipe-web-app)
+[![Performance](https://img.shields.io/badge/lighthouse-95%2B-brightgreen)](https://github.com/jsamuelsen11/recipe-web-app)
+[![Bundle Size](https://img.shields.io/badge/bundle%20size-%3C250kb-success)](https://github.com/jsamuelsen11/recipe-web-app)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A modern, scalable Next.js application for recipe management with server-side rendering, built with
@@ -39,7 +39,7 @@ enterprise-grade tooling and best practices.
 - **Security First** with automated scanning and vulnerability detection
 - **Production Ready** with Docker, Kubernetes, and blue-green deployment
 - **Enterprise DevOps** with GitHub Actions and automated workflows
-- **Dependency Management** with Renovate and security patching
+- **Dependency Management** with Dependabot and security patching
 
 ## 📁 Project Structure
 
@@ -120,7 +120,7 @@ src/
 - **TypeScript** - Strict mode with comprehensive type checking
 - **Husky** - Git hooks for quality gates
 - **lint-staged** - Multi-stage pre-commit pipeline
-- **Renovate** - Automated dependency management
+- **Dependabot** - Automated dependency management
 
 ### Testing & Quality Assurance
 
@@ -248,7 +248,7 @@ npm run deps:check  # Check for circular dependencies and unused code
 - **11-stage pre-commit hooks** with security, performance, and quality validation
 - **TypeScript strict mode** with comprehensive type checking
 - **60+ ESLint rules** covering security, performance, and accessibility
-- **Automated dependency management** with Renovate
+- **Automated dependency management** with Dependabot
 
 #### 2. **Comprehensive Testing Strategy**
 
@@ -383,16 +383,22 @@ The application is configured to communicate with multiple backend microservices
 ### Project Documentation
 
 - **[Architecture Guide](ARCHITECTURE.md)** - System design and patterns
-- **[API Documentation](API.md)** - Backend integration guide
-- **[Security Guide](SECURITY.md)** - Security best practices
 - **[Performance Guide](PERFORMANCE.md)** - Optimization strategies
 - **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
 - **[Testing Strategy](TESTING.md)** - Comprehensive testing guide
 - **[GitHub Workflows](WORKFLOWS.md)** - CI/CD pipeline documentation
-- **[Contributing Guidelines](CONTRIBUTING.md)** - Development workflow
-- **[Pre-commit Guide](PRECOMMIT_GUIDE.md)** - Quality pipeline setup
+- **[UI/UX Design Guide](UI_GUIDE.md)** - Design system and component library
 - **[Claude Code Guide](CLAUDE.md)** - AI-assisted development
-- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
+
+### Planned Documentation
+
+The following documentation is planned for future releases:
+
+- **API Documentation** - Backend integration guide
+- **Security Guide** - Security best practices and policies
+- **Contributing Guidelines** - Development workflow and contribution process
+- **Pre-commit Guide** - Quality pipeline setup and usage
+- **Troubleshooting** - Common issues and solutions
 
 ### External Resources
 
@@ -400,7 +406,7 @@ The application is configured to communicate with multiple backend microservices
 - [TanStack Query Docs](https://tanstack.com/query/latest)
 - [TailwindCSS Docs](https://tailwindcss.com/docs)
 - [Playwright Testing](https://playwright.dev/)
-- [Renovate Configuration](https://docs.renovatebot.com/)
+- [Dependabot Configuration](https://docs.github.com/en/code-security/dependabot)
 
 ## 🏆 Quality Standards
 
@@ -495,13 +501,13 @@ npm run format && npm run lint
 
 ### Getting Help
 
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/jsamuelsen/recipe-web-app/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/jsamuelsen/recipe-web-app/discussions)
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/jsamuelsen11/recipe-web-app/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/jsamuelsen11/recipe-web-app/discussions)
 - **📖 Documentation**: Check our comprehensive docs above
 - **🚀 Feature Requests**: Use our issue templates
-- **🔒 Security Issues**: See [SECURITY.md](SECURITY.md) for reporting guidelines
+- **🔒 Security Issues**: Report security vulnerabilities via [GitHub Security](https://github.com/jsamuelsen11/recipe-web-app/security)
 
 ---
 
-**Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen)
-**Last Updated**: <!-- AUTO-GENERATED-DATE -->
+**Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen11)
+**Last Updated**: 2025-10-08

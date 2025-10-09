@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete CI/CD pipeline with 8 GitHub workflows
 - Performance monitoring and optimization tools
 - Comprehensive documentation (10+ guides)
-- Automated dependency management with Renovate
+- Automated dependency management with Dependabot
 - Code quality enforcement with 60+ ESLint rules
 
 ### Security
