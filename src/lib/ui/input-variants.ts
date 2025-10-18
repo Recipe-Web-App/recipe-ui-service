@@ -15,9 +15,9 @@ export const inputVariants = cva(
   [
     'flex',
     'w-full',
-    'rounded-md',
+    'rounded-lg',
     'border',
-    'bg-background',
+    'bg-primary/5',
     'px-3',
     'py-2',
     'font-medium',
@@ -27,10 +27,10 @@ export const inputVariants = cva(
     'file:text-foreground',
     'file:text-sm',
     'file:font-medium',
-    'placeholder:text-muted-foreground',
+    'placeholder:text-primary/60',
     'focus-visible:outline-none',
     'focus-visible:ring-2',
-    'focus-visible:ring-primary/50',
+    'focus-visible:ring-primary/20',
     'focus-visible:ring-offset-2',
     'disabled:cursor-not-allowed',
     'disabled:opacity-50',
@@ -42,9 +42,10 @@ export const inputVariants = cva(
     variants: {
       variant: {
         default: [
-          'border-input',
-          'hover:border-input-hover',
-          'focus:border-primary',
+          'border-primary/20',
+          'hover:border-primary/30',
+          'focus:border-primary/40',
+          'focus:bg-primary/10',
         ],
         filled: [
           'border-transparent',

@@ -55,7 +55,8 @@ describe('RegisterForm', () => {
 
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/confirm password/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/bio/i)).toBeInTheDocument();
     expect(
@@ -112,7 +113,7 @@ describe('RegisterForm', () => {
     const user = userEvent.setup();
     render(<RegisterForm />);
 
-    const passwordInput = screen.getByLabelText(/^password/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
     await user.type(passwordInput, 'weak');
     await user.tab();
 
@@ -120,6 +121,68 @@ describe('RegisterForm', () => {
       expect(
         screen.getByText(/password must be at least 8 characters/i)
       ).toBeInTheDocument();
+    });
+  });
+
+  it('validates confirm password is required', async () => {
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    await user.click(confirmPasswordInput);
+    await user.tab();
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/please confirm your password/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('shows error when passwords do not match', async () => {
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+
+    await user.type(passwordInput, 'Password123');
+    await user.type(confirmPasswordInput, 'DifferentPassword123');
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument();
+    });
+  });
+
+  it('disables submit button when passwords do not match', async () => {
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+
+    await user.type(passwordInput, 'Password123');
+    await user.type(confirmPasswordInput, 'DifferentPassword123');
+
+    await waitFor(() => {
+      const submitButton = screen.getByRole('button', { name: /sign up/i });
+      expect(submitButton).toBeDisabled();
+    });
+  });
+
+  it('enables submit button when passwords match and form is valid', async () => {
+    const user = userEvent.setup();
+    render(<RegisterForm />);
+
+    await user.type(screen.getByLabelText(/username/i), 'testuser');
+    await user.type(screen.getByLabelText(/email/i), 'test@example.com');
+    await user.type(screen.getByLabelText(/^password$/i), 'Password123');
+    await user.type(screen.getByLabelText(/confirm password/i), 'Password123');
+
+    await waitFor(() => {
+      const submitButton = screen.getByRole('button', { name: /sign up/i });
+      expect(submitButton).not.toBeDisabled();
     });
   });
 
@@ -145,7 +208,8 @@ describe('RegisterForm', () => {
 
     await user.type(screen.getByLabelText(/username/i), 'testuser');
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password/i), 'Password123');
+    await user.type(screen.getByLabelText(/^password$/i), 'Password123');
+    await user.type(screen.getByLabelText(/confirm password/i), 'Password123');
     await user.type(screen.getByLabelText(/full name/i), 'Test User');
 
     const submitButton = screen.getByRole('button', { name: /sign up/i });
@@ -188,7 +252,8 @@ describe('RegisterForm', () => {
 
     await user.type(screen.getByLabelText(/username/i), 'testuser');
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password/i), 'Password123');
+    await user.type(screen.getByLabelText(/^password$/i), 'Password123');
+    await user.type(screen.getByLabelText(/confirm password/i), 'Password123');
 
     const submitButton = screen.getByRole('button', { name: /sign up/i });
     await user.click(submitButton);
@@ -252,7 +317,8 @@ describe('RegisterForm', () => {
 
     expect(screen.getByLabelText(/username/i)).toBeDisabled();
     expect(screen.getByLabelText(/email/i)).toBeDisabled();
-    expect(screen.getByLabelText(/^password/i)).toBeDisabled();
+    expect(screen.getByLabelText(/^password$/i)).toBeDisabled();
+    expect(screen.getByLabelText(/confirm password/i)).toBeDisabled();
     expect(
       screen.getByRole('button', { name: /creating account/i })
     ).toBeDisabled();
@@ -282,7 +348,8 @@ describe('RegisterForm', () => {
 
     await user.type(screen.getByLabelText(/username/i), 'testuser');
     await user.type(screen.getByLabelText(/email/i), 'test@example.com');
-    await user.type(screen.getByLabelText(/^password/i), 'Password123');
+    await user.type(screen.getByLabelText(/^password$/i), 'Password123');
+    await user.type(screen.getByLabelText(/confirm password/i), 'Password123');
 
     const submitButton = screen.getByRole('button', { name: /sign up/i });
     await user.click(submitButton);

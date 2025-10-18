@@ -33,15 +33,16 @@ export function RegisterForm({
       username: '',
       email: '',
       password: '',
+      confirm_password: '',
       full_name: '',
       bio: '',
     },
-    mode: 'onBlur',
+    mode: 'onTouched',
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      // Filter out empty optional fields
+      // Filter out empty optional fields and exclude confirm_password
       const requestData = {
         username: data.username,
         email: data.email,
@@ -115,6 +116,16 @@ export function RegisterForm({
 
         <FormInput
           form={form}
+          name="confirm_password"
+          type="password"
+          label="Confirm Password"
+          placeholder="Re-enter your password"
+          required
+          disabled={registerMutation.isPending}
+        />
+
+        <FormInput
+          form={form}
           name="full_name"
           label="Full Name"
           placeholder="John Doe"
@@ -136,7 +147,7 @@ export function RegisterForm({
         <Button
           type="submit"
           className="w-full"
-          disabled={registerMutation.isPending}
+          disabled={registerMutation.isPending || !form.formState.isValid}
           loading={registerMutation.isPending}
         >
           {registerMutation.isPending ? 'Creating Account...' : 'Sign Up'}

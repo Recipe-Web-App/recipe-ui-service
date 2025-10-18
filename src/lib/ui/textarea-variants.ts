@@ -160,7 +160,7 @@ export const recipeTextareaVariants = cva(
           'min-h-[6rem]',
           'border-primary/20',
           'bg-primary/5',
-          'text-primary-foreground',
+          'text-foreground',
           'placeholder:text-primary/60',
           'focus:border-primary/40',
           'focus:ring-primary/20',
