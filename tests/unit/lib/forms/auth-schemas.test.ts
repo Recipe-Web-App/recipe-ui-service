@@ -13,6 +13,7 @@ describe('auth-schemas', () => {
         username: 'testuser',
         email: 'test@example.com',
         password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
         full_name: 'Test User',
         bio: 'A test user bio',
       };
@@ -26,6 +27,7 @@ describe('auth-schemas', () => {
         username: 'testuser',
         email: 'test@example.com',
         password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
         full_name: '',
         bio: '',
       };
@@ -87,6 +89,7 @@ describe('auth-schemas', () => {
         username: 'test_user_123',
         email: 'test@example.com',
         password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
       };
 
       const result = registerSchema.safeParse(validData);
@@ -170,6 +173,7 @@ describe('auth-schemas', () => {
         username: 'testuser',
         email: 'test@example.com',
         password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
         full_name: 'a'.repeat(101),
       };
 
@@ -187,6 +191,7 @@ describe('auth-schemas', () => {
         username: 'testuser',
         email: 'test@example.com',
         password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
         bio: 'a'.repeat(501),
       };
 
@@ -197,6 +202,50 @@ describe('auth-schemas', () => {
           'at most 500 characters'
         );
       }
+    });
+
+    it('rejects empty confirm password', () => {
+      const invalidData = {
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'Password123', // pragma: allowlist secret
+        confirm_password: '',
+      };
+
+      const result = registerSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain(
+          'confirm your password'
+        );
+      }
+    });
+
+    it('rejects mismatched passwords', () => {
+      const invalidData = {
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'DifferentPassword123', // pragma: allowlist secret
+      };
+
+      const result = registerSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].message).toContain('do not match');
+      }
+    });
+
+    it('accepts matching passwords', () => {
+      const validData = {
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'Password123', // pragma: allowlist secret
+        confirm_password: 'Password123', // pragma: allowlist secret
+      };
+
+      const result = registerSchema.safeParse(validData);
+      expect(result.success).toBe(true);
     });
   });
 

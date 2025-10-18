@@ -39,21 +39,27 @@ const usernameSchema = z
 /**
  * Registration form validation schema
  */
-export const registerSchema = z.object({
-  username: usernameSchema,
-  email: emailSchema,
-  password: passwordSchema,
-  full_name: z
-    .string()
-    .max(100, 'Full name must be at most 100 characters')
-    .optional()
-    .or(z.literal('')),
-  bio: z
-    .string()
-    .max(500, 'Bio must be at most 500 characters')
-    .optional()
-    .or(z.literal('')),
-});
+export const registerSchema = z
+  .object({
+    username: usernameSchema,
+    email: emailSchema,
+    password: passwordSchema,
+    confirm_password: z.string().min(1, 'Please confirm your password'),
+    full_name: z
+      .string()
+      .max(100, 'Full name must be at most 100 characters')
+      .optional()
+      .or(z.literal('')),
+    bio: z
+      .string()
+      .max(500, 'Bio must be at most 500 characters')
+      .optional()
+      .or(z.literal('')),
+  })
+  .refine(data => data.password === data.confirm_password, {
+    message: 'Passwords do not match',
+    path: ['confirm_password'],
+  });
 
 /**
  * Registration form type
