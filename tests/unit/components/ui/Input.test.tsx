@@ -107,7 +107,7 @@ describe('Input', () => {
     test('applies default variant classes', () => {
       renderInput({ variant: 'default' });
       const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('border-input');
+      expect(input).toHaveClass('border-primary/20', 'bg-primary/5');
     });
 
     test('applies filled variant classes', () => {
