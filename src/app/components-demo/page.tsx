@@ -19,6 +19,13 @@ const components = [
     status: 'ready',
   },
   {
+    name: 'BrowseList',
+    path: '/components-demo/browse-list',
+    description: 'Compact list view for browsing content with pagination',
+    variants: 4,
+    status: 'ready',
+  },
+  {
     name: 'Button',
     path: '/components-demo/button',
     description: 'Flexible, accessible button component',
@@ -449,7 +456,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">52</div>
+            <div className="text-primary text-3xl font-bold">53</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -457,7 +464,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">433</div>
+            <div className="text-primary text-3xl font-bold">437</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

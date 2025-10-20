@@ -1,0 +1,242 @@
+# BrowseList
+
+A generic, reusable list component for browsing content with built-in support for pagination, loading, empty, and error states. Optimized for compact display and quick scanning of many items.
+
+## Features
+
+- **Compact List Layout**: Optimized for displaying many items in a scannable format
+- **Pagination Support**: Built-in pagination controls with page size selection
+- **Loading State**: Skeleton placeholders during data fetching
+- **Empty State**: Customizable empty state with message and actions
+- **Error State**: Error handling with retry functionality
+- **TypeScript Generics**: Full type safety with generic item types
+- **Accessibility**: WCAG 2.1 AA compliant with proper ARIA labels
+
+## Usage
+
+```tsx
+import { BrowseList } from '@/components/ui/browse-list';
+
+<BrowseList
+  items={recipes}
+  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setCurrentPage}
+  loading={isLoading}
+  emptyMessage="No recipes found"
+/>
+```
+
+## Props
+
+### Data Props
+
+- `items: T[]` - Array of items to display
+- `renderItem: (item: T, index: number) => ReactNode` - Function to render each item
+
+### Pagination Props
+
+- `currentPage?: number` - Current active page (default: 1)
+- `totalPages?: number` - Total number of pages (default: 1)
+- `totalItems?: number` - Total count of items across all pages
+- `pageSize?: number` - Items per page (default: 20)
+- `onPageChange?: (page: number) => void` - Page change callback
+- `onPageSizeChange?: (size: number) => void` - Page size change callback
+
+### State Props
+
+- `loading?: boolean` - Loading state flag (default: false)
+- `error?: Error | string | null` - Error to display
+
+### Empty State Props
+
+- `emptyMessage?: string` - Empty state message (default: "No items found")
+- `emptyDescription?: string` - Empty state description
+- `emptyIcon?: ReactNode` - Icon for empty state
+- `emptyActions?: ReactNode` - Action buttons for empty state
+
+### Configuration Props
+
+- `showDividers?: boolean` - Show dividers between items (default: false)
+- `spacing?: 'compact' | 'default' | 'comfortable'` - Spacing variant (default: 'default')
+- `skeletonCount?: number` - Number of skeleton items (default: 8)
+- `renderSkeleton?: () => ReactNode` - Custom skeleton renderer
+
+### Styling Props
+
+- `className?: string` - Additional container classes
+- `listClassName?: string` - Additional list classes
+- `paginationClassName?: string` - Additional pagination classes
+
+### Pagination Options
+
+- `showPagination?: boolean` - Show pagination controls (default: true)
+- `paginationProps?: Partial<PaginationProps>` - Additional pagination props
+
+### Error Handling
+
+- `onRetry?: () => void` - Retry button callback
+- `renderError?: (error: Error | string) => ReactNode` - Custom error renderer
+
+### Accessibility
+
+- `aria-label?: string` - Accessible label (default: "Browse list")
+- `aria-describedby?: string` - Accessible description
+
+## Variants
+
+### Spacing
+
+Controls vertical spacing between the list and pagination:
+
+- `compact` - Minimal spacing (12px)
+- `default` - Standard spacing (24px)
+- `comfortable` - Generous spacing (32px)
+
+### Dividers
+
+- `showDividers={true}` - Shows horizontal dividers between list items
+- `showDividers={false}` - No dividers (default)
+
+## Examples
+
+### Basic List
+
+Simple list without pagination:
+
+```tsx
+<SimpleBrowseList
+  items={recipes}
+  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+/>
+```
+
+### With Pagination
+
+Full pagination controls:
+
+```tsx
+<BrowseList
+  items={recipes}
+  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  currentPage={page}
+  totalPages={10}
+  onPageChange={setPage}
+  pageSize={20}
+  onPageSizeChange={setPageSize}
+  paginationProps={{
+    showPageInfo: true,
+    showPageSizeSelector: true,
+  }}
+/>
+```
+
+### Loading State
+
+Show skeletons while fetching:
+
+```tsx
+<BrowseList
+  items={[]}
+  renderItem={() => null}
+  loading={true}
+  skeletonCount={8}
+/>
+```
+
+### Empty State
+
+Custom empty state:
+
+```tsx
+<BrowseList
+  items={[]}
+  renderItem={() => null}
+  emptyMessage="No recipes found"
+  emptyDescription="Try adjusting your search filters"
+  emptyIcon={<Search className="h-16 w-16" />}
+  emptyActions={
+    <Button onClick={clearFilters}>Clear Filters</Button>
+  }
+/>
+```
+
+### Error State
+
+Error handling with retry:
+
+```tsx
+<BrowseList
+  items={[]}
+  renderItem={() => null}
+  error="Failed to load recipes"
+  onRetry={refetch}
+/>
+```
+
+### With Dividers
+
+Show dividers between items:
+
+```tsx
+<BrowseList
+  items={recipes}
+  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  showDividers={true}
+/>
+```
+
+### Spacing Variants
+
+```tsx
+// Compact
+<BrowseList items={data} renderItem={render} spacing="compact" />
+
+// Comfortable
+<BrowseList items={data} renderItem={render} spacing="comfortable" />
+```
+
+## Best Practices
+
+1. **Use for Compact Views**: BrowseList is ideal when you need to display many items in a scannable format
+2. **Complement BrowseGrid**: Use BrowseList as an alternative view to BrowseGrid for the same data
+3. **Consistent Item Height**: Keep list items consistent in height for better scanning
+4. **Provide Empty Actions**: Always provide helpful actions in empty states
+5. **Handle Errors Gracefully**: Always provide retry functionality for errors
+6. **Optimize Rendering**: Use React.memo() for complex list items
+
+## Accessibility
+
+- **ARIA Labels**: Provide descriptive `aria-label` props
+- **Keyboard Navigation**: Full keyboard support via List component
+- **Screen Readers**: Proper semantic HTML and ARIA attributes
+- **Focus Management**: Maintains focus after page changes
+- **Loading States**: Announces loading state to screen readers
+
+## Related Components
+
+- `BrowseGrid` - Grid view alternative for the same data
+- `List` - Base list component used internally
+- `Pagination` - Pagination controls
+- `EmptyState` - Empty state component
+- `Skeleton` - Loading skeletons
+
+## TypeScript
+
+Full TypeScript support with generics:
+
+```tsx
+interface Recipe {
+  id: number;
+  title: string;
+  description: string;
+}
+
+<BrowseList<Recipe>
+  items={recipes}
+  renderItem={(recipe) => (
+    <ListItem>{recipe.title}</ListItem>
+  )}
+/>
+```

@@ -419,6 +419,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-browse-list',
+    label: 'Browse List',
+    href: '/components-demo/browse-list',
+    metadata: {
+      sortOrder: 66,
+    },
+  },
+  {
     id: 'components-button',
     label: 'Button',
     href: '/components-demo/button',
