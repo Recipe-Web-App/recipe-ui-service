@@ -12,6 +12,13 @@ import {
 
 const components = [
   {
+    name: 'BrowseGrid',
+    path: '/components-demo/browse-grid',
+    description: 'Generic grid wrapper for browsing content with pagination',
+    variants: 4,
+    status: 'ready',
+  },
+  {
     name: 'Button',
     path: '/components-demo/button',
     description: 'Flexible, accessible button component',
@@ -442,7 +449,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">51</div>
+            <div className="text-primary text-3xl font-bold">52</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -450,7 +457,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">429</div>
+            <div className="text-primary text-3xl font-bold">433</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

@@ -1,0 +1,445 @@
+import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import { BrowseGrid, SimpleBrowseGrid } from './browse-grid';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from './card';
+import { Badge } from './badge';
+import { Button } from './button';
+import { Search, Package } from 'lucide-react';
+
+<Meta
+  title="UI Components/BrowseGrid"
+  component={BrowseGrid}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[600px] p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The BrowseGrid component provides a comprehensive, reusable grid layout for browsing content
+with built-in support for pagination, loading states, empty states, and error handling.
+
+## Features
+
+- **Generic TypeScript support** - Works with any data type
+- **Responsive grid layout** - 2/3/4 columns (mobile/tablet/desktop)
+- **Integrated pagination** - Built-in pagination controls
+- **Loading state** - Skeleton placeholders during data fetching
+- **Empty state** - Customizable empty state display
+- **Error state** - Error handling with retry functionality
+- **Accessibility** - Full ARIA support and keyboard navigation
+- **Customizable** - Flexible styling and configuration options
+
+## Usage
+
+Use BrowseGrid for:
+- Recipe browsing pages
+- Collection galleries
+- Meal plan listings
+- Search results
+- Product catalogs
+- User-generated content lists
+        `
+      }
+    }
+  }}
+  argTypes={{
+    items: {
+      description: 'Array of items to display in the grid',
+      control: false
+    },
+    renderItem: {
+      description: 'Function to render each item',
+      control: false
+    },
+    currentPage: {
+      control: { type: 'number', min: 1 },
+      description: 'Current active page number',
+      defaultValue: 1
+    },
+    totalPages: {
+      control: { type: 'number', min: 1 },
+      description: 'Total number of pages',
+      defaultValue: 1
+    },
+    loading: {
+      control: { type: 'boolean' },
+      description: 'Whether the grid is loading',
+      defaultValue: false
+    },
+    gap: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+      description: 'Gap size between grid items',
+      defaultValue: 'md'
+    },
+    skeletonCount: {
+      control: { type: 'number', min: 1, max: 24 },
+      description: 'Number of skeleton items to show when loading',
+      defaultValue: 12
+    }
+  }}
+/>
+
+# BrowseGrid
+
+<Description of={BrowseGrid} />
+
+export const mockRecipes = [
+  { id: 1, title: 'Spaghetti Carbonara', category: 'Italian', time: '30 min', rating: 4.5 },
+  { id: 2, title: 'Chicken Tikka Masala', category: 'Indian', time: '45 min', rating: 4.8 },
+  { id: 3, title: 'Beef Tacos', category: 'Mexican', time: '20 min', rating: 4.3 },
+  { id: 4, title: 'Caesar Salad', category: 'Salad', time: '15 min', rating: 4.0 },
+  { id: 5, title: 'Pad Thai', category: 'Thai', time: '35 min', rating: 4.7 },
+  { id: 6, title: 'Greek Moussaka', category: 'Greek', time: '60 min', rating: 4.6 },
+  { id: 7, title: 'French Onion Soup', category: 'French', time: '40 min', rating: 4.4 },
+  { id: 8, title: 'Sushi Rolls', category: 'Japanese', time: '50 min', rating: 4.9 },
+  { id: 9, title: 'BBQ Ribs', category: 'American', time: '90 min', rating: 4.7 },
+  { id: 10, title: 'Falafel Wrap', category: 'Middle Eastern', time: '25 min', rating: 4.2 },
+  { id: 11, title: 'Paella', category: 'Spanish', time: '55 min', rating: 4.6 },
+  { id: 12, title: 'Pho', category: 'Vietnamese', time: '120 min', rating: 4.8 },
+];
+
+export const RecipeCard = ({ recipe }) => (
+  <Card className="h-full transition-shadow hover:shadow-lg">
+    <CardHeader>
+      <div className="flex items-start justify-between">
+        <CardTitle className="text-lg">{recipe.title}</CardTitle>
+        <Badge variant="secondary">{recipe.rating}★</Badge>
+      </div>
+      <CardDescription>
+        {recipe.category} • {recipe.time}
+      </CardDescription>
+    </CardHeader>
+  </Card>
+);
+
+## Basic Grid
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      return (
+        <BrowseGrid
+          items={mockRecipes}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          showPagination={false}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## With Pagination
+
+<Canvas>
+  <Story name="With Pagination">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const pageSize = 6;
+      const totalPages = Math.ceil(mockRecipes.length / pageSize);
+      const startIndex = (currentPage - 1) * pageSize;
+      const paginatedItems = mockRecipes.slice(startIndex, startIndex + pageSize);
+
+      return (
+        <BrowseGrid
+          items={paginatedItems}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={mockRecipes.length}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          showPagination={true}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Loading State
+
+<Canvas>
+  <Story name="Loading">
+    {() => {
+      return (
+        <BrowseGrid
+          items={[]}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          loading={true}
+          skeletonCount={12}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Empty State
+
+<Canvas>
+  <Story name="Empty">
+    {() => {
+      return (
+        <BrowseGrid
+          items={[]}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          emptyMessage="No recipes found"
+          emptyDescription="Try adjusting your search or filters to find what you're looking for."
+          emptyIcon={<Search className="h-16 w-16 text-muted-foreground" />}
+          emptyActions={
+            <>
+              <Button variant="outline">Clear Filters</Button>
+              <Button>Browse All Recipes</Button>
+            </>
+          }
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Error State
+
+<Canvas>
+  <Story name="Error">
+    {() => {
+      const [hasError, setHasError] = React.useState(true);
+
+      return (
+        <BrowseGrid
+          items={hasError ? [] : mockRecipes}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          error={hasError ? "Failed to load recipes. Please try again." : null}
+          onRetry={() => setHasError(false)}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Gap Sizes
+
+<Canvas>
+  <Story name="Gap Sizes">
+    {() => {
+      const items = mockRecipes.slice(0, 6);
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-sm font-medium">Small Gap</h3>
+            <BrowseGrid
+              items={items}
+              renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+              gap="sm"
+              showPagination={false}
+            />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-sm font-medium">Medium Gap (Default)</h3>
+            <BrowseGrid
+              items={items}
+              renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+              gap="md"
+              showPagination={false}
+            />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-sm font-medium">Large Gap</h3>
+            <BrowseGrid
+              items={items}
+              renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+              gap="lg"
+              showPagination={false}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Custom Columns
+
+<Canvas>
+  <Story name="Custom Columns">
+    {() => {
+      const items = mockRecipes.slice(0, 8);
+
+      return (
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-sm font-medium">Wide Layout (1/2/3 columns)</h3>
+            <BrowseGrid
+              items={items}
+              renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+              columns={{ mobile: 1, tablet: 2, desktop: 3 }}
+              showPagination={false}
+            />
+          </div>
+
+          <div>
+            <h3 className="mb-4 text-sm font-medium">Compact Layout (3/4/6 columns)</h3>
+            <BrowseGrid
+              items={items}
+              renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+              columns={{ mobile: 3, tablet: 4, desktop: 6 }}
+              showPagination={false}
+            />
+          </div>
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Interactive Example
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const [currentPage, setCurrentPage] = React.useState(1);
+      const [isLoading, setIsLoading] = React.useState(false);
+      const [searchTerm, setSearchTerm] = React.useState('');
+
+      const pageSize = 6;
+      const filteredRecipes = searchTerm
+        ? mockRecipes.filter(r => r.title.toLowerCase().includes(searchTerm.toLowerCase()))
+        : mockRecipes;
+
+      const totalPages = Math.ceil(filteredRecipes.length / pageSize);
+      const startIndex = (currentPage - 1) * pageSize;
+      const paginatedItems = filteredRecipes.slice(startIndex, startIndex + pageSize);
+
+      const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1);
+      };
+
+      const simulateLoading = () => {
+        setIsLoading(true);
+        setTimeout(() => setIsLoading(false), 2000);
+      };
+
+      return (
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Search recipes..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            />
+            <Button onClick={simulateLoading} variant="outline">
+              Toggle Loading
+            </Button>
+          </div>
+
+          <BrowseGrid
+            items={paginatedItems}
+            renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={filteredRecipes.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            loading={isLoading}
+            emptyMessage="No recipes match your search"
+            emptyDescription="Try a different search term or browse all recipes."
+            emptyIcon={<Search className="h-16 w-16 text-muted-foreground" />}
+          />
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Simple Browse Grid
+
+<Canvas>
+  <Story name="Simple">
+    {() => {
+      return (
+        <SimpleBrowseGrid
+          items={mockRecipes.slice(0, 8)}
+          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+        />
+      );
+    }}
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={BrowseGrid} />
+
+## Accessibility Features
+
+### Keyboard Navigation
+- **Tab**: Navigate through grid items and pagination controls
+- **Enter/Space**: Activate pagination buttons
+- **Arrow Keys**: Navigate between pages
+
+### Screen Reader Support
+- Proper ARIA labels for grid region
+- Loading state announced with `aria-busy`
+- Current page announced in pagination
+- Empty and error states clearly communicated
+
+### Focus Management
+- Logical tab order through grid items
+- Focus indicators on all interactive elements
+- Focus restoration after page changes
+
+## Design Guidelines
+
+### When to Use
+- **Browse Pages**: Recipe lists, collection galleries, meal plan browsing
+- **Search Results**: Display search results with pagination
+- **Content Galleries**: User-generated content, photos, articles
+- **Product Catalogs**: E-commerce product listings
+
+### When Not to Use
+- **Small Datasets**: Use simple flex layouts for < 6 items
+- **Infinite Scroll**: Consider InfiniteScroll component for social feeds
+- **Tables**: Use Table component for structured data
+- **Single Item**: Use Card or detail view for single items
+
+### Best Practices
+- **Page Size**: 12-24 items for card grids, 6-12 for detailed cards
+- **Loading**: Always show loading skeletons for better UX
+- **Empty State**: Provide clear guidance on what to do next
+- **Error Handling**: Always provide retry functionality
+- **Responsive**: Test at all breakpoints (mobile, tablet, desktop)
+
+## Performance Considerations
+
+### Optimization Strategies
+- Memoize `renderItem` function to prevent unnecessary re-renders
+- Use proper keys for list items (stable IDs, not indexes)
+- Lazy load images in cards for better performance
+- Consider virtualization for very large datasets (1000+ items)
+- Debounce search/filter inputs to reduce API calls
+
+### Bundle Impact
+- Minimal overhead - composes existing components
+- Tree-shakeable - only imports what you use
+- Efficient re-render patterns
+- Optimized for server-side rendering
+
+## Implementation Notes
+
+- Supports both controlled and uncontrolled usage patterns
+- Full TypeScript generic support for type safety
+- Responsive design with mobile-first approach
+- Automatic skeleton generation based on item count
+- Customizable empty and error states
+- WCAG 2.1 AA compliant accessibility
+- Performance optimized with proper memoization
+- Compatible with all entity types (recipes, collections, etc.)
