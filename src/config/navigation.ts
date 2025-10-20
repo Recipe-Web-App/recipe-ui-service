@@ -811,6 +811,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-view-toggle',
+    label: 'View Toggle',
+    href: '/components-demo/view-toggle',
+    metadata: {
+      sortOrder: 485,
+    },
+  },
+  {
     id: 'components-protected-route',
     label: 'Protected Route',
     href: '/components-demo/protected-route',

@@ -433,6 +433,14 @@ const components = [
     variants: 8,
     status: 'ready',
   },
+  {
+    name: 'ViewToggle',
+    path: '/components-demo/view-toggle',
+    description:
+      'Toggle between grid and list views with persistent localStorage preference',
+    variants: 4,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -456,7 +464,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">53</div>
+            <div className="text-primary text-3xl font-bold">54</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -464,7 +472,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">437</div>
+            <div className="text-primary text-3xl font-bold">441</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
