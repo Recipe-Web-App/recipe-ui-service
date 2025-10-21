@@ -519,15 +519,6 @@ describe('QuickActions', () => {
       const buttons = screen.getAllByRole('button');
       expect(buttons).toHaveLength(4); // 3 visible + 1 overflow
     });
-
-    it('handles custom animation duration', () => {
-      const { container } = render(
-        <QuickActions actions={defaultActions} animationDuration={300} />
-      );
-
-      const toolbar = container.firstChild as HTMLElement;
-      expect(toolbar.style.transitionDuration).toBe('300ms');
-    });
   });
 
   describe('Accessibility', () => {

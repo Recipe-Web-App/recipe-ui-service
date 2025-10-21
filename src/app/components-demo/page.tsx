@@ -457,6 +457,14 @@ const components = [
     variants: 4,
     status: 'ready',
   },
+  {
+    name: 'RecipeCard',
+    path: '/components-demo/recipe-card',
+    description:
+      'Recipe-specific card with metadata, author, quick actions, and menu',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -480,7 +488,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">56</div>
+            <div className="text-primary text-3xl font-bold">57</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -488,7 +496,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">449</div>
+            <div className="text-primary text-3xl font-bold">457</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
