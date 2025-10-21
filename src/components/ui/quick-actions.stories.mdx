@@ -1,0 +1,889 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import { QuickActions } from './quick-actions';
+import { Card, CardHeader, CardContent, CardTitle } from './card';
+import { Badge } from './badge';
+import {
+  Heart,
+  Share2,
+  Plus,
+  Eye,
+  Edit,
+  Trash2,
+  Copy,
+  Download,
+} from 'lucide-react';
+import React from 'react';
+
+<Meta
+  title="UI Components/QuickActions"
+  component={QuickActions}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[400px] p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The QuickActions component displays a set of action buttons that appear on hover/focus,
+positioned in a corner of a parent card. Supports up to 3 visible actions with additional
+actions in an overflow menu.
+
+## Features
+
+- **Hover/Focus Activation** - Appears on hover or focus for clean UI
+- **Top-Right Corner Positioning** - Configurable position (all 4 corners)
+- **Grid Layout** - Auto-adapts to number of actions (1x1, 2x1, 2x2, 3x1, 3x2)
+- **Overflow Menu** - Shows first 3 actions, additional in dropdown
+- **Tooltip Support** - Each action has a descriptive tooltip
+- **Touch-Friendly** - Tap to reveal on mobile devices
+- **Accessible** - Full keyboard navigation and screen reader support
+- **Variants** - Default, destructive, and ghost button styles
+- **Size Options** - Small, medium, and large sizes
+- **Type-Safe** - Complete TypeScript support
+
+## Use Cases
+
+Use QuickActions for:
+
+- Recipe cards (favorite, share, add to collection, quick view)
+- Product cards (wishlist, compare, quick view)
+- Collection cards (favorite, share, edit, delete)
+- Media galleries (download, share, edit, delete)
+- Any card that needs contextual actions
+  `
+  }
+  }
+  }}
+  argTypes={{
+      actions: {
+        description: 'Array of quick action configurations',
+        control: { type: 'object' },
+      },
+      maxVisible: {
+        control: { type: 'number', min: 1, max: 6 },
+        description: 'Maximum visible actions before overflow (default: 3)',
+        defaultValue: 3
+      },
+      position: {
+        control: { type: 'select' },
+        options: ['top-right', 'top-left', 'bottom-right', 'bottom-left'],
+        description: 'Position of the overlay',
+        defaultValue: 'top-right'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size variant',
+        defaultValue: 'md'
+      },
+      showOnHover: {
+        control: { type: 'boolean' },
+        description: 'Show on hover',
+        defaultValue: true
+      },
+      showOnFocus: {
+        control: { type: 'boolean' },
+        description: 'Show on focus',
+        defaultValue: true
+      },
+    }}
+  />
+
+# QuickActions
+
+<Description of={QuickActions} />
+
+## Basic Usage
+
+Basic example with 2-3 actions (no overflow).
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add to collection',
+          onClick: () => console.log('Added to collection'),
+        },
+      ];
+
+      return (
+        <div className="group relative w-64 cursor-pointer">
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-3 h-32 rounded bg-gray-200 dark:bg-gray-700" />
+              <h3 className="font-semibold">Recipe Card</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Hover to see quick actions
+              </p>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## With Overflow Menu
+
+Example with 4+ actions showing overflow menu.
+
+<Canvas>
+  <Story name="With Overflow">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add to collection',
+          onClick: () => console.log('Added'),
+        },
+        {
+          id: 'view',
+          icon: Eye,
+          label: 'Quick view',
+          onClick: () => console.log('Quick view'),
+        },
+        {
+          id: 'download',
+          icon: Download,
+          label: 'Download',
+          onClick: () => console.log('Downloaded'),
+        },
+      ];
+
+      return (
+        <div className="group relative w-64 cursor-pointer">
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-3 h-32 rounded bg-gray-200 dark:bg-gray-700" />
+              <h3 className="font-semibold">Recipe Card</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                First 3 actions visible, 2 in overflow menu
+              </p>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} maxVisible={3} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## All Positions
+
+Showcasing all 4 corner positions.
+
+<Canvas>
+  <Story name="All Positions">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+      ];
+
+      const positions = ['top-right', 'top-left', 'bottom-right', 'bottom-left'];
+
+      return (
+        <div className="grid grid-cols-2 gap-6">
+          {positions.map(position => (
+            <div key={position}>
+              <p className="mb-2 text-sm font-medium capitalize">
+                {position.replace('-', ' ')}
+              </p>
+              <div className="group relative w-48 cursor-pointer">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="mb-2 h-24 rounded bg-gray-200 dark:bg-gray-700" />
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      Hover here
+                    </p>
+                  </CardContent>
+                </Card>
+                <QuickActions actions={actions} position={position} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Size Variants
+
+Small, medium, and large sizes.
+
+<Canvas>
+  <Story name="Size Variants">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add',
+          onClick: () => console.log('Added'),
+        },
+      ];
+
+      const sizes = ['sm', 'md', 'lg'];
+
+      return (
+        <div className="grid grid-cols-3 gap-6">
+          {sizes.map(size => (
+            <div key={size}>
+              <p className="mb-2 text-sm font-medium capitalize">{size}</p>
+              <div className="group relative w-48 cursor-pointer">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="mb-2 h-24 rounded bg-gray-200 dark:bg-gray-700" />
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      Hover here
+                    </p>
+                  </CardContent>
+                </Card>
+                <QuickActions actions={actions} size={size} />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Action Variants
+
+Different button variants (default, destructive, ghost).
+
+<Canvas>
+  <Story name="Action Variants">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          variant: 'default',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'edit',
+          icon: Edit,
+          label: 'Edit',
+          variant: 'ghost',
+          onClick: () => console.log('Edited'),
+        },
+        {
+          id: 'delete',
+          icon: Trash2,
+          label: 'Delete',
+          variant: 'destructive',
+          onClick: () => console.log('Deleted'),
+        },
+      ];
+
+      return (
+        <div className="group relative w-64 cursor-pointer">
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-3 h-32 rounded bg-gray-200 dark:bg-gray-700" />
+              <h3 className="font-semibold">Mixed Variants</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Default, ghost, and destructive variants
+              </p>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Disabled Actions
+
+Some actions disabled.
+
+<Canvas>
+  <Story name="Disabled Actions">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share (disabled)',
+          onClick: () => console.log('Shared'),
+          disabled: true,
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add to collection',
+          onClick: () => console.log('Added'),
+        },
+        {
+          id: 'download',
+          icon: Download,
+          label: 'Download (disabled)',
+          onClick: () => console.log('Downloaded'),
+          disabled: true,
+        },
+      ];
+
+      return (
+        <div className="group relative w-64 cursor-pointer">
+          <Card>
+            <CardContent className="p-6">
+              <div className="mb-3 h-32 rounded bg-gray-200 dark:bg-gray-700" />
+              <h3 className="font-semibold">Disabled Actions</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Share and Download are disabled
+              </p>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} maxVisible={3} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Recipe Card Example
+
+Real-world example on a recipe card.
+
+<Canvas>
+  <Story name="Recipe Card">
+    {() => {
+      const [favorited, setFavorited] = React.useState(false);
+
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: favorited ? 'Unfavorite' : 'Favorite',
+          onClick: () => setFavorited(!favorited),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share recipe',
+          onClick: () => console.log('Share recipe'),
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add to collection',
+          onClick: () => console.log('Add to collection'),
+        },
+        {
+          id: 'view',
+          icon: Eye,
+          label: 'Quick view',
+          onClick: () => console.log('Quick view'),
+        },
+      ];
+
+      return (
+        <div className="group relative w-72 cursor-pointer">
+          <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+            <div className="relative h-48 bg-gradient-to-br from-orange-200 to-red-300 dark:from-orange-600 dark:to-red-700">
+              <div className="absolute inset-0 flex items-center justify-center text-4xl">
+                🍝
+              </div>
+              {favorited && (
+                <Badge className="absolute bottom-2 right-2" variant="secondary">
+                  Favorited
+                </Badge>
+              )}
+            </div>
+            <CardContent className="p-4">
+              <CardTitle className="mb-2">Classic Spaghetti Carbonara</CardTitle>
+              <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                Creamy Italian pasta with bacon, eggs, and parmesan cheese.
+              </p>
+              <div className="flex items-center gap-3 text-xs text-gray-500">
+                <span>⏱️ 30 min</span>
+                <span>👨‍🍳 Medium</span>
+                <span>⭐ 4.8</span>
+              </div>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Product Card Example
+
+Example on an e-commerce product card.
+
+<Canvas>
+  <Story name="Product Card">
+    {() => {
+      const actions = [
+        {
+          id: 'wishlist',
+          icon: Heart,
+          label: 'Add to wishlist',
+          onClick: () => console.log('Added to wishlist'),
+        },
+        {
+          id: 'compare',
+          icon: Copy,
+          label: 'Compare',
+          onClick: () => console.log('Compare'),
+        },
+        {
+          id: 'quickview',
+          icon: Eye,
+          label: 'Quick view',
+          onClick: () => console.log('Quick view'),
+        },
+      ];
+
+      return (
+        <div className="group relative w-64 cursor-pointer">
+          <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+            <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
+              <div className="absolute inset-0 flex items-center justify-center text-6xl">
+                📱
+              </div>
+            </div>
+            <CardContent className="p-4">
+              <h3 className="mb-1 font-semibold">Premium Smartphone</h3>
+              <p className="mb-2 text-sm text-gray-600 dark:text-gray-400">
+                Latest flagship model with advanced features
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-bold text-primary">$999</span>
+                <Badge variant="secondary">In Stock</Badge>
+              </div>
+            </CardContent>
+          </Card>
+          <QuickActions actions={actions} />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Grid Layout
+
+Multiple cards in a grid with quick actions.
+
+<Canvas>
+  <Story name="Grid Layout">
+    {() => {
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+        {
+          id: 'view',
+          icon: Eye,
+          label: 'Quick view',
+          onClick: () => console.log('Quick view'),
+        },
+      ];
+
+      const items = [
+        { emoji: '🍕', name: 'Margherita Pizza', time: '25 min' },
+        { emoji: '🍔', name: 'Classic Burger', time: '20 min' },
+        { emoji: '🍜', name: 'Ramen Bowl', time: '40 min' },
+        { emoji: '🥗', name: 'Caesar Salad', time: '15 min' },
+      ];
+
+      return (
+        <div className="grid grid-cols-2 gap-4">
+          {items.map((item, index) => (
+            <div key={index} className="group relative cursor-pointer">
+              <Card className="overflow-hidden transition-shadow hover:shadow-md">
+                <div className="relative h-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
+                  <div className="absolute inset-0 flex items-center justify-center text-5xl">
+                    {item.emoji}
+                  </div>
+                </div>
+                <CardContent className="p-3">
+                  <h4 className="mb-1 text-sm font-semibold">{item.name}</h4>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    ⏱️ {item.time}
+                  </p>
+                </CardContent>
+              </Card>
+              <QuickActions actions={actions} size="sm" />
+            </div>
+          ))}
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Interactive Playground
+
+Full configurable demo with all options.
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const [maxVisible, setMaxVisible] = React.useState(3);
+      const [position, setPosition] = React.useState('top-right');
+      const [size, setSize] = React.useState('md');
+
+      const actions = [
+        {
+          id: 'favorite',
+          icon: Heart,
+          label: 'Favorite',
+          onClick: () => console.log('Favorited'),
+        },
+        {
+          id: 'share',
+          icon: Share2,
+          label: 'Share',
+          onClick: () => console.log('Shared'),
+        },
+        {
+          id: 'add',
+          icon: Plus,
+          label: 'Add to collection',
+          onClick: () => console.log('Added'),
+        },
+        {
+          id: 'view',
+          icon: Eye,
+          label: 'Quick view',
+          onClick: () => console.log('Quick view'),
+        },
+        {
+          id: 'download',
+          icon: Download,
+          label: 'Download',
+          onClick: () => console.log('Downloaded'),
+        },
+      ];
+
+      return (
+        <div className="space-y-6">
+          {/* Controls */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Max Visible
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="6"
+                    value={maxVisible}
+                    onChange={(e) => setMaxVisible(Number(e.target.value))}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">
+                    Position
+                  </label>
+                  <select
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="top-right">Top Right</option>
+                    <option value="top-left">Top Left</option>
+                    <option value="bottom-right">Bottom Right</option>
+                    <option value="bottom-left">Bottom Left</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Size</label>
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                  </select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Preview */}
+          <div className="group relative mx-auto w-80 cursor-pointer">
+            <Card className="overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-green-200 to-blue-300 dark:from-green-700 dark:to-blue-800">
+                <div className="absolute inset-0 flex items-center justify-center text-6xl">
+                  🎨
+                </div>
+              </div>
+              <CardContent className="p-6">
+                <h3 className="mb-2 text-lg font-semibold">
+                  Interactive Demo Card
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Hover to see quick actions with your selected configuration
+                </p>
+              </CardContent>
+            </Card>
+            <QuickActions
+              actions={actions}
+              maxVisible={maxVisible}
+              position={position}
+              size={size}
+            />
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={QuickActions} />
+
+## Usage Patterns
+
+### Basic Implementation
+
+```tsx
+import { QuickActions } from '@/components/ui/quick-actions';
+import { Heart, Share2, Plus } from 'lucide-react';
+
+const actions = [
+  {
+    id: 'favorite',
+    icon: Heart,
+    label: 'Favorite',
+    onClick: () => handleFavorite(),
+  },
+  {
+    id: 'share',
+    icon: Share2,
+    label: 'Share',
+    onClick: () => handleShare(),
+  },
+  {
+    id: 'add',
+    icon: Plus,
+    label: 'Add to collection',
+    onClick: () => handleAdd(),
+  },
+];
+
+// Wrap your card with a group class
+<div className="group relative">
+  <YourCard />
+  <QuickActions actions={actions} />
+</div>;
+```
+
+### With Overflow Menu
+
+```tsx
+const actions = [
+  { id: '1', icon: Heart, label: 'Favorite', onClick: () => {} },
+  { id: '2', icon: Share2, label: 'Share', onClick: () => {} },
+  { id: '3', icon: Plus, label: 'Add', onClick: () => {} },
+  { id: '4', icon: Eye, label: 'View', onClick: () => {} }, // In overflow
+  { id: '5', icon: Download, label: 'Download', onClick: () => {} }, // In overflow
+];
+
+<QuickActions actions={actions} maxVisible={3} />;
+```
+
+### Different Positions
+
+```tsx
+<QuickActions actions={actions} position="top-left" />
+<QuickActions actions={actions} position="bottom-right" />
+```
+
+### Variants and Sizes
+
+```tsx
+const actions = [
+  {
+    id: '1',
+    icon: Heart,
+    label: 'Like',
+    variant: 'default',
+    onClick: () => {},
+  },
+  { id: '2', icon: Edit, label: 'Edit', variant: 'ghost', onClick: () => {} },
+  {
+    id: '3',
+    icon: Trash2,
+    label: 'Delete',
+    variant: 'destructive',
+    onClick: () => {},
+  },
+];
+
+<QuickActions actions={actions} size="lg" />;
+```
+
+## Accessibility Features
+
+### Keyboard Navigation
+
+- **Tab**: Navigate through action buttons
+- **Enter/Space**: Activate action button
+- **Escape**: Close overflow menu
+- **Arrow Keys**: Navigate within overflow menu
+
+### Screen Reader Support
+
+- ARIA toolbar role for container
+- ARIA labels for all action buttons
+- ARIA expanded state for overflow menu
+- Descriptive tooltips for context
+- Keyboard accessible overflow menu
+
+### Focus Management
+
+- Logical tab order
+- Focus visible indicators
+- No keyboard traps
+- Disabled state properly communicated
+
+## Design Guidelines
+
+### When to Use
+
+- **Card Overlays**: Recipe cards, product cards, media cards
+- **Contextual Actions**: Actions specific to a single item
+- **Quick Access**: Frequently used actions that need fast access
+- **Clean UI**: When you want actions hidden until needed
+
+### When Not to Use
+
+- **Primary Actions**: Use prominent buttons instead
+- **Single Action**: Just use a button
+- **Complex Forms**: Use proper form controls
+- **Always Visible**: If actions need to be permanently visible
+
+### Best Practices
+
+- **Action Limit**: Keep total actions under 6
+- **Icon Choice**: Use clear, recognizable icons
+- **Label Clarity**: Provide descriptive labels
+- **Destructive Actions**: Use destructive variant for delete/remove
+- **Parent Container**: Always use `group` class on parent
+- **Positioning**: Top-right is standard, use others sparingly
+- **Mobile**: Ensure touch targets are large enough (min 44x44px)
+
+## Performance Considerations
+
+- Lazy-loaded tooltip content
+- Memoized action buttons
+- Efficient hover detection
+- Minimal re-renders
+- Tree-shakeable exports
+
+## Implementation Notes
+
+- Requires parent with `group` class for hover trigger
+- Uses Radix UI for tooltips and dropdown
+- Fully typed with TypeScript
+- Accessible (WCAG 2.1 AA compliant)
+- Mobile-responsive with touch support
+- Supports light and dark themes
