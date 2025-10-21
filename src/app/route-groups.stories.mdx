@@ -54,18 +54,21 @@ src/app/
 ## Layout Variants by Route Group
 
 ### (main) Route Group
+
 - **Layout Variant**: `default`
 - **Features**: TopNav + Sidebar + ContentPane + Footer
 - **Use Case**: Main application pages with full navigation
 - **Examples**: Home, Recipes, Meal Plans, Settings
 
 ### (auth) Route Group
+
 - **Layout Variant**: `minimal`
 - **Features**: TopNav only (no sidebar or footer)
 - **Use Case**: Authentication flows requiring focus
 - **Examples**: Login, Registration, Password Reset
 
 ### components-demo
+
 - **Layout Variant**: `focused`
 - **Features**: TopNav + Custom Sidebar + ContentPane (no footer)
 - **Use Case**: Component documentation and testing
@@ -74,6 +77,7 @@ src/app/
 ## Navigation Integration
 
 ### Main Navigation
+
 The main navigation is defined in `src/config/navigation.ts` and includes:
 
 - **Home** (`/main`) - Application homepage
@@ -87,6 +91,7 @@ The main navigation is defined in `src/config/navigation.ts` and includes:
 - **Components** (`/components-demo`) - Component demos (dev only)
 
 ### Sub-Navigation
+
 Each main section has contextual sub-navigation defined in the navigation config:
 
 ```typescript
@@ -120,16 +125,19 @@ The Components Demo section is controlled by feature flags:
 ## Responsive Behavior
 
 ### Desktop (1024px+)
+
 - **Main Layout**: Full sidebar, complete footer
 - **Auth Layout**: Centered forms with ample whitespace
 - **Demo Layout**: Custom sidebar for component navigation
 
 ### Tablet (768px - 1023px)
+
 - **Main Layout**: Collapsible sidebar, simplified footer
 - **Auth Layout**: Responsive centered container
 - **Demo Layout**: Collapsible component navigation
 
 ### Mobile (< 768px)
+
 - **Main Layout**: Mobile drawer, minimal footer
 - **Auth Layout**: Full-width forms with mobile optimizations
 - **Demo Layout**: Mobile-friendly component list
@@ -162,6 +170,7 @@ The application maintains a clean provider hierarchy:
    - Create new route groups for specialized needs
 
 2. **Follow Naming Conventions**:
+
    ```
    src/app/(group)/feature/page.tsx
    src/app/(group)/feature/[id]/page.tsx

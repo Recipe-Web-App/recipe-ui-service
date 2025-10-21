@@ -27,7 +27,7 @@ import {
   RecipeList,
   IngredientListItem,
   InstructionListItem,
-  NutritionListItem
+  NutritionListItem,
 } from '@/components/ui/list';
 ```
 
@@ -68,6 +68,7 @@ import {
 ## Variants
 
 ### Default
+
 The standard list style for general use.
 
 ```tsx
@@ -81,6 +82,7 @@ The standard list style for general use.
 ```
 
 ### Bordered
+
 A subtle list with border around the entire list.
 
 ```tsx
@@ -94,6 +96,7 @@ A subtle list with border around the entire list.
 ```
 
 ### Divided
+
 Items separated by horizontal dividers.
 
 ```tsx
@@ -107,6 +110,7 @@ Items separated by horizontal dividers.
 ```
 
 ### Card
+
 Each item styled as an individual card.
 
 ```tsx
@@ -120,6 +124,7 @@ Each item styled as an individual card.
 ```
 
 ### Grid
+
 Items arranged in a responsive grid layout.
 
 ```tsx
@@ -158,14 +163,18 @@ Add icons to provide visual context and improve scanability.
     <ListItemIcon icon={<Bell />} />
     <ListItemContent>
       <ListItemTitle>Notifications</ListItemTitle>
-      <ListItemDescription>Configure notification preferences</ListItemDescription>
+      <ListItemDescription>
+        Configure notification preferences
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
   <ListItem>
     <ListItemIcon icon={<Settings />} />
     <ListItemContent>
       <ListItemTitle>General Settings</ListItemTitle>
-      <ListItemDescription>App preferences and configuration</ListItemDescription>
+      <ListItemDescription>
+        App preferences and configuration
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
 </List>
@@ -177,25 +186,35 @@ Make list items clickable and interactive.
 
 ```tsx
 <List variant="divided">
-  <ListItem variant="interactive" onSelect={() => console.log('Profile selected')}>
+  <ListItem
+    variant="interactive"
+    onSelect={() => console.log('Profile selected')}
+  >
     <ListItemIcon icon={<User />} />
     <ListItemContent>
       <ListItemTitle>Profile Settings</ListItemTitle>
       <ListItemDescription>Manage your account information</ListItemDescription>
     </ListItemContent>
   </ListItem>
-  <ListItem variant="interactive" onSelect={() => console.log('Notifications selected')}>
+  <ListItem
+    variant="interactive"
+    onSelect={() => console.log('Notifications selected')}
+  >
     <ListItemIcon icon={<Bell />} />
     <ListItemContent>
       <ListItemTitle>Notifications</ListItemTitle>
-      <ListItemDescription>Configure notification preferences</ListItemDescription>
+      <ListItemDescription>
+        Configure notification preferences
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
   <ListItem variant="interactive" disabled>
     <ListItemIcon icon={<Star />} variant="muted" />
     <ListItemContent>
       <ListItemTitle>Premium Features</ListItemTitle>
-      <ListItemDescription>Upgrade to unlock premium features</ListItemDescription>
+      <ListItemDescription>
+        Upgrade to unlock premium features
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
 </List>
@@ -204,6 +223,7 @@ Make list items clickable and interactive.
 ## Sizes and Density
 
 ### Size Variants
+
 Control the overall size of text and spacing.
 
 ```tsx
@@ -242,6 +262,7 @@ Control the overall size of text and spacing.
 ```
 
 ### Density Options
+
 Control vertical spacing between items.
 
 ```tsx
@@ -295,7 +316,7 @@ Create selectable lists with checkboxes.
 ```tsx
 const [selectedItems, setSelectedItems] = useState(new Set());
 
-const handleToggle = (id) => {
+const handleToggle = id => {
   const newSelection = new Set(selectedItems);
   if (newSelection.has(id)) {
     newSelection.delete(id);
@@ -341,6 +362,7 @@ return (
 Use specialized components for recipe content.
 
 ### Ingredient Lists
+
 Display ingredients with quantities and optional checking.
 
 ```tsx
@@ -350,12 +372,18 @@ const ingredients = [
   { id: '1', name: 'All-purpose flour', quantity: '2', unit: 'cups' },
   { id: '2', name: 'Large eggs', quantity: '3', unit: '' },
   { id: '3', name: 'Whole milk', quantity: '1', unit: 'cup' },
-  { id: '4', name: 'Unsalted butter', quantity: '4', unit: 'tbsp', optional: true },
+  {
+    id: '4',
+    name: 'Unsalted butter',
+    quantity: '4',
+    unit: 'tbsp',
+    optional: true,
+  },
   { id: '5', name: 'Salt', quantity: '1', unit: 'tsp' },
-  { id: '6', name: 'Baking powder', quantity: '2', unit: 'tsp' }
+  { id: '6', name: 'Baking powder', quantity: '2', unit: 'tsp' },
 ];
 
-const handleToggleIngredient = (id) => {
+const handleToggleIngredient = id => {
   const newChecked = new Set(checkedIngredients);
   if (newChecked.has(id)) {
     newChecked.delete(id);
@@ -372,7 +400,7 @@ return (
         key={ingredient.id}
         ingredient={{
           ...ingredient,
-          checked: checkedIngredients.has(ingredient.id)
+          checked: checkedIngredients.has(ingredient.id),
         }}
         allowChecking
         onToggleCheck={handleToggleIngredient}
@@ -384,6 +412,7 @@ return (
 ```
 
 ### Instruction Lists
+
 Display cooking instructions with step numbers and optional completion tracking.
 
 ```tsx
@@ -393,30 +422,30 @@ const instructions = [
   {
     id: '1',
     step: 1,
-    text: 'In a large bowl, whisk together flour, salt, and baking powder.'
+    text: 'In a large bowl, whisk together flour, salt, and baking powder.',
   },
   {
     id: '2',
     step: 2,
     text: 'In another bowl, beat eggs and gradually add milk.',
-    duration: '2 min'
+    duration: '2 min',
   },
   {
     id: '3',
     step: 3,
     text: 'Melt butter in a skillet over medium heat.',
     temperature: '350°F',
-    duration: '1 min'
+    duration: '1 min',
   },
   {
     id: '4',
     step: 4,
     text: 'Pour wet ingredients into dry ingredients and mix until just combined.',
-    duration: '30 sec'
-  }
+    duration: '30 sec',
+  },
 ];
 
-const handleToggleStep = (id) => {
+const handleToggleStep = id => {
   const newCompleted = new Set(completedSteps);
   if (newCompleted.has(id)) {
     newCompleted.delete(id);
@@ -433,7 +462,7 @@ return (
         key={instruction.id}
         instruction={{
           ...instruction,
-          completed: completedSteps.has(instruction.id)
+          completed: completedSteps.has(instruction.id),
         }}
         allowChecking
         onToggleComplete={handleToggleStep}
@@ -445,6 +474,7 @@ return (
 ```
 
 ### Nutrition Lists
+
 Display nutrition information with values and daily percentages.
 
 ```tsx
@@ -454,16 +484,24 @@ const nutrition = [
   { id: '3', label: 'Saturated Fat', value: 2, unit: 'g', dailyValue: 10 },
   { id: '4', label: 'Cholesterol', value: 37, unit: 'mg', dailyValue: 12 },
   { id: '5', label: 'Sodium', value: 317, unit: 'mg', dailyValue: 14 },
-  { id: '6', label: 'Total Carbohydrates', value: 22, unit: 'g', dailyValue: 8 },
+  {
+    id: '6',
+    label: 'Total Carbohydrates',
+    value: 22,
+    unit: 'g',
+    dailyValue: 8,
+  },
   { id: '7', label: 'Dietary Fiber', value: 1, unit: 'g', dailyValue: 4 },
   { id: '8', label: 'Sugars', value: 3, unit: 'g' },
-  { id: '9', label: 'Protein', value: 4, unit: 'g', dailyValue: 8 }
+  { id: '9', label: 'Protein', value: 4, unit: 'g', dailyValue: 8 },
 ];
 
 return (
   <div>
     <h3 className="mb-4 text-lg font-semibold">Nutrition Facts</h3>
-    <p className="text-muted-foreground mb-2 text-sm">Per serving (1 pancake)</p>
+    <p className="text-muted-foreground mb-2 text-sm">
+      Per serving (1 pancake)
+    </p>
     <RecipeList context="nutrition" variant="divided">
       {nutrition.map(item => (
         <NutritionListItem
@@ -481,6 +519,7 @@ return (
 ## States
 
 ### Loading State
+
 Show loading indicators for individual items.
 
 ```tsx
@@ -512,6 +551,7 @@ Show loading indicators for individual items.
 ## Advanced Usage
 
 ### Settings List
+
 Create comprehensive settings interfaces.
 
 ```tsx
@@ -520,14 +560,18 @@ Create comprehensive settings interfaces.
     <ListItemIcon icon={<User />} />
     <ListItemContent>
       <ListItemTitle>Account Settings</ListItemTitle>
-      <ListItemDescription>Update your personal information</ListItemDescription>
+      <ListItemDescription>
+        Update your personal information
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
   <ListItem variant="interactive">
     <ListItemIcon icon={<Bell />} />
     <ListItemContent>
       <ListItemTitle>Notifications</ListItemTitle>
-      <ListItemDescription>Manage your notification preferences</ListItemDescription>
+      <ListItemDescription>
+        Manage your notification preferences
+      </ListItemDescription>
     </ListItemContent>
   </ListItem>
   <ListItem variant="interactive">
@@ -541,6 +585,7 @@ Create comprehensive settings interfaces.
 ```
 
 ### Navigation Menu
+
 Create navigation menus with proper hierarchy.
 
 ```tsx
@@ -574,12 +619,14 @@ Create navigation menus with proper hierarchy.
 The List component follows WCAG accessibility guidelines:
 
 ### Keyboard Navigation
+
 - **Arrow keys** navigate between list items
 - **Enter** and **Space** activate interactive items
 - **Tab** moves focus to next interactive element
 - Proper focus management with visible focus indicators
 
 ### Screen Reader Support
+
 - Proper list semantics with `<ul>`, `<ol>`, and `<li>` elements
 - ARIA attributes for interactive states and descriptions
 - Checkbox states communicated via `aria-checked`
@@ -587,6 +634,7 @@ The List component follows WCAG accessibility guidelines:
 - Disabled states communicated via `aria-disabled`
 
 ### Focus Management
+
 - Clear focus indicators with ring styles
 - Focus-visible support for keyboard vs mouse interaction
 - Logical tab order within complex list items
@@ -595,6 +643,7 @@ The List component follows WCAG accessibility guidelines:
 ## Design Guidelines
 
 ### When to Use Each Variant
+
 - **Default**: Simple lists, basic content organization
 - **Bordered**: Contained lists, forms, settings panels
 - **Divided**: Long lists, content separation, readable scanning
@@ -602,11 +651,13 @@ The List component follows WCAG accessibility guidelines:
 - **Grid**: Categories, dashboards, responsive layouts
 
 ### Size Guidelines
+
 - **Small**: Dense interfaces, mobile views, secondary content
 - **Medium**: Standard size for most desktop interfaces
 - **Large**: Prominent lists, accessibility needs, touch interfaces
 
 ### Density Guidelines
+
 - **Compact**: Data-heavy interfaces, tables, admin panels
 - **Comfortable**: Standard interfaces, balanced readability
 - **Spacious**: Accessibility needs, marketing pages, hero sections
@@ -615,59 +666,59 @@ The List component follows WCAG accessibility guidelines:
 
 ### List Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'bordered' \| 'divided' \| 'card' \| 'inline' \| 'grid'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of text and spacing |
-| `density` | `'compact' \| 'comfortable' \| 'spacious'` | `'comfortable'` | Vertical spacing density |
-| `gridCols` | `1 \| 2 \| 3 \| 4` | `1` | Number of grid columns (grid variant only) |
-| `ordered` | `boolean` | `false` | Render as ordered list (ol) vs unordered (ul) |
-| `children` | `ReactNode` | - | List items |
+| Prop       | Type                                                                   | Default         | Description                                   |
+| ---------- | ---------------------------------------------------------------------- | --------------- | --------------------------------------------- |
+| `variant`  | `'default' \| 'bordered' \| 'divided' \| 'card' \| 'inline' \| 'grid'` | `'default'`     | Visual style variant                          |
+| `size`     | `'sm' \| 'md' \| 'lg'`                                                 | `'md'`          | Size of text and spacing                      |
+| `density`  | `'compact' \| 'comfortable' \| 'spacious'`                             | `'comfortable'` | Vertical spacing density                      |
+| `gridCols` | `1 \| 2 \| 3 \| 4`                                                     | `1`             | Number of grid columns (grid variant only)    |
+| `ordered`  | `boolean`                                                              | `false`         | Render as ordered list (ol) vs unordered (ul) |
+| `children` | `ReactNode`                                                            | -               | List items                                    |
 
 ### ListItem Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'interactive'` | `'default'` | Item style variant |
-| `disabled` | `boolean` | `false` | Whether the item is disabled |
-| `loading` | `boolean` | `false` | Whether the item is loading |
-| `onSelect` | `() => void` | - | Selection handler (interactive variant) |
-| `children` | `ReactNode` | - | Item content |
+| Prop       | Type                         | Default     | Description                             |
+| ---------- | ---------------------------- | ----------- | --------------------------------------- |
+| `variant`  | `'default' \| 'interactive'` | `'default'` | Item style variant                      |
+| `disabled` | `boolean`                    | `false`     | Whether the item is disabled            |
+| `loading`  | `boolean`                    | `false`     | Whether the item is loading             |
+| `onSelect` | `() => void`                 | -           | Selection handler (interactive variant) |
+| `children` | `ReactNode`                  | -           | Item content                            |
 
 ### CheckboxListItem Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `checked` | `boolean` | `false` | Whether the checkbox is checked |
-| `onCheckedChange` | `(checked: boolean) => void` | - | Change handler |
-| `label` | `string` | - | Main label text |
-| `description` | `string` | - | Description text |
-| `disabled` | `boolean` | `false` | Whether the item is disabled |
+| Prop              | Type                         | Default | Description                     |
+| ----------------- | ---------------------------- | ------- | ------------------------------- |
+| `checked`         | `boolean`                    | `false` | Whether the checkbox is checked |
+| `onCheckedChange` | `(checked: boolean) => void` | -       | Change handler                  |
+| `label`           | `string`                     | -       | Main label text                 |
+| `description`     | `string`                     | -       | Description text                |
+| `disabled`        | `boolean`                    | `false` | Whether the item is disabled    |
 
 ### IngredientListItem Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ingredient` | `IngredientItem` | - | Ingredient data object |
-| `allowChecking` | `boolean` | `false` | Allow checking off ingredients |
-| `onToggleCheck` | `(id: string) => void` | - | Check toggle handler |
-| `context` | `'shopping' \| 'cooking'` | `'cooking'` | Display context |
+| Prop            | Type                      | Default     | Description                    |
+| --------------- | ------------------------- | ----------- | ------------------------------ |
+| `ingredient`    | `IngredientItem`          | -           | Ingredient data object         |
+| `allowChecking` | `boolean`                 | `false`     | Allow checking off ingredients |
+| `onToggleCheck` | `(id: string) => void`    | -           | Check toggle handler           |
+| `context`       | `'shopping' \| 'cooking'` | `'cooking'` | Display context                |
 
 ### InstructionListItem Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `instruction` | `InstructionItem` | - | Instruction data object |
-| `allowChecking` | `boolean` | `false` | Allow marking steps complete |
-| `onToggleComplete` | `(id: string) => void` | - | Completion toggle handler |
-| `context` | `'cooking' \| 'reading'` | `'cooking'` | Display context |
+| Prop               | Type                     | Default     | Description                  |
+| ------------------ | ------------------------ | ----------- | ---------------------------- |
+| `instruction`      | `InstructionItem`        | -           | Instruction data object      |
+| `allowChecking`    | `boolean`                | `false`     | Allow marking steps complete |
+| `onToggleComplete` | `(id: string) => void`   | -           | Completion toggle handler    |
+| `context`          | `'cooking' \| 'reading'` | `'cooking'` | Display context              |
 
 ### NutritionListItem Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `nutrition` | `NutritionItem` | - | Nutrition data object |
-| `showDailyValue` | `boolean` | `false` | Show daily value percentage |
-| `showUnit` | `boolean` | `false` | Show unit of measurement |
+| Prop             | Type            | Default | Description                 |
+| ---------------- | --------------- | ------- | --------------------------- |
+| `nutrition`      | `NutritionItem` | -       | Nutrition data object       |
+| `showDailyValue` | `boolean`       | `false` | Show daily value percentage |
+| `showUnit`       | `boolean`       | `false` | Show unit of measurement    |
 
 Plus all standard HTML list and list item attributes.

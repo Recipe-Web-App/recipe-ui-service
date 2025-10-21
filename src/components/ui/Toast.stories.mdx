@@ -25,7 +25,7 @@ import {
   ToastTitle,
   ToastDescription,
   ToastAction,
-  ToastClose
+  ToastClose,
 } from '@/components/ui/toast';
 ```
 
@@ -52,6 +52,7 @@ import {
 ## Variants
 
 ### Default
+
 The standard notification style for general messages.
 
 ```tsx
@@ -63,6 +64,7 @@ The standard notification style for general messages.
 ```
 
 ### Success
+
 For positive feedback and successful operations.
 
 ```tsx
@@ -74,6 +76,7 @@ For positive feedback and successful operations.
 ```
 
 ### Error
+
 For error messages and failed operations.
 
 ```tsx
@@ -85,6 +88,7 @@ For error messages and failed operations.
 ```
 
 ### Warning
+
 For warnings and important notices that need attention.
 
 ```tsx
@@ -96,6 +100,7 @@ For warnings and important notices that need attention.
 ```
 
 ### Info
+
 For informational messages and tips.
 
 ```tsx
@@ -109,6 +114,7 @@ For informational messages and tips.
 ## Sizes
 
 ### Small
+
 Compact size for less important notifications.
 
 ```tsx
@@ -121,6 +127,7 @@ Compact size for less important notifications.
 ```
 
 ### Default (Medium)
+
 Standard size for most notifications.
 
 ```tsx
@@ -133,6 +140,7 @@ Standard size for most notifications.
 ```
 
 ### Large
+
 Prominent size for important notifications.
 
 ```tsx
@@ -147,6 +155,7 @@ Prominent size for important notifications.
 ## Behavior Options
 
 ### Auto-dismiss with Timer
+
 Automatically dismiss after a specified duration.
 
 ```tsx
@@ -160,6 +169,7 @@ Automatically dismiss after a specified duration.
 ```
 
 ### Progress Bar Indicator
+
 Show a visual countdown for auto-dismiss.
 
 ```tsx
@@ -174,6 +184,7 @@ Show a visual countdown for auto-dismiss.
 ```
 
 ### Manual Dismiss Only
+
 Require user interaction to dismiss.
 
 ```tsx
@@ -186,6 +197,7 @@ Require user interaction to dismiss.
 ```
 
 ### Non-dismissible
+
 Remove the close button entirely.
 
 ```tsx
@@ -201,6 +213,7 @@ Remove the close button entirely.
 ## Action Buttons
 
 ### Simple Action
+
 String-based action button.
 
 ```tsx
@@ -214,6 +227,7 @@ String-based action button.
 ```
 
 ### Custom Action Button
+
 React element with custom styling.
 
 ```tsx
@@ -221,16 +235,13 @@ React element with custom styling.
   title="Confirmation Required"
   description="Are you sure you want to delete this recipe?"
   variant="warning"
-  action={
-    <button className="font-semibold underline">
-      Yes, Delete
-    </button>
-  }
+  action={<button className="font-semibold underline">Yes, Delete</button>}
   onAction={() => console.log('Confirmed deletion')}
 />
 ```
 
 ### Multiple Actions with Compound Components
+
 Using compound components for complex layouts.
 
 ```tsx
@@ -241,7 +252,7 @@ Using compound components for complex layouts.
     <ToastDescription variant="error">
       Unable to connect to the server.
     </ToastDescription>
-    <div className="flex gap-2 mt-3">
+    <div className="mt-3 flex gap-2">
       <ToastAction variant="error" onClick={() => retry()}>
         Retry
       </ToastAction>
@@ -257,6 +268,7 @@ Using compound components for complex layouts.
 ## Custom Icons
 
 ### Default Icons
+
 Each variant comes with appropriate default icons.
 
 ```tsx
@@ -269,6 +281,7 @@ Each variant comes with appropriate default icons.
 ```
 
 ### Custom Icon
+
 Provide your own icon element.
 
 ```tsx
@@ -281,6 +294,7 @@ Provide your own icon element.
 ```
 
 ### No Icon
+
 Hide the icon completely.
 
 ```tsx
@@ -295,6 +309,7 @@ Hide the icon completely.
 ## Advanced Usage
 
 ### Custom Content
+
 Use children for complex content.
 
 ```tsx
@@ -303,7 +318,7 @@ Use children for complex content.
   description="This toast contains custom content below."
   variant="info"
 >
-  <div className="mt-2 p-3 bg-blue-100 rounded-md">
+  <div className="mt-2 rounded-md bg-blue-100 p-3">
     <h4 className="font-semibold">Additional Information</h4>
     <p className="text-sm">You can include any custom content here.</p>
   </div>
@@ -311,6 +326,7 @@ Use children for complex content.
 ```
 
 ### Event Handlers
+
 Handle various user interactions.
 
 ```tsx
@@ -327,6 +343,7 @@ Handle various user interactions.
 ```
 
 ### Custom Styling
+
 Extend styling with additional Tailwind classes.
 
 ```tsx
@@ -358,7 +375,7 @@ For maximum flexibility, use the compound component approach:
       Your recipe "Chocolate Chip Cookies" is now live.
     </ToastDescription>
 
-    <div className="flex items-center gap-3 mt-3">
+    <div className="mt-3 flex items-center gap-3">
       <ToastAction variant="success" onClick={viewRecipe}>
         View Recipe
       </ToastAction>
@@ -377,24 +394,28 @@ For maximum flexibility, use the compound component approach:
 The Toast component follows WCAG accessibility guidelines:
 
 ### Screen Reader Support
+
 - Uses proper ARIA roles (`alert` for errors, `status` for others)
 - Configures `aria-live` regions for dynamic announcements
 - Proper labeling with `aria-labelledby` and `aria-describedby`
 - Error toasts use `aria-live="assertive"` for immediate announcement
 
 ### Keyboard Navigation
+
 - Close button is focusable and keyboard accessible
 - Action buttons support keyboard interaction
 - Proper tab order through interactive elements
 - Enter and Space keys work with buttons
 
 ### Focus Management
+
 - Clear focus indicators with ring styles
 - Proper focus offset for better visibility
 - Focus-visible support for keyboard vs mouse interaction
 - Focus is managed appropriately when toasts appear/disappear
 
 ### Timer Interaction
+
 - Auto-dismiss timer pauses on hover for accessibility
 - Sufficient time given for users to read content (5s default)
 - Progress bar provides visual indication of remaining time
@@ -405,6 +426,7 @@ The Toast component follows WCAG accessibility guidelines:
 ### Recipe Application Scenarios
 
 #### Save Confirmation
+
 ```tsx
 <Toast
   title="Recipe Saved"
@@ -416,6 +438,7 @@ The Toast component follows WCAG accessibility guidelines:
 ```
 
 #### Error Handling
+
 ```tsx
 <Toast
   title="Upload Failed"
@@ -427,6 +450,7 @@ The Toast component follows WCAG accessibility guidelines:
 ```
 
 #### Feature Tips
+
 ```tsx
 <Toast
   title="Pro Tip"
@@ -439,6 +463,7 @@ The Toast component follows WCAG accessibility guidelines:
 ```
 
 #### Batch Operations
+
 ```tsx
 <Toast
   title="Bulk Import Complete"
@@ -450,6 +475,7 @@ The Toast component follows WCAG accessibility guidelines:
 ```
 
 ### Toast Manager Integration
+
 ```tsx
 // Example with a toast manager/context
 const showToast = (type, title, description, options = {}) => {
@@ -467,7 +493,7 @@ const showToast = (type, title, description, options = {}) => {
 showToast('success', 'Saved!', 'Recipe saved successfully');
 showToast('error', 'Error', 'Failed to save recipe', {
   action: 'Retry',
-  onAction: retrySave
+  onAction: retrySave,
 });
 ```
 
@@ -498,18 +524,21 @@ showToast('error', 'Error', 'Failed to save recipe', {
 ## Technical Details
 
 ### Timer Behavior
+
 - Timer pauses on hover for better UX
 - Progress bar animates smoothly at 60fps
 - Cleanup prevents memory leaks
 - Multiple toasts don't interfere with each other
 
 ### Performance Optimizations
+
 - Uses `React.forwardRef` for proper ref handling
 - Memoized icon rendering to prevent unnecessary re-renders
 - Efficient class merging with `tailwind-merge`
 - Minimal re-renders through stable callbacks
 
 ### Theming
+
 The toast uses design tokens from your CSS custom properties:
 
 - `--success` / `--success-foreground` for success variant
@@ -523,22 +552,22 @@ The toast uses design tokens from your CSS custom properties:
 
 ### Toast Component
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'success' \| 'error' \| 'warning' \| 'info'` | `'default'` | Toast style variant |
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Toast size |
-| `title` | `string` | - | Toast title text |
-| `description` | `string` | - | Toast description text |
-| `dismissible` | `boolean` | `true` | Show close button |
-| `autoDismiss` | `boolean` | `true` | Auto-dismiss after duration |
-| `duration` | `number` | `5000` | Auto-dismiss duration in ms |
-| `showProgress` | `boolean` | `false` | Show progress bar |
-| `action` | `ReactNode` | - | Action button content |
-| `onDismiss` | `() => void` | - | Dismiss event handler |
-| `onAction` | `() => void` | - | Action button handler |
-| `icon` | `ReactNode` | - | Custom icon element |
-| `showIcon` | `boolean` | `true` | Show icon |
-| `className` | `string` | - | Additional CSS classes |
+| Prop           | Type                                                       | Default     | Description                 |
+| -------------- | ---------------------------------------------------------- | ----------- | --------------------------- |
+| `variant`      | `'default' \| 'success' \| 'error' \| 'warning' \| 'info'` | `'default'` | Toast style variant         |
+| `size`         | `'sm' \| 'default' \| 'lg'`                                | `'default'` | Toast size                  |
+| `title`        | `string`                                                   | -           | Toast title text            |
+| `description`  | `string`                                                   | -           | Toast description text      |
+| `dismissible`  | `boolean`                                                  | `true`      | Show close button           |
+| `autoDismiss`  | `boolean`                                                  | `true`      | Auto-dismiss after duration |
+| `duration`     | `number`                                                   | `5000`      | Auto-dismiss duration in ms |
+| `showProgress` | `boolean`                                                  | `false`     | Show progress bar           |
+| `action`       | `ReactNode`                                                | -           | Action button content       |
+| `onDismiss`    | `() => void`                                               | -           | Dismiss event handler       |
+| `onAction`     | `() => void`                                               | -           | Action button handler       |
+| `icon`         | `ReactNode`                                                | -           | Custom icon element         |
+| `showIcon`     | `boolean`                                                  | `true`      | Show icon                   |
+| `className`    | `string`                                                   | -           | Additional CSS classes      |
 
 ### Compound Components
 

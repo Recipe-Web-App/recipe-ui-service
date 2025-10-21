@@ -1,4 +1,11 @@
-import { Meta, StoryObj, Canvas, Controls, Primary, Source } from '@storybook/blocks';
+import {
+  Meta,
+  StoryObj,
+  Canvas,
+  Controls,
+  Primary,
+  Source,
+} from '@storybook/blocks';
 import { useState } from 'react';
 import { Trash2, Save, Share, Download, Copy, Globe, X } from 'lucide-react';
 import {
@@ -48,23 +55,23 @@ A comprehensive dialog system built on Radix UI primitives. Provides accessible,
 - Use RecipeConfirmationDialog for recipe-specific operations
 - Use AlertDialog for simple notifications or single-action confirmations
 - Always provide clear, actionable text in titles and descriptions
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
   argTypes={{
-    variant: {
-      control: 'select',
-      options: ['default', 'destructive', 'success', 'warning', 'info'],
-      description: 'Dialog content styling variant',
-    },
-    size: {
-      control: 'select',
-      options: ['sm', 'default', 'lg', 'xl', 'full'],
-      description: 'Dialog content size',
-    },
-  }}
-/>
+      variant: {
+        control: 'select',
+        options: ['default', 'destructive', 'success', 'warning', 'info'],
+        description: 'Dialog content styling variant',
+      },
+      size: {
+        control: 'select',
+        options: ['sm', 'default', 'lg', 'xl', 'full'],
+        description: 'Dialog content size',
+      },
+    }}
+  />
 
 # Dialog
 
@@ -169,6 +176,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -230,6 +238,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -300,6 +309,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -346,6 +356,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -386,6 +397,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -425,6 +437,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -463,6 +476,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -522,12 +536,14 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
 ## Best Practices
 
 ### Do's
+
 - ✅ Use clear, actionable titles and descriptions
 - ✅ Provide appropriate confirmation buttons for the action
 - ✅ Use RecipeConfirmationDialog for recipe-specific actions
@@ -536,6 +552,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
 - ✅ Test keyboard navigation and screen readers
 
 ### Don'ts
+
 - ❌ Don't use dialogs for non-critical information
 - ❌ Don't create deeply nested dialog chains
 - ❌ Don't ignore loading states for slow operations
@@ -563,6 +580,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
 />
 
 // Recipe-specific confirmation
+
 <RecipeConfirmationDialog
   open={open}
   onOpenChange={setOpen}
@@ -572,6 +590,7 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
 />
 
 // Custom dialog
+
 <Dialog open={open} onOpenChange={setOpen}>
   <DialogContent>
     <DialogHeader>
@@ -579,11 +598,8 @@ A versatile dialog system for confirmations, alerts, and recipe-specific actions
     </DialogHeader>
     {/* Custom content */}
     <DialogFooter>
-      <DialogButton onClick={handleAction}>
-        Action
-      </DialogButton>
+      <DialogButton onClick={handleAction}>Action</DialogButton>
     </DialogFooter>
   </DialogContent>
 </Dialog>
-\`}
-/>
+\`} />

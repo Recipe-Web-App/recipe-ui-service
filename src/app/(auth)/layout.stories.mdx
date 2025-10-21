@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import AuthLayout from './layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,26 +44,27 @@ It's perfect for login, registration, password reset, and similar authentication
 
 \`\`\`
 src/app/(auth)/
-├── layout.tsx          # This component
+├── layout.tsx # This component
 ├── login/
-│   └── page.tsx
+│ └── page.tsx
 ├── register/
-│   └── page.tsx
+│ └── page.tsx
 ├── forgot-password/
-│   └── page.tsx
+│ └── page.tsx
 └── ...
 \`\`\`
 
 The layout provides:
+
 - Minimal chrome for focus
 - Responsive centered container
 - Consistent spacing and typography
 - Integration with the theme system
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
-/>
+  />
 
 # Auth Layout
 
@@ -119,6 +126,7 @@ The minimal layout for authentication flows.
         </Card>
       </AuthLayout>
     )}
+
   </Story>
 </Canvas>
 
@@ -203,6 +211,7 @@ The minimal layout for authentication flows.
         </Card>
       </AuthLayout>
     )}
+
   </Story>
 </Canvas>
 
@@ -213,6 +222,7 @@ The minimal layout for authentication flows.
 ## Layout Behavior
 
 ### All Screen Sizes
+
 - TopNav only (minimal variant)
 - Centered content container
 - Maximum width of 448px (28rem)
@@ -222,17 +232,20 @@ The minimal layout for authentication flows.
 ## Design Principles
 
 ### Focus
+
 - Removes all non-essential UI elements
 - Centers attention on the authentication form
 - Minimal navigation to reduce cognitive load
 
 ### Accessibility
+
 - Proper form labeling and structure
 - High contrast ratios for text and backgrounds
 - Keyboard navigation support
 - Screen reader friendly
 
 ### Responsive Design
+
 - Works perfectly on mobile devices
 - Scales appropriately for tablets and desktop
 - Maintains readability at all sizes

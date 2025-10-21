@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { SearchBar, SearchResults } from './search-bar';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
@@ -34,41 +40,42 @@ It adapts to different screen sizes and provides both direct search and command 
 ## Usage
 
 Use SearchBar for:
+
 - Top navigation search functionality
 - Global application search
 - Recipe and ingredient discovery
 - Command palette access point
 - Mobile-friendly search interfaces
 - Responsive search implementations
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    compact: {
-      control: { type: 'boolean' },
-      description: 'Force compact mode (search button only)',
-      defaultValue: false
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Search input placeholder text',
-      defaultValue: 'Search recipes, ingredients...'
-    },
-    onSearch: {
-      action: 'searched',
-      description: 'Callback fired when search is performed'
-    },
-    onCommandPaletteOpen: {
-      action: 'command palette opened',
-      description: 'Callback fired when command palette opens'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      compact: {
+        control: { type: 'boolean' },
+        description: 'Force compact mode (search button only)',
+        defaultValue: false
+      },
+      placeholder: {
+        control: { type: 'text' },
+        description: 'Search input placeholder text',
+        defaultValue: 'Search recipes, ingredients...'
+      },
+      onSearch: {
+        action: 'searched',
+        description: 'Callback fired when search is performed'
+      },
+      onCommandPaletteOpen: {
+        action: 'command palette opened',
+        description: 'Callback fired when command palette opens'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # SearchBar
 
@@ -101,6 +108,7 @@ Use SearchBar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -110,12 +118,12 @@ Use SearchBar for:
   <Story name="Compact">
     {() => (
       <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Compact mode shows search button with command palette:
         </div>
         <SearchBar
           compact
-          onSearch={(query) => console.log('Search:', query)}
+          onSearch={query => console.log('Search:', query)}
           onCommandPaletteOpen={() => console.log('Command palette opened')}
         />
       </div>
@@ -129,12 +137,12 @@ Use SearchBar for:
   <Story name="Custom Placeholder">
     {() => (
       <div className="w-full max-w-md space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Custom placeholder text:
         </div>
         <SearchBar
           placeholder="Find your favorite recipes..."
-          onSearch={(query) => console.log('Search:', query)}
+          onSearch={query => console.log('Search:', query)}
         />
       </div>
     )}
@@ -166,6 +174,7 @@ Use SearchBar for:
         </nav>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -174,17 +183,17 @@ Use SearchBar for:
 <Canvas>
   <Story name="Mobile Navigation">
     {() => (
-      <div className="max-w-sm mx-auto">
-        <div className="border rounded-lg bg-background">
+      <div className="mx-auto max-w-sm">
+        <div className="bg-background rounded-lg border">
           {/* Mobile header */}
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between border-b p-4">
             <div className="flex items-center space-x-3">
-              <div className="h-6 w-6 bg-muted rounded" />
+              <div className="bg-muted h-6 w-6 rounded" />
               <div className="text-lg font-semibold">Recipe App</div>
             </div>
             <div className="flex items-center space-x-2">
               <SearchBar compact />
-              <div className="h-8 w-8 rounded-full bg-muted" />
+              <div className="bg-muted h-8 w-8 rounded-full" />
             </div>
           </div>
         </div>
@@ -231,6 +240,7 @@ Use SearchBar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -262,6 +272,7 @@ Use SearchBar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -297,6 +308,7 @@ Use SearchBar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -334,6 +346,7 @@ Use SearchBar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -384,6 +397,7 @@ Use SearchBar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -414,6 +428,7 @@ Use SearchBar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -449,6 +464,7 @@ Use SearchBar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -456,9 +472,9 @@ Use SearchBar for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <div className="w-full max-w-md space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Use the controls below to configure SearchBar:
         </div>
         <SearchBar {...args} />
@@ -474,6 +490,7 @@ Use SearchBar for:
 ## Search Functionality
 
 ### Desktop Mode Features
+
 - Full search input with placeholder text
 - Integrated command palette trigger button
 - Real-time search with debouncing (300ms)
@@ -482,6 +499,7 @@ Use SearchBar for:
 - Keyboard shortcuts display
 
 ### Compact Mode Features
+
 - Space-efficient search button
 - Tooltip with keyboard shortcut hint
 - Command palette opens on click
@@ -507,17 +525,20 @@ Use SearchBar for:
 ## Responsive Behavior
 
 ### Mobile (< 768px)
+
 - Compact button mode by default
 - Optimized button sizing
 - Touch-friendly interactions
 - Command palette for search
 
 ### Tablet (768px - 1024px)
+
 - Full search bar available
 - Standard sizing and spacing
 - Balanced layout integration
 
 ### Desktop (> 1024px)
+
 - Full feature set
 - Command palette integration
 - Optimal sizing and spacing
@@ -526,16 +547,19 @@ Use SearchBar for:
 ## Integration Patterns
 
 ### Top Navigation
+
 - Centered or right-aligned placement
 - Integrated with other navigation elements
 - Responsive sizing and behavior
 
 ### Sidebar
+
 - Compact mode in sidebar headers
 - Full mode in sidebar content areas
 - Consistent spacing with other elements
 
 ### Mobile Headers
+
 - Compact button placement
 - Space-efficient design
 - Touch-optimized interactions
@@ -543,16 +567,19 @@ Use SearchBar for:
 ## Performance Considerations
 
 ### Debouncing
+
 - 300ms delay for search queries
 - Prevents excessive API calls
 - Improves user experience
 
 ### Event Handling
+
 - Efficient keyboard event listeners
 - Proper cleanup on unmount
 - Optimized re-render patterns
 
 ### Bundle Size
+
 - Tree-shakeable imports
 - Minimal dependencies
 - Efficient component structure

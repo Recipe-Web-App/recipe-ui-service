@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { SidebarFooter } from './sidebar-footer';
 
 <Meta
@@ -38,40 +44,41 @@ collapse/expand toggle and optional version information display.
 ## Usage
 
 Use SidebarFooter for:
+
 - Sidebar collapse/expand controls
 - Version information display
 - Footer actions in sidebar layouts
 - Consistent sidebar state management
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    collapsed: {
-      control: { type: 'boolean' },
-      description: 'Whether the sidebar is in collapsed state',
-      defaultValue: false
-    },
-    showVersion: {
-      control: { type: 'boolean' },
-      description: 'Whether to show version information',
-      defaultValue: true
-    },
-    versionText: {
-      control: { type: 'text' },
-      description: 'Custom version text to display',
-      defaultValue: 'v1.0.0'
-    },
-    onToggleCollapse: {
-      action: 'toggle collapse',
-      description: 'Custom collapse toggle handler'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      collapsed: {
+        control: { type: 'boolean' },
+        description: 'Whether the sidebar is in collapsed state',
+        defaultValue: false
+      },
+      showVersion: {
+        control: { type: 'boolean' },
+        description: 'Whether to show version information',
+        defaultValue: true
+      },
+      versionText: {
+        control: { type: 'text' },
+        description: 'Custom version text to display',
+        defaultValue: 'v1.0.0'
+      },
+      onToggleCollapse: {
+        action: 'toggle collapse',
+        description: 'Custom collapse toggle handler'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # SidebarFooter
 
@@ -80,9 +87,7 @@ Use SidebarFooter for:
 ## Default Footer
 
 <Canvas>
-  <Story name="Default">
-    {() => <SidebarFooter collapsed={false} />}
-  </Story>
+  <Story name="Default">{() => <SidebarFooter collapsed={false} />}</Story>
 </Canvas>
 
 ## Collapsed State
@@ -108,9 +113,7 @@ Use SidebarFooter for:
 ## Interactive Example
 
 <Canvas>
-  <Story name="Interactive">
-    {(args) => <SidebarFooter {...args} />}
-  </Story>
+  <Story name="Interactive">{args => <SidebarFooter {...args} />}</Story>
 </Canvas>
 
 ## Component API

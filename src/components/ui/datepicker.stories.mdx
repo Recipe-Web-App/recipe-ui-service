@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { DatePicker } from './datepicker';
 
 <Meta
@@ -36,90 +42,91 @@ preset options, validation, and full accessibility support.
 ## Usage
 
 Use DatePicker for:
+
 - Date selection in forms and filters
 - Event and appointment scheduling
 - Date range configuration
 - Birth date and anniversary inputs
 - Deadline and due date selection
 - Calendar-based data entry
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'outline', 'ghost'],
-      description: 'Visual variant of the date picker',
-      defaultValue: 'default'
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'default', 'lg'],
-      description: 'Size of the date picker',
-      defaultValue: 'default'
-    },
-    state: {
-      control: { type: 'select' },
-      options: ['default', 'error', 'success'],
-      description: 'Validation state',
-      defaultValue: 'default'
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text when no date is selected',
-      defaultValue: 'Select date'
-    },
-    dateFormat: {
-      control: { type: 'select' },
-      options: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'MMM dd, yyyy'],
-      description: 'Date display format',
-      defaultValue: 'MM/dd/yyyy'
-    },
-    label: {
-      control: { type: 'text' },
-      description: 'Label text above the input'
-    },
-    helperText: {
-      control: { type: 'text' },
-      description: 'Helper text below the input'
-    },
-    errorText: {
-      control: { type: 'text' },
-      description: 'Error message text'
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the date picker is disabled',
-      defaultValue: false
-    },
-    required: {
-      control: { type: 'boolean' },
-      description: 'Whether the date picker is required',
-      defaultValue: false
-    },
-    clearable: {
-      control: { type: 'boolean' },
-      description: 'Whether the date can be cleared',
-      defaultValue: false
-    },
-    fullWidth: {
-      control: { type: 'boolean' },
-      description: 'Whether to take full width of container',
-      defaultValue: false
-    },
-    showPresets: {
-      control: { type: 'boolean' },
-      description: 'Whether to show preset date options',
-      defaultValue: false
-    },
-    closeOnSelect: {
-      control: { type: 'boolean' },
-      description: 'Whether to close calendar after date selection',
-      defaultValue: true
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'outline', 'ghost'],
+        description: 'Visual variant of the date picker',
+        defaultValue: 'default'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'default', 'lg'],
+        description: 'Size of the date picker',
+        defaultValue: 'default'
+      },
+      state: {
+        control: { type: 'select' },
+        options: ['default', 'error', 'success'],
+        description: 'Validation state',
+        defaultValue: 'default'
+      },
+      placeholder: {
+        control: { type: 'text' },
+        description: 'Placeholder text when no date is selected',
+        defaultValue: 'Select date'
+      },
+      dateFormat: {
+        control: { type: 'select' },
+        options: ['MM/dd/yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'MMM dd, yyyy'],
+        description: 'Date display format',
+        defaultValue: 'MM/dd/yyyy'
+      },
+      label: {
+        control: { type: 'text' },
+        description: 'Label text above the input'
+      },
+      helperText: {
+        control: { type: 'text' },
+        description: 'Helper text below the input'
+      },
+      errorText: {
+        control: { type: 'text' },
+        description: 'Error message text'
+      },
+      disabled: {
+        control: { type: 'boolean' },
+        description: 'Whether the date picker is disabled',
+        defaultValue: false
+      },
+      required: {
+        control: { type: 'boolean' },
+        description: 'Whether the date picker is required',
+        defaultValue: false
+      },
+      clearable: {
+        control: { type: 'boolean' },
+        description: 'Whether the date can be cleared',
+        defaultValue: false
+      },
+      fullWidth: {
+        control: { type: 'boolean' },
+        description: 'Whether to take full width of container',
+        defaultValue: false
+      },
+      showPresets: {
+        control: { type: 'boolean' },
+        description: 'Whether to show preset date options',
+        defaultValue: false
+      },
+      closeOnSelect: {
+        control: { type: 'boolean' },
+        description: 'Whether to close calendar after date selection',
+        defaultValue: true
+      }
+    }}
+  />
 
 # DatePicker
 
@@ -147,6 +154,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -172,6 +180,7 @@ Use DatePicker for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -196,6 +205,7 @@ Use DatePicker for:
         />
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -228,6 +238,7 @@ Use DatePicker for:
         />
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -278,6 +289,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -313,6 +325,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -352,6 +365,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -384,6 +398,7 @@ Use DatePicker for:
         />
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -409,6 +424,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -439,6 +455,7 @@ Use DatePicker for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -524,6 +541,7 @@ Use DatePicker for:
         </form>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -554,6 +572,7 @@ Use DatePicker for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -579,6 +598,7 @@ Use DatePicker for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -591,18 +611,22 @@ Use DatePicker for:
 The DatePicker includes several built-in utilities for date manipulation:
 
 ### Format Options
+
 - **MM/dd/yyyy**: US format (06/15/2024)
 - **dd/MM/yyyy**: European format (15/06/2024)
 - **yyyy-MM-dd**: ISO format (2024-06-15)
 - **MMM dd, yyyy**: Long format (Jun 15, 2024)
 
 ### Constraint Options
+
 - **minDate/maxDate**: Restrict selectable date range
 - **disabledDates**: Array of specific disabled dates
 - **disabledDaysOfWeek**: Disable specific days (0=Sunday, 6=Saturday)
 
 ### Preset Options
+
 Common preset configurations:
+
 - Today, Tomorrow, Yesterday
 - Next/Previous Week/Month
 - Custom date calculations
@@ -620,26 +644,33 @@ Common preset configurations:
 ## Validation Patterns
 
 ### Required Fields
+
 Use `required` prop with visual indicators and error states.
 
 ### Date Range Validation
+
 Combine `minDate` and `maxDate` for range constraints.
 
 ### Business Rules
+
 Use `disabledDaysOfWeek` for business day requirements.
 
 ### Custom Validation
+
 Implement custom validation with `disabledDates` array.
 
 ## Integration Patterns
 
 ### Form Libraries
+
 Works seamlessly with React Hook Form, Formik, and other form libraries.
 
 ### State Management
+
 Controlled component pattern with `value` and `onValueChange`.
 
 ### Date Libraries
+
 Compatible with date-fns, moment.js, and native Date objects.
 
 ## Performance Considerations

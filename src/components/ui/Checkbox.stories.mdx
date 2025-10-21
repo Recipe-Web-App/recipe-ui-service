@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Checkbox,
   CheckboxRoot,
@@ -66,25 +72,33 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           <Checkbox
             size="sm"
             checked={sizes.sm}
-            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, sm: checked }))}
+            onCheckedChange={checked =>
+              setSizes(prev => ({ ...prev, sm: checked }))
+            }
             label="Small checkbox"
           />
           <Checkbox
             size="md"
             checked={sizes.md}
-            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, md: checked }))}
+            onCheckedChange={checked =>
+              setSizes(prev => ({ ...prev, md: checked }))
+            }
             label="Medium checkbox (default)"
           />
           <Checkbox
             size="lg"
             checked={sizes.lg}
-            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, lg: checked }))}
+            onCheckedChange={checked =>
+              setSizes(prev => ({ ...prev, lg: checked }))
+            }
             label="Large checkbox"
           />
           <Checkbox
             size="xl"
             checked={sizes.xl}
-            onCheckedChange={(checked) => setSizes(prev => ({ ...prev, xl: checked }))}
+            onCheckedChange={checked =>
+              setSizes(prev => ({ ...prev, xl: checked }))
+            }
             label="Extra large checkbox"
           />
         </div>
@@ -111,37 +125,49 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           <Checkbox
             variant="default"
             checked={variants.default}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, default: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, default: checked }))
+            }
             label="Default variant"
           />
           <Checkbox
             variant="success"
             checked={variants.success}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, success: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, success: checked }))
+            }
             label="Success variant"
           />
           <Checkbox
             variant="warning"
             checked={variants.warning}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, warning: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, warning: checked }))
+            }
             label="Warning variant"
           />
           <Checkbox
             variant="danger"
             checked={variants.danger}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, danger: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, danger: checked }))
+            }
             label="Danger variant"
           />
           <Checkbox
             variant="info"
             checked={variants.info}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, info: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, info: checked }))
+            }
             label="Info variant"
           />
           <Checkbox
             variant="subtle"
             checked={variants.subtle}
-            onCheckedChange={(checked) => setVariants(prev => ({ ...prev, subtle: checked }))}
+            onCheckedChange={checked =>
+              setVariants(prev => ({ ...prev, subtle: checked }))
+            }
             label="Subtle variant"
           />
         </div>
@@ -164,19 +190,25 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-4">
           <Checkbox
             checked={preferences.notifications}
-            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, notifications: checked }))}
+            onCheckedChange={checked =>
+              setPreferences(prev => ({ ...prev, notifications: checked }))
+            }
             label="Email notifications"
             description="Receive email updates about your recipes and meal plans"
           />
           <Checkbox
             checked={preferences.marketing}
-            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, marketing: checked }))}
+            onCheckedChange={checked =>
+              setPreferences(prev => ({ ...prev, marketing: checked }))
+            }
             label="Marketing communications"
             description="Get updates about new features, recipes, and special offers"
           />
           <Checkbox
             checked={preferences.analytics}
-            onCheckedChange={(checked) => setPreferences(prev => ({ ...prev, analytics: checked }))}
+            onCheckedChange={checked =>
+              setPreferences(prev => ({ ...prev, analytics: checked }))
+            }
             label="Usage analytics"
             description="Help improve the app by sharing anonymous usage data"
           />
@@ -201,7 +233,9 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-4">
           <Checkbox
             checked={dietary.vegetarian}
-            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, vegetarian: checked }))}
+            onCheckedChange={checked =>
+              setDietary(prev => ({ ...prev, vegetarian: checked }))
+            }
             label="Vegetarian"
             description="Plant-based with dairy and eggs"
             icon={<Leaf className="h-4 w-4" />}
@@ -209,7 +243,9 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           />
           <Checkbox
             checked={dietary.vegan}
-            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, vegan: checked }))}
+            onCheckedChange={checked =>
+              setDietary(prev => ({ ...prev, vegan: checked }))
+            }
             label="Vegan"
             description="Entirely plant-based"
             icon={<Heart className="h-4 w-4" />}
@@ -217,7 +253,9 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           />
           <Checkbox
             checked={dietary.glutenFree}
-            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, glutenFree: checked }))}
+            onCheckedChange={checked =>
+              setDietary(prev => ({ ...prev, glutenFree: checked }))
+            }
             label="Gluten-free"
             description="No wheat, barley, or rye"
             icon={<Wheat className="h-4 w-4" />}
@@ -225,7 +263,9 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           />
           <Checkbox
             checked={dietary.dairyFree}
-            onCheckedChange={(checked) => setDietary(prev => ({ ...prev, dairyFree: checked }))}
+            onCheckedChange={checked =>
+              setDietary(prev => ({ ...prev, dairyFree: checked }))
+            }
             label="Dairy-free"
             description="No milk or dairy products"
             icon={<Apple className="h-4 w-4" />}
@@ -252,13 +292,17 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-4">
           <Checkbox
             checked={states.normal}
-            onCheckedChange={(checked) => setStates(prev => ({ ...prev, normal: checked }))}
+            onCheckedChange={checked =>
+              setStates(prev => ({ ...prev, normal: checked }))
+            }
             label="Normal checkbox"
             description="Standard interactive state"
           />
           <Checkbox
             checked={states.indeterminate}
-            onCheckedChange={(checked) => setStates(prev => ({ ...prev, indeterminate: checked }))}
+            onCheckedChange={checked =>
+              setStates(prev => ({ ...prev, indeterminate: checked }))
+            }
             label="Indeterminate checkbox"
             description="Partially selected state"
           />
@@ -276,7 +320,9 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
           />
           <Checkbox
             checked={states.error}
-            onCheckedChange={(checked) => setStates(prev => ({ ...prev, error: checked }))}
+            onCheckedChange={checked =>
+              setStates(prev => ({ ...prev, error: checked }))
+            }
             label="Required field"
             description="This field must be checked"
             error="This field is required"
@@ -302,22 +348,30 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-6">
           <CheckboxField
             checked={form.terms}
-            onCheckedChange={(checked) => setForm(prev => ({ ...prev, terms: checked }))}
+            onCheckedChange={checked =>
+              setForm(prev => ({ ...prev, terms: checked }))
+            }
             label="Terms and Conditions"
             description="I agree to the terms of service and privacy policy"
             required
-            error={!form.terms ? "You must accept the terms to continue" : undefined}
+            error={
+              !form.terms ? 'You must accept the terms to continue' : undefined
+            }
           />
           <CheckboxField
             checked={form.newsletter}
-            onCheckedChange={(checked) => setForm(prev => ({ ...prev, newsletter: checked }))}
+            onCheckedChange={checked =>
+              setForm(prev => ({ ...prev, newsletter: checked }))
+            }
             label="Newsletter Subscription"
             description="Receive weekly recipe newsletters and cooking tips"
             helperText="You can unsubscribe at any time"
           />
           <CheckboxField
             checked={form.privacy}
-            onCheckedChange={(checked) => setForm(prev => ({ ...prev, privacy: checked }))}
+            onCheckedChange={checked =>
+              setForm(prev => ({ ...prev, privacy: checked }))
+            }
             label="Privacy Settings"
             description="Make my profile and recipes public"
             helperText="Other users will be able to see your shared recipes"
@@ -419,6 +473,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -458,6 +513,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -475,21 +531,27 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-4">
           <AnimatedCheckbox
             checked={animated.scale}
-            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, scale: checked }))}
+            onCheckedChange={checked =>
+              setAnimated(prev => ({ ...prev, scale: checked }))
+            }
             label="Scale Animation"
             animation="scale"
             animationDuration={200}
           />
           <AnimatedCheckbox
             checked={animated.bounce}
-            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, bounce: checked }))}
+            onCheckedChange={checked =>
+              setAnimated(prev => ({ ...prev, bounce: checked }))
+            }
             label="Bounce Animation"
             animation="bounce"
             animationDuration={300}
           />
           <AnimatedCheckbox
             checked={animated.slide}
-            onCheckedChange={(checked) => setAnimated(prev => ({ ...prev, slide: checked }))}
+            onCheckedChange={checked =>
+              setAnimated(prev => ({ ...prev, slide: checked }))
+            }
             label="Slide Animation"
             animation="slide"
             animationDuration={250}
@@ -540,6 +602,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -612,6 +675,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -629,27 +693,33 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
         <div className="space-y-4">
           <Checkbox
             checked={a11y.option1}
-            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option1: checked }))}
+            onCheckedChange={checked =>
+              setA11y(prev => ({ ...prev, option1: checked }))
+            }
             label="Screen reader friendly"
             description="Includes proper ARIA attributes and labels"
             aria-label="Screen reader accessibility option"
           />
           <Checkbox
             checked={a11y.option2}
-            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option2: checked }))}
+            onCheckedChange={checked =>
+              setA11y(prev => ({ ...prev, option2: checked }))
+            }
             label="Keyboard navigation"
             description="Fully accessible via keyboard with proper focus management"
             aria-describedby="keyboard-help"
           />
           <Checkbox
             checked={a11y.option3}
-            onCheckedChange={(checked) => setA11y(prev => ({ ...prev, option3: checked }))}
+            onCheckedChange={checked =>
+              setA11y(prev => ({ ...prev, option3: checked }))
+            }
             label="High contrast support"
             description="Works with high contrast mode and color preferences"
           />
-          <div id="keyboard-help" className="text-sm text-gray-600 mt-2">
+          <div id="keyboard-help" className="mt-2 text-sm text-gray-600">
             <p>Keyboard navigation:</p>
-            <ul className="list-disc list-inside mt-1 space-y-1">
+            <ul className="mt-1 list-inside list-disc space-y-1">
               <li>Use Tab to navigate between checkboxes</li>
               <li>Press Space to toggle checkbox state</li>
               <li>Screen readers will announce the label and state</li>
@@ -668,6 +738,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
 ## Usage Guidelines
 
 ### When to use
+
 - For multi-selection from a list of options
 - In forms for binary choices or feature toggles
 - For filtering and categorization with multiple selections
@@ -675,6 +746,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
 - For recipe ingredient selection and dietary restrictions
 
 ### Best practices
+
 - Always provide clear, descriptive labels
 - Use descriptions for complex options or settings
 - Group related checkboxes together logically
@@ -685,6 +757,7 @@ Multi-selection controls for filtering, preferences, and form inputs with compre
 - Consider using search for long lists of options
 
 ### Accessibility
+
 - Full keyboard navigation support
 - Screen reader compatible with proper ARIA attributes
 - High contrast mode support

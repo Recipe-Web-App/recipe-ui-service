@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Popover,
   PopoverTrigger,
@@ -15,7 +21,8 @@ import {
   parameters={{
     docs: {
       description: {
-        component: 'A floating content container that appears on demand, providing contextual information, actions, and forms in the recipe application.',
+        component:
+          'A floating content container that appears on demand, providing contextual information, actions, and forms in the recipe application.',
       },
     },
   }}
@@ -83,6 +90,7 @@ The Popover component supports multiple visual variants for different contexts:
         <button className="rounded border px-3 py-1.5 text-sm">Info</button>
       </SimplePopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -138,6 +146,7 @@ Different size options accommodate various content requirements:
         <button className="rounded bg-gray-200 px-6 py-3 text-lg">Full Width</button>
       </SimplePopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -174,6 +183,7 @@ Popovers can be positioned in various locations relative to their trigger:
         <div />
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -240,6 +250,7 @@ The MenuPopover component provides a quick action menu with keyboard shortcuts:
         </button>
       </MenuPopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -308,6 +319,7 @@ Inline editing with the FormPopover component:
         </button>
       </FormPopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -352,6 +364,7 @@ Use ConfirmPopover for destructive or important actions:
         </button>
       </ConfirmPopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -440,6 +453,7 @@ Use ConfirmPopover for destructive or important actions:
         </div>
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -458,7 +472,8 @@ Use ConfirmPopover for destructive or important actions:
                 <div className="space-y-2">
                   <h4 className="font-semibold">Beef Chuck Roast</h4>
                   <p className="text-sm">
-                    A tough cut that becomes tender when slow-cooked. Perfect for stews.
+                    A tough cut that becomes tender when slow-cooked. Perfect
+                    for stews.
                   </p>
                   <div className="space-y-1 text-sm">
                     <div className="font-medium">Substitutions:</div>
@@ -482,7 +497,8 @@ Use ConfirmPopover for destructive or important actions:
                 <div className="space-y-2">
                   <h4 className="font-semibold">Beef Broth</h4>
                   <p className="text-sm">
-                    Adds depth of flavor to the stew. Use low-sodium for better control.
+                    Adds depth of flavor to the stew. Use low-sodium for better
+                    control.
                   </p>
                   <div className="space-y-1 text-sm">
                     <div className="font-medium">Substitutions:</div>
@@ -585,6 +601,7 @@ Popovers can contain rich, interactive content:
         </button>
       </SimplePopover>
     </div>
+
   </Story>
 </Canvas>
 
@@ -630,6 +647,7 @@ Example of controlled popover state:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 

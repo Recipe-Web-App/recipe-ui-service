@@ -33,138 +33,125 @@ import { Button } from '@/components/ui/button';
 ## Variants
 
 ### Default
+
 The primary button style used for main actions.
 
 ```tsx
-<Button variant="default">
-  Primary Action
-</Button>
+<Button variant="default">Primary Action</Button>
 ```
 
 ### Destructive
+
 For dangerous or destructive actions like deleting.
 
 ```tsx
-<Button variant="destructive">
-  Delete Item
-</Button>
+<Button variant="destructive">Delete Item</Button>
 ```
 
 ### Outline
+
 A subtle button with border, good for secondary actions.
 
 ```tsx
-<Button variant="outline">
-  Secondary Action
-</Button>
+<Button variant="outline">Secondary Action</Button>
 ```
 
 ### Secondary
+
 A muted button for less prominent actions.
 
 ```tsx
-<Button variant="secondary">
-  Cancel
-</Button>
+<Button variant="secondary">Cancel</Button>
 ```
 
 ### Ghost
+
 A minimal button that only shows background on hover.
 
 ```tsx
-<Button variant="ghost">
-  Ghost Button
-</Button>
+<Button variant="ghost">Ghost Button</Button>
 ```
 
 ### Link
+
 Styled like a text link with underline on hover.
 
 ```tsx
-<Button variant="link">
-  Learn More
-</Button>
+<Button variant="link">Learn More</Button>
 ```
 
 ## Sizes
 
 ### Small
+
 Compact size for tight spaces or less important actions.
 
 ```tsx
-<Button size="sm">
-  Small Button
-</Button>
+<Button size="sm">Small Button</Button>
 ```
 
 ### Default (Medium)
+
 Standard size for most use cases.
 
 ```tsx
-<Button size="default">
-  Default Button
-</Button>
+<Button size="default">Default Button</Button>
 ```
 
 ### Large
+
 Prominent size for important actions.
 
 ```tsx
-<Button size="lg">
-  Large Button
-</Button>
+<Button size="lg">Large Button</Button>
 ```
 
 ### Icon Only
+
 Square button designed for icons.
 
 ```tsx
-<Button size="icon">
-  ⚙️
-</Button>
+<Button size="icon">⚙️</Button>
 ```
 
 ## States
 
 ### Disabled
+
 Prevents interaction and provides visual feedback.
 
 ```tsx
-<Button disabled>
-  Disabled Button
-</Button>
+<Button disabled>Disabled Button</Button>
 ```
 
 ### Loading
+
 Shows spinner and disables interaction.
 
 ```tsx
-<Button loading>
-  Loading...
-</Button>
+<Button loading>Loading...</Button>
 ```
 
 ### Loading with Custom Text
+
 Maintains button text while showing spinner.
 
 ```tsx
-<Button loading>
-  Saving Changes...
-</Button>
+<Button loading>Saving Changes...</Button>
 ```
 
 ## Advanced Usage
 
 ### Custom Classes
+
 Extend styling with additional Tailwind classes.
 
 ```tsx
-<Button className="w-full justify-start">
-  Full Width Button
-</Button>
+<Button className="w-full justify-start">Full Width Button</Button>
 ```
 
 ### Form Integration
+
 Use with forms and specify button types.
 
 ```tsx
@@ -179,6 +166,7 @@ Use with forms and specify button types.
 ```
 
 ### Event Handlers
+
 Handle various user interactions.
 
 ```tsx
@@ -197,16 +185,19 @@ Handle various user interactions.
 The Button component follows WCAG accessibility guidelines:
 
 ### Keyboard Navigation
+
 - **Enter** and **Space** keys trigger button actions
 - Proper focus management with visible focus indicators
 - Tab navigation support
 
 ### Screen Reader Support
+
 - Proper ARIA attributes for all states
 - Loading spinner hidden from screen readers with `aria-hidden="true"`
 - Disabled state communicated via `aria-disabled="true"`
 
 ### Focus Management
+
 - Clear focus indicators with ring styles
 - Focus-visible support for keyboard vs mouse interaction
 - Proper focus offset for better visibility
@@ -214,6 +205,7 @@ The Button component follows WCAG accessibility guidelines:
 ## Examples in Context
 
 ### Action Groups
+
 ```tsx
 <div className="flex gap-2">
   <Button variant="default">Save</Button>
@@ -223,8 +215,9 @@ The Button component follows WCAG accessibility guidelines:
 ```
 
 ### Form Actions
+
 ```tsx
-<div className="flex flex-col sm:flex-row gap-2">
+<div className="flex flex-col gap-2 sm:flex-row">
   <Button type="submit" className="flex-1">
     Create Recipe
   </Button>
@@ -235,6 +228,7 @@ The Button component follows WCAG accessibility guidelines:
 ```
 
 ### Loading States
+
 ```tsx
 const [isLoading, setIsLoading] = useState(false);
 
@@ -282,6 +276,7 @@ return (
 ## Technical Details
 
 ### CSS Custom Properties
+
 The button uses design tokens from your CSS custom properties:
 
 - `--primary` / `--primary-foreground`
@@ -292,6 +287,7 @@ The button uses design tokens from your CSS custom properties:
 - `--radius` for border radius
 
 ### Typography
+
 Button typography is configured in Tailwind config:
 
 - `text-button-sm`: 14px with optimized line height
@@ -301,6 +297,7 @@ Button typography is configured in Tailwind config:
 All button text includes `-0.025em` letter spacing for improved readability.
 
 ### Performance
+
 The component is optimized for performance:
 
 - Uses `React.forwardRef` for proper ref handling
@@ -310,15 +307,15 @@ The component is optimized for performance:
 
 ## Props Reference
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'default'` | Button style variant |
-| `size` | `'default' \| 'sm' \| 'lg' \| 'icon'` | `'default'` | Button size |
-| `loading` | `boolean` | `false` | Shows loading spinner and disables button |
-| `disabled` | `boolean` | `false` | Disables button interaction |
-| `asChild` | `boolean` | `false` | Render as child element (polymorphic) |
-| `className` | `string` | - | Additional CSS classes |
-| `onClick` | `(event: MouseEvent) => void` | - | Click event handler |
-| `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Button type attribute |
+| Prop        | Type                                                                          | Default     | Description                               |
+| ----------- | ----------------------------------------------------------------------------- | ----------- | ----------------------------------------- |
+| `variant`   | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'` | `'default'` | Button style variant                      |
+| `size`      | `'default' \| 'sm' \| 'lg' \| 'icon'`                                         | `'default'` | Button size                               |
+| `loading`   | `boolean`                                                                     | `false`     | Shows loading spinner and disables button |
+| `disabled`  | `boolean`                                                                     | `false`     | Disables button interaction               |
+| `asChild`   | `boolean`                                                                     | `false`     | Render as child element (polymorphic)     |
+| `className` | `string`                                                                      | -           | Additional CSS classes                    |
+| `onClick`   | `(event: MouseEvent) => void`                                                 | -           | Click event handler                       |
+| `type`      | `'button' \| 'submit' \| 'reset'`                                             | `'button'`  | Button type attribute                     |
 
 Plus all standard HTML button attributes (`id`, `aria-*`, `data-*`, etc.).

@@ -1,9 +1,15 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   useLayoutVariant,
   useSidebarVisibility,
   useFooterVisibility,
-  useLayoutSubNavigation
+  useLayoutSubNavigation,
 } from './layout-hooks';
 import { LayoutProvider } from './layout-provider';
 
@@ -20,18 +26,22 @@ access to layout state and are optimized for performance.
 ## Available Hooks
 
 ### useLayoutVariant()
+
 Returns the current layout variant ('default', 'focused', 'minimal').
 Useful for conditional rendering based on the active layout type.
 
 ### useSidebarVisibility()
+
 Returns a boolean indicating whether the sidebar should be visible.
 Automatically updates when layout variant changes or when sidebar is toggled.
 
 ### useFooterVisibility()
+
 Returns a boolean indicating whether the footer should be visible.
 Responds to layout variant changes and manual footer toggles.
 
 ### useLayoutSubNavigation()
+
 Returns the current sub-navigation items for the active route.
 Automatically filtered based on authentication, roles, and feature flags.
 
@@ -45,15 +55,16 @@ Automatically filtered based on authentication, roles, and feature flags.
 ## Use Cases
 
 These hooks are perfect for:
+
 - Conditional rendering based on layout state
 - Components that need to adapt to layout changes
 - Building responsive layouts that react to sidebar state
 - Creating layout-aware navigation components
-        `
-      }
-    }
+  `
+  }
+  }
   }}
-/>
+  />
 
 # Layout Hooks
 
@@ -134,33 +145,35 @@ each hook in action with real-time updates.
             <div className="p-6 border rounded-lg bg-muted/50">
               <h4 className="font-semibold mb-3">Hook Usage Example</h4>
               <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+
 {`import {
-  useLayoutVariant,
-  useSidebarVisibility,
-  useFooterVisibility,
-  useLayoutSubNavigation
+useLayoutVariant,
+useSidebarVisibility,
+useFooterVisibility,
+useLayoutSubNavigation
 } from '@/components/layout';
 
 const MyComponent = () => {
-  const variant = useLayoutVariant();
-  const showSidebar = useSidebarVisibility();
-  const showFooter = useFooterVisibility();
-  const subNavigation = useLayoutSubNavigation();
+const variant = useLayoutVariant();
+const showSidebar = useSidebarVisibility();
+const showFooter = useFooterVisibility();
+const subNavigation = useLayoutSubNavigation();
 
-  return (
-    <div>
-      <p>Current layout: {variant}</p>
-      {showSidebar && <p>Sidebar is visible</p>}
-      {showFooter && <p>Footer is visible</p>}
-      <p>Navigation items: {subNavigation.length}</p>
-    </div>
-  );
+return (
+
+<div>
+<p>Current layout: {variant}</p>
+{showSidebar && <p>Sidebar is visible</p>}
+{showFooter && <p>Footer is visible</p>}
+<p>Navigation items: {subNavigation.length}</p>
+</div>
+);
 };`}
-              </pre>
-            </div>
-          </div>
-        );
-      };
+</pre>
+</div>
+</div>
+);
+};
 
       return (
         <LayoutProvider variant="default" defaultShowSidebar={true} defaultShowFooter={true}>
@@ -168,6 +181,7 @@ const MyComponent = () => {
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -237,28 +251,30 @@ The `useLayoutVariant` hook returns the current layout variant and updates when 
             <div className="p-6 border rounded-lg bg-muted/50">
               <h4 className="font-semibold mb-3">Conditional Rendering Example</h4>
               <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
-{`const MyComponent = () => {
-  const variant = useLayoutVariant();
 
-  return (
-    <div>
-      {variant === 'default' && (
-        <div>Full navigation experience</div>
-      )}
-      {variant === 'focused' && (
-        <div>Content-focused layout</div>
-      )}
-      {variant === 'minimal' && (
-        <div>Minimal layout for standalone pages</div>
-      )}
-    </div>
-  );
+{`const MyComponent = () => {
+const variant = useLayoutVariant();
+
+return (
+
+<div>
+{variant === 'default' && (
+<div>Full navigation experience</div>
+)}
+{variant === 'focused' && (
+<div>Content-focused layout</div>
+)}
+{variant === 'minimal' && (
+<div>Minimal layout for standalone pages</div>
+)}
+</div>
+);
 };`}
-              </pre>
-            </div>
-          </div>
-        );
-      };
+</pre>
+</div>
+</div>
+);
+};
 
       return (
         <LayoutProvider variant="default">
@@ -266,6 +282,7 @@ The `useLayoutVariant` hook returns the current layout variant and updates when 
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -351,27 +368,29 @@ The `useSidebarVisibility` hook returns whether the sidebar should be visible ba
             <div className="p-6 border rounded-lg bg-muted/50">
               <h4 className="font-semibold mb-3">Responsive Layout Example</h4>
               <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
-{`const ResponsiveLayout = () => {
-  const showSidebar = useSidebarVisibility();
 
-  return (
-    <div className="flex">
-      {showSidebar && (
-        <aside className="w-64 bg-muted p-4">
-          <nav>Sidebar Navigation</nav>
-        </aside>
-      )}
-      <main className={\`flex-1 p-4 \${showSidebar ? 'ml-0' : 'ml-auto'}\`}>
-        <div>Main Content</div>
-      </main>
-    </div>
-  );
+{`const ResponsiveLayout = () => {
+const showSidebar = useSidebarVisibility();
+
+return (
+
+<div className="flex">
+{showSidebar && (
+<aside className="w-64 bg-muted p-4">
+<nav>Sidebar Navigation</nav>
+</aside>
+)}
+<main className={\`flex-1 p-4 \${showSidebar ? 'ml-0' : 'ml-auto'}\`}>
+<div>Main Content</div>
+</main>
+</div>
+);
 };`}
-              </pre>
-            </div>
-          </div>
-        );
-      };
+</pre>
+</div>
+</div>
+);
+};
 
       return (
         <LayoutProvider variant="default" defaultShowSidebar={true}>
@@ -379,6 +398,7 @@ The `useSidebarVisibility` hook returns whether the sidebar should be visible ba
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -464,33 +484,35 @@ The `useFooterVisibility` hook returns whether the footer should be visible base
             <div className="p-6 border rounded-lg bg-muted/50">
               <h4 className="font-semibold mb-3">Conditional Footer Example</h4>
               <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
-{`const PageLayout = ({ children }) => {
-  const showFooter = useFooterVisibility();
-  const variant = useLayoutVariant();
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header>Page Header</header>
-      <main className="flex-1">{children}</main>
-      {showFooter && (
-        <footer className={\`mt-auto \${
-          variant === 'focused' ? 'py-4' : 'py-8'
-        }\`}>
-          {variant === 'focused' ? (
-            <div>Minimal footer content</div>
-          ) : (
-            <div>Full footer with links and info</div>
-          )}
-        </footer>
-      )}
-    </div>
-  );
+{`const PageLayout = ({ children }) => {
+const showFooter = useFooterVisibility();
+const variant = useLayoutVariant();
+
+return (
+
+<div className="min-h-screen flex flex-col">
+<header>Page Header</header>
+<main className="flex-1">{children}</main>
+{showFooter && (
+<footer className={\`mt-auto \${
+variant === 'focused' ? 'py-4' : 'py-8'
+}\`}>
+{variant === 'focused' ? (
+<div>Minimal footer content</div>
+) : (
+<div>Full footer with links and info</div>
+)}
+</footer>
+)}
+</div>
+);
 };`}
-              </pre>
-            </div>
-          </div>
-        );
-      };
+</pre>
+</div>
+</div>
+);
+};
 
       return (
         <LayoutProvider variant="default" defaultShowFooter={true}>
@@ -498,6 +520,7 @@ The `useFooterVisibility` hook returns whether the footer should be visible base
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -584,36 +607,38 @@ The `useLayoutSubNavigation` hook returns the current sub-navigation items for t
             <div className="p-6 border rounded-lg bg-muted/50">
               <h4 className="font-semibold mb-3">Dynamic Navigation Example</h4>
               <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+
 {`const DynamicSidebar = () => {
-  const subNavigation = useLayoutSubNavigation();
+const subNavigation = useLayoutSubNavigation();
 
-  if (subNavigation.length === 0) {
-    return <div>No navigation items</div>;
-  }
+if (subNavigation.length === 0) {
+return <div>No navigation items</div>;
+}
 
-  return (
-    <nav className="space-y-2">
-      {subNavigation.map((item) => (
-        <a
+return (
+
+<nav className="space-y-2">
+{subNavigation.map((item) => (
+<a
           key={item.href}
           href={item.href}
           className="flex items-center gap-2 p-2 rounded hover:bg-muted"
         >
-          {item.icon && <span>{item.icon}</span>}
-          <span>{item.label}</span>
-          {item.badge && (
-            <span className="ml-auto badge">{item.badge}</span>
-          )}
-        </a>
-      ))}
-    </nav>
-  );
+{item.icon && <span>{item.icon}</span>}
+<span>{item.label}</span>
+{item.badge && (
+<span className="ml-auto badge">{item.badge}</span>
+)}
+</a>
+))}
+</nav>
+);
 };`}
-              </pre>
-            </div>
-          </div>
-        );
-      };
+</pre>
+</div>
+</div>
+);
+};
 
       return (
         <LayoutProvider variant="default">
@@ -621,6 +646,7 @@ The `useLayoutSubNavigation` hook returns the current sub-navigation items for t
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -737,6 +763,7 @@ The layout hooks are optimized for performance and only re-render when their spe
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -805,28 +832,32 @@ Layout hooks include proper error handling when used outside of a LayoutProvider
           <div className="p-6 border rounded-lg bg-muted/50">
             <h4 className="font-semibold mb-3">Error Prevention</h4>
             <pre className="text-xs bg-background p-4 rounded overflow-x-auto">
+
 {`// ❌ Wrong - Hook used outside provider
 const App = () => {
-  const variant = useLayoutVariant(); // Error!
-  return <div>{variant}</div>;
+const variant = useLayoutVariant(); // Error!
+return <div>{variant}</div>;
 };
 
 // ✅ Correct - Hook used within provider
 const App = () => (
-  <LayoutProvider variant="default">
-    <MyComponent />
-  </LayoutProvider>
+
+<LayoutProvider variant="default">
+  <MyComponent />
+</LayoutProvider>
 );
 
 const MyComponent = () => {
-  const variant = useLayoutVariant(); // Works!
-  return <div>{variant}</div>;
+const variant = useLayoutVariant(); // Works!
+return <div>{variant}</div>;
 };`}
-            </pre>
-          </div>
-        </div>
-      );
-    }}
+
+</pre>
+</div>
+</div>
+);
+}}
+
   </Story>
 </Canvas>
 
@@ -836,37 +867,37 @@ const MyComponent = () => {
 
 ```typescript
 // Returns the current layout variant
-function useLayoutVariant(): LayoutVariant
+function useLayoutVariant(): LayoutVariant;
 
 // Returns whether sidebar should be visible
-function useSidebarVisibility(): boolean
+function useSidebarVisibility(): boolean;
 
 // Returns whether footer should be visible
-function useFooterVisibility(): boolean
+function useFooterVisibility(): boolean;
 
 // Returns current sub-navigation items
-function useLayoutSubNavigation(): NavItem[]
+function useLayoutSubNavigation(): NavItem[];
 ```
 
 ### Types
 
 ```typescript
-type LayoutVariant = 'default' | 'focused' | 'minimal'
+type LayoutVariant = 'default' | 'focused' | 'minimal';
 
 interface NavItem {
-  href: string
-  label: string
-  icon?: string
-  badge?: string
+  href: string;
+  label: string;
+  icon?: string;
+  badge?: string;
   metadata?: {
-    requiredAuth?: boolean
-    requiredRoles?: string[]
-    featureFlag?: string
-    showInMobile?: boolean
-    showInDesktop?: boolean
-    disabled?: boolean
-    sortOrder?: number
-  }
+    requiredAuth?: boolean;
+    requiredRoles?: string[];
+    featureFlag?: string;
+    showInMobile?: boolean;
+    showInDesktop?: boolean;
+    disabled?: boolean;
+    sortOrder?: number;
+  };
 }
 ```
 

@@ -1,6 +1,18 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { ViewToggle } from './view-toggle';
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from './card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from './card';
 import { Badge } from './badge';
 
 <Meta
@@ -33,45 +45,46 @@ It integrates with the view preference store for automatic persistence to localS
 ## Usage
 
 Use ViewToggle for:
+
 - Browse pages with grid/list view options
 - Collection galleries
 - Search results pages
 - Recipe browsing interfaces
 - Any content that benefits from multiple view modes
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    value: {
-      description: 'Controlled value for the view mode',
-      control: { type: 'select' },
-      options: ['grid', 'list'],
-    },
-    defaultValue: {
-      description: 'Default value for uncontrolled mode',
-      control: { type: 'select' },
-      options: ['grid', 'list'],
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Size variant of the toggle',
-      defaultValue: 'md'
-    },
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'outline', 'ghost'],
-      description: 'Visual style variant',
-      defaultValue: 'default'
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the toggle is disabled',
-      defaultValue: false
-    }
-  }}
-/>
+      value: {
+        description: 'Controlled value for the view mode',
+        control: { type: 'select' },
+        options: ['grid', 'list'],
+      },
+      defaultValue: {
+        description: 'Default value for uncontrolled mode',
+        control: { type: 'select' },
+        options: ['grid', 'list'],
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size variant of the toggle',
+        defaultValue: 'md'
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'outline', 'ghost'],
+        description: 'Visual style variant',
+        defaultValue: 'default'
+      },
+      disabled: {
+        control: { type: 'boolean' },
+        description: 'Whether the toggle is disabled',
+        defaultValue: false
+      }
+    }}
+  />
 
 # ViewToggle
 
@@ -107,6 +120,7 @@ Full control over the value with the `value` and `onValueChange` props.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -136,6 +150,7 @@ Three size options: small, medium (default), and large.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -165,6 +180,7 @@ Three visual styles: default, outline, and ghost.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -189,6 +205,7 @@ Toggle can be disabled to prevent user interaction.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -213,6 +230,7 @@ Specify a default value for uncontrolled mode.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -257,6 +275,7 @@ Showcasing size and variant combinations.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -292,6 +311,7 @@ Example of ViewToggle integrated into a typical browse page header.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -378,6 +398,7 @@ Full interactive example with persistent state.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -388,11 +409,13 @@ Full interactive example with persistent state.
 ## Accessibility Features
 
 ### Keyboard Navigation
+
 - **Tab**: Navigate to the toggle group
 - **Enter/Space**: Activate the focused button
 - **Arrow Keys**: Navigate between grid and list buttons
 
 ### Screen Reader Support
+
 - ARIA radiogroup pattern for proper semantics
 - Each button has `role="radio"` with `aria-checked` state
 - `aria-label` for the toggle group ("Switch view mode")
@@ -400,6 +423,7 @@ Full interactive example with persistent state.
 - Screen reader only text for icon descriptions
 
 ### Focus Management
+
 - Focus visible indicators on all buttons
 - Logical tab order through controls
 - Disabled state properly communicated (`tabIndex={-1}`)
@@ -408,18 +432,21 @@ Full interactive example with persistent state.
 ## Design Guidelines
 
 ### When to Use
+
 - **Browse Pages**: Recipe listings, collections, galleries
 - **Search Results**: Toggle between grid and list views
 - **Content Libraries**: User-generated content, media libraries
 - **Product Catalogs**: E-commerce product display options
 
 ### When Not to Use
+
 - **Single View Only**: Don't add if only one view makes sense
 - **Mobile Only**: Consider hiding on mobile where space is limited
 - **Complex Filters**: Use dedicated filter components instead
 - **More Than 2 Options**: Use a dropdown or segmented control
 
 ### Best Practices
+
 - **Placement**: Top-right of content area (standard convention)
 - **Default Mode**: Grid is typically the default for visual content
 - **Persistence**: Use uncontrolled mode for automatic persistence
@@ -448,12 +475,14 @@ const [mode, setMode] = useState('grid');
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Uses `React.useCallback` for all event handlers
 - Minimal re-renders with proper memoization
 - No expensive calculations or operations
 - Efficient store subscriptions (only reads needed values)
 
 ### Bundle Impact
+
 - Minimal overhead (~2KB gzipped)
 - Tree-shakeable exports
 - No heavy dependencies

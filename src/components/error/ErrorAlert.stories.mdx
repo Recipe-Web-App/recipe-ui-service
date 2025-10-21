@@ -43,11 +43,11 @@ A specialized component for displaying inline error messages from various source
 **ErrorAlert vs ErrorPage**: ErrorAlert is for inline contextual errors. ErrorPage is for full-page errors (404, 500, etc.).
 
 **ErrorAlert vs Error Boundaries**: ErrorAlert displays controlled error messages. Error Boundaries catch runtime errors.
-        `,
-      },
-    },
-  }}
-  argTypes={{
+`,
+},
+},
+}}
+argTypes={{
     variant: {
       control: 'select',
       options: ['inline', 'banner', 'toast', 'card'],
@@ -139,6 +139,7 @@ A versatile inline error alert component for all error scenarios.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -157,11 +158,7 @@ A versatile inline error alert component for all error scenarios.
         severity="warning"
         title="Warning"
       />
-      <ErrorAlert
-        error="For your information"
-        severity="info"
-        title="Info"
-      />
+      <ErrorAlert error="For your information" severity="info" title="Info" />
     </div>
   </Story>
 </Canvas>
@@ -186,6 +183,7 @@ A versatile inline error alert component for all error scenarios.
         return <ErrorAlert zodError={error} variant="inline" />;
       }
     }}
+
   </Story>
 </Canvas>
 
@@ -196,7 +194,10 @@ A versatile inline error alert component for all error scenarios.
     <ErrorAlert
       validationErrors={[
         { field: 'email', message: 'Invalid email format' },
-        { field: 'password', message: 'Password must be at least 8 characters' },
+        {
+          field: 'password',
+          message: 'Password must be at least 8 characters',
+        },
         { field: 'confirmPassword', message: 'Passwords do not match' },
       ]}
       variant="card"
@@ -226,6 +227,7 @@ A versatile inline error alert component for all error scenarios.
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -253,6 +255,7 @@ A versatile inline error alert component for all error scenarios.
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -287,6 +290,7 @@ A versatile inline error alert component for all error scenarios.
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -316,6 +320,7 @@ A versatile inline error alert component for all error scenarios.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -370,6 +375,7 @@ A versatile inline error alert component for all error scenarios.
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -384,9 +390,7 @@ A versatile inline error alert component for all error scenarios.
         onRetry={() => console.log('Retry')}
       />
       <ErrorAlert
-        validationErrors={[
-          { field: 'email', message: 'Invalid email' },
-        ]}
+        validationErrors={[{ field: 'email', message: 'Invalid email' }]}
         hint="Please use a valid email address (e.g., user@example.com)"
       />
     </div>
@@ -409,19 +413,13 @@ A versatile inline error alert component for all error scenarios.
 
 <Canvas>
   <Story name="Without Icon">
-    <ErrorAlert
-      error="Error message without icon"
-      showIcon={false}
-    />
+    <ErrorAlert error="Error message without icon" showIcon={false} />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Without Close Button">
-    <ErrorAlert
-      error="Error message without close button"
-      showClose={false}
-    />
+    <ErrorAlert error="Error message without close button" showClose={false} />
   </Story>
 </Canvas>
 
@@ -576,6 +574,7 @@ A versatile inline error alert component for all error scenarios.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -611,9 +610,11 @@ const { errors } = useForm({ resolver: zodResolver(schema) });
 
 // API error with retry
 const { error, refetch } = useQuery({ ... });
+
 <ErrorAlert error={error} onRetry={refetch} />
 
 // Service error
+
 <ErrorAlert
   serviceError={serviceError}
   onRetry={() => refetch()}
@@ -621,6 +622,7 @@ const { error, refetch } = useQuery({ ... });
 />
 
 // Success message with auto-dismiss
+
 <ErrorAlert
   error="Recipe saved successfully!"
   severity="info"
@@ -629,11 +631,11 @@ const { error, refetch } = useQuery({ ... });
 />
 
 // Multiple validation errors
+
 <ErrorAlert
   validationErrors={validationErrors}
   maxErrors={5}
   collapsible
   variant="card"
 />
-`}
-/>
+`} />

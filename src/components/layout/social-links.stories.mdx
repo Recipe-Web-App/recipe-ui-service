@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { SocialLinks } from './social-links';
 
 <Meta
@@ -25,28 +31,29 @@ It supports multiple platforms and provides a clean, consistent way to link to s
 ## Usage
 
 Use SocialLinks for:
+
 - Footer social media links
 - Author/profile social connections
 - Community and contact sections
 - Marketing and outreach areas
 - Any location requiring social media presence
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    iconSize: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Size of the social media icons',
-      defaultValue: 'sm'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      iconSize: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size of the social media icons',
+        defaultValue: 'sm'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # SocialLinks
 
@@ -57,7 +64,7 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Default">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <SocialLinks />
       </div>
     )}
@@ -69,17 +76,17 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Icon Sizes">
     {() => (
-      <div className="p-6 bg-background border rounded space-y-6">
+      <div className="bg-background space-y-6 rounded border p-6">
         <div>
-          <div className="text-sm font-medium mb-2">Small (sm)</div>
+          <div className="mb-2 text-sm font-medium">Small (sm)</div>
           <SocialLinks iconSize="sm" />
         </div>
         <div>
-          <div className="text-sm font-medium mb-2">Medium (md)</div>
+          <div className="mb-2 text-sm font-medium">Medium (md)</div>
           <SocialLinks iconSize="md" />
         </div>
         <div>
-          <div className="text-sm font-medium mb-2">Large (lg)</div>
+          <div className="mb-2 text-sm font-medium">Large (lg)</div>
           <SocialLinks iconSize="lg" />
         </div>
       </div>
@@ -92,12 +99,24 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Custom Platforms">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <SocialLinks
           links={[
-            { platform: 'youtube', href: 'https://youtube.com/@recipeapp', label: 'YouTube Channel' },
-            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp', label: 'LinkedIn' },
-            { platform: 'facebook', href: 'https://facebook.com/recipeapp', label: 'Facebook Page' },
+            {
+              platform: 'youtube',
+              href: 'https://youtube.com/@recipeapp',
+              label: 'YouTube Channel',
+            },
+            {
+              platform: 'linkedin',
+              href: 'https://linkedin.com/company/recipeapp',
+              label: 'LinkedIn',
+            },
+            {
+              platform: 'facebook',
+              href: 'https://facebook.com/recipeapp',
+              label: 'Facebook Page',
+            },
           ]}
         />
       </div>
@@ -110,14 +129,17 @@ Use SocialLinks for:
 <Canvas>
   <Story name="All Platforms">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <SocialLinks
           iconSize="md"
           links={[
             { platform: 'github', href: 'https://github.com/recipeapp' },
             { platform: 'twitter', href: 'https://twitter.com/recipeapp' },
             { platform: 'youtube', href: 'https://youtube.com/@recipeapp' },
-            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp' },
+            {
+              platform: 'linkedin',
+              href: 'https://linkedin.com/company/recipeapp',
+            },
             { platform: 'facebook', href: 'https://facebook.com/recipeapp' },
           ]}
         />
@@ -131,23 +153,23 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Custom Labels">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <SocialLinks
           links={[
             {
               platform: 'github',
               href: 'https://github.com/recipeapp',
-              label: 'Source Code Repository'
+              label: 'Source Code Repository',
             },
             {
               platform: 'twitter',
               href: 'https://twitter.com/recipeapp',
-              label: 'Latest Updates and News'
+              label: 'Latest Updates and News',
             },
             {
               platform: 'youtube',
               href: 'https://youtube.com/@recipeapp',
-              label: 'Cooking Videos and Tutorials'
+              label: 'Cooking Videos and Tutorials',
             },
           ]}
         />
@@ -161,13 +183,13 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Footer Integration">
     {() => (
-      <div className="p-6 bg-background border rounded">
-        <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
-          <div className="text-sm text-muted-foreground">
+      <div className="bg-background rounded border p-6">
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <div className="text-muted-foreground text-sm">
             © 2024 Recipe App. All rights reserved.
           </div>
           <div className="flex items-center space-x-4">
-            <div className="text-xs text-muted-foreground">Follow us:</div>
+            <div className="text-muted-foreground text-xs">Follow us:</div>
             <SocialLinks />
           </div>
         </div>
@@ -181,11 +203,11 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Mobile Layout">
     {() => (
-      <div className="max-w-xs p-4 bg-background border rounded">
+      <div className="bg-background max-w-xs rounded border p-4">
         <div className="space-y-3">
           <div className="text-sm font-medium">Connect with us</div>
           <SocialLinks iconSize="md" />
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             Follow for recipes and updates
           </div>
         </div>
@@ -199,14 +221,17 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Custom Styling">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <SocialLinks
-          className="justify-center space-x-6 p-4 bg-muted rounded-lg"
+          className="bg-muted justify-center space-x-6 rounded-lg p-4"
           iconSize="lg"
           links={[
             { platform: 'github', href: 'https://github.com/recipeapp' },
             { platform: 'twitter', href: 'https://twitter.com/recipeapp' },
-            { platform: 'linkedin', href: 'https://linkedin.com/company/recipeapp' },
+            {
+              platform: 'linkedin',
+              href: 'https://linkedin.com/company/recipeapp',
+            },
           ]}
         />
       </div>
@@ -219,11 +244,11 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Empty State">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <div className="space-y-2">
           <div className="text-sm">When no links are provided:</div>
           <SocialLinks links={[]} />
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             Component renders empty navigation container
           </div>
         </div>
@@ -237,7 +262,7 @@ Use SocialLinks for:
 <Canvas>
   <Story name="Hover Effects">
     {() => (
-      <div className="p-6 bg-background border rounded">
+      <div className="bg-background rounded border p-6">
         <div className="space-y-4">
           <div className="text-sm font-medium">
             Hover over the icons to see the scale animation:
@@ -250,7 +275,7 @@ Use SocialLinks for:
               { platform: 'youtube', href: 'https://youtube.com/@recipeapp' },
             ]}
           />
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             Icons scale to 110% on hover with smooth transitions
           </div>
         </div>
@@ -263,8 +288,8 @@ Use SocialLinks for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
-      <div className="p-4 bg-background border rounded">
+    {args => (
+      <div className="bg-background rounded border p-4">
         <SocialLinks {...args} />
       </div>
     )}
@@ -277,13 +302,13 @@ Use SocialLinks for:
 
 ## Supported Platforms
 
-| Platform  | Icon       | Description                    |
-|-----------|------------|--------------------------------|
-| github    | GitHub     | Code repositories and projects |
-| twitter   | Twitter/X  | Social updates and news        |
-| youtube   | YouTube    | Video content and tutorials    |
-| linkedin  | LinkedIn   | Professional networking        |
-| facebook  | Facebook   | Community and social presence  |
+| Platform | Icon      | Description                    |
+| -------- | --------- | ------------------------------ |
+| github   | GitHub    | Code repositories and projects |
+| twitter  | Twitter/X | Social updates and news        |
+| youtube  | YouTube   | Video content and tutorials    |
+| linkedin | LinkedIn  | Professional networking        |
+| facebook | Facebook  | Community and social presence  |
 
 ## Accessibility Features
 
@@ -296,16 +321,19 @@ Use SocialLinks for:
 ## Design Guidelines
 
 ### Icon Sizes
+
 - **Small (sm)**: 16px - Best for footers and compact areas
 - **Medium (md)**: 20px - Good for sidebars and general use
 - **Large (lg)**: 24px - Ideal for hero sections and prominent placement
 
 ### Spacing
+
 - Consistent 16px gap between icons
 - Adequate touch targets for mobile devices
 - Proper alignment with surrounding content
 
 ### Hover Effects
+
 - Smooth scale animation (1.1x on hover)
 - Color transitions for visual feedback
 - Maintains accessibility during animations

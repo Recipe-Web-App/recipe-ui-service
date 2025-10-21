@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Switch,
   SwitchRoot,
@@ -285,6 +291,7 @@ A toggle switch component for settings and preferences with comprehensive varian
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -346,6 +353,7 @@ A toggle switch component for settings and preferences with comprehensive varian
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -387,7 +395,7 @@ A toggle switch component for settings and preferences with comprehensive varian
           <SwitchRoot
             checked={checked}
             onCheckedChange={setChecked}
-            className="flex items-center gap-4 p-4 border rounded-lg"
+            className="flex items-center gap-4 rounded-lg border p-4"
           >
             <SwitchTrack size="lg" variant="success">
               <SwitchThumb
@@ -427,7 +435,7 @@ A toggle switch component for settings and preferences with comprehensive varian
         description="Fully keyboard accessible"
         aria-describedby="keyboard-help"
       />
-      <div id="keyboard-help" className="text-sm text-gray-600 mt-2">
+      <div id="keyboard-help" className="mt-2 text-sm text-gray-600">
         Press Space to toggle the switch
       </div>
     </div>
@@ -441,12 +449,14 @@ A toggle switch component for settings and preferences with comprehensive varian
 ## Usage Guidelines
 
 ### When to use
+
 - For binary on/off settings
 - For enabling/disabling features
 - For preference toggles
 - In settings and configuration screens
 
 ### Best practices
+
 - Always provide a clear label
 - Use descriptions for complex settings
 - Group related switches together

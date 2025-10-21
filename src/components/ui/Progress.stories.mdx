@@ -38,6 +38,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         </div>
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -94,6 +95,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         <Progress value={75} barAnimation="glow" showPercentage />
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -138,6 +140,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         onCancel={() => alert('Cancelled')}
       />
     </div>
+
   </Story>
 </Canvas>
 
@@ -184,6 +187,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         isSkipped={true}
       />
     </div>
+
   </Story>
 </Canvas>
 
@@ -228,7 +232,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
             duration: '10 min',
           },
         ]}
-        onStepClick={(index) => alert(`Clicked step ${index + 1}`)}
+        onStepClick={index => alert(`Clicked step ${index + 1}`)}
       />
     </div>
   </Story>
@@ -271,6 +275,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         size="default"
       />
     </div>
+
   </Story>
 </Canvas>
 
@@ -314,6 +319,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         />
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -414,6 +420,7 @@ Progress components for upload progress, cooking progress indicators, timers, an
         </div>
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -422,7 +429,9 @@ Progress components for upload progress, cooking progress indicators, timers, an
 <Canvas>
   <Story name="Upload List">
     <div className="max-w-lg">
-      <h4 className="mb-3 font-medium text-gray-900">Uploading Recipe Assets</h4>
+      <h4 className="mb-3 font-medium text-gray-900">
+        Uploading Recipe Assets
+      </h4>
       <div className="space-y-2">
         <UploadProgress
           fileName="hero-image.jpg"

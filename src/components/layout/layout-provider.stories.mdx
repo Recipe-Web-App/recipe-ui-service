@@ -1,5 +1,15 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
-import { LayoutProvider, useLayoutContext, LayoutErrorBoundary } from './layout-provider';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import {
+  LayoutProvider,
+  useLayoutContext,
+  LayoutErrorBoundary,
+} from './layout-provider';
 
 <Meta
   title="Layout Components/LayoutProvider"
@@ -28,6 +38,7 @@ child components can access through the useLayoutContext hook.
 ## Context Values
 
 The provider makes the following values available to child components:
+
 - Current layout variant
 - Sidebar and footer visibility state
 - Sub-navigation items for the current route
@@ -37,11 +48,11 @@ The provider makes the following values available to child components:
 
 The provider includes built-in error boundary protection that catches
 layout-related errors and provides a fallback UI with recovery options.
-        `
-      }
-    }
-  }}
-  argTypes={{
+`
+}
+}
+}}
+argTypes={{
     variant: {
       control: { type: 'select' },
       options: ['default', 'focused', 'minimal'],
@@ -146,6 +157,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -197,6 +209,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -245,6 +258,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -281,6 +295,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -342,6 +357,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -384,6 +400,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -478,6 +495,7 @@ layout-related errors and provides a fallback UI with recovery options.
         </LayoutProvider>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -503,13 +521,13 @@ interface LayoutContextType {
 
 ### Available Hooks
 
-| Hook | Return Type | Description |
-|------|-------------|-------------|
-| `useLayoutContext()` | `LayoutContextType` | Full layout context |
-| `useLayoutVariant()` | `LayoutVariant` | Current layout variant |
-| `useSidebarVisibility()` | `boolean` | Sidebar visibility state |
-| `useFooterVisibility()` | `boolean` | Footer visibility state |
-| `useLayoutSubNavigation()` | `NavItem[]` | Current sub-navigation |
+| Hook                       | Return Type         | Description              |
+| -------------------------- | ------------------- | ------------------------ |
+| `useLayoutContext()`       | `LayoutContextType` | Full layout context      |
+| `useLayoutVariant()`       | `LayoutVariant`     | Current layout variant   |
+| `useSidebarVisibility()`   | `boolean`           | Sidebar visibility state |
+| `useFooterVisibility()`    | `boolean`           | Footer visibility state  |
+| `useLayoutSubNavigation()` | `NavItem[]`         | Current sub-navigation   |
 
 ## Error Boundary Features
 

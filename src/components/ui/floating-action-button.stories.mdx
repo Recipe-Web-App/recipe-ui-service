@@ -1,6 +1,21 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { FloatingActionButton } from './floating-action-button';
-import { Plus, Edit, Share, Heart, MessageCircle, Mail, Phone, Search } from 'lucide-react';
+import {
+  Plus,
+  Edit,
+  Share,
+  Heart,
+  MessageCircle,
+  Mail,
+  Phone,
+  Search,
+} from 'lucide-react';
 
 <Meta
   title="UI Components/FloatingActionButton"
@@ -46,74 +61,75 @@ and advanced features like speed dial functionality.
 ## Usage
 
 Use FloatingActionButton for:
+
 - Primary actions like "Add New" or "Create"
 - Quick access to frequently used functions
 - Mobile-first interfaces where screen space is limited
 - Call-to-action buttons that should always be visible
 - Speed dial menus for related action groups
 - Overlay interfaces and modal-like experiences
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['primary', 'secondary', 'destructive', 'success', 'outline', 'surface'],
-      description: 'Visual variant of the FAB',
-      defaultValue: 'primary'
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Size of the FAB',
-      defaultValue: 'md'
-    },
-    position: {
-      control: { type: 'select' },
-      options: [
-        'top-left', 'top-center', 'top-right',
-        'center-left', 'center', 'center-right',
-        'bottom-left', 'bottom-center', 'bottom-right'
-      ],
-      description: 'Position on screen',
-      defaultValue: 'bottom-right'
-    },
-    extended: {
-      control: { type: 'boolean' },
-      description: 'Show as extended FAB with label',
-      defaultValue: false
-    },
-    loading: {
-      control: { type: 'boolean' },
-      description: 'Show loading state',
-      defaultValue: false
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Disable the button',
-      defaultValue: false
-    },
-    usePortal: {
-      control: { type: 'boolean' },
-      description: 'Render using portal (for proper positioning)',
-      defaultValue: false
-    },
-    label: {
-      control: { type: 'text' },
-      description: 'Label text for extended mode'
-    },
-    ariaLabel: {
-      control: { type: 'text' },
-      description: 'Accessible label for screen readers'
-    },
-    offset: {
-      control: { type: 'number', min: 0, max: 100 },
-      description: 'Distance from screen edge in pixels',
-      defaultValue: 16
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['primary', 'secondary', 'destructive', 'success', 'outline', 'surface'],
+        description: 'Visual variant of the FAB',
+        defaultValue: 'primary'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size of the FAB',
+        defaultValue: 'md'
+      },
+      position: {
+        control: { type: 'select' },
+        options: [
+          'top-left', 'top-center', 'top-right',
+          'center-left', 'center', 'center-right',
+          'bottom-left', 'bottom-center', 'bottom-right'
+        ],
+        description: 'Position on screen',
+        defaultValue: 'bottom-right'
+      },
+      extended: {
+        control: { type: 'boolean' },
+        description: 'Show as extended FAB with label',
+        defaultValue: false
+      },
+      loading: {
+        control: { type: 'boolean' },
+        description: 'Show loading state',
+        defaultValue: false
+      },
+      disabled: {
+        control: { type: 'boolean' },
+        description: 'Disable the button',
+        defaultValue: false
+      },
+      usePortal: {
+        control: { type: 'boolean' },
+        description: 'Render using portal (for proper positioning)',
+        defaultValue: false
+      },
+      label: {
+        control: { type: 'text' },
+        description: 'Label text for extended mode'
+      },
+      ariaLabel: {
+        control: { type: 'text' },
+        description: 'Accessible label for screen readers'
+      },
+      offset: {
+        control: { type: 'number', min: 0, max: 100 },
+        description: 'Distance from screen edge in pixels',
+        defaultValue: 16
+      }
+    }}
+  />
 
 # FloatingActionButton
 
@@ -175,6 +191,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -251,6 +268,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -297,6 +315,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -307,11 +326,20 @@ Use FloatingActionButton for:
     {() => (
       <div className="grid grid-cols-3 gap-4 text-center">
         {[
-          'top-left', 'top-center', 'top-right',
-          'center-left', 'center', 'center-right',
-          'bottom-left', 'bottom-center', 'bottom-right'
-        ].map((position) => (
-          <div key={position} className="relative h-20 border border-dashed border-border rounded">
+          'top-left',
+          'top-center',
+          'top-right',
+          'center-left',
+          'center',
+          'center-right',
+          'bottom-left',
+          'bottom-center',
+          'bottom-right',
+        ].map(position => (
+          <div
+            key={position}
+            className="border-border relative h-20 rounded border border-dashed"
+          >
             <FloatingActionButton
               icon={<Plus className="h-4 w-4" />}
               position={position}
@@ -321,7 +349,7 @@ Use FloatingActionButton for:
               ariaLabel={`FAB at ${position}`}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xs text-muted-foreground bg-background px-1">
+              <span className="text-muted-foreground bg-background px-1 text-xs">
                 {position}
               </span>
             </div>
@@ -362,6 +390,7 @@ Use FloatingActionButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -396,6 +425,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -461,6 +491,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -497,6 +528,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -543,6 +575,7 @@ Use FloatingActionButton for:
         />
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -580,6 +613,7 @@ Use FloatingActionButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -587,7 +621,7 @@ Use FloatingActionButton for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <div className="text-center">
         <FloatingActionButton
           {...args}
@@ -608,23 +642,27 @@ Use FloatingActionButton for:
 ## Design Guidelines
 
 ### When to Use
+
 - **Primary Actions**: Use FAB for the most important action on a screen
 - **Consistent Action**: The same type of action appears throughout the app flow
 - **Quick Access**: Actions users perform frequently and need quick access to
 - **Mobile-First**: Especially important for mobile interfaces with limited space
 
 ### When Not to Use
+
 - **Multiple Primary Actions**: Avoid multiple FABs competing for attention
 - **Destructive Actions**: Generally avoid for delete or other destructive actions
 - **Navigation**: FABs shouldn't be used for navigation between screens
 - **Complex Actions**: Actions requiring multiple steps or extensive input
 
 ### Positioning Guidelines
+
 - **Bottom-Right**: Most common and natural position for primary actions
 - **Bottom-Center**: Good for actions that affect the entire screen content
 - **Context-Sensitive**: Position based on the content and user workflow
 
 ### Size Guidelines
+
 - **Small (sm)**: Secondary actions or constrained layouts
 - **Medium (md)**: Standard size for most use cases
 - **Large (lg)**: Primary actions needing emphasis or accessibility
@@ -641,12 +679,14 @@ Use FloatingActionButton for:
 ## Animation Guidelines
 
 ### Micro-interactions
+
 - **Hover**: Subtle elevation and color changes
 - **Press**: Gentle scale down effect
 - **Loading**: Smooth spinner animation
 - **Appearance**: Gentle scale-in animation when appearing
 
 ### Performance
+
 - **GPU Acceleration**: Uses transform animations for smooth performance
 - **Reduced Motion**: Respects user preferences for reduced motion
 - **Smooth Transitions**: 200-300ms timing for natural feel

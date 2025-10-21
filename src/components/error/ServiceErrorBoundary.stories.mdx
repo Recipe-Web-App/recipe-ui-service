@@ -49,30 +49,30 @@ A specialized error boundary for handling microservice API errors with health mo
 - Set appropriate retry limits and delays
 - Implement health check callbacks for monitoring
 - Use circuit breaker for preventing cascading failures
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
   argTypes={{
-    serviceName: {
-      control: 'text',
-      description: 'Name of the microservice',
-    },
-    variant: {
-      control: 'select',
-      options: ['card', 'inline', 'banner'],
-      description: 'Display variant',
-    },
-    enableRetry: {
-      control: 'boolean',
-      description: 'Enable automatic retry',
-    },
-    checkHealth: {
-      control: 'boolean',
-      description: 'Enable health check polling',
-    },
-  }}
-/>
+      serviceName: {
+        control: 'text',
+        description: 'Name of the microservice',
+      },
+      variant: {
+        control: 'select',
+        options: ['card', 'inline', 'banner'],
+        description: 'Display variant',
+      },
+      enableRetry: {
+        control: 'boolean',
+        description: 'Enable automatic retry',
+      },
+      checkHealth: {
+        control: 'boolean',
+        description: 'Enable health check polling',
+      },
+    }}
+  />
 
 # ServiceErrorBoundary
 
@@ -121,6 +121,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -185,6 +186,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -234,6 +236,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -296,6 +299,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -353,6 +357,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -417,6 +422,7 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -507,12 +513,14 @@ A microservice error boundary with health monitoring and intelligent retry.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
 ## Best Practices
 
 ### Do&apos;s
+
 - ✅ Use service error boundaries for API-dependent components
 - ✅ Configure service name for better error context
 - ✅ Enable retry for transient errors (503, 429, network failures)
@@ -522,6 +530,7 @@ A microservice error boundary with health monitoring and intelligent retry.
 - ✅ Track service errors in monitoring/analytics
 
 ### Don&apos;ts
+
 - ❌ Don&apos;t enable auto-retry for authentication errors (401, 403)
 - ❌ Don&apos;t set retry limits too high (max 3-5 attempts)
 - ❌ Don&apos;t retry on 4xx errors (except 429)
@@ -553,6 +562,7 @@ A microservice error boundary with health monitoring and intelligent retry.
 </ServiceErrorBoundary>
 
 // With retry configuration
+
 <ServiceErrorBoundary
   serviceName="Recipe Scraper Service"
   variant="card"
@@ -568,6 +578,7 @@ A microservice error boundary with health monitoring and intelligent retry.
 </ServiceErrorBoundary>
 
 // With health monitoring
+
 <ServiceErrorBoundary
   serviceName="Media Management Service"
   variant="inline"
@@ -577,7 +588,7 @@ A microservice error boundary with health monitoring and intelligent retry.
     healthCheckInterval: 30000,
     healthCheckUrl: '/api/v1/media/health',
   }}
-  onHealthChange={(status) => {
+  onHealthChange={status => {
     console.log('Service health:', status);
   }}
 >
@@ -585,6 +596,7 @@ A microservice error boundary with health monitoring and intelligent retry.
 </ServiceErrorBoundary>
 
 // With circuit breaker
+
 <ServiceErrorBoundary
   serviceName="User Management Service"
   variant="card"
@@ -600,5 +612,4 @@ A microservice error boundary with health monitoring and intelligent retry.
 >
   <UserProfile />
 </ServiceErrorBoundary>
-`}
-/>
+`} />

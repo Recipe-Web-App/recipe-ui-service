@@ -40,6 +40,7 @@ A granular error boundary component for isolating and handling errors in individ
 ## Error Types
 
 The component automatically detects and classifies errors:
+
 - **Render Errors**: Component rendering failures
 - **Props Errors**: Invalid or missing props
 - **Lifecycle Errors**: Errors during component lifecycle
@@ -55,26 +56,26 @@ The component automatically detects and classifies errors:
 - Enable auto-retry for transient errors (data fetching, async operations)
 - Use props validation to catch issues early
 - Implement analytics callbacks for production error tracking
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
   argTypes={{
-    componentName: {
-      control: 'text',
-      description: 'Name of the component being wrapped',
-    },
-    fallbackMode: {
-      control: 'select',
-      options: ['skeleton', 'placeholder', 'minimal', 'detailed', 'hidden'],
-      description: 'Fallback display mode',
-    },
-    isolate: {
-      control: 'boolean',
-      description: 'Whether to prevent error bubbling',
-    },
-  }}
-/>
+      componentName: {
+        control: 'text',
+        description: 'Name of the component being wrapped',
+      },
+      fallbackMode: {
+        control: 'select',
+        options: ['skeleton', 'placeholder', 'minimal', 'detailed', 'hidden'],
+        description: 'Fallback display mode',
+      },
+      isolate: {
+        control: 'boolean',
+        description: 'Whether to prevent error bubbling',
+      },
+    }}
+  />
 
 # ComponentErrorBoundary
 
@@ -131,6 +132,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -176,6 +178,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -230,6 +233,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -287,6 +291,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -343,6 +348,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -393,6 +399,7 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -430,12 +437,14 @@ A granular error boundary for component-level error isolation and recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
 ## Best Practices
 
 ### Do&apos;s
+
 - ✅ Use component error boundaries for granular error isolation
 - ✅ Choose appropriate fallback modes based on component importance
 - ✅ Enable retry for transient errors (network, async operations)
@@ -444,6 +453,7 @@ A granular error boundary for component-level error isolation and recovery.
 - ✅ Use skeleton mode for loading-like states
 
 ### Don&apos;ts
+
 - ❌ Don&apos;t wrap the entire app in a component error boundary
 - ❌ Don&apos;t use detailed mode in production (use minimal/skeleton)
 - ❌ Don&apos;t ignore error metadata in analytics
@@ -470,6 +480,7 @@ A granular error boundary for component-level error isolation and recovery.
 </ComponentErrorBoundary>
 
 // With retry and custom config
+
 <ComponentErrorBoundary
   componentName="RecipeList"
   config={{
@@ -484,11 +495,12 @@ A granular error boundary for component-level error isolation and recovery.
 </ComponentErrorBoundary>
 
 // With props validation
+
 <ComponentErrorBoundary
   componentName="UserProfile"
   config={{
     componentName: 'UserProfile',
-    validateProps: (props) => {
+    validateProps: props => {
       if (!props.userId) return 'userId is required';
       return true;
     },
@@ -498,6 +510,7 @@ A granular error boundary for component-level error isolation and recovery.
 </ComponentErrorBoundary>
 
 // With custom fallback
+
 <ComponentErrorBoundary
   componentName="CustomComponent"
   fallbackRender={({ error, retry, resetErrorBoundary }) => (
@@ -509,5 +522,4 @@ A granular error boundary for component-level error isolation and recovery.
 >
   <CustomComponent />
 </ComponentErrorBoundary>
-`}
-/>
+`} />

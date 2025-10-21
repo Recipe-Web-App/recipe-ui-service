@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { SearchInput } from './search-input';
 import { useState } from 'react';
 import {
@@ -54,12 +60,14 @@ A specialized input component optimized for search functionality with built-in d
         />
       );
     }}
+
   </Story>
 </Canvas>
 
 ## Variants
 
 ### Default Variant
+
 <Canvas>
   <Story name="Variant Default">
     {() => {
@@ -68,7 +76,7 @@ A specialized input component optimized for search functionality with built-in d
         <SearchInput
           variant="default"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           placeholder="Search with default variant"
         />
       );
@@ -77,6 +85,7 @@ A specialized input component optimized for search functionality with built-in d
 </Canvas>
 
 ### Filled Variant
+
 <Canvas>
   <Story name="Variant Filled">
     {() => {
@@ -85,7 +94,7 @@ A specialized input component optimized for search functionality with built-in d
         <SearchInput
           variant="filled"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           placeholder="Search with filled variant"
         />
       );
@@ -94,6 +103,7 @@ A specialized input component optimized for search functionality with built-in d
 </Canvas>
 
 ### Outlined Variant
+
 <Canvas>
   <Story name="Variant Outlined">
     {() => {
@@ -102,7 +112,7 @@ A specialized input component optimized for search functionality with built-in d
         <SearchInput
           variant="outlined"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           placeholder="Search with outlined variant"
         />
       );
@@ -145,6 +155,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -194,6 +205,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -223,6 +235,7 @@ A specialized input component optimized for search functionality with built-in d
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -262,6 +275,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -312,6 +326,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -363,6 +378,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -412,6 +428,7 @@ A specialized input component optimized for search functionality with built-in d
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -438,7 +455,7 @@ A specialized input component optimized for search functionality with built-in d
       return (
         <SearchInput
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           showSearchIcon={false}
           showClearButton={false}
           placeholder="Minimal search input"
@@ -464,12 +481,14 @@ This component includes comprehensive accessibility features:
 ## Usage Guidelines
 
 ### When to Use
+
 - **Primary Search**: Main search functionality in your application
 - **Filter Interfaces**: When users need to filter through lists or data
 - **Quick Actions**: Fast access to search across different content types
 - **Auto-complete**: When you need debounced input for typeahead functionality
 
 ### Best Practices
+
 1. **Debounce Configuration**: Use appropriate debounce delays (300ms default)
 2. **Loading States**: Show loading indicators for async searches
 3. **Error Handling**: Provide clear error messages for failed searches
@@ -477,6 +496,7 @@ This component includes comprehensive accessibility features:
 5. **Help Text**: Provide context about what can be searched
 
 ### Recipe App Specific Usage
+
 - **Recipe Discovery**: Main recipe search with ingredient filtering
 - **Quick Filters**: Dietary restrictions, cuisine types, cooking time
 - **Ingredient Search**: Find recipes by available ingredients

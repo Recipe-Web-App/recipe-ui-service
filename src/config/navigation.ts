@@ -819,6 +819,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-filter-panel',
+    label: 'Filter Panel',
+    href: '/components-demo/filter-panel',
+    metadata: {
+      sortOrder: 487,
+    },
+  },
+  {
     id: 'components-protected-route',
     label: 'Protected Route',
     href: '/components-demo/protected-route',

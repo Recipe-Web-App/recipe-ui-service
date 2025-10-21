@@ -19,13 +19,13 @@ import { BrowseList } from '@/components/ui/browse-list';
 
 <BrowseList
   items={recipes}
-  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  renderItem={recipe => <RecipeListItem recipe={recipe} />}
   currentPage={currentPage}
   totalPages={totalPages}
   onPageChange={setCurrentPage}
   loading={isLoading}
   emptyMessage="No recipes found"
-/>
+/>;
 ```
 
 ## Props
@@ -108,7 +108,7 @@ Simple list without pagination:
 ```tsx
 <SimpleBrowseList
   items={recipes}
-  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  renderItem={recipe => <RecipeListItem recipe={recipe} />}
 />
 ```
 
@@ -119,7 +119,7 @@ Full pagination controls:
 ```tsx
 <BrowseList
   items={recipes}
-  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  renderItem={recipe => <RecipeListItem recipe={recipe} />}
   currentPage={page}
   totalPages={10}
   onPageChange={setPage}
@@ -156,9 +156,7 @@ Custom empty state:
   emptyMessage="No recipes found"
   emptyDescription="Try adjusting your search filters"
   emptyIcon={<Search className="h-16 w-16" />}
-  emptyActions={
-    <Button onClick={clearFilters}>Clear Filters</Button>
-  }
+  emptyActions={<Button onClick={clearFilters}>Clear Filters</Button>}
 />
 ```
 
@@ -182,7 +180,7 @@ Show dividers between items:
 ```tsx
 <BrowseList
   items={recipes}
-  renderItem={(recipe) => <RecipeListItem recipe={recipe} />}
+  renderItem={recipe => <RecipeListItem recipe={recipe} />}
   showDividers={true}
 />
 ```
@@ -235,8 +233,6 @@ interface Recipe {
 
 <BrowseList<Recipe>
   items={recipes}
-  renderItem={(recipe) => (
-    <ListItem>{recipe.title}</ListItem>
-  )}
-/>
+  renderItem={recipe => <ListItem>{recipe.title}</ListItem>}
+/>;
 ```

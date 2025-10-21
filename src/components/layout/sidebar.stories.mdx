@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Sidebar } from './sidebar';
 import { useNavigationStore } from '@/stores/ui/navigation-store';
 
@@ -61,38 +67,39 @@ It focuses on presentation while navigation filtering is handled by sub-package 
 ## Usage
 
 Use Sidebar for:
+
 - Desktop application navigation
 - Contextual sub-package navigation
 - Multi-level menu hierarchies
 - Collapsible navigation experiences
 - Accessible navigation with screen reader support
 - Integration with extensible navigation systems
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    showFooter: {
-      control: { type: 'boolean' },
-      description: 'Whether to show the footer with collapse toggle',
-      defaultValue: true
-    },
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'minimal'],
-      description: 'Sidebar visual variant',
-      defaultValue: 'default'
-    },
-    items: {
-      control: { type: 'object' },
-      description: 'Override navigation items (optional - uses store by default)'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      showFooter: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the footer with collapse toggle',
+        defaultValue: true
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'minimal'],
+        description: 'Sidebar visual variant',
+        defaultValue: 'default'
+      },
+      items: {
+        control: { type: 'object' },
+        description: 'Override navigation items (optional - uses store by default)'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # Sidebar
 
@@ -105,10 +112,10 @@ Use Sidebar for:
     {() => {
       // Mock navigation store state
       return (
-        <div className="flex h-96 border rounded-lg overflow-hidden">
+        <div className="flex h-96 overflow-hidden rounded-lg border">
           <Sidebar />
           <div className="flex-1 p-6">
-            <div className="text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-sm">
               Main content area with sidebar navigation
             </div>
           </div>
@@ -149,6 +156,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -157,10 +165,10 @@ Use Sidebar for:
 <Canvas>
   <Story name="Without Footer">
     {() => (
-      <div className="flex h-80 border rounded-lg overflow-hidden">
+      <div className="flex h-80 overflow-hidden rounded-lg border">
         <Sidebar showFooter={false} />
         <div className="flex-1 p-6">
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             Sidebar without footer section - navigation only
           </div>
         </div>
@@ -218,6 +226,7 @@ Use Sidebar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -303,6 +312,7 @@ Use Sidebar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -342,6 +352,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -388,6 +399,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -431,6 +443,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -509,6 +522,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -518,15 +532,15 @@ Use Sidebar for:
   <Story name="Tooltip Behavior">
     {() => (
       <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           When collapsed, hover over items to see tooltips:
         </div>
-        <div className="flex h-80 border rounded-lg overflow-hidden">
+        <div className="flex h-80 overflow-hidden rounded-lg border">
           <Sidebar />
           <div className="flex-1 p-6">
             <div className="space-y-2">
               <div className="text-sm font-medium">Tooltip Features:</div>
-              <ul className="text-sm text-muted-foreground space-y-1">
+              <ul className="text-muted-foreground space-y-1 text-sm">
                 <li>• Hover over collapsed sidebar items</li>
                 <li>• Tooltips show full navigation labels</li>
                 <li>• Positioned to the right of the sidebar</li>
@@ -546,13 +560,16 @@ Use Sidebar for:
   <Story name="Dark Theme">
     {() => (
       <div className="dark">
-        <div className="flex h-80 bg-background border rounded-lg overflow-hidden">
+        <div className="bg-background flex h-80 overflow-hidden rounded-lg border">
           <Sidebar />
-          <div className="flex-1 p-6 bg-background">
+          <div className="bg-background flex-1 p-6">
             <div className="space-y-4">
-              <h2 className="text-foreground text-lg font-semibold">Dark Theme Sidebar</h2>
+              <h2 className="text-foreground text-lg font-semibold">
+                Dark Theme Sidebar
+              </h2>
               <p className="text-muted-foreground text-sm">
-                Sidebar automatically adapts to dark theme with proper contrast and visual hierarchy.
+                Sidebar automatically adapts to dark theme with proper contrast
+                and visual hierarchy.
               </p>
             </div>
           </div>
@@ -593,6 +610,7 @@ Use Sidebar for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -626,6 +644,7 @@ Use Sidebar for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -633,15 +652,15 @@ Use Sidebar for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Use the controls below to configure Sidebar:
         </div>
-        <div className="flex h-80 border rounded-lg overflow-hidden">
+        <div className="flex h-80 overflow-hidden rounded-lg border">
           <Sidebar {...args} />
           <div className="flex-1 p-6">
-            <div className="text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-sm">
               Main content area with configurable sidebar
             </div>
           </div>
@@ -658,6 +677,7 @@ Use Sidebar for:
 ## Navigation Architecture
 
 ### Sub-package Integration
+
 - **Presentation Layer**: Sidebar handles UI and interactions
 - **Filtering Layer**: Sub-packages filter navigation based on:
   - User authentication state
@@ -666,6 +686,7 @@ Use Sidebar for:
   - User roles and access levels
 
 ### Navigation Store Integration
+
 - **State Management**: Centralized sidebar state (open/closed, collapsed)
 - **Item Management**: Navigation items provided by sub-packages
 - **Context Switching**: Different navigation per sub-package context
@@ -674,12 +695,14 @@ Use Sidebar for:
 ## Responsive Behavior
 
 ### Desktop (> 1024px)
+
 - Sidebar visible and functional
 - Full navigation with labels
 - Collapsible with smooth transitions
 - Tooltip support when collapsed
 
 ### Tablet/Mobile (< 1024px)
+
 - Sidebar hidden completely
 - Mobile drawer navigation used instead
 - Touch-friendly mobile experience
@@ -688,12 +711,14 @@ Use Sidebar for:
 ## State Management
 
 ### Sidebar States
+
 - **Open/Closed**: Controls sidebar visibility
 - **Expanded/Collapsed**: Controls sidebar width and detail level
 - **Navigation Context**: Current sub-package navigation items
 - **Active State**: Tracks current page/section
 
 ### Interaction Patterns
+
 - **Click to Navigate**: Standard navigation behavior
 - **Hover for Tooltips**: Enhanced UX when collapsed
 - **Keyboard Navigation**: Full keyboard accessibility
@@ -711,12 +736,14 @@ Use Sidebar for:
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Memoized navigation item rendering
 - Efficient state updates and re-renders
 - Lazy loading for complex navigation trees
 - Minimal DOM updates on state changes
 
 ### Bundle Impact
+
 - Tree-shakeable navigation utilities
 - Efficient icon loading through sub-components
 - Minimal JavaScript for basic functionality

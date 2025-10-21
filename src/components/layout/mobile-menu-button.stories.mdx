@@ -1,5 +1,14 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
-import { MobileMenuButton, AlternativeMobileMenuButton } from './mobile-menu-button';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import {
+  MobileMenuButton,
+  AlternativeMobileMenuButton,
+} from './mobile-menu-button';
 import { useNavigationStore } from '@/stores/ui/navigation-store';
 
 <Meta
@@ -34,29 +43,30 @@ It features smooth animations between hamburger and X states with full accessibi
 ## Usage
 
 Use MobileMenuButton for:
+
 - Mobile navigation triggers in headers
 - Hamburger menu buttons in responsive layouts
 - Touch-friendly navigation controls
 - Accessible mobile menu interactions
 - Animated navigation state indicators
 - Integration with mobile navigation drawers
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'default', 'lg'],
-      description: 'Button size variant',
-      defaultValue: 'default'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'default', 'lg'],
+        description: 'Button size variant',
+        defaultValue: 'default'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # MobileMenuButton
 
@@ -86,6 +96,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -117,6 +128,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -177,6 +189,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -237,6 +250,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -269,6 +283,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -319,6 +334,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -364,6 +380,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -401,6 +418,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -435,6 +453,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -479,6 +498,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -515,6 +535,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -548,6 +569,7 @@ Use MobileMenuButton for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -579,6 +601,7 @@ Use MobileMenuButton for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -586,9 +609,9 @@ Use MobileMenuButton for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Use the controls below to configure MobileMenuButton:
         </div>
         <div className="text-center">
@@ -606,6 +629,7 @@ Use MobileMenuButton for:
 ## Animation Details
 
 ### Hamburger to X Transformation
+
 - **Top Line**: Rotates 45° and moves to center
 - **Middle Line**: Scales to 0 and fades out
 - **Bottom Line**: Rotates -45° and moves to center
@@ -613,6 +637,7 @@ Use MobileMenuButton for:
 - **Performance**: Uses CSS transforms for GPU acceleration
 
 ### Animation States
+
 - **Closed State**: Three horizontal lines (hamburger)
 - **Open State**: Two diagonal lines forming X
 - **Transition**: Smooth transform animation
@@ -621,18 +646,21 @@ Use MobileMenuButton for:
 ## Accessibility Features
 
 ### ARIA Support
+
 - **aria-label**: Descriptive button purpose
 - **aria-expanded**: Current menu state (true/false)
 - **aria-haspopup**: Indicates menu popup ("menu")
 - **aria-controls**: References controlled menu element
 
 ### Keyboard Support
+
 - **Enter Key**: Triggers menu toggle
 - **Space Key**: Triggers menu toggle
 - **Tab Navigation**: Proper focus order
 - **Focus Indicators**: Clear visual focus states
 
 ### Touch Accessibility
+
 - **Minimum Touch Target**: 44×44px minimum for all sizes
 - **Touch-friendly Spacing**: Adequate spacing from other elements
 - **Visual Feedback**: Clear hover and active states
@@ -641,16 +669,19 @@ Use MobileMenuButton for:
 ## Size Variants
 
 ### Small (sm)
+
 - **Visual Size**: 32×32px
 - **Touch Target**: 44×44px minimum
 - **Use Case**: Compact layouts, secondary actions
 
 ### Default
+
 - **Visual Size**: 36×36px
 - **Touch Target**: 44×44px minimum
 - **Use Case**: Standard mobile headers
 
 ### Large (lg)
+
 - **Visual Size**: 40×40px
 - **Touch Target**: 48×48px
 - **Use Case**: Primary navigation, accessibility needs
@@ -658,16 +689,19 @@ Use MobileMenuButton for:
 ## Integration Patterns
 
 ### Mobile Header
+
 - Right-aligned in mobile headers
 - Paired with logo/brand on left
 - Consistent with other header controls
 
 ### Navigation Drawer
+
 - Triggers mobile navigation drawer
 - State synchronized with drawer visibility
 - Closes drawer when menu items selected
 
 ### Responsive Layout
+
 - Hidden on desktop (>= 1024px)
 - Visible on tablet and mobile (< 1024px)
 - Replaces desktop navigation menu
@@ -675,12 +709,14 @@ Use MobileMenuButton for:
 ## Performance Considerations
 
 ### Animation Optimization
+
 - CSS transforms for GPU acceleration
 - No layout recalculation during animation
 - Efficient paint and composite layers
 - 60fps smooth animation performance
 
 ### Bundle Impact
+
 - Minimal JavaScript for button logic
 - CSS-only animations
 - No external animation libraries

@@ -28,13 +28,13 @@ Perfect for displaying recipe photos, cooking steps, or any collection of images
 import { ImageGallery } from '@/components/ui/image-gallery';
 
 const images = [
-  {
-    id: '1',
-    src: '/images/recipe1.jpg',
-    alt: 'Delicious pasta dish',
-    caption: 'Fresh pasta with tomato sauce',
-  },
-  // ... more images
+{
+id: '1',
+src: '/images/recipe1.jpg',
+alt: 'Delicious pasta dish',
+caption: 'Fresh pasta with tomato sauce',
+},
+// ... more images
 ];
 
 <ImageGallery
@@ -44,45 +44,41 @@ const images = [
   showLightbox
   showCaptions
 />
-\`\`\`
-        `,
-      },
-    },
-  }}
-  argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['grid-2', 'grid-3', 'grid-4', 'masonry'],
-      description: 'Grid layout variant',
-    },
-    aspectRatio: {
-      control: { type: 'select' },
-      options: ['square', 'landscape', 'portrait', 'auto'],
-      description: 'Aspect ratio for images',
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg', 'xl'],
-      description: 'Size of images and spacing',
-    },
-    spacing: {
-      control: { type: 'select' },
-      options: ['tight', 'normal', 'loose'],
-      description: 'Spacing between images',
-    },
-    showLightbox: {
-      control: { type: 'boolean' },
-      description: 'Enable lightbox functionality',
-    },
-    showCaptions: {
-      control: { type: 'boolean' },
-      description: 'Show image captions',
-    },
-    lazyLoad: {
-      control: { type: 'boolean' },
-      description: 'Enable lazy loading',
-    },
-  }}
+\`\`\` `, }, }, }} argTypes=
+{{
+  variant: {
+    control: { type: 'select' },
+    options: ['grid-2', 'grid-3', 'grid-4', 'masonry'],
+    description: 'Grid layout variant',
+  },
+  aspectRatio: {
+    control: { type: 'select' },
+    options: ['square', 'landscape', 'portrait', 'auto'],
+    description: 'Aspect ratio for images',
+  },
+  size: {
+    control: { type: 'select' },
+    options: ['sm', 'md', 'lg', 'xl'],
+    description: 'Size of images and spacing',
+  },
+  spacing: {
+    control: { type: 'select' },
+    options: ['tight', 'normal', 'loose'],
+    description: 'Spacing between images',
+  },
+  showLightbox: {
+    control: { type: 'boolean' },
+    description: 'Enable lightbox functionality',
+  },
+  showCaptions: {
+    control: { type: 'boolean' },
+    description: 'Show image captions',
+  },
+  lazyLoad: {
+    control: { type: 'boolean' },
+    description: 'Enable lazy loading',
+  },
+}}
 />
 
 export const sampleImages = [
@@ -136,7 +132,7 @@ export const sampleImages = [
   },
 ];
 
-export const Template = (args) => <ImageGallery {...args} />;
+export const Template = args => <ImageGallery {...args} />;
 
 ## Default Gallery
 

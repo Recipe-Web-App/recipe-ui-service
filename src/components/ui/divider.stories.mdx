@@ -23,7 +23,7 @@ import {
   DividerWithText,
   DividerWithIcon,
   RecipeDivider,
-  SectionDivider
+  SectionDivider,
 } from '@/components/ui/divider';
 ```
 
@@ -46,6 +46,7 @@ import {
 ## Orientations
 
 ### Horizontal (Default)
+
 Standard horizontal divider for separating content vertically.
 
 ```tsx
@@ -57,6 +58,7 @@ Standard horizontal divider for separating content vertically.
 ```
 
 ### Vertical
+
 Vertical divider for separating content horizontally.
 
 ```tsx
@@ -76,21 +78,25 @@ Vertical divider for separating content horizontally.
 Control the visual style of the divider line.
 
 ### Solid (Default)
+
 ```tsx
 <Divider style="solid" />
 ```
 
 ### Dashed
+
 ```tsx
 <Divider style="dashed" />
 ```
 
 ### Dotted
+
 ```tsx
 <Divider style="dotted" />
 ```
 
 ### Double
+
 ```tsx
 <Divider style="double" />
 ```
@@ -100,6 +106,7 @@ Control the visual style of the divider line.
 Control the thickness of the divider line.
 
 ### Thin (Default)
+
 Subtle divider for minimal separation.
 
 ```tsx
@@ -107,6 +114,7 @@ Subtle divider for minimal separation.
 ```
 
 ### Normal
+
 Standard divider for most use cases.
 
 ```tsx
@@ -114,6 +122,7 @@ Standard divider for most use cases.
 ```
 
 ### Thick
+
 Prominent divider for strong separation.
 
 ```tsx
@@ -138,6 +147,7 @@ Choose from multiple color variants to match your design.
 Control the length of the divider (horizontal) or height (vertical).
 
 ### Short
+
 Compact divider for subtle separation.
 
 ```tsx
@@ -147,6 +157,7 @@ Compact divider for subtle separation.
 ```
 
 ### Normal (Default)
+
 Standard length for most use cases.
 
 ```tsx
@@ -156,6 +167,7 @@ Standard length for most use cases.
 ```
 
 ### Long
+
 Extended divider for prominent separation.
 
 ```tsx
@@ -165,6 +177,7 @@ Extended divider for prominent separation.
 ```
 
 ### Full
+
 Full width or height divider.
 
 ```tsx
@@ -191,21 +204,25 @@ Control the spacing around the divider.
 Add text labels to provide context for the separation.
 
 ### Center Position (Default)
+
 ```tsx
 <DividerWithText text="OR" />
 ```
 
 ### Start Position
+
 ```tsx
 <DividerWithText text="Beginning" textPosition="start" />
 ```
 
 ### End Position
+
 ```tsx
 <DividerWithText text="End" textPosition="end" />
 ```
 
 ### Custom Text Styling
+
 ```tsx
 <DividerWithText
   text="INGREDIENTS"
@@ -213,7 +230,7 @@ Add text labels to provide context for the separation.
     size: 'sm',
     weight: 'semibold',
     transform: 'uppercase',
-    color: 'primary'
+    color: 'primary',
   }}
 />
 ```
@@ -223,25 +240,25 @@ Add text labels to provide context for the separation.
 Add icons to provide visual context.
 
 ### Center Position (Default)
+
 ```tsx
 <DividerWithIcon icon={<Star className="h-4 w-4" />} />
 ```
 
 ### Start Position
+
 ```tsx
-<DividerWithIcon
-  icon={<Heart className="h-4 w-4" />}
-  textPosition="start"
-/>
+<DividerWithIcon icon={<Heart className="h-4 w-4" />} textPosition="start" />
 ```
 
 ### Custom Icon Styling
+
 ```tsx
 <DividerWithIcon
   icon={<ChefHat className="h-5 w-5" />}
   iconProps={{
     size: 'lg',
-    variant: 'filled'
+    variant: 'filled',
   }}
 />
 ```
@@ -251,6 +268,7 @@ Add icons to provide visual context.
 Use specialized dividers for recipe content with optimized styling.
 
 ### Ingredient Group
+
 Separate different groups of ingredients.
 
 ```tsx
@@ -258,6 +276,7 @@ Separate different groups of ingredients.
 ```
 
 ### Instruction Step
+
 Separate cooking instruction steps.
 
 ```tsx
@@ -265,6 +284,7 @@ Separate cooking instruction steps.
 ```
 
 ### Nutrition Group
+
 Separate nutrition information sections.
 
 ```tsx
@@ -272,6 +292,7 @@ Separate nutrition information sections.
 ```
 
 ### Recipe Section
+
 General recipe section separator.
 
 ```tsx
@@ -279,14 +300,11 @@ General recipe section separator.
 ```
 
 ### With Labels
+
 Add descriptive labels to recipe dividers.
 
 ```tsx
-<RecipeDivider
-  context="ingredient-group"
-  label="Wet Ingredients"
-  showLabel
-/>
+<RecipeDivider context="ingredient-group" label="Wet Ingredients" showLabel />
 ```
 
 ## Section Dividers
@@ -294,6 +312,7 @@ Add descriptive labels to recipe dividers.
 Enhanced dividers with titles, subtitles, and additional functionality.
 
 ### Basic Section Divider
+
 ```tsx
 <SectionDivider
   section="ingredients"
@@ -304,6 +323,7 @@ Enhanced dividers with titles, subtitles, and additional functionality.
 ```
 
 ### Instructions Section
+
 ```tsx
 <SectionDivider
   section="instructions"
@@ -314,6 +334,7 @@ Enhanced dividers with titles, subtitles, and additional functionality.
 ```
 
 ### Nutrition Section
+
 ```tsx
 <SectionDivider
   section="nutrition"
@@ -324,6 +345,7 @@ Enhanced dividers with titles, subtitles, and additional functionality.
 ```
 
 ### Collapsible Section
+
 ```tsx
 <SectionDivider
   section="metadata"
@@ -331,13 +353,14 @@ Enhanced dividers with titles, subtitles, and additional functionality.
   subtitle="Prep time, cook time, and servings"
   icon={<Clock className="h-4 w-4" />}
   collapsible
-  onToggleCollapse={(collapsed) => console.log('Collapsed:', collapsed)}
+  onToggleCollapse={collapsed => console.log('Collapsed:', collapsed)}
 />
 ```
 
 ## Advanced Usage
 
 ### Interactive Divider Controls
+
 Create dynamic dividers with user controls.
 
 ```tsx
@@ -352,7 +375,7 @@ return (
         <label className="mb-2 block text-sm font-medium">Style</label>
         <select
           value={selectedStyle}
-          onChange={(e) => setSelectedStyle(e.target.value)}
+          onChange={e => setSelectedStyle(e.target.value)}
           className="w-full rounded border px-3 py-2"
         >
           <option value="solid">Solid</option>
@@ -366,7 +389,7 @@ return (
         <label className="mb-2 block text-sm font-medium">Weight</label>
         <select
           value={selectedWeight}
-          onChange={(e) => setSelectedWeight(e.target.value)}
+          onChange={e => setSelectedWeight(e.target.value)}
           className="w-full rounded border px-3 py-2"
         >
           <option value="thin">Thin</option>
@@ -379,7 +402,7 @@ return (
         <label className="mb-2 block text-sm font-medium">Color</label>
         <select
           value={selectedColor}
-          onChange={(e) => setSelectedColor(e.target.value)}
+          onChange={e => setSelectedColor(e.target.value)}
           className="w-full rounded border px-3 py-2"
         >
           <option value="default">Default</option>
@@ -402,6 +425,7 @@ return (
 ```
 
 ### Recipe Layout Example
+
 Complete recipe layout using various divider types.
 
 ```tsx
@@ -476,6 +500,7 @@ Complete recipe layout using various divider types.
 ```
 
 ### Form Section Dividers
+
 Use dividers to organize form sections.
 
 ```tsx
@@ -485,9 +510,9 @@ Use dividers to organize form sections.
     <DividerWithText text="Basic Details" />
 
     <div className="space-y-4">
-      <input placeholder="First Name" className="w-full p-2 border rounded" />
-      <input placeholder="Last Name" className="w-full p-2 border rounded" />
-      <input placeholder="Email" className="w-full p-2 border rounded" />
+      <input placeholder="First Name" className="w-full rounded border p-2" />
+      <input placeholder="Last Name" className="w-full rounded border p-2" />
+      <input placeholder="Email" className="w-full rounded border p-2" />
     </div>
   </div>
 
@@ -516,21 +541,25 @@ Use dividers to organize form sections.
 The Divider component follows WCAG accessibility guidelines:
 
 ### Semantic Markup
+
 - Uses proper `role="separator"` for dividers
 - Decorative dividers marked with `aria-hidden="true"`
 - Semantic dividers include appropriate ARIA labels
 
 ### Screen Reader Support
+
 - Text and icon content properly announced
 - Section dividers include heading semantics
 - Collapsible sections communicate state changes
 
 ### Focus Management
+
 - Interactive section dividers are keyboard accessible
 - Proper focus indicators for collapsible elements
 - Logical tab order maintained
 
 ### Color and Contrast
+
 - Sufficient color contrast for all variants
 - Visual information not conveyed by color alone
 - High contrast mode support
@@ -538,17 +567,20 @@ The Divider component follows WCAG accessibility guidelines:
 ## Design Guidelines
 
 ### When to Use Each Style
+
 - **Solid**: Standard separation, formal content, clean interfaces
 - **Dashed**: Casual separation, draft content, temporary sections
 - **Dotted**: Subtle separation, decorative elements, light divisions
 - **Double**: Formal separation, important sections, emphasis
 
 ### Weight Guidelines
+
 - **Thin**: Subtle separation, dense layouts, minimal visual disruption
 - **Normal**: Standard separation, balanced visual hierarchy
 - **Thick**: Strong separation, section boundaries, emphasis
 
 ### Color Guidelines
+
 - **Default**: Neutral separation, follows theme colors
 - **Muted**: Subtle separation, background content
 - **Primary**: Important sections, brand-related content
@@ -557,6 +589,7 @@ The Divider component follows WCAG accessibility guidelines:
 - **Destructive**: Warning sections, error content
 
 ### Length Guidelines
+
 - **Short**: Decorative separation, inline content, subtle breaks
 - **Normal**: Standard content separation, balanced layouts
 - **Long**: Prominent separation, section boundaries
@@ -566,54 +599,54 @@ The Divider component follows WCAG accessibility guidelines:
 
 ### Divider Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Divider orientation |
-| `style` | `'solid' \| 'dashed' \| 'dotted' \| 'double'` | `'solid'` | Line style |
-| `weight` | `'thin' \| 'normal' \| 'thick'` | `'thin'` | Line thickness |
-| `length` | `'short' \| 'normal' \| 'long' \| 'full'` | `'full'` | Divider length |
-| `spacing` | `'tight' \| 'normal' \| 'loose'` | `'normal'` | Spacing around divider |
-| `color` | `'default' \| 'muted' \| 'primary' \| 'secondary' \| 'accent' \| 'destructive'` | `'default'` | Color variant |
-| `decorative` | `boolean` | `true` | Whether divider is decorative (affects ARIA) |
-| `className` | `string` | - | Additional CSS classes |
+| Prop          | Type                                                                            | Default        | Description                                  |
+| ------------- | ------------------------------------------------------------------------------- | -------------- | -------------------------------------------- |
+| `orientation` | `'horizontal' \| 'vertical'`                                                    | `'horizontal'` | Divider orientation                          |
+| `style`       | `'solid' \| 'dashed' \| 'dotted' \| 'double'`                                   | `'solid'`      | Line style                                   |
+| `weight`      | `'thin' \| 'normal' \| 'thick'`                                                 | `'thin'`       | Line thickness                               |
+| `length`      | `'short' \| 'normal' \| 'long' \| 'full'`                                       | `'full'`       | Divider length                               |
+| `spacing`     | `'tight' \| 'normal' \| 'loose'`                                                | `'normal'`     | Spacing around divider                       |
+| `color`       | `'default' \| 'muted' \| 'primary' \| 'secondary' \| 'accent' \| 'destructive'` | `'default'`    | Color variant                                |
+| `decorative`  | `boolean`                                                                       | `true`         | Whether divider is decorative (affects ARIA) |
+| `className`   | `string`                                                                        | -              | Additional CSS classes                       |
 
 ### DividerWithText Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `text` | `string` | - | Text content |
-| `textPosition` | `'start' \| 'center' \| 'end'` | `'center'` | Text position |
-| `textProps` | `TextProps` | - | Text styling props |
-| All base Divider props | - | - | Inherited from Divider |
+| Prop                   | Type                           | Default    | Description            |
+| ---------------------- | ------------------------------ | ---------- | ---------------------- |
+| `text`                 | `string`                       | -          | Text content           |
+| `textPosition`         | `'start' \| 'center' \| 'end'` | `'center'` | Text position          |
+| `textProps`            | `TextProps`                    | -          | Text styling props     |
+| All base Divider props | -                              | -          | Inherited from Divider |
 
 ### DividerWithIcon Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `icon` | `ReactNode` | - | Icon element |
-| `textPosition` | `'start' \| 'center' \| 'end'` | `'center'` | Icon position |
-| `iconProps` | `IconProps` | - | Icon styling props |
-| All base Divider props | - | - | Inherited from Divider |
+| Prop                   | Type                           | Default    | Description            |
+| ---------------------- | ------------------------------ | ---------- | ---------------------- |
+| `icon`                 | `ReactNode`                    | -          | Icon element           |
+| `textPosition`         | `'start' \| 'center' \| 'end'` | `'center'` | Icon position          |
+| `iconProps`            | `IconProps`                    | -          | Icon styling props     |
+| All base Divider props | -                              | -          | Inherited from Divider |
 
 ### RecipeDivider Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `context` | `'ingredient-group' \| 'instruction-step' \| 'nutrition-group' \| 'recipe-section'` | - | Recipe context |
-| `label` | `string` | - | Optional label text |
-| `showLabel` | `boolean` | `false` | Whether to show label |
-| All base Divider props | - | - | Inherited from Divider |
+| Prop                   | Type                                                                                | Default | Description            |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------- | ---------------------- |
+| `context`              | `'ingredient-group' \| 'instruction-step' \| 'nutrition-group' \| 'recipe-section'` | -       | Recipe context         |
+| `label`                | `string`                                                                            | -       | Optional label text    |
+| `showLabel`            | `boolean`                                                                           | `false` | Whether to show label  |
+| All base Divider props | -                                                                                   | -       | Inherited from Divider |
 
 ### SectionDivider Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `section` | `'ingredients' \| 'instructions' \| 'nutrition' \| 'metadata'` | - | Section type |
-| `title` | `string` | - | Section title |
-| `subtitle` | `string` | - | Optional subtitle |
-| `icon` | `ReactNode` | - | Optional icon |
-| `collapsible` | `boolean` | `false` | Whether section is collapsible |
-| `onToggleCollapse` | `(collapsed: boolean) => void` | - | Collapse toggle handler |
-| All base Divider props | - | - | Inherited from Divider |
+| Prop                   | Type                                                           | Default | Description                    |
+| ---------------------- | -------------------------------------------------------------- | ------- | ------------------------------ |
+| `section`              | `'ingredients' \| 'instructions' \| 'nutrition' \| 'metadata'` | -       | Section type                   |
+| `title`                | `string`                                                       | -       | Section title                  |
+| `subtitle`             | `string`                                                       | -       | Optional subtitle              |
+| `icon`                 | `ReactNode`                                                    | -       | Optional icon                  |
+| `collapsible`          | `boolean`                                                      | `false` | Whether section is collapsible |
+| `onToggleCollapse`     | `(collapsed: boolean) => void`                                 | -       | Collapse toggle handler        |
+| All base Divider props | -                                                              | -       | Inherited from Divider         |
 
 Plus all standard HTML div attributes.

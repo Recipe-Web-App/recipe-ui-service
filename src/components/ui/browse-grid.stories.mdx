@@ -1,6 +1,18 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { BrowseGrid, SimpleBrowseGrid } from './browse-grid';
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from './card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from './card';
 import { Badge } from './badge';
 import { Button } from './button';
 import { Search, Package } from 'lucide-react';
@@ -36,71 +48,132 @@ with built-in support for pagination, loading states, empty states, and error ha
 ## Usage
 
 Use BrowseGrid for:
+
 - Recipe browsing pages
 - Collection galleries
 - Meal plan listings
 - Search results
 - Product catalogs
 - User-generated content lists
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    items: {
-      description: 'Array of items to display in the grid',
-      control: false
-    },
-    renderItem: {
-      description: 'Function to render each item',
-      control: false
-    },
-    currentPage: {
-      control: { type: 'number', min: 1 },
-      description: 'Current active page number',
-      defaultValue: 1
-    },
-    totalPages: {
-      control: { type: 'number', min: 1 },
-      description: 'Total number of pages',
-      defaultValue: 1
-    },
-    loading: {
-      control: { type: 'boolean' },
-      description: 'Whether the grid is loading',
-      defaultValue: false
-    },
-    gap: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg'],
-      description: 'Gap size between grid items',
-      defaultValue: 'md'
-    },
-    skeletonCount: {
-      control: { type: 'number', min: 1, max: 24 },
-      description: 'Number of skeleton items to show when loading',
-      defaultValue: 12
-    }
-  }}
-/>
+      items: {
+        description: 'Array of items to display in the grid',
+        control: false
+      },
+      renderItem: {
+        description: 'Function to render each item',
+        control: false
+      },
+      currentPage: {
+        control: { type: 'number', min: 1 },
+        description: 'Current active page number',
+        defaultValue: 1
+      },
+      totalPages: {
+        control: { type: 'number', min: 1 },
+        description: 'Total number of pages',
+        defaultValue: 1
+      },
+      loading: {
+        control: { type: 'boolean' },
+        description: 'Whether the grid is loading',
+        defaultValue: false
+      },
+      gap: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Gap size between grid items',
+        defaultValue: 'md'
+      },
+      skeletonCount: {
+        control: { type: 'number', min: 1, max: 24 },
+        description: 'Number of skeleton items to show when loading',
+        defaultValue: 12
+      }
+    }}
+  />
 
 # BrowseGrid
 
 <Description of={BrowseGrid} />
 
 export const mockRecipes = [
-  { id: 1, title: 'Spaghetti Carbonara', category: 'Italian', time: '30 min', rating: 4.5 },
-  { id: 2, title: 'Chicken Tikka Masala', category: 'Indian', time: '45 min', rating: 4.8 },
-  { id: 3, title: 'Beef Tacos', category: 'Mexican', time: '20 min', rating: 4.3 },
-  { id: 4, title: 'Caesar Salad', category: 'Salad', time: '15 min', rating: 4.0 },
+  {
+    id: 1,
+    title: 'Spaghetti Carbonara',
+    category: 'Italian',
+    time: '30 min',
+    rating: 4.5,
+  },
+  {
+    id: 2,
+    title: 'Chicken Tikka Masala',
+    category: 'Indian',
+    time: '45 min',
+    rating: 4.8,
+  },
+  {
+    id: 3,
+    title: 'Beef Tacos',
+    category: 'Mexican',
+    time: '20 min',
+    rating: 4.3,
+  },
+  {
+    id: 4,
+    title: 'Caesar Salad',
+    category: 'Salad',
+    time: '15 min',
+    rating: 4.0,
+  },
   { id: 5, title: 'Pad Thai', category: 'Thai', time: '35 min', rating: 4.7 },
-  { id: 6, title: 'Greek Moussaka', category: 'Greek', time: '60 min', rating: 4.6 },
-  { id: 7, title: 'French Onion Soup', category: 'French', time: '40 min', rating: 4.4 },
-  { id: 8, title: 'Sushi Rolls', category: 'Japanese', time: '50 min', rating: 4.9 },
-  { id: 9, title: 'BBQ Ribs', category: 'American', time: '90 min', rating: 4.7 },
-  { id: 10, title: 'Falafel Wrap', category: 'Middle Eastern', time: '25 min', rating: 4.2 },
+  {
+    id: 6,
+    title: 'Greek Moussaka',
+    category: 'Greek',
+    time: '60 min',
+    rating: 4.6,
+  },
+  {
+    id: 7,
+    title: 'French Onion Soup',
+    category: 'French',
+    time: '40 min',
+    rating: 4.4,
+  },
+  {
+    id: 8,
+    title: 'Sushi Rolls',
+    category: 'Japanese',
+    time: '50 min',
+    rating: 4.9,
+  },
+  {
+    id: 9,
+    title: 'BBQ Ribs',
+    category: 'American',
+    time: '90 min',
+    rating: 4.7,
+  },
+  {
+    id: 10,
+    title: 'Falafel Wrap',
+    category: 'Middle Eastern',
+    time: '25 min',
+    rating: 4.2,
+  },
   { id: 11, title: 'Paella', category: 'Spanish', time: '55 min', rating: 4.6 },
-  { id: 12, title: 'Pho', category: 'Vietnamese', time: '120 min', rating: 4.8 },
+  {
+    id: 12,
+    title: 'Pho',
+    category: 'Vietnamese',
+    time: '120 min',
+    rating: 4.8,
+  },
 ];
 
 export const RecipeCard = ({ recipe }) => (
@@ -125,7 +198,7 @@ export const RecipeCard = ({ recipe }) => (
       return (
         <BrowseGrid
           items={mockRecipes}
-          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          renderItem={recipe => <RecipeCard key={recipe.id} recipe={recipe} />}
           showPagination={false}
         />
       );
@@ -157,6 +230,7 @@ export const RecipeCard = ({ recipe }) => (
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -168,7 +242,7 @@ export const RecipeCard = ({ recipe }) => (
       return (
         <BrowseGrid
           items={[]}
-          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          renderItem={recipe => <RecipeCard key={recipe.id} recipe={recipe} />}
           loading={true}
           skeletonCount={12}
         />
@@ -185,10 +259,10 @@ export const RecipeCard = ({ recipe }) => (
       return (
         <BrowseGrid
           items={[]}
-          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          renderItem={recipe => <RecipeCard key={recipe.id} recipe={recipe} />}
           emptyMessage="No recipes found"
           emptyDescription="Try adjusting your search or filters to find what you're looking for."
-          emptyIcon={<Search className="h-16 w-16 text-muted-foreground" />}
+          emptyIcon={<Search className="text-muted-foreground h-16 w-16" />}
           emptyActions={
             <>
               <Button variant="outline">Clear Filters</Button>
@@ -217,6 +291,7 @@ export const RecipeCard = ({ recipe }) => (
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -261,6 +336,7 @@ export const RecipeCard = ({ recipe }) => (
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -295,6 +371,7 @@ export const RecipeCard = ({ recipe }) => (
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -357,6 +434,7 @@ export const RecipeCard = ({ recipe }) => (
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -368,7 +446,7 @@ export const RecipeCard = ({ recipe }) => (
       return (
         <SimpleBrowseGrid
           items={mockRecipes.slice(0, 8)}
-          renderItem={(recipe) => <RecipeCard key={recipe.id} recipe={recipe} />}
+          renderItem={recipe => <RecipeCard key={recipe.id} recipe={recipe} />}
         />
       );
     }}
@@ -382,17 +460,20 @@ export const RecipeCard = ({ recipe }) => (
 ## Accessibility Features
 
 ### Keyboard Navigation
+
 - **Tab**: Navigate through grid items and pagination controls
 - **Enter/Space**: Activate pagination buttons
 - **Arrow Keys**: Navigate between pages
 
 ### Screen Reader Support
+
 - Proper ARIA labels for grid region
 - Loading state announced with `aria-busy`
 - Current page announced in pagination
 - Empty and error states clearly communicated
 
 ### Focus Management
+
 - Logical tab order through grid items
 - Focus indicators on all interactive elements
 - Focus restoration after page changes
@@ -400,18 +481,21 @@ export const RecipeCard = ({ recipe }) => (
 ## Design Guidelines
 
 ### When to Use
+
 - **Browse Pages**: Recipe lists, collection galleries, meal plan browsing
 - **Search Results**: Display search results with pagination
 - **Content Galleries**: User-generated content, photos, articles
 - **Product Catalogs**: E-commerce product listings
 
 ### When Not to Use
+
 - **Small Datasets**: Use simple flex layouts for < 6 items
 - **Infinite Scroll**: Consider InfiniteScroll component for social feeds
 - **Tables**: Use Table component for structured data
 - **Single Item**: Use Card or detail view for single items
 
 ### Best Practices
+
 - **Page Size**: 12-24 items for card grids, 6-12 for detailed cards
 - **Loading**: Always show loading skeletons for better UX
 - **Empty State**: Provide clear guidance on what to do next
@@ -421,6 +505,7 @@ export const RecipeCard = ({ recipe }) => (
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Memoize `renderItem` function to prevent unnecessary re-renders
 - Use proper keys for list items (stable IDs, not indexes)
 - Lazy load images in cards for better performance
@@ -428,6 +513,7 @@ export const RecipeCard = ({ recipe }) => (
 - Debounce search/filter inputs to reduce API calls
 
 ### Bundle Impact
+
 - Minimal overhead - composes existing components
 - Tree-shakeable - only imports what you use
 - Efficient re-render patterns

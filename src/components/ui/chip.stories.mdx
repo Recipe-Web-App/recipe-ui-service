@@ -17,12 +17,7 @@ Interactive tag component with delete, selection, and click actions. Perfect for
 ## Import
 
 ```tsx
-import {
-  Chip,
-  ChipGroup,
-  ChipInput,
-  RecipeChip
-} from '@/components/ui/chip';
+import { Chip, ChipGroup, ChipInput, RecipeChip } from '@/components/ui/chip';
 ```
 
 ## Basic Usage
@@ -45,6 +40,7 @@ import {
 ## Variants
 
 ### Default
+
 The standard chip style for general use.
 
 ```tsx
@@ -52,6 +48,7 @@ The standard chip style for general use.
 ```
 
 ### Outlined
+
 A subtle chip with border, good for secondary information.
 
 ```tsx
@@ -59,6 +56,7 @@ A subtle chip with border, good for secondary information.
 ```
 
 ### Filled
+
 A prominent chip with solid background.
 
 ```tsx
@@ -68,6 +66,7 @@ A prominent chip with solid background.
 ## Sizes
 
 ### Small
+
 Compact size for tight spaces or less important tags.
 
 ```tsx
@@ -75,6 +74,7 @@ Compact size for tight spaces or less important tags.
 ```
 
 ### Medium (Default)
+
 Standard size for most use cases.
 
 ```tsx
@@ -82,6 +82,7 @@ Standard size for most use cases.
 ```
 
 ### Large
+
 Prominent size for important tags or hero sections.
 
 ```tsx
@@ -105,6 +106,7 @@ The chip component supports multiple color variants:
 ## Interactive Features
 
 ### Deletable Chips
+
 Add a delete button with the `onDelete` prop.
 
 ```tsx
@@ -120,6 +122,7 @@ Add a delete button with the `onDelete` prop.
 ```
 
 ### Selectable Chips
+
 Use the `selected` prop and `onClick` handler for selection.
 
 ```tsx
@@ -143,6 +146,7 @@ return (
 ```
 
 ### With Icons
+
 Add leading icons to provide visual context.
 
 ```tsx
@@ -166,6 +170,7 @@ Add leading icons to provide visual context.
 ```
 
 ### With Avatars
+
 Use avatars for user tags or profile chips.
 
 ```tsx
@@ -220,6 +225,7 @@ Use `ChipGroup` to organize multiple chips with consistent spacing.
 ```
 
 ### Chip Group with Overflow
+
 Limit displayed chips and show overflow indicator.
 
 ```tsx
@@ -238,6 +244,7 @@ Limit displayed chips and show overflow indicator.
 The `ChipInput` component allows users to dynamically create and manage chips.
 
 ### Basic Input
+
 ```tsx
 const [ingredients, setIngredients] = useState(['Tomato', 'Onion']);
 
@@ -252,15 +259,17 @@ return (
 ```
 
 ### With Validation
+
 Add custom validation for input values.
 
 ```tsx
 const [tags, setTags] = useState(['recipe', 'cooking']);
 
-const validateTag = (value) => {
+const validateTag = value => {
   if (value.length < 3) return 'Tag must be at least 3 characters';
   if (value.length > 15) return 'Tag must be less than 15 characters';
-  if (!/^[a-zA-Z0-9-]+$/.test(value)) return 'Only letters, numbers, and hyphens allowed';
+  if (!/^[a-zA-Z0-9-]+$/.test(value))
+    return 'Only letters, numbers, and hyphens allowed';
   return true;
 };
 
@@ -276,13 +285,21 @@ return (
 ```
 
 ### With Suggestions
+
 Provide suggestions for faster input.
 
 ```tsx
 const [selected, setSelected] = useState([]);
 const suggestions = [
-  'Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free',
-  'Keto', 'Low-Carb', 'Sugar-Free', 'Paleo', 'Mediterranean'
+  'Vegetarian',
+  'Vegan',
+  'Gluten-Free',
+  'Dairy-Free',
+  'Keto',
+  'Low-Carb',
+  'Sugar-Free',
+  'Paleo',
+  'Mediterranean',
 ];
 
 return (
@@ -300,6 +317,7 @@ return (
 Use `RecipeChip` for recipe-related contexts with optimized styling.
 
 ### Ingredient Context
+
 ```tsx
 <RecipeChip context="ingredient" onDelete={() => handleDelete()}>
   2 cups flour
@@ -313,6 +331,7 @@ Use `RecipeChip` for recipe-related contexts with optimized styling.
 ```
 
 ### Dietary Restrictions
+
 ```tsx
 <RecipeChip context="dietary" selected>
   Vegetarian
@@ -326,6 +345,7 @@ Use `RecipeChip` for recipe-related contexts with optimized styling.
 ```
 
 ### Categories
+
 ```tsx
 <RecipeChip context="category">Breakfast</RecipeChip>
 <RecipeChip context="category">Quick Meals</RecipeChip>
@@ -333,6 +353,7 @@ Use `RecipeChip` for recipe-related contexts with optimized styling.
 ```
 
 ### Tags
+
 ```tsx
 <RecipeChip context="tag" onDelete={() => handleDelete()}>
   summer
@@ -348,13 +369,14 @@ Use `RecipeChip` for recipe-related contexts with optimized styling.
 ## Advanced Usage
 
 ### Filter Interface
+
 Create interactive filter interfaces with chips.
 
 ```tsx
 const [filters, setFilters] = useState({
   difficulty: ['Easy'],
   time: [],
-  category: ['Dinner']
+  category: ['Dinner'],
 });
 
 const toggleFilter = (category, value) => {
@@ -370,7 +392,7 @@ const toggleFilter = (category, value) => {
 return (
   <div className="space-y-4">
     <div>
-      <p className="text-xs text-muted-foreground mb-2">Difficulty</p>
+      <p className="text-muted-foreground mb-2 text-xs">Difficulty</p>
       <div className="flex gap-2">
         {['Easy', 'Medium', 'Hard'].map(level => (
           <Chip
@@ -378,7 +400,13 @@ return (
             variant="outlined"
             selected={filters.difficulty.includes(level)}
             onClick={() => toggleFilter('difficulty', level)}
-            color={level === 'Easy' ? 'success' : level === 'Medium' ? 'warning' : 'destructive'}
+            color={
+              level === 'Easy'
+                ? 'success'
+                : level === 'Medium'
+                  ? 'warning'
+                  : 'destructive'
+            }
           >
             {level}
           </Chip>
@@ -387,7 +415,7 @@ return (
     </div>
 
     <div>
-      <p className="text-xs text-muted-foreground mb-2">Cook Time</p>
+      <p className="text-muted-foreground mb-2 text-xs">Cook Time</p>
       <div className="flex gap-2">
         {['< 30 min', '30-60 min', '1+ hour'].map(time => (
           <Chip
@@ -407,6 +435,7 @@ return (
 ```
 
 ### Recipe Card Integration
+
 Use chips within recipe cards for metadata display.
 
 ```tsx
@@ -455,6 +484,7 @@ Use chips within recipe cards for metadata display.
 ## States
 
 ### Disabled State
+
 Prevent interaction and provide visual feedback.
 
 ```tsx
@@ -469,18 +499,21 @@ Prevent interaction and provide visual feedback.
 The Chip component follows WCAG accessibility guidelines:
 
 ### Keyboard Navigation
+
 - **Enter** and **Space** keys trigger chip actions
 - **Delete** and **Backspace** keys trigger deletion when focused
 - Proper focus management with visible focus indicators
 - Tab navigation support for interactive chips
 
 ### Screen Reader Support
+
 - Proper ARIA attributes for all states (`aria-selected`, `aria-disabled`)
 - Delete buttons have descriptive `aria-label` attributes
 - Selected state communicated via `aria-pressed="true"`
 - Group semantics with proper ARIA roles
 
 ### Focus Management
+
 - Clear focus indicators with ring styles
 - Focus-visible support for keyboard vs mouse interaction
 - Logical tab order within chip groups
@@ -489,11 +522,13 @@ The Chip component follows WCAG accessibility guidelines:
 ## Design Guidelines
 
 ### When to Use Each Variant
+
 - **Default**: General purpose tags, neutral information
 - **Outlined**: Secondary information, filter options, selectable states
 - **Filled**: Important tags, selected states, prominent categories
 
 ### Color Guidelines
+
 - **Primary**: Important actions, main categories
 - **Success**: Positive attributes (vegetarian, healthy, easy)
 - **Warning**: Cautionary information (medium difficulty, allergens)
@@ -501,6 +536,7 @@ The Chip component follows WCAG accessibility guidelines:
 - **Info**: Neutral information (categories, metadata)
 
 ### Size Guidelines
+
 - **Small**: Dense layouts, metadata, less important information
 - **Medium**: Standard size for most use cases
 - **Large**: Important tags, hero sections, prominent categories
@@ -509,45 +545,45 @@ The Chip component follows WCAG accessibility guidelines:
 
 ### Chip Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'outlined' \| 'filled'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the chip |
-| `color` | `'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'` | Color variant |
-| `selected` | `boolean` | `false` | Whether the chip is selected |
-| `disabled` | `boolean` | `false` | Whether the chip is disabled |
-| `icon` | `ReactNode` | - | Leading icon element |
-| `avatar` | `ReactNode` | - | Avatar element (replaces icon) |
-| `onDelete` | `() => void` | - | Delete handler (shows delete button) |
-| `onClick` | `() => void` | - | Click handler |
-| `children` | `ReactNode` | - | Chip content |
+| Prop       | Type                                                                                         | Default     | Description                          |
+| ---------- | -------------------------------------------------------------------------------------------- | ----------- | ------------------------------------ |
+| `variant`  | `'default' \| 'outlined' \| 'filled'`                                                        | `'default'` | Visual style variant                 |
+| `size`     | `'sm' \| 'md' \| 'lg'`                                                                       | `'md'`      | Size of the chip                     |
+| `color`    | `'default' \| 'primary' \| 'secondary' \| 'success' \| 'warning' \| 'destructive' \| 'info'` | `'default'` | Color variant                        |
+| `selected` | `boolean`                                                                                    | `false`     | Whether the chip is selected         |
+| `disabled` | `boolean`                                                                                    | `false`     | Whether the chip is disabled         |
+| `icon`     | `ReactNode`                                                                                  | -           | Leading icon element                 |
+| `avatar`   | `ReactNode`                                                                                  | -           | Avatar element (replaces icon)       |
+| `onDelete` | `() => void`                                                                                 | -           | Delete handler (shows delete button) |
+| `onClick`  | `() => void`                                                                                 | -           | Click handler                        |
+| `children` | `ReactNode`                                                                                  | -           | Chip content                         |
 
 ### ChipGroup Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `spacing` | `'tight' \| 'normal' \| 'loose'` | `'normal'` | Spacing between chips |
-| `maxDisplay` | `number` | - | Maximum chips to display before overflow |
-| `children` | `ReactNode` | - | Chip elements |
+| Prop         | Type                             | Default    | Description                              |
+| ------------ | -------------------------------- | ---------- | ---------------------------------------- |
+| `spacing`    | `'tight' \| 'normal' \| 'loose'` | `'normal'` | Spacing between chips                    |
+| `maxDisplay` | `number`                         | -          | Maximum chips to display before overflow |
+| `children`   | `ReactNode`                      | -          | Chip elements                            |
 
 ### ChipInput Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `value` | `string[]` | - | Array of current values |
-| `onChange` | `(values: string[]) => void` | - | Change handler |
-| `placeholder` | `string` | - | Input placeholder text |
-| `maxChips` | `number` | - | Maximum number of chips allowed |
-| `validate` | `(value: string) => boolean \| string` | - | Validation function |
-| `suggestions` | `string[]` | - | Array of suggestion values |
+| Prop          | Type                                   | Default | Description                     |
+| ------------- | -------------------------------------- | ------- | ------------------------------- |
+| `value`       | `string[]`                             | -       | Array of current values         |
+| `onChange`    | `(values: string[]) => void`           | -       | Change handler                  |
+| `placeholder` | `string`                               | -       | Input placeholder text          |
+| `maxChips`    | `number`                               | -       | Maximum number of chips allowed |
+| `validate`    | `(value: string) => boolean \| string` | -       | Validation function             |
+| `suggestions` | `string[]`                             | -       | Array of suggestion values      |
 
 ### RecipeChip Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `context` | `'ingredient' \| 'dietary' \| 'category' \| 'tag'` | - | Recipe-specific context |
-| `selected` | `boolean` | `false` | Whether the chip is selected |
-| `onDelete` | `() => void` | - | Delete handler |
-| `children` | `ReactNode` | - | Chip content |
+| Prop       | Type                                               | Default | Description                  |
+| ---------- | -------------------------------------------------- | ------- | ---------------------------- |
+| `context`  | `'ingredient' \| 'dietary' \| 'category' \| 'tag'` | -       | Recipe-specific context      |
+| `selected` | `boolean`                                          | `false` | Whether the chip is selected |
+| `onDelete` | `() => void`                                       | -       | Delete handler               |
+| `children` | `ReactNode`                                        | -       | Chip content                 |
 
 Plus all standard chip props and HTML attributes.

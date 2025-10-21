@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { FooterLink } from './footer-link';
 
 <Meta
@@ -23,36 +29,37 @@ It automatically handles internal and external link behavior with appropriate st
 ## Usage
 
 Use FooterLink for:
+
 - Footer navigation links
 - Legal and policy links
 - Social media and external resource links
 - Any link that needs consistent footer styling
 - Accessible link patterns throughout the application
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    href: {
-      control: { type: 'text' },
-      description: 'The URL the link points to',
-      defaultValue: '/about'
-    },
-    external: {
-      control: { type: 'boolean' },
-      description: 'Force link to be treated as external (opens in new tab)',
-      defaultValue: false
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    },
-    'aria-label': {
-      control: { type: 'text' },
-      description: 'Accessible label for screen readers'
-    }
-  }}
-/>
+      href: {
+        control: { type: 'text' },
+        description: 'The URL the link points to',
+        defaultValue: '/about'
+      },
+      external: {
+        control: { type: 'boolean' },
+        description: 'Force link to be treated as external (opens in new tab)',
+        defaultValue: false
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      },
+      'aria-label': {
+        control: { type: 'text' },
+        description: 'Accessible label for screen readers'
+      }
+    }}
+  />
 
 # FooterLink
 
@@ -63,7 +70,7 @@ Use FooterLink for:
 <Canvas>
   <Story name="Internal Link">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <FooterLink href="/about">About Us</FooterLink>
       </div>
     )}
@@ -75,7 +82,7 @@ Use FooterLink for:
 <Canvas>
   <Story name="External Link">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <FooterLink href="https://github.com/example" external>
           GitHub Repository
         </FooterLink>
@@ -89,10 +96,8 @@ Use FooterLink for:
 <Canvas>
   <Story name="Auto External">
     {() => (
-      <div className="p-4 bg-background border rounded">
-        <FooterLink href="https://docs.example.com">
-          Documentation
-        </FooterLink>
+      <div className="bg-background rounded border p-4">
+        <FooterLink href="https://docs.example.com">Documentation</FooterLink>
       </div>
     )}
   </Story>
@@ -103,10 +108,10 @@ Use FooterLink for:
 <Canvas>
   <Story name="Custom Style">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <FooterLink
           href="/privacy"
-          className="text-blue-600 hover:text-blue-800 font-semibold"
+          className="font-semibold text-blue-600 hover:text-blue-800"
         >
           Privacy Policy
         </FooterLink>
@@ -120,7 +125,7 @@ Use FooterLink for:
 <Canvas>
   <Story name="With ARIA Label">
     {() => (
-      <div className="p-4 bg-background border rounded">
+      <div className="bg-background rounded border p-4">
         <FooterLink
           href="/contact"
           aria-label="Contact us for support and inquiries"
@@ -137,9 +142,9 @@ Use FooterLink for:
 <Canvas>
   <Story name="Footer Context">
     {() => (
-      <div className="p-6 bg-background border rounded">
+      <div className="bg-background rounded border p-6">
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold tracking-wider uppercase mb-3">
+          <h3 className="mb-3 text-sm font-semibold tracking-wider uppercase">
             Company
           </h3>
           <div className="flex flex-col space-y-2">
@@ -161,8 +166,8 @@ Use FooterLink for:
 <Canvas>
   <Story name="Interactive States">
     {() => (
-      <div className="p-4 bg-background border rounded space-y-4">
-        <p className="text-sm text-muted-foreground">
+      <div className="bg-background space-y-4 rounded border p-4">
+        <p className="text-muted-foreground text-sm">
           Hover and focus these links to see the interactive states:
         </p>
         <div className="space-y-2">

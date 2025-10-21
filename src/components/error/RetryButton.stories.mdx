@@ -42,11 +42,11 @@ A specialized button component for retry operations that wraps the base Button c
 ## Difference from Base Button
 
 **RetryButton vs Button**: RetryButton extends Button with retry-specific features like attempt tracking, cooldown timers, max attempts enforcement, and retry strategies. Use Button for general actions, RetryButton for operations that may need multiple attempts.
-        `,
-      },
-    },
-  }}
-  argTypes={{
+`,
+},
+},
+}}
+argTypes={{
     maxAttempts: {
       control: 'number',
       description: 'Maximum number of retry attempts',
@@ -392,15 +392,15 @@ Track retry events for monitoring and analytics:
           maxAttempts={3}
           cooldownMs={2000}
           showAttemptCount
-          onAnalytics={(event) => {
+          onAnalytics={event => {
             console.log('Analytics event:', event);
-            setEvents((prev) => [...prev, event]);
+            setEvents(prev => [...prev, event]);
           }}
         />
         {events.length > 0 && (
-          <div className="rounded-md bg-muted p-4">
+          <div className="bg-muted rounded-md p-4">
             <h4 className="mb-2 text-sm font-semibold">Analytics Events:</h4>
-            <pre className="text-xs overflow-auto max-h-40">
+            <pre className="max-h-40 overflow-auto text-xs">
               {JSON.stringify(events, null, 2)}
             </pre>
           </div>
@@ -444,10 +444,10 @@ Control attempt number externally for complex retry logic:
           currentAttempt={attempt}
           maxAttempts={5}
           showAttemptCount
-          onAfterRetry={() => setAttempt((prev) => prev + 1)}
+          onAfterRetry={() => setAttempt(prev => prev + 1)}
         />
         <button
-          className="ml-2 rounded-md bg-secondary px-3 py-1 text-sm"
+          className="bg-secondary ml-2 rounded-md px-3 py-1 text-sm"
           onClick={() => setAttempt(1)}
         >
           Reset Attempts
@@ -467,10 +467,7 @@ Control attempt number externally for complex retry logic:
   onAfterRetry={() => setAttempt(prev => prev + 1)}
 />
 
-<button onClick={() => setAttempt(1)}>
-  Reset Attempts
-</button>`}
-  language="tsx"
+<button onClick={() => setAttempt(1)}>Reset Attempts</button>`} language="tsx"
 />
 
 ### With Lifecycle Callbacks
@@ -480,8 +477,11 @@ Hook into retry lifecycle for custom behavior:
 <Canvas>
   {() => {
     const [log, setLog] = useState([]);
-    const addLog = (message) => {
-      setLog((prev) => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    const addLog = message => {
+      setLog(prev => [
+        ...prev,
+        `${new Date().toLocaleTimeString()}: ${message}`,
+      ]);
     };
     return (
       <div className="space-y-4">
@@ -490,16 +490,18 @@ Hook into retry lifecycle for custom behavior:
           maxAttempts={3}
           cooldownMs={2000}
           showAttemptCount
-          onBeforeRetry={(attempt) => addLog(`Starting attempt ${attempt}`)}
-          onAfterRetry={(result) =>
-            addLog(`Attempt ${result.attemptNumber} ${result.success ? 'succeeded' : 'failed'}`)
+          onBeforeRetry={attempt => addLog(`Starting attempt ${attempt}`)}
+          onAfterRetry={result =>
+            addLog(
+              `Attempt ${result.attemptNumber} ${result.success ? 'succeeded' : 'failed'}`
+            )
           }
-          onCooldownStart={(ms) => addLog(`Cooldown started (${ms}ms)`)}
+          onCooldownStart={ms => addLog(`Cooldown started (${ms}ms)`)}
           onCooldownEnd={() => addLog('Cooldown ended')}
           onMaxAttemptsReached={() => addLog('Max attempts reached!')}
         />
         {log.length > 0 && (
-          <div className="rounded-md bg-muted p-4">
+          <div className="bg-muted rounded-md p-4">
             <h4 className="mb-2 text-sm font-semibold">Event Log:</h4>
             <div className="space-y-1 text-xs">
               {log.map((entry, i) => (
@@ -594,7 +596,9 @@ Complete example with error handling and user feedback:
         </div>
       </div>
     );
-  }}
+
+}}
+
 </Canvas>
 
 ---
@@ -609,6 +613,7 @@ RetryButton includes comprehensive accessibility features:
 - **Keyboard Support**: Full keyboard navigation and activation
 
 Example ARIA labels:
+
 - Idle: "Retry operation. Attempt 1 of 3"
 - Retrying: "Retrying... Attempt 1 of 3"
 - Cooldown: "Retry available in 5 seconds"
@@ -639,26 +644,26 @@ Example ARIA labels:
 
 ## Props Reference
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `onRetry` | `() => void \| Promise<void>` | - | Callback to execute on retry (required) |
-| `maxAttempts` | `number` | `3` | Maximum number of retry attempts |
-| `currentAttempt` | `number` | - | Controlled attempt number |
-| `cooldownMs` | `number` | `1000` | Cooldown period in milliseconds |
-| `exponentialBackoff` | `boolean` | `false` | Use exponential backoff |
-| `backoffMultiplier` | `number` | `2` | Multiplier for exponential backoff |
-| `retryStrategy` | `RetryStrategy` | `CONSTANT` | Retry strategy to use |
-| `showAttemptCount` | `boolean` | `false` | Show attempt count in text |
-| `showCooldown` | `boolean` | `false` | Show cooldown countdown |
-| `showIcon` | `boolean` | `true` | Show retry icon |
-| `iconPosition` | `'left' \| 'right'` | `'left'` | Icon position |
-| `retryingText` | `string` | `'Retrying...'` | Text while retrying |
-| `maxAttemptsText` | `string` | `'Max Retries Reached'` | Text when max reached |
-| `onMaxAttemptsReached` | `() => void` | - | Called when max attempts reached |
-| `onBeforeRetry` | `(attempt: number) => void` | - | Called before retry |
-| `onAfterRetry` | `(result: RetryAttempt) => void` | - | Called after retry |
-| `onCooldownStart` | `(ms: number) => void` | - | Called when cooldown starts |
-| `onCooldownEnd` | `() => void` | - | Called when cooldown ends |
-| `onAnalytics` | `(event: RetryAnalyticsEvent) => void` | - | Analytics event callback |
+| Prop                   | Type                                   | Default                 | Description                             |
+| ---------------------- | -------------------------------------- | ----------------------- | --------------------------------------- |
+| `onRetry`              | `() => void \| Promise<void>`          | -                       | Callback to execute on retry (required) |
+| `maxAttempts`          | `number`                               | `3`                     | Maximum number of retry attempts        |
+| `currentAttempt`       | `number`                               | -                       | Controlled attempt number               |
+| `cooldownMs`           | `number`                               | `1000`                  | Cooldown period in milliseconds         |
+| `exponentialBackoff`   | `boolean`                              | `false`                 | Use exponential backoff                 |
+| `backoffMultiplier`    | `number`                               | `2`                     | Multiplier for exponential backoff      |
+| `retryStrategy`        | `RetryStrategy`                        | `CONSTANT`              | Retry strategy to use                   |
+| `showAttemptCount`     | `boolean`                              | `false`                 | Show attempt count in text              |
+| `showCooldown`         | `boolean`                              | `false`                 | Show cooldown countdown                 |
+| `showIcon`             | `boolean`                              | `true`                  | Show retry icon                         |
+| `iconPosition`         | `'left' \| 'right'`                    | `'left'`                | Icon position                           |
+| `retryingText`         | `string`                               | `'Retrying...'`         | Text while retrying                     |
+| `maxAttemptsText`      | `string`                               | `'Max Retries Reached'` | Text when max reached                   |
+| `onMaxAttemptsReached` | `() => void`                           | -                       | Called when max attempts reached        |
+| `onBeforeRetry`        | `(attempt: number) => void`            | -                       | Called before retry                     |
+| `onAfterRetry`         | `(result: RetryAttempt) => void`       | -                       | Called after retry                      |
+| `onCooldownStart`      | `(ms: number) => void`                 | -                       | Called when cooldown starts             |
+| `onCooldownEnd`        | `() => void`                           | -                       | Called when cooldown ends               |
+| `onAnalytics`          | `(event: RetryAnalyticsEvent) => void` | -                       | Analytics event callback                |
 
 All Button props are also supported (variant, size, className, etc.).

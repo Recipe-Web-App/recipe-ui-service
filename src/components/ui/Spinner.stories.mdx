@@ -41,19 +41,19 @@ The spinner comes with four distinct animation variants:
     <div className="flex items-center gap-8">
       <div className="text-center">
         <Spinner variant="spinner" />
-        <p className="mt-2 text-sm text-muted-foreground">Spinner</p>
+        <p className="text-muted-foreground mt-2 text-sm">Spinner</p>
       </div>
       <div className="text-center">
         <Spinner variant="dots" />
-        <p className="mt-2 text-sm text-muted-foreground">Dots</p>
+        <p className="text-muted-foreground mt-2 text-sm">Dots</p>
       </div>
       <div className="text-center">
         <Spinner variant="pulse" />
-        <p className="mt-2 text-sm text-muted-foreground">Pulse</p>
+        <p className="text-muted-foreground mt-2 text-sm">Pulse</p>
       </div>
       <div className="text-center">
         <Spinner variant="bars" />
-        <p className="mt-2 text-sm text-muted-foreground">Bars</p>
+        <p className="text-muted-foreground mt-2 text-sm">Bars</p>
       </div>
     </div>
   </Story>
@@ -103,15 +103,15 @@ Control the animation speed:
     <div className="flex items-center gap-4">
       <div className="text-center">
         <Spinner speed="slow" />
-        <p className="mt-2 text-sm text-muted-foreground">Slow</p>
+        <p className="text-muted-foreground mt-2 text-sm">Slow</p>
       </div>
       <div className="text-center">
         <Spinner speed="default" />
-        <p className="mt-2 text-sm text-muted-foreground">Default</p>
+        <p className="text-muted-foreground mt-2 text-sm">Default</p>
       </div>
       <div className="text-center">
         <Spinner speed="fast" />
-        <p className="mt-2 text-sm text-muted-foreground">Fast</p>
+        <p className="text-muted-foreground mt-2 text-sm">Fast</p>
       </div>
     </div>
   </Story>
@@ -137,7 +137,7 @@ Center the spinner in a container:
 
 <Canvas>
   <Story name="Centered">
-    <div className="h-32 border rounded-lg">
+    <div className="h-32 rounded-lg border">
       <Spinner centered />
     </div>
   </Story>
@@ -149,7 +149,7 @@ Use as a fullscreen loading overlay:
 
 <Canvas>
   <Story name="Overlay">
-    <div className="relative h-32 border rounded-lg p-4">
+    <div className="relative h-32 rounded-lg border p-4">
       <p>Content beneath the overlay</p>
       <div className="absolute inset-0">
         <Spinner overlay text="Saving recipe..." />
@@ -166,7 +166,10 @@ Common usage patterns in UI components:
 
 <Canvas>
   <Story name="Button Loading">
-    <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md" disabled>
+    <button
+      className="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-4 py-2"
+      disabled
+    >
       <Spinner size="sm" color="default" />
       <span>Saving Recipe</span>
     </button>
@@ -177,7 +180,7 @@ Common usage patterns in UI components:
 
 <Canvas>
   <Story name="Card Loading">
-    <div className="w-64 p-6 border rounded-lg">
+    <div className="w-64 rounded-lg border p-6">
       <Spinner centered text="Loading recipe details..." />
     </div>
   </Story>
@@ -197,6 +200,7 @@ Common usage patterns in UI components:
 ## Accessibility
 
 The Spinner component includes:
+
 - `role="status"` for screen reader announcement
 - `aria-label` for descriptive loading state
 - `aria-live="polite"` for non-intrusive updates
@@ -205,18 +209,21 @@ The Spinner component includes:
 ## Design Guidelines
 
 ### When to Use
+
 - **Page Loading**: Use overlay mode for full-page loading states
 - **Data Fetching**: Show inline spinners when loading specific content
 - **Form Submission**: Add to buttons during submission
 - **Background Tasks**: Use subtle spinners for background operations
 
 ### Variant Selection
+
 - **Spinner**: Default choice for most loading states
 - **Dots**: Good for inline text loading or subtle indicators
 - **Pulse**: Effective for placeholder content
 - **Bars**: Best for processing or upload progress
 
 ### Size Guidelines
+
 - **xs/sm**: Inline with text or in small buttons
 - **default**: Standard loading states
 - **lg/xl**: Page-level loading or empty states

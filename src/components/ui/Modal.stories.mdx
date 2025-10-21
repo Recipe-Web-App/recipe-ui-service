@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Modal,
   ModalTrigger,
@@ -63,7 +69,10 @@ Accessible dialog component for displaying content that requires user attention 
             </ModalDescription>
           </ModalHeader>
           <ModalBody>
-            <p>This is the main content of the modal. You can put any content here.</p>
+            <p>
+              This is the main content of the modal. You can put any content
+              here.
+            </p>
           </ModalBody>
           <ModalFooter>
             <ModalClose asChild>
@@ -151,6 +160,7 @@ Accessible dialog component for displaying content that requires user attention 
         </ModalOverlay>
       </Modal>
     </div>
+
   </Story>
 </Canvas>
 
@@ -326,6 +336,7 @@ Accessible dialog component for displaying content that requires user attention 
         </ModalOverlay>
       </Modal>
     </div>
+
   </Story>
 </Canvas>
 
@@ -415,6 +426,7 @@ Accessible dialog component for displaying content that requires user attention 
         </Modal>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -546,6 +558,7 @@ Accessible dialog component for displaying content that requires user attention 
         </ModalContent>
       </ModalOverlay>
     </Modal>
+
   </Story>
 </Canvas>
 
@@ -556,7 +569,7 @@ Accessible dialog component for displaying content that requires user attention 
     <Modal>
       <ModalTrigger asChild>
         <Button variant="outline">
-          <Camera className="h-4 w-4 mr-2" />
+          <Camera className="mr-2 h-4 w-4" />
           Add Photo
         </Button>
       </ModalTrigger>
@@ -570,17 +583,22 @@ Accessible dialog component for displaying content that requires user attention 
           </ModalHeader>
           <ModalBody>
             <div className="space-y-4">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <Upload className="h-8 w-8 mx-auto mb-4 text-gray-400" />
-                <p className="text-sm text-gray-600 mb-2">
-                  Drop your image here, or <button className="text-blue-600 hover:underline">browse</button>
+              <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
+                <Upload className="mx-auto mb-4 h-8 w-8 text-gray-400" />
+                <p className="mb-2 text-sm text-gray-600">
+                  Drop your image here, or{' '}
+                  <button className="text-blue-600 hover:underline">
+                    browse
+                  </button>
                 </p>
                 <p className="text-xs text-gray-500">
                   Supports: JPG, PNG, GIF (max 10MB)
                 </p>
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium">Photo Description</label>
+                <label className="block text-sm font-medium">
+                  Photo Description
+                </label>
                 <Input placeholder="Describe your photo..." />
               </div>
               <div className="space-y-2">
@@ -620,32 +638,60 @@ Accessible dialog component for displaying content that requires user attention 
           <ModalBody className="max-h-96 overflow-y-auto">
             <div className="space-y-4 text-sm">
               <section>
-                <h3 className="font-semibold mb-2">1. Acceptance of Terms</h3>
-                <p>By accessing and using this recipe platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                <h3 className="mb-2 font-semibold">1. Acceptance of Terms</h3>
+                <p>
+                  By accessing and using this recipe platform, you accept and
+                  agree to be bound by the terms and provision of this
+                  agreement.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">2. Recipe Content</h3>
-                <p>Users are responsible for the accuracy and safety of recipes they share. All recipes should include proper ingredient lists, instructions, and safety warnings where applicable.</p>
+                <h3 className="mb-2 font-semibold">2. Recipe Content</h3>
+                <p>
+                  Users are responsible for the accuracy and safety of recipes
+                  they share. All recipes should include proper ingredient
+                  lists, instructions, and safety warnings where applicable.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">3. User Accounts</h3>
-                <p>Users must provide accurate information when creating accounts. Each user is responsible for maintaining the security of their account credentials.</p>
+                <h3 className="mb-2 font-semibold">3. User Accounts</h3>
+                <p>
+                  Users must provide accurate information when creating
+                  accounts. Each user is responsible for maintaining the
+                  security of their account credentials.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">4. Content Ownership</h3>
-                <p>Users retain ownership of original recipes they create and share. By sharing content, users grant the platform a license to display and distribute the content.</p>
+                <h3 className="mb-2 font-semibold">4. Content Ownership</h3>
+                <p>
+                  Users retain ownership of original recipes they create and
+                  share. By sharing content, users grant the platform a license
+                  to display and distribute the content.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">5. Community Guidelines</h3>
-                <p>Users must maintain respectful communication and provide constructive feedback. Spam, harassment, or inappropriate content will result in account suspension.</p>
+                <h3 className="mb-2 font-semibold">5. Community Guidelines</h3>
+                <p>
+                  Users must maintain respectful communication and provide
+                  constructive feedback. Spam, harassment, or inappropriate
+                  content will result in account suspension.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">6. Privacy Policy</h3>
-                <p>User data is protected according to our privacy policy. Personal information is not shared with third parties without explicit consent.</p>
+                <h3 className="mb-2 font-semibold">6. Privacy Policy</h3>
+                <p>
+                  User data is protected according to our privacy policy.
+                  Personal information is not shared with third parties without
+                  explicit consent.
+                </p>
               </section>
               <section>
-                <h3 className="font-semibold mb-2">7. Modifications</h3>
-                <p>These terms may be updated periodically. Users will be notified of significant changes and continued use constitutes acceptance of updated terms.</p>
+                <h3 className="mb-2 font-semibold">7. Modifications</h3>
+                <p>
+                  These terms may be updated periodically. Users will be
+                  notified of significant changes and continued use constitutes
+                  acceptance of updated terms.
+                </p>
               </section>
             </div>
           </ModalBody>
@@ -673,7 +719,7 @@ Accessible dialog component for displaying content that requires user attention 
         <ModalContent showClose={false}>
           <ModalHeader>
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-full">
+              <div className="rounded-full bg-orange-100 p-2">
                 <AlertTriangle className="h-5 w-5 text-orange-600" />
               </div>
               <div>
@@ -686,7 +732,8 @@ Accessible dialog component for displaying content that requires user attention 
           </ModalHeader>
           <ModalBody>
             <p className="text-sm text-gray-600">
-              Your recipe "Chocolate Chip Cookies" has unsaved changes. Would you like to save before leaving?
+              Your recipe "Chocolate Chip Cookies" has unsaved changes. Would
+              you like to save before leaving?
             </p>
           </ModalBody>
           <ModalFooter>
@@ -710,6 +757,7 @@ Accessible dialog component for displaying content that requires user attention 
 ## Usage Guidelines
 
 ### When to use
+
 - For confirmations that require user decision
 - To display detailed information without leaving current page
 - For forms that create or edit content
@@ -717,6 +765,7 @@ Accessible dialog component for displaying content that requires user attention 
 - For image galleries or media viewers
 
 ### Best practices
+
 - Use appropriate sizes for content amount
 - Include clear actions in the footer
 - Provide descriptive titles and descriptions
@@ -727,6 +776,7 @@ Accessible dialog component for displaying content that requires user attention 
 - Use sparingly to avoid interrupting user flow
 
 ### Accessibility
+
 - Proper focus management and restoration
 - Screen reader compatible with ARIA attributes
 - Keyboard navigation support (Tab, ESC)

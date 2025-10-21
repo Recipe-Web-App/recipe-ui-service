@@ -23,7 +23,7 @@ import {
   DefaultInfiniteScrollLoading,
   DefaultInfiniteScrollError,
   DefaultInfiniteScrollEmpty,
-  Spinner
+  Spinner,
 } from '@/components/ui/infinite-scroll';
 ```
 
@@ -51,7 +51,7 @@ const loadMore = async () => {
 <InfiniteScroll
   items={items}
   renderItem={({ item }) => (
-    <div className="p-4 border rounded">
+    <div className="rounded border p-4">
       <h3>{item.title}</h3>
       <p>{item.description}</p>
     </div>
@@ -59,7 +59,7 @@ const loadMore = async () => {
   hasNextPage={hasNextPage}
   loadingState={loading}
   onLoadMore={loadMore}
-/>
+/>;
 ```
 
 ### Recipe Infinite Scroll
@@ -78,7 +78,7 @@ const [hasNextPage, setHasNextPage] = useState(true);
   showCookTime={true}
   cardVariant="default"
   enableImageLazyLoading={true}
-/>
+/>;
 ```
 
 ### Search Results Infinite Scroll
@@ -96,23 +96,21 @@ const [searchQuery, setSearchQuery] = useState('');
   highlightQuery={true}
   showResultType={true}
   showRelevanceScore={false}
-/>
+/>;
 ```
 
 ## Variants
 
 ### Default
+
 Standard infinite scroll for general content.
 
 ```tsx
-<InfiniteScroll
-  variant="default"
-  items={items}
-  renderItem={renderItem}
-/>
+<InfiniteScroll variant="default" items={items} renderItem={renderItem} />
 ```
 
 ### Grid Layout
+
 Responsive grid layout with configurable columns.
 
 ```tsx
@@ -125,30 +123,25 @@ Responsive grid layout with configurable columns.
 ```
 
 ### Compact
+
 Reduced spacing for dense content.
 
 ```tsx
-<InfiniteScroll
-  variant="compact"
-  items={items}
-  renderItem={renderItem}
-/>
+<InfiniteScroll variant="compact" items={items} renderItem={renderItem} />
 ```
 
 ### Feed Style
+
 Social media feed style with enhanced spacing.
 
 ```tsx
-<InfiniteScroll
-  variant="feed"
-  items={items}
-  renderItem={renderItem}
-/>
+<InfiniteScroll variant="feed" items={items} renderItem={renderItem} />
 ```
 
 ## Loading States
 
 ### Skeleton Loading
+
 Shows skeleton placeholders while loading.
 
 ```tsx
@@ -167,6 +160,7 @@ Shows skeleton placeholders while loading.
 ```
 
 ### Spinner Variants
+
 Different spinner animations for loading states.
 
 ```tsx
@@ -200,10 +194,10 @@ Different spinner animations for loading states.
 
 ```tsx
 const CustomError = ({ error, onRetry }) => (
-  <div className="text-center p-8">
+  <div className="p-8 text-center">
     <h3>Oops! Something went wrong</h3>
     <p>{error.message}</p>
-    <button onClick={onRetry} className="mt-4 btn">
+    <button onClick={onRetry} className="btn mt-4">
       Try Again
     </button>
   </div>
@@ -214,7 +208,7 @@ const CustomError = ({ error, onRetry }) => (
   error={error}
   errorComponent={CustomError}
   renderItem={renderItem}
-/>
+/>;
 ```
 
 ## Recipe-Specific Features
@@ -259,7 +253,7 @@ const CustomError = ({ error, onRetry }) => (
   items={items}
   observerConfig={{
     rootMargin: '100px',
-    threshold: 0.1
+    threshold: 0.1,
   }}
   loadMoreThreshold={200}
   renderItem={renderItem}
@@ -274,7 +268,7 @@ const CustomError = ({ error, onRetry }) => (
   enableVirtualization={true}
   itemHeight={300}
   overscan={5}
-  getItemKey={(item) => item.id}
+  getItemKey={item => item.id}
   renderItem={renderItem}
 />
 ```
@@ -309,11 +303,11 @@ const CustomError = ({ error, onRetry }) => (
 
 ```tsx
 const CustomEmpty = () => (
-  <div className="text-center py-16">
-    <ChefHat className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+  <div className="py-16 text-center">
+    <ChefHat className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
     <h3>No recipes yet</h3>
     <p>Start by adding your first recipe!</p>
-    <button className="mt-4 btn">Add Recipe</button>
+    <button className="btn mt-4">Add Recipe</button>
   </div>
 );
 
@@ -322,7 +316,7 @@ const CustomEmpty = () => (
   loadingState="idle"
   emptyComponent={CustomEmpty}
   renderItem={renderItem}
-/>
+/>;
 ```
 
 ## Recipe Context Configurations
@@ -330,23 +324,27 @@ const CustomEmpty = () => (
 The component includes optimized defaults for different recipe contexts:
 
 ### Recipes Context
+
 - Virtual scrolling enabled with 280px item height
 - Image lazy loading enabled
 - Shows author, rating, and cook time
 - 200px load threshold
 
 ### Search Results Context
+
 - Virtual scrolling enabled with 120px item height
 - Faster loading with 150px threshold
 - Shows categories but not author/rating
 - Optimized for quick browsing
 
 ### Favorites Context
+
 - Virtual scrolling disabled for better UX
 - All metadata shown
 - 300px load threshold for leisurely browsing
 
 ### Meal Plans Context
+
 - Compact layout with 200px item height
 - Shows cook time but not author/rating
 - Optimized for planning workflows
