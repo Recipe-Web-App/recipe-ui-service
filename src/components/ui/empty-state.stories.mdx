@@ -53,6 +53,7 @@ import {
 ## Variants
 
 ### Default
+
 Standard empty state with card-like appearance for general use.
 
 ```tsx
@@ -69,6 +70,7 @@ Standard empty state with card-like appearance for general use.
 ```
 
 ### Search
+
 Specialized for empty search results with dashed border styling.
 
 ```tsx
@@ -86,6 +88,7 @@ Specialized for empty search results with dashed border styling.
 ```
 
 ### Minimal
+
 Clean, text-only version for subtle empty states.
 
 ```tsx
@@ -99,6 +102,7 @@ Clean, text-only version for subtle empty states.
 ```
 
 ### Illustrated
+
 Version with gradient background for prominent empty states.
 
 ```tsx
@@ -106,7 +110,8 @@ Version with gradient background for prominent empty states.
   <EmptyStateIcon>🎨</EmptyStateIcon>
   <EmptyStateTitle>Start your culinary journey</EmptyStateTitle>
   <EmptyStateDescription>
-    Discover amazing recipes from chefs around the world and create your own collection.
+    Discover amazing recipes from chefs around the world and create your own
+    collection.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button size="lg">Explore Recipes</Button>
@@ -115,6 +120,7 @@ Version with gradient background for prominent empty states.
 ```
 
 ### Error
+
 For error states like connection failures or loading errors.
 
 ```tsx
@@ -134,6 +140,7 @@ For error states like connection failures or loading errors.
 ## Sizes
 
 ### Small
+
 Compact size for smaller containers or sidebars.
 
 ```tsx
@@ -150,6 +157,7 @@ Compact size for smaller containers or sidebars.
 ```
 
 ### Medium (Default)
+
 Standard size for most use cases.
 
 ```tsx
@@ -166,6 +174,7 @@ Standard size for most use cases.
 ```
 
 ### Large
+
 Prominent size for main content areas and landing pages.
 
 ```tsx
@@ -173,11 +182,14 @@ Prominent size for main content areas and landing pages.
   <EmptyStateIcon>🌟</EmptyStateIcon>
   <EmptyStateTitle>Welcome to Recipe Manager</EmptyStateTitle>
   <EmptyStateDescription>
-    Your recipe collection is empty. Let's get started by adding your first recipe or importing from your favorite cooking websites.
+    Your recipe collection is empty. Let's get started by adding your first
+    recipe or importing from your favorite cooking websites.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button size="lg">Create Recipe</Button>
-    <Button variant="outline" size="lg">Import Recipe</Button>
+    <Button variant="outline" size="lg">
+      Import Recipe
+    </Button>
   </EmptyStateActions>
 </EmptyState>
 ```
@@ -185,6 +197,7 @@ Prominent size for main content areas and landing pages.
 ## Actions Layout
 
 ### Horizontal (Default)
+
 Actions arranged in a row with flexible wrapping.
 
 ```tsx
@@ -198,6 +211,7 @@ Actions arranged in a row with flexible wrapping.
 ```
 
 ### Vertical
+
 Actions stacked vertically for narrow containers.
 
 ```tsx
@@ -205,12 +219,15 @@ Actions stacked vertically for narrow containers.
   <EmptyStateTitle>No meal plans</EmptyStateTitle>
   <EmptyStateActions layout="vertical">
     <Button className="w-full">Create Meal Plan</Button>
-    <Button variant="outline" className="w-full">View Templates</Button>
+    <Button variant="outline" className="w-full">
+      View Templates
+    </Button>
   </EmptyStateActions>
 </EmptyState>
 ```
 
 ### Stacked
+
 Centered vertical layout with consistent spacing.
 
 ```tsx
@@ -226,6 +243,7 @@ Centered vertical layout with consistent spacing.
 ## Advanced Usage
 
 ### Custom Icons
+
 Use custom SVG icons or icon components.
 
 ```tsx
@@ -241,6 +259,7 @@ Use custom SVG icons or icon components.
 ```
 
 ### Complex Actions
+
 Multiple action buttons with different variants and sizes.
 
 ```tsx
@@ -254,22 +273,23 @@ Multiple action buttons with different variants and sizes.
       <Button>Import from URL</Button>
       <Button variant="outline">Upload File</Button>
     </div>
-    <Button variant="link" size="sm">Manual Entry</Button>
+    <Button variant="link" size="sm">
+      Manual Entry
+    </Button>
   </EmptyStateActions>
 </EmptyState>
 ```
 
 ### Custom Classes
+
 Extend styling with additional Tailwind classes.
 
 ```tsx
-<EmptyState className="border-2 border-dashed border-primary/30 bg-primary/5">
+<EmptyState className="border-primary/30 bg-primary/5 border-2 border-dashed">
   <EmptyStateIcon className="text-primary">
     <PlusIcon className="h-16 w-16" />
   </EmptyStateIcon>
-  <EmptyStateTitle className="text-primary">
-    Drop recipes here
-  </EmptyStateTitle>
+  <EmptyStateTitle className="text-primary">Drop recipes here</EmptyStateTitle>
   <EmptyStateDescription>
     Drag and drop recipe files or click to browse.
   </EmptyStateDescription>
@@ -277,18 +297,18 @@ Extend styling with additional Tailwind classes.
 ```
 
 ### Conditional Content
+
 Show different content based on state or user permissions.
 
 ```tsx
 const EmptyRecipeList = ({ userCanCreate }: { userCanCreate: boolean }) => (
-  <EmptyState variant={userCanCreate ? "default" : "minimal"}>
+  <EmptyState variant={userCanCreate ? 'default' : 'minimal'}>
     <EmptyStateIcon>📚</EmptyStateIcon>
     <EmptyStateTitle>No recipes yet</EmptyStateTitle>
     <EmptyStateDescription>
       {userCanCreate
-        ? "Start building your recipe collection."
-        : "Ask an admin to add recipes to this collection."
-      }
+        ? 'Start building your recipe collection.'
+        : 'Ask an admin to add recipes to this collection.'}
     </EmptyStateDescription>
     {userCanCreate && (
       <EmptyStateActions>
@@ -305,16 +325,19 @@ const EmptyRecipeList = ({ userCanCreate }: { userCanCreate: boolean }) => (
 The EmptyState component follows WCAG accessibility guidelines:
 
 ### Semantic Structure
+
 - Uses proper heading hierarchy with `h3` for titles
 - Includes `role="status"` for screen reader announcements
 - Provides `aria-live="polite"` for dynamic content updates
 
 ### Screen Reader Support
+
 - Icons are hidden from screen readers with `aria-hidden="true"`
 - Descriptive text provides context for empty states
 - Action buttons have clear, descriptive labels
 
 ### Keyboard Navigation
+
 - All interactive elements are keyboard accessible
 - Proper tab order through action buttons
 - Focus indicators for keyboard users
@@ -336,27 +359,33 @@ The EmptyState component follows WCAG accessibility guidelines:
 ## Recipe-Specific Examples
 
 ### Empty Recipe Collection
+
 ```tsx
 <EmptyState variant="illustrated" size="lg">
   <EmptyStateIcon>👨‍🍳</EmptyStateIcon>
   <EmptyStateTitle>Your recipe box is empty</EmptyStateTitle>
   <EmptyStateDescription>
-    Start your culinary journey by adding your first recipe or discovering new ones from our community.
+    Start your culinary journey by adding your first recipe or discovering new
+    ones from our community.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button size="lg">Add Recipe</Button>
-    <Button variant="outline" size="lg">Discover Recipes</Button>
+    <Button variant="outline" size="lg">
+      Discover Recipes
+    </Button>
   </EmptyStateActions>
 </EmptyState>
 ```
 
 ### Failed Recipe Import
+
 ```tsx
 <EmptyState variant="error">
   <EmptyStateIcon>🚫</EmptyStateIcon>
   <EmptyStateTitle>Import failed</EmptyStateTitle>
   <EmptyStateDescription>
-    We couldn't import the recipe from that URL. Please check the link and try again.
+    We couldn't import the recipe from that URL. Please check the link and try
+    again.
   </EmptyStateDescription>
   <EmptyStateActions>
     <Button variant="outline">Try Again</Button>
@@ -366,6 +395,7 @@ The EmptyState component follows WCAG accessibility guidelines:
 ```
 
 ### Empty Search Results
+
 ```tsx
 <EmptyState variant="search">
   <EmptyStateIcon>🔍</EmptyStateIcon>
@@ -381,6 +411,7 @@ The EmptyState component follows WCAG accessibility guidelines:
 ```
 
 ### Empty Meal Plan
+
 ```tsx
 <EmptyState>
   <EmptyStateIcon>📅</EmptyStateIcon>
@@ -390,7 +421,9 @@ The EmptyState component follows WCAG accessibility guidelines:
   </EmptyStateDescription>
   <EmptyStateActions layout="vertical">
     <Button className="w-full">Create Meal Plan</Button>
-    <Button variant="outline" className="w-full">Use Template</Button>
+    <Button variant="outline" className="w-full">
+      Use Template
+    </Button>
   </EmptyStateActions>
 </EmptyState>
 ```
@@ -428,6 +461,7 @@ The EmptyState component follows WCAG accessibility guidelines:
 ## Technical Details
 
 ### CSS Custom Properties
+
 The component uses design tokens from your CSS custom properties:
 
 - `--card` / `--card-foreground` for default variant
@@ -437,6 +471,7 @@ The component uses design tokens from your CSS custom properties:
 - `--border` for border colors and styling
 
 ### Performance
+
 The component is optimized for performance:
 
 - Uses `React.forwardRef` for proper ref handling
@@ -445,6 +480,7 @@ The component is optimized for performance:
 - Minimal re-renders through stable class generation
 
 ### Responsive Design
+
 Built with mobile-first approach:
 
 - Flexible layouts that adapt to container width
@@ -455,43 +491,48 @@ Built with mobile-first approach:
 ## Props Reference
 
 ### EmptyState
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Size of the empty state container |
-| `asChild` | `boolean` | `false` | Render as child element (polymorphic) |
-| `className` | `string` | - | Additional CSS classes |
+
+| Prop        | Type                                                             | Default     | Description                           |
+| ----------- | ---------------------------------------------------------------- | ----------- | ------------------------------------- |
+| `variant`   | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Visual style variant                  |
+| `size`      | `'sm' \| 'md' \| 'lg'`                                           | `'md'`      | Size of the empty state container     |
+| `asChild`   | `boolean`                                                        | `false`     | Render as child element (polymorphic) |
+| `className` | `string`                                                         | -           | Additional CSS classes                |
 
 ### EmptyStateIcon
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Icon color variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Icon size |
-| `asChild` | `boolean` | `false` | Render as child element |
-| `className` | `string` | - | Additional CSS classes |
+
+| Prop        | Type                                                             | Default     | Description             |
+| ----------- | ---------------------------------------------------------------- | ----------- | ----------------------- |
+| `variant`   | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Icon color variant      |
+| `size`      | `'sm' \| 'md' \| 'lg'`                                           | `'md'`      | Icon size               |
+| `asChild`   | `boolean`                                                        | `false`     | Render as child element |
+| `className` | `string`                                                         | -           | Additional CSS classes  |
 
 ### EmptyStateTitle
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Title color variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Title text size |
-| `asChild` | `boolean` | `false` | Render as child element |
-| `className` | `string` | - | Additional CSS classes |
+
+| Prop        | Type                                                             | Default     | Description             |
+| ----------- | ---------------------------------------------------------------- | ----------- | ----------------------- |
+| `variant`   | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Title color variant     |
+| `size`      | `'sm' \| 'md' \| 'lg'`                                           | `'md'`      | Title text size         |
+| `asChild`   | `boolean`                                                        | `false`     | Render as child element |
+| `className` | `string`                                                         | -           | Additional CSS classes  |
 
 ### EmptyStateDescription
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Description color variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Description text size |
-| `asChild` | `boolean` | `false` | Render as child element |
-| `className` | `string` | - | Additional CSS classes |
+
+| Prop        | Type                                                             | Default     | Description               |
+| ----------- | ---------------------------------------------------------------- | ----------- | ------------------------- |
+| `variant`   | `'default' \| 'search' \| 'minimal' \| 'illustrated' \| 'error'` | `'default'` | Description color variant |
+| `size`      | `'sm' \| 'md' \| 'lg'`                                           | `'md'`      | Description text size     |
+| `asChild`   | `boolean`                                                        | `false`     | Render as child element   |
+| `className` | `string`                                                         | -           | Additional CSS classes    |
 
 ### EmptyStateActions
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `layout` | `'horizontal' \| 'vertical' \| 'stacked'` | `'horizontal'` | Layout direction for actions |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Gap size between actions |
-| `asChild` | `boolean` | `false` | Render as child element |
-| `className` | `string` | - | Additional CSS classes |
+
+| Prop        | Type                                      | Default        | Description                  |
+| ----------- | ----------------------------------------- | -------------- | ---------------------------- |
+| `layout`    | `'horizontal' \| 'vertical' \| 'stacked'` | `'horizontal'` | Layout direction for actions |
+| `size`      | `'sm' \| 'md' \| 'lg'`                    | `'md'`         | Gap size between actions     |
+| `asChild`   | `boolean`                                 | `false`        | Render as child element      |
+| `className` | `string`                                  | -              | Additional CSS classes       |
 
 Plus all standard HTML div/heading/paragraph attributes for each component.

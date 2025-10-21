@@ -66,6 +66,7 @@ import {
 ## Variants
 
 ### Default
+
 Clean white background with subtle border and shadow.
 
 ```tsx
@@ -78,6 +79,7 @@ Clean white background with subtle border and shadow.
 ```
 
 ### Outlined
+
 Transparent background with defined border.
 
 ```tsx
@@ -90,6 +92,7 @@ Transparent background with defined border.
 ```
 
 ### Minimal
+
 No borders or background - just content.
 
 ```tsx
@@ -102,6 +105,7 @@ No borders or background - just content.
 ```
 
 ### Elevated
+
 Enhanced shadow for prominent sections.
 
 ```tsx
@@ -114,6 +118,7 @@ Enhanced shadow for prominent sections.
 ```
 
 ### Card
+
 Subtle gray background for grouped content.
 
 ```tsx
@@ -128,6 +133,7 @@ Subtle gray background for grouped content.
 ## Sizes
 
 ### Small
+
 Compact size for secondary information.
 
 ```tsx
@@ -140,6 +146,7 @@ Compact size for secondary information.
 ```
 
 ### Medium (Default)
+
 Standard size for most use cases.
 
 ```tsx
@@ -152,13 +159,16 @@ Standard size for most use cases.
 ```
 
 ### Large
+
 Prominent size for important information.
 
 ```tsx
 <Collapse size="lg">
   <CollapseTrigger>Detailed explanation</CollapseTrigger>
   <CollapseContent>
-    <p className="text-lg">This technique requires careful attention to timing.</p>
+    <p className="text-lg">
+      This technique requires careful attention to timing.
+    </p>
   </CollapseContent>
 </Collapse>
 ```
@@ -166,6 +176,7 @@ Prominent size for important information.
 ## Icons and Customization
 
 ### Default Chevron
+
 Standard chevron that rotates when opened.
 
 ```tsx
@@ -178,6 +189,7 @@ Standard chevron that rotates when opened.
 ```
 
 ### Custom Icon
+
 Use any icon with proper sizing.
 
 ```tsx
@@ -190,10 +202,11 @@ import { HelpCircle } from 'lucide-react';
   <CollapseContent>
     <p>Custom help icon indicates this is assistance content.</p>
   </CollapseContent>
-</Collapse>
+</Collapse>;
 ```
 
 ### Icon Position
+
 Control icon placement.
 
 ```tsx
@@ -206,17 +219,16 @@ import { Lightbulb } from 'lucide-react';
   <CollapseContent>
     <p>Icon on the left draws attention to important tips.</p>
   </CollapseContent>
-</Collapse>
+</Collapse>;
 ```
 
 ### No Icon
+
 Clean look without any icon.
 
 ```tsx
 <Collapse>
-  <CollapseTrigger showIcon={false}>
-    Simple collapse
-  </CollapseTrigger>
+  <CollapseTrigger showIcon={false}>Simple collapse</CollapseTrigger>
   <CollapseContent>
     <p>Sometimes a minimal approach is preferred.</p>
   </CollapseContent>
@@ -226,6 +238,7 @@ Clean look without any icon.
 ## Animation Control
 
 ### Animation Speed
+
 Control the speed of icon rotation and content transitions.
 
 ```tsx
@@ -251,6 +264,7 @@ Control the speed of icon rotation and content transitions.
 ```
 
 ### Custom Animation Easing
+
 Control the animation timing function.
 
 ```tsx
@@ -263,6 +277,7 @@ Control the animation timing function.
 ```
 
 ### Disable Smooth Transitions
+
 For instant show/hide behavior.
 
 ```tsx
@@ -277,6 +292,7 @@ For instant show/hide behavior.
 ## Recipe-Specific Components
 
 ### Recipe Sections
+
 Pre-configured collapses for different recipe sections.
 
 ```tsx
@@ -326,6 +342,7 @@ Pre-configured collapses for different recipe sections.
 ```
 
 ### Kitchen Tips with Difficulty Levels
+
 Specialized collapses for cooking tips with difficulty indicators.
 
 ```tsx
@@ -369,6 +386,7 @@ Specialized collapses for cooking tips with difficulty indicators.
 ## FAQ Components
 
 ### Featured FAQ
+
 Highlighted important questions with special styling.
 
 ```tsx
@@ -378,12 +396,15 @@ Highlighted important questions with special styling.
   featured
 >
   <CollapseContent>
-    <p>Store dry ingredients in airtight containers and refrigerate perishables.</p>
+    <p>
+      Store dry ingredients in airtight containers and refrigerate perishables.
+    </p>
   </CollapseContent>
 </FAQCollapse>
 ```
 
 ### Categorized FAQ
+
 Organized by category with color coding.
 
 ```tsx
@@ -392,12 +413,15 @@ Organized by category with color coding.
   category="cooking"
 >
   <CollapseContent>
-    <p>Most tools have substitutes - check our equipment alternatives section.</p>
+    <p>
+      Most tools have substitutes - check our equipment alternatives section.
+    </p>
   </CollapseContent>
 </FAQCollapse>
 ```
 
 ### Custom Question ID
+
 For deep linking and navigation.
 
 ```tsx
@@ -415,6 +439,7 @@ For deep linking and navigation.
 ## Ingredient Notes
 
 ### Substitution Notes
+
 Important ingredient substitution information.
 
 ```tsx
@@ -425,12 +450,15 @@ Important ingredient substitution information.
 >
   <CollapseTrigger>Butter substitutions</CollapseTrigger>
   <CollapseContent>
-    <p>Can substitute with vegetable shortening, coconut oil, or vegan butter.</p>
+    <p>
+      Can substitute with vegetable shortening, coconut oil, or vegan butter.
+    </p>
   </CollapseContent>
 </IngredientNotesCollapse>
 ```
 
 ### Allergen Warnings
+
 Critical allergen information with warning styling.
 
 ```tsx
@@ -448,6 +476,7 @@ Critical allergen information with warning styling.
 ```
 
 ### Quality Tips
+
 Ingredient selection and quality information.
 
 ```tsx
@@ -466,6 +495,7 @@ Ingredient selection and quality information.
 ## Grouped Collapses
 
 ### Multiple Open (Default)
+
 Allow multiple collapses to be open simultaneously.
 
 ```tsx
@@ -494,14 +524,11 @@ Allow multiple collapses to be open simultaneously.
 ```
 
 ### Accordion Style (Single Open)
+
 Only one collapse can be open at a time.
 
 ```tsx
-<CollapseGroup
-  spacing="tight"
-  allowMultiple={false}
-  defaultOpenItems={[0]}
->
+<CollapseGroup spacing="tight" allowMultiple={false} defaultOpenItems={[0]}>
   <Collapse variant="outlined">
     <CollapseTrigger>Beginner Level</CollapseTrigger>
     <CollapseContent>
@@ -526,6 +553,7 @@ Only one collapse can be open at a time.
 ```
 
 ### Controlled Group
+
 External control over which items are open.
 
 ```tsx
@@ -541,6 +569,7 @@ External control over which items are open.
 ## States and Behaviors
 
 ### Disabled State
+
 Prevent interaction when needed.
 
 ```tsx
@@ -561,6 +590,7 @@ Prevent interaction when needed.
 ```
 
 ### Force Mount Content
+
 Keep content in DOM even when collapsed.
 
 ```tsx
@@ -573,6 +603,7 @@ Keep content in DOM even when collapsed.
 ```
 
 ### Partial Collapse
+
 Show partial content when collapsed.
 
 ```tsx
@@ -604,6 +635,7 @@ The Collapse component includes comprehensive accessibility features:
 ### Screen Reader Behavior
 
 Screen readers will announce:
+
 - Button role and current expanded state
 - Content region when opened
 - Proper labeling relationships between trigger and content
@@ -612,30 +644,35 @@ Screen readers will announce:
 ## Best Practices
 
 ### Content Structure
+
 - Keep trigger text concise and descriptive
 - Use semantic HTML within content areas
 - Provide clear visual hierarchy
 - Consider content length for smooth animations
 
 ### Performance
+
 - Use `forceMount` sparingly (only when needed for SEO)
 - Prefer CSS transitions over JavaScript animations
 - Consider using `smoothTransitions={false}` for very large content
 - Monitor animation performance on lower-end devices
 
 ### Recipe Context Usage
+
 - Use `RecipeCollapse` for cooking-related content
 - Choose appropriate section type (ingredients, instructions, etc.)
 - Include counts and time estimates when relevant
 - Use custom icons to enhance recognition
 
 ### Grouping
+
 - Use `CollapseGroup` for related sets of collapses
 - Choose appropriate spacing (tight, normal, loose)
 - Consider allowing multiple open vs accordion behavior
 - Provide external controls when needed
 
 ### Animation Guidelines
+
 - Use fast animations (150ms) for simple content
 - Use normal animations (300ms) for most cases
 - Use slow animations (500ms) for large or complex content
@@ -644,19 +681,19 @@ Screen readers will announce:
 ## Advanced Usage
 
 ### Custom Height Calculations
+
 The collapse component automatically calculates content height for smooth transitions. For complex content that changes size, consider:
 
 ```tsx
 // Force remeasurement when content changes
 <Collapse key={contentVersion}>
   <CollapseTrigger>Dynamic content</CollapseTrigger>
-  <CollapseContent>
-    {/* Content that might change size */}
-  </CollapseContent>
+  <CollapseContent>{/* Content that might change size */}</CollapseContent>
 </Collapse>
 ```
 
 ### Integration with Forms
+
 Collapse works well with form sections:
 
 ```tsx
@@ -672,6 +709,7 @@ Collapse works well with form sections:
 ```
 
 ### Custom Styling
+
 Extend with additional classes for unique designs:
 
 ```tsx

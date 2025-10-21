@@ -95,6 +95,7 @@ const recipe = {
 ## Variants
 
 ### Button Variants
+
 - `default` - Primary blue background
 - `secondary` - Secondary gray background
 - `outline` - Outlined button with border
@@ -103,12 +104,14 @@ const recipe = {
 - `success` - Green background for success states
 
 ### Sizes
+
 - `sm` - Small size (32px height)
 - `default` - Default size (36px height)
 - `lg` - Large size (40px height)
 - `icon` - Square icon-only button
 
 ### Recipe Variants
+
 - `ingredient` - Green accent for ingredient content
 - `instruction` - Blue accent for instruction content
 - `url` - Purple accent for URL sharing
@@ -121,7 +124,7 @@ const recipe = {
 ```tsx
 <CopyButton
   content="raw content"
-  transformContent={(content) => `Formatted: ${content.toUpperCase()}`}
+  transformContent={content => `Formatted: ${content.toUpperCase()}`}
 >
   Copy Transformed
 </CopyButton>
@@ -147,9 +150,9 @@ const recipe = {
 <CopyButton
   content="Example content"
   onCopyStart={() => console.log('Copy started')}
-  onCopySuccess={(content) => console.log('Copied:', content)}
-  onCopyError={(error) => console.error('Copy failed:', error)}
-  onStatusChange={(status) => console.log('Status:', status)}
+  onCopySuccess={content => console.log('Copied:', content)}
+  onCopyError={error => console.error('Copy failed:', error)}
+  onStatusChange={status => console.log('Status:', status)}
 >
   Copy with Events
 </CopyButton>
@@ -159,9 +162,15 @@ const recipe = {
 
 ```tsx
 <CopyButton.Group spacing="default" orientation="horizontal">
-  <CopyButton content="Text 1" size="sm">Copy 1</CopyButton>
-  <CopyButton content="Text 2" size="sm">Copy 2</CopyButton>
-  <CopyButton content="Text 3" size="sm">Copy 3</CopyButton>
+  <CopyButton content="Text 1" size="sm">
+    Copy 1
+  </CopyButton>
+  <CopyButton content="Text 2" size="sm">
+    Copy 2
+  </CopyButton>
+  <CopyButton content="Text 3" size="sm">
+    Copy 3
+  </CopyButton>
 </CopyButton.Group>
 ```
 
@@ -201,32 +210,32 @@ The component includes comprehensive accessibility features:
 
 ### CopyButton Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `content` | `string \| (() => string) \| (() => Promise<string>)` | - | Content to copy |
-| `variant` | `'default' \| 'secondary' \| 'outline' \| 'ghost' \| 'link' \| 'success'` | `'default'` | Button style variant |
-| `size` | `'sm' \| 'default' \| 'lg' \| 'icon'` | `'default'` | Button size |
-| `recipe` | `'none' \| 'ingredient' \| 'instruction' \| 'url' \| 'nutrition'` | `'none'` | Recipe-specific styling |
-| `icon` | `IconName` | `'copy'` | Icon to display |
-| `successIcon` | `IconName` | `'check'` | Success state icon |
-| `errorIcon` | `IconName` | `'alert-circle'` | Error state icon |
-| `iconOnly` | `boolean` | `false` | Show icon only |
-| `successMessage` | `string` | `'Copied!'` | Success feedback text |
-| `errorMessage` | `string` | `'Failed to copy'` | Error feedback text |
-| `resetDelay` | `number` | `2000` | Time before reset (ms) |
-| `maxLength` | `number` | - | Max content length |
-| `transformContent` | `(content: string) => string` | - | Content transformer |
-| `onCopyStart` | `() => void` | - | Copy start callback |
-| `onCopySuccess` | `(content: string) => void` | - | Copy success callback |
-| `onCopyError` | `(error: Error) => void` | - | Copy error callback |
-| `copyLabel` | `string` | `'Copy to clipboard'` | Accessibility label |
-| `announceToScreenReader` | `boolean` | `true` | Screen reader announcements |
+| Prop                     | Type                                                                      | Default               | Description                 |
+| ------------------------ | ------------------------------------------------------------------------- | --------------------- | --------------------------- |
+| `content`                | `string \| (() => string) \| (() => Promise<string>)`                     | -                     | Content to copy             |
+| `variant`                | `'default' \| 'secondary' \| 'outline' \| 'ghost' \| 'link' \| 'success'` | `'default'`           | Button style variant        |
+| `size`                   | `'sm' \| 'default' \| 'lg' \| 'icon'`                                     | `'default'`           | Button size                 |
+| `recipe`                 | `'none' \| 'ingredient' \| 'instruction' \| 'url' \| 'nutrition'`         | `'none'`              | Recipe-specific styling     |
+| `icon`                   | `IconName`                                                                | `'copy'`              | Icon to display             |
+| `successIcon`            | `IconName`                                                                | `'check'`             | Success state icon          |
+| `errorIcon`              | `IconName`                                                                | `'alert-circle'`      | Error state icon            |
+| `iconOnly`               | `boolean`                                                                 | `false`               | Show icon only              |
+| `successMessage`         | `string`                                                                  | `'Copied!'`           | Success feedback text       |
+| `errorMessage`           | `string`                                                                  | `'Failed to copy'`    | Error feedback text         |
+| `resetDelay`             | `number`                                                                  | `2000`                | Time before reset (ms)      |
+| `maxLength`              | `number`                                                                  | -                     | Max content length          |
+| `transformContent`       | `(content: string) => string`                                             | -                     | Content transformer         |
+| `onCopyStart`            | `() => void`                                                              | -                     | Copy start callback         |
+| `onCopySuccess`          | `(content: string) => void`                                               | -                     | Copy success callback       |
+| `onCopyError`            | `(error: Error) => void`                                                  | -                     | Copy error callback         |
+| `copyLabel`              | `string`                                                                  | `'Copy to clipboard'` | Accessibility label         |
+| `announceToScreenReader` | `boolean`                                                                 | `true`                | Screen reader announcements |
 
 ### Recipe Copy Button Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `recipe` | `Recipe` | Recipe data object |
+| Prop       | Type                                                                            | Description             |
+| ---------- | ------------------------------------------------------------------------------- | ----------------------- |
+| `recipe`   | `Recipe`                                                                        | Recipe data object      |
 | `copyType` | `'ingredients' \| 'instructions' \| 'url' \| 'nutrition' \| 'formatted-recipe'` | Type of content to copy |
 
 ## Examples
@@ -235,7 +244,9 @@ The component includes comprehensive accessibility features:
 
 ```tsx
 <CopyButton
-  content={() => `Timer set for ${minutes} minutes at ${new Date().toLocaleTimeString()}`}
+  content={() =>
+    `Timer set for ${minutes} minutes at ${new Date().toLocaleTimeString()}`
+  }
   variant="outline"
   icon="timer"
   recipe="instruction"
@@ -250,7 +261,7 @@ The component includes comprehensive accessibility features:
 <CopyButton.Recipe
   recipe={recipe}
   copyType="ingredients"
-  transformContent={(ingredients) =>
+  transformContent={ingredients =>
     `Shopping List:\n${ingredients}\n\nGenerated from: ${recipe.title}`
   }
   variant="secondary"

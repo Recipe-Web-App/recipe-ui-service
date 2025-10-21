@@ -1,0 +1,1219 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import { FilterPanel } from './filter-panel';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from './card';
+import { Badge } from './badge';
+import React from 'react';
+
+<Meta
+  title="UI Components/FilterPanel"
+  component={FilterPanel}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[600px] p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The FilterPanel component is a generic, configurable filter panel that composes existing UI components
+(SearchInput, Accordion, Checkbox, Slider, Select) to provide a flexible filtering system for browse pages.
+
+## Features
+
+- **Multiple Filter Types** - Search, checkbox, range, select, and custom filters
+- **Configurable** - Accepts filter configuration via props for maximum flexibility
+- **Collapsible** - Mobile-friendly collapsible panel
+- **Clear & Reset** - Built-in actions to clear all or reset to defaults
+- **Active Count Badge** - Shows number of active filters
+- **Result Count** - Displays filtered result count
+- **Real-time & Apply Modes** - Support for both filtering approaches
+- **Fully Accessible** - WCAG 2.1 AA compliant with proper ARIA attributes
+- **Type-Safe** - Complete TypeScript support with filter type definitions
+
+## Use Cases
+
+Use FilterPanel for:
+
+- Recipe browse pages (filter by category, time, difficulty, etc.)
+- Product catalogs (filter by price, brand, features, etc.)
+- Search results (refine by date, category, type, etc.)
+- Collection galleries (filter by tags, date, creator, etc.)
+- Any browse interface that needs filtering
+  `
+  }
+  }
+  }}
+  argTypes={{
+      filters: {
+        description: 'Array of filter configurations',
+        control: { type: 'object' },
+      },
+      values: {
+        description: 'Current filter values (controlled)',
+        control: { type: 'object' },
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'compact', 'full'],
+        description: 'Visual style variant',
+        defaultValue: 'default'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size variant',
+        defaultValue: 'md'
+      },
+      position: {
+        control: { type: 'select' },
+        options: ['sidebar', 'drawer', 'modal'],
+        description: 'Position variant',
+        defaultValue: 'sidebar'
+      },
+      collapsible: {
+        control: { type: 'boolean' },
+        description: 'Whether the panel can be collapsed',
+        defaultValue: true
+      },
+      showHeader: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the header',
+        defaultValue: true
+      },
+      showFooter: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the footer',
+        defaultValue: true
+      },
+      showApplyButton: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the Apply button',
+        defaultValue: false
+      },
+      showResultCount: {
+        control: { type: 'boolean' },
+        description: 'Whether to show result count',
+        defaultValue: false
+      },
+    }}
+  />
+
+# FilterPanel
+
+<Description of={FilterPanel} />
+
+## Basic Usage
+
+The simplest usage with all filter types.
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        time: [0, 120],
+        difficulty: 'any',
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search recipes...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'breakfast', label: 'Breakfast', count: 24 },
+            { id: 'lunch', label: 'Lunch', count: 18 },
+            { id: 'dinner', label: 'Dinner', count: 32 },
+            { id: 'dessert', label: 'Dessert', count: 16 },
+          ],
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'range',
+          id: 'time',
+          label: 'Cook Time',
+          min: 0,
+          max: 120,
+          unit: 'min',
+          showValue: true,
+        },
+        {
+          type: 'select',
+          id: 'difficulty',
+          label: 'Difficulty',
+          options: [
+            { value: 'any', label: 'Any' },
+            { value: 'easy', label: 'Easy' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'hard', label: 'Hard' },
+          ],
+          placeholder: 'Select difficulty',
+          defaultValue: 'any',
+        },
+      ];
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Filter Recipes"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+            totalResults={90}
+            showResultCount
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Recipe Filters Example
+
+Real-world example with recipe-specific filters.
+
+<Canvas>
+  <Story name="Recipe Filters">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        cuisines: [],
+        time: [0, 180],
+        servings: [1, 8],
+        difficulty: '',
+        dietary: [],
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search by name or ingredients...',
+          showSearchIcon: true,
+          showClearButton: true,
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Meal Type',
+          options: [
+            { id: 'breakfast', label: 'Breakfast', count: 42 },
+            { id: 'brunch', label: 'Brunch', count: 28 },
+            { id: 'lunch', label: 'Lunch', count: 56 },
+            { id: 'dinner', label: 'Dinner', count: 84 },
+            { id: 'snack', label: 'Snack', count: 32 },
+            { id: 'dessert', label: 'Dessert', count: 38 },
+          ],
+          searchable: true,
+          searchPlaceholder: 'Search meal types...',
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'checkbox',
+          id: 'cuisines',
+          label: 'Cuisine',
+          options: [
+            { id: 'italian', label: 'Italian', count: 24 },
+            { id: 'mexican', label: 'Mexican', count: 18 },
+            { id: 'asian', label: 'Asian', count: 32 },
+            { id: 'american', label: 'American', count: 28 },
+            { id: 'mediterranean', label: 'Mediterranean', count: 16 },
+          ],
+          searchable: true,
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'range',
+          id: 'time',
+          label: 'Total Time',
+          min: 0,
+          max: 180,
+          step: 5,
+          unit: 'min',
+          showValue: true,
+          valuePosition: 'inline',
+        },
+        {
+          type: 'range',
+          id: 'servings',
+          label: 'Servings',
+          min: 1,
+          max: 12,
+          step: 1,
+          showValue: true,
+        },
+        {
+          type: 'select',
+          id: 'difficulty',
+          label: 'Difficulty Level',
+          options: [
+            { value: '', label: 'Any' },
+            { value: 'easy', label: 'Easy' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'hard', label: 'Hard' },
+            { value: 'expert', label: 'Expert' },
+          ],
+          placeholder: 'Select difficulty',
+        },
+        {
+          type: 'checkbox',
+          id: 'dietary',
+          label: 'Dietary Restrictions',
+          options: [
+            { id: 'vegetarian', label: 'Vegetarian', count: 48 },
+            { id: 'vegan', label: 'Vegan', count: 32 },
+            { id: 'gluten-free', label: 'Gluten-Free', count: 28 },
+            { id: 'dairy-free', label: 'Dairy-Free', count: 24 },
+            { id: 'keto', label: 'Keto', count: 18 },
+          ],
+          showSelectAll: true,
+          showClearAll: true,
+        },
+      ];
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Filter Recipes"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+            totalResults={142}
+            showResultCount
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Collapsible (Mobile-Friendly)
+
+Collapsible panel for mobile devices.
+
+<Canvas>
+  <Story name="Collapsible">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        price: [0, 100],
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'cat1', label: 'Category 1', count: 12 },
+            { id: 'cat2', label: 'Category 2', count: 8 },
+          ],
+        },
+        {
+          type: 'range',
+          id: 'price',
+          label: 'Price Range',
+          min: 0,
+          max: 100,
+          unit: '$',
+          showValue: true,
+        },
+      ];
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Filters"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+            collapsible
+            defaultCollapsed={false}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Compact Variant
+
+Smaller variant for tight spaces or sidebars.
+
+<Canvas>
+  <Story name="Compact Variant">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        tags: [],
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search...',
+        },
+        {
+          type: 'checkbox',
+          id: 'tags',
+          label: 'Tags',
+          options: [
+            { id: 'new', label: 'New', count: 5 },
+            { id: 'featured', label: 'Featured', count: 8 },
+            { id: 'sale', label: 'On Sale', count: 12 },
+          ],
+        },
+      ];
+
+      return (
+        <div className="max-w-xs">
+          <FilterPanel
+            title="Quick Filters"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+            variant="compact"
+            size="sm"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## With Result Count
+
+Shows the number of filtered results.
+
+<Canvas>
+  <Story name="With Result Count">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        price: [0, 500],
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search products...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'electronics', label: 'Electronics', count: 24 },
+            { id: 'clothing', label: 'Clothing', count: 18 },
+            { id: 'home', label: 'Home & Garden', count: 32 },
+          ],
+        },
+        {
+          type: 'range',
+          id: 'price',
+          label: 'Price',
+          min: 0,
+          max: 500,
+          unit: '$',
+          showValue: true,
+        },
+      ];
+
+      // Calculate mock result count
+      const baseCount = 74;
+      const searchPenalty = filterValues.search ? 20 : 0;
+      const categoryPenalty = filterValues.categories.length * 10;
+      const pricePenalty = Math.floor((500 - (filterValues.price[1] - filterValues.price[0])) / 10);
+      const resultCount = Math.max(0, baseCount - searchPenalty - categoryPenalty - pricePenalty);
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Product Filters"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+            totalResults={resultCount}
+            showResultCount
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Real-time vs Apply Button
+
+Comparison of filter modes.
+
+<Canvas>
+  <Story name="Real-time vs Apply">
+    {() => {
+      const [realtimeValues, setRealtimeValues] = React.useState({
+        search: '',
+        categories: [],
+      });
+
+      const [applyValues, setApplyValues] = React.useState({
+        search: '',
+        categories: [],
+      });
+
+      const [appliedValues, setAppliedValues] = React.useState(applyValues);
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'cat1', label: 'Category 1' },
+            { id: 'cat2', label: 'Category 2' },
+          ],
+        },
+      ];
+
+      return (
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <h3 className="mb-2 text-sm font-medium">Real-time Filtering</h3>
+            <p className="mb-4 text-xs text-gray-600">
+              Results update as you change filters
+            </p>
+            <FilterPanel
+              title="Real-time"
+              filters={filters}
+              values={realtimeValues}
+              onValuesChange={setRealtimeValues}
+              showApplyButton={false}
+              size="sm"
+            />
+          </div>
+          <div>
+            <h3 className="mb-2 text-sm font-medium">Apply Button Mode</h3>
+            <p className="mb-4 text-xs text-gray-600">
+              Click Apply to update results
+            </p>
+            <FilterPanel
+              title="With Apply"
+              filters={filters}
+              values={applyValues}
+              onValuesChange={setApplyValues}
+              showApplyButton
+              onApply={setAppliedValues}
+              size="sm"
+            />
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## All Filter Types
+
+Showcasing all supported filter types.
+
+<Canvas>
+  <Story name="All Filter Types">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        checkboxes: [],
+        range: [0, 100],
+        select: '',
+        custom: 'custom value',
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          label: 'Search Filter',
+          placeholder: 'Type to search...',
+          description: 'Full-text search with debouncing',
+        },
+        {
+          type: 'checkbox',
+          id: 'checkboxes',
+          label: 'Checkbox Filter',
+          description: 'Multi-select with search',
+          options: [
+            { id: 'option1', label: 'Option 1', count: 10 },
+            { id: 'option2', label: 'Option 2', count: 15 },
+            { id: 'option3', label: 'Option 3', count: 8 },
+          ],
+          searchable: true,
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'range',
+          id: 'range',
+          label: 'Range Filter',
+          description: 'Slider for numeric ranges',
+          min: 0,
+          max: 100,
+          step: 5,
+          showValue: true,
+          showTicks: true,
+        },
+        {
+          type: 'select',
+          id: 'select',
+          label: 'Select Filter',
+          description: 'Single-choice dropdown',
+          options: [
+            { value: 'option1', label: 'Option 1' },
+            { value: 'option2', label: 'Option 2' },
+            { value: 'option3', label: 'Option 3' },
+          ],
+          placeholder: 'Choose an option',
+        },
+        {
+          type: 'custom',
+          id: 'custom',
+          label: 'Custom Filter',
+          description: 'Custom render function for flexibility',
+          render: ({ value, onChange }) => (
+            <input
+              type="text"
+              value={value as string}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              placeholder="Custom input"
+            />
+          ),
+        },
+      ];
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="All Filter Types"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Disabled State
+
+All filters disabled.
+
+<Canvas>
+  <Story name="Disabled State">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        price: [0, 100],
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search...',
+          disabled: true,
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'cat1', label: 'Category 1' },
+            { id: 'cat2', label: 'Category 2' },
+          ],
+          disabled: true,
+        },
+        {
+          type: 'range',
+          id: 'price',
+          label: 'Price',
+          min: 0,
+          max: 100,
+          disabled: true,
+        },
+      ];
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Disabled Filters"
+            filters={filters}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Empty State
+
+No filters configured.
+
+<Canvas>
+  <Story name="Empty State">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({});
+
+      return (
+        <div className="max-w-sm">
+          <FilterPanel
+            title="Empty Filters"
+            filters={[]}
+            values={filterValues}
+            onValuesChange={setFilterValues}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## In Context
+
+Filter panel integrated into a browse page layout.
+
+<Canvas>
+  <Story name="In Context">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        price: [0, 200],
+        rating: '',
+      });
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search products...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'electronics', label: 'Electronics', count: 24 },
+            { id: 'clothing', label: 'Clothing', count: 18 },
+            { id: 'home', label: 'Home', count: 32 },
+          ],
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'range',
+          id: 'price',
+          label: 'Price Range',
+          min: 0,
+          max: 200,
+          unit: '$',
+          showValue: true,
+        },
+        {
+          type: 'select',
+          id: 'rating',
+          label: 'Minimum Rating',
+          options: [
+            { value: '', label: 'Any' },
+            { value: '4', label: '4+ Stars' },
+            { value: '3', label: '3+ Stars' },
+          ],
+        },
+      ];
+
+      return (
+        <div className="grid grid-cols-4 gap-6">
+          {/* Sidebar with filters */}
+          <div className="col-span-1">
+            <FilterPanel
+              title="Filters"
+              filters={filters}
+              values={filterValues}
+              onValuesChange={setFilterValues}
+              totalResults={68}
+              showResultCount
+            />
+          </div>
+
+          {/* Main content area */}
+          <div className="col-span-3">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold">Products</h2>
+              <p className="text-sm text-gray-600">
+                Showing 68 results
+              </p>
+            </div>
+
+            {/* Mock product grid */}
+            <div className="grid grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Card key={i}>
+                  <CardContent className="p-4">
+                    <div className="mb-2 h-32 rounded bg-gray-200" />
+                    <h3 className="font-medium">Product {i}</h3>
+                    <p className="text-sm text-gray-600">$99.99</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Interactive Playground
+
+Full configurable demo with all options.
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: '',
+        categories: [],
+        price: [0, 500],
+        rating: '',
+      });
+
+      const [variant, setVariant] = React.useState('default');
+      const [size, setSize] = React.useState('md');
+      const [collapsible, setCollapsible] = React.useState(true);
+      const [showHeader, setShowHeader] = React.useState(true);
+      const [showFooter, setShowFooter] = React.useState(true);
+      const [showApplyButton, setShowApplyButton] = React.useState(false);
+      const [showResultCount, setShowResultCount] = React.useState(true);
+
+      const filters = [
+        {
+          type: 'search',
+          id: 'search',
+          placeholder: 'Search...',
+        },
+        {
+          type: 'checkbox',
+          id: 'categories',
+          label: 'Categories',
+          options: [
+            { id: 'cat1', label: 'Category 1', count: 12 },
+            { id: 'cat2', label: 'Category 2', count: 8 },
+            { id: 'cat3', label: 'Category 3', count: 15 },
+          ],
+          showSelectAll: true,
+          showClearAll: true,
+        },
+        {
+          type: 'range',
+          id: 'price',
+          label: 'Price',
+          min: 0,
+          max: 500,
+          unit: '$',
+          showValue: true,
+        },
+        {
+          type: 'select',
+          id: 'rating',
+          label: 'Rating',
+          options: [
+            { value: '', label: 'Any' },
+            { value: '5', label: '5 Stars' },
+            { value: '4', label: '4+ Stars' },
+            { value: '3', label: '3+ Stars' },
+          ],
+        },
+      ];
+
+      return (
+        <div className="space-y-6">
+          {/* Controls */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Variant</label>
+                  <select
+                    value={variant}
+                    onChange={(e) => setVariant(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="default">Default</option>
+                    <option value="compact">Compact</option>
+                    <option value="full">Full</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Size</label>
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={collapsible}
+                    onChange={(e) => setCollapsible(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Collapsible</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showHeader}
+                    onChange={(e) => setShowHeader(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Header</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showFooter}
+                    onChange={(e) => setShowFooter(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Footer</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showApplyButton}
+                    onChange={(e) => setShowApplyButton(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Apply Button</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showResultCount}
+                    onChange={(e) => setShowResultCount(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Result Count</span>
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Filter Panel Preview */}
+          <div className="max-w-sm">
+            <FilterPanel
+              title="Interactive Filters"
+              filters={filters}
+              values={filterValues}
+              onValuesChange={setFilterValues}
+              variant={variant}
+              size={size}
+              collapsible={collapsible}
+              showHeader={showHeader}
+              showFooter={showFooter}
+              showApplyButton={showApplyButton}
+              showResultCount={showResultCount}
+              totalResults={35}
+            />
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={FilterPanel} />
+
+## Filter Configuration
+
+### Search Filter
+
+```typescript
+{
+  type: 'search',
+  id: 'search',
+  placeholder: 'Search...',
+  showSearchIcon: true,
+  showClearButton: true,
+  debounceDelay: 300,
+  loading: false,
+  disabled: false,
+}
+```
+
+### Checkbox Filter
+
+```typescript
+{
+  type: 'checkbox',
+  id: 'categories',
+  label: 'Categories',
+  description: 'Filter by category',
+  options: [
+    { id: 'cat1', label: 'Category 1', count: 10 },
+  ],
+  searchable: true,
+  searchPlaceholder: 'Search categories...',
+  showSelectAll: true,
+  showClearAll: true,
+  maxSelections: 5,
+  layout: 'vertical',
+}
+```
+
+### Range Filter
+
+```typescript
+{
+  type: 'range',
+  id: 'price',
+  label: 'Price Range',
+  min: 0,
+  max: 1000,
+  step: 10,
+  unit: '$',
+  showValue: true,
+  valuePosition: 'inline',
+  showTicks: false,
+  formatValue: (value) => `$${value}`,
+}
+```
+
+### Select Filter
+
+```typescript
+{
+  type: 'select',
+  id: 'sort',
+  label: 'Sort By',
+  options: [
+    { value: 'newest', label: 'Newest' },
+  ],
+  placeholder: 'Select...',
+  defaultValue: 'newest',
+  required: false,
+}
+```
+
+### Custom Filter
+
+```typescript
+{
+  type: 'custom',
+  id: 'custom',
+  label: 'Custom Filter',
+  render: ({ value, onChange, disabled }) => (
+    <YourCustomComponent
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+    />
+  ),
+}
+```
+
+## Integration Pattern
+
+```typescript
+// Define filters
+const filters: FilterConfig[] = [
+  {
+    type: 'search',
+    id: 'search',
+    placeholder: 'Search recipes...',
+  },
+  {
+    type: 'checkbox',
+    id: 'categories',
+    label: 'Categories',
+    options: recipeCategories.map(cat => ({
+      id: cat.id,
+      label: cat.name,
+      count: cat.recipeCount,
+    })),
+    searchable: true,
+    showSelectAll: true,
+  },
+  {
+    type: 'range',
+    id: 'cookTime',
+    label: 'Cook Time',
+    min: 0,
+    max: 180,
+    unit: 'min',
+  },
+];
+
+// Manage filter state
+const [filterValues, setFilterValues] = useState<FilterValues>({
+  search: '',
+  categories: [],
+  cookTime: [0, 180],
+});
+
+// Use in component
+<FilterPanel
+  title="Filter Recipes"
+  filters={filters}
+  values={filterValues}
+  onValuesChange={setFilterValues}
+  totalResults={filteredRecipes.length}
+  showResultCount
+/>
+```
+
+## Accessibility Features
+
+### Keyboard Navigation
+
+- **Tab**: Navigate between filter sections and controls
+- **Enter/Space**: Expand/collapse accordion sections
+- **Arrow Keys**: Navigate within select dropdowns and sliders
+- **Escape**: Close open dropdowns
+
+### Screen Reader Support
+
+- ARIA region role for the entire panel
+- ARIA labels for all interactive elements
+- ARIA live region for result count updates
+- Proper button roles and states
+- Screen reader announcements for filter changes
+
+### Focus Management
+
+- Logical tab order through all controls
+- Focus visible indicators
+- No keyboard traps
+- Disabled state properly communicated
+
+## Design Guidelines
+
+### When to Use
+
+- **Browse Pages**: Product listings, recipe collections, search results
+- **Data Tables**: Filter tabular data by columns
+- **Search Results**: Refine search with faceted filters
+- **Catalogs**: E-commerce product filtering
+- **Collections**: User-generated content libraries
+
+### When Not to Use
+
+- **Single Filter**: Use individual filter component instead
+- **Simple Search**: Just use SearchInput
+- **Advanced Queries**: Use query builder instead
+- **Real-time Data**: Consider performance implications
+
+### Best Practices
+
+- **Placement**: Left sidebar on desktop, drawer on mobile
+- **Filter Order**: Most important filters first
+- **Default Values**: Set sensible defaults
+- **Result Count**: Always show when filtering
+- **Clear State**: Provide easy way to reset
+- **Mobile**: Make collapsible on small screens
+- **Performance**: Debounce search, throttle range updates
+
+## Performance Considerations
+
+### Optimization Strategies
+
+- Debounced search input (300ms default)
+- Memoized filter sections
+- Virtual scrolling for long checkbox lists
+- Lazy accordion content rendering
+- Efficient value comparison
+
+### Bundle Impact
+
+- Component size: ~8KB gzipped
+- Includes dependent components
+- Tree-shakeable exports
+- No heavy dependencies
+
+## Implementation Notes
+
+- Controlled component (filter values managed by parent)
+- Supports all filter types (search, checkbox, range, select, custom)
+- Full TypeScript type safety
+- WCAG 2.1 AA compliant
+- Mobile-responsive with collapsible option
+- Composable with existing UI components
+- Compatible with React Hook Form and other form libraries

@@ -30,23 +30,23 @@ Perfect for providing users with fast access to application features and navigat
 import { CommandPalette } from '@/components/ui/command-palette';
 
 const commands = [
-  {
-    id: 'navigation',
-    label: 'Navigation',
-    commands: [
-      {
-        id: 'recipes',
-        label: 'View All Recipes',
-        description: 'Browse the complete recipe collection',
-        icon: <ChefHat className="w-4 h-4" />,
-        shortcut: ['⌘', 'R'],
-        action: () => router.push('/recipes'),
-        keywords: ['browse', 'list', 'collection'],
-      },
-      // ... more commands
-    ],
-  },
-  // ... more groups
+{
+id: 'navigation',
+label: 'Navigation',
+commands: [
+{
+id: 'recipes',
+label: 'View All Recipes',
+description: 'Browse the complete recipe collection',
+icon: <ChefHat className="w-4 h-4" />,
+shortcut: ['⌘', 'R'],
+action: () => router.push('/recipes'),
+keywords: ['browse', 'list', 'collection'],
+},
+// ... more commands
+],
+},
+// ... more groups
 ];
 
 const [open, setOpen] = useState(false);
@@ -55,54 +55,50 @@ const [open, setOpen] = useState(false);
   open={open}
   onOpenChange={setOpen}
   commands={commands}
-  onCommandSelect={(command) => command.action()}
+  onCommandSelect={command => command.action()}
   placeholder="Type a command or search..."
   showRecentCommands
   showShortcuts
   enableFuzzySearch
 />
-\`\`\`
-        `,
-      },
-    },
-  }}
-  argTypes={{
-    open: {
-      control: { type: 'boolean' },
-      description: 'Whether the command palette is open',
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'md', 'lg', 'xl'],
-      description: 'Size of the command palette modal',
-    },
-    position: {
-      control: { type: 'select' },
-      options: ['center', 'top'],
-      description: 'Position of the modal in the viewport',
-    },
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'compact', 'spotlight'],
-      description: 'Visual variant of the command palette',
-    },
-    placeholder: {
-      control: { type: 'text' },
-      description: 'Placeholder text for the search input',
-    },
-    showRecentCommands: {
-      control: { type: 'boolean' },
-      description: 'Whether to show recent commands section',
-    },
-    showShortcuts: {
-      control: { type: 'boolean' },
-      description: 'Whether to show keyboard shortcuts',
-    },
-    enableFuzzySearch: {
-      control: { type: 'boolean' },
-      description: 'Enable intelligent fuzzy search matching',
-    },
-  }}
+\`\`\` `, }, }, }} argTypes=
+{{
+  open: {
+    control: { type: 'boolean' },
+    description: 'Whether the command palette is open',
+  },
+  size: {
+    control: { type: 'select' },
+    options: ['sm', 'md', 'lg', 'xl'],
+    description: 'Size of the command palette modal',
+  },
+  position: {
+    control: { type: 'select' },
+    options: ['center', 'top'],
+    description: 'Position of the modal in the viewport',
+  },
+  variant: {
+    control: { type: 'select' },
+    options: ['default', 'compact', 'spotlight'],
+    description: 'Visual variant of the command palette',
+  },
+  placeholder: {
+    control: { type: 'text' },
+    description: 'Placeholder text for the search input',
+  },
+  showRecentCommands: {
+    control: { type: 'boolean' },
+    description: 'Whether to show recent commands section',
+  },
+  showShortcuts: {
+    control: { type: 'boolean' },
+    description: 'Whether to show keyboard shortcuts',
+  },
+  enableFuzzySearch: {
+    control: { type: 'boolean' },
+    description: 'Enable intelligent fuzzy search matching',
+  },
+}}
 />
 
 export const sampleCommands = [
@@ -115,8 +111,18 @@ export const sampleCommands = [
         label: 'View All Recipes',
         description: 'Browse the complete recipe collection',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
           </svg>
         ),
         shortcut: ['⌘', 'R'],
@@ -128,8 +134,18 @@ export const sampleCommands = [
         label: 'Meal Plans',
         description: 'Plan your weekly meals',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
         ),
         shortcut: ['⌘', 'M'],
@@ -141,8 +157,18 @@ export const sampleCommands = [
         label: 'Shopping List',
         description: 'Manage your grocery shopping',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6.5-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6.5-5v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
+            />
           </svg>
         ),
         shortcut: ['⌘', 'S'],
@@ -160,8 +186,18 @@ export const sampleCommands = [
         label: 'Create New Recipe',
         description: 'Start creating a new recipe',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
           </svg>
         ),
         shortcut: ['⌘', 'N'],
@@ -173,8 +209,18 @@ export const sampleCommands = [
         label: 'Import Recipe',
         description: 'Import recipe from URL or file',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+            />
           </svg>
         ),
         shortcut: ['⌘', 'I'],
@@ -186,8 +232,18 @@ export const sampleCommands = [
         label: 'Random Recipe',
         description: 'Discover a random recipe',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
           </svg>
         ),
         action: () => alert('Show random recipe'),
@@ -204,9 +260,24 @@ export const sampleCommands = [
         label: 'Preferences',
         description: 'Manage your app preferences',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
           </svg>
         ),
         shortcut: ['⌘', ','],
@@ -218,8 +289,18 @@ export const sampleCommands = [
         label: 'Help & Support',
         description: 'Get help and support',
         icon: (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="h-4 w-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         ),
         shortcut: ['⌘', '?'],
@@ -236,7 +317,7 @@ export const recentCommands = [
   sampleCommands[0].commands[1], // Meal Plans
 ];
 
-export const Template = (args) => <CommandPalette {...args} />;
+export const Template = args => <CommandPalette {...args} />;
 
 ## Default Command Palette
 
@@ -577,15 +658,15 @@ The component is optimized for performance:
 
 \`\`\`tsx
 useEffect(() => {
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
-      event.preventDefault();
-      setCommandPaletteOpen(true);
-    }
-  };
+const handleKeyDown = (event: KeyboardEvent) => {
+if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
+event.preventDefault();
+setCommandPaletteOpen(true);
+}
+};
 
-  document.addEventListener('keydown', handleKeyDown);
-  return () => document.removeEventListener('keydown', handleKeyDown);
+document.addEventListener('keydown', handleKeyDown);
+return () => document.removeEventListener('keydown', handleKeyDown);
 }, []);
 \`\`\`
 
@@ -595,13 +676,13 @@ useEffect(() => {
 const [recentCommands, setRecentCommands] = useState<Command[]>([]);
 
 const handleCommandSelect = (command: Command) => {
-  // Execute command
-  command.action();
+// Execute command
+command.action();
 
-  // Track as recent (remove duplicates, limit to 5)
-  setRecentCommands(prev => {
-    const filtered = prev.filter(c => c.id !== command.id);
-    return [command, ...filtered].slice(0, 5);
-  });
+// Track as recent (remove duplicates, limit to 5)
+setRecentCommands(prev => {
+const filtered = prev.filter(c => c.id !== command.id);
+return [command, ...filtered].slice(0, 5);
+});
 };
 \`\`\`

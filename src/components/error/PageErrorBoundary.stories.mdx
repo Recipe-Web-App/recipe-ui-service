@@ -48,25 +48,25 @@ A specialized error boundary for handling full-page errors with HTTP status awar
 - Enable analytics tracking in production
 - Use auto-retry for transient errors only
 - Provide clear recovery actions
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
   argTypes={{
-    homeUrl: {
-      control: 'text',
-      description: 'URL to navigate for "Go Home" action',
-    },
-    enableSeo: {
-      control: 'boolean',
-      description: 'Enable SEO meta tags for error pages',
-    },
-    enableAnalytics: {
-      control: 'boolean',
-      description: 'Enable analytics tracking',
-    },
-  }}
-/>
+      homeUrl: {
+        control: 'text',
+        description: 'URL to navigate for "Go Home" action',
+      },
+      enableSeo: {
+        control: 'boolean',
+        description: 'Enable SEO meta tags for error pages',
+      },
+      enableAnalytics: {
+        control: 'boolean',
+        description: 'Enable analytics tracking',
+      },
+    }}
+  />
 
 # PageErrorBoundary
 
@@ -133,6 +133,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -158,6 +159,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -184,6 +186,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -212,6 +215,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -239,6 +243,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -266,6 +271,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -308,6 +314,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -338,6 +345,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -388,6 +396,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </PageErrorBoundary>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -430,12 +439,14 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
 ## Best Practices
 
 ### Do&apos;s
+
 - ✅ Use page error boundaries at the page/route level
 - ✅ Configure proper home URL and contact options
 - ✅ Enable SEO meta tags for better search engine handling
@@ -445,6 +456,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 - ✅ Test all error states before deployment
 
 ### Don&apos;ts
+
 - ❌ Don&apos;t use page error boundaries for component-level errors
 - ❌ Don&apos;t show detailed error information in production
 - ❌ Don&apos;t enable auto-retry for all error types
@@ -472,6 +484,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 </PageErrorBoundary>
 
 // With SEO and recovery options
+
 <PageErrorBoundary
   config={{
     homeUrl: '/',
@@ -485,6 +498,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 </PageErrorBoundary>
 
 // With auto-retry for transient errors
+
 <PageErrorBoundary
   config={{
     homeUrl: '/',
@@ -497,6 +511,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 </PageErrorBoundary>
 
 // With custom recovery actions
+
 <PageErrorBoundary
   config={{
     homeUrl: '/',
@@ -518,6 +533,7 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 </PageErrorBoundary>
 
 // Maintenance mode
+
 <PageErrorBoundary
   config={{
     homeUrl: '/',
@@ -528,5 +544,4 @@ A full-page error boundary with HTTP status awareness and intelligent recovery.
 >
   <YourPageContent />
 </PageErrorBoundary>
-`}
-/>
+`} />

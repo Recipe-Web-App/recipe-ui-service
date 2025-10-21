@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   RadioGroup,
   RadioGroupRoot,
@@ -70,26 +76,10 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
       ];
       return (
         <div className="space-y-4">
-          <RadioGroup
-            options={[sizeOptions[0]]}
-            defaultValue="sm"
-            size="sm"
-          />
-          <RadioGroup
-            options={[sizeOptions[1]]}
-            defaultValue="md"
-            size="md"
-          />
-          <RadioGroup
-            options={[sizeOptions[2]]}
-            defaultValue="lg"
-            size="lg"
-          />
-          <RadioGroup
-            options={[sizeOptions[3]]}
-            defaultValue="xl"
-            size="xl"
-          />
+          <RadioGroup options={[sizeOptions[0]]} defaultValue="sm" size="sm" />
+          <RadioGroup options={[sizeOptions[1]]} defaultValue="md" size="md" />
+          <RadioGroup options={[sizeOptions[2]]} defaultValue="lg" size="lg" />
+          <RadioGroup options={[sizeOptions[3]]} defaultValue="xl" size="xl" />
         </div>
       );
     }}
@@ -111,12 +101,36 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
       ];
       return (
         <div className="space-y-4">
-          <RadioGroup options={[variantOptions[0]]} defaultValue="default" variant="default" />
-          <RadioGroup options={[variantOptions[1]]} defaultValue="success" variant="success" />
-          <RadioGroup options={[variantOptions[2]]} defaultValue="warning" variant="warning" />
-          <RadioGroup options={[variantOptions[3]]} defaultValue="danger" variant="danger" />
-          <RadioGroup options={[variantOptions[4]]} defaultValue="info" variant="info" />
-          <RadioGroup options={[variantOptions[5]]} defaultValue="subtle" variant="subtle" />
+          <RadioGroup
+            options={[variantOptions[0]]}
+            defaultValue="default"
+            variant="default"
+          />
+          <RadioGroup
+            options={[variantOptions[1]]}
+            defaultValue="success"
+            variant="success"
+          />
+          <RadioGroup
+            options={[variantOptions[2]]}
+            defaultValue="warning"
+            variant="warning"
+          />
+          <RadioGroup
+            options={[variantOptions[3]]}
+            defaultValue="danger"
+            variant="danger"
+          />
+          <RadioGroup
+            options={[variantOptions[4]]}
+            defaultValue="info"
+            variant="info"
+          />
+          <RadioGroup
+            options={[variantOptions[5]]}
+            defaultValue="subtle"
+            variant="subtle"
+          />
         </div>
       );
     }}
@@ -254,6 +268,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -264,7 +279,12 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
     {() => {
       const stateOptions = [
         { id: 'enabled', value: 'enabled', label: 'Enabled option' },
-        { id: 'disabled', value: 'disabled', label: 'Disabled option', disabled: true },
+        {
+          id: 'disabled',
+          value: 'disabled',
+          label: 'Disabled option',
+          disabled: true,
+        },
       ];
       return (
         <div className="space-y-4">
@@ -274,12 +294,16 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
             orientation="vertical"
           />
           <RadioGroup
-            options={[{ id: 'required', value: 'required', label: 'Required field' }]}
+            options={[
+              { id: 'required', value: 'required', label: 'Required field' },
+            ]}
             required
             error="This field is required"
           />
           <RadioGroup
-            options={[{ id: 'helper', value: 'helper', label: 'With helper text' }]}
+            options={[
+              { id: 'helper', value: 'helper', label: 'With helper text' },
+            ]}
             helperText="Choose your preferred option"
           />
         </div>
@@ -329,6 +353,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -416,6 +441,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -469,6 +495,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -544,6 +571,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </RadioGroupRoot>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -594,6 +622,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -604,6 +633,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
 ## Usage Guidelines
 
 ### When to use
+
 - For exclusive selection from a list of options
 - When users need to choose one option from 2-7 choices
 - In forms for single-choice questions
@@ -611,6 +641,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
 - In recipe preference selection
 
 ### Best practices
+
 - Always provide clear labels
 - Use descriptions for complex options
 - Group related options together
@@ -622,6 +653,7 @@ Exclusive selection controls for recipe preferences and form inputs with compreh
 - Use Recipe Radio Groups for domain-specific filtering
 
 ### Accessibility
+
 - Full keyboard navigation support
 - Screen reader compatible
 - Proper ARIA attributes

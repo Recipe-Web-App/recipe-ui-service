@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Select,
   SelectContent,
@@ -35,33 +41,34 @@ Perfect for category selection, filters, preferences, and form inputs in recipe 
 ## Usage
 
 Use Select for:
+
 - Recipe category selection (Breakfast, Lunch, Dinner, etc.)
 - Difficulty level selection (Easy, Medium, Hard)
 - Cooking time filters (15 min, 30 min, 1 hour)
 - Dietary restriction filters (Vegetarian, Vegan, Gluten-Free)
 - Sort preferences (Newest, Popular, Alphabetical)
 - User preferences and settings
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'outline', 'ghost', 'filled'],
-      description: 'Visual style variant'
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['sm', 'default', 'lg'],
-      description: 'Size of the select trigger'
-    },
-    disabled: {
-      control: { type: 'boolean' },
-      description: 'Whether the select is disabled'
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'outline', 'ghost', 'filled'],
+        description: 'Visual style variant'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'default', 'lg'],
+        description: 'Size of the select trigger'
+      },
+      disabled: {
+        control: { type: 'boolean' },
+        description: 'Whether the select is disabled'
+      }
+    }}
+  />
 
 # Select
 
@@ -94,7 +101,7 @@ Use Select for:
   <Story name="Variants">
     {() => (
       <div className="flex flex-col gap-4">
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-20 text-sm font-medium">Default:</label>
           <Select>
             <SelectTrigger variant="default" className="w-[180px]">
@@ -106,7 +113,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-20 text-sm font-medium">Outline:</label>
           <Select>
             <SelectTrigger variant="outline" className="w-[180px]">
@@ -118,7 +125,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-20 text-sm font-medium">Ghost:</label>
           <Select>
             <SelectTrigger variant="ghost" className="w-[180px]">
@@ -130,7 +137,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-20 text-sm font-medium">Filled:</label>
           <Select>
             <SelectTrigger variant="filled" className="w-[180px]">
@@ -153,7 +160,7 @@ Use Select for:
   <Story name="Sizes">
     {() => (
       <div className="flex flex-col gap-4">
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-16 text-sm font-medium">Small:</label>
           <Select>
             <SelectTrigger size="sm" className="w-[180px]">
@@ -165,7 +172,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-16 text-sm font-medium">Default:</label>
           <Select>
             <SelectTrigger size="default" className="w-[180px]">
@@ -177,7 +184,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-16 text-sm font-medium">Large:</label>
           <Select>
             <SelectTrigger size="lg" className="w-[180px]">
@@ -200,7 +207,7 @@ Use Select for:
   <Story name="Recipe Categories">
     {() => (
       <div className="flex flex-col gap-4">
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-24 text-sm font-medium">Category:</label>
           <Select>
             <SelectTrigger className="w-[200px]">
@@ -222,7 +229,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-24 text-sm font-medium">Difficulty:</label>
           <Select>
             <SelectTrigger className="w-[200px]">
@@ -236,7 +243,7 @@ Use Select for:
             </SelectContent>
           </Select>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <label className="w-24 text-sm font-medium">Cook Time:</label>
           <Select>
             <SelectTrigger className="w-[200px]">
@@ -355,6 +362,7 @@ Use Select for:
         </SelectField>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -420,6 +428,7 @@ Use Select for:
         </SelectField>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -429,22 +438,22 @@ Use Select for:
 
 ### SelectTrigger Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| variant | 'default' \| 'outline' \| 'ghost' \| 'filled' | 'default' | Visual style variant |
-| size | 'sm' \| 'default' \| 'lg' | 'default' | Size of the trigger |
-| error | boolean | false | Whether to show error state |
+| Prop    | Type                                          | Default   | Description                 |
+| ------- | --------------------------------------------- | --------- | --------------------------- |
+| variant | 'default' \| 'outline' \| 'ghost' \| 'filled' | 'default' | Visual style variant        |
+| size    | 'sm' \| 'default' \| 'lg'                     | 'default' | Size of the trigger         |
+| error   | boolean                                       | false     | Whether to show error state |
 
 ### SelectField Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| label | string | - | Label text for the field |
-| error | string | - | Error message to display |
-| required | boolean | false | Whether the field is required |
-| placeholder | string | - | Placeholder text |
-| triggerProps | SelectTriggerProps | - | Props to pass to trigger |
-| contentProps | SelectContentProps | - | Props to pass to content |
+| Prop         | Type               | Default | Description                   |
+| ------------ | ------------------ | ------- | ----------------------------- |
+| label        | string             | -       | Label text for the field      |
+| error        | string             | -       | Error message to display      |
+| required     | boolean            | false   | Whether the field is required |
+| placeholder  | string             | -       | Placeholder text              |
+| triggerProps | SelectTriggerProps | -       | Props to pass to trigger      |
+| contentProps | SelectContentProps | -       | Props to pass to content      |
 
 ## Accessibility
 

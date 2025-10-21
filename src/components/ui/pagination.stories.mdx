@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Pagination } from './pagination';
 
 <Meta
@@ -34,80 +40,81 @@ with customizable display options, accessibility features, and responsive design
 ## Usage
 
 Use Pagination for:
+
 - Table and list pagination
 - Search result navigation
 - Content browsing interfaces
 - Data grid controls
 - Blog post navigation
 - Product listing pagination
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    currentPage: {
-      control: { type: 'number', min: 1 },
-      description: 'Current active page number',
-      defaultValue: 1
-    },
-    totalPages: {
-      control: { type: 'number', min: 1 },
-      description: 'Total number of pages',
-      defaultValue: 10
-    },
-    pageSize: {
-      control: { type: 'number', min: 1 },
-      description: 'Number of items per page',
-      defaultValue: 10
-    },
-    totalItems: {
-      control: { type: 'number', min: 0 },
-      description: 'Total number of items',
-      defaultValue: 100
-    },
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'outline', 'ghost'],
-      description: 'Visual variant',
-      defaultValue: 'default'
-    },
-    showFirstLast: {
-      control: { type: 'boolean' },
-      description: 'Show first and last page buttons',
-      defaultValue: true
-    },
-    showPrevNext: {
-      control: { type: 'boolean' },
-      description: 'Show previous and next buttons',
-      defaultValue: true
-    },
-    showPageNumbers: {
-      control: { type: 'boolean' },
-      description: 'Show individual page number buttons',
-      defaultValue: true
-    },
-    showPageInfo: {
-      control: { type: 'boolean' },
-      description: 'Show page information text',
-      defaultValue: true
-    },
-    showPageSizeSelector: {
-      control: { type: 'boolean' },
-      description: 'Show page size selector',
-      defaultValue: false
-    },
-    showPageJump: {
-      control: { type: 'boolean' },
-      description: 'Show page jump input',
-      defaultValue: false
-    },
-    maxPageButtons: {
-      control: { type: 'number', min: 3, max: 15 },
-      description: 'Maximum number of page buttons to show',
-      defaultValue: 7
-    }
-  }}
-/>
+      currentPage: {
+        control: { type: 'number', min: 1 },
+        description: 'Current active page number',
+        defaultValue: 1
+      },
+      totalPages: {
+        control: { type: 'number', min: 1 },
+        description: 'Total number of pages',
+        defaultValue: 10
+      },
+      pageSize: {
+        control: { type: 'number', min: 1 },
+        description: 'Number of items per page',
+        defaultValue: 10
+      },
+      totalItems: {
+        control: { type: 'number', min: 0 },
+        description: 'Total number of items',
+        defaultValue: 100
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'outline', 'ghost'],
+        description: 'Visual variant',
+        defaultValue: 'default'
+      },
+      showFirstLast: {
+        control: { type: 'boolean' },
+        description: 'Show first and last page buttons',
+        defaultValue: true
+      },
+      showPrevNext: {
+        control: { type: 'boolean' },
+        description: 'Show previous and next buttons',
+        defaultValue: true
+      },
+      showPageNumbers: {
+        control: { type: 'boolean' },
+        description: 'Show individual page number buttons',
+        defaultValue: true
+      },
+      showPageInfo: {
+        control: { type: 'boolean' },
+        description: 'Show page information text',
+        defaultValue: true
+      },
+      showPageSizeSelector: {
+        control: { type: 'boolean' },
+        description: 'Show page size selector',
+        defaultValue: false
+      },
+      showPageJump: {
+        control: { type: 'boolean' },
+        description: 'Show page jump input',
+        defaultValue: false
+      },
+      maxPageButtons: {
+        control: { type: 'number', min: 3, max: 15 },
+        description: 'Maximum number of page buttons to show',
+        defaultValue: 7
+      }
+    }}
+  />
 
 # Pagination
 
@@ -128,6 +135,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -151,6 +159,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -195,6 +204,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -226,6 +236,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -248,6 +259,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -281,6 +293,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -334,6 +347,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -387,6 +401,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -445,6 +460,7 @@ Use Pagination for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -505,6 +521,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -551,6 +568,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -588,6 +606,7 @@ Use Pagination for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -621,6 +640,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -639,6 +659,7 @@ Use Pagination for:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -651,15 +672,19 @@ Use Pagination for:
 The pagination component uses an intelligent algorithm to display page numbers:
 
 ### Small datasets (≤ maxPageButtons)
+
 Shows all page numbers: `1 2 3 4 5`
 
 ### Large datasets (> maxPageButtons)
+
 Uses ellipsis to indicate hidden pages:
+
 - `1 2 3 4 5 ... 20` (near beginning)
 - `1 ... 8 9 10 11 12 ... 20` (middle)
 - `1 ... 16 17 18 19 20` (near end)
 
 ### Responsive considerations
+
 - Mobile: Reduce `maxPageButtons` to 3-5
 - Tablet: Use 5-7 page buttons
 - Desktop: Use 7-10 page buttons for optimal UX
@@ -667,18 +692,21 @@ Uses ellipsis to indicate hidden pages:
 ## Accessibility Features
 
 ### Keyboard Navigation
+
 - **Tab**: Navigate through pagination controls
 - **Enter/Space**: Activate buttons and links
 - **Arrow Keys**: Navigate between page numbers
 - **Home/End**: Jump to first/last page
 
 ### Screen Reader Support
+
 - Proper ARIA labels for all navigation elements
 - Current page announced as "current page"
 - Page ranges and totals clearly communicated
 - Navigation landmarks for page structure
 
 ### Focus Management
+
 - Clear focus indicators on all interactive elements
 - Logical tab order through pagination controls
 - Focus restoration after page changes
@@ -687,18 +715,21 @@ Uses ellipsis to indicate hidden pages:
 ## Design Guidelines
 
 ### When to Use
+
 - **Tables**: Paginate large datasets in tables
 - **Search Results**: Break up search results into manageable chunks
 - **Content Lists**: Navigate through blog posts, articles, products
 - **Data Grids**: Handle large amounts of structured data
 
 ### When Not to Use
+
 - **Small Datasets**: Avoid pagination for < 25 items
 - **Infinite Scroll**: Consider infinite scroll for social feeds
 - **Real-time Data**: Use filters instead of pagination
 - **Mobile-first**: Consider "Load More" buttons for mobile
 
 ### Page Size Guidelines
+
 - **Default**: 10-25 items per page
 - **Tables**: 10-50 rows depending on complexity
 - **Cards**: 12-24 cards per page
@@ -707,12 +738,14 @@ Uses ellipsis to indicate hidden pages:
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Memoize page calculations to avoid recalculation
 - Lazy load pagination controls for large datasets
 - Debounce page size changes to prevent excessive API calls
 - Use URL state for shareable pagination state
 
 ### Bundle Impact
+
 - Minimal JavaScript for basic pagination
 - Tree-shakeable components and utilities
 - Efficient re-render patterns

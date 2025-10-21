@@ -411,6 +411,22 @@ export const componentsDemoSubNavigation: NavItem[] = [
     },
   },
   {
+    id: 'components-browse-grid',
+    label: 'Browse Grid',
+    href: '/components-demo/browse-grid',
+    metadata: {
+      sortOrder: 65,
+    },
+  },
+  {
+    id: 'components-browse-list',
+    label: 'Browse List',
+    href: '/components-demo/browse-list',
+    metadata: {
+      sortOrder: 66,
+    },
+  },
+  {
     id: 'components-button',
     label: 'Button',
     href: '/components-demo/button',
@@ -792,6 +808,22 @@ export const componentsDemoSubNavigation: NavItem[] = [
     href: '/components-demo/tooltip',
     metadata: {
       sortOrder: 480,
+    },
+  },
+  {
+    id: 'components-view-toggle',
+    label: 'View Toggle',
+    href: '/components-demo/view-toggle',
+    metadata: {
+      sortOrder: 485,
+    },
+  },
+  {
+    id: 'components-filter-panel',
+    label: 'Filter Panel',
+    href: '/components-demo/filter-panel',
+    metadata: {
+      sortOrder: 487,
     },
   },
   {

@@ -24,10 +24,22 @@ The AvatarGroup component displays multiple user avatars in various layouts, per
   <Story name="Default">
     {() => {
       const users = [
-        { id: '1', name: 'John Doe', avatar: 'https://via.placeholder.com/150' },
-        { id: '2', name: 'Jane Smith', avatar: 'https://via.placeholder.com/150' },
+        {
+          id: '1',
+          name: 'John Doe',
+          avatar: 'https://via.placeholder.com/150',
+        },
+        {
+          id: '2',
+          name: 'Jane Smith',
+          avatar: 'https://via.placeholder.com/150',
+        },
         { id: '3', name: 'Bob Johnson' },
-        { id: '4', name: 'Alice Brown', avatar: 'https://via.placeholder.com/150' },
+        {
+          id: '4',
+          name: 'Alice Brown',
+          avatar: 'https://via.placeholder.com/150',
+        },
         { id: '5', name: 'Charlie Wilson' },
       ];
       return <AvatarGroup users={users} />;
@@ -161,7 +173,7 @@ The AvatarGroup component displays multiple user avatars in various layouts, per
             <AvatarGroup
               users={users}
               animated
-              onUserClick={(user) => alert(`Clicked: ${user.name}`)}
+              onUserClick={user => alert(`Clicked: ${user.name}`)}
               onOverflowClick={() => alert('Show all users')}
             />
           </div>
@@ -193,7 +205,7 @@ The AvatarGroup component displays multiple user avatars in various layouts, per
             users={recipeCollaborators}
             context={{
               type: 'recipe',
-              title: 'Grandma\'s Secret Recipe',
+              title: "Grandma's Secret Recipe",
               isPublic: false,
             }}
           />
@@ -278,7 +290,7 @@ The AvatarGroup component displays multiple user avatars in various layouts, per
         <AvatarGroup
           users={users}
           max={3}
-          renderOverflow={(count) => (
+          renderOverflow={count => (
             <button className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-sm font-medium text-white hover:bg-blue-600">
               +{count}
             </button>

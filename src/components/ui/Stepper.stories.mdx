@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Stepper,
   StepperItem,
@@ -19,7 +25,8 @@ import {
   parameters={{
     docs: {
       description: {
-        component: 'A comprehensive stepper component system for creating multi-step workflows, recipe creation wizards, and cooking mode interfaces with built-in state management and accessibility.',
+        component:
+          'A comprehensive stepper component system for creating multi-step workflows, recipe creation wizards, and cooking mode interfaces with built-in state management and accessibility.',
       },
     },
   }}
@@ -92,6 +99,7 @@ import {
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -122,6 +130,7 @@ The stepper supports both horizontal and vertical orientations:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -162,6 +171,7 @@ Different visual styles for various contexts:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -189,6 +199,7 @@ Steps can have different states to indicate progress:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -249,6 +260,7 @@ Specialized stepper for recipe creation workflows:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -296,6 +308,7 @@ Interactive stepper for cooking mode with timers:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -339,6 +352,7 @@ Standalone cooking timer component:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -388,6 +402,7 @@ Allow users to jump between steps:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -443,6 +458,7 @@ Stepper with step validation:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -472,6 +488,7 @@ Shows step progress and completion:
         />
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -546,20 +563,19 @@ function RecipeCreationForm() {
       id: 'basic',
       title: 'Basic Info',
       content: <BasicInfoForm />,
-      validationRules: [{
-        validate: () => methods.formState.isValid,
-        errorMessage: 'Please complete all required fields',
-      }],
+      validationRules: [
+        {
+          validate: () => methods.formState.isValid,
+          errorMessage: 'Please complete all required fields',
+        },
+      ],
     },
     // ... more steps
   ];
 
   return (
     <FormProvider {...methods}>
-      <Stepper
-        steps={steps}
-        onValidateStep={(stepId) => methods.trigger()}
-      />
+      <Stepper steps={steps} onValidateStep={stepId => methods.trigger()} />
     </FormProvider>
   );
 }

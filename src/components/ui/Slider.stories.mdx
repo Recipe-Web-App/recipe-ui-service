@@ -5,7 +5,7 @@ import {
   TemperatureSlider,
   TimeSlider,
   ServingSizeSlider,
-  DifficultySlider
+  DifficultySlider,
 } from './slider';
 
 <Meta
@@ -14,72 +14,72 @@ import {
   argTypes={{
     value: {
       control: { type: 'object' },
-      description: 'The controlled value of the slider'
+      description: 'The controlled value of the slider',
     },
     defaultValue: {
       control: { type: 'object' },
-      description: 'The default value when uncontrolled'
+      description: 'The default value when uncontrolled',
     },
     min: {
       control: { type: 'number' },
-      description: 'The minimum value'
+      description: 'The minimum value',
     },
     max: {
       control: { type: 'number' },
-      description: 'The maximum value'
+      description: 'The maximum value',
     },
     step: {
       control: { type: 'number' },
-      description: 'The step increment'
+      description: 'The step increment',
     },
     orientation: {
       control: { type: 'select' },
       options: ['horizontal', 'vertical'],
-      description: 'The orientation of the slider'
+      description: 'The orientation of the slider',
     },
     size: {
       control: { type: 'select' },
       options: ['sm', 'default', 'lg'],
-      description: 'The size variant'
+      description: 'The size variant',
     },
     variant: {
       control: { type: 'select' },
       options: ['default', 'success', 'warning', 'danger', 'info'],
-      description: 'The color variant'
+      description: 'The color variant',
     },
     disabled: {
       control: { type: 'boolean' },
-      description: 'Whether the slider is disabled'
+      description: 'Whether the slider is disabled',
     },
     label: {
       control: { type: 'text' },
-      description: 'The label text'
+      description: 'The label text',
     },
     showValue: {
       control: { type: 'boolean' },
-      description: 'Whether to show the current value'
+      description: 'Whether to show the current value',
     },
     valuePosition: {
       control: { type: 'select' },
       options: ['tooltip', 'inline', 'bottom', 'floating'],
-      description: 'Where to display the value'
+      description: 'Where to display the value',
     },
     showTicks: {
       control: { type: 'boolean' },
-      description: 'Whether to show tick marks'
+      description: 'Whether to show tick marks',
     },
     showStepLabels: {
       control: { type: 'boolean' },
-      description: 'Whether to show step labels'
+      description: 'Whether to show step labels',
     },
     gradient: {
       control: { type: 'boolean' },
-      description: 'Whether to apply gradient styling'
+      description: 'Whether to apply gradient styling',
     },
     unit: {
       control: { type: 'text' },
-      description: 'The unit to display with the value'
-    }
+      description: 'The unit to display with the value',
+    },
   }}
 />
 
@@ -123,24 +123,14 @@ The Slider component provides a comprehensive set of slider variants for differe
   <Story name="Size Variants">
     {() => (
       <div className="w-80 space-y-6">
-        <Slider
-          size="sm"
-          defaultValue={[25]}
-          label="Small Slider"
-          showValue
-        />
+        <Slider size="sm" defaultValue={[25]} label="Small Slider" showValue />
         <Slider
           size="default"
           defaultValue={[50]}
           label="Default Slider"
           showValue
         />
-        <Slider
-          size="lg"
-          defaultValue={[75]}
-          label="Large Slider"
-          showValue
-        />
+        <Slider size="lg" defaultValue={[75]} label="Large Slider" showValue />
       </div>
     )}
   </Story>
@@ -170,18 +160,8 @@ The Slider component provides a comprehensive set of slider variants for differe
           label="Warning"
           showValue
         />
-        <Slider
-          variant="danger"
-          defaultValue={[80]}
-          label="Danger"
-          showValue
-        />
-        <Slider
-          variant="info"
-          defaultValue={[100]}
-          label="Info"
-          showValue
-        />
+        <Slider variant="danger" defaultValue={[80]} label="Danger" showValue />
+        <Slider variant="info" defaultValue={[100]} label="Info" showValue />
       </div>
     )}
   </Story>
@@ -414,7 +394,7 @@ The Slider component provides a comprehensive set of slider variants for differe
 <Canvas>
   <Story name="Vertical Orientation">
     {() => (
-      <div className="flex space-x-8 h-64">
+      <div className="flex h-64 space-x-8">
         <div className="flex flex-col items-center space-y-2">
           <span className="text-sm font-medium">Volume</span>
           <Slider
@@ -447,17 +427,8 @@ The Slider component provides a comprehensive set of slider variants for differe
   <Story name="States">
     {() => (
       <div className="w-80 space-y-6">
-        <Slider
-          defaultValue={[40]}
-          label="Normal State"
-          showValue
-        />
-        <Slider
-          defaultValue={[60]}
-          label="Disabled State"
-          disabled
-          showValue
-        />
+        <Slider defaultValue={[40]} label="Normal State" showValue />
+        <Slider defaultValue={[60]} label="Disabled State" disabled showValue />
       </div>
     )}
   </Story>
@@ -483,10 +454,10 @@ The Slider component provides a comprehensive set of slider variants for differe
       showTicks: false,
       showStepLabels: false,
       gradient: false,
-      unit: ''
+      unit: '',
     }}
   >
-    {(args) => (
+    {args => (
       <div className="w-80">
         <Slider {...args} />
       </div>

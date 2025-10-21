@@ -59,6 +59,7 @@ import {
 ## Variants
 
 ### Default
+
 Clean white background with subtle border and shadow.
 
 ```tsx
@@ -71,6 +72,7 @@ Clean white background with subtle border and shadow.
 ```
 
 ### Outlined
+
 Transparent background with defined border.
 
 ```tsx
@@ -83,6 +85,7 @@ Transparent background with defined border.
 ```
 
 ### Minimal
+
 No borders or background - just content.
 
 ```tsx
@@ -95,6 +98,7 @@ No borders or background - just content.
 ```
 
 ### Elevated
+
 Enhanced shadow for prominent sections.
 
 ```tsx
@@ -107,6 +111,7 @@ Enhanced shadow for prominent sections.
 ```
 
 ### Card
+
 Subtle gray background for grouped content.
 
 ```tsx
@@ -121,6 +126,7 @@ Subtle gray background for grouped content.
 ## Sizes
 
 ### Small
+
 Compact size for secondary information.
 
 ```tsx
@@ -133,6 +139,7 @@ Compact size for secondary information.
 ```
 
 ### Medium (Default)
+
 Standard size for most use cases.
 
 ```tsx
@@ -145,13 +152,16 @@ Standard size for most use cases.
 ```
 
 ### Large
+
 Prominent size for important information.
 
 ```tsx
 <Disclosure size="lg">
   <DisclosureTrigger>Detailed explanation</DisclosureTrigger>
   <DisclosureContent>
-    <p className="text-lg">This technique requires careful attention to timing.</p>
+    <p className="text-lg">
+      This technique requires careful attention to timing.
+    </p>
   </DisclosureContent>
 </Disclosure>
 ```
@@ -159,6 +169,7 @@ Prominent size for important information.
 ## Icons
 
 ### Default Chevron
+
 Standard chevron that rotates when opened.
 
 ```tsx
@@ -171,6 +182,7 @@ Standard chevron that rotates when opened.
 ```
 
 ### Custom Icon
+
 Use any icon with proper sizing.
 
 ```tsx
@@ -183,10 +195,11 @@ import { HelpCircle } from 'lucide-react';
   <DisclosureContent>
     <p>Custom help icon indicates this is assistance content.</p>
   </DisclosureContent>
-</Disclosure>
+</Disclosure>;
 ```
 
 ### Icon Position
+
 Control icon placement.
 
 ```tsx
@@ -199,17 +212,16 @@ import { Lightbulb } from 'lucide-react';
   <DisclosureContent>
     <p>Icon on the left draws attention to important tips.</p>
   </DisclosureContent>
-</Disclosure>
+</Disclosure>;
 ```
 
 ### No Icon
+
 Clean look without any icon.
 
 ```tsx
 <Disclosure>
-  <DisclosureTrigger showIcon={false}>
-    Simple disclosure
-  </DisclosureTrigger>
+  <DisclosureTrigger showIcon={false}>Simple disclosure</DisclosureTrigger>
   <DisclosureContent>
     <p>Sometimes a minimal approach is preferred.</p>
   </DisclosureContent>
@@ -219,6 +231,7 @@ Clean look without any icon.
 ## Recipe-Specific Components
 
 ### Cooking Tips
+
 Pre-configured for cooking tips with proper styling.
 
 ```tsx
@@ -231,6 +244,7 @@ Pre-configured for cooking tips with proper styling.
 ```
 
 ### Ingredient Notes
+
 For ingredient information and substitutions.
 
 ```tsx
@@ -243,6 +257,7 @@ For ingredient information and substitutions.
 ```
 
 ### Substitutions
+
 Highlighted substitution options.
 
 ```tsx
@@ -255,6 +270,7 @@ Highlighted substitution options.
 ```
 
 ### Nutrition Information
+
 Styled for nutritional data.
 
 ```tsx
@@ -269,6 +285,7 @@ Styled for nutritional data.
 ## Kitchen Tips with Difficulty Levels
 
 ### Beginner Tips
+
 Simple techniques with green styling.
 
 ```tsx
@@ -285,6 +302,7 @@ Simple techniques with green styling.
 ```
 
 ### Advanced Techniques
+
 Complex techniques with red styling.
 
 ```tsx
@@ -301,6 +319,7 @@ Complex techniques with red styling.
 ```
 
 ### Food Safety
+
 Safety information with yellow styling.
 
 ```tsx
@@ -315,6 +334,7 @@ Safety information with yellow styling.
 ## FAQ Components
 
 ### Featured FAQ
+
 Highlighted important questions.
 
 ```tsx
@@ -324,21 +344,26 @@ Highlighted important questions.
   featured
 >
   <DisclosureContent>
-    <p>Store dry ingredients in airtight containers and refrigerate perishables.</p>
+    <p>
+      Store dry ingredients in airtight containers and refrigerate perishables.
+    </p>
   </DisclosureContent>
 </FAQDisclosure>
 ```
 
 ### Categorized FAQ
+
 Organized by category with color coding.
 
 ```tsx
 <FAQDisclosure
-  question="What if I don&apos;t have a specific tool?"
+  question="What if I don't have a specific tool?"
   category="cooking"
 >
   <DisclosureContent>
-    <p>Most tools have substitutes - check our equipment alternatives section.</p>
+    <p>
+      Most tools have substitutes - check our equipment alternatives section.
+    </p>
   </DisclosureContent>
 </FAQDisclosure>
 ```
@@ -349,19 +374,13 @@ Group related disclosures with consistent spacing.
 
 ```tsx
 <DisclosureGroup spacing="normal">
-  <FAQDisclosure
-    question="How long does this recipe take?"
-    category="general"
-  >
+  <FAQDisclosure question="How long does this recipe take?" category="general">
     <DisclosureContent>
       <p>Total time is about 45 minutes including prep and cooking.</p>
     </DisclosureContent>
   </FAQDisclosure>
 
-  <FAQDisclosure
-    question="Can I make this vegan?"
-    category="ingredients"
-  >
+  <FAQDisclosure question="Can I make this vegan?" category="ingredients">
     <DisclosureContent>
       <p>Yes! Replace dairy with plant-based alternatives.</p>
     </DisclosureContent>
@@ -382,6 +401,7 @@ Group related disclosures with consistent spacing.
 ## States and Behaviors
 
 ### Disabled State
+
 Prevent interaction when needed.
 
 ```tsx
@@ -394,6 +414,7 @@ Prevent interaction when needed.
 ```
 
 ### Non-collapsible
+
 Open but cannot be closed.
 
 ```tsx
@@ -423,6 +444,7 @@ The Disclosure component includes comprehensive accessibility features:
 ### Screen Reader Behavior
 
 Screen readers will announce:
+
 - Button role and expanded state
 - Content region when opened
 - Proper labeling relationships between trigger and content
@@ -430,21 +452,25 @@ Screen readers will announce:
 ## Best Practices
 
 ### Content Structure
+
 - Keep trigger text concise and descriptive
 - Use semantic HTML within content areas
 - Provide clear visual hierarchy
 
 ### Performance
+
 - Use `forceMount` sparingly (only when needed for SEO)
 - Prefer CSS transitions over JavaScript animations
 - Consider content length for smooth animations
 
 ### Recipe Context Usage
+
 - Use `RecipeDisclosure` for cooking-related content
 - Choose appropriate context (tips, notes, substitutions, etc.)
 - Add badges for important information
 
 ### Grouping
+
 - Use `DisclosureGroup` for related sets of disclosures
 - Choose appropriate spacing (tight, normal, loose)
 - Consider allowing multiple open disclosures vs single
@@ -452,6 +478,7 @@ Screen readers will announce:
 ## Advanced Usage
 
 ### Force Mount Content
+
 Keep content in DOM for SEO or complex animations.
 
 ```tsx
@@ -464,6 +491,7 @@ Keep content in DOM for SEO or complex animations.
 ```
 
 ### Custom Animation Duration
+
 Control transition timing.
 
 ```tsx
@@ -476,6 +504,7 @@ Control transition timing.
 ```
 
 ### Custom Styling
+
 Extend with additional classes.
 
 ```tsx

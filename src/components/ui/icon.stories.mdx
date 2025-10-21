@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Icon, IconContainer, RecipeIcon } from './icon';
 
 <Meta
@@ -36,48 +42,49 @@ use cases and ensures consistent icon usage across the application.
 ## Usage
 
 Use Icon for:
+
 - User interface elements and navigation
 - Status indicators and feedback
 - Content categorization and labeling
 - Interactive buttons and controls
 - Decorative elements with semantic meaning
 - Recipe and cooking-related content visualization
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    name: {
-      control: { type: 'text' },
-      description: 'Icon name from Lucide React library',
-      defaultValue: 'star'
-    },
-    size: {
-      control: { type: 'select' },
-      options: ['xs', 'sm', 'default', 'lg', 'xl', '2xl'],
-      description: 'Icon size variant',
-      defaultValue: 'default'
-    },
-    color: {
-      control: { type: 'select' },
-      options: ['default', 'muted', 'primary', 'secondary', 'accent', 'destructive', 'success', 'warning'],
-      description: 'Icon color from theme system',
-      defaultValue: 'default'
-    },
-    animation: {
-      control: { type: 'select' },
-      options: ['none', 'spin', 'pulse', 'bounce', 'ping'],
-      description: 'Animation type',
-      defaultValue: 'none'
-    },
-    state: {
-      control: { type: 'select' },
-      options: ['default', 'hover', 'active', 'disabled'],
-      description: 'Interactive state',
-      defaultValue: 'default'
-    }
-  }}
-/>
+      name: {
+        control: { type: 'text' },
+        description: 'Icon name from Lucide React library',
+        defaultValue: 'star'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['xs', 'sm', 'default', 'lg', 'xl', '2xl'],
+        description: 'Icon size variant',
+        defaultValue: 'default'
+      },
+      color: {
+        control: { type: 'select' },
+        options: ['default', 'muted', 'primary', 'secondary', 'accent', 'destructive', 'success', 'warning'],
+        description: 'Icon color from theme system',
+        defaultValue: 'default'
+      },
+      animation: {
+        control: { type: 'select' },
+        options: ['none', 'spin', 'pulse', 'bounce', 'ping'],
+        description: 'Animation type',
+        defaultValue: 'none'
+      },
+      state: {
+        control: { type: 'select' },
+        options: ['default', 'hover', 'active', 'disabled'],
+        description: 'Interactive state',
+        defaultValue: 'default'
+      }
+    }}
+  />
 
 # Icon
 
@@ -139,6 +146,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -189,6 +197,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -219,6 +228,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -270,6 +280,7 @@ Use Icon for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -300,6 +311,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -350,6 +362,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -399,6 +412,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -450,6 +464,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -507,6 +522,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -591,6 +607,7 @@ Use Icon for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -598,7 +615,7 @@ Use Icon for:
 
 <Canvas>
   <Story name="Interactive Example">
-    {(args) => (
+    {args => (
       <div className="text-center">
         <Icon {...args} />
       </div>
@@ -615,17 +632,21 @@ Use Icon for:
 The Icon component uses a centralized registry system that provides:
 
 ### Type Safety
+
 - All icon names are type-checked at compile time
 - IntelliSense support for available icons
 - Runtime validation with helpful error messages
 
 ### Performance
+
 - Tree-shaking support for unused icons
 - Lazy loading capabilities
 - Optimized bundle size
 
 ### Common Icons
+
 Popular icons available in the registry:
+
 - **Navigation**: home, menu, search, settings, user
 - **Actions**: edit, delete, save, copy, share, download
 - **Status**: check, x, alert, info, warning, success
@@ -636,19 +657,25 @@ Popular icons available in the registry:
 ## Accessibility Guidelines
 
 ### Decorative Icons
+
 Use `aria-hidden` for icons that are purely decorative:
+
 ```jsx
 <Icon name="star" aria-hidden /> Featured Recipe
 ```
 
 ### Meaningful Icons
+
 Provide `aria-label` for icons that convey meaning:
+
 ```jsx
 <Icon name="heart" aria-label="Add to favorites" onClick={handleFavorite} />
 ```
 
 ### Interactive Icons
+
 Include proper keyboard support and focus indicators:
+
 ```jsx
 <Icon
   name="share"
@@ -661,6 +688,7 @@ Include proper keyboard support and focus indicators:
 ## Design Guidelines
 
 ### Size Guidelines
+
 - **xs (12px)**: Inline text, small badges
 - **sm (16px)**: Form inputs, small buttons
 - **default (20px)**: Standard UI elements
@@ -669,6 +697,7 @@ Include proper keyboard support and focus indicators:
 - **2xl (48px)**: Hero sections, empty states
 
 ### Color Guidelines
+
 - **Default**: Standard text color
 - **Muted**: Secondary information
 - **Primary**: Brand-related actions
@@ -677,6 +706,7 @@ Include proper keyboard support and focus indicators:
 - **Destructive**: Errors or dangerous actions
 
 ### Animation Guidelines
+
 - **Spin**: Loading states, refresh actions
 - **Pulse**: Ongoing processes, breathing effect
 - **Bounce**: Attention-grabbing, playful interactions

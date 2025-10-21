@@ -47,6 +47,7 @@ import {
 ## Variants
 
 ### Default
+
 Basic rectangular skeleton for general content.
 
 ```tsx
@@ -54,6 +55,7 @@ Basic rectangular skeleton for general content.
 ```
 
 ### Text
+
 Optimized for text content with appropriate line height.
 
 ```tsx
@@ -64,6 +66,7 @@ Optimized for text content with appropriate line height.
 ```
 
 ### Circular
+
 Perfect for avatars and profile images.
 
 ```tsx
@@ -71,6 +74,7 @@ Perfect for avatars and profile images.
 ```
 
 ### Card
+
 Container skeleton with padding for card layouts.
 
 ```tsx
@@ -78,6 +82,7 @@ Container skeleton with padding for card layouts.
 ```
 
 ### Image
+
 Square aspect ratio for image placeholders.
 
 ```tsx
@@ -85,6 +90,7 @@ Square aspect ratio for image placeholders.
 ```
 
 ### Button
+
 Button-shaped skeleton with appropriate dimensions.
 
 ```tsx
@@ -94,6 +100,7 @@ Button-shaped skeleton with appropriate dimensions.
 ## Animation Styles
 
 ### Pulse (Default)
+
 Subtle opacity animation for a gentle loading effect.
 
 ```tsx
@@ -101,6 +108,7 @@ Subtle opacity animation for a gentle loading effect.
 ```
 
 ### Wave
+
 Shimmer effect that moves across the skeleton.
 
 ```tsx
@@ -108,6 +116,7 @@ Shimmer effect that moves across the skeleton.
 ```
 
 ### None
+
 No animation for users who prefer reduced motion.
 
 ```tsx
@@ -133,6 +142,7 @@ No animation for users who prefer reduced motion.
 ## Compound Components
 
 ### SkeletonContainer
+
 Groups multiple skeleton elements with consistent spacing.
 
 ```tsx
@@ -144,6 +154,7 @@ Groups multiple skeleton elements with consistent spacing.
 ```
 
 ### SkeletonText
+
 Creates multiple lines of text with varied widths.
 
 ```tsx
@@ -158,6 +169,7 @@ Creates multiple lines of text with varied widths.
 ```
 
 ### SkeletonAvatar
+
 Circular skeleton for user avatars.
 
 ```tsx
@@ -174,6 +186,7 @@ Circular skeleton for user avatars.
 ```
 
 ### SkeletonButton
+
 Button placeholder with proper sizing.
 
 ```tsx
@@ -183,6 +196,7 @@ Button placeholder with proper sizing.
 ## Recipe-Specific Presets
 
 ### RecipeCardSkeleton
+
 Complete skeleton for recipe card components.
 
 ```tsx
@@ -190,6 +204,7 @@ Complete skeleton for recipe card components.
 ```
 
 ### RecipeListSkeleton
+
 Multiple recipe items in a list format.
 
 ```tsx
@@ -201,6 +216,7 @@ Multiple recipe items in a list format.
 ```
 
 ### RecipeDetailSkeleton
+
 Full-page skeleton for recipe details.
 
 ```tsx
@@ -208,6 +224,7 @@ Full-page skeleton for recipe details.
 ```
 
 ### ProfileSkeleton
+
 User profile with avatar and info.
 
 ```tsx
@@ -236,6 +253,7 @@ Control width and height with precise values.
 ## Accessibility
 
 ### Screen Reader Support
+
 All skeletons include proper ARIA attributes.
 
 ```tsx
@@ -243,6 +261,7 @@ All skeletons include proper ARIA attributes.
 ```
 
 ### Reduced Motion
+
 Animations automatically disabled for users who prefer reduced motion.
 
 ```tsx
@@ -253,6 +272,7 @@ Animations automatically disabled for users who prefer reduced motion.
 ## Recipe App Examples
 
 ### Loading Recipe Search Results
+
 ```tsx
 function RecipeSearch({ isLoading, recipes }) {
   if (isLoading) {
@@ -270,6 +290,7 @@ function RecipeSearch({ isLoading, recipes }) {
 ```
 
 ### Loading Recipe Details
+
 ```tsx
 function RecipeDetail({ isLoading, recipe }) {
   if (isLoading) {
@@ -281,6 +302,7 @@ function RecipeDetail({ isLoading, recipe }) {
 ```
 
 ### Inline Loading States
+
 ```tsx
 function RecipeTitle({ title, isLoading }) {
   return (
@@ -292,6 +314,7 @@ function RecipeTitle({ title, isLoading }) {
 ```
 
 ### Loading User Profile
+
 ```tsx
 function UserProfile({ user, isLoading }) {
   if (isLoading) {
@@ -311,6 +334,7 @@ function UserProfile({ user, isLoading }) {
 ```
 
 ### Progressive Loading
+
 ```tsx
 function RecipeCard({ recipe }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -333,6 +357,7 @@ function RecipeCard({ recipe }) {
 ## Best Practices
 
 ### 1. Match Content Layout
+
 Ensure skeletons accurately represent the final content structure.
 
 ```tsx
@@ -347,6 +372,7 @@ Ensure skeletons accurately represent the final content structure.
 ```
 
 ### 2. Use Appropriate Animations
+
 Choose animations based on context and duration.
 
 ```tsx
@@ -361,20 +387,18 @@ Choose animations based on context and duration.
 ```
 
 ### 3. Progressive Enhancement
+
 Show skeletons for slow-loading content while displaying available data.
 
 ```tsx
 <div>
   <h1>{title}</h1>
-  {content ? (
-    <p>{content}</p>
-  ) : (
-    <SkeletonText lines="paragraph" />
-  )}
+  {content ? <p>{content}</p> : <SkeletonText lines="paragraph" />}
 </div>
 ```
 
 ### 4. Consistent Styling
+
 Use preset components for common patterns.
 
 ```tsx
@@ -389,33 +413,33 @@ Use preset components for common patterns.
 
 ### Skeleton Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| variant | `'default' \| 'text' \| 'circular' \| 'card' \| 'image' \| 'button'` | `'default'` | Visual style variant |
-| size | `'sm' \| 'default' \| 'lg' \| 'full'` | `'default'` | Size preset |
-| animation | `'pulse' \| 'wave' \| 'none'` | `'pulse'` | Animation style |
-| rounded | `'none' \| 'sm' \| 'default' \| 'lg' \| 'full'` | `'default'` | Border radius |
-| intensity | `'light' \| 'default' \| 'strong'` | `'default'` | Visual intensity |
-| width | `string \| number` | - | Custom width |
-| height | `string \| number` | - | Custom height |
-| count | `number` | `1` | Number of skeleton lines |
-| circle | `boolean` | `false` | Shorthand for circular variant |
-| aria-label | `string` | `'Loading...'` | Screen reader text |
+| Prop       | Type                                                                 | Default        | Description                    |
+| ---------- | -------------------------------------------------------------------- | -------------- | ------------------------------ |
+| variant    | `'default' \| 'text' \| 'circular' \| 'card' \| 'image' \| 'button'` | `'default'`    | Visual style variant           |
+| size       | `'sm' \| 'default' \| 'lg' \| 'full'`                                | `'default'`    | Size preset                    |
+| animation  | `'pulse' \| 'wave' \| 'none'`                                        | `'pulse'`      | Animation style                |
+| rounded    | `'none' \| 'sm' \| 'default' \| 'lg' \| 'full'`                      | `'default'`    | Border radius                  |
+| intensity  | `'light' \| 'default' \| 'strong'`                                   | `'default'`    | Visual intensity               |
+| width      | `string \| number`                                                   | -              | Custom width                   |
+| height     | `string \| number`                                                   | -              | Custom height                  |
+| count      | `number`                                                             | `1`            | Number of skeleton lines       |
+| circle     | `boolean`                                                            | `false`        | Shorthand for circular variant |
+| aria-label | `string`                                                             | `'Loading...'` | Screen reader text             |
 
 ### SkeletonContainer Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| spacing | `'tight' \| 'default' \| 'loose'` | `'default'` | Gap between children |
-| direction | `'vertical' \| 'horizontal'` | `'vertical'` | Layout direction |
+| Prop      | Type                              | Default      | Description          |
+| --------- | --------------------------------- | ------------ | -------------------- |
+| spacing   | `'tight' \| 'default' \| 'loose'` | `'default'`  | Gap between children |
+| direction | `'vertical' \| 'horizontal'`      | `'vertical'` | Layout direction     |
 
 ### SkeletonText Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| lines | `'single' \| 'two' \| 'three' \| 'paragraph'` | `'three'` | Preset line counts |
-| lineCount | `number` | - | Custom line count |
-| animation | `'pulse' \| 'wave' \| 'none'` | `'pulse'` | Animation style |
+| Prop      | Type                                          | Default   | Description        |
+| --------- | --------------------------------------------- | --------- | ------------------ |
+| lines     | `'single' \| 'two' \| 'three' \| 'paragraph'` | `'three'` | Preset line counts |
+| lineCount | `number`                                      | -         | Custom line count  |
+| animation | `'pulse' \| 'wave' \| 'none'`                 | `'pulse'` | Animation style    |
 
 ## Performance Tips
 

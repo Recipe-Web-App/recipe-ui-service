@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Layout } from './layout';
 import { DefaultLayout, FocusedLayout, MinimalLayout } from './layout-variants';
 import { LayoutProvider } from './layout-provider';
@@ -34,58 +40,63 @@ components that work together seamlessly.
 ## Layout Variants
 
 ### Default Layout
+
 Full layout with all components: TopNav + Sidebar + ContentPane + Footer.
 Perfect for main application pages with navigation.
 
 ### Focused Layout
+
 Streamlined layout for content focus: TopNav + ContentPane + minimal Footer.
 Ideal for article reading, detail pages, or content consumption.
 
 ### Minimal Layout
+
 Bare essentials: TopNav + ContentPane only.
 Perfect for authentication pages, modals, or standalone views.
 
 ## Usage
 
 Use Layout for:
+
 - Main application pages
 - Page templates and wrappers
 - Route-level layout management
 - Consistent user experience across the app
 
 The component automatically handles:
+
 - Sub-navigation based on current route
 - Responsive behavior across devices
 - Theme consistency
 - Error boundaries
 - Toast notifications
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'focused', 'minimal'],
-      description: 'Layout variant that controls which components are shown',
-      defaultValue: 'default'
-    },
-    showSidebar: {
-      control: { type: 'boolean' },
-      description: 'Whether to show the sidebar (managed by layout provider)',
-      defaultValue: true
-    },
-    showFooter: {
-      control: { type: 'boolean' },
-      description: 'Whether to show the footer (managed by layout provider)',
-      defaultValue: true
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes for the root container'
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'focused', 'minimal'],
+        description: 'Layout variant that controls which components are shown',
+        defaultValue: 'default'
+      },
+      showSidebar: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the sidebar (managed by layout provider)',
+        defaultValue: true
+      },
+      showFooter: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the footer (managed by layout provider)',
+        defaultValue: true
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes for the root container'
+      }
+    }}
+  />
 
 # Layout
 
@@ -98,16 +109,16 @@ The component automatically handles:
     {() => (
       <DefaultLayout>
         <div className="p-8">
-          <h1 className="text-3xl font-bold mb-4">Welcome to Recipe App</h1>
+          <h1 className="mb-4 text-3xl font-bold">Welcome to Recipe App</h1>
           <p className="text-muted-foreground mb-6">
-            This is the default layout with full navigation and footer.
-            Perfect for main application pages.
+            This is the default layout with full navigation and footer. Perfect
+            for main application pages.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="p-4 border rounded-lg bg-card">
-                <h3 className="font-semibold mb-2">Content Card {i + 1}</h3>
-                <p className="text-sm text-muted-foreground">
+              <div key={i} className="bg-card rounded-lg border p-4">
+                <h3 className="mb-2 font-semibold">Content Card {i + 1}</h3>
+                <p className="text-muted-foreground text-sm">
                   Sample content to demonstrate the layout structure.
                 </p>
               </div>
@@ -155,6 +166,7 @@ The component automatically handles:
         </div>
       </FocusedLayout>
     )}
+
   </Story>
 </Canvas>
 
@@ -200,6 +212,7 @@ The component automatically handles:
         </div>
       </MinimalLayout>
     )}
+
   </Story>
 </Canvas>
 
@@ -208,19 +221,19 @@ The component automatically handles:
 <Canvas>
   <Story name="Mobile Responsive">
     {() => (
-      <div className="max-w-sm mx-auto border rounded-lg overflow-hidden">
+      <div className="mx-auto max-w-sm overflow-hidden rounded-lg border">
         <DefaultLayout>
           <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Mobile View</h1>
-            <p className="text-sm text-muted-foreground mb-4">
-              On mobile devices, the sidebar automatically converts to a drawer menu
-              accessible via the hamburger button in the top navigation.
+            <h1 className="mb-4 text-xl font-bold">Mobile View</h1>
+            <p className="text-muted-foreground mb-4 text-sm">
+              On mobile devices, the sidebar automatically converts to a drawer
+              menu accessible via the hamburger button in the top navigation.
             </p>
             <div className="space-y-3">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="p-3 border rounded bg-card">
-                  <h3 className="font-medium text-sm">Mobile Card {i + 1}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">
+                <div key={i} className="bg-card rounded border p-3">
+                  <h3 className="text-sm font-medium">Mobile Card {i + 1}</h3>
+                  <p className="text-muted-foreground mt-1 text-xs">
                     Optimized for mobile viewing
                   </p>
                 </div>
@@ -271,6 +284,7 @@ The component automatically handles:
         </div>
       </Layout>
     )}
+
   </Story>
 </Canvas>
 
@@ -297,8 +311,8 @@ The component automatically handles:
           error: {
             type: 'network',
             message: 'Unable to load content',
-            code: 'NETWORK_ERROR'
-          }
+            code: 'NETWORK_ERROR',
+          },
         }}
       >
         {/* Content won't be shown when error is present */}
@@ -341,6 +355,7 @@ The component automatically handles:
         </div>
       </Layout>
     )}
+
   </Story>
 </Canvas>
 
@@ -367,19 +382,19 @@ Layout (Wrapper)
 
 ### Variant Behavior
 
-| Variant | TopNav | Sidebar | ContentPane | Footer | Use Case |
-|---------|--------|---------|-------------|--------|----------|
-| default | ✓ | ✓ | ✓ | ✓ | Main app pages |
-| focused | ✓ | ✗ | ✓ | minimal | Content reading |
-| minimal | ✓ | ✗ | ✓ | ✗ | Auth pages |
+| Variant | TopNav | Sidebar | ContentPane | Footer  | Use Case        |
+| ------- | ------ | ------- | ----------- | ------- | --------------- |
+| default | ✓      | ✓       | ✓           | ✓       | Main app pages  |
+| focused | ✓      | ✗       | ✓           | minimal | Content reading |
+| minimal | ✓      | ✗       | ✓           | ✗       | Auth pages      |
 
 ### Responsive Breakpoints
 
 | Breakpoint | Sidebar Behavior | Footer Behavior | TopNav Behavior |
-|------------|------------------|-----------------|-----------------|
-| Mobile | Drawer menu | Stacked layout | Simplified nav |
-| Tablet | Collapsible | Standard layout | Standard nav |
-| Desktop | Full sidebar | Standard layout | Full nav |
+| ---------- | ---------------- | --------------- | --------------- |
+| Mobile     | Drawer menu      | Stacked layout  | Simplified nav  |
+| Tablet     | Collapsible      | Standard layout | Standard nav    |
+| Desktop    | Full sidebar     | Standard layout | Full nav        |
 
 ## Implementation Notes
 

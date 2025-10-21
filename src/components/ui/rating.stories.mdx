@@ -9,9 +9,10 @@ import { useState } from 'react';
     layout: 'centered',
     docs: {
       description: {
-        component: 'A flexible rating component that supports stars, hearts, thumbs, and numeric displays with full accessibility support.'
-      }
-    }
+        component:
+          'A flexible rating component that supports stars, hearts, thumbs, and numeric displays with full accessibility support.',
+      },
+    },
   }}
 />
 
@@ -52,6 +53,7 @@ A comprehensive rating component designed for recipe applications and general fe
 ## Rating Types
 
 ### Star Rating
+
 Perfect for recipe quality ratings and general feedback.
 
 <Canvas>
@@ -86,6 +88,7 @@ Perfect for recipe quality ratings and general feedback.
 </Canvas>
 
 ### Heart Rating
+
 Ideal for favorites and love-based feedback.
 
 <Canvas>
@@ -116,6 +119,7 @@ Ideal for favorites and love-based feedback.
 </Canvas>
 
 ### Thumbs Rating
+
 Simple binary feedback system.
 
 <Canvas>
@@ -149,6 +153,7 @@ Simple binary feedback system.
 </Canvas>
 
 ### Numeric Rating
+
 Clean numerical display for scores and metrics.
 
 <Canvas>
@@ -230,7 +235,7 @@ Clean numerical display for scores and metrics.
 
 <Canvas>
   <Story name="Recipe Quality">
-    <div className="p-4 border rounded-lg space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <h3 className="font-semibold">Grandma's Chocolate Chip Cookies</h3>
       <div className="flex items-center gap-4">
         <Rating
@@ -240,7 +245,7 @@ Clean numerical display for scores and metrics.
           label="Overall Rating"
           showLabel
         />
-        <span className="text-sm text-muted-foreground">(142 reviews)</span>
+        <span className="text-muted-foreground text-sm">(142 reviews)</span>
       </div>
     </div>
   </Story>
@@ -250,7 +255,7 @@ Clean numerical display for scores and metrics.
 
 <Canvas>
   <Story name="Difficulty Level">
-    <div className="p-4 border rounded-lg space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <h3 className="font-semibold">Beef Wellington</h3>
       <div className="flex items-center gap-4">
         <Rating
@@ -262,7 +267,7 @@ Clean numerical display for scores and metrics.
           label="Difficulty"
           showLabel
         />
-        <span className="text-sm text-muted-foreground">Advanced</span>
+        <span className="text-muted-foreground text-sm">Advanced</span>
       </div>
     </div>
   </Story>
@@ -272,7 +277,7 @@ Clean numerical display for scores and metrics.
 
 <Canvas>
   <Story name="Favorite System">
-    <div className="p-4 border rounded-lg space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <h3 className="font-semibold">Quick Pasta Salad</h3>
       <div className="flex items-center gap-4">
         {(() => {
@@ -283,7 +288,7 @@ Clean numerical display for scores and metrics.
               value={isFavorite ? 1 : 0}
               maxValue={1}
               interactive
-              onChange={(value) => setIsFavorite(value > 0)}
+              onChange={value => setIsFavorite(value > 0)}
               label="Add to Favorites"
               showLabel
             />
@@ -298,7 +303,7 @@ Clean numerical display for scores and metrics.
 
 <Canvas>
   <Story name="Nutritional Score">
-    <div className="p-4 border rounded-lg space-y-3">
+    <div className="space-y-3 rounded-lg border p-4">
       <h3 className="font-semibold">Mediterranean Quinoa Bowl</h3>
       <div className="flex items-center gap-4">
         <Rating
@@ -310,7 +315,9 @@ Clean numerical display for scores and metrics.
           label="Health Score"
           showLabel
         />
-        <span className="text-sm text-muted-foreground">Excellent nutrition</span>
+        <span className="text-muted-foreground text-sm">
+          Excellent nutrition
+        </span>
       </div>
     </div>
   </Story>
@@ -324,7 +331,14 @@ Clean numerical display for scores and metrics.
   <Story name="Disabled">
     <div className="space-y-4">
       <Rating value={3} disabled showValue label="Disabled Rating" showLabel />
-      <Rating value={2} interactive disabled showValue label="Disabled Interactive" showLabel />
+      <Rating
+        value={2}
+        interactive
+        disabled
+        showValue
+        label="Disabled Interactive"
+        showLabel
+      />
     </div>
   </Story>
 </Canvas>
@@ -335,7 +349,14 @@ Clean numerical display for scores and metrics.
   <Story name="Read-only">
     <div className="space-y-4">
       <Rating value={4} readOnly showValue label="Read-only Rating" showLabel />
-      <Rating value={3} interactive readOnly showValue label="Read-only Interactive" showLabel />
+      <Rating
+        value={3}
+        interactive
+        readOnly
+        showValue
+        label="Read-only Interactive"
+        showLabel
+      />
     </div>
   </Story>
 </Canvas>
@@ -358,7 +379,7 @@ The Rating component follows WAI-ARIA guidelines:
 <Canvas>
   <Story name="Accessibility Demo">
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Try navigating this rating with your keyboard:
       </p>
       {(() => {
@@ -375,7 +396,7 @@ The Rating component follows WAI-ARIA guidelines:
           />
         );
       })()}
-      <p id="rating-help" className="text-xs text-muted-foreground">
+      <p id="rating-help" className="text-muted-foreground text-xs">
         Use Tab to navigate, Enter or Space to select a rating
       </p>
     </div>
@@ -432,9 +453,9 @@ The Rating component follows WAI-ARIA guidelines:
 
 <Canvas>
   <Story name="Combined Display">
-    <div className="p-6 border rounded-lg space-y-4">
+    <div className="space-y-4 rounded-lg border p-6">
       <h3 className="text-lg font-semibold">Recipe Overview</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Rating
             type="star"

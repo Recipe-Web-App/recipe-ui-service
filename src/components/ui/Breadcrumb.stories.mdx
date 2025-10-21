@@ -62,19 +62,22 @@ const items = [
   { label: 'Carbonara', href: '/recipes/italian/pasta/carbonara' },
 ];
 
-<Breadcrumb items={items} showHome={true} />
+<Breadcrumb items={items} showHome={true} />;
 ```
 
 ## Size Variants
 
 ### Small
+
 Compact breadcrumbs for dense layouts or secondary navigation.
 
 ```tsx
 <Breadcrumb size="sm">
   <BreadcrumbList size="sm">
     <BreadcrumbItem size="sm">
-      <BreadcrumbLink href="/" size="sm">Home</BreadcrumbLink>
+      <BreadcrumbLink href="/" size="sm">
+        Home
+      </BreadcrumbLink>
     </BreadcrumbItem>
     <BreadcrumbSeparator size="sm" />
     <BreadcrumbItem size="sm">
@@ -85,13 +88,16 @@ Compact breadcrumbs for dense layouts or secondary navigation.
 ```
 
 ### Default
+
 Standard size for most use cases.
 
 ```tsx
 <Breadcrumb size="default">
   <BreadcrumbList size="default">
     <BreadcrumbItem size="default">
-      <BreadcrumbLink href="/" size="default">Home</BreadcrumbLink>
+      <BreadcrumbLink href="/" size="default">
+        Home
+      </BreadcrumbLink>
     </BreadcrumbItem>
     <BreadcrumbSeparator size="default" />
     <BreadcrumbItem size="default">
@@ -102,13 +108,16 @@ Standard size for most use cases.
 ```
 
 ### Large
+
 Prominent breadcrumbs for main navigation or hero sections.
 
 ```tsx
 <Breadcrumb size="lg">
   <BreadcrumbList size="lg">
     <BreadcrumbItem size="lg">
-      <BreadcrumbLink href="/" size="lg">Home</BreadcrumbLink>
+      <BreadcrumbLink href="/" size="lg">
+        Home
+      </BreadcrumbLink>
     </BreadcrumbItem>
     <BreadcrumbSeparator size="lg" />
     <BreadcrumbItem size="lg">
@@ -121,6 +130,7 @@ Prominent breadcrumbs for main navigation or hero sections.
 ## Separator Variants
 
 ### Chevron (Default)
+
 The most common separator using chevron right icon.
 
 ```tsx
@@ -128,6 +138,7 @@ The most common separator using chevron right icon.
 ```
 
 ### Slash
+
 Clean text-based separator for minimal designs.
 
 ```tsx
@@ -135,6 +146,7 @@ Clean text-based separator for minimal designs.
 ```
 
 ### Arrow
+
 Bold directional separator for emphasis.
 
 ```tsx
@@ -142,6 +154,7 @@ Bold directional separator for emphasis.
 ```
 
 ### Dot
+
 Subtle separator for compact layouts.
 
 ```tsx
@@ -149,6 +162,7 @@ Subtle separator for compact layouts.
 ```
 
 ### Custom Separator
+
 Use any content as a separator.
 
 ```tsx
@@ -160,6 +174,7 @@ Use any content as a separator.
 ## Link Variants
 
 ### Default
+
 Standard muted text with hover effects.
 
 ```tsx
@@ -169,6 +184,7 @@ Standard muted text with hover effects.
 ```
 
 ### Solid
+
 High-contrast links with background on hover.
 
 ```tsx
@@ -178,6 +194,7 @@ High-contrast links with background on hover.
 ```
 
 ### Ghost
+
 Subtle links with background on hover.
 
 ```tsx
@@ -187,6 +204,7 @@ Subtle links with background on hover.
 ```
 
 ### Minimal
+
 Clean links without underlines.
 
 ```tsx
@@ -229,6 +247,7 @@ Add visual context with icons from the icon registry.
 ## Overflow Handling
 
 ### Auto-Collapse
+
 Automatically collapses middle items when exceeding maxItems.
 
 ```tsx
@@ -242,10 +261,11 @@ const longPath = [
   { label: 'Carbonara', href: '/recipes/italian/pasta/main/cream/carbonara' },
 ];
 
-<Breadcrumb items={longPath} maxItems={3} />
+<Breadcrumb items={longPath} maxItems={3} />;
 ```
 
 ### Manual Ellipsis
+
 Explicitly place ellipsis where needed.
 
 ```tsx
@@ -311,13 +331,14 @@ const workflowItems = [
   workflow="cooking"
   items={workflowItems}
   currentStep="cooking"
-  onStepClick={(step) => console.log('Navigate to:', step)}
-/>
+  onStepClick={step => console.log('Navigate to:', step)}
+/>;
 ```
 
 ### Workflow Stages
 
 #### Planning Stage
+
 ```tsx
 <RecipeBreadcrumb
   workflow="planning"
@@ -333,6 +354,7 @@ const workflowItems = [
 ```
 
 #### Shopping Stage
+
 ```tsx
 <RecipeBreadcrumb
   workflow="shopping"
@@ -348,6 +370,7 @@ const workflowItems = [
 ```
 
 #### Serving Stage
+
 ```tsx
 <RecipeBreadcrumb
   workflow="serving"
@@ -483,44 +506,44 @@ const workflowItems = [
 
 ### Breadcrumb Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `items` | `BreadcrumbItem[]` | `[]` | Array of breadcrumb items (auto-generates breadcrumb) |
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
-| `separator` | `React.ReactNode` | - | Custom separator component |
-| `maxItems` | `number` | `3` | Maximum items before collapsing |
-| `showHome` | `boolean` | `true` | Whether to show home icon |
-| `homeUrl` | `string` | `'/'` | Custom home URL |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                        | Default     | Description                                           |
+| ----------- | --------------------------- | ----------- | ----------------------------------------------------- |
+| `items`     | `BreadcrumbItem[]`          | `[]`        | Array of breadcrumb items (auto-generates breadcrumb) |
+| `size`      | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant                                          |
+| `separator` | `React.ReactNode`           | -           | Custom separator component                            |
+| `maxItems`  | `number`                    | `3`         | Maximum items before collapsing                       |
+| `showHome`  | `boolean`                   | `true`      | Whether to show home icon                             |
+| `homeUrl`   | `string`                    | `'/'`       | Custom home URL                                       |
+| `className` | `string`                    | -           | Additional CSS classes                                |
 
 ### BreadcrumbLink Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'default' \| 'solid' \| 'ghost' \| 'minimal'` | `'default'` | Link style variant |
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
-| `asChild` | `boolean` | `false` | Render as child component with Radix Slot |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                                           | Default     | Description                               |
+| ----------- | ---------------------------------------------- | ----------- | ----------------------------------------- |
+| `variant`   | `'default' \| 'solid' \| 'ghost' \| 'minimal'` | `'default'` | Link style variant                        |
+| `size`      | `'sm' \| 'default' \| 'lg'`                    | `'default'` | Size variant                              |
+| `asChild`   | `boolean`                                      | `false`     | Render as child component with Radix Slot |
+| `className` | `string`                                       | -           | Additional CSS classes                    |
 
 ### BreadcrumbSeparator Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'` | Separator style |
-| `size` | `'sm' \| 'default' \| 'lg'` | `'default'` | Size variant |
-| `children` | `React.ReactNode` | - | Custom separator content |
-| `className` | `string` | - | Additional CSS classes |
+| Prop        | Type                                       | Default     | Description              |
+| ----------- | ------------------------------------------ | ----------- | ------------------------ |
+| `variant`   | `'chevron' \| 'slash' \| 'arrow' \| 'dot'` | `'chevron'` | Separator style          |
+| `size`      | `'sm' \| 'default' \| 'lg'`                | `'default'` | Size variant             |
+| `children`  | `React.ReactNode`                          | -           | Custom separator content |
+| `className` | `string`                                   | -           | Additional CSS classes   |
 
 ### RecipeBreadcrumb Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `workflow` | `'planning' \| 'shopping' \| 'cooking' \| 'serving'` | `'cooking'` | Workflow stage theme |
-| `emphasis` | `'subtle' \| 'normal' \| 'strong'` | `'normal'` | Visual emphasis level |
-| `items` | `RecipeWorkflowItem[]` | - | Array of workflow items |
-| `currentStep` | `string` | - | Currently active step ID |
-| `onStepClick` | `(step: string) => void` | - | Click handler for workflow navigation |
-| `className` | `string` | - | Additional CSS classes |
+| Prop          | Type                                                 | Default     | Description                           |
+| ------------- | ---------------------------------------------------- | ----------- | ------------------------------------- |
+| `workflow`    | `'planning' \| 'shopping' \| 'cooking' \| 'serving'` | `'cooking'` | Workflow stage theme                  |
+| `emphasis`    | `'subtle' \| 'normal' \| 'strong'`                   | `'normal'`  | Visual emphasis level                 |
+| `items`       | `RecipeWorkflowItem[]`                               | -           | Array of workflow items               |
+| `currentStep` | `string`                                             | -           | Currently active step ID              |
+| `onStepClick` | `(step: string) => void`                             | -           | Click handler for workflow navigation |
+| `className`   | `string`                                             | -           | Additional CSS classes                |
 
 ### BreadcrumbItem Interface
 

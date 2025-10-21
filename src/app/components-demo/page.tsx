@@ -12,6 +12,20 @@ import {
 
 const components = [
   {
+    name: 'BrowseGrid',
+    path: '/components-demo/browse-grid',
+    description: 'Generic grid wrapper for browsing content with pagination',
+    variants: 4,
+    status: 'ready',
+  },
+  {
+    name: 'BrowseList',
+    path: '/components-demo/browse-list',
+    description: 'Compact list view for browsing content with pagination',
+    variants: 4,
+    status: 'ready',
+  },
+  {
     name: 'Button',
     path: '/components-demo/button',
     description: 'Flexible, accessible button component',
@@ -419,6 +433,30 @@ const components = [
     variants: 8,
     status: 'ready',
   },
+  {
+    name: 'ViewToggle',
+    path: '/components-demo/view-toggle',
+    description:
+      'Toggle between grid and list views with persistent localStorage preference',
+    variants: 4,
+    status: 'ready',
+  },
+  {
+    name: 'FilterPanel',
+    path: '/components-demo/filter-panel',
+    description:
+      'Generic filter panel with search, checkbox, range, select, and custom filter types',
+    variants: 4,
+    status: 'ready',
+  },
+  {
+    name: 'QuickActions',
+    path: '/components-demo/quick-actions',
+    description:
+      'Quick action buttons that appear on hover/focus, positioned in corners with overflow menu support',
+    variants: 4,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -442,7 +480,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">51</div>
+            <div className="text-primary text-3xl font-bold">56</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -450,7 +488,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">429</div>
+            <div className="text-primary text-3xl font-bold">449</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

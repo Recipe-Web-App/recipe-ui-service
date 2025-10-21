@@ -89,11 +89,7 @@ const actions = [
 
 function MyComponent() {
   return (
-    <SpeedDial
-      actions={actions}
-      icon={<Plus />}
-      ariaLabel="Recipe actions"
-    />
+    <SpeedDial actions={actions} icon={<Plus />} ariaLabel="Recipe actions" />
   );
 }
 ```
@@ -103,7 +99,10 @@ function MyComponent() {
 Use multiple FABs together:
 
 ```tsx
-import { FABGroup, FloatingActionButton } from '@/components/ui/floating-action-button';
+import {
+  FABGroup,
+  FloatingActionButton,
+} from '@/components/ui/floating-action-button';
 import { Plus, Search } from 'lucide-react';
 
 function MyComponent() {
@@ -178,7 +177,7 @@ const [loading, setLoading] = useState(false);
     await saveRecipe();
     setLoading(false);
   }}
-/>
+/>;
 ```
 
 ## Accessibility
@@ -249,7 +248,7 @@ const recipeActions = [
   variant="primary"
   showLabels
   direction="up"
-/>
+/>;
 ```
 
 ### Multi-FAB Layout
@@ -287,39 +286,39 @@ const recipeActions = [
 
 ### FloatingActionButton Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| icon | ReactNode | - | Icon to display in the FAB |
-| label | string | - | Label text for extended FAB |
-| variant | 'primary' \| 'secondary' \| 'destructive' \| 'success' \| 'outline' \| 'surface' | 'primary' | Visual style variant |
-| size | 'sm' \| 'md' \| 'lg' | 'md' | Size of the FAB |
-| position | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' | 'bottom-right' | Screen position |
-| extended | boolean | false | Show as extended FAB with label |
-| loading | boolean | false | Show loading spinner |
-| disabled | boolean | false | Disable the FAB |
-| usePortal | boolean | true | Render in a portal |
-| offset | number | 16 | Distance from screen edge in pixels |
-| zIndex | number | 50 | Z-index for stacking |
-| tooltipLabel | string | - | Tooltip text on hover |
-| ariaLabel | string | - | Accessibility label |
+| Prop         | Type                                                                             | Default        | Description                         |
+| ------------ | -------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
+| icon         | ReactNode                                                                        | -              | Icon to display in the FAB          |
+| label        | string                                                                           | -              | Label text for extended FAB         |
+| variant      | 'primary' \| 'secondary' \| 'destructive' \| 'success' \| 'outline' \| 'surface' | 'primary'      | Visual style variant                |
+| size         | 'sm' \| 'md' \| 'lg'                                                             | 'md'           | Size of the FAB                     |
+| position     | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left'                     | 'bottom-right' | Screen position                     |
+| extended     | boolean                                                                          | false          | Show as extended FAB with label     |
+| loading      | boolean                                                                          | false          | Show loading spinner                |
+| disabled     | boolean                                                                          | false          | Disable the FAB                     |
+| usePortal    | boolean                                                                          | true           | Render in a portal                  |
+| offset       | number                                                                           | 16             | Distance from screen edge in pixels |
+| zIndex       | number                                                                           | 50             | Z-index for stacking                |
+| tooltipLabel | string                                                                           | -              | Tooltip text on hover               |
+| ariaLabel    | string                                                                           | -              | Accessibility label                 |
 
 ### SpeedDial Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| actions | SpeedDialAction[] | - | Array of action items |
-| open | boolean | - | Controlled open state |
-| onOpenChange | (open: boolean) => void | - | Open state change handler |
-| direction | 'up' \| 'down' \| 'left' \| 'right' | 'up' | Direction to expand actions |
-| showLabels | boolean | true | Show labels for actions |
-| showBackdrop | boolean | true | Show backdrop when open |
-| ...FloatingActionButtonProps | - | - | All FAB props are also supported |
+| Prop                         | Type                                | Default | Description                      |
+| ---------------------------- | ----------------------------------- | ------- | -------------------------------- |
+| actions                      | SpeedDialAction[]                   | -       | Array of action items            |
+| open                         | boolean                             | -       | Controlled open state            |
+| onOpenChange                 | (open: boolean) => void             | -       | Open state change handler        |
+| direction                    | 'up' \| 'down' \| 'left' \| 'right' | 'up'    | Direction to expand actions      |
+| showLabels                   | boolean                             | true    | Show labels for actions          |
+| showBackdrop                 | boolean                             | true    | Show backdrop when open          |
+| ...FloatingActionButtonProps | -                                   | -       | All FAB props are also supported |
 
 ### FABGroup Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| position | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' | 'bottom-right' | Screen position |
-| direction | 'vertical' \| 'horizontal' | 'vertical' | Stacking direction |
-| spacing | number | 16 | Space between FABs |
-| offset | number | 16 | Distance from screen edge |
+| Prop      | Type                                                         | Default        | Description               |
+| --------- | ------------------------------------------------------------ | -------------- | ------------------------- |
+| position  | 'bottom-right' \| 'bottom-left' \| 'top-right' \| 'top-left' | 'bottom-right' | Screen position           |
+| direction | 'vertical' \| 'horizontal'                                   | 'vertical'     | Stacking direction        |
+| spacing   | number                                                       | 16             | Space between FABs        |
+| offset    | number                                                       | 16             | Distance from screen edge |

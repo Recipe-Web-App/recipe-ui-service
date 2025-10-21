@@ -23,6 +23,7 @@ Perfect for organizing recipe sections, user profile sections, and navigation in
 ## Recipe App Use Cases
 
 ### Recipe Details Organization
+
 - **Ingredients Tab**: Recipe ingredients and shopping list
 - **Instructions Tab**: Step-by-step cooking instructions
 - **Nutrition Tab**: Nutritional information and dietary details
@@ -30,20 +31,22 @@ Perfect for organizing recipe sections, user profile sections, and navigation in
 - **Related Tab**: Similar recipes and suggestions
 
 ### User Profile Sections
+
 - **My Recipes**: User's created and saved recipes
 - **Collections**: Organized recipe collections
 - **Activity**: Recent activity and interactions
 - **Settings**: Profile and preference settings
 
 ### Recipe Management
+
 - **Edit Recipe**: Organize complex recipe forms into sections
 - **Recipe Analytics**: Views, saves, and engagement metrics
 - **Version History**: Track recipe changes and updates
-        `,
-      },
-    },
+  `,
+  },
+  },
   }}
-/>
+  />
 
 # Tabs
 
@@ -69,7 +72,7 @@ Perfect for organizing recipe sections, user profile sections, and navigation in
       <TabsContent value="instructions">
         <div className="space-y-2">
           <h3 className="font-semibold">Cooking Instructions</h3>
-          <ol className="space-y-1 text-sm list-decimal list-inside">
+          <ol className="list-inside list-decimal space-y-1 text-sm">
             <li>Preheat oven to 350°F</li>
             <li>Mix dry ingredients</li>
             <li>Add wet ingredients</li>
@@ -80,7 +83,7 @@ Perfect for organizing recipe sections, user profile sections, and navigation in
       <TabsContent value="nutrition">
         <div className="space-y-2">
           <h3 className="font-semibold">Nutrition Facts</h3>
-          <div className="text-sm space-y-1">
+          <div className="space-y-1 text-sm">
             <div>Calories: 250</div>
             <div>Protein: 4g</div>
             <div>Carbs: 35g</div>
@@ -95,20 +98,29 @@ Perfect for organizing recipe sections, user profile sections, and navigation in
 ## Variants
 
 ### Line Variant
+
 Clean underline style perfect for minimal interfaces.
 
 <Canvas>
   <Story name="Line Variant">
     <Tabs defaultValue="recipes" className="w-full max-w-lg">
       <TabsList variant="line">
-        <TabsTrigger variant="line" value="recipes">My Recipes</TabsTrigger>
-        <TabsTrigger variant="line" value="collections">Collections</TabsTrigger>
-        <TabsTrigger variant="line" value="activity">Activity</TabsTrigger>
-        <TabsTrigger variant="line" value="settings">Settings</TabsTrigger>
+        <TabsTrigger variant="line" value="recipes">
+          My Recipes
+        </TabsTrigger>
+        <TabsTrigger variant="line" value="collections">
+          Collections
+        </TabsTrigger>
+        <TabsTrigger variant="line" value="activity">
+          Activity
+        </TabsTrigger>
+        <TabsTrigger variant="line" value="settings">
+          Settings
+        </TabsTrigger>
       </TabsList>
       <TabsContent variant="line" value="recipes">
         <div className="py-4">
-          <h3 className="font-semibold mb-2">My Recipe Collection</h3>
+          <h3 className="mb-2 font-semibold">My Recipe Collection</h3>
           <p className="text-sm text-gray-600">
             View and manage all your created recipes. You have 24 recipes saved.
           </p>
@@ -116,23 +128,25 @@ Clean underline style perfect for minimal interfaces.
       </TabsContent>
       <TabsContent variant="line" value="collections">
         <div className="py-4">
-          <h3 className="font-semibold mb-2">Recipe Collections</h3>
+          <h3 className="mb-2 font-semibold">Recipe Collections</h3>
           <p className="text-sm text-gray-600">
-            Organize recipes into themed collections like "Quick Dinners" or "Holiday Treats".
+            Organize recipes into themed collections like "Quick Dinners" or
+            "Holiday Treats".
           </p>
         </div>
       </TabsContent>
       <TabsContent variant="line" value="activity">
         <div className="py-4">
-          <h3 className="font-semibold mb-2">Recent Activity</h3>
+          <h3 className="mb-2 font-semibold">Recent Activity</h3>
           <p className="text-sm text-gray-600">
-            Track your cooking activity, saved recipes, and community interactions.
+            Track your cooking activity, saved recipes, and community
+            interactions.
           </p>
         </div>
       </TabsContent>
       <TabsContent variant="line" value="settings">
         <div className="py-4">
-          <h3 className="font-semibold mb-2">Profile Settings</h3>
+          <h3 className="mb-2 font-semibold">Profile Settings</h3>
           <p className="text-sm text-gray-600">
             Manage your profile, preferences, and account settings.
           </p>
@@ -143,16 +157,25 @@ Clean underline style perfect for minimal interfaces.
 </Canvas>
 
 ### Pills Variant
+
 Rounded pill style for modern, friendly interfaces.
 
 <Canvas>
   <Story name="Pills Variant">
     <Tabs defaultValue="breakfast" className="w-full max-w-lg">
       <TabsList variant="pills">
-        <TabsTrigger variant="pills" value="breakfast">Breakfast</TabsTrigger>
-        <TabsTrigger variant="pills" value="lunch">Lunch</TabsTrigger>
-        <TabsTrigger variant="pills" value="dinner">Dinner</TabsTrigger>
-        <TabsTrigger variant="pills" value="dessert">Dessert</TabsTrigger>
+        <TabsTrigger variant="pills" value="breakfast">
+          Breakfast
+        </TabsTrigger>
+        <TabsTrigger variant="pills" value="lunch">
+          Lunch
+        </TabsTrigger>
+        <TabsTrigger variant="pills" value="dinner">
+          Dinner
+        </TabsTrigger>
+        <TabsTrigger variant="pills" value="dessert">
+          Dessert
+        </TabsTrigger>
       </TabsList>
       <TabsContent variant="pills" value="breakfast">
         <div className="space-y-2">
@@ -191,6 +214,7 @@ Rounded pill style for modern, friendly interfaces.
 </Canvas>
 
 ### Card Variant
+
 Elevated card style with shadow for premium content areas.
 
 <Canvas>
@@ -205,7 +229,7 @@ Elevated card style with shadow for premium content areas.
       <TabsContent variant="card" value="overview">
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Recipe Overview</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
             <div>
               <div className="font-medium text-gray-600">Prep Time</div>
               <div>15 minutes</div>
@@ -225,7 +249,8 @@ Elevated card style with shadow for premium content areas.
           </div>
           <p className="text-gray-600">
             A delicious and easy recipe that's perfect for weeknight dinners.
-            This dish combines fresh ingredients with simple techniques for amazing results.
+            This dish combines fresh ingredients with simple techniques for
+            amazing results.
           </p>
         </div>
       </TabsContent>
@@ -255,7 +280,7 @@ Elevated card style with shadow for premium content areas.
       <TabsContent variant="card" value="method">
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Cooking Method</h3>
-          <ol className="space-y-3 list-decimal list-inside">
+          <ol className="list-inside list-decimal space-y-3">
             <li>Preheat your oven to 350°F (175°C)</li>
             <li>In a large bowl, mix together the flour and sugar</li>
             <li>Add the softened butter and mix until crumbly</li>
@@ -329,6 +354,7 @@ Elevated card style with shadow for premium content areas.
         </Tabs>
       </div>
     </div>
+
   </Story>
 </Canvas>
 
@@ -479,6 +505,7 @@ Elevated card style with shadow for premium content areas.
         </div>
       </TabsContent>
     </Tabs>
+
   </Story>
 </Canvas>
 

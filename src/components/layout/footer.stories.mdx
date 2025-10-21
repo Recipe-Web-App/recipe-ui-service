@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Footer } from './footer';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
@@ -39,32 +45,33 @@ a consistent, accessible footer experience across the application.
 ## Usage
 
 Use Footer for:
+
 - Application-wide footer navigation
 - Legal and policy link organization
 - Build and version information display
 - Social media presence and community links
 - Consistent branding and information architecture
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    showBuildInfo: {
-      control: { type: 'boolean' },
-      description: 'Whether to show build/version information',
-      defaultValue: true
-    },
-    showSocialLinks: {
-      control: { type: 'boolean' },
-      description: 'Whether to show social media links',
-      defaultValue: true
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      showBuildInfo: {
+        control: { type: 'boolean' },
+        description: 'Whether to show build/version information',
+        defaultValue: true
+      },
+      showSocialLinks: {
+        control: { type: 'boolean' },
+        description: 'Whether to show social media links',
+        defaultValue: true
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # Footer
 
@@ -73,17 +80,13 @@ Use Footer for:
 ## Complete Footer
 
 <Canvas>
-  <Story name="Complete">
-    {() => <Footer />}
-  </Story>
+  <Story name="Complete">{() => <Footer />}</Story>
 </Canvas>
 
 ## Without Build Info
 
 <Canvas>
-  <Story name="No Build Info">
-    {() => <Footer showBuildInfo={false} />}
-  </Story>
+  <Story name="No Build Info">{() => <Footer showBuildInfo={false} />}</Story>
 </Canvas>
 
 ## Without Social Links
@@ -119,6 +122,7 @@ Use Footer for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -127,7 +131,7 @@ Use Footer for:
 <Canvas>
   <Story name="Tablet Layout">
     {() => (
-      <div className="max-w-2xl mx-auto">
+      <div className="mx-auto max-w-2xl">
         <Footer />
       </div>
     )}
@@ -150,9 +154,7 @@ Use Footer for:
 
 <Canvas>
   <Story name="Custom Style">
-    {() => (
-      <Footer className="bg-muted border-2 border-primary" />
-    )}
+    {() => <Footer className="bg-muted border-primary border-2" />}
   </Story>
 </Canvas>
 
@@ -198,15 +200,14 @@ Use Footer for:
         <Footer />
       </div>
     )}
+
   </Story>
 </Canvas>
 
 ## Interactive Example
 
 <Canvas>
-  <Story name="Interactive">
-    {(args) => <Footer {...args} />}
-  </Story>
+  <Story name="Interactive">{args => <Footer {...args} />}</Story>
 </Canvas>
 
 ## Component API
@@ -216,24 +217,28 @@ Use Footer for:
 ## Footer Sections
 
 ### Product Section
+
 - **About** - Company information and mission
 - **Features** - Product capabilities and benefits
 - **Pricing** - Subscription and pricing details
 - **Changelog** - Product updates and release notes
 
 ### Resources Section
+
 - **Documentation** - User guides and API docs
 - **Blog** - Articles and tutorials
 - **Support** - Help center and contact
 - **API Reference** - Technical documentation
 
 ### Community Section
+
 - **Forum** - Community discussions
 - **Discord** - Real-time chat and support
 - **Contribute** - Open source contributions
 - **Events** - Workshops and community events
 
 ### Legal Section
+
 - **Privacy Policy** - Data protection and privacy
 - **Terms of Service** - Usage terms and conditions
 - **Cookie Policy** - Cookie usage and preferences
@@ -242,18 +247,21 @@ Use Footer for:
 ## Responsive Behavior
 
 ### Mobile (< 768px)
+
 - Single column layout
 - Stacked sections with full width
 - Compact spacing
 - Vertical layout for bottom section
 
 ### Tablet (768px - 1024px)
+
 - Two column grid layout
 - Balanced section distribution
 - Medium spacing
 - Horizontal bottom section
 
 ### Desktop (> 1024px)
+
 - Four column grid layout
 - All sections in one row
 - Full spacing
@@ -271,18 +279,21 @@ Use Footer for:
 ## Design Guidelines
 
 ### Layout Principles
+
 - **Consistency**: Uniform spacing and typography throughout
 - **Hierarchy**: Clear visual hierarchy with section titles
 - **Balance**: Even distribution of content across sections
 - **Flexibility**: Adapts to different content amounts
 
 ### Typography
+
 - Section titles use uppercase with letter spacing
 - Links use consistent sizing and color
 - Copyright text uses muted styling
 - Build info uses small, technical styling
 
 ### Spacing
+
 - Consistent vertical rhythm between sections
 - Appropriate margins and padding
 - Responsive spacing that scales with screen size

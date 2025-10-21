@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   Content,
   ContentProvider,
@@ -57,52 +63,53 @@ for building consistent, responsive content areas with loading states, error han
 ## Usage
 
 Use Content components for:
+
 - Application main content areas
 - Dashboard layouts with multiple sections
 - Data display with loading and error states
 - Responsive content grids and lists
 - Consistent page headers and navigation
 - Collapsible content sections
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'contained', 'fluid'],
-      description: 'Content pane variant',
-      defaultValue: 'default'
-    },
-    viewMode: {
-      control: { type: 'select' },
-      options: ['grid', 'card', 'list', 'table'],
-      description: 'Content view mode',
-      defaultValue: 'grid'
-    },
-    contentWidth: {
-      control: { type: 'select' },
-      options: ['contained', 'fluid', 'narrow'],
-      description: 'Content width constraint',
-      defaultValue: 'contained'
-    },
-    loading: {
-      control: { type: 'boolean' },
-      description: 'Show loading state',
-      defaultValue: false
-    },
-    scrollable: {
-      control: { type: 'boolean' },
-      description: 'Enable scrolling',
-      defaultValue: true
-    },
-    padding: {
-      control: { type: 'boolean' },
-      description: 'Apply default padding',
-      defaultValue: true
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'contained', 'fluid'],
+        description: 'Content pane variant',
+        defaultValue: 'default'
+      },
+      viewMode: {
+        control: { type: 'select' },
+        options: ['grid', 'card', 'list', 'table'],
+        description: 'Content view mode',
+        defaultValue: 'grid'
+      },
+      contentWidth: {
+        control: { type: 'select' },
+        options: ['contained', 'fluid', 'narrow'],
+        description: 'Content width constraint',
+        defaultValue: 'contained'
+      },
+      loading: {
+        control: { type: 'boolean' },
+        description: 'Show loading state',
+        defaultValue: false
+      },
+      scrollable: {
+        control: { type: 'boolean' },
+        description: 'Enable scrolling',
+        defaultValue: true
+      },
+      padding: {
+        control: { type: 'boolean' },
+        description: 'Apply default padding',
+        defaultValue: true
+      }
+    }}
+  />
 
 # Content
 
@@ -123,9 +130,9 @@ Use Content components for:
       >
         <div className="space-y-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="p-4 bg-muted/20 rounded border">
-              <h3 className="font-medium mb-2">Content Item {i + 1}</h3>
-              <p className="text-sm text-muted-foreground">
+            <div key={i} className="bg-muted/20 rounded border p-4">
+              <h3 className="mb-2 font-medium">Content Item {i + 1}</h3>
+              <p className="text-muted-foreground text-sm">
                 Sample content that would appear in the main content area.
               </p>
             </div>
@@ -178,6 +185,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -203,6 +211,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -246,6 +255,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -295,6 +305,7 @@ Use Content components for:
         </ContentSection>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -330,6 +341,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -367,6 +379,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -408,6 +421,7 @@ Use Content components for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -496,6 +510,7 @@ Use Content components for:
         </div>
       </ContentPane>
     )}
+
   </Story>
 </Canvas>
 
@@ -575,6 +590,7 @@ Use Content components for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -582,7 +598,7 @@ Use Content components for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <ContentPane
         {...args}
         header={
@@ -594,9 +610,9 @@ Use Content components for:
       >
         <ContentGrid columns={3} responsive>
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="p-4 bg-muted/20 rounded border">
-              <h4 className="font-medium mb-2">Item {i + 1}</h4>
-              <p className="text-sm text-muted-foreground">
+            <div key={i} className="bg-muted/20 rounded border p-4">
+              <h4 className="mb-2 font-medium">Item {i + 1}</h4>
+              <p className="text-muted-foreground text-sm">
                 Configurable content item
               </p>
             </div>
@@ -614,50 +630,62 @@ Use Content components for:
 ## Sub-Components
 
 ### ContentHeader
+
 Header component with title, description, breadcrumbs, and actions.
 
 ### ContentSkeleton
+
 Loading skeleton that adapts to different view modes (grid, list, table).
 
 ### ContentError
+
 Error display with recovery actions and contextual messaging for different error types.
 
 ### ContentSection
+
 Sectioned content with optional collapsible functionality and header actions.
 
 ### ContentGrid
+
 Responsive grid container with configurable columns and gaps.
 
 ### ContentList
+
 List container with optional dividers and hover effects.
 
 ### ContentActions
+
 Action bar with different alignment options (left, right, between, center).
 
 ### ContentProvider
+
 Context provider for managing global view modes and content width preferences.
 
 ## Design Guidelines
 
 ### Layout Hierarchy
+
 - Use ContentHeader for page/section titles and navigation
 - Organize content with ContentSection for logical groupings
 - Apply ContentGrid or ContentList for data display
 - Include ContentActions for user interactions
 
 ### Responsive Behavior
+
 - ContentGrid automatically adapts column count on smaller screens
 - ContentHeader stacks elements vertically on mobile
 - ContentActions reflow to prevent overflow
 - All components respect responsive spacing patterns
 
 ### Error Handling
+
 - Use appropriate error types (network, 404, 500, unauthorized, validation)
 - Provide clear recovery actions (retry, go back, home)
 - Include helpful error messages and optional error codes
 - Consider error context and user journey
 
 ### Loading States
+
 - Match skeleton layout to actual content structure
 - Use appropriate skeleton variants for different view modes
 - Include header skeletons when needed

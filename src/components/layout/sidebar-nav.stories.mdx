@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { SidebarNav } from './sidebar-nav';
 
 <Meta
@@ -39,40 +45,41 @@ nested navigation, collapsible sections, and active route highlighting.
 ## Usage
 
 Use SidebarNav for:
+
 - Sidebar navigation with hierarchical structure
 - Multi-level menu systems
 - Collapsible navigation sections
 - Context-sensitive navigation
 - Accessible navigation with screen reader support
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    collapsed: {
-      control: { type: 'boolean' },
-      description: 'Whether the sidebar is in collapsed state',
-      defaultValue: false
-    },
-    maxDepth: {
-      control: { type: 'number', min: 1, max: 5 },
-      description: 'Maximum nesting depth to prevent infinite recursion',
-      defaultValue: 3
-    },
-    activeRoute: {
-      control: { type: 'text' },
-      description: 'Current active route for highlighting'
-    },
-    onItemClick: {
-      action: 'item clicked',
-      description: 'Callback when navigation item is clicked'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      collapsed: {
+        control: { type: 'boolean' },
+        description: 'Whether the sidebar is in collapsed state',
+        defaultValue: false
+      },
+      maxDepth: {
+        control: { type: 'number', min: 1, max: 5 },
+        description: 'Maximum nesting depth to prevent infinite recursion',
+        defaultValue: 3
+      },
+      activeRoute: {
+        control: { type: 'text' },
+        description: 'Current active route for highlighting'
+      },
+      onItemClick: {
+        action: 'item clicked',
+        description: 'Callback when navigation item is clicked'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # SidebarNav
 
@@ -111,6 +118,7 @@ Use SidebarNav for:
 
       return <SidebarNav items={sampleItems} collapsed={false} />;
     }}
+
   </Story>
 </Canvas>
 
@@ -131,6 +139,7 @@ Use SidebarNav for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -171,6 +180,7 @@ Use SidebarNav for:
 
       return <SidebarNav items={sampleItems} {...args} />;
     }}
+
   </Story>
 </Canvas>
 

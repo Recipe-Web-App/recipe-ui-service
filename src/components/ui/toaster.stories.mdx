@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { Toaster, useToaster } from './toaster';
 import { useToast } from '@/hooks/ui/use-toast';
 
@@ -44,11 +50,11 @@ from anywhere in your application.
 
 The Toaster is typically placed once in your layout and will handle all
 toast notifications throughout your application lifecycle.
-        `
-      }
-    }
-  }}
-  argTypes={{
+`
+}
+}
+}}
+argTypes={{
     position: {
       control: { type: 'select' },
       options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
@@ -159,6 +165,7 @@ The Toaster component displays all active toast notifications in a fixed positio
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -229,6 +236,7 @@ The Toaster can be positioned in any of the 6 available positions.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -306,6 +314,7 @@ Control the maximum number of visible toasts and see how they stack.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -392,6 +401,7 @@ Toasts can include action buttons for user interaction.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -500,6 +510,7 @@ Demonstrate loading toasts that can be updated based on async operations.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -575,6 +586,7 @@ Configure different durations for toast notifications.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -635,6 +647,7 @@ Customize the spacing between toasts and overall styling.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -683,6 +696,7 @@ Customize the spacing between toasts and overall styling.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -735,8 +749,8 @@ await toast.promise(apiCall(), {
 toast.error('Failed to delete', {
   action: {
     label: 'Retry',
-    onClick: () => handleRetry()
-  }
+    onClick: () => handleRetry(),
+  },
 });
 
 // Custom duration

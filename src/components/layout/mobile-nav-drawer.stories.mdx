@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { MobileNavDrawer } from './mobile-nav-drawer';
 
 <Meta
@@ -36,21 +42,22 @@ that slides out from the right side of the screen.
 ## Usage
 
 Use MobileNavDrawer for:
+
 - Mobile navigation experiences
 - Touch-friendly navigation interfaces
 - Full-screen navigation overlays
 - Mobile-first responsive designs
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # MobileNavDrawer
 
@@ -61,8 +68,8 @@ Use MobileNavDrawer for:
 <Canvas>
   <Story name="Default">
     {() => (
-      <div className="text-center p-8">
-        <div className="text-sm text-muted-foreground">
+      <div className="p-8 text-center">
+        <div className="text-muted-foreground text-sm">
           MobileNavDrawer is controlled by navigation store state.
           <br />
           It slides out from the right when mobile menu is opened.
@@ -76,9 +83,7 @@ Use MobileNavDrawer for:
 ## Interactive Example
 
 <Canvas>
-  <Story name="Interactive">
-    {(args) => <MobileNavDrawer {...args} />}
-  </Story>
+  <Story name="Interactive">{args => <MobileNavDrawer {...args} />}</Story>
 </Canvas>
 
 ## Component API

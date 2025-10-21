@@ -63,6 +63,7 @@ import {
 ## Positions
 
 ### Left Drawer
+
 Slides in from the left side of the screen.
 
 ```tsx
@@ -77,6 +78,7 @@ Slides in from the left side of the screen.
 ```
 
 ### Right Drawer
+
 Slides in from the right side of the screen.
 
 ```tsx
@@ -91,6 +93,7 @@ Slides in from the right side of the screen.
 ```
 
 ### Top Drawer
+
 Slides down from the top of the screen.
 
 ```tsx
@@ -105,6 +108,7 @@ Slides down from the top of the screen.
 ```
 
 ### Bottom Drawer
+
 Slides up from the bottom of the screen.
 
 ```tsx
@@ -121,6 +125,7 @@ Slides up from the bottom of the screen.
 ## Sizes
 
 ### Extra Small (xs)
+
 Compact drawer for minimal content.
 
 ```tsx
@@ -130,6 +135,7 @@ Compact drawer for minimal content.
 ```
 
 ### Small (sm)
+
 Small drawer for focused content.
 
 ```tsx
@@ -139,6 +145,7 @@ Small drawer for focused content.
 ```
 
 ### Medium (md) - Default
+
 Standard drawer size for most content.
 
 ```tsx
@@ -148,6 +155,7 @@ Standard drawer size for most content.
 ```
 
 ### Large (lg)
+
 Large drawer for complex content.
 
 ```tsx
@@ -157,6 +165,7 @@ Large drawer for complex content.
 ```
 
 ### Extra Large (xl)
+
 Extra large drawer for extensive content.
 
 ```tsx
@@ -166,6 +175,7 @@ Extra large drawer for extensive content.
 ```
 
 ### Full Size
+
 Full-width or full-height drawer.
 
 ```tsx
@@ -210,12 +220,12 @@ const navigationItems = [
     name: 'John Chef',
     email: 'john@example.com',
   }}
-  onItemClick={(item) => console.log('Clicked:', item)}
+  onItemClick={item => console.log('Clicked:', item)}
 >
   <DrawerTrigger asChild>
     <Button variant="outline">Menu</Button>
   </DrawerTrigger>
-</NavigationDrawer>
+</NavigationDrawer>;
 ```
 
 ## Recipe Drawer
@@ -253,7 +263,7 @@ const ingredients = [
   <DrawerTrigger asChild>
     <Button>View Ingredients</Button>
   </DrawerTrigger>
-</RecipeDrawer>
+</RecipeDrawer>;
 ```
 
 ### Cooking Instructions
@@ -286,7 +296,7 @@ const instructions = [
   <DrawerTrigger asChild>
     <Button>View Instructions</Button>
   </DrawerTrigger>
-</RecipeDrawer>
+</RecipeDrawer>;
 ```
 
 ### Shopping List
@@ -319,7 +329,7 @@ const shoppingList = [
   <DrawerTrigger asChild>
     <Button>Shopping List</Button>
   </DrawerTrigger>
-</RecipeDrawer>
+</RecipeDrawer>;
 ```
 
 ## Mobile Menu Drawer
@@ -338,8 +348,8 @@ Specialized drawer for mobile navigation with search and notifications.
     name: 'Jane Chef',
     email: 'jane@example.com',
   }}
-  onItemClick={(item) => console.log('Clicked:', item)}
-  onSearchChange={(value) => console.log('Search:', value)}
+  onItemClick={item => console.log('Clicked:', item)}
+  onSearchChange={value => console.log('Search:', value)}
 >
   <DrawerTrigger asChild>
     <Button>Mobile Menu</Button>
@@ -350,6 +360,7 @@ Specialized drawer for mobile navigation with search and notifications.
 ## Controlled vs Uncontrolled
 
 ### Controlled
+
 Manage the open state externally.
 
 ```tsx
@@ -364,10 +375,11 @@ const [open, setOpen] = useState(false);
       <DrawerTitle>Controlled Drawer</DrawerTitle>
     </DrawerHeader>
   </DrawerContent>
-</Drawer>
+</Drawer>;
 ```
 
 ### Uncontrolled
+
 Let the component manage its own state.
 
 ```tsx
@@ -395,20 +407,25 @@ Let the component manage its own state.
 ## Recipe App Patterns
 
 ### Navigation Pattern
+
 Use NavigationDrawer for main app navigation with recipe categories and user actions.
 
 ### Ingredient Management
+
 Use RecipeDrawer with ingredient type for shopping list management and cooking preparation.
 
 ### Cooking Mode
+
 Use RecipeDrawer with instructions type for step-by-step cooking guidance with progress tracking.
 
 ### Mobile Experience
+
 Use MobileMenuDrawer for responsive navigation with search functionality.
 
 ## Props Reference
 
 ### Drawer Props
+
 - `open?: boolean` - Controls drawer open state
 - `onOpenChange?: (open: boolean) => void` - Callback when open state changes
 - `defaultOpen?: boolean` - Default open state for uncontrolled usage
@@ -418,12 +435,14 @@ Use MobileMenuDrawer for responsive navigation with search functionality.
 - `preventScroll?: boolean` - Prevent body scrolling when open
 
 ### DrawerContent Props
+
 - `position?: 'left' | 'right' | 'top' | 'bottom'` - Drawer position
 - `size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'` - Drawer size
 - `variant?: 'default' | 'elevated' | 'minimal' | 'overlay'` - Style variant
 - `showClose?: boolean` - Show close button in header
 
 ### NavigationDrawer Props
+
 - `items: NavigationItem[]` - Array of navigation items
 - `activeItemId?: string` - Currently active item ID
 - `showProfile?: boolean` - Show user profile section
@@ -431,6 +450,7 @@ Use MobileMenuDrawer for responsive navigation with search functionality.
 - `onItemClick?: (item: NavigationItem) => void` - Item click handler
 
 ### RecipeDrawer Props
+
 - `recipeTitle?: string` - Recipe title to display
 - `ingredients?: DrawerIngredient[]` - Array of recipe ingredients
 - `instructions?: DrawerInstruction[]` - Array of cooking instructions

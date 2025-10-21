@@ -1,10 +1,16 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import {
   withLayout,
   withDefaultLayout,
   withFocusedLayout,
   withMinimalLayout,
-  withLayoutProvider
+  withLayoutProvider,
 } from './layout-hocs';
 import { LayoutProvider } from './layout-provider';
 
@@ -21,15 +27,18 @@ without repeating layout setup code.
 ## Available HOCs
 
 ### withLayout(variant)
+
 A flexible HOC factory that creates layout wrappers for any component. You can specify
 the layout variant to use, making it easy to apply different layout types consistently.
 
 ### Pre-configured HOCs
+
 - **withDefaultLayout** - Wraps components with the default layout variant
 - **withFocusedLayout** - Wraps components with the focused layout variant
 - **withMinimalLayout** - Wraps components with the minimal layout variant
 
 ### withLayoutProvider
+
 Wraps components with just the LayoutProvider context, useful when you need layout
 state management without the full layout structure.
 
@@ -44,15 +53,16 @@ state management without the full layout structure.
 ## Common Patterns
 
 These HOCs are perfect for:
+
 - Page-level components that need consistent layouts
 - Route-based layout application
 - Component libraries that need layout integration
 - Conditional layout wrapping based on user state or feature flags
-        `
-      }
-    }
+  `
+  }
+  }
   }}
-/>
+  />
 
 # Layout HOCs
 
@@ -89,16 +99,18 @@ The `withLayout` HOC factory allows you to create custom layout wrappers for any
             <div className="p-6 border rounded-lg bg-card">
               <h3 className="font-semibold mb-3">Usage Example</h3>
               <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
+
 {`const WrappedPage = withLayout('default')(SamplePage);
 
 // Or with custom variant
 const CustomWrapper = withLayout('focused');
 const FocusedPage = CustomWrapper(SamplePage);`}
-              </pre>
-            </div>
-          </div>
-        </div>
-      );
+
+</pre>
+</div>
+</div>
+</div>
+);
 
       // Create HOC instances for demonstration
       const DefaultWrapped = withDefaultLayout(SamplePage);
@@ -157,6 +169,7 @@ const FocusedPage = CustomWrapper(SamplePage);`}
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -313,6 +326,7 @@ Each pre-configured HOC applies a specific layout variant consistently.
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -394,6 +408,7 @@ layout state management without the full layout structure.
 
       return <WrappedComponent />;
     }}
+
   </Story>
 </Canvas>
 
@@ -409,6 +424,7 @@ layout state management without the full layout structure.
           <div className="p-6 border rounded-lg bg-card">
             <h3 className="font-semibold mb-4">Basic HOC Usage</h3>
             <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+
 {`import { withDefaultLayout, withFocusedLayout, withMinimalLayout } from '@/components/layout';
 
 // Wrap your page components
@@ -420,12 +436,14 @@ const LoginPage = () => <div>Login Form</div>;
 export const Dashboard = withDefaultLayout(DashboardPage);
 export const Article = withFocusedLayout(ArticlePage);
 export const Login = withMinimalLayout(LoginPage);`}
-            </pre>
-          </div>
+
+</pre>
+</div>
 
           <div className="p-6 border rounded-lg bg-card">
             <h3 className="font-semibold mb-4">Custom Layout HOC</h3>
             <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+
 {`import { withLayout } from '@/components/layout';
 
 // Create custom layout wrapper
@@ -438,56 +456,64 @@ const Recipe = withCustomLayout(RecipeComponent);
 
 // Or inline usage
 const WrappedComponent = withLayout('minimal')(YourComponent);`}
-            </pre>
-          </div>
+
+</pre>
+</div>
 
           <div className="p-6 border rounded-lg bg-card">
             <h3 className="font-semibold mb-4">Layout Provider HOC</h3>
             <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+
 {`import { withLayoutProvider } from '@/components/layout';
 
 const CustomDashboard = () => {
-  const { variant, showSidebar, toggleSidebar } = useLayoutContext();
+const { variant, showSidebar, toggleSidebar } = useLayoutContext();
 
-  return (
-    <div>
-      <button onClick={toggleSidebar}>Toggle Sidebar</button>
-      <div>Custom layout with variant: {variant}</div>
-    </div>
-  );
-};
+return (
+
+<div>
+  <button onClick={toggleSidebar}>Toggle Sidebar</button>
+  <div>Custom layout with variant: {variant}</div>
+</div>
+); };
 
 // Wrap with provider and options
 export const Dashboard = withLayoutProvider(CustomDashboard, {
-  variant: 'default',
-  defaultShowSidebar: true,
-  defaultShowFooter: false
+variant: 'default',
+defaultShowSidebar: true,
+defaultShowFooter: false
 });`}
-            </pre>
-          </div>
+
+</pre>
+</div>
 
           <div className="p-6 border rounded-lg bg-card">
             <h3 className="font-semibold mb-4">TypeScript Usage</h3>
             <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+
 {`import { withDefaultLayout } from '@/components/layout';
 import type { FC } from 'react';
 
 interface PageProps {
-  title: string;
-  data: Array<{ id: string; name: string }>;
+title: string;
+data: Array<{ id: string; name: string }>;
 }
 
 const PageComponent: FC<PageProps> = ({ title, data }) => (
-  <div>
-    <h1>{title}</h1>
-    {data.map(item => <div key={item.id}>{item.name}</div>)}
-  </div>
+
+<div>
+  <h1>{title}</h1>
+  {data.map(item => (
+    <div key={item.id}>{item.name}</div>
+  ))}
+</div>
 );
 
 // HOC maintains full type safety
 export const Page = withDefaultLayout(PageComponent);
 
 // Usage maintains props interface
+
 <Page title="My Page" data={[{ id: '1', name: 'Item 1' }]} />`}
             </pre>
           </div>
@@ -495,6 +521,7 @@ export const Page = withDefaultLayout(PageComponent);
           <div className="p-6 border rounded-lg bg-card">
             <h3 className="font-semibold mb-4">Next.js Route Integration</h3>
             <pre className="bg-muted p-4 rounded-md text-sm overflow-x-auto">
+
 {`// pages/dashboard.tsx
 import { withDefaultLayout } from '@/components/layout';
 
@@ -512,11 +539,13 @@ import { withMinimalLayout } from '@/components/layout';
 
 const LoginPage = () => <div>Login</div>;
 export default withMinimalLayout(LoginPage);`}
-            </pre>
-          </div>
-        </div>
-      </div>
-    )}
+
+</pre>
+</div>
+</div>
+</div>
+)}
+
   </Story>
 </Canvas>
 
@@ -624,6 +653,7 @@ export default withMinimalLayout(LoginPage);`}
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -695,6 +725,7 @@ export default withMinimalLayout(LoginPage);`}
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -703,23 +734,33 @@ export default withMinimalLayout(LoginPage);`}
 ### withLayout(variant)
 
 ```typescript
-function withLayout(variant: LayoutVariant = 'default'): <P extends object>(
+function withLayout(
+  variant: LayoutVariant = 'default'
+): <P extends object>(
   Component: React.ComponentType<P>
-) => React.ForwardRefExoticComponent<P>
+) => React.ForwardRefExoticComponent<P>;
 ```
 
 **Parameters:**
+
 - `variant` - Layout variant to apply ('default', 'focused', 'minimal')
 
 **Returns:**
+
 - Higher-order component that wraps the input component with the specified layout
 
 ### Pre-configured HOCs
 
 ```typescript
-const withDefaultLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
-const withFocusedLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
-const withMinimalLayout: <P extends object>(Component: React.ComponentType<P>) => React.ForwardRefExoticComponent<P>
+const withDefaultLayout: <P extends object>(
+  Component: React.ComponentType<P>
+) => React.ForwardRefExoticComponent<P>;
+const withFocusedLayout: <P extends object>(
+  Component: React.ComponentType<P>
+) => React.ForwardRefExoticComponent<P>;
+const withMinimalLayout: <P extends object>(
+  Component: React.ComponentType<P>
+) => React.ForwardRefExoticComponent<P>;
 ```
 
 ### withLayoutProvider
@@ -728,12 +769,14 @@ const withMinimalLayout: <P extends object>(Component: React.ComponentType<P>) =
 function withLayoutProvider<P extends object>(
   Component: React.ComponentType<P>,
   options: Omit<LayoutProviderProps, 'children'> = {}
-): React.ForwardRefExoticComponent<P>
+): React.ForwardRefExoticComponent<P>;
 ```
 
 **Parameters:**
+
 - `Component` - React component to wrap
 - `options` - LayoutProvider configuration options
 
 **Returns:**
+
 - Component wrapped with LayoutProvider context

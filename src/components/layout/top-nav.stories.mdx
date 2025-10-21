@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { TopNav } from './top-nav';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
@@ -41,35 +47,36 @@ It intelligently adapts to different screen sizes and authentication states.
 ## Usage
 
 Use TopNav for:
+
 - Main application header navigation
 - Primary navigation across all pages
 - Responsive navigation that adapts to any screen size
 - Authentication-aware navigation experiences
 - Modern, glassmorphism-style navigation bars
 - Accessible navigation with screen reader support
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    variant: {
-      control: { type: 'select' },
-      options: ['default', 'minimal', 'transparent'],
-      description: 'Visual variant of the navigation bar',
-      defaultValue: 'default'
-    },
-    position: {
-      control: { type: 'select' },
-      options: ['sticky', 'fixed', 'static'],
-      description: 'CSS positioning behavior',
-      defaultValue: 'sticky'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'minimal', 'transparent'],
+        description: 'Visual variant of the navigation bar',
+        defaultValue: 'default'
+      },
+      position: {
+        control: { type: 'select' },
+        options: ['sticky', 'fixed', 'static'],
+        description: 'CSS positioning behavior',
+        defaultValue: 'sticky'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # TopNav
 
@@ -82,8 +89,8 @@ Use TopNav for:
     {() => (
       <div className="relative">
         <TopNav position="static" />
-        <div className="p-6 bg-muted/20">
-          <div className="text-sm text-muted-foreground">
+        <div className="bg-muted/20 p-6">
+          <div className="text-muted-foreground text-sm">
             Page content appears below the navigation bar
           </div>
         </div>
@@ -114,6 +121,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -149,6 +157,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -186,6 +195,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -216,6 +226,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -254,6 +265,7 @@ Use TopNav for:
         </main>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -282,6 +294,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -318,6 +331,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -329,11 +343,14 @@ Use TopNav for:
       <div className="dark">
         <div className="bg-background">
           <TopNav position="static" />
-          <div className="p-6 bg-background">
+          <div className="bg-background p-6">
             <div className="space-y-4">
-              <h2 className="text-foreground text-xl font-semibold">Dark Theme</h2>
+              <h2 className="text-foreground text-xl font-semibold">
+                Dark Theme
+              </h2>
               <p className="text-muted-foreground">
-                Navigation automatically adapts to dark theme with proper contrast and backdrop blur
+                Navigation automatically adapts to dark theme with proper
+                contrast and backdrop blur
               </p>
             </div>
           </div>
@@ -382,6 +399,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -420,6 +438,7 @@ Use TopNav for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -445,6 +464,7 @@ Use TopNav for:
         </div>
       );
     }}
+
   </Story>
 </Canvas>
 
@@ -452,14 +472,14 @@ Use TopNav for:
 
 <Canvas>
   <Story name="Interactive">
-    {(args) => (
+    {args => (
       <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Use the controls below to configure TopNav:
         </div>
         <TopNav {...args} />
-        <div className="p-6 bg-muted/20">
-          <div className="text-sm text-muted-foreground">
+        <div className="bg-muted/20 p-6">
+          <div className="text-muted-foreground text-sm">
             Sample content area
           </div>
         </div>
@@ -475,6 +495,7 @@ Use TopNav for:
 ## Layout Composition
 
 ### Desktop Layout Structure
+
 - **Logo/Brand**: Left-aligned with home link
 - **GlobalNav**: Center-left navigation items
 - **SearchBar**: Center-right search functionality
@@ -482,6 +503,7 @@ Use TopNav for:
 - **UserMenu**: Far-right user controls
 
 ### Tablet Layout Structure
+
 - **Logo/Brand**: Left-aligned
 - **GlobalNav**: Condensed navigation items
 - **SearchBar**: Compact search icon
@@ -489,6 +511,7 @@ Use TopNav for:
 - **UserMenu**: User controls
 
 ### Mobile Layout Structure
+
 - **Logo/Brand**: Left-aligned
 - **SearchBar**: Compact search icon (optional)
 - **ThemeToggle**: Theme switching
@@ -498,18 +521,21 @@ Use TopNav for:
 ## Visual Variants
 
 ### Default Variant
+
 - Semi-transparent background with backdrop blur
 - Border bottom for separation
 - Modern glassmorphism effect
 - Supports all responsive features
 
 ### Minimal Variant
+
 - Reduced visual weight
 - Only essential controls (theme toggle, user menu)
 - Subtle backdrop blur
 - Perfect for focused content pages
 
 ### Transparent Variant
+
 - Fully transparent background
 - No borders or backdrop effects
 - Overlays content seamlessly
@@ -518,18 +544,21 @@ Use TopNav for:
 ## Position Behaviors
 
 ### Sticky Positioning
+
 - Sticks to top when scrolling
 - Maintains visibility during page navigation
 - Smooth scrolling behavior
 - Most common use case
 
 ### Fixed Positioning
+
 - Always visible at top of viewport
 - Does not scroll with content
 - Covers content when needed
 - Useful for critical navigation
 
 ### Static Positioning
+
 - Normal document flow
 - Scrolls with page content
 - No special positioning behavior
@@ -547,11 +576,13 @@ Use TopNav for:
 ## Responsive Design
 
 ### Breakpoint Behavior
+
 - **Mobile (< 768px)**: Minimal layout with hamburger menu
 - **Tablet (768px - 1024px)**: Compact layout with essential features
 - **Desktop (> 1024px)**: Full layout with all features
 
 ### Component Adaptation
+
 - **GlobalNav**: Hidden on mobile, condensed on tablet, full on desktop
 - **SearchBar**: Icon-only on mobile/tablet, full input on desktop
 - **UserMenu**: Compact on mobile, full on tablet/desktop
@@ -560,12 +591,14 @@ Use TopNav for:
 ## Performance Considerations
 
 ### Optimization Strategies
+
 - Memoized component rendering
 - Efficient responsive behavior
 - Lazy-loaded mobile navigation drawer
 - Minimal re-renders on route changes
 
 ### Bundle Impact
+
 - Tree-shakeable component imports
 - Efficient icon loading
 - Minimal JavaScript for basic functionality

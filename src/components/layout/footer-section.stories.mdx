@@ -1,4 +1,10 @@
-import { Meta, Story, Canvas, ArgsTable, Description } from '@storybook/addon-docs';
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
 import { FooterSection } from './footer-section';
 import { FooterLink } from './footer-link';
 
@@ -24,27 +30,28 @@ It handles consistent spacing, typography, and accessibility for footer navigati
 ## Usage
 
 Use FooterSection for:
+
 - Grouping related footer links by category
 - Creating organized footer layouts
 - Providing navigation structure in footers
 - Maintaining consistent spacing between footer groups
 - Building accessible footer navigation patterns
-        `
-      }
-    }
+  `
+  }
+  }
   }}
   argTypes={{
-    title: {
-      control: { type: 'text' },
-      description: 'Optional section heading text',
-      defaultValue: 'Section Title'
-    },
-    className: {
-      control: { type: 'text' },
-      description: 'Additional CSS classes to apply'
-    }
-  }}
-/>
+      title: {
+        control: { type: 'text' },
+        description: 'Optional section heading text',
+        defaultValue: 'Section Title'
+      },
+      className: {
+        control: { type: 'text' },
+        description: 'Additional CSS classes to apply'
+      }
+    }}
+  />
 
 # FooterSection
 
@@ -55,7 +62,7 @@ Use FooterSection for:
 <Canvas>
   <Story name="With Title">
     {() => (
-      <div className="p-6 bg-background border rounded max-w-sm">
+      <div className="bg-background max-w-sm rounded border p-6">
         <FooterSection title="Company">
           <FooterLink href="/about">About Us</FooterLink>
           <FooterLink href="/careers">Careers</FooterLink>
@@ -72,7 +79,7 @@ Use FooterSection for:
 <Canvas>
   <Story name="Without Title">
     {() => (
-      <div className="p-6 bg-background border rounded max-w-sm">
+      <div className="bg-background max-w-sm rounded border p-6">
         <FooterSection>
           <FooterLink href="/privacy">Privacy Policy</FooterLink>
           <FooterLink href="/terms">Terms of Service</FooterLink>
@@ -113,6 +120,7 @@ Use FooterSection for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -121,7 +129,7 @@ Use FooterSection for:
 <Canvas>
   <Story name="Mixed Content">
     {() => (
-      <div className="p-6 bg-background border rounded max-w-sm">
+      <div className="bg-background max-w-sm rounded border p-6">
         <FooterSection title="Connect">
           <FooterLink href="/newsletter">Newsletter</FooterLink>
           <FooterLink href="https://twitter.com/example" external>
@@ -130,7 +138,7 @@ Use FooterSection for:
           <FooterLink href="https://linkedin.com/company/example" external>
             LinkedIn
           </FooterLink>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             Follow us for updates and news
           </div>
         </FooterSection>
@@ -144,11 +152,8 @@ Use FooterSection for:
 <Canvas>
   <Story name="Custom Style">
     {() => (
-      <div className="p-6 bg-background border rounded max-w-sm">
-        <FooterSection
-          title="Legal"
-          className="border-l-2 border-primary pl-4"
-        >
+      <div className="bg-background max-w-sm rounded border p-6">
+        <FooterSection title="Legal" className="border-primary border-l-2 pl-4">
           <FooterLink href="/privacy" className="text-xs">
             Privacy Policy
           </FooterLink>
@@ -203,6 +208,7 @@ Use FooterSection for:
         </div>
       </div>
     )}
+
   </Story>
 </Canvas>
 
@@ -211,9 +217,9 @@ Use FooterSection for:
 <Canvas>
   <Story name="Empty Section">
     {() => (
-      <div className="p-6 bg-background border rounded max-w-sm">
+      <div className="bg-background max-w-sm rounded border p-6">
         <FooterSection title="Coming Soon">
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             More links coming soon...
           </div>
         </FooterSection>
@@ -237,16 +243,19 @@ Use FooterSection for:
 ## Design Guidelines
 
 ### Typography
+
 - Section titles use uppercase styling with letter spacing
 - Consistent font weights and sizes throughout
 - Proper color contrast for accessibility
 
 ### Spacing
+
 - Consistent vertical rhythm between sections
 - Proper spacing between title and links
 - Responsive spacing that adapts to screen size
 
 ### Layout
+
 - Flexible grid system for responsive layouts
 - Consistent alignment and positioning
 - Clean separation between sections
