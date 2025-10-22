@@ -473,6 +473,22 @@ const components = [
     variants: 6,
     status: 'ready',
   },
+  {
+    name: 'RecipeListItem',
+    path: '/components-demo/recipe-list-item',
+    description:
+      'Horizontal list item layout for recipe browsing with metadata and quick actions',
+    variants: 9,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeBrowseList',
+    path: '/components-demo/recipe-browse-list',
+    description:
+      'Recipe-specific list wrapper with RecipeListItem integration, pagination, and recipe actions',
+    variants: 7,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -496,7 +512,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">58</div>
+            <div className="text-primary text-3xl font-bold">60</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -504,7 +520,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">463</div>
+            <div className="text-primary text-3xl font-bold">479</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
