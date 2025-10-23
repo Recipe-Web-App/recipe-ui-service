@@ -7,12 +7,18 @@ import {
   Copy,
   Trash2,
   Flag,
+  ExternalLink,
+  CalendarPlus,
 } from 'lucide-react';
 import {
   type RecipeCardActions,
   type RecipeCardMenuItem,
 } from '@/types/ui/recipe-card';
 import { type QuickActionsProps } from '@/types/ui/quick-actions';
+import {
+  type RecipeMenuAction,
+  type RecipeMenuActions,
+} from '@/types/recipe/menu';
 
 /**
  * Get all recipe actions (quick actions + menu items) for QuickActions component
@@ -235,4 +241,126 @@ export function getRecipeMenuItems(
   }
 
   return items;
+}
+
+/**
+ * Get recipe menu actions for RecipeMenu component
+ * Returns menu actions based on ownership and available handlers
+ * This is the primary function for RecipeMenu - replaces menu functionality in QuickActions
+ */
+export function getRecipeMenuActions(
+  handlers: RecipeMenuActions,
+  isOwner: boolean = false
+): RecipeMenuAction[] {
+  const {
+    onView,
+    onEdit,
+    onDuplicate,
+    onDelete,
+    onShare,
+    onAddToCollection,
+    onCopyLink,
+    onAddToMealPlan,
+    onReport,
+  } = handlers;
+
+  const actions: RecipeMenuAction[] = [];
+
+  // View action (always available if handler exists)
+  if (onView) {
+    actions.push({
+      id: 'view',
+      label: 'View details',
+      icon: Eye,
+      onClick: onView,
+      variant: 'default',
+    });
+  }
+
+  // Owner-only actions
+  if (isOwner) {
+    if (onEdit) {
+      actions.push({
+        id: 'edit',
+        label: 'Edit',
+        icon: Edit,
+        onClick: onEdit,
+        variant: 'default',
+      });
+    }
+
+    if (onDuplicate) {
+      actions.push({
+        id: 'duplicate',
+        label: 'Duplicate',
+        icon: Copy,
+        onClick: onDuplicate,
+        variant: 'default',
+      });
+    }
+  }
+
+  // Universal actions
+  if (onShare) {
+    actions.push({
+      id: 'share',
+      label: 'Share',
+      icon: Share2,
+      onClick: onShare,
+      variant: 'default',
+    });
+  }
+
+  if (onAddToCollection) {
+    actions.push({
+      id: 'add-to-collection',
+      label: 'Add to collection',
+      icon: Plus,
+      onClick: onAddToCollection,
+      variant: 'default',
+    });
+  }
+
+  if (onCopyLink) {
+    actions.push({
+      id: 'copy-link',
+      label: 'Copy link',
+      icon: ExternalLink,
+      onClick: onCopyLink,
+      variant: 'default',
+    });
+  }
+
+  if (onAddToMealPlan) {
+    actions.push({
+      id: 'add-to-meal-plan',
+      label: 'Add to meal plan',
+      icon: CalendarPlus,
+      onClick: onAddToMealPlan,
+      variant: 'default',
+    });
+  }
+
+  // Destructive actions (separated by ownership)
+  if (isOwner && onDelete) {
+    actions.push({
+      id: 'delete',
+      label: 'Delete',
+      icon: Trash2,
+      onClick: onDelete,
+      variant: 'destructive',
+    });
+  }
+
+  if (!isOwner && onReport) {
+    actions.push({
+      id: 'report',
+      label: 'Report',
+      icon: Flag,
+      onClick: onReport,
+      variant: 'destructive',
+    });
+  }
+
+  return actions;
 }

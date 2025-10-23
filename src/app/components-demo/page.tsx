@@ -497,6 +497,14 @@ const components = [
     variants: 6,
     status: 'ready',
   },
+  {
+    name: 'RecipeMenu',
+    path: '/components-demo/recipe-menu',
+    description:
+      'Standalone contextual menu for recipe actions with ownership-based permissions and new features',
+    variants: 8,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -520,7 +528,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">60</div>
+            <div className="text-primary text-3xl font-bold">61</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -528,7 +536,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">479</div>
+            <div className="text-primary text-3xl font-bold">487</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

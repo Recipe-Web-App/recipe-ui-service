@@ -1,0 +1,376 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/blocks';
+import { RecipeMenu } from './RecipeMenu';
+import { DifficultyLevel } from '@/types/recipe-management/common';
+
+<Meta
+  title="Recipe/RecipeMenu"
+  component={RecipeMenu}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A standalone, reusable contextual menu component for recipe-specific actions. Displays different actions based on ownership and available handlers.',
+      },
+    },
+  }}
+/>
+
+# RecipeMenu
+
+A three-dot menu component that provides recipe-specific actions with ownership-based permissions.
+
+## Features
+
+- **Ownership-Based Actions**: Different menu items for owners vs non-owners
+- **New Actions**: Copy Link and Add to Meal Plan
+- **Replaces QuickActions Menu**: QuickActions now handles only icon buttons
+- **Accessible**: Full keyboard navigation and ARIA support
+- **Customizable**: Multiple variants, sizes, and positioning options
+- **Grouped Actions**: Primary, secondary, and destructive actions visually separated
+
+## Sample Recipe Data
+
+```js
+const sampleRecipe = {
+  recipeId: 1,
+  userId: 'user-123',
+  title: 'Chocolate Chip Cookies',
+  description: 'Classic soft and chewy cookies',
+  servings: 24,
+  preparationTime: 15,
+  cookingTime: 12,
+  difficulty: DifficultyLevel.EASY,
+  createdAt: '2024-01-01T10:00:00Z',
+};
+```
+
+## Basic Usage
+
+```tsx
+import { RecipeMenu } from '@/components/recipe/RecipeMenu';
+
+function MyComponent() {
+  return (
+    <RecipeMenu
+      recipe={recipe}
+      isOwner={true}
+      onView={() => console.log('View')}
+      onEdit={() => console.log('Edit')}
+      onDelete={() => console.log('Delete')}
+      onShare={() => console.log('Share')}
+    />
+  );
+}
+```
+
+## Variants
+
+### Default Variant
+
+<Canvas>
+  <Story
+    name="Default Variant"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      variant: 'default',
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDelete: () => console.log('Delete'),
+      onShare: () => console.log('Share'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+### Ghost Variant (Default)
+
+<Canvas>
+  <Story
+    name="Ghost Variant"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      variant: 'ghost',
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDelete: () => console.log('Delete'),
+      onShare: () => console.log('Share'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+### Outline Variant
+
+<Canvas>
+  <Story
+    name="Outline Variant"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      variant: 'outline',
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDelete: () => console.log('Delete'),
+      onShare: () => console.log('Share'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+## Sizes
+
+<Canvas>
+  <Story
+    name="Sizes"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDelete: () => console.log('Delete'),
+    }}
+  >
+    {args => (
+      <div className="flex items-center gap-4">
+        <RecipeMenu {...args} size="sm" />
+        <RecipeMenu {...args} size="md" />
+        <RecipeMenu {...args} size="lg" />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Ownership States
+
+### Owner Actions
+
+<Canvas>
+  <Story
+    name="Owner Actions"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDuplicate: () => console.log('Duplicate'),
+      onShare: () => console.log('Share'),
+      onAddToCollection: () => console.log('Add to Collection'),
+      onCopyLink: () => console.log('Copy Link'),
+      onAddToMealPlan: () => console.log('Add to Meal Plan'),
+      onDelete: () => console.log('Delete'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+**Available actions for owners:**
+
+- View details
+- Edit
+- Duplicate
+- Share
+- Add to collection
+- Copy link
+- Add to meal plan
+- Delete (destructive)
+
+### Non-Owner Actions
+
+<Canvas>
+  <Story
+    name="Non-Owner Actions"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      isOwner: false,
+      onView: () => console.log('View'),
+      onShare: () => console.log('Share'),
+      onAddToCollection: () => console.log('Add to Collection'),
+      onCopyLink: () => console.log('Copy Link'),
+      onAddToMealPlan: () => console.log('Add to Meal Plan'),
+      onReport: () => console.log('Report'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+**Available actions for non-owners:**
+
+- View details
+- Share
+- Add to collection
+- Copy link
+- Add to meal plan
+- Report (destructive)
+
+## Icon Visibility
+
+<Canvas>
+  <Story
+    name="Icon Visibility"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+      onDelete: () => console.log('Delete'),
+    }}
+  >
+    {args => (
+      <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
+          <RecipeMenu {...args} showIcons={true} />
+          <span className="text-muted-foreground text-xs">With Icons</span>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+          <RecipeMenu {...args} showIcons={false} />
+          <span className="text-muted-foreground text-xs">Without Icons</span>
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## States
+
+### Disabled State
+
+<Canvas>
+  <Story
+    name="Disabled State"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy cookies',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      disabled: true,
+      isOwner: true,
+      onView: () => console.log('View'),
+      onEdit: () => console.log('Edit'),
+    }}
+  >
+    {args => <RecipeMenu {...args} />}
+  </Story>
+</Canvas>
+
+## Props
+
+<ArgsTable of={RecipeMenu} />
+
+## Accessibility
+
+The RecipeMenu component is fully accessible:
+
+- **Keyboard Navigation**: Menu can be opened with Enter/Space, navigated with Arrow keys, and closed with Escape
+- **ARIA Attributes**: Proper `aria-label`, `aria-haspopup`, `aria-expanded`, and role attributes
+- **Focus Management**: Automatic focus management when menu opens and closes
+- **Screen Reader Support**: Clear labels and announcements for all actions
+
+## Action Grouping
+
+Actions are visually grouped for better organization:
+
+1. **Primary Group**: View, Edit, Duplicate
+2. **Secondary Group**: Share, Add to Collection, Copy Link, Add to Meal Plan
+3. **Destructive Group**: Delete (owner) or Report (non-owner)
+
+Groups are separated by visual separators for clarity.
+
+## Best Practices
+
+1. **Always provide `recipe` prop**: The recipe data is required
+2. **Set `isOwner` correctly**: This determines which actions are shown
+3. **Only provide handlers you need**: Missing handlers won't show in the menu
+4. **Use consistent placement**: Typically in the top-right corner of recipe cards
+5. **Consider mobile**: Ghost variant works best on mobile devices
+6. **Confirm destructive actions**: Always show confirmation dialogs for delete/report
+
+## Related Components
+
+- **RecipeCard**: Uses RecipeMenu for recipe actions
+- **RecipeListItem**: Uses RecipeMenu for list view actions
+- **QuickActions**: Handles icon button actions (no longer includes menu)
