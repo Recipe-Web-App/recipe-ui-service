@@ -489,6 +489,14 @@ const components = [
     variants: 7,
     status: 'ready',
   },
+  {
+    name: 'RecipeFilters',
+    path: '/components-demo/recipe-filters',
+    description:
+      'Entity-specific filter panel for recipe browsing with dynamic tag extraction and responsive design',
+    variants: 6,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
