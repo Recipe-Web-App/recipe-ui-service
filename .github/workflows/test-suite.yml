@@ -93,7 +93,7 @@ jobs:
           CI: true
 
       - name: 📤 Upload blob report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: blob-report-${{ matrix.browser }}-${{ strategy.job-index }}
@@ -121,7 +121,7 @@ jobs:
         run: npm ci --prefer-offline --no-audit
 
       - name: 📥 Download blob reports
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: all-blob-reports
           pattern: blob-report-*
@@ -131,7 +131,7 @@ jobs:
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: 📤 Upload HTML report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: e2e-test-report
           path: playwright-report/
@@ -192,7 +192,7 @@ jobs:
 
       - name: 📤 Upload visual test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: visual-test-results
           path: |
@@ -245,7 +245,7 @@ jobs:
 
       - name: 📤 Upload accessibility results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: accessibility-test-results
           path: |
@@ -303,7 +303,7 @@ jobs:
 
       - name: 📤 Upload performance results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: performance-test-results
           path: |
@@ -361,7 +361,7 @@ jobs:
 
       - name: 📤 Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cross-browser-results-${{ matrix.os }}-${{ matrix.browser }}
           path: |
@@ -417,7 +417,7 @@ jobs:
 
       - name: 📤 Upload mobile test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: mobile-test-results-${{ matrix.device }}
           path: |
@@ -454,7 +454,7 @@ jobs:
           echo "Generated on: $(date)" >> test-summary.md
 
       - name: 📤 Upload summary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-suite-summary
           path: test-summary.md
