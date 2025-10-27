@@ -318,7 +318,7 @@ jobs:
           echo "✅ Created archive for $PLATFORM"
 
       - name: 📤 Upload release assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: release-assets-${{ matrix.platform }}
           path: |
@@ -360,7 +360,7 @@ jobs:
           echo "✅ Created and pushed tag v$VERSION"
 
       - name: 📥 Download all release assets
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           path: release-assets
           pattern: release-assets-*
