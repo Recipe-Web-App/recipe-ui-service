@@ -457,6 +457,9 @@ const ContentError = React.forwardRef<HTMLDivElement, ContentErrorProps>(
     ref
   ) => {
     // Parse error information
+    // Note: React Compiler cannot optimize this useMemo due to complex conditional logic,
+    // but the manual memoization is necessary to avoid re-parsing on every render
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     const errorInfo = React.useMemo(() => {
       if (typeof error === 'string') {
         return {

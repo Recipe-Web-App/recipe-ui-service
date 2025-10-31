@@ -126,8 +126,10 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
     },
     ref
   ) => {
+    // Create spinner element with proper ref handling
     const spinnerElement = (
       <div
+        ref={!overlay && !centered && !text ? ref : undefined}
         className={cn(
           spinnerVariants({ variant, size, color, speed }),
           className
@@ -142,22 +144,6 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
       </div>
     );
 
-    // If there's text, wrap spinner with text
-    const spinnerWithText = text ? (
-      <div
-        className={cn(
-          'flex items-center gap-3',
-          textPosition === 'bottom' && 'flex-col',
-          textPosition === 'right' && 'flex-row'
-        )}
-      >
-        {spinnerElement}
-        <span className="text-muted-foreground text-sm">{text}</span>
-      </div>
-    ) : (
-      spinnerElement
-    );
-
     // Handle overlay or centered wrapper
     if (overlay || centered) {
       return (
@@ -165,24 +151,65 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
           ref={ref}
           className={cn(spinnerWrapperVariants({ overlay, centered }))}
         >
-          {spinnerWithText}
+          {text ? (
+            <div
+              className={cn(
+                'flex items-center gap-3',
+                textPosition === 'bottom' && 'flex-col',
+                textPosition === 'right' && 'flex-row'
+              )}
+            >
+              {spinnerElement}
+              <span className="text-muted-foreground text-sm">{text}</span>
+            </div>
+          ) : (
+            spinnerElement
+          )}
         </div>
       );
     }
 
     // Handle asChild prop
     if (asChild) {
-      return <Slot>{spinnerWithText}</Slot>;
+      return (
+        <Slot>
+          {text ? (
+            <div
+              className={cn(
+                'flex items-center gap-3',
+                textPosition === 'bottom' && 'flex-col',
+                textPosition === 'right' && 'flex-row'
+              )}
+            >
+              {spinnerElement}
+              <span className="text-muted-foreground text-sm">{text}</span>
+            </div>
+          ) : (
+            spinnerElement
+          )}
+        </Slot>
+      );
     }
 
-    // Apply ref directly to the element
-    if (React.isValidElement(spinnerWithText)) {
-      return React.cloneElement(spinnerWithText, {
-        ref,
-      } as React.HTMLAttributes<HTMLDivElement>);
+    // Handle text case with wrapper
+    if (text) {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            'flex items-center gap-3',
+            textPosition === 'bottom' && 'flex-col',
+            textPosition === 'right' && 'flex-row'
+          )}
+        >
+          {spinnerElement}
+          <span className="text-muted-foreground text-sm">{text}</span>
+        </div>
+      );
     }
 
-    return spinnerWithText;
+    // Default case: return spinner directly (ref already attached above)
+    return spinnerElement;
   }
 );
 

@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/purity */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import {
   Pagination,
@@ -22,15 +23,19 @@ export default function PaginationDemoPage() {
   const totalItems = 248;
   const totalPagesWithSize = Math.ceil(totalItems / pageSize);
 
-  // Table data for demo
+  // Table data for demo - memoized to avoid impure Date.now() calls in render
   const [tableCurrentPage, setTableCurrentPage] = useState(1);
   const [tablePageSize, setTablePageSize] = useState(5);
-  const tableData = Array.from({ length: 50 }, (_, i) => ({
-    id: i + 1,
-    name: `Item ${i + 1}`,
-    status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Pending' : 'Inactive',
-    date: new Date(Date.now() - i * 86400000).toLocaleDateString(),
-  }));
+
+  const tableData = useMemo(() => {
+    const now = Date.now();
+    return Array.from({ length: 50 }, (_, i) => ({
+      id: i + 1,
+      name: `Item ${i + 1}`,
+      status: i % 3 === 0 ? 'Active' : i % 3 === 1 ? 'Pending' : 'Inactive',
+      date: new Date(now - i * 86400000).toLocaleDateString(),
+    }));
+  }, []);
 
   const paginatedData = tableData.slice(
     (tableCurrentPage - 1) * tablePageSize,

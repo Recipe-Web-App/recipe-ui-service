@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 import {
@@ -50,16 +51,14 @@ const Icon = React.forwardRef<
     },
     ref
   ) => {
+    // Memoize icon component lookup to avoid creating components during render
+    // Note: This returns a component constructor (type), not an instance - safe to use
+
+    const IconComponent = React.useMemo(() => getIcon(name), [name]);
+
     // Validate icon exists
-    if (!hasIcon(name)) {
+    if (!hasIcon(name) || !IconComponent) {
       console.warn(`Icon "${name}" not found in registry`);
-      return null;
-    }
-
-    const IconComponent = getIcon(name);
-
-    // Early return if icon doesn't exist
-    if (!IconComponent) {
       return null;
     }
 

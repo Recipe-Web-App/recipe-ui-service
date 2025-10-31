@@ -1,19 +1,16 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+// eslint.config.mjs
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
 import security from 'eslint-plugin-security';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import next from 'eslint-config-next';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 const eslintConfig = [
   {
@@ -34,8 +31,7 @@ const eslintConfig = [
       'lighthouserc.js',
     ],
   },
-  ...compat.extends('next/core-web-vitals'),
-  ...compat.extends('next/typescript'),
+  ...next,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
@@ -43,19 +39,15 @@ const eslintConfig = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
       },
     },
     plugins: {
-      '@next/eslint-plugin-next': {},
       '@typescript-eslint': typescriptEslint,
-      'jsx-a11y': jsxA11y,
       'react-hooks': reactHooks,
-      security: security,
+      security,
       'react-refresh': reactRefresh,
     },
     rules: {
@@ -79,7 +71,7 @@ const eslintConfig = [
       'react-hooks/exhaustive-deps': 'error',
       'react-refresh/only-export-components': 'warn',
 
-      // Accessibility (enhanced)
+      // Accessibility
       'jsx-a11y/alt-text': 'error',
       'jsx-a11y/aria-props': 'error',
       'jsx-a11y/aria-proptypes': 'error',
