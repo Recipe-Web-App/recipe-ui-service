@@ -75,6 +75,18 @@ export enum RevisionCategory {
   STEP = 'STEP',
 }
 
+export enum CollectionVisibility {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
+  FRIENDS_ONLY = 'FRIENDS_ONLY',
+}
+
+export enum CollaborationMode {
+  OWNER_ONLY = 'OWNER_ONLY',
+  ALL_USERS = 'ALL_USERS',
+  SPECIFIC_USERS = 'SPECIFIC_USERS',
+}
+
 export interface RecipeManagementErrorResponse {
   error: string;
   message: string;

@@ -135,7 +135,7 @@ export function useProfileForm(
   const validateUsername = useCallback(
     async (username: string): Promise<boolean> => {
       // If username hasn't changed, it's valid
-      if (currentUser && username === currentUser.username) {
+      if (username === currentUser?.username) {
         return true;
       }
 
