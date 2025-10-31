@@ -9,6 +9,7 @@ export * from './tag';
 export * from './review';
 export * from './revision';
 export * from './media';
+export * from './collection';
 
 // Feature-specific types
 export * from './search';

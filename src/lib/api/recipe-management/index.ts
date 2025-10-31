@@ -17,6 +17,9 @@ export * from './tags';
 export * from './reviews';
 export * from './revisions';
 export * from './media';
+export * from './collections';
+export * from './collection-recipes';
+export * from './collection-collaborators';
 export * from './health';
 export * from './monitoring';
 
@@ -93,6 +96,21 @@ export type {
   // Search types
   SearchRecipesRequest,
   SearchRecipesResponse,
+
+  // Collection types
+  CollectionDto,
+  CollectionDetailsDto,
+  CollectionRecipeDto,
+  CollaboratorDto,
+  PageCollectionDto,
+  CreateCollectionRequest,
+  UpdateCollectionRequest,
+  SearchCollectionsRequest,
+  AddCollaboratorRequest,
+  UpdateRecipeOrderRequest,
+  ReorderRecipesRequest,
+  CollectionVisibility,
+  CollaborationMode,
 
   // Health & Monitoring types
   RecipeManagementHealthResponse,

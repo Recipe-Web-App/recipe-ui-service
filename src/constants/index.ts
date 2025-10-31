@@ -93,6 +93,12 @@ export const QUERY_KEYS = {
     SEARCH: ['recipeManagement', 'search'],
     SEARCH_SUGGESTIONS: ['recipeManagement', 'searchSuggestions'],
 
+    // Collection operations
+    COLLECTIONS: ['recipeManagement', 'collections'],
+    COLLECTION: ['recipeManagement', 'collection'],
+    COLLECTION_RECIPES: ['recipeManagement', 'collectionRecipes'],
+    COLLECTION_COLLABORATORS: ['recipeManagement', 'collectionCollaborators'],
+
     // Health and monitoring
     HEALTH: ['recipeManagement', 'health'],
     METRICS: ['recipeManagement', 'metrics'],
