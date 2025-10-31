@@ -77,6 +77,8 @@ export function useProfileForm(
   });
 
   // Watch form values for unsaved changes detection
+  // React Hook Form's watch() is intentionally not memoized to track form changes
+  // eslint-disable-next-line react-hooks/incompatible-library
   const formValues = form.watch();
 
   // Update form when current user data is loaded

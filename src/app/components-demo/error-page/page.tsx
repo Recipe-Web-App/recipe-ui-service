@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/purity */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ErrorPage } from '@/components/error/ErrorPage';
 import { PageErrorType } from '@/types/error/page-errors';
 import {
@@ -21,6 +22,13 @@ export default function ErrorPageDemo() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [includeMaintenanceMessage, setIncludeMaintenanceMessage] =
     useState<boolean>(false);
+
+  // Memoize recovery time to avoid impure Date.now() calls in render
+
+  const estimatedRecoveryTime = useMemo(
+    () => new Date(Date.now() + 3600000),
+    []
+  );
 
   const statusCodes = [
     { value: 400, label: '400 - Bad Request', description: 'Invalid request' },
@@ -365,7 +373,7 @@ export default function ErrorPageDemo() {
                       }
                       estimatedRecoveryTime={
                         includeMaintenanceMessage
-                          ? new Date(Date.now() + 3600000)
+                          ? estimatedRecoveryTime
                           : undefined
                       }
                       onError={handleErrorCallback}

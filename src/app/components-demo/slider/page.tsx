@@ -21,6 +21,30 @@ import {
 } from '@/components/ui/slider';
 import { Settings, Thermometer, Clock, Users, Star, Zap } from 'lucide-react';
 
+// ComponentCard extracted outside render to fix React Compiler error
+const ComponentCard = ({
+  title,
+  description,
+  children,
+  icon: Icon,
+}: {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
+}) => (
+  <Card>
+    <CardHeader>
+      <CardTitle className="flex items-center gap-2">
+        <Icon className="h-5 w-5" />
+        {title}
+      </CardTitle>
+      <CardDescription>{description}</CardDescription>
+    </CardHeader>
+    <CardContent>{children}</CardContent>
+  </Card>
+);
+
 export default function SliderDemoPage() {
   // State for interactive examples
   const [basicValue, setBasicValue] = useState([50]);
@@ -29,29 +53,6 @@ export default function SliderDemoPage() {
   const [timeValue, setTimeValue] = useState([30]);
   const [servingsValue, setServingsValue] = useState([4]);
   const [difficultyValue, setDifficultyValue] = useState([2]);
-
-  const ComponentCard = ({
-    title,
-    description,
-    children,
-    icon: Icon,
-  }: {
-    title: string;
-    description: string;
-    children: React.ReactNode;
-    icon: React.ComponentType<{ className?: string }>;
-  }) => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Icon className="h-5 w-5" />
-          {title}
-        </CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
-  );
 
   return (
     <div className="bg-background min-h-screen">

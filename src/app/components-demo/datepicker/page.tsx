@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/purity */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -38,6 +39,20 @@ export default function DatePickerDemoPage() {
   const [mealPlanDate, setMealPlanDate] = useState<Date | undefined>();
   const [scheduleDate, setScheduleDate] = useState<Date | undefined>();
   const [expirationDate, setExpirationDate] = useState<Date | undefined>();
+
+  // Memoize preset date calculations to avoid impure Date.now() calls in render
+
+  const presetDates = useMemo(() => {
+    const now = Date.now();
+    return {
+      today: new Date(),
+      tomorrow: new Date(now + 24 * 60 * 60 * 1000),
+      nextWeek: new Date(now + 7 * 24 * 60 * 60 * 1000),
+      inOneHour: new Date(now + 60 * 60 * 1000),
+      threeDaysAgo: new Date(now - 3 * 24 * 60 * 60 * 1000),
+      threeDaysFromNow: new Date(now + 3 * 24 * 60 * 60 * 1000),
+    };
+  }, []);
 
   const ComponentCard = ({
     title,
@@ -113,14 +128,14 @@ export default function DatePickerDemoPage() {
                       placeholder="Choose a date"
                       showPresets={true}
                       presetOptions={[
-                        { label: 'Today', value: new Date() },
+                        { label: 'Today', value: presetDates.today },
                         {
                           label: 'Tomorrow',
-                          value: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                          value: presetDates.tomorrow,
                         },
                         {
                           label: 'Next Week',
-                          value: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                          value: presetDates.nextWeek,
                         },
                       ]}
                     />
@@ -175,10 +190,10 @@ export default function DatePickerDemoPage() {
                       placeholder="Choose date and time"
                       showPresets={true}
                       presetOptions={[
-                        { label: 'Now', value: new Date() },
+                        { label: 'Now', value: presetDates.today },
                         {
                           label: 'In 1 hour',
-                          value: new Date(Date.now() + 60 * 60 * 1000),
+                          value: presetDates.inOneHour,
                         },
                       ]}
                     />
@@ -209,16 +224,16 @@ export default function DatePickerDemoPage() {
                         {
                           label: 'This Week',
                           value: [
-                            new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-                            new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                            presetDates.threeDaysAgo,
+                            presetDates.threeDaysFromNow,
                           ] as [Date, Date],
                         },
                         {
                           label: 'Next 7 Days',
-                          value: [
-                            new Date(),
-                            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-                          ] as [Date, Date],
+                          value: [presetDates.today, presetDates.nextWeek] as [
+                            Date,
+                            Date,
+                          ],
                         },
                       ]}
                     />

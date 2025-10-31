@@ -214,6 +214,8 @@ function useCreateRecipeFormInternal({
     hasErrors: Object.keys(form.formState.errors).length > 0,
     isValid: form.formState.isValid,
     hasChanges: form.formState.isDirty,
+    // React Hook Form's watch() is intentionally not memoized to track form changes
+    // eslint-disable-next-line react-hooks/incompatible-library
     currentValues: form.watch(),
     isCreating: createMutation.isPending,
     isUpdating: false,
@@ -392,6 +394,8 @@ function useEditRecipeFormInternal({
     hasErrors: Object.keys(form.formState.errors).length > 0,
     isValid: form.formState.isValid,
     hasChanges: form.formState.isDirty,
+    // React Hook Form's watch() is intentionally not memoized to track form changes
+    // eslint-disable-next-line react-hooks/incompatible-library
     currentValues: form.watch(),
     isCreating: false,
     isUpdating: editMutation.isPending,
@@ -501,6 +505,8 @@ function useUpdateRecipeFormInternal({
     hasErrors: Object.keys(form.formState.errors).length > 0,
     isValid: form.formState.isValid,
     hasChanges: form.formState.isDirty,
+    // React Hook Form's watch() is intentionally not memoized to track form changes
+    // eslint-disable-next-line react-hooks/incompatible-library
     currentValues: form.watch(),
     isCreating: false,
     isUpdating: updateMutation.isPending,

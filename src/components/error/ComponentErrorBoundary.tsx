@@ -5,6 +5,7 @@
  * graceful degradation with component-specific recovery strategies.
  */
 
+/* eslint-disable react-hooks/static-components */
 'use client';
 
 import React from 'react';
@@ -678,7 +679,13 @@ const ComponentErrorMinimal: React.FC<ComponentErrorMinimalProps> = ({
   retryable,
   className,
 }) => {
-  const Icon = getSeverityIcon(metadata.severity);
+  // Memoize icon component to avoid creating components during render
+  // Note: This returns a component constructor (type), not an instance - safe to use
+
+  const Icon = React.useMemo(
+    () => getSeverityIcon(metadata.severity),
+    [metadata.severity]
+  );
 
   return (
     <div
@@ -753,7 +760,13 @@ const ComponentErrorDetailed: React.FC<ComponentErrorDetailedProps> = ({
   onToggleDetails,
   className,
 }) => {
-  const Icon = getSeverityIcon(metadata.severity);
+  // Memoize icon component to avoid creating components during render
+  // Note: This returns a component constructor (type), not an instance - safe to use
+
+  const Icon = React.useMemo(
+    () => getSeverityIcon(metadata.severity),
+    [metadata.severity]
+  );
 
   return (
     <div

@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useState, useCallback, useMemo, forwardRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  forwardRef,
+  useId,
+} from 'react';
 import { Star, Heart, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ratingVariants, ratingItemVariants } from '@/lib/ui/rating-variants';
@@ -314,6 +320,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     ref
   ) => {
     const [hoverValue, setHoverValue] = useState<number | null>(null);
+    const generatedId = useId();
     const isInteractive = interactive && !disabled && !readOnly;
     const displayValue = hoverValue ?? value;
 
@@ -381,8 +388,8 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       return `${value} out of ${maxValue}`;
     };
 
-    const ratingId =
-      id ?? `rating-${Math.random().toString(36).substring(2, 11)}`;
+    // Use React's useId() hook for stable, unique IDs instead of Math.random()
+    const ratingId = id ?? `rating-${generatedId}`;
     const labelId = showLabel && label ? `${ratingId}-label` : undefined;
     const valueId = showValue ? `${ratingId}-value` : undefined;
 

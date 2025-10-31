@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ErrorAlert } from '@/components/error/ErrorAlert';
 import {
   Card,
@@ -49,6 +49,10 @@ export default function ErrorAlertDemo() {
   const [showToast, setShowToast] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Memoize timestamp to avoid impure Date.now() calls in render
+  // eslint-disable-next-line react-hooks/purity
+  const stableTimestamp = useMemo(() => Date.now(), []);
+
   // Sample errors
   const simpleError = 'Failed to save recipe. Please try again.';
 
@@ -58,40 +62,49 @@ export default function ErrorAlertDemo() {
     { field: 'prepTime', message: 'Prep time cannot be negative' },
   ];
 
-  const serviceError: ServiceErrorMetadata = {
-    serviceType: ServiceType.RECIPE_MANAGEMENT,
-    serviceName: 'Recipe Service',
-    endpoint: '/api/recipes',
-    statusCode: 500,
-    timestamp: Date.now(),
-    retryable: true,
-    severity: ErrorSeverity.ERROR,
-  };
+  const serviceError: ServiceErrorMetadata = useMemo(
+    () => ({
+      serviceType: ServiceType.RECIPE_MANAGEMENT,
+      serviceName: 'Recipe Service',
+      endpoint: '/api/recipes',
+      statusCode: 500,
+      timestamp: stableTimestamp,
+      retryable: true,
+      severity: ErrorSeverity.ERROR,
+    }),
+    [stableTimestamp]
+  );
 
-  const componentError: ComponentErrorMetadata = {
-    errorType: ComponentErrorType.RENDER_ERROR,
-    severity: ComponentErrorSeverity.ERROR,
-    componentName: 'RecipeCard',
-    componentDisplayName: 'Recipe Card',
-    message: 'Failed to render component',
-    timestamp: Date.now(),
-    fingerprint: 'recipe-card-error',
-    retryable: true,
-    retryCount: 0,
-  };
+  const componentError: ComponentErrorMetadata = useMemo(
+    () => ({
+      errorType: ComponentErrorType.RENDER_ERROR,
+      severity: ComponentErrorSeverity.ERROR,
+      componentName: 'RecipeCard',
+      componentDisplayName: 'Recipe Card',
+      message: 'Failed to render component',
+      timestamp: stableTimestamp,
+      fingerprint: 'recipe-card-error',
+      retryable: true,
+      retryCount: 0,
+    }),
+    [stableTimestamp]
+  );
 
-  const pageError: PageErrorMetadata = {
-    errorType: PageErrorType.NOT_FOUND,
-    statusCode: HttpStatusCode.NOT_FOUND,
-    severity: PageErrorSeverity.ERROR,
-    title: 'Page Not Found',
-    description: 'The page you are looking for does not exist',
-    recoveryActions: [RecoveryActionType.GO_HOME],
-    seoTitle: '404 - Not Found',
-    seoDescription: 'Page not found',
-    retryable: false,
-    timestamp: Date.now(),
-  };
+  const pageError: PageErrorMetadata = useMemo(
+    () => ({
+      errorType: PageErrorType.NOT_FOUND,
+      statusCode: HttpStatusCode.NOT_FOUND,
+      severity: PageErrorSeverity.ERROR,
+      title: 'Page Not Found',
+      description: 'The page you are looking for does not exist',
+      recoveryActions: [RecoveryActionType.GO_HOME],
+      seoTitle: '404 - Not Found',
+      seoDescription: 'Page not found',
+      retryable: false,
+      timestamp: stableTimestamp,
+    }),
+    [stableTimestamp]
+  );
 
   const networkError =
     'Network error: Failed to fetch data. Check your connection.';
@@ -377,7 +390,7 @@ export default function ErrorAlertDemo() {
                       </Button>
                       {showToast && (
                         <ErrorAlert
-                          key={Date.now()}
+                          key={stableTimestamp}
                           {...getErrorProps()}
                           variant="toast"
                           severity={selectedSeverity}

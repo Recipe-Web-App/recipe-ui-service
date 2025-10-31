@@ -81,6 +81,8 @@ export function useSearchForm(options?: SearchFormOptions): SearchFormReturn {
   });
 
   // Watch form values for auto-search
+  // React Hook Form's watch() is intentionally not memoized to track form changes
+  // eslint-disable-next-line react-hooks/incompatible-library
   const formValues = form.watch();
 
   // State for search criteria
