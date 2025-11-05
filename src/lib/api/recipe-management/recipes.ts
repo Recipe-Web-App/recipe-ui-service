@@ -48,10 +48,21 @@ export const recipesApi = {
   /**
    * Get recipe by ID
    * GET /recipes/{recipeId}
+   * @param recipeId - Recipe identifier
+   * @param includeComments - Whether to include recipe comments in the response
    */
-  async getRecipeById(recipeId: number): Promise<RecipeDto> {
+  async getRecipeById(
+    recipeId: number,
+    includeComments?: boolean
+  ): Promise<RecipeDto> {
     try {
-      const response = await recipeManagementClient.get(`/recipes/${recipeId}`);
+      const queryString =
+        includeComments !== undefined
+          ? buildQueryParams({ includeComments })
+          : '';
+      const response = await recipeManagementClient.get(
+        `/recipes/${recipeId}${queryString ? `?${queryString}` : ''}`
+      );
       return response.data as RecipeDto;
     } catch (error) {
       handleRecipeManagementApiError(error);

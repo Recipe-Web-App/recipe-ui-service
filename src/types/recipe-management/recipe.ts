@@ -3,6 +3,7 @@ import { RecipeIngredientDto } from './ingredient';
 import { RecipeStepDto } from './step';
 import { RecipeTagDto } from './tag';
 import { RecipeRevisionDto } from './revision';
+import { RecipeCommentDto } from './comment';
 
 export interface RecipeDto {
   recipeId: number;
@@ -21,6 +22,7 @@ export interface RecipeDto {
   tags?: RecipeTagDto[];
   revisions?: RecipeRevisionDto[];
   favorites?: RecipeFavoriteDto[];
+  comments?: RecipeCommentDto[];
 }
 
 export interface RecipeFavoriteDto {
