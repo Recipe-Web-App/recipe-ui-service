@@ -79,6 +79,9 @@ export const QUERY_KEYS = {
     REVIEWS: ['recipeManagement', 'reviews'],
     RECIPE_REVIEWS: ['recipeManagement', 'recipeReviews'],
 
+    // Comment operations
+    RECIPE_COMMENTS: ['recipeManagement', 'recipeComments'],
+
     // Revision operations
     REVISIONS: ['recipeManagement', 'revisions'],
     RECIPE_REVISIONS: ['recipeManagement', 'recipeRevisions'],

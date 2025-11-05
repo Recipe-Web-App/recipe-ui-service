@@ -152,7 +152,7 @@ describe('useRecipes hooks', () => {
       });
 
       expect(result.current.data).toEqual(mockRecipe);
-      expect(mockedRecipesApi.getRecipeById).toHaveBeenCalledWith(1);
+      expect(mockedRecipesApi.getRecipeById).toHaveBeenCalledWith(1, undefined);
     });
 
     it('should handle disabled state when recipeId is 0', () => {
@@ -162,6 +162,68 @@ describe('useRecipes hooks', () => {
 
       expect(result.current.fetchStatus).toBe('idle');
       expect(mockedRecipesApi.getRecipeById).not.toHaveBeenCalled();
+    });
+
+    it('should fetch recipe with comments when includeComments is true', async () => {
+      const mockRecipeWithComments: RecipeDto = {
+        recipeId: 1,
+        title: 'Test Recipe',
+        description: 'A test recipe',
+        userId: 'user1',
+        servings: 4,
+        createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: '2024-01-01T00:00:00Z',
+        comments: [
+          {
+            commentId: 501,
+            recipeId: 1,
+            userId: 'user2',
+            commentText: 'Great recipe!',
+            isPublic: true,
+            createdAt: '2024-01-02T10:00:00Z',
+          },
+        ],
+      };
+
+      mockedRecipesApi.getRecipeById.mockResolvedValue(mockRecipeWithComments);
+
+      const { result } = renderHook(() => useRecipe(1, true), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockRecipeWithComments);
+      expect(result.current.data?.comments).toHaveLength(1);
+      expect(mockedRecipesApi.getRecipeById).toHaveBeenCalledWith(1, true);
+    });
+
+    it('should fetch recipe without comments when includeComments is false', async () => {
+      const mockRecipe: RecipeDto = {
+        recipeId: 1,
+        title: 'Test Recipe',
+        description: 'A test recipe',
+        userId: 'user1',
+        servings: 4,
+        createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: '2024-01-01T00:00:00Z',
+      };
+
+      mockedRecipesApi.getRecipeById.mockResolvedValue(mockRecipe);
+
+      const { result } = renderHook(() => useRecipe(1, false), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockRecipe);
+      expect(result.current.data?.comments).toBeUndefined();
+      expect(mockedRecipesApi.getRecipeById).toHaveBeenCalledWith(1, false);
     });
 
     it('should handle errors', async () => {

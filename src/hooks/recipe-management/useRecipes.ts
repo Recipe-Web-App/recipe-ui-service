@@ -39,12 +39,14 @@ export const useRecipes = (params?: PaginationParams) => {
 
 /**
  * Hook to fetch a specific recipe by ID
+ * @param recipeId - Recipe identifier
+ * @param includeComments - Whether to include recipe comments in the response
  */
-export const useRecipe = (recipeId: number) => {
+export const useRecipe = (recipeId: number, includeComments?: boolean) => {
   return useQuery({
-    queryKey: [...RECIPE, recipeId],
+    queryKey: [...RECIPE, recipeId, { includeComments }],
     queryFn: async (): Promise<RecipeDto> => {
-      return await recipesApi.getRecipeById(recipeId);
+      return await recipesApi.getRecipeById(recipeId, includeComments);
     },
     enabled: !!recipeId,
     staleTime: 5 * 60 * 1000, // 5 minutes
