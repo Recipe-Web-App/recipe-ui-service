@@ -364,3 +364,70 @@ export function getRecipeMenuActions(
 
   return actions;
 }
+
+/**
+ * Get quick actions list for RecipeQuickActions component
+ * Returns only the quick action buttons (not menu items)
+ * Used by RecipeQuickActions to build actions for the QuickActions component
+ */
+export function getRecipeQuickActionsList(
+  handlers: {
+    onFavorite?: () => void;
+    onShare?: () => void;
+    onAddToCollection?: () => void;
+    onQuickView?: () => void;
+  },
+  isFavorite: boolean = false,
+  isFavoriteLoading: boolean = false
+): QuickActionsProps['actions'] {
+  const { onFavorite, onShare, onAddToCollection, onQuickView } = handlers;
+
+  const actions: QuickActionsProps['actions'] = [];
+
+  // Favorite action (always shown if handler exists)
+  if (onFavorite) {
+    actions.push({
+      id: 'favorite',
+      label: isFavorite ? 'Unfavorite' : 'Favorite',
+      icon: Heart,
+      onClick: onFavorite,
+      variant: 'default',
+      disabled: isFavoriteLoading,
+    });
+  }
+
+  // Share action
+  if (onShare) {
+    actions.push({
+      id: 'share',
+      label: 'Share',
+      icon: Share2,
+      onClick: onShare,
+      variant: 'default',
+    });
+  }
+
+  // Add to collection action
+  if (onAddToCollection) {
+    actions.push({
+      id: 'add-to-collection',
+      label: 'Add to collection',
+      icon: Plus,
+      onClick: onAddToCollection,
+      variant: 'default',
+    });
+  }
+
+  // Quick view action
+  if (onQuickView) {
+    actions.push({
+      id: 'quick-view',
+      label: 'Quick view',
+      icon: Eye,
+      onClick: onQuickView,
+      variant: 'default',
+    });
+  }
+
+  return actions;
+}

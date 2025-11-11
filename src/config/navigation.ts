@@ -850,6 +850,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 510,
     },
   },
+  {
+    id: 'components-recipe-quick-actions',
+    label: 'RecipeQuickActions',
+    href: '/components-demo/recipe-quick-actions',
+    metadata: {
+      sortOrder: 520,
+    },
+  },
 ];
 
 /**

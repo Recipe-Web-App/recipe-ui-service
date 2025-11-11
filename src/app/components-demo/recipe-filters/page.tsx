@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { RecipeFilters } from '@/components/recipe/RecipeFilters';
 import { RecipeBrowseGrid } from '@/components/recipe/RecipeBrowseGrid';
 import {
@@ -121,7 +121,7 @@ export default function RecipeFiltersDemo() {
   );
 
   // Filter recipes based on current filter values
-  const filteredRecipes = React.useMemo(() => {
+  const filteredRecipes = useMemo(() => {
     return sampleRecipes.filter(recipe => {
       // Search filter
       if (filterValues.search) {
@@ -170,6 +170,28 @@ export default function RecipeFiltersDemo() {
       return true;
     });
   }, [filterValues]);
+
+  // Enrich recipes with additional data (deterministic based on recipeId)
+  const enrichedRecipes = useMemo(
+    () =>
+      filteredRecipes.map(recipe => ({
+        ...recipe,
+        imageUrl: `https://images.unsplash.com/photo-${1500000000000 + recipe.recipeId}?w=400`,
+        rating: 4 + ((recipe.recipeId * 0.01) % 1),
+        reviewCount: (recipe.recipeId * 17) % 200,
+        isFavorite: recipe.recipeId % 3 === 0,
+        author: {
+          id: recipe.userId,
+          name: `Chef ${recipe.userId}`,
+          avatar: `https://i.pravatar.cc/150?u=${recipe.userId}`,
+          role: 'chef' as const,
+          verified: recipe.recipeId % 2 === 0,
+          rating: 4.5,
+          recipeCount: 25,
+        },
+      })),
+    [filteredRecipes]
+  );
 
   const handleFilterChange = (newValues: RecipeFilterValues) => {
     setFilterValues(newValues);
@@ -249,24 +271,9 @@ export default function RecipeFiltersDemo() {
 
               {/* Filtered Recipe Grid */}
               <div>
-                {filteredRecipes.length > 0 ? (
+                {enrichedRecipes.length > 0 ? (
                   <RecipeBrowseGrid
-                    recipes={filteredRecipes.map(recipe => ({
-                      ...recipe,
-                      imageUrl: `https://images.unsplash.com/photo-${1500000000000 + recipe.recipeId}?w=400`,
-                      rating: 4 + Math.random(),
-                      reviewCount: Math.floor(Math.random() * 200),
-                      isFavorite: recipe.recipeId % 3 === 0,
-                      author: {
-                        id: recipe.userId,
-                        name: `Chef ${recipe.userId}`,
-                        avatar: `https://i.pravatar.cc/150?u=${recipe.userId}`,
-                        role: 'chef',
-                        verified: recipe.recipeId % 2 === 0,
-                        rating: 4.5,
-                        recipeCount: 25,
-                      },
-                    }))}
+                    recipes={enrichedRecipes}
                     columns={{ mobile: 1, tablet: 2, desktop: 3 }}
                     gap="md"
                     cardVariant="elevated"
