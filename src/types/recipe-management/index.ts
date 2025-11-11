@@ -13,4 +13,6 @@ export * from './collection';
 
 // Feature-specific types
 export * from './search';
+export * from './comment';
+export * from './favorite';
 export * from './health';

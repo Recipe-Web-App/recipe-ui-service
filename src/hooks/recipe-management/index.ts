@@ -89,6 +89,22 @@ export {
   useRecipeSearchBuilder,
 } from './useSearch';
 
+// Comment Management
+export {
+  useRecipeComments,
+  useAddRecipeComment,
+  useEditRecipeComment,
+  useDeleteRecipeComment,
+} from './useRecipeComments';
+
+// Favorite Management
+export {
+  useFavoriteRecipes,
+  useFavoriteRecipe,
+  useUnfavoriteRecipe,
+  useIsRecipeFavorited,
+} from './useFavorites';
+
 // Health Monitoring
 export {
   useRecipeManagementHealth,

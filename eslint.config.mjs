@@ -1,10 +1,7 @@
 // eslint.config.mjs
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import reactHooks from 'eslint-plugin-react-hooks';
 import security from 'eslint-plugin-security';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import next from 'eslint-config-next';
@@ -45,8 +42,6 @@ const eslintConfig = [
       },
     },
     plugins: {
-      '@typescript-eslint': typescriptEslint,
-      'react-hooks': reactHooks,
       security,
       'react-refresh': reactRefresh,
     },
