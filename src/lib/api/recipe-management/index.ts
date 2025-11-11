@@ -20,6 +20,8 @@ export * from './media';
 export * from './collections';
 export * from './collection-recipes';
 export * from './collection-collaborators';
+export * from './comments';
+export * from './favorites';
 export * from './health';
 export * from './monitoring';
 
@@ -111,6 +113,16 @@ export type {
   ReorderRecipesRequest,
   CollectionVisibility,
   CollaborationMode,
+
+  // Favorite types
+  GetFavoriteRecipesParams,
+  FavoriteRecipesResponse,
+
+  // Comment types
+  RecipeCommentDto,
+  RecipeCommentsResponse,
+  AddRecipeCommentRequest,
+  EditRecipeCommentRequest,
 
   // Health & Monitoring types
   RecipeManagementHealthResponse,
