@@ -337,11 +337,11 @@ You can override default behavior by providing custom handlers:
 <RecipeQuickActions
   recipe={recipe}
   handlers={{
-    onFavorite: (recipe) => {
+    onFavorite: recipe => {
       // Custom favorite logic - bypasses default API integration
       console.log('Custom favorite handler:', recipe.title);
     },
-    onAddToCollection: (recipe) => {
+    onAddToCollection: recipe => {
       // Custom collection logic - bypasses modal
       customCollectionDialog.open(recipe);
     },

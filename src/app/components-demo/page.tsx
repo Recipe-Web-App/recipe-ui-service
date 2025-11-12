@@ -513,6 +513,14 @@ const components = [
     variants: 4,
     status: 'ready',
   },
+  {
+    name: 'CollectionCard',
+    path: '/components-demo/collection-card',
+    description:
+      'Collection-specific card with 2x2 mosaic image grid, quick actions, and menu for recipe collections',
+    variants: 5,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
