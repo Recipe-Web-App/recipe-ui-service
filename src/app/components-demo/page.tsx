@@ -521,6 +521,14 @@ const components = [
     variants: 5,
     status: 'ready',
   },
+  {
+    name: 'CollectionBrowseGrid',
+    path: '/components-demo/collection-browse-grid',
+    description:
+      'Grid view for browsing recipe collections with pagination and actions',
+    variants: 5,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -544,7 +552,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">62</div>
+            <div className="text-primary text-3xl font-bold">63</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -552,7 +560,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">491</div>
+            <div className="text-primary text-3xl font-bold">496</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

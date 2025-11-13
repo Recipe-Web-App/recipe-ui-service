@@ -24,7 +24,11 @@ jest.mock('next/image', () => ({
 // Mock CollectionQuickActions
 jest.mock('@/components/collection/CollectionQuickActions', () => ({
   CollectionQuickActions: ({ collectionId, handlers, className }: any) => (
-    <div data-testid="collection-quick-actions" className={className}>
+    <div
+      data-testid="collection-quick-actions"
+      data-quick-actions
+      className={className}
+    >
       <button
         data-testid="quick-action-favorite"
         onClick={() => handlers.onFavorite?.(collectionId)}
@@ -44,7 +48,7 @@ jest.mock('@/components/collection/CollectionQuickActions', () => ({
 // Mock CollectionMenu
 jest.mock('@/components/collection/CollectionMenu', () => ({
   CollectionMenu: ({ collectionId, handlers }: any) => (
-    <div data-testid="collection-menu">
+    <div data-testid="collection-menu" data-collection-menu>
       <button
         data-testid="menu-action-edit"
         onClick={() => handlers.onEdit?.(collectionId)}

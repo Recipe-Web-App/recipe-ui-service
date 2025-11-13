@@ -245,6 +245,7 @@ export const QuickActions = React.forwardRef<HTMLDivElement, QuickActionsProps>(
     return (
       <div
         ref={ref}
+        data-quick-actions
         className={cn(quickActionsVariants({ position, size }), className)}
         style={style}
         role="toolbar"
