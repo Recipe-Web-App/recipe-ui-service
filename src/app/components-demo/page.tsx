@@ -529,6 +529,14 @@ const components = [
     variants: 5,
     status: 'ready',
   },
+  {
+    name: 'CollectionFilters',
+    path: '/components-demo/collection-filters',
+    description:
+      'Entity-specific filter panel for collection browsing with text search, visibility, collaboration, and favorited toggles. Responsive with mobile drawer.',
+    variants: 6,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
