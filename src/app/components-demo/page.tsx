@@ -537,6 +537,14 @@ const components = [
     variants: 6,
     status: 'ready',
   },
+  {
+    name: 'MealPlanCard',
+    path: '/components-demo/meal-plan-card',
+    description:
+      'Meal plan card with 2x2 recipe image mosaic, status badges (current/upcoming/completed), meal type breakdown, quick actions, and menu',
+    variants: 5,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -560,7 +568,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">63</div>
+            <div className="text-primary text-3xl font-bold">64</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -568,7 +576,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">496</div>
+            <div className="text-primary text-3xl font-bold">501</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
