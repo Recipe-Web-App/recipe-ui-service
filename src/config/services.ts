@@ -27,6 +27,11 @@ export const SERVICE_URLS = {
   MEDIA_MANAGEMENT: 'http://media-management.local/api/v1/media-management',
 
   /**
+   * Notification Service - Email notifications and alerts
+   */
+  NOTIFICATION: 'http://notification-service.local/api/v1/notification',
+
+  /**
    * Recipe Management Service - Recipe CRUD operations
    */
   RECIPE_MANAGEMENT: 'http://recipe-management.local/api/v1/recipe-management',

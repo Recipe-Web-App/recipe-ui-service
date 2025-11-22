@@ -183,6 +183,11 @@ export const QUERY_KEYS = {
     INGREDIENT_MEDIA: ['mediaManagement', 'ingredientMedia'],
     STEP_MEDIA: ['mediaManagement', 'stepMedia'],
   },
+  NOTIFICATION: {
+    // Notification operations
+    NOTIFICATION: ['notification', 'notification'],
+    SHARE: ['notification', 'share'],
+  },
 } as const;
 
 export const DEFAULT_PAGINATION = {
