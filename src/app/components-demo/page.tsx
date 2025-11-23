@@ -545,6 +545,14 @@ const components = [
     variants: 5,
     status: 'ready',
   },
+  {
+    name: 'MealPlanCalendar',
+    path: '/components-demo/meal-plan-calendar',
+    description:
+      'Comprehensive meal planning calendar with multiple view modes (week/day/month/meal), interactive slots, and edit capabilities',
+    variants: 12,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -568,7 +576,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">64</div>
+            <div className="text-primary text-3xl font-bold">65</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -576,7 +584,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">501</div>
+            <div className="text-primary text-3xl font-bold">513</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
