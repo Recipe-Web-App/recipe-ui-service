@@ -858,6 +858,14 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 520,
     },
   },
+  {
+    id: 'components-meal-plan-browse-grid',
+    label: 'Meal Plan Browse Grid',
+    href: '/components-demo/meal-plan-browse-grid',
+    metadata: {
+      sortOrder: 530,
+    },
+  },
 ];
 
 /**

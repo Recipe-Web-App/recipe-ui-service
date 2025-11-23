@@ -553,6 +553,14 @@ const components = [
     variants: 12,
     status: 'ready',
   },
+  {
+    name: 'MealPlanBrowseGrid',
+    path: '/components-demo/meal-plan-browse-grid',
+    description:
+      'Grid view for browsing meal plans with pagination, filtering, and status-based organization',
+    variants: 12,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
