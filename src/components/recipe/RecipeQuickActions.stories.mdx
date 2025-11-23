@@ -1,0 +1,361 @@
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/blocks';
+import { RecipeQuickActions } from './RecipeQuickActions';
+import { DifficultyLevel } from '@/types/recipe-management/common';
+
+<Meta
+  title="Recipe/RecipeQuickActions"
+  component={RecipeQuickActions}
+  parameters={{
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Recipe-specific quick action buttons that appear on hover/focus. Provides favorite, share, add to collection, and quick view actions with full API integration.',
+      },
+    },
+  }}
+/>
+
+# RecipeQuickActions
+
+A specialized quick actions component for recipe cards that wraps the base `QuickActions` component with recipe-specific behavior and integrated modals.
+
+## Features
+
+- **Favorite Action**: Toggle favorite status with real-time API integration
+- **Share Action**: Opens share modal with copy-to-clipboard functionality
+- **Add to Collection**: Opens modal to add recipe to existing or new collection
+- **Quick View**: Preview recipe in modal, with option to view full recipe page
+- **Real-time Status**: Fetches and displays current favorite status on load
+- **Optimistic Updates**: Instant UI feedback with proper error handling
+- **Customizable**: Position, size, max visible actions
+- **Accessible**: Full ARIA support and keyboard navigation
+
+## API Integration
+
+All actions are fully integrated with the recipe-management microservice:
+
+- **Favorite/Unfavorite**: Uses `useFavoriteRecipe`/`useUnfavoriteRecipe` hooks with TanStack Query
+- **Add to Collection**: Opens `AddToCollectionModal` with collection selection and creation
+- **View Full Recipe**: Navigates to `/recipes/[id]` using Next.js router
+- **Status Fetching**: Uses `useIsRecipeFavorited` to display accurate favorite state
+
+## Sample Recipe Data
+
+```js
+const sampleRecipe = {
+  recipeId: 1,
+  userId: 'user-123',
+  title: 'Chocolate Chip Cookies',
+  description: 'Classic soft and chewy chocolate chip cookies',
+  imageUrl: 'https://via.placeholder.com/400x300',
+  servings: 24,
+  preparationTime: 15,
+  cookingTime: 12,
+  difficulty: DifficultyLevel.EASY,
+  rating: 4.5,
+  reviewCount: 128,
+  isFavorite: false,
+  createdAt: '2024-01-01T10:00:00Z',
+};
+```
+
+## Basic Usage
+
+```tsx
+import { RecipeQuickActions } from '@/components/recipe/RecipeQuickActions';
+
+function MyRecipeCard() {
+  return (
+    <div className="group relative">
+      {/* Recipe card content */}
+      <RecipeQuickActions recipe={recipe} position="top-right" size="md" />
+    </div>
+  );
+}
+```
+
+## With Custom Handlers
+
+```tsx
+<RecipeQuickActions
+  recipe={recipe}
+  handlers={{
+    onFavorite: recipe => {
+      // Custom favorite logic
+      console.log('Favorited:', recipe.title);
+    },
+    onShare: recipe => {
+      // Custom share logic instead of modal
+      navigator.share({
+        title: recipe.title,
+        url: `/recipes/${recipe.recipeId}`,
+      });
+    },
+  }}
+/>
+```
+
+## Integration with RecipeCard
+
+```tsx
+<div className="group relative">
+  <RecipeCard
+    recipe={recipe}
+    onClick={() => navigate(`/recipes/${recipe.recipeId}`)}
+  />
+  <RecipeQuickActions recipe={recipe} />
+</div>
+```
+
+## Props
+
+<ArgsTable of={RecipeQuickActions} />
+
+## Examples
+
+### Default (Top Right)
+
+<Canvas>
+  <Story
+    name="Default"
+    args={{
+      recipe: {
+        recipeId: 1,
+        userId: 'user-123',
+        title: 'Chocolate Chip Cookies',
+        description: 'Classic soft and chewy chocolate chip cookies',
+        imageUrl: 'https://via.placeholder.com/400x300',
+        servings: 24,
+        preparationTime: 15,
+        cookingTime: 12,
+        difficulty: DifficultyLevel.EASY,
+        rating: 4.5,
+        reviewCount: 128,
+        isFavorite: false,
+        createdAt: '2024-01-01T10:00:00Z',
+      },
+      position: 'top-right',
+      size: 'md',
+    }}
+  >
+    {args => (
+      <div className="group border-border relative h-64 w-80 rounded-lg border bg-white p-4 shadow-sm">
+        <p className="text-muted-foreground text-sm">
+          Hover over this card to see quick actions
+        </p>
+        <RecipeQuickActions {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+### Favorited Recipe
+
+<Canvas>
+  <Story
+    name="Favorited"
+    args={{
+      recipe: {
+        recipeId: 2,
+        userId: 'user-123',
+        title: 'Pasta Carbonara',
+        description: 'Authentic Italian pasta dish',
+        imageUrl: 'https://via.placeholder.com/400x300',
+        servings: 4,
+        preparationTime: 10,
+        cookingTime: 15,
+        difficulty: DifficultyLevel.MEDIUM,
+        rating: 4.8,
+        reviewCount: 256,
+        isFavorite: true,
+        createdAt: '2024-01-05T14:30:00Z',
+      },
+      position: 'top-right',
+      size: 'md',
+    }}
+  >
+    {args => (
+      <div className="group border-border relative h-64 w-80 rounded-lg border bg-white p-4 shadow-sm">
+        <p className="text-muted-foreground text-sm">
+          Recipe is favorited - action label changes
+        </p>
+        <RecipeQuickActions {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+### Small Size
+
+<Canvas>
+  <Story
+    name="Small Size"
+    args={{
+      recipe: {
+        recipeId: 3,
+        userId: 'user-123',
+        title: 'Greek Salad',
+        servings: 2,
+        preparationTime: 10,
+        cookingTime: 0,
+        difficulty: DifficultyLevel.EASY,
+        createdAt: '2024-01-10T09:00:00Z',
+      },
+      position: 'top-right',
+      size: 'sm',
+    }}
+  >
+    {args => (
+      <div className="group border-border relative h-48 w-64 rounded-lg border bg-white p-3 shadow-sm">
+        <p className="text-muted-foreground text-xs">
+          Small size for compact cards
+        </p>
+        <RecipeQuickActions {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+### Large Size
+
+<Canvas>
+  <Story
+    name="Large Size"
+    args={{
+      recipe: {
+        recipeId: 4,
+        userId: 'user-123',
+        title: 'Beef Wellington',
+        description: 'Classic British dish with tender beef wrapped in pastry',
+        servings: 6,
+        preparationTime: 45,
+        cookingTime: 40,
+        difficulty: DifficultyLevel.HARD,
+        rating: 4.9,
+        reviewCount: 89,
+        createdAt: '2024-01-15T18:00:00Z',
+      },
+      position: 'top-right',
+      size: 'lg',
+    }}
+  >
+    {args => (
+      <div className="group border-border relative h-80 w-96 rounded-lg border bg-white p-6 shadow-sm">
+        <p className="text-muted-foreground text-sm">
+          Large size for hero cards
+        </p>
+        <RecipeQuickActions {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+### Different Positions
+
+<Canvas>
+  <Story name="Positions">
+    {() => {
+      const recipe = {
+        recipeId: 5,
+        userId: 'user-123',
+        title: 'Margherita Pizza',
+        servings: 4,
+        preparationTime: 20,
+        cookingTime: 15,
+        difficulty: DifficultyLevel.MEDIUM,
+        createdAt: '2024-01-20T12:00:00Z',
+      };
+      return (
+        <div className="grid grid-cols-2 gap-4">
+          {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map(
+            position => (
+              <div
+                key={position}
+                className="group border-border relative h-48 w-64 rounded-lg border bg-white p-3 shadow-sm"
+              >
+                <p className="text-muted-foreground text-xs">{position}</p>
+                <RecipeQuickActions
+                  recipe={recipe}
+                  position={position}
+                  size="md"
+                />
+              </div>
+            )
+          )}
+        </div>
+      );
+    }}
+  </Story>
+</Canvas>
+
+### Max Visible Actions
+
+<Canvas>
+  <Story
+    name="Max Visible"
+    args={{
+      recipe: {
+        recipeId: 6,
+        userId: 'user-123',
+        title: 'Thai Green Curry',
+        servings: 4,
+        preparationTime: 15,
+        cookingTime: 25,
+        difficulty: DifficultyLevel.MEDIUM,
+        createdAt: '2024-01-25T16:00:00Z',
+      },
+      position: 'top-right',
+      size: 'md',
+      maxVisible: 2,
+    }}
+  >
+    {args => (
+      <div className="group border-border relative h-64 w-80 rounded-lg border bg-white p-4 shadow-sm">
+        <p className="text-muted-foreground text-sm">
+          Max 2 visible - others in overflow menu
+        </p>
+        <RecipeQuickActions {...args} />
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Accessibility
+
+- **ARIA Labels**: All actions have descriptive labels
+- **Keyboard Navigation**: Full keyboard support (Tab, Enter, Escape)
+- **Screen Readers**: Proper announcements for all actions
+- **Focus Management**: Visible focus indicators
+- **Tooltips**: Action labels shown on hover for clarity
+
+## Custom Handlers
+
+You can override default behavior by providing custom handlers:
+
+```tsx
+<RecipeQuickActions
+  recipe={recipe}
+  handlers={{
+    onFavorite: recipe => {
+      // Custom favorite logic - bypasses default API integration
+      console.log('Custom favorite handler:', recipe.title);
+    },
+    onAddToCollection: recipe => {
+      // Custom collection logic - bypasses modal
+      customCollectionDialog.open(recipe);
+    },
+  }}
+/>
+```
+
+When custom handlers are provided, the default behavior (API calls, modals) is skipped.
+
+## Error Handling
+
+The component handles errors gracefully with toast notifications:
+
+- **Favorite errors**: Shows error toast with message from API
+- **Collection errors**: Shows error toast when adding to collection fails
+- **Network errors**: Displays user-friendly error messages
+- **Loading states**: Disables buttons during API calls to prevent double-submission

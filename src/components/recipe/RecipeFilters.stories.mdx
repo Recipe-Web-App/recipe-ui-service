@@ -1,0 +1,1164 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import { RecipeFilters } from './RecipeFilters';
+import { RecipeBrowseGrid } from './RecipeBrowseGrid';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import React from 'react';
+import { DifficultyLevel } from '@/types/recipe-management/common';
+import type { RecipeDto } from '@/types/recipe-management/recipe';
+import type { RecipeFilterValues } from '@/types/recipe/filters';
+import { DEFAULT_RECIPE_FILTER_VALUES } from '@/types/recipe/filters';
+
+<Meta
+  title="Recipe Components/RecipeFilters"
+  component={RecipeFilters}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[800px] p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The RecipeFilters component is an entity-specific filter panel for recipe browsing that wraps
+the generic FilterPanel component with recipe-specific filtering options.
+
+## Features
+
+- **Dynamic Tag Extraction** - Tags are automatically extracted from recipe entities (no separate API call required)
+- **Responsive Design** - Drawer on mobile (<768px), inline panel on desktop/tablet
+- **Session-only Persistence** - Integrates with search-filter store for session state (no localStorage/URL)
+- **Recipe-specific Filters** - Search, tags, prep time, cook time, difficulty, rating
+- **Real-time Updates** - Filtered results update immediately as filters change
+- **Integration with FilterPanel** - Consistent UX with other filter panels in the app
+- **Fully Accessible** - WCAG 2.1 AA compliant with proper ARIA attributes
+- **Type-Safe** - Complete TypeScript support with recipe filter type definitions
+
+## Use Cases
+
+Use RecipeFilters for:
+
+- Recipe browse pages (main recipe discovery)
+- Search results (refine recipe search)
+- User recipe collections (filter saved recipes)
+- Category pages (filter by cuisine, meal type, etc.)
+- Any recipe listing that needs filtering
+  `
+  }
+  }
+  }}
+  argTypes={{
+      recipes: {
+        description: 'Array of recipes to extract tags from and filter',
+        control: { type: 'object' },
+      },
+      values: {
+        description: 'Current filter values (controlled)',
+        control: { type: 'object' },
+      },
+      onFilterChange: {
+        description: 'Callback when filter values change',
+        action: 'filterChanged',
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'compact', 'full'],
+        description: 'Visual style variant',
+        defaultValue: 'default'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size variant',
+        defaultValue: 'md'
+      },
+      position: {
+        control: { type: 'select' },
+        options: ['sidebar', 'drawer', 'modal'],
+        description: 'Position variant (auto-responsive on mobile)',
+        defaultValue: 'sidebar'
+      },
+      collapsible: {
+        control: { type: 'boolean' },
+        description: 'Whether filters are collapsible',
+        defaultValue: true
+      },
+      showResultCount: {
+        control: { type: 'boolean' },
+        description: 'Whether to show result count',
+        defaultValue: false
+      },
+      showHeader: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the header',
+        defaultValue: true
+      },
+      showFooter: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the footer',
+        defaultValue: true
+      },
+    }}
+  />
+
+# RecipeFilters
+
+<Description of={RecipeFilters} />
+
+## Sample Data
+
+The following sample recipes are used in the examples below:
+
+export const sampleRecipes = [
+  {
+    recipeId: 1,
+    userId: 'user-1',
+    title: 'Chocolate Chip Cookies',
+    description: 'Classic soft and chewy cookies with chocolate chips',
+    servings: 24,
+    preparationTime: 15,
+    cookingTime: 12,
+    difficulty: DifficultyLevel.EASY,
+    createdAt: '2024-01-01T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400',
+    tags: [
+      { tagId: 1, name: 'Dessert', category: 'meal-type' },
+      { tagId: 2, name: 'Baking', category: 'method' },
+      { tagId: 3, name: 'American', category: 'cuisine' },
+    ],
+  },
+  {
+    recipeId: 2,
+    userId: 'user-1',
+    title: 'Pasta Carbonara',
+    description: 'Classic Italian pasta with eggs, cheese, and pancetta',
+    servings: 4,
+    preparationTime: 10,
+    cookingTime: 20,
+    difficulty: DifficultyLevel.MEDIUM,
+    createdAt: '2024-01-02T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400',
+    tags: [
+      { tagId: 4, name: 'Italian', category: 'cuisine' },
+      { tagId: 5, name: 'Pasta', category: 'ingredient' },
+      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+    ],
+  },
+  {
+    recipeId: 3,
+    userId: 'user-2',
+    title: 'Vegan Buddha Bowl',
+    description: 'Healthy and colorful bowl with quinoa and roasted vegetables',
+    servings: 2,
+    preparationTime: 20,
+    cookingTime: 0,
+    difficulty: DifficultyLevel.EASY,
+    createdAt: '2024-01-03T10:00:00Z',
+    imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400',
+    tags: [
+      { tagId: 7, name: 'Vegan', category: 'dietary' },
+      { tagId: 8, name: 'Healthy', category: 'attribute' },
+      { tagId: 9, name: 'Lunch', category: 'meal-type' },
+    ],
+  },
+  {
+    recipeId: 4,
+    userId: 'user-3',
+    title: 'Thai Green Curry',
+    description: 'Spicy and aromatic Thai curry with chicken and vegetables',
+    servings: 6,
+    preparationTime: 25,
+    cookingTime: 30,
+    difficulty: DifficultyLevel.HARD,
+    createdAt: '2024-01-04T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400',
+    tags: [
+      { tagId: 10, name: 'Thai', category: 'cuisine' },
+      { tagId: 11, name: 'Spicy', category: 'attribute' },
+      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+    ],
+  },
+  {
+    recipeId: 5,
+    userId: 'user-1',
+    title: 'Overnight Oats',
+    description: 'Simple make-ahead breakfast with oats and fruit',
+    servings: 1,
+    preparationTime: 5,
+    cookingTime: 0,
+    difficulty: DifficultyLevel.BEGINNER,
+    createdAt: '2024-01-05T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=400',
+    tags: [
+      { tagId: 12, name: 'Breakfast', category: 'meal-type' },
+      { tagId: 8, name: 'Healthy', category: 'attribute' },
+      { tagId: 13, name: 'Quick', category: 'attribute' },
+    ],
+  },
+  {
+    recipeId: 6,
+    userId: 'user-2',
+    title: 'Classic Margherita Pizza',
+    description: 'Traditional Italian pizza with tomato, mozzarella, and basil',
+    servings: 4,
+    preparationTime: 120,
+    cookingTime: 15,
+    difficulty: DifficultyLevel.MEDIUM,
+    createdAt: '2024-01-06T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400',
+    tags: [
+      { tagId: 4, name: 'Italian', category: 'cuisine' },
+      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+      { tagId: 2, name: 'Baking', category: 'method' },
+    ],
+  },
+  {
+    recipeId: 7,
+    userId: 'user-3',
+    title: 'Greek Salad',
+    description: 'Fresh Mediterranean salad with feta and olives',
+    servings: 4,
+    preparationTime: 10,
+    cookingTime: 0,
+    difficulty: DifficultyLevel.BEGINNER,
+    createdAt: '2024-01-07T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400',
+    tags: [
+      { tagId: 14, name: 'Greek', category: 'cuisine' },
+      { tagId: 8, name: 'Healthy', category: 'attribute' },
+      { tagId: 9, name: 'Lunch', category: 'meal-type' },
+    ],
+  },
+  {
+    recipeId: 8,
+    userId: 'user-1',
+    title: 'Beef Stir Fry',
+    description:
+      'Quick Asian-inspired stir fry with tender beef and vegetables',
+    servings: 4,
+    preparationTime: 15,
+    cookingTime: 12,
+    difficulty: DifficultyLevel.EASY,
+    createdAt: '2024-01-08T10:00:00Z',
+    imageUrl:
+      'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400',
+    tags: [
+      { tagId: 15, name: 'Asian', category: 'cuisine' },
+      { tagId: 13, name: 'Quick', category: 'attribute' },
+      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+    ],
+  },
+];
+
+## Basic Usage
+
+Simplest usage with recipe filtering.
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      const filteredRecipes = React.useMemo(() => {
+        return sampleRecipes.filter(recipe => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const titleMatch = recipe.title.toLowerCase().includes(searchLower);
+            const descMatch = recipe.description?.toLowerCase().includes(searchLower);
+            if (!titleMatch && !descMatch) return false;
+          }
+
+          if (filterValues.tags && filterValues.tags.length > 0) {
+            const recipeTags = recipe.tags?.map(t => t.name) ?? [];
+            const hasTag = filterValues.tags.some(tag => recipeTags.includes(tag));
+            if (!hasTag) return false;
+          }
+
+          if (filterValues.prepTime) {
+            const [min, max] = filterValues.prepTime;
+            const prepTime = recipe.preparationTime ?? 0;
+            if (prepTime < min || prepTime > max) return false;
+          }
+
+          if (filterValues.cookTime) {
+            const [min, max] = filterValues.cookTime;
+            const cookTime = recipe.cookingTime ?? 0;
+            if (cookTime < min || cookTime > max) return false;
+          }
+
+          if (filterValues.difficulty && filterValues.difficulty.length > 0) {
+            if (recipe.difficulty && !filterValues.difficulty.includes(recipe.difficulty)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            totalResults={filteredRecipes.length}
+            showResultCount
+            title="Filter Recipes"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Full Recipe Browse Experience
+
+Filter panel integrated with recipe grid showing real-time filtering.
+
+<Canvas>
+  <Story name="With Recipe Grid">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      const filteredRecipes = React.useMemo(() => {
+        return sampleRecipes.filter(recipe => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const titleMatch = recipe.title.toLowerCase().includes(searchLower);
+            const descMatch = recipe.description?.toLowerCase().includes(searchLower);
+            if (!titleMatch && !descMatch) return false;
+          }
+
+          if (filterValues.tags && filterValues.tags.length > 0) {
+            const recipeTags = recipe.tags?.map(t => t.name) ?? [];
+            const hasTag = filterValues.tags.some(tag => recipeTags.includes(tag));
+            if (!hasTag) return false;
+          }
+
+          if (filterValues.prepTime) {
+            const [min, max] = filterValues.prepTime;
+            const prepTime = recipe.preparationTime ?? 0;
+            if (prepTime < min || prepTime > max) return false;
+          }
+
+          if (filterValues.cookTime) {
+            const [min, max] = filterValues.cookTime;
+            const cookTime = recipe.cookingTime ?? 0;
+            if (cookTime < min || cookTime > max) return false;
+          }
+
+          if (filterValues.difficulty && filterValues.difficulty.length > 0) {
+            if (recipe.difficulty && !filterValues.difficulty.includes(recipe.difficulty)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+          {/* Filter Sidebar */}
+          <div className="lg:sticky lg:top-4 lg:h-fit">
+            <RecipeFilters
+              recipes={sampleRecipes}
+              values={filterValues}
+              onFilterChange={setFilterValues}
+              totalResults={filteredRecipes.length}
+              showResultCount
+              title="Filter Recipes"
+              position="sidebar"
+            />
+          </div>
+
+          {/* Recipe Grid */}
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold">Recipes</h2>
+              <p className="text-sm text-muted-foreground">
+                {filteredRecipes.length} {filteredRecipes.length === 1 ? 'recipe' : 'recipes'}
+              </p>
+            </div>
+
+            {filteredRecipes.length > 0 ? (
+              <RecipeBrowseGrid
+                recipes={filteredRecipes.map(recipe => ({
+                  ...recipe,
+                  rating: 4 + Math.random(),
+                  reviewCount: Math.floor(Math.random() * 200),
+                  isFavorite: recipe.recipeId % 3 === 0,
+                  author: {
+                    id: recipe.userId,
+                    name: `Chef ${recipe.userId}`,
+                    avatar: `https://i.pravatar.cc/150?u=${recipe.userId}`,
+                    role: 'chef',
+                    verified: recipe.recipeId % 2 === 0,
+                    rating: 4.5,
+                    recipeCount: 25,
+                  },
+                }))}
+                columns={{ mobile: 1, tablet: 2, desktop: 2 }}
+                gap="md"
+                cardVariant="elevated"
+                cardSize="default"
+              />
+            ) : (
+              <div className="bg-muted flex flex-col items-center justify-center rounded-lg p-12 text-center">
+                <p className="text-muted-foreground text-lg font-medium">
+                  No recipes match your filters
+                </p>
+                <p className="text-muted-foreground mt-2 text-sm">
+                  Try adjusting your filters to see more results
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Compact Variant
+
+Smaller variant for tight spaces.
+
+<Canvas>
+  <Story name="Compact Variant">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-xs">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            variant="compact"
+            size="sm"
+            title="Quick Filters"
+            showResultCount={false}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Large Variant
+
+Expanded variant with more spacing.
+
+<Canvas>
+  <Story name="Large Variant">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-md">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            variant="full"
+            size="lg"
+            title="Detailed Filters"
+            showResultCount
+            totalResults={sampleRecipes.length}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## With Active Filters
+
+Shows the component with pre-selected filters.
+
+<Canvas>
+  <Story name="With Active Filters">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: 'pasta',
+        tags: ['Italian', 'Dinner'],
+        prepTime: [0, 30],
+        cookTime: [10, 30],
+        difficulty: [DifficultyLevel.MEDIUM],
+        minRating: '4',
+      });
+
+      const filteredRecipes = React.useMemo(() => {
+        return sampleRecipes.filter(recipe => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const titleMatch = recipe.title.toLowerCase().includes(searchLower);
+            const descMatch = recipe.description?.toLowerCase().includes(searchLower);
+            if (!titleMatch && !descMatch) return false;
+          }
+
+          if (filterValues.tags && filterValues.tags.length > 0) {
+            const recipeTags = recipe.tags?.map(t => t.name) ?? [];
+            const hasTag = filterValues.tags.some(tag => recipeTags.includes(tag));
+            if (!hasTag) return false;
+          }
+
+          if (filterValues.prepTime) {
+            const [min, max] = filterValues.prepTime;
+            const prepTime = recipe.preparationTime ?? 0;
+            if (prepTime < min || prepTime > max) return false;
+          }
+
+          if (filterValues.cookTime) {
+            const [min, max] = filterValues.cookTime;
+            const cookTime = recipe.cookingTime ?? 0;
+            if (cookTime < min || cookTime > max) return false;
+          }
+
+          if (filterValues.difficulty && filterValues.difficulty.length > 0) {
+            if (recipe.difficulty && !filterValues.difficulty.includes(recipe.difficulty)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            totalResults={filteredRecipes.length}
+            showResultCount
+            title="Active Filters Demo"
+          />
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle className="text-sm">Filter State</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre className="text-xs overflow-x-auto">
+                {JSON.stringify(filterValues, null, 2)}
+              </pre>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Collapsible (Mobile-Friendly)
+
+Collapsible filters for mobile devices.
+
+<Canvas>
+  <Story name="Collapsible">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            collapsible
+            defaultCollapsed={false}
+            showResultCount
+            totalResults={sampleRecipes.length}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Without Header or Footer
+
+Minimal configuration.
+
+<Canvas>
+  <Story name="Minimal">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            showHeader={false}
+            showFooter={false}
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Loading State
+
+Shows loading state while fetching results.
+
+<Canvas>
+  <Story name="Loading Results">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={sampleRecipes}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            loadingResults
+            showResultCount
+            totalResults={0}
+            title="Loading..."
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Empty Recipe List
+
+Handles empty recipe array gracefully.
+
+<Canvas>
+  <Story name="Empty Recipes">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+
+      return (
+        <div className="max-w-sm">
+          <RecipeFilters
+            recipes={[]}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            showResultCount
+            totalResults={0}
+            title="No Recipes Available"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Interactive Playground
+
+Full configurable demo with all options.
+
+<Canvas>
+  <Story name="Interactive">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_RECIPE_FILTER_VALUES);
+      const [variant, setVariant] = React.useState('default');
+      const [size, setSize] = React.useState('md');
+      const [collapsible, setCollapsible] = React.useState(true);
+      const [showHeader, setShowHeader] = React.useState(true);
+      const [showFooter, setShowFooter] = React.useState(true);
+      const [showResultCount, setShowResultCount] = React.useState(true);
+
+      const filteredRecipes = React.useMemo(() => {
+        return sampleRecipes.filter(recipe => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const titleMatch = recipe.title.toLowerCase().includes(searchLower);
+            const descMatch = recipe.description?.toLowerCase().includes(searchLower);
+            if (!titleMatch && !descMatch) return false;
+          }
+
+          if (filterValues.tags && filterValues.tags.length > 0) {
+            const recipeTags = recipe.tags?.map(t => t.name) ?? [];
+            const hasTag = filterValues.tags.some(tag => recipeTags.includes(tag));
+            if (!hasTag) return false;
+          }
+
+          if (filterValues.prepTime) {
+            const [min, max] = filterValues.prepTime;
+            const prepTime = recipe.preparationTime ?? 0;
+            if (prepTime < min || prepTime > max) return false;
+          }
+
+          if (filterValues.cookTime) {
+            const [min, max] = filterValues.cookTime;
+            const cookTime = recipe.cookingTime ?? 0;
+            if (cookTime < min || cookTime > max) return false;
+          }
+
+          if (filterValues.difficulty && filterValues.difficulty.length > 0) {
+            if (recipe.difficulty && !filterValues.difficulty.includes(recipe.difficulty)) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="space-y-6">
+          {/* Controls */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Variant</label>
+                  <select
+                    value={variant}
+                    onChange={(e) => setVariant(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="default">Default</option>
+                    <option value="compact">Compact</option>
+                    <option value="full">Full</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Size</label>
+                  <select
+                    value={size}
+                    onChange={(e) => setSize(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="sm">Small</option>
+                    <option value="md">Medium</option>
+                    <option value="lg">Large</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={collapsible}
+                    onChange={(e) => setCollapsible(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Collapsible</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showHeader}
+                    onChange={(e) => setShowHeader(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Header</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showFooter}
+                    onChange={(e) => setShowFooter(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Footer</span>
+                </label>
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={showResultCount}
+                    onChange={(e) => setShowResultCount(e.target.checked)}
+                    className="h-4 w-4 rounded border-input"
+                  />
+                  <span className="text-sm font-medium">Show Result Count</span>
+                </label>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Filter Panel Preview */}
+          <div className="max-w-sm">
+            <RecipeFilters
+              recipes={sampleRecipes}
+              values={filterValues}
+              onFilterChange={setFilterValues}
+              variant={variant}
+              size={size}
+              collapsible={collapsible}
+              showHeader={showHeader}
+              showFooter={showFooter}
+              showResultCount={showResultCount}
+              totalResults={filteredRecipes.length}
+              title="Interactive Recipe Filters"
+            />
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={RecipeFilters} />
+
+## Filter Types
+
+The RecipeFilters component includes the following filter types:
+
+### 1. Search Filter
+
+Full-text search across recipe titles and descriptions with debouncing (300ms).
+
+```typescript
+{
+  type: 'search',
+  id: 'search',
+  placeholder: 'Search recipes...',
+  debounceDelay: 300,
+  showSearchIcon: true,
+  showClearButton: true,
+}
+```
+
+### 2. Tags Filter (Dynamic)
+
+Multi-select checkboxes for tags, automatically extracted from the recipes prop.
+
+```typescript
+{
+  type: 'checkbox',
+  id: 'tags',
+  label: 'Tags',
+  description: 'Filter by recipe tags',
+  options: extractUniqueTags(recipes), // Dynamically generated
+  searchable: true,  // If > 10 tags
+  searchPlaceholder: 'Search tags...',
+  showSelectAll: true,
+  showClearAll: true,
+  layout: 'vertical',
+}
+```
+
+### 3. Prep Time Filter
+
+Range slider for preparation time (0-120 minutes).
+
+```typescript
+{
+  type: 'range',
+  id: 'prepTime',
+  label: 'Prep Time',
+  description: 'Filter by preparation time',
+  min: 0,
+  max: 120,
+  step: 5,
+  unit: 'min',
+  formatValue: formatFilterTime, // "1h 30m" format
+  showValue: true,
+  valuePosition: 'inline',
+}
+```
+
+### 4. Cook Time Filter
+
+Range slider for cooking time (0-120 minutes).
+
+```typescript
+{
+  type: 'range',
+  id: 'cookTime',
+  label: 'Cook Time',
+  description: 'Filter by cooking time',
+  min: 0,
+  max: 120,
+  step: 5,
+  unit: 'min',
+  formatValue: formatFilterTime,
+  showValue: true,
+  valuePosition: 'inline',
+}
+```
+
+### 5. Difficulty Filter
+
+Multi-select checkboxes for difficulty levels (Beginner, Easy, Medium, Hard, Expert).
+
+```typescript
+{
+  type: 'checkbox',
+  id: 'difficulty',
+  label: 'Difficulty',
+  description: 'Filter by difficulty level',
+  options: getDifficultyOptions(),
+  layout: 'vertical',
+  showSelectAll: false,
+  showClearAll: true,
+}
+```
+
+### 6. Minimum Rating Filter
+
+Dropdown for minimum star rating (All, 2+, 3+, 4+, 4.5+).
+
+```typescript
+{
+  type: 'select',
+  id: 'minRating',
+  label: 'Minimum Rating',
+  description: 'Filter by minimum star rating',
+  options: getRatingOptions(),
+  defaultValue: '0',
+  placeholder: 'Select minimum rating',
+}
+```
+
+## Integration Pattern
+
+### Basic Integration
+
+```typescript
+import { RecipeFilters } from '@/components/recipe/RecipeFilters';
+import { DEFAULT_RECIPE_FILTER_VALUES } from '@/types/recipe/filters';
+import type { RecipeFilterValues } from '@/types/recipe/filters';
+
+function RecipeBrowsePage() {
+  const { data: recipes } = useRecipes();
+  const [filterValues, setFilterValues] = React.useState<RecipeFilterValues>(
+    DEFAULT_RECIPE_FILTER_VALUES
+  );
+
+  // Filter recipes based on current filter values
+  const filteredRecipes = React.useMemo(() => {
+    return filterRecipes(recipes, filterValues);
+  }, [recipes, filterValues]);
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      {/* Filter Sidebar */}
+      <RecipeFilters
+        recipes={recipes}
+        values={filterValues}
+        onFilterChange={setFilterValues}
+        totalResults={filteredRecipes.length}
+        showResultCount
+      />
+
+      {/* Recipe Grid */}
+      <RecipeBrowseGrid recipes={filteredRecipes} />
+    </div>
+  );
+}
+```
+
+### With URL Sync (Optional)
+
+```typescript
+import { useSearchParams } from 'next/navigation';
+
+function RecipeBrowsePage() {
+  const searchParams = useSearchParams();
+  const [filterValues, setFilterValues] = React.useState<RecipeFilterValues>(() => ({
+    search: searchParams.get('q') || '',
+    tags: searchParams.getAll('tag'),
+    // ... other filters from URL
+  }));
+
+  // Sync filters to URL on change
+  const handleFilterChange = (newValues: RecipeFilterValues) => {
+    setFilterValues(newValues);
+    // Update URL (implementation depends on routing)
+  };
+
+  return <RecipeFilters values={filterValues} onFilterChange={handleFilterChange} />;
+}
+```
+
+## Responsive Behavior
+
+The RecipeFilters component automatically adapts to different screen sizes:
+
+### Desktop/Tablet (≥768px)
+
+- Renders as inline panel (default)
+- Fixed position in sidebar
+- All filters visible
+- No drawer overlay
+
+### Mobile (<768px)
+
+- Renders as drawer with trigger button
+- Drawer slides from bottom
+- Filters accessible via "Filters" button
+- Shows result count in button badge
+- Drawer closes after applying filters
+
+### Breakpoint Detection
+
+The component uses `window.innerWidth` to detect the viewport size:
+
+```typescript
+React.useEffect(() => {
+  const checkMobile = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+  return () => window.removeEventListener('resize', checkMobile);
+}, []);
+```
+
+## Accessibility Features
+
+### Keyboard Navigation
+
+- **Tab**: Navigate between filter sections and controls
+- **Enter/Space**: Expand/collapse accordion sections
+- **Arrow Keys**: Navigate within checkboxes and sliders
+- **Escape**: Close mobile drawer
+
+### Screen Reader Support
+
+- ARIA region with `aria-label="Recipe filters"`
+- ARIA labels for all interactive elements
+- ARIA live region for result count updates
+- Proper button roles and states
+- Screen reader announcements for filter changes
+
+### Focus Management
+
+- Logical tab order through all controls
+- Focus visible indicators
+- No keyboard traps
+- Focus returns to trigger button when drawer closes
+
+## Design Guidelines
+
+### When to Use
+
+- **Recipe Browse Pages**: Main recipe discovery and browsing
+- **Search Results**: Refine recipe search results
+- **User Collections**: Filter saved or favorited recipes
+- **Category Pages**: Filter by cuisine, meal type, dietary preferences
+
+### When Not to Use
+
+- **Single Filter**: Use individual filter component instead
+- **Simple Search**: Just use SearchInput component
+- **Advanced Queries**: Use query builder instead
+- **Non-recipe Entities**: Use generic FilterPanel or create entity-specific wrapper
+
+### Best Practices
+
+- **Placement**: Left sidebar on desktop (280px width), drawer on mobile
+- **Filter Order**: Most important filters first (search, tags, time)
+- **Default Values**: Set sensible defaults (all ranges at max, no filters selected)
+- **Result Count**: Always show when filtering to provide feedback
+- **Clear State**: Provide easy way to reset all filters
+- **Mobile UX**: Use drawer on small screens for better space utilization
+- **Performance**: Debounce search (300ms), memoize filtered results
+- **Tags**: Automatically extract from recipes (no separate API call)
+
+## Performance Considerations
+
+### Optimization Strategies
+
+- **Debounced Search**: 300ms debounce on search input
+- **Memoized Filters**: Filter configuration memoized based on recipes
+- **Memoized Values**: Filter values conversion memoized
+- **Efficient Filtering**: Client-side filtering with useMemo
+- **Tag Extraction**: Cached tag extraction with Map
+
+### Bundle Impact
+
+- Component size: ~6KB gzipped (excluding FilterPanel)
+- Uses FilterPanel (~8KB) as base
+- Total: ~14KB gzipped with dependencies
+- Tree-shakeable exports
+- No heavy dependencies beyond FilterPanel
+
+## State Management
+
+### Session Persistence
+
+The component integrates with the search-filter store for session-only persistence:
+
+```typescript
+const { setQuery } = useSearchFilterStore();
+
+// Sync search query to store
+React.useCallback(
+  (newValues: Record<string, unknown>) => {
+    const recipeFilters = filterValuesToRecipeFilters(newValues);
+    onFilterChange(recipeFilters);
+
+    // Sync search query to store
+    if (typeof newValues.search === 'string') {
+      setQuery(newValues.search);
+    }
+  },
+  [onFilterChange, setQuery]
+);
+```
+
+### No URL/localStorage Persistence
+
+As per the design decision, RecipeFilters does NOT:
+
+- Store filters in URL query parameters
+- Persist filters to localStorage
+- Sync filters across browser tabs
+
+This keeps URLs clean and provides a fresh start on each session.
+
+## Implementation Notes
+
+- **Entity-specific Wrapper**: Wraps generic FilterPanel with recipe logic
+- **Dynamic Tag Extraction**: Tags extracted from recipe entities on the fly
+- **Controlled Component**: Filter values managed by parent component
+- **Full TypeScript**: Complete type safety with RecipeFilterValues interface
+- **WCAG 2.1 AA Compliant**: Fully accessible with ARIA attributes
+- **Mobile-responsive**: Automatic drawer on mobile (<768px)
+- **Session State**: Integration with search-filter Zustand store
+- **No External Dependencies**: Uses existing UI components only

@@ -850,6 +850,22 @@ export const componentsDemoSubNavigation: NavItem[] = [
       sortOrder: 510,
     },
   },
+  {
+    id: 'components-recipe-quick-actions',
+    label: 'RecipeQuickActions',
+    href: '/components-demo/recipe-quick-actions',
+    metadata: {
+      sortOrder: 520,
+    },
+  },
+  {
+    id: 'components-meal-plan-browse-grid',
+    label: 'Meal Plan Browse Grid',
+    href: '/components-demo/meal-plan-browse-grid',
+    metadata: {
+      sortOrder: 530,
+    },
+  },
 ];
 
 /**

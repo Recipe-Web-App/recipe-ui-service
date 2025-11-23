@@ -457,6 +457,134 @@ const components = [
     variants: 4,
     status: 'ready',
   },
+  {
+    name: 'RecipeCard',
+    path: '/components-demo/recipe-card',
+    description:
+      'Recipe-specific card with metadata, author, quick actions, and menu',
+    variants: 8,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeBrowseGrid',
+    path: '/components-demo/recipe-browse-grid',
+    description:
+      'Recipe-specific grid wrapper with RecipeCard integration, pagination, and recipe actions',
+    variants: 6,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeListItem',
+    path: '/components-demo/recipe-list-item',
+    description:
+      'Horizontal list item layout for recipe browsing with metadata and quick actions',
+    variants: 9,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeBrowseList',
+    path: '/components-demo/recipe-browse-list',
+    description:
+      'Recipe-specific list wrapper with RecipeListItem integration, pagination, and recipe actions',
+    variants: 7,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeFilters',
+    path: '/components-demo/recipe-filters',
+    description:
+      'Entity-specific filter panel for recipe browsing with dynamic tag extraction and responsive design',
+    variants: 6,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeMenu',
+    path: '/components-demo/recipe-menu',
+    description:
+      'Standalone contextual menu for recipe actions with ownership-based permissions and new features',
+    variants: 8,
+    status: 'ready',
+  },
+  {
+    name: 'RecipeQuickActions',
+    path: '/components-demo/recipe-quick-actions',
+    description:
+      'Recipe-specific quick action buttons that appear on hover/focus, providing favorite, share, add to collection, and quick view actions',
+    variants: 4,
+    status: 'ready',
+  },
+  {
+    name: 'CollectionCard',
+    path: '/components-demo/collection-card',
+    description:
+      'Collection-specific card with 2x2 mosaic image grid, quick actions, and menu for recipe collections',
+    variants: 5,
+    status: 'ready',
+  },
+  {
+    name: 'CollectionBrowseGrid',
+    path: '/components-demo/collection-browse-grid',
+    description:
+      'Grid view for browsing recipe collections with pagination and actions',
+    variants: 5,
+    status: 'ready',
+  },
+  {
+    name: 'CollectionFilters',
+    path: '/components-demo/collection-filters',
+    description:
+      'Entity-specific filter panel for collection browsing with text search, visibility, collaboration, and favorited toggles. Responsive with mobile drawer.',
+    variants: 6,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanCard',
+    path: '/components-demo/meal-plan-card',
+    description:
+      'Meal plan card with 2x2 recipe image mosaic, status badges (current/upcoming/completed), meal type breakdown, quick actions, and menu',
+    variants: 5,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanCalendar',
+    path: '/components-demo/meal-plan-calendar',
+    description:
+      'Comprehensive meal planning calendar with multiple view modes (week/day/month/meal), interactive slots, and edit capabilities',
+    variants: 12,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanBrowseGrid',
+    path: '/components-demo/meal-plan-browse-grid',
+    description:
+      'Grid view for browsing meal plans with pagination, filtering, and status-based organization',
+    variants: 12,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanFilters',
+    path: '/components-demo/meal-plan-filters',
+    description:
+      'Entity-specific filter panel for meal plan browsing with search, duration, recipe count, status, meal types, and ownership filters. Responsive with mobile drawer.',
+    variants: 6,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanMenu',
+    path: '/components-demo/meal-plan-menu',
+    description:
+      'Contextual menu for meal plan actions with ownership-based permissions (view, edit, duplicate, share, generate shopping list, delete)',
+    variants: 6,
+    status: 'ready',
+  },
+  {
+    name: 'MealPlanQuickActions',
+    path: '/components-demo/meal-plan-quick-actions',
+    description:
+      'Quick action buttons for meal plans that appear on hover/focus (favorite, share, clone, quick view, shopping list, calendar)',
+    variants: 6,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -480,7 +608,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">56</div>
+            <div className="text-primary text-3xl font-bold">68</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -488,7 +616,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">449</div>
+            <div className="text-primary text-3xl font-bold">531</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>

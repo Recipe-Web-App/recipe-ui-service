@@ -196,7 +196,6 @@ export const QuickActions = React.forwardRef<HTMLDivElement, QuickActionsProps>(
       size = 'md',
       showOnHover: _showOnHover = true,
       showOnFocus: _showOnFocus = true,
-      animationDuration = 150,
       className,
       overlayClassName,
       actionClassName,
@@ -246,11 +245,9 @@ export const QuickActions = React.forwardRef<HTMLDivElement, QuickActionsProps>(
     return (
       <div
         ref={ref}
+        data-quick-actions
         className={cn(quickActionsVariants({ position, size }), className)}
-        style={{
-          ...style,
-          transitionDuration: `${animationDuration}ms`,
-        }}
+        style={style}
         role="toolbar"
         aria-label={ariaLabel}
         aria-describedby={ariaDescribedby}

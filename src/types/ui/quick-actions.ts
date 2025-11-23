@@ -71,8 +71,6 @@ export interface QuickActionsProps
   showOnHover?: boolean;
   /** Whether to show the overlay on focus (default: true) */
   showOnFocus?: boolean;
-  /** Animation duration in milliseconds (default: 150) */
-  animationDuration?: number;
 
   // Styling
   /** Additional CSS class for the container */
