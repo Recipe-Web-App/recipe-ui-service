@@ -569,6 +569,14 @@ const components = [
     variants: 6,
     status: 'ready',
   },
+  {
+    name: 'MealPlanMenu',
+    path: '/components-demo/meal-plan-menu',
+    description:
+      'Contextual menu for meal plan actions with ownership-based permissions (view, edit, duplicate, share, generate shopping list, delete)',
+    variants: 6,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
@@ -592,7 +600,7 @@ export default function ComponentsDemoOverview() {
       <div className="mb-12 grid gap-4 md:grid-cols-4">
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">66</div>
+            <div className="text-primary text-3xl font-bold">67</div>
             <div className="text-muted-foreground text-sm">
               Ready Components
             </div>
@@ -600,7 +608,7 @@ export default function ComponentsDemoOverview() {
         </Card>
         <Card size="sm">
           <CardContent>
-            <div className="text-primary text-3xl font-bold">519</div>
+            <div className="text-primary text-3xl font-bold">525</div>
             <div className="text-muted-foreground text-sm">Total Variants</div>
           </CardContent>
         </Card>
