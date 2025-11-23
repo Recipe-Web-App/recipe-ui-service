@@ -1,0 +1,468 @@
+import {
+  Meta,
+  Story,
+  Canvas,
+  ArgsTable,
+  Description,
+} from '@storybook/addon-docs';
+import { MealPlanFilters } from './MealPlanFilters';
+import { MealPlanBrowseGrid } from './MealPlanBrowseGrid';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import React from 'react';
+import type { MealPlanResponseDto } from '@/types/meal-plan-management/meal-plan';
+import type { MealPlanFilterValues } from '@/types/meal-plan/filters';
+import { DEFAULT_MEAL_PLAN_FILTER_VALUES, STATUS_OPTIONS, DURATION_OPTIONS } from '@/types/meal-plan/filters';
+
+<Meta
+  title="Meal Plan Components/MealPlanFilters"
+  component={MealPlanFilters}
+  decorators={[
+    (Story) => (
+      <div className="min-h-[800px] p-8 bg-background">
+        <Story />
+      </div>
+    ),
+  ]}
+  parameters={{
+    docs: {
+      description: {
+        component: `
+The MealPlanFilters component is an entity-specific filter panel for meal plan browsing that wraps
+the generic FilterPanel component with meal-plan-specific filtering options.
+
+## Features
+
+- **Responsive Design** - Drawer on mobile (<768px), inline panel on desktop/tablet
+- **Session-only Persistence** - Integrates with search-filter store for session state (no localStorage/URL)
+- **Meal-plan-specific Filters** - Search, duration, recipe count, status, meal types, ownership, favorites
+- **Real-time Updates** - Filtered results update immediately as filters change
+- **Integration with FilterPanel** - Consistent UX with other filter panels in the app
+- **Fully Accessible** - WCAG 2.1 AA compliant with proper ARIA attributes
+- **Type-Safe** - Complete TypeScript support with meal plan filter type definitions
+
+## Use Cases
+
+Use MealPlanFilters for:
+
+- Meal plan browse pages (main meal plan discovery)
+- Search results (refine meal plan search)
+- User meal plan collections (filter saved meal plans)
+- Calendar views (filter by status and duration)
+- Any meal plan listing that needs filtering
+  `
+  }
+  }
+  }}
+  argTypes={{
+      mealPlans: {
+        description: 'Array of meal plans to filter',
+        control: { type: 'object' },
+      },
+      values: {
+        description: 'Current filter values (controlled)',
+        control: { type: 'object' },
+      },
+      onFilterChange: {
+        description: 'Callback when filter values change',
+        action: 'filterChanged',
+      },
+      variant: {
+        control: { type: 'select' },
+        options: ['default', 'compact', 'full'],
+        description: 'Visual style variant',
+        defaultValue: 'default'
+      },
+      size: {
+        control: { type: 'select' },
+        options: ['sm', 'md', 'lg'],
+        description: 'Size variant',
+        defaultValue: 'md'
+      },
+      position: {
+        control: { type: 'select' },
+        options: ['sidebar', 'drawer', 'modal'],
+        description: 'Position variant (auto-responsive on mobile)',
+        defaultValue: 'sidebar'
+      },
+      collapsible: {
+        control: { type: 'boolean' },
+        description: 'Whether filters are collapsible',
+        defaultValue: true
+      },
+      showResultCount: {
+        control: { type: 'boolean' },
+        description: 'Whether to show result count',
+        defaultValue: false
+      },
+      showHeader: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the header',
+        defaultValue: true
+      },
+      showFooter: {
+        control: { type: 'boolean' },
+        description: 'Whether to show the footer',
+        defaultValue: true
+      },
+    }}
+  />
+
+# MealPlanFilters
+
+<Description of={MealPlanFilters} />
+
+## Sample Data
+
+export const sampleMealPlans = [
+  {
+    id: '1',
+    userId: 'current-user',
+    name: 'Healthy January Week 1',
+    description: 'Low-carb meal plan for first week of January',
+    startDate: '2024-01-01',
+    endDate: '2024-01-07',
+    isActive: false,
+    createdAt: '2023-12-28T10:00:00Z',
+    updatedAt: '2023-12-30T15:00:00Z',
+    recipeCount: 21,
+    durationDays: 7,
+  },
+  {
+    id: '2',
+    userId: 'current-user',
+    name: 'Quick Weeknight Dinners',
+    description: 'Easy meals for busy work nights',
+    startDate: '2024-01-08',
+    endDate: '2024-01-21',
+    isActive: true,
+    createdAt: '2024-01-05T10:00:00Z',
+    updatedAt: '2024-01-07T12:00:00Z',
+    recipeCount: 14,
+    durationDays: 14,
+  },
+  {
+    id: '3',
+    userId: 'other-user-1',
+    name: 'Keto February',
+    description: 'Full month of ketogenic diet meals',
+    startDate: '2024-02-01',
+    endDate: '2024-02-29',
+    isActive: false,
+    createdAt: '2024-01-25T10:00:00Z',
+    updatedAt: '2024-01-28T14:00:00Z',
+    recipeCount: 42,
+    durationDays: 29,
+  },
+  {
+    id: '4',
+    userId: 'current-user',
+    name: 'Meal Prep Sunday',
+    description: 'Batch cooking for the week ahead',
+    startDate: '2024-01-15',
+    endDate: '2024-01-21',
+    isActive: true,
+    createdAt: '2024-01-12T10:00:00Z',
+    updatedAt: '2024-01-14T11:00:00Z',
+    recipeCount: 7,
+    durationDays: 7,
+  },
+  {
+    id: '5',
+    userId: 'other-user-2',
+    name: 'Family Favorites Collection',
+    description: 'Tried and tested family recipes',
+    startDate: '2024-02-05',
+    endDate: '2024-02-11',
+    isActive: false,
+    createdAt: '2024-01-30T10:00:00Z',
+    updatedAt: '2024-02-02T10:00:00Z',
+    recipeCount: 18,
+    durationDays: 7,
+  },
+  {
+    id: '6',
+    userId: 'other-user-1',
+    name: 'Vegan January Challenge',
+    description: 'Plant-based eating for the month',
+    startDate: '2024-01-01',
+    endDate: '2024-01-31',
+    isActive: false,
+    createdAt: '2023-12-20T10:00:00Z',
+    updatedAt: '2023-12-29T16:00:00Z',
+    recipeCount: 31,
+    durationDays: 31,
+  },
+  {
+    id: '7',
+    userId: 'current-user',
+    name: 'Summer BBQ Season',
+    description: 'Grilling recipes for warm weather',
+    startDate: '2024-06-01',
+    endDate: '2024-06-14',
+    isActive: false,
+    createdAt: '2024-05-15T10:00:00Z',
+    updatedAt: '2024-05-28T12:00:00Z',
+    recipeCount: 28,
+    durationDays: 14,
+  },
+  {
+    id: '8',
+    userId: 'other-user-3',
+    name: 'Mediterranean Diet Week',
+    description: 'Heart-healthy Mediterranean meals',
+    startDate: '2024-01-22',
+    endDate: '2024-01-28',
+    isActive: true,
+    createdAt: '2024-01-18T10:00:00Z',
+    updatedAt: '2024-01-20T14:00:00Z',
+    recipeCount: 21,
+    durationDays: 7,
+  },
+];
+
+## Basic Usage
+
+Simplest usage with meal plan filtering.
+
+<Canvas>
+  <Story name="Basic">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_MEAL_PLAN_FILTER_VALUES);
+
+      const filteredMealPlans = React.useMemo(() => {
+        return sampleMealPlans.filter(plan => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const nameMatch = plan.name.toLowerCase().includes(searchLower);
+            const descMatch = plan.description?.toLowerCase().includes(searchLower);
+            if (!nameMatch && !descMatch) return false;
+          }
+
+          if (filterValues.recipeCountRange) {
+            const [min, max] = filterValues.recipeCountRange;
+            if (plan.recipeCount < min || plan.recipeCount > max) return false;
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="max-w-sm">
+          <MealPlanFilters
+            mealPlans={sampleMealPlans}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            totalResults={filteredMealPlans.length}
+            showResultCount
+            title="Filter Meal Plans"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## With Meal Plan Grid
+
+Filter panel integrated with meal plan grid showing real-time filtering.
+
+<Canvas>
+  <Story name="With Meal Plan Grid">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_MEAL_PLAN_FILTER_VALUES);
+
+      const filteredMealPlans = React.useMemo(() => {
+        return sampleMealPlans.filter(plan => {
+          if (filterValues.search) {
+            const searchLower = filterValues.search.toLowerCase();
+            const nameMatch = plan.name.toLowerCase().includes(searchLower);
+            const descMatch = plan.description?.toLowerCase().includes(searchLower);
+            if (!nameMatch && !descMatch) return false;
+          }
+
+          if (filterValues.recipeCountRange) {
+            const [min, max] = filterValues.recipeCountRange;
+            if (plan.recipeCount < min || plan.recipeCount > max) return false;
+          }
+
+          if (filterValues.showMyMealPlans) {
+            if (plan.userId !== 'current-user') return false;
+          }
+
+          return true;
+        });
+      }, [filterValues]);
+
+      return (
+        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+          <div className="lg:sticky lg:top-4 lg:h-fit">
+            <MealPlanFilters
+              mealPlans={sampleMealPlans}
+              values={filterValues}
+              onFilterChange={setFilterValues}
+              totalResults={filteredMealPlans.length}
+              showResultCount
+              position="sidebar"
+            />
+          </div>
+
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold">Meal Plans</h2>
+              <p className="text-sm text-muted-foreground">
+                {filteredMealPlans.length} {filteredMealPlans.length === 1 ? 'plan' : 'plans'}
+              </p>
+            </div>
+
+            {filteredMealPlans.length > 0 ? (
+              <MealPlanBrowseGrid
+                mealPlans={filteredMealPlans.map(plan => ({
+                  ...plan,
+                  status: plan.isActive ? 'current' : 'completed',
+                  owner: {
+                    id: plan.userId,
+                    name: plan.userId === 'current-user' ? 'You' : `Chef ${plan.userId}`,
+                    avatar: `https://i.pravatar.cc/150?u=${plan.userId}`,
+                  },
+                }))}
+                columns={{ mobile: 1, tablet: 2, desktop: 2 }}
+                gap="md"
+                cardVariant="elevated"
+              />
+            ) : (
+              <div className="bg-muted flex flex-col items-center justify-center rounded-lg p-12 text-center">
+                <p className="text-muted-foreground text-lg font-medium">
+                  No meal plans match your filters
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Compact Variant
+
+<Canvas>
+  <Story name="Compact Variant">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState(DEFAULT_MEAL_PLAN_FILTER_VALUES);
+
+      return (
+        <div className="max-w-xs">
+          <MealPlanFilters
+            mealPlans={sampleMealPlans}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            variant="compact"
+            size="sm"
+            title="Quick Filters"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## With Active Filters
+
+<Canvas>
+  <Story name="With Active Filters">
+    {() => {
+      const [filterValues, setFilterValues] = React.useState({
+        search: 'keto',
+        duration: [DURATION_OPTIONS.ONE_WEEK],
+        status: [STATUS_OPTIONS.CURRENT],
+        showMyMealPlans: true,
+        recipeCountRange: [10, 30],
+      });
+
+      return (
+        <div className="max-w-sm">
+          <MealPlanFilters
+            mealPlans={sampleMealPlans}
+            values={filterValues}
+            onFilterChange={setFilterValues}
+            totalResults={2}
+            showResultCount
+            title="Active Filters Demo"
+          />
+        </div>
+      );
+    }}
+
+  </Story>
+</Canvas>
+
+## Component API
+
+<ArgsTable of={MealPlanFilters} />
+
+## Filter Types
+
+### 1. Search Filter
+
+Full-text search across meal plan names and descriptions with debouncing (300ms).
+
+### 2. Duration Filter
+
+Multi-select checkboxes for meal plan duration:
+
+- 1 Week (7 days)
+- 2 Weeks (14 days)
+- 1 Month (28-31 days)
+- Custom
+
+### 3. Recipe Count Filter
+
+Range slider for number of recipes (0-50).
+
+### 4. Status Filter
+
+Multi-select checkboxes for meal plan status:
+
+- Current (active now)
+- Upcoming (future)
+- Completed (past)
+
+### 5. Meal Types Filter
+
+Multi-select checkboxes for included meal types:
+
+- Breakfast
+- Lunch
+- Dinner
+- Snack
+- Dessert
+
+### 6. Ownership Filter
+
+Boolean toggle: "My meal plans only"
+
+### 7. Favorites Filter
+
+Boolean toggle: "Favorited meal plans only"
+
+## Responsive Behavior
+
+- **Desktop/Tablet (≥768px)**: Inline panel in sidebar
+- **Mobile (<768px)**: Drawer with trigger button
+
+## Accessibility
+
+- WCAG 2.1 AA compliant
+- Full keyboard navigation
+- Screen reader support
+- Proper ARIA attributes
