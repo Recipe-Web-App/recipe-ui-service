@@ -585,6 +585,14 @@ const components = [
     variants: 6,
     status: 'ready',
   },
+  {
+    name: 'Notification',
+    path: '/components-demo/notification',
+    description:
+      'Complete notification system with bell icon, dropdown panel, and real-time updates for user engagement',
+    variants: 5,
+    status: 'ready',
+  },
 ];
 
 const upcomingComponents: Array<{ name: string; description: string }> = [
