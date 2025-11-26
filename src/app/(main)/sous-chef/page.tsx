@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { SectionHubPage } from '@/components/layout/section-hub-page';
 
 export function generateMetadata(): Metadata {
   return {
@@ -8,6 +8,18 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function SousChefIndexPage() {
-  redirect('/sous-chef/timers');
+/**
+ * Sous Chef Hub Page
+ *
+ * Landing page for the Sous Chef section. Displays a card grid
+ * of sub-page navigation options for cooking assistant tools.
+ */
+export default function SousChefPage() {
+  return (
+    <SectionHubPage
+      sectionId="sous-chef"
+      title="Sous Chef"
+      description="Your AI-powered cooking assistant"
+    />
+  );
 }

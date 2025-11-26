@@ -165,8 +165,9 @@ describe('NavDropdown', () => {
   it('applies active styling when isActive is true', () => {
     render(<NavDropdown item={mockNavItem} isActive />);
 
-    const trigger = screen.getByText('Test Dropdown').closest('button');
-    expect(trigger).toHaveClass('bg-accent', 'text-accent-foreground');
+    // The container div has the active styling, not a button
+    const container = screen.getByText('Test Dropdown').closest('div');
+    expect(container).toHaveClass('bg-accent');
   });
 
   it('highlights active child items based on current pathname', () => {
@@ -189,9 +190,13 @@ describe('NavDropdown', () => {
 
     render(<NavDropdown item={disabledItem} />);
 
-    const trigger = screen.getByText('Test Dropdown').closest('button');
-    expect(trigger).toHaveClass('pointer-events-none', 'opacity-50');
-    expect(trigger).toBeDisabled();
+    // The container div has the disabled styling
+    const container = screen.getByText('Test Dropdown').closest('div');
+    expect(container).toHaveClass('pointer-events-none', 'opacity-50');
+
+    // The chevron button should be disabled
+    const chevronButton = screen.getByRole('button');
+    expect(chevronButton).toBeDisabled();
   });
 
   it('renders icons when showIcons is true', () => {
@@ -250,20 +255,29 @@ describe('NavDropdown', () => {
     expect(screen.queryByTestId('child-icon')).not.toBeInTheDocument();
   });
 
-  it('applies custom className to trigger', () => {
+  it('applies custom className to container', () => {
     render(<NavDropdown item={mockNavItem} className="custom-class" />);
 
-    const trigger = screen.getByText('Test Dropdown').closest('button');
-    expect(trigger).toHaveClass('custom-class');
+    // The container div receives the custom className
+    const container = screen.getByText('Test Dropdown').closest('div');
+    expect(container).toHaveClass('custom-class');
   });
 
-  it('sets proper accessibility attributes on trigger', () => {
+  it('sets proper accessibility attributes on trigger button', () => {
     render(<NavDropdown item={mockNavItem} />);
 
-    const trigger = screen.getByText('Test Dropdown').closest('button');
-    expect(trigger).toHaveAttribute('type', 'button');
-    expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
-    expect(trigger).toHaveAttribute('aria-expanded');
+    // The chevron button has the accessibility attributes
+    const chevronButton = screen.getByRole('button');
+    expect(chevronButton).toHaveAttribute('type', 'button');
+    expect(chevronButton).toHaveAttribute('aria-haspopup', 'menu');
+    expect(chevronButton).toHaveAttribute('aria-expanded');
+  });
+
+  it('renders the label as a navigable link', () => {
+    render(<NavDropdown item={mockNavItem} />);
+
+    const link = screen.getByText('Test Dropdown').closest('a');
+    expect(link).toHaveAttribute('href', '/test');
   });
 
   it('sets proper accessibility attributes on content', () => {
@@ -346,32 +360,32 @@ describe('NavDropdown', () => {
   });
 
   describe('styling', () => {
-    it('applies hover styles to trigger', () => {
+    it('applies hover styles to container', () => {
       render(<NavDropdown item={mockNavItem} />);
 
-      const trigger = screen.getByText('Test Dropdown').closest('button');
-      expect(trigger).toHaveClass(
-        'hover:bg-accent',
-        'hover:text-accent-foreground'
-      );
+      // The container div has the hover background
+      const container = screen.getByText('Test Dropdown').closest('div');
+      expect(container).toHaveClass('hover:bg-accent');
     });
 
-    it('applies focus styles to trigger', () => {
+    it('applies focus styles to link', () => {
       render(<NavDropdown item={mockNavItem} />);
 
-      const trigger = screen.getByText('Test Dropdown').closest('button');
-      expect(trigger).toHaveClass(
+      // The link has focus-visible styles
+      const link = screen.getByText('Test Dropdown').closest('a');
+      expect(link).toHaveClass(
         'focus-visible:outline-none',
         'focus-visible:ring-2',
         'focus-visible:ring-ring'
       );
     });
 
-    it('applies transition styles to trigger', () => {
+    it('applies transition styles to container', () => {
       render(<NavDropdown item={mockNavItem} />);
 
-      const trigger = screen.getByText('Test Dropdown').closest('button');
-      expect(trigger).toHaveClass('transition-all', 'duration-200');
+      // The container div has transition styles
+      const container = screen.getByText('Test Dropdown').closest('div');
+      expect(container).toHaveClass('transition-all', 'duration-200');
     });
 
     it('applies hover styles to child links', () => {

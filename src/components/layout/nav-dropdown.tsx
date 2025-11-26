@@ -32,9 +32,10 @@ export interface NavDropdownProps {
 /**
  * NavDropdown Component
  *
- * A dropdown navigation component for top-level nav items with children.
+ * A split-button dropdown navigation component for top-level nav items with children.
  * Features:
- * - Click to open dropdown
+ * - Label part navigates to the parent page
+ * - Chevron button opens dropdown menu
  * - Keyboard navigation (arrow keys, enter, escape)
  * - Active state highlighting
  * - Badge support for items
@@ -61,33 +62,56 @@ export function NavDropdown({
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
+      {/* Split button container */}
+      <div
+        className={cn(
+          'group inline-flex items-center rounded-md transition-all duration-200',
+          'hover:bg-accent',
+          isActive && 'bg-accent',
+          item.metadata?.disabled &&
+            'pointer-events-none cursor-not-allowed opacity-50',
+          className
+        )}
+      >
+        {/* Navigable link part - clicking navigates to the section page */}
+        <Link
+          href={item.href ?? '#'}
           className={cn(
-            'group inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200',
-            'hover:bg-accent hover:text-accent-foreground',
-            'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
-            isActive && 'bg-accent text-accent-foreground',
-            item.metadata?.disabled &&
-              'pointer-events-none cursor-not-allowed opacity-50',
-            className
+            'inline-flex items-center gap-1.5 rounded-l-md px-3 py-2 text-sm font-medium transition-colors',
+            'hover:text-accent-foreground',
+            'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset',
+            isActive && 'text-accent-foreground'
           )}
-          aria-expanded={isOpen}
-          aria-haspopup="menu"
-          disabled={item.metadata?.disabled}
         >
           {showIcons && Icon && <Icon className="h-4 w-4" aria-hidden="true" />}
           <span>{item.label}</span>
-          <ChevronDown
+        </Link>
+
+        {/* Dropdown trigger part - clicking opens the dropdown */}
+        <PopoverTrigger asChild>
+          <button
+            type="button"
             className={cn(
-              'h-4 w-4 transition-transform duration-200',
-              isOpen && 'rotate-180'
+              'inline-flex items-center rounded-r-md px-1.5 py-2 transition-colors',
+              'hover:text-accent-foreground',
+              'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset',
+              isActive && 'text-accent-foreground'
             )}
-            aria-hidden="true"
-          />
-        </button>
-      </PopoverTrigger>
+            aria-expanded={isOpen}
+            aria-haspopup="menu"
+            aria-label={`Open ${item.label} menu`}
+            disabled={item.metadata?.disabled}
+          >
+            <ChevronDown
+              className={cn(
+                'h-4 w-4 transition-transform duration-200',
+                isOpen && 'rotate-180'
+              )}
+              aria-hidden="true"
+            />
+          </button>
+        </PopoverTrigger>
+      </div>
 
       <PopoverContent
         align={align}

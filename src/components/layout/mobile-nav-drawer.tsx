@@ -209,6 +209,21 @@ export const MobileNavDrawer = React.forwardRef<
         </AccordionTrigger>
         <AccordionContent className="pt-1 pb-0">
           <div className="space-y-1">
+            {/* View All link - navigates to the section hub page */}
+            {item.href && (
+              <Link
+                href={item.href}
+                onClick={handleNavClick}
+                className={cn(
+                  'flex items-center space-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                  'text-primary hover:bg-primary/10',
+                  'focus:bg-primary/10 focus:outline-none',
+                  'pl-10'
+                )}
+              >
+                <span>View All {item.label}</span>
+              </Link>
+            )}
             {children.map(child => renderNavItem(child, true))}
           </div>
         </AccordionContent>

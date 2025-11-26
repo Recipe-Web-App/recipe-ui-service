@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { SectionHubPage } from '@/components/layout/section-hub-page';
 
 export function generateMetadata(): Metadata {
   return {
@@ -8,6 +8,18 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function AccountIndexPage() {
-  redirect('/account/profile');
+/**
+ * Account Hub Page
+ *
+ * Landing page for the Account section. Displays a card grid
+ * of sub-page navigation options for account management.
+ */
+export default function AccountPage() {
+  return (
+    <SectionHubPage
+      sectionId="account"
+      title="Account"
+      description="Manage your account and profile"
+    />
+  );
 }

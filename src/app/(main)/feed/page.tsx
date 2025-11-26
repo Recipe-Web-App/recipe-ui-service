@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { SectionHubPage } from '@/components/layout/section-hub-page';
 
 export function generateMetadata(): Metadata {
   return {
@@ -8,6 +8,18 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function FeedIndexPage() {
-  redirect('/feed/co-chefs');
+/**
+ * Kitchen Feed Hub Page
+ *
+ * Landing page for the Kitchen Feed section. Displays a card grid
+ * of sub-page navigation options for social activity features.
+ */
+export default function FeedPage() {
+  return (
+    <SectionHubPage
+      sectionId="kitchen-feed"
+      title="Kitchen Feed"
+      description="See what your co-chefs are cooking"
+    />
+  );
 }
