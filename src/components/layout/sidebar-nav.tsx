@@ -245,6 +245,19 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
                 >
                   {itemContent}
                 </CollapseTrigger>
+                {/* Render children inside Collapse for context access */}
+                {shouldRenderChildren && (
+                  <CollapseContent className="space-y-1">
+                    <SidebarNav
+                      items={item.children!}
+                      collapsed={collapsed}
+                      activeRoute={currentRoute}
+                      maxDepth={maxDepth}
+                      level={itemLevel + 1}
+                      onItemClick={onItemClick}
+                    />
+                  </CollapseContent>
+                )}
               </Collapse>
             ) : (
               // Non-navigable item (rare case)
@@ -259,20 +272,6 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
               >
                 {itemContent}
               </div>
-            )}
-
-            {/* Render children */}
-            {shouldRenderChildren && (
-              <CollapseContent className="space-y-1">
-                <SidebarNav
-                  items={item.children!}
-                  collapsed={collapsed}
-                  activeRoute={currentRoute}
-                  maxDepth={maxDepth}
-                  level={itemLevel + 1}
-                  onItemClick={onItemClick}
-                />
-              </CollapseContent>
             )}
           </div>
         );

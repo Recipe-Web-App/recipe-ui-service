@@ -37,6 +37,8 @@ export interface NavMetadata {
   external?: boolean;
   /** Whether to open link in new tab/window */
   target?: '_blank' | '_self' | '_parent' | '_top';
+  /** Whether this item triggers an action (e.g., logout modal) instead of navigation */
+  isAction?: boolean;
 }
 
 /**

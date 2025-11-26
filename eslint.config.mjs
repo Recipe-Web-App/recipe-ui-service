@@ -64,7 +64,22 @@ const eslintConfig = [
       // React hooks and performance
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
-      'react-refresh/only-export-components': 'warn',
+      'react-refresh/only-export-components': [
+        'warn',
+        {
+          allowExportNames: [
+            'generateMetadata',
+            'generateStaticParams',
+            'generateViewport',
+            'dynamic',
+            'revalidate',
+            'fetchCache',
+            'runtime',
+            'preferredRegion',
+            'maxDuration',
+          ],
+        },
+      ],
 
       // Accessibility
       'jsx-a11y/alt-text': 'error',
