@@ -47,6 +47,14 @@ import type {
  * - Keyboard navigation support
  * - Icon support for breadcrumb items
  */
+// Valid separator variant strings
+const separatorVariants = ['chevron', 'slash', 'arrow', 'dot'] as const;
+type SeparatorVariant = (typeof separatorVariants)[number];
+
+const isSeparatorVariant = (value: unknown): value is SeparatorVariant =>
+  typeof value === 'string' &&
+  separatorVariants.includes(value as SeparatorVariant);
+
 const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
   (
     {
@@ -63,6 +71,14 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
     ref
   ) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
+
+    // Determine if separator is a variant string or custom element
+    const separatorVariant = isSeparatorVariant(separator)
+      ? separator
+      : undefined;
+    const separatorElement = !isSeparatorVariant(separator)
+      ? separator
+      : undefined;
 
     // If children are provided, render them directly
     if (children) {
@@ -102,7 +118,9 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                   <span className="sr-only">Home</span>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
+              <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                {separatorElement}
+              </BreadcrumbSeparator>
             </>
           )}
 
@@ -123,8 +141,8 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                         aria-label={`Show ${hiddenCount} hidden items`}
                       />
                     </BreadcrumbItem>
-                    <BreadcrumbSeparator size={size}>
-                      {separator}
+                    <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                      {separatorElement}
                     </BreadcrumbSeparator>
                   </>
                 )}
@@ -153,8 +171,8 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
 
                 {/* Separator (not after last item) */}
                 {!isLast && (
-                  <BreadcrumbSeparator size={size}>
-                    {separator}
+                  <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                    {separatorElement}
                   </BreadcrumbSeparator>
                 )}
               </React.Fragment>
