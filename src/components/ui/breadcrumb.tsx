@@ -80,6 +80,13 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
       ? separator
       : undefined;
 
+    // Filter out the first Home item if showHome is true (to avoid duplicate Home)
+    const isFirstItemHome =
+      items.length > 0 &&
+      (items[0].label?.toLowerCase() === 'home' || items[0].id === 'home');
+
+    const displayItems = showHome && isFirstItemHome ? items.slice(1) : items;
+
     // If children are provided, render them directly
     if (children) {
       return (
@@ -95,11 +102,11 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
     }
 
     // Auto-generate breadcrumb from items prop
-    const shouldCollapse = items.length > maxItems && !isExpanded;
+    const shouldCollapse = displayItems.length > maxItems && !isExpanded;
     const visibleItems = shouldCollapse
-      ? [items[0], ...items.slice(-2)]
-      : items;
-    const hiddenCount = shouldCollapse ? items.length - 3 : 0;
+      ? [displayItems[0], ...displayItems.slice(-2)]
+      : displayItems;
+    const hiddenCount = shouldCollapse ? displayItems.length - 3 : 0;
 
     return (
       <nav
@@ -118,9 +125,11 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                   <span className="sr-only">Home</span>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator size={size} variant={separatorVariant}>
-                {separatorElement}
-              </BreadcrumbSeparator>
+              {displayItems.length > 0 && (
+                <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                  {separatorElement}
+                </BreadcrumbSeparator>
+              )}
             </>
           )}
 
