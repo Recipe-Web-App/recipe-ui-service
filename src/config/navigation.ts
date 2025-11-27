@@ -19,6 +19,7 @@ import {
   Compass,
   UserCog,
   LogOut,
+  Settings,
 } from 'lucide-react';
 
 import type { NavItem } from '@/types/navigation';
@@ -366,6 +367,17 @@ export const accountSubNavigation: NavItem[] = [
       sortOrder: 20,
       requiredAuth: true,
       tooltip: 'Update your profile',
+    },
+  },
+  {
+    id: 'account-settings',
+    label: 'Settings',
+    href: '/account/settings',
+    icon: Settings,
+    metadata: {
+      sortOrder: 25,
+      requiredAuth: true,
+      tooltip: 'Account and app preferences',
     },
   },
   {
