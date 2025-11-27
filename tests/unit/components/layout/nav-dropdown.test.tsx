@@ -8,6 +8,16 @@ import type { LucideIcon } from 'lucide-react';
 // Mock Next.js hooks
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(),
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+  })),
+}));
+
+// Mock auth hook
+jest.mock('@/hooks/auth/useAuth', () => ({
+  useLogout: jest.fn(() => ({
+    mutateAsync: jest.fn(),
+  })),
 }));
 
 // Mock UI components

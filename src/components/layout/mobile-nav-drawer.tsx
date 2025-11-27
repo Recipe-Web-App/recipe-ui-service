@@ -52,6 +52,8 @@ export interface MobileNavDrawerProps {
  * - Auto-close on navigation
  * - Auto-expand section containing active route
  */
+import { LogoutModal } from '@/components/auth/logout-modal';
+
 export const MobileNavDrawer = React.forwardRef<
   HTMLDivElement,
   MobileNavDrawerProps
@@ -59,6 +61,7 @@ export const MobileNavDrawer = React.forwardRef<
   const pathname = usePathname();
   const { isMobileMenuOpen, closeMobileMenu } = useNavigationStore();
   const { isAuthenticated, user, authUser } = useAuthStore();
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
 
   // Filter navigation items for mobile
   const filteredNavItems = React.useMemo(() => {
@@ -123,7 +126,9 @@ export const MobileNavDrawer = React.forwardRef<
           type="button"
           onClick={() => {
             closeMobileMenu();
-            // TODO: Handle logout or other actions
+            if (item.id === 'account-logout' || item.href === '#logout') {
+              setShowLogoutModal(true);
+            }
           }}
           className={cn(
             'flex w-full items-center space-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
@@ -232,103 +237,106 @@ export const MobileNavDrawer = React.forwardRef<
   };
 
   return (
-    <Drawer
-      open={isMobileMenuOpen}
-      onOpenChange={open => !open && closeMobileMenu()}
-      className="w-full max-w-sm"
-    >
-      <div
-        ref={ref}
-        className={cn('bg-background flex h-full flex-col', className)}
-        id="mobile-menu"
-        role="navigation"
-        aria-label="Mobile navigation menu"
+    <>
+      <Drawer
+        open={isMobileMenuOpen}
+        onOpenChange={open => !open && closeMobileMenu()}
+        className="w-full max-w-sm"
       >
-        {/* Header */}
-        <div className="border-border flex items-center justify-between border-b p-4">
-          <h2 className="text-lg font-semibold">Menu</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={closeMobileMenu}
-            className="h-8 w-8"
-            aria-label="Close mobile menu"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
-
-        {/* User Section */}
-        {isAuthenticated ? (
-          <div className="border-border border-b p-4">
-            <Link
-              href="/account/profile"
-              onClick={handleNavClick}
-              className="hover:bg-accent flex items-center space-x-3 rounded-lg p-2 transition-colors"
+        <div
+          ref={ref}
+          className={cn('bg-background flex h-full flex-col', className)}
+          id="mobile-menu"
+          role="navigation"
+          aria-label="Mobile navigation menu"
+        >
+          {/* Header */}
+          <div className="border-border flex items-center justify-between border-b p-4">
+            <h2 className="text-lg font-semibold">Menu</h2>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={closeMobileMenu}
+              className="h-8 w-8"
+              aria-label="Close mobile menu"
             >
-              <UserAvatar
-                src={user?.id ? `/api/users/${user.id}/avatar` : undefined}
-                alt={displayName}
-                name={displayName}
-                className="h-10 w-10"
-              />
-              <div className="min-w-0 flex-1">
-                <div className="text-foreground truncate text-sm font-medium">
-                  {displayName}
-                </div>
-                {userEmail && (
-                  <div className="text-muted-foreground truncate text-xs">
-                    {userEmail}
-                  </div>
-                )}
-              </div>
-              <ChevronRight className="text-muted-foreground h-4 w-4" />
-            </Link>
+              <X className="h-4 w-4" />
+            </Button>
           </div>
-        ) : (
-          <div className="border-border border-b p-4">
-            <div className="text-center">
-              <p className="text-muted-foreground mb-3 text-sm">
-                Sign in to access all features
-              </p>
-              <Link href="/login" onClick={handleNavClick}>
-                <Button className="w-full">Sign In</Button>
+
+          {/* User Section */}
+          {isAuthenticated ? (
+            <div className="border-border border-b p-4">
+              <Link
+                href="/account/profile"
+                onClick={handleNavClick}
+                className="hover:bg-accent flex items-center space-x-3 rounded-lg p-2 transition-colors"
+              >
+                <UserAvatar
+                  src={user?.id ? `/api/users/${user.id}/avatar` : undefined}
+                  alt={displayName}
+                  name={displayName}
+                  className="h-10 w-10"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="text-foreground truncate text-sm font-medium">
+                    {displayName}
+                  </div>
+                  {userEmail && (
+                    <div className="text-muted-foreground truncate text-xs">
+                      {userEmail}
+                    </div>
+                  )}
+                </div>
+                <ChevronRight className="text-muted-foreground h-4 w-4" />
               </Link>
             </div>
+          ) : (
+            <div className="border-border border-b p-4">
+              <div className="text-center">
+                <p className="text-muted-foreground mb-3 text-sm">
+                  Sign in to access all features
+                </p>
+                <Link href="/login" onClick={handleNavClick}>
+                  <Button className="w-full">Sign In</Button>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Items */}
+          <div className="flex-1 overflow-y-auto py-4">
+            <Accordion
+              type="multiple"
+              defaultValue={defaultExpandedItems}
+              className="space-y-1 px-4"
+            >
+              {filteredNavItems.map(item => {
+                const hasChildren = item.children && item.children.length > 0;
+
+                if (hasChildren) {
+                  return renderAccordionItem(item);
+                }
+
+                return (
+                  <div key={item.id} className="py-0.5">
+                    {renderNavItem(item)}
+                  </div>
+                );
+              })}
+            </Accordion>
           </div>
-        )}
 
-        {/* Navigation Items */}
-        <div className="flex-1 overflow-y-auto py-4">
-          <Accordion
-            type="multiple"
-            defaultValue={defaultExpandedItems}
-            className="space-y-1 px-4"
-          >
-            {filteredNavItems.map(item => {
-              const hasChildren = item.children && item.children.length > 0;
-
-              if (hasChildren) {
-                return renderAccordionItem(item);
-              }
-
-              return (
-                <div key={item.id} className="py-0.5">
-                  {renderNavItem(item)}
-                </div>
-              );
-            })}
-          </Accordion>
-        </div>
-
-        {/* Footer */}
-        <div className="border-border border-t p-4">
-          <div className="text-center">
-            <p className="text-muted-foreground text-xs">Recipe App v1.0.0</p>
+          {/* Footer */}
+          <div className="border-border border-t p-4">
+            <div className="text-center">
+              <p className="text-muted-foreground text-xs">Recipe App v1.0.0</p>
+            </div>
           </div>
         </div>
-      </div>
-    </Drawer>
+      </Drawer>
+      <LogoutModal open={showLogoutModal} onOpenChange={setShowLogoutModal} />
+    </>
   );
 });
 
