@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { useLogout } from '@/hooks/auth/useAuth';
 import {
   Modal,
@@ -19,16 +18,20 @@ interface LogoutModalProps {
 }
 
 export function LogoutModal({ open, onOpenChange }: LogoutModalProps) {
-  const router = useRouter();
   const logoutMutation = useLogout();
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleLogout = async () => {
     try {
       setIsLoading(true);
+      // Clear auth cookies first so middleware allows access to /logged-out
+      document.cookie = 'authToken=; path=/; max-age=0';
+      document.cookie = 'tokenExpiresAt=; path=/; max-age=0';
+      document.cookie = 'refreshToken=; path=/; max-age=0';
+      document.cookie = 'userRole=; path=/; max-age=0';
+      window.location.href = '/logged-out';
       await logoutMutation.mutateAsync();
       onOpenChange(false);
-      router.push('/');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {

@@ -28,6 +28,7 @@ export const AUTH_ROUTES = [
   '/forgot-password',
   '/reset-password',
   '/verify-email',
+  '/logged-out',
 ] as const;
 
 /**
