@@ -89,20 +89,20 @@ export default function HomePage() {
               Quick access to your favorite recipes
             </p>
             <Button variant="outline" size="sm" asChild className="w-full">
-              <Link href="/favorites">View Favorites</Link>
+              <Link href="/recipes/favorites">View Favorites</Link>
             </Button>
           </Card>
 
           <Card className="p-6 transition-shadow hover:shadow-lg">
             <div className="mb-4 flex items-center">
               <Users className="text-primary mr-3 h-8 w-8" />
-              <h3 className="font-semibold">Community</h3>
+              <h3 className="font-semibold">Discover Cooks</h3>
             </div>
             <p className="text-muted-foreground mb-4">
-              Connect with other food enthusiasts
+              Find and follow other food enthusiasts
             </p>
             <Button variant="outline" size="sm" asChild className="w-full">
-              <Link href="/social">Join Community</Link>
+              <Link href="/feed/discover">Explore</Link>
             </Button>
           </Card>
         </div>

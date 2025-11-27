@@ -9,7 +9,6 @@ import { ErrorPage } from '@/components/error/ErrorPage';
 import { PageErrorType } from '@/types/error/page-errors';
 import type { Metadata } from 'next';
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function generateMetadata(): Metadata {
   return {
     title: '403 - Access Denied',

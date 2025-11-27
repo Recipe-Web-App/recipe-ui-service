@@ -30,7 +30,7 @@ describe('Route Constants', () => {
     it('defines protected routes', () => {
       expect(PROTECTED_ROUTES).toContain('/recipes');
       expect(PROTECTED_ROUTES).toContain('/meal-plans');
-      expect(PROTECTED_ROUTES).toContain('/profile');
+      expect(PROTECTED_ROUTES).toContain('/account');
     });
 
     it('defines admin routes', () => {
@@ -124,8 +124,9 @@ describe('Route Constants', () => {
     it('returns true for protected routes', () => {
       expect(isProtectedRoute('/recipes')).toBe(true);
       expect(isProtectedRoute('/meal-plans')).toBe(true);
-      expect(isProtectedRoute('/profile')).toBe(true);
-      expect(isProtectedRoute('/settings')).toBe(true);
+      expect(isProtectedRoute('/account')).toBe(true);
+      expect(isProtectedRoute('/account/profile')).toBe(true);
+      expect(isProtectedRoute('/account/settings')).toBe(true);
     });
 
     it('returns false for non-protected routes', () => {

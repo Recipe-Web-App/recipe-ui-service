@@ -28,21 +28,46 @@ export const AUTH_ROUTES = [
   '/forgot-password',
   '/reset-password',
   '/verify-email',
+  '/logged-out',
 ] as const;
 
 /**
  * Protected routes - require authentication
  * Users must be logged in to access these routes
+ *
+ * Note: Patterns using (.*) match the route and all sub-routes
  */
 export const PROTECTED_ROUTES = [
+  // Home
   '/home',
+
+  // Recipes section
   '/recipes',
-  '/meal-plans',
-  '/shopping-lists',
+  '/recipes/(.*)',
+
+  // Collections section
   '/collections',
-  '/profile',
-  '/settings',
-  '/favorites',
+  '/collections/(.*)',
+
+  // Meal Plans section
+  '/meal-plans',
+  '/meal-plans/(.*)',
+
+  // Shopping Lists section
+  '/shopping-lists',
+  '/shopping-lists/(.*)',
+
+  // Kitchen Feed section
+  '/feed',
+  '/feed/(.*)',
+
+  // Sous Chef section
+  '/sous-chef',
+  '/sous-chef/(.*)',
+
+  // Account section
+  '/account',
+  '/account/(.*)',
 ] as const;
 
 /**

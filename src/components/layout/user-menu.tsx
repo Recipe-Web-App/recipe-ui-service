@@ -27,8 +27,8 @@ import { Divider } from '@/components/ui/divider';
 import { useAuthStore } from '@/stores/auth-store';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
-// Auth hooks
-import { useLogout } from '@/hooks/auth/useAuth';
+// Auth components
+import { LogoutModal } from '@/components/auth/logout-modal';
 
 export interface UserMenuProps {
   className?: string;
@@ -52,30 +52,16 @@ export interface UserMenuProps {
 export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
   ({ className, compact = false, showLabel = false, align = 'end' }, ref) => {
     const router = useRouter();
-    const { isAuthenticated, user, authUser, setLoading } = useAuthStore();
+    const { isAuthenticated, user, authUser } = useAuthStore();
     const { breakpoint } = useLayoutStore();
     const [isOpen, setIsOpen] = React.useState(false);
-    const logoutMutation = useLogout();
+    const [showLogoutModal, setShowLogoutModal] = React.useState(false);
 
     const isMobile = breakpoint === 'mobile';
 
     // User display information
     const displayName = user?.name ?? authUser?.email ?? 'User';
     const userEmail = authUser?.email;
-
-    // Handle logout
-    const handleLogout = React.useCallback(async () => {
-      try {
-        setLoading(true);
-        await logoutMutation.mutateAsync();
-        router.push('/');
-      } catch (error) {
-        console.error('Logout error:', error);
-      } finally {
-        setLoading(false);
-        setIsOpen(false);
-      }
-    }, [logoutMutation, router, setLoading]);
 
     // Handle sign in
     const handleSignIn = React.useCallback(() => {
@@ -93,28 +79,28 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
         {
           id: 'profile',
           label: 'Profile',
-          href: '/profile',
+          href: '/account/profile',
           icon: UserCircle,
           description: 'View and edit your profile',
         },
         {
           id: 'favorites',
           label: 'Favorites',
-          href: '/favorites',
+          href: '/recipes/favorites',
           icon: Heart,
           description: 'Your favorite recipes',
         },
         {
           id: 'recipes',
           label: 'My Recipes',
-          href: '/recipes/my',
+          href: '/recipes/my-recipes',
           icon: ChefHat,
           description: "Recipes you've created",
         },
         {
           id: 'settings',
           label: 'Settings',
-          href: '/settings',
+          href: '/account/settings',
           icon: Settings,
           description: 'Account and app preferences',
         },
@@ -248,7 +234,10 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
 
                 {/* Logout */}
                 <button
-                  onClick={handleLogout}
+                  onClick={() => {
+                    setIsOpen(false);
+                    setShowLogoutModal(true);
+                  }}
                   className={cn(
                     'flex w-full items-center px-4 py-2 text-sm transition-colors',
                     'hover:bg-destructive hover:text-destructive-foreground',
@@ -264,6 +253,7 @@ export const UserMenu = React.forwardRef<HTMLDivElement, UserMenuProps>(
             </div>
           </PopoverContent>
         </Popover>
+        <LogoutModal open={showLogoutModal} onOpenChange={setShowLogoutModal} />
       </div>
     );
   }

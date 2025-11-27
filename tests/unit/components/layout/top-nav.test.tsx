@@ -63,7 +63,7 @@ describe('TopNav', () => {
 
     const logoLink = screen.getByRole('link', { name: /recipe app home/i });
     expect(logoLink).toBeInTheDocument();
-    expect(logoLink).toHaveAttribute('href', '/');
+    expect(logoLink).toHaveAttribute('href', '/home');
 
     expect(screen.getByText('Recipe App')).toBeInTheDocument();
   });

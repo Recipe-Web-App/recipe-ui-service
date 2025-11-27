@@ -208,25 +208,40 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
         const navItemElement = (
           <div key={item.id} className="relative">
             {item.href ? (
-              // Navigable item
-              <Link
-                href={item.href}
-                onClick={() => handleItemClick(item)}
-                className={cn(
-                  'group flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors',
-                  'hover:bg-primary/10 hover:text-primary',
-                  'focus:bg-primary/10 focus:text-primary focus:ring-primary/50 focus:ring-2 focus:outline-none',
-                  isActive && 'bg-primary/15 text-primary font-medium',
-                  item.metadata?.disabled &&
-                    'pointer-events-none cursor-not-allowed opacity-50',
-                  collapsed && 'justify-center px-2',
-                  // Indentation for nested items
-                  !collapsed && itemLevel > 0 && `ml-${itemLevel * 4}`
+              // Navigable item (may or may not have children)
+              <>
+                <Link
+                  href={item.href}
+                  onClick={() => handleItemClick(item)}
+                  className={cn(
+                    'group flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors',
+                    'hover:bg-primary/10 hover:text-primary',
+                    'focus:bg-primary/10 focus:text-primary focus:ring-primary/50 focus:ring-2 focus:outline-none',
+                    isActive && 'bg-primary/15 text-primary font-medium',
+                    item.metadata?.disabled &&
+                      'pointer-events-none cursor-not-allowed opacity-50',
+                    collapsed && 'justify-center px-2',
+                    // Indentation for nested items
+                    !collapsed && itemLevel > 0 && `ml-${itemLevel * 4}`
+                  )}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {itemContent}
+                </Link>
+                {/* Render children separately for items with both href and children */}
+                {shouldRenderChildren && (
+                  <div className="mt-1 space-y-1">
+                    <SidebarNav
+                      items={item.children!}
+                      collapsed={collapsed}
+                      activeRoute={currentRoute}
+                      maxDepth={maxDepth}
+                      level={itemLevel + 1}
+                      onItemClick={onItemClick}
+                    />
+                  </div>
                 )}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                {itemContent}
-              </Link>
+              </>
             ) : hasChildren ? (
               // Section header (collapsible)
               <Collapse
@@ -245,6 +260,19 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
                 >
                   {itemContent}
                 </CollapseTrigger>
+                {/* Render children inside Collapse for context access */}
+                {shouldRenderChildren && (
+                  <CollapseContent className="space-y-1">
+                    <SidebarNav
+                      items={item.children!}
+                      collapsed={collapsed}
+                      activeRoute={currentRoute}
+                      maxDepth={maxDepth}
+                      level={itemLevel + 1}
+                      onItemClick={onItemClick}
+                    />
+                  </CollapseContent>
+                )}
               </Collapse>
             ) : (
               // Non-navigable item (rare case)
@@ -259,20 +287,6 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(
               >
                 {itemContent}
               </div>
-            )}
-
-            {/* Render children */}
-            {shouldRenderChildren && (
-              <CollapseContent className="space-y-1">
-                <SidebarNav
-                  items={item.children!}
-                  collapsed={collapsed}
-                  activeRoute={currentRoute}
-                  maxDepth={maxDepth}
-                  level={itemLevel + 1}
-                  onItemClick={onItemClick}
-                />
-              </CollapseContent>
             )}
           </div>
         );

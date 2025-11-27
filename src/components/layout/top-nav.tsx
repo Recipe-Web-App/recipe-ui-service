@@ -80,7 +80,7 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
           {/* Logo/Brand Section */}
           <div className="mr-4 flex lg:mr-6">
             <Link
-              href="/"
+              href="/home"
               className="hover:text-primary group flex items-center space-x-2 transition-colors"
               aria-label="Recipe App Home"
             >

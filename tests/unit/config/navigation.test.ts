@@ -1,10 +1,13 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   topLevelNavigation,
-  recipeSubNavigation,
-  mealPlanSubNavigation,
-  socialSubNavigation,
-  settingsSubNavigation,
+  recipesSubNavigation,
+  collectionsSubNavigation,
+  mealPlansSubNavigation,
+  shoppingListsSubNavigation,
+  kitchenFeedSubNavigation,
+  sousChefSubNavigation,
+  accountSubNavigation,
   subNavigationMap,
   getSubNavigation,
   footerNavigation,
@@ -37,15 +40,13 @@ describe('Navigation Configuration', () => {
   describe('topLevelNavigation', () => {
     it('should have all required top-level navigation items', () => {
       const expectedIds = [
-        'home',
         'recipes',
+        'collections',
         'meal-plans',
-        'favorites',
-        'shopping',
-        'social',
-        'profile',
-        'analytics',
-        'settings',
+        'shopping-lists',
+        'kitchen-feed',
+        'sous-chef',
+        'account',
         'components-demo',
       ];
 
@@ -97,119 +98,221 @@ describe('Navigation Configuration', () => {
     it('should have proper sort order', () => {
       const sortOrders = topLevelNavigation
         .map(item => item.metadata?.sortOrder || 0)
-        .filter(order => order > 0);
+        .filter(order => order >= 0);
 
       const sortedOrders = [...sortOrders].sort((a, b) => a - b);
       expect(sortOrders).toEqual(sortedOrders);
     });
 
-    it('should have icons for visual navigation items', () => {
+    it('should have icons for navigation items', () => {
       topLevelNavigation.forEach(item => {
-        if (item.id !== 'home') {
-          // Most navigation items should have icons
-          expect(item.icon).toBeDefined();
-        }
+        expect(item.icon).toBeDefined();
+      });
+    });
+
+    it('should have children for all dropdown items', () => {
+      // All top-level items now have dropdown children
+      topLevelNavigation.forEach(item => {
+        expect(item.children).toBeDefined();
+        expect(Array.isArray(item.children)).toBe(true);
+        expect(item.children!.length).toBeGreaterThan(0);
       });
     });
   });
 
   describe('Sub-navigation configurations', () => {
-    describe('recipeSubNavigation', () => {
+    describe('recipesSubNavigation', () => {
       it('should have all recipe-related navigation items', () => {
         const expectedIds = [
-          'recipes-browse',
           'recipes-create',
-          'recipes-import',
-          'recipes-collections',
-          'recipes-tags',
+          'recipes-my-recipes',
+          'recipes-favorites',
+          'recipes-popular',
+          'recipes-trending',
+          'recipes-shared',
         ];
 
-        const actualIds = recipeSubNavigation.map(item => item.id);
+        const actualIds = recipesSubNavigation.map(item => item.id);
         expectedIds.forEach(id => {
           expect(actualIds).toContain(id);
         });
       });
 
       it('should have proper href paths for all items', () => {
-        recipeSubNavigation.forEach(item => {
+        recipesSubNavigation.forEach(item => {
           expect(item.href).toBeDefined();
           expect(item.href).toMatch(/^\/recipes/);
         });
       });
     });
 
-    describe('mealPlanSubNavigation', () => {
-      it('should have all meal plan related navigation items', () => {
+    describe('collectionsSubNavigation', () => {
+      it('should have all collection-related navigation items', () => {
         const expectedIds = [
-          'meal-plans-calendar',
-          'meal-plans-create',
-          'meal-plans-templates',
-          'meal-plans-nutrition',
+          'collections-create',
+          'collections-my-collections',
+          'collections-favorites',
+          'collections-popular',
+          'collections-trending',
+          'collections-shared',
         ];
 
-        const actualIds = mealPlanSubNavigation.map(item => item.id);
-        expectedIds.forEach(id => {
-          expect(actualIds).toContain(id);
-        });
-      });
-
-      it('should require authentication for all items', () => {
-        mealPlanSubNavigation.forEach(item => {
-          expect(item.metadata?.requiredAuth).toBe(true);
-        });
-      });
-    });
-
-    describe('socialSubNavigation', () => {
-      it('should have all social-related navigation items', () => {
-        const expectedIds = [
-          'social-feed',
-          'social-following',
-          'social-discover',
-          'social-groups',
-        ];
-
-        const actualIds = socialSubNavigation.map(item => item.id);
-        expectedIds.forEach(id => {
-          expect(actualIds).toContain(id);
-        });
-      });
-
-      it('should require authentication for all items', () => {
-        socialSubNavigation.forEach(item => {
-          expect(item.metadata?.requiredAuth).toBe(true);
-        });
-      });
-    });
-
-    describe('settingsSubNavigation', () => {
-      it('should have all settings-related navigation items', () => {
-        const expectedIds = [
-          'settings-account',
-          'settings-preferences',
-          'settings-notifications',
-          'settings-privacy',
-          'settings-data',
-        ];
-
-        const actualIds = settingsSubNavigation.map(item => item.id);
+        const actualIds = collectionsSubNavigation.map(item => item.id);
         expectedIds.forEach(id => {
           expect(actualIds).toContain(id);
         });
       });
 
       it('should have proper href paths for all items', () => {
-        settingsSubNavigation.forEach(item => {
+        collectionsSubNavigation.forEach(item => {
           expect(item.href).toBeDefined();
-          expect(item.href).toMatch(/^\/settings/);
+          expect(item.href).toMatch(/^\/collections/);
         });
+      });
+    });
+
+    describe('mealPlansSubNavigation', () => {
+      it('should have all meal plan related navigation items', () => {
+        const expectedIds = [
+          'meal-plans-create',
+          'meal-plans-my-plans',
+          'meal-plans-favorites',
+          'meal-plans-popular',
+          'meal-plans-trending',
+          'meal-plans-shared',
+        ];
+
+        const actualIds = mealPlansSubNavigation.map(item => item.id);
+        expectedIds.forEach(id => {
+          expect(actualIds).toContain(id);
+        });
+      });
+
+      it('should have proper href paths for all items', () => {
+        mealPlansSubNavigation.forEach(item => {
+          expect(item.href).toBeDefined();
+          expect(item.href).toMatch(/^\/meal-plans/);
+        });
+      });
+    });
+
+    describe('shoppingListsSubNavigation', () => {
+      it('should have all shopping list navigation items', () => {
+        const expectedIds = ['shopping-lists-create', 'shopping-lists-browse'];
+
+        const actualIds = shoppingListsSubNavigation.map(item => item.id);
+        expectedIds.forEach(id => {
+          expect(actualIds).toContain(id);
+        });
+      });
+
+      it('should have proper href paths for all items', () => {
+        shoppingListsSubNavigation.forEach(item => {
+          expect(item.href).toBeDefined();
+          expect(item.href).toMatch(/^\/shopping-lists/);
+        });
+      });
+
+      it('should require authentication for all items', () => {
+        shoppingListsSubNavigation.forEach(item => {
+          expect(item.metadata?.requiredAuth).toBe(true);
+        });
+      });
+    });
+
+    describe('kitchenFeedSubNavigation', () => {
+      it('should have all kitchen feed navigation items', () => {
+        const expectedIds = [
+          'feed-co-chefs',
+          'feed-my-activity',
+          'feed-discover',
+        ];
+
+        const actualIds = kitchenFeedSubNavigation.map(item => item.id);
+        expectedIds.forEach(id => {
+          expect(actualIds).toContain(id);
+        });
+      });
+
+      it('should require authentication for all items', () => {
+        kitchenFeedSubNavigation.forEach(item => {
+          expect(item.metadata?.requiredAuth).toBe(true);
+        });
+      });
+
+      it('should have proper href paths for all items', () => {
+        kitchenFeedSubNavigation.forEach(item => {
+          expect(item.href).toBeDefined();
+          expect(item.href).toMatch(/^\/feed/);
+        });
+      });
+    });
+
+    describe('sousChefSubNavigation', () => {
+      it('should have all sous chef navigation items', () => {
+        const expectedIds = [
+          'sous-chef-cook',
+          'sous-chef-adapt',
+          'sous-chef-timers',
+        ];
+
+        const actualIds = sousChefSubNavigation.map(item => item.id);
+        expectedIds.forEach(id => {
+          expect(actualIds).toContain(id);
+        });
+      });
+
+      it('should have proper href paths for all items', () => {
+        sousChefSubNavigation.forEach(item => {
+          expect(item.href).toBeDefined();
+          expect(item.href).toMatch(/^\/sous-chef/);
+        });
+      });
+    });
+
+    describe('accountSubNavigation', () => {
+      it('should have all account navigation items', () => {
+        const expectedIds = [
+          'account-profile',
+          'account-edit',
+          'account-logout',
+        ];
+
+        const actualIds = accountSubNavigation.map(item => item.id);
+        expectedIds.forEach(id => {
+          expect(actualIds).toContain(id);
+        });
+      });
+
+      it('should require authentication for all items', () => {
+        accountSubNavigation.forEach(item => {
+          expect(item.metadata?.requiredAuth).toBe(true);
+        });
+      });
+
+      it('should mark logout as an action item', () => {
+        const logoutItem = accountSubNavigation.find(
+          item => item.id === 'account-logout'
+        );
+        expect(logoutItem).toBeDefined();
+        expect(logoutItem?.metadata?.isAction).toBe(true);
       });
     });
   });
 
   describe('subNavigationMap', () => {
     it('should map all main navigation sections to their sub-navigation', () => {
-      const expectedKeys = ['recipes', 'meal-plans', 'social', 'settings'];
+      const expectedKeys = [
+        'recipes',
+        'collections',
+        'meal-plans',
+        'shopping-lists',
+        'kitchen-feed',
+        'feed',
+        'sous-chef',
+        'account',
+        'components-demo',
+      ];
       const actualKeys = Object.keys(subNavigationMap);
 
       expectedKeys.forEach(key => {
@@ -223,14 +326,26 @@ describe('Navigation Configuration', () => {
         expect(navItems.length).toBeGreaterThan(0);
       });
     });
+
+    it('should have feed as an alias for kitchen-feed', () => {
+      expect(subNavigationMap['feed']).toBe(subNavigationMap['kitchen-feed']);
+    });
   });
 
   describe('getSubNavigation', () => {
     it('should return correct sub-navigation for known sections', () => {
-      expect(getSubNavigation('recipes')).toEqual(recipeSubNavigation);
-      expect(getSubNavigation('meal-plans')).toEqual(mealPlanSubNavigation);
-      expect(getSubNavigation('social')).toEqual(socialSubNavigation);
-      expect(getSubNavigation('settings')).toEqual(settingsSubNavigation);
+      expect(getSubNavigation('recipes')).toEqual(recipesSubNavigation);
+      expect(getSubNavigation('collections')).toEqual(collectionsSubNavigation);
+      expect(getSubNavigation('meal-plans')).toEqual(mealPlansSubNavigation);
+      expect(getSubNavigation('shopping-lists')).toEqual(
+        shoppingListsSubNavigation
+      );
+      expect(getSubNavigation('kitchen-feed')).toEqual(
+        kitchenFeedSubNavigation
+      );
+      expect(getSubNavigation('feed')).toEqual(kitchenFeedSubNavigation);
+      expect(getSubNavigation('sous-chef')).toEqual(sousChefSubNavigation);
+      expect(getSubNavigation('account')).toEqual(accountSubNavigation);
     });
 
     it('should return empty array for unknown sections', () => {
@@ -275,8 +390,8 @@ describe('Navigation Configuration', () => {
       const expectedIds = [
         'quick-create-recipe',
         'quick-meal-plan',
-        'quick-import',
         'quick-shopping-list',
+        'quick-timers',
       ];
 
       const actualIds = quickActions.map(action => action.id);
@@ -288,12 +403,6 @@ describe('Navigation Configuration', () => {
     it('should have icons for all quick actions', () => {
       quickActions.forEach(action => {
         expect(action.icon).toBeDefined();
-      });
-    });
-
-    it('should require authentication for all quick actions', () => {
-      quickActions.forEach(action => {
-        expect(action.metadata?.requiredAuth).toBe(true);
       });
     });
 

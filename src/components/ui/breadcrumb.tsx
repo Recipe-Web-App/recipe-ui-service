@@ -47,6 +47,14 @@ import type {
  * - Keyboard navigation support
  * - Icon support for breadcrumb items
  */
+// Valid separator variant strings
+const separatorVariants = ['chevron', 'slash', 'arrow', 'dot'] as const;
+type SeparatorVariant = (typeof separatorVariants)[number];
+
+const isSeparatorVariant = (value: unknown): value is SeparatorVariant =>
+  typeof value === 'string' &&
+  separatorVariants.includes(value as SeparatorVariant);
+
 const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
   (
     {
@@ -64,6 +72,21 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
   ) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
+    // Determine if separator is a variant string or custom element
+    const separatorVariant = isSeparatorVariant(separator)
+      ? separator
+      : undefined;
+    const separatorElement = !isSeparatorVariant(separator)
+      ? separator
+      : undefined;
+
+    // Filter out the first Home item if showHome is true (to avoid duplicate Home)
+    const isFirstItemHome =
+      items.length > 0 &&
+      (items[0].label?.toLowerCase() === 'home' || items[0].id === 'home');
+
+    const displayItems = showHome && isFirstItemHome ? items.slice(1) : items;
+
     // If children are provided, render them directly
     if (children) {
       return (
@@ -79,11 +102,11 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
     }
 
     // Auto-generate breadcrumb from items prop
-    const shouldCollapse = items.length > maxItems && !isExpanded;
+    const shouldCollapse = displayItems.length > maxItems && !isExpanded;
     const visibleItems = shouldCollapse
-      ? [items[0], ...items.slice(-2)]
-      : items;
-    const hiddenCount = shouldCollapse ? items.length - 3 : 0;
+      ? [displayItems[0], ...displayItems.slice(-2)]
+      : displayItems;
+    const hiddenCount = shouldCollapse ? displayItems.length - 3 : 0;
 
     return (
       <nav
@@ -102,7 +125,11 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                   <span className="sr-only">Home</span>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
+              {displayItems.length > 0 && (
+                <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                  {separatorElement}
+                </BreadcrumbSeparator>
+              )}
             </>
           )}
 
@@ -123,8 +150,8 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
                         aria-label={`Show ${hiddenCount} hidden items`}
                       />
                     </BreadcrumbItem>
-                    <BreadcrumbSeparator size={size}>
-                      {separator}
+                    <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                      {separatorElement}
                     </BreadcrumbSeparator>
                   </>
                 )}
@@ -153,8 +180,8 @@ const Breadcrumb = React.forwardRef<HTMLElement, BreadcrumbProps>(
 
                 {/* Separator (not after last item) */}
                 {!isLast && (
-                  <BreadcrumbSeparator size={size}>
-                    {separator}
+                  <BreadcrumbSeparator size={size} variant={separatorVariant}>
+                    {separatorElement}
                   </BreadcrumbSeparator>
                 )}
               </React.Fragment>

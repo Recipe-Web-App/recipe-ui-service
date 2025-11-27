@@ -7,6 +7,9 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { SimpleTooltip } from '@/components/ui/tooltip';
 
+// Layout components
+import { NavDropdown } from './nav-dropdown';
+
 // Navigation configuration and utilities
 import { topLevelNavigation } from '@/config/navigation';
 import { filterNavigationItems } from '@/lib/navigation/filter-utils';
@@ -35,6 +38,8 @@ export interface GlobalNavProps {
  *
  * Displays the main navigation items for desktop/tablet views.
  * Features:
+ * - Renders dropdowns for items with children
+ * - Direct links for items without children
  * - Filters items based on auth state, feature flags, and platform
  * - Shows active state highlighting
  * - Displays badges and tooltips
@@ -42,7 +47,7 @@ export interface GlobalNavProps {
  * - Responsive design
  */
 export const GlobalNav = React.forwardRef<HTMLDivElement, GlobalNavProps>(
-  ({ className, maxItems = 6, showIcons = false, showBadges = true }, ref) => {
+  ({ className, maxItems = 8, showIcons = false, showBadges = true }, ref) => {
     const pathname = usePathname();
     const { isAuthenticated } = useAuthStore();
     const { breakpoint } = useLayoutStore();
@@ -51,14 +56,8 @@ export const GlobalNav = React.forwardRef<HTMLDivElement, GlobalNavProps>(
     const filteredNavItems = React.useMemo(() => {
       const filtered = filterNavigationItems(topLevelNavigation, {
         isAuthenticated,
-        // TODO: Add feature flags when available
         featureFlags: {
           SHOW_COMPONENTS_DEMO: process.env.NODE_ENV === 'development',
-          ENABLE_MEAL_PLANNING: true,
-          ENABLE_GROCERY_LISTS: true,
-          ENABLE_SOCIAL_FEATURES: true,
-          ENABLE_USER_PROFILES: true,
-          ENABLE_ANALYTICS: true,
         },
         isMobile: false, // This is desktop navigation
       });
@@ -80,19 +79,35 @@ export const GlobalNav = React.forwardRef<HTMLDivElement, GlobalNavProps>(
     return (
       <div
         ref={ref}
-        className={cn('flex items-center space-x-1 md:space-x-2', className)}
+        className={cn('flex items-center space-x-1', className)}
         role="menubar"
         aria-label="Main navigation"
       >
         {filteredNavItems.map(item => {
+          const hasChildren = item.children && item.children.length > 0;
           const isActive = item.href
             ? isRouteActive(item.href, pathname)
             : false;
+
+          // Items with children render as dropdowns
+          if (hasChildren) {
+            return (
+              <NavDropdown
+                key={item.id}
+                item={item}
+                isActive={isActive}
+                showIcons={showIcons}
+              />
+            );
+          }
+
+          // Items without children render as direct links
           const isExternal = isExternalNavItem(item);
           const target = getNavItemTarget(item);
           const hasBadge = hasNavItemBadge(item);
           const badgeText = getNavItemBadge(item);
           const badgeVariant = getNavItemBadgeVariant(item);
+          const Icon = item.icon;
 
           const LinkComponent = (
             <Link
@@ -100,7 +115,7 @@ export const GlobalNav = React.forwardRef<HTMLDivElement, GlobalNavProps>(
               target={target}
               rel={isExternal ? 'noopener noreferrer' : undefined}
               className={cn(
-                'relative inline-flex items-center space-x-1.5 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200',
+                'relative inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200',
                 'hover:bg-accent hover:text-accent-foreground',
                 'focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none',
                 isActive && 'bg-accent text-accent-foreground',
@@ -112,8 +127,8 @@ export const GlobalNav = React.forwardRef<HTMLDivElement, GlobalNavProps>(
               tabIndex={item.metadata?.disabled ? -1 : 0}
             >
               {/* Icon */}
-              {showIcons && item.icon && (
-                <item.icon className="h-4 w-4" aria-hidden="true" />
+              {showIcons && Icon && (
+                <Icon className="h-4 w-4" aria-hidden="true" />
               )}
 
               {/* Label */}
