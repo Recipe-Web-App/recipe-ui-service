@@ -18,6 +18,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 import { useAuthStore } from '@/stores/auth-store';
+import { getServiceUrl } from '@/config/services';
 import type { Token } from '@/types/auth';
 
 /**
@@ -96,7 +97,7 @@ async function refreshAccessToken(): Promise<string> {
     // Call auth service refresh endpoint directly with axios
     // Don't use authClient to avoid circular dependency
     const response = await axios.post<RefreshTokenResponse>(
-      'http://auth-service.local/api/v1/auth/user-management/auth/refresh',
+      `${getServiceUrl('AUTH')}/user-management/auth/refresh`,
       { refresh_token: storedRefreshToken },
       {
         headers: {
