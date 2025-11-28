@@ -47,7 +47,7 @@ import {
   buildHomeRedirect,
   validateReturnUrl,
   continueRequest,
-} from '@/lib/middleware/auth';
+} from '@/lib/proxy/auth';
 import { AUTH_COOKIE_NAMES } from '@/constants/routes';
 
 describe('Middleware Auth Utilities', () => {

@@ -46,7 +46,7 @@ import {
   applySecurityHeaders,
   getNonceFromRequest,
   CUSTOM_HEADERS,
-} from '@/lib/middleware/headers';
+} from '@/lib/proxy/headers';
 
 describe('Security Headers Utilities', () => {
   beforeEach(() => {

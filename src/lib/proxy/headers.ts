@@ -1,7 +1,7 @@
 /**
  * Security Headers Utilities
  *
- * Centralized security header management for Next.js middleware.
+ * Centralized security header management for Next.js proxy.
  * Implements Content Security Policy (CSP) with nonce-based protection,
  * Permissions-Policy, HSTS, and other security best practices.
  */
@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Header names used for passing data between middleware and app
+ * Header names used for passing data between proxy and app
  */
 export const CUSTOM_HEADERS = {
   NONCE: 'X-Nonce',
@@ -221,7 +221,7 @@ export function buildHSTSHeader(): string {
  * Apply all security headers to a NextResponse
  *
  * Centralized function to apply CSP, Permissions-Policy, HSTS,
- * and other security headers to all middleware responses.
+ * and other security headers to all proxy responses.
  *
  * @param request - Next.js request object
  * @param response - Next.js response object to modify

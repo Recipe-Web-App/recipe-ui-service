@@ -1,5 +1,5 @@
 // Mock security logging
-jest.mock('@/lib/middleware/security-log');
+jest.mock('@/lib/proxy/security-log');
 
 // Mock Next.js server runtime
 jest.mock('next/server', () => {
@@ -37,10 +37,10 @@ import {
   buildUnauthorizedRedirect,
   checkAdminAccess,
   getUserIdFromCookies,
-} from '@/lib/middleware/role';
+} from '@/lib/proxy/role';
 import { UserRole } from '@/types/auth/role-guard';
 import { AUTH_COOKIE_NAMES } from '@/constants/routes';
-import * as securityLog from '@/lib/middleware/security-log';
+import * as securityLog from '@/lib/proxy/security-log';
 
 describe('Middleware Role Utilities', () => {
   beforeEach(() => {

@@ -7,7 +7,7 @@ import {
   logAuthenticationFailure,
   logInvalidToken,
   logExpiredToken,
-} from '@/lib/middleware/security-log';
+} from '@/lib/proxy/security-log';
 
 // Mock console.warn
 const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();

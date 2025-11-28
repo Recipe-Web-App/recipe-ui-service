@@ -1,8 +1,8 @@
 /**
- * Middleware Authentication Utilities
+ * Proxy Authentication Utilities
  *
- * Helper functions for Next.js middleware authentication checks.
- * These run at the edge before page rendering.
+ * Helper functions for Next.js proxy authentication checks.
+ * These run before page rendering.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -163,9 +163,9 @@ export function validateReturnUrl(url: string | null): string | null {
 }
 
 /**
- * Create response that continues to next middleware/page
+ * Create response that continues to next handler/page
  *
- * Security headers are applied by the main middleware using applySecurityHeaders().
+ * Security headers are applied by the main proxy using applySecurityHeaders().
  * This function now accepts an optional nonce parameter to pass through request headers.
  *
  * @param request - Next.js request object
