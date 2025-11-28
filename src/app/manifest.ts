@@ -2,19 +2,14 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Recipe App',
-    short_name: 'Recipes',
+    name: 'Sous Chef',
+    short_name: 'Sous Chef',
     description: 'A modern recipe management application built with Next.js',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
     theme_color: '#3b82f6',
     icons: [
-      {
-        src: '/icon.ico',
-        sizes: '32x32',
-        type: 'image/png',
-      },
       {
         src: '/icon-192.png',
         sizes: '192x192',
