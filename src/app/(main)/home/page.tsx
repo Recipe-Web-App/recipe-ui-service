@@ -12,6 +12,7 @@ import {
   Star,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * Recipe App Homepage
@@ -25,7 +26,14 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-12 text-center">
         <div className="mb-6 flex items-center justify-center">
-          <ChefHat className="text-primary mr-4 h-16 w-16" />
+          <Image
+            src="/site-logo.png"
+            alt="Recipe App Logo"
+            width={80}
+            height={80}
+            className="mr-4"
+            unoptimized
+          />
           <h1 className="text-foreground text-4xl font-bold">
             Recipe Management App
           </h1>
