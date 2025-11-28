@@ -61,11 +61,11 @@ describe('TopNav', () => {
   it('renders the logo and brand name', () => {
     render(<TopNav />);
 
-    const logoLink = screen.getByRole('link', { name: /recipe app home/i });
+    const logoLink = screen.getByRole('link', { name: /sous chef home/i });
     expect(logoLink).toBeInTheDocument();
     expect(logoLink).toHaveAttribute('href', '/home');
 
-    expect(screen.getByText('Recipe App')).toBeInTheDocument();
+    expect(screen.getByText('Sous Chef')).toBeInTheDocument();
   });
 
   it('renders desktop layout by default', () => {
@@ -240,7 +240,7 @@ describe('TopNav', () => {
     it('has proper ARIA labels', () => {
       render(<TopNav />);
 
-      const logoLink = screen.getByRole('link', { name: /recipe app home/i });
+      const logoLink = screen.getByRole('link', { name: /sous chef home/i });
       expect(logoLink).toBeInTheDocument();
 
       const nav = screen.getByRole('navigation', { name: /main navigation/i });

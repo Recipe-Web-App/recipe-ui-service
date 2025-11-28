@@ -25,17 +25,19 @@ export default function HomePage() {
     <div className="space-y-8">
       {/* Hero Section */}
       <section className="py-12 text-center">
-        <div className="mb-6 flex items-center justify-center">
+        <div className="mb-6 flex flex-col items-center justify-center">
           <Image
-            src="/site-logo.png"
-            alt="Recipe App Logo"
-            width={80}
-            height={80}
-            className="mr-4"
+            src="/site-logo.webp"
+            alt="Sous Chef Logo"
+            width={280}
+            height={150}
+            className="mb-4"
             unoptimized
           />
-          <h1 className="text-foreground text-4xl font-bold">
-            Recipe Management App
+          <h1 className="text-foreground flex items-center gap-3 text-4xl font-bold">
+            <ChefHat className="text-primary h-8 w-8" />
+            Sous Chef
+            <ChefHat className="text-primary h-8 w-8" />
           </h1>
         </div>
         <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-xl">

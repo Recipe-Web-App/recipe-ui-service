@@ -82,17 +82,17 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
             <Link
               href="/home"
               className="hover:text-primary group flex items-center space-x-2 transition-colors"
-              aria-label="Recipe App Home"
+              aria-label="Sous Chef Home"
             >
               <Image
-                src="/site-logo.png"
-                alt="Recipe App Logo"
+                src="/site-logo.webp"
+                alt="Sous Chef Logo"
                 width={32}
                 height={32}
                 className="transition-transform group-hover:scale-110"
                 unoptimized
               />
-              <span className="font-bold tracking-tight">Recipe App</span>
+              <span className="font-bold tracking-tight">Sous Chef</span>
             </Link>
           </div>
 
