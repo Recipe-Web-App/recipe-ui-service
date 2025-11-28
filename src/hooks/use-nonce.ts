@@ -2,7 +2,7 @@
  * useNonce Hook
  *
  * Provides access to the CSP nonce for inline scripts and styles.
- * The nonce is generated per-request by middleware and passed via headers.
+ * The nonce is generated per-request by the proxy and passed via headers.
  *
  * Usage:
  * ```tsx
@@ -12,12 +12,12 @@
  */
 
 import { headers } from 'next/headers';
-import { CUSTOM_HEADERS } from '@/lib/middleware/headers';
+import { CUSTOM_HEADERS } from '@/lib/proxy/headers';
 
 /**
  * Get the CSP nonce for the current request
  *
- * This hook reads the nonce from request headers that were set by middleware.
+ * This hook reads the nonce from request headers that were set by the proxy.
  * The nonce should be used for inline scripts and styles to satisfy CSP.
  *
  * Note: This is an async Server Component hook (Next.js 15+).

@@ -1,18 +1,20 @@
 /**
- * Next.js Middleware
+ * Next.js Proxy
  *
- * Runs authentication checks at the edge before page rendering.
+ * Runs authentication checks before page rendering.
  * Provides performance optimization and security by checking auth
  * before React components load.
  *
  * Features:
- * - Edge-level authentication checks
+ * - Request-level authentication checks
  * - Public route access (no auth required)
  * - Auth route redirects (login/register redirect if authenticated)
  * - Protected route guards (require authentication)
  * - Return URL preservation
  * - Security headers with CSP nonce generation
  * - Role-based access control
+ *
+ * Note: As of Next.js 16, proxy runs on Node.js runtime (not Edge).
  */
 
 import { NextRequest } from 'next/server';
@@ -28,23 +30,20 @@ import {
   buildLoginRedirect,
   buildHomeRedirect,
   continueRequest,
-} from '@/lib/middleware/auth';
-import {
-  checkAdminAccess,
-  getUserRoleFromCookies,
-} from '@/lib/middleware/role';
+} from '@/lib/proxy/auth';
+import { checkAdminAccess, getUserRoleFromCookies } from '@/lib/proxy/role';
 import {
   generateNonce,
   applySecurityHeaders,
   CUSTOM_HEADERS,
-} from '@/lib/middleware/headers';
+} from '@/lib/proxy/headers';
 
 /**
- * Main middleware function
+ * Main proxy function
  *
  * Checks authentication and redirects based on route type:
  * 1. Generate nonce for CSP
- * 2. Excluded routes (API, static) - skip middleware
+ * 2. Excluded routes (API, static) - skip proxy
  * 3. Public routes - allow access regardless of auth
  * 4. Auth routes (login, register) - redirect if already authenticated
  * 5. Protected routes - require authentication
@@ -56,7 +55,7 @@ import {
  * @param request - Next.js request object
  * @returns NextResponse - redirect or continue
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Generate nonce for Content Security Policy
@@ -66,7 +65,7 @@ export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(CUSTOM_HEADERS.NONCE, nonce);
 
-  // 2. Skip middleware for API routes, static files, etc.
+  // 2. Skip proxy for API routes, static files, etc.
   if (isExcludedRoute(pathname)) {
     const response = continueRequest(request, nonce);
     return applySecurityHeaders(request, response, nonce);
@@ -141,7 +140,7 @@ export function middleware(request: NextRequest) {
 /**
  * Matcher configuration
  *
- * Specifies which routes middleware runs on.
+ * Specifies which routes proxy runs on.
  * Excludes:
  * - API routes (/api/*)
  * - Static files (_next/static/*)

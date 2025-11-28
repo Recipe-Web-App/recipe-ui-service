@@ -1,7 +1,7 @@
 /**
  * Security Logging Utilities
  *
- * Centralized security event logging for middleware.
+ * Centralized security event logging for proxy.
  * Logs unauthorized access attempts and other security events
  * for monitoring and audit purposes.
  */

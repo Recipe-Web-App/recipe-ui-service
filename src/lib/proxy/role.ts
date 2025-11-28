@@ -1,8 +1,8 @@
 /**
- * Middleware Role Utilities
+ * Proxy Role Utilities
  *
- * Helper functions for role-based access control in Next.js middleware.
- * These run at the edge before page rendering to enforce role requirements.
+ * Helper functions for role-based access control in Next.js proxy.
+ * These run before page rendering to enforce role requirements.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -78,7 +78,7 @@ export function buildUnauthorizedRedirect(
 /**
  * Check admin access and log if unauthorized
  *
- * Combines role checking with security logging for cleaner middleware code.
+ * Combines role checking with security logging for cleaner proxy code.
  *
  * @param request - Next.js request object
  * @param userRole - User's current role

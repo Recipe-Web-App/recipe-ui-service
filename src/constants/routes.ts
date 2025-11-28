@@ -2,10 +2,8 @@
  * Route Constants
  *
  * Defines route patterns for authentication and access control.
- * Used by middleware and route guards to determine access levels.
+ * Used by proxy and route guards to determine access levels.
  */
-
-import { checkSync } from 'recheck';
 
 /**
  * Public routes - accessible without authentication
@@ -121,6 +119,12 @@ export const AUTH_COOKIE_NAMES = {
 /**
  * Check if a route matches any pattern in the list
  *
+ * Security note: ReDoS (Regular Expression Denial of Service) is not a concern here because:
+ * 1. All patterns are hardcoded constants, not user input
+ * 2. The patterns use simple (.*) wildcards which translate to linear-time regex
+ * 3. User-controlled data (the pathname) is only the INPUT to regex.test(), not the pattern
+ *    - Regex metacharacters in the input are treated as literal characters
+ *
  * @param pathname - The pathname to check
  * @param patterns - Array of route patterns (supports wildcards with .*)
  * @returns True if pathname matches any pattern
@@ -148,18 +152,8 @@ export function matchesRoutePattern(
     // Step 4: Build final regex pattern
     const finalPattern = `^${regexPattern}$`;
 
-    // Step 5: Validate regex safety using industry-standard 'recheck' library
-    // recheck analyzes the pattern for ReDoS (Regular Expression Denial of Service) vulnerabilities
-    // This protects against malicious regex patterns that could cause exponential backtracking
-    const recheckResult = checkSync(finalPattern, '');
-
-    // If pattern is vulnerable to ReDoS attacks, reject it and fall back to safe exact match
-    if (recheckResult.status === 'vulnerable') {
-      return pattern === pathname;
-    }
-
     try {
-      // Safe to construct RegExp - pattern has been validated by recheck
+      // Patterns are hardcoded constants - safe from ReDoS
       // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
       const regex = new RegExp(finalPattern); // eslint-disable-line security/detect-non-literal-regexp
       return regex.test(pathname);
@@ -199,7 +193,7 @@ export function isAdminRoute(pathname: string): boolean {
 }
 
 /**
- * Check if route should be excluded from middleware
+ * Check if route should be excluded from proxy
  */
 export function isExcludedRoute(pathname: string): boolean {
   return matchesRoutePattern(pathname, EXCLUDED_ROUTES);
