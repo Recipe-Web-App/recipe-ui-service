@@ -2,49 +2,100 @@ import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+  const lastModified = new Date();
 
-  // Static pages
-  const staticPages = [
+  // Homepage
+  const homepage: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      lastModified,
+      changeFrequency: 'weekly',
       priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/recipes`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/search`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/categories`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
     },
   ];
 
-  // TODO: Add dynamic recipe pages when data fetching is implemented
-  // const recipes = await fetchAllRecipes();
-  // const recipePages = recipes.map((recipe) => ({
-  //   url: `${baseUrl}/recipes/${recipe.slug}`,
-  //   lastModified: new Date(recipe.updatedAt),
-  //   changeFrequency: 'monthly' as const,
-  //   priority: 0.8,
-  // }));
+  // Main sections (priority 0.9)
+  const mainSections = [
+    '/home',
+    '/recipes',
+    '/meal-plans',
+    '/collections',
+    '/feed',
+    '/shopping-lists',
+    '/sous-chef',
+  ].map(path => ({
+    url: `${baseUrl}${path}`,
+    lastModified,
+    changeFrequency: 'daily' as const,
+    priority: 0.9,
+  }));
 
-  return [...staticPages];
+  // Section subpages (priority 0.8)
+  const sectionSubpages = [
+    // Recipes
+    '/recipes/create',
+    '/recipes/favorites',
+    '/recipes/my-recipes',
+    '/recipes/popular',
+    '/recipes/shared',
+    '/recipes/trending',
+    // Meal plans
+    '/meal-plans/create',
+    '/meal-plans/favorites',
+    '/meal-plans/my-plans',
+    '/meal-plans/popular',
+    '/meal-plans/shared',
+    '/meal-plans/trending',
+    // Collections
+    '/collections/create',
+    '/collections/favorites',
+    '/collections/my-collections',
+    '/collections/popular',
+    '/collections/shared',
+    '/collections/trending',
+    // Feed
+    '/feed/co-chefs',
+    '/feed/discover',
+    '/feed/my-activity',
+    // Shopping lists
+    '/shopping-lists/create',
+    // Sous chef
+    '/sous-chef/adapt',
+    '/sous-chef/cook',
+    '/sous-chef/timers',
+  ].map(path => ({
+    url: `${baseUrl}${path}`,
+    lastModified,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  // Account pages (priority 0.7)
+  const accountPages = [
+    '/account',
+    '/account/edit',
+    '/account/profile',
+    '/account/settings',
+  ].map(path => ({
+    url: `${baseUrl}${path}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  // Auth pages (priority 0.6)
+  const authPages = ['/login', '/register'].map(path => ({
+    url: `${baseUrl}${path}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  return [
+    ...homepage,
+    ...mainSections,
+    ...sectionSubpages,
+    ...accountPages,
+    ...authPages,
+  ];
 }
