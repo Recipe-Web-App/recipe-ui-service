@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { LoginForm } from '@/components/forms/LoginForm';
-import { ChefHat } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -13,8 +13,15 @@ export default function LoginPage() {
   return (
     <Card className="p-8">
       <div className="mb-8 text-center">
-        <div className="mb-4 flex items-center justify-center">
-          <ChefHat className="text-primary h-10 w-10" />
+        <div className="mb-4 flex flex-col items-center justify-center space-y-4">
+          <Image
+            src="/site-logo.webp"
+            alt="Sous Chef Logo"
+            width={180}
+            height={180}
+            unoptimized
+          />
+          <span className="text-2xl font-bold tracking-tight">Sous Chef</span>
         </div>
         <h1 className="text-2xl font-bold">Welcome Back</h1>
         <p className="text-muted-foreground">
