@@ -26,6 +26,11 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-12 text-center">
         <div className="mb-6 flex flex-col items-center justify-center">
+          <h1 className="text-foreground flex items-center gap-3 text-4xl font-bold">
+            <ChefHat className="text-primary h-8 w-8" />
+            Sous Chef
+            <ChefHat className="text-primary h-8 w-8" />
+          </h1>
           <Image
             src="/site-logo.webp"
             alt="Sous Chef Logo"
@@ -34,11 +39,6 @@ export default function HomePage() {
             className="mb-4"
             unoptimized
           />
-          <h1 className="text-foreground flex items-center gap-3 text-4xl font-bold">
-            <ChefHat className="text-primary h-8 w-8" />
-            Sous Chef
-            <ChefHat className="text-primary h-8 w-8" />
-          </h1>
         </div>
         <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-xl">
           Discover, create, and organize your favorite recipes. Plan meals,

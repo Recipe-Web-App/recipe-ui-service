@@ -85,8 +85,8 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
               aria-label="Sous Chef Home"
             >
               <Image
-                src="/site-logo.webp"
-                alt="Sous Chef Logo"
+                src="/icon.ico"
+                alt="Sous Chef Icon"
                 width={32}
                 height={32}
                 className="transition-transform group-hover:scale-110"
