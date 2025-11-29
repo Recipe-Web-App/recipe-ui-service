@@ -41,7 +41,7 @@ describe('Route Constants', () => {
     it('defines excluded routes', () => {
       expect(EXCLUDED_ROUTES).toContain('/api/(.*)');
       expect(EXCLUDED_ROUTES).toContain('/_next/(.*)');
-      expect(EXCLUDED_ROUTES).toContain('/favicon.ico');
+      expect(EXCLUDED_ROUTES).toContain('/manifest.json');
     });
   });
 
@@ -166,7 +166,6 @@ describe('Route Constants', () => {
     });
 
     it('returns true for static assets', () => {
-      expect(isExcludedRoute('/favicon.ico')).toBe(true);
       expect(isExcludedRoute('/manifest.json')).toBe(true);
     });
 

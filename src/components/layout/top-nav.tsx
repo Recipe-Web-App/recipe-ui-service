@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { ChefHat } from 'lucide-react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { useLayoutStore } from '@/stores/ui/layout-store';
 
@@ -82,13 +82,17 @@ export const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
             <Link
               href="/home"
               className="hover:text-primary group flex items-center space-x-2 transition-colors"
-              aria-label="Recipe App Home"
+              aria-label="Sous Chef Home"
             >
-              <ChefHat
-                className="text-primary h-6 w-6 transition-transform group-hover:scale-110"
-                aria-hidden="true"
+              <Image
+                src="/icon.ico"
+                alt="Sous Chef Icon"
+                width={32}
+                height={32}
+                className="transition-transform group-hover:scale-110"
+                unoptimized
               />
-              <span className="font-bold tracking-tight">Recipe App</span>
+              <span className="font-bold tracking-tight">Sous Chef</span>
             </Link>
           </div>
 

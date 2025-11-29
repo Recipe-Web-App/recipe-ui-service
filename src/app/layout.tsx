@@ -17,10 +17,15 @@ const geistMono = Geist_Mono({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata: Metadata = {
-  title: 'Recipe App',
+  title: 'Sous Chef',
   description: 'A modern recipe management application built with Next.js',
   keywords: ['recipes', 'cooking', 'food', 'kitchen'],
   authors: [{ name: 'Jonathan Samuelsen' }],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

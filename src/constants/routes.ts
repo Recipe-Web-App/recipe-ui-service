@@ -81,7 +81,6 @@ export const ADMIN_ROUTES = ['/admin', '/admin/(.*)'] as const;
 export const EXCLUDED_ROUTES = [
   '/api/(.*)',
   '/_next/(.*)',
-  '/favicon.ico',
   '/manifest.json',
   '/.well-known/(.*)',
 ] as const;

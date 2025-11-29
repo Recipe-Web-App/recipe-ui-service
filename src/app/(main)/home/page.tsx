@@ -12,6 +12,7 @@ import {
   Star,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * Recipe App Homepage
@@ -24,11 +25,20 @@ export default function HomePage() {
     <div className="space-y-8">
       {/* Hero Section */}
       <section className="py-12 text-center">
-        <div className="mb-6 flex items-center justify-center">
-          <ChefHat className="text-primary mr-4 h-16 w-16" />
-          <h1 className="text-foreground text-4xl font-bold">
-            Recipe Management App
+        <div className="mb-6 flex flex-col items-center justify-center">
+          <h1 className="text-foreground flex items-center gap-3 text-4xl font-bold">
+            <ChefHat className="text-primary h-8 w-8" />
+            Sous Chef
+            <ChefHat className="text-primary h-8 w-8" />
           </h1>
+          <Image
+            src="/site-logo.webp"
+            alt="Sous Chef Logo"
+            width={280}
+            height={150}
+            className="mb-4"
+            unoptimized
+          />
         </div>
         <p className="text-muted-foreground mx-auto mb-8 max-w-2xl text-xl">
           Discover, create, and organize your favorite recipes. Plan meals,
