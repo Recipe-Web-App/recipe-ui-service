@@ -22,6 +22,7 @@ export * from './collection-recipes';
 export * from './collection-collaborators';
 export * from './comments';
 export * from './favorites';
+export * from './users';
 export * from './health';
 export * from './monitoring';
 

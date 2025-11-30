@@ -62,6 +62,9 @@ export const QUERY_KEYS = {
     RECIPE: ['recipeManagement', 'recipe'],
     RECIPE_VERSIONS: ['recipeManagement', 'recipeVersions'],
 
+    // User-scoped operations
+    MY_RECIPES: ['recipeManagement', 'myRecipes'],
+
     // Ingredient operations
     INGREDIENTS: ['recipeManagement', 'ingredients'],
     RECIPE_INGREDIENTS: ['recipeManagement', 'recipeIngredients'],
