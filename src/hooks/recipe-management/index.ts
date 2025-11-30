@@ -105,6 +105,9 @@ export {
   useIsRecipeFavorited,
 } from './useFavorites';
 
+// User Operations
+export { useMyRecipes } from './useUsers';
+
 // Health Monitoring
 export {
   useRecipeManagementHealth,
