@@ -20,7 +20,7 @@ export interface FormFieldProps<T extends FieldValues> {
   name: FieldPath<T>;
   children: (props: {
     field: {
-      value: T[FieldPath<T>];
+      value: T[FieldPath<T>] | undefined;
       onChange: (value: unknown) => void;
       onBlur: () => void;
       name: string;
@@ -90,8 +90,10 @@ export function FormField<T extends FieldValues>({
 /**
  * FormInput - Input field with react-hook-form integration
  */
-export interface FormInputProps<T extends FieldValues>
-  extends Omit<FormFieldProps<T>, 'children'> {
+export interface FormInputProps<T extends FieldValues> extends Omit<
+  FormFieldProps<T>,
+  'children'
+> {
   label?: string;
   placeholder?: string;
   type?: string;
@@ -130,8 +132,10 @@ export function FormInput<T extends FieldValues>({
 /**
  * FormSelect - Select field with react-hook-form integration
  */
-export interface FormSelectProps<T extends FieldValues>
-  extends Omit<FormFieldProps<T>, 'children'> {
+export interface FormSelectProps<T extends FieldValues> extends Omit<
+  FormFieldProps<T>,
+  'children'
+> {
   label?: string;
   placeholder?: string;
   options: Array<{ value: string; label: string; disabled?: boolean }>;
@@ -184,8 +188,10 @@ export function FormSelect<T extends FieldValues>({
 /**
  * FormCheckbox - Checkbox field with react-hook-form integration
  */
-export interface FormCheckboxProps<T extends FieldValues>
-  extends Omit<FormFieldProps<T>, 'children'> {
+export interface FormCheckboxProps<T extends FieldValues> extends Omit<
+  FormFieldProps<T>,
+  'children'
+> {
   label?: string;
   description?: string;
   className?: string;
@@ -284,8 +290,10 @@ export function FormErrors<T extends FieldValues>({
 /**
  * FormTextarea - Textarea field with react-hook-form integration
  */
-export interface FormTextareaProps<T extends FieldValues>
-  extends Omit<FormFieldProps<T>, 'children'> {
+export interface FormTextareaProps<T extends FieldValues> extends Omit<
+  FormFieldProps<T>,
+  'children'
+> {
   label?: string;
   placeholder?: string;
   helperText?: string;
