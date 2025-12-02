@@ -542,8 +542,10 @@ export function CreateRecipeForm(props: CreateRecipeFormProps) {
 /**
  * Convenience component for editing recipes (full editing)
  */
-export interface EditRecipeFormProps
-  extends Omit<RecipeFormProps, 'mode' | 'recipeId' | 'initialData'> {
+export interface EditRecipeFormProps extends Omit<
+  RecipeFormProps,
+  'mode' | 'recipeId' | 'initialData'
+> {
   recipeId: number;
   initialData: RecipeDto;
 }
@@ -566,8 +568,10 @@ export function EditRecipeForm({
 /**
  * Convenience component for updating recipes (basic fields only)
  */
-export interface UpdateRecipeFormProps
-  extends Omit<RecipeFormProps, 'mode' | 'recipeId' | 'initialData'> {
+export interface UpdateRecipeFormProps extends Omit<
+  RecipeFormProps,
+  'mode' | 'recipeId' | 'initialData'
+> {
   recipeId: number;
   initialData: RecipeDto;
 }

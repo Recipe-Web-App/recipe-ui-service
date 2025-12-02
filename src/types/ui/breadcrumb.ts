@@ -32,7 +32,8 @@ export interface BreadcrumbItem {
  * Breadcrumb container component props
  */
 export interface BreadcrumbProps
-  extends React.HTMLAttributes<HTMLElement>,
+  extends
+    React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof breadcrumbVariants> {
   /** Array of breadcrumb items to display */
   items?: BreadcrumbItem[];
@@ -52,7 +53,8 @@ export interface BreadcrumbProps
  * Breadcrumb list component props
  */
 export interface BreadcrumbListProps
-  extends React.HTMLAttributes<HTMLOListElement>,
+  extends
+    React.HTMLAttributes<HTMLOListElement>,
     VariantProps<typeof breadcrumbListVariants> {
   /** Children elements */
   children: React.ReactNode;
@@ -64,7 +66,8 @@ export interface BreadcrumbListProps
  * Breadcrumb item component props
  */
 export interface BreadcrumbItemProps
-  extends React.HTMLAttributes<HTMLLIElement>,
+  extends
+    React.HTMLAttributes<HTMLLIElement>,
     VariantProps<typeof breadcrumbItemVariants> {
   /** Children elements */
   children: React.ReactNode;
@@ -76,7 +79,8 @@ export interface BreadcrumbItemProps
  * Breadcrumb link component props
  */
 export interface BreadcrumbLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  extends
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
     VariantProps<typeof breadcrumbLinkVariants> {
   /** Children elements */
   children: React.ReactNode;
@@ -90,7 +94,8 @@ export interface BreadcrumbLinkProps
  * Breadcrumb page component props (current page, non-clickable)
  */
 export interface BreadcrumbPageProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof breadcrumbPageVariants> {
   /** Children elements */
   children: React.ReactNode;
@@ -102,7 +107,8 @@ export interface BreadcrumbPageProps
  * Breadcrumb separator component props
  */
 export interface BreadcrumbSeparatorProps
-  extends React.HTMLAttributes<HTMLLIElement>,
+  extends
+    React.HTMLAttributes<HTMLLIElement>,
     VariantProps<typeof breadcrumbSeparatorVariants> {
   /** Custom separator content (overrides variant) */
   children?: React.ReactNode;
@@ -114,7 +120,8 @@ export interface BreadcrumbSeparatorProps
  * Breadcrumb ellipsis component props for overflow indication
  */
 export interface BreadcrumbEllipsisProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof breadcrumbEllipsisVariants> {
   /** Click handler for expanding collapsed items */
   onExpand?: () => void;
@@ -126,7 +133,8 @@ export interface BreadcrumbEllipsisProps
  * Recipe-specific breadcrumb component props
  */
 export interface RecipeBreadcrumbProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof recipeBreadcrumbVariants> {
   /** Recipe workflow items */
   items: RecipeWorkflowItem[];

@@ -43,8 +43,9 @@ export interface IconProps extends VariantProps<typeof iconVariants> {
 /**
  * Icon container component props for grouped icons
  */
-export interface IconContainerProps
-  extends VariantProps<typeof iconContainerVariants> {
+export interface IconContainerProps extends VariantProps<
+  typeof iconContainerVariants
+> {
   /** Children elements (usually Icon components) */
   children: React.ReactNode;
   /** Additional CSS classes */
@@ -59,7 +60,8 @@ export interface IconContainerProps
  * Recipe-specific icon props
  */
 export interface RecipeIconProps
-  extends Omit<IconProps, 'color' | 'animation' | 'state'>,
+  extends
+    Omit<IconProps, 'color' | 'animation' | 'state'>,
     VariantProps<typeof recipeIconVariants> {
   // Inherits all IconProps except styling variants that are overridden by recipe variants
 }

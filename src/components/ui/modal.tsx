@@ -30,14 +30,16 @@ interface ModalTriggerProps extends DialogPrimitive.DialogTriggerProps {
  * Modal overlay component props interface
  */
 interface ModalOverlayProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>,
     VariantProps<typeof modalOverlayVariants> {}
 
 /**
  * Modal content component props interface
  */
 interface ModalContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
     VariantProps<typeof modalContentVariants> {
   showClose?: boolean;
 }

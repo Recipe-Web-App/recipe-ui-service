@@ -38,8 +38,10 @@ export interface RadioOption {
 }
 
 // Main RadioGroup component props
-export interface RadioGroupProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface RadioGroupProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onChange'
+> {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -56,7 +58,8 @@ export interface RadioGroupProps
 
 // Compound component props
 export interface RadioGroupRootProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     Omit<VariantProps<typeof radioGroupVariants>, 'disabled'> {
   value?: string;
   defaultValue?: string;
@@ -67,7 +70,8 @@ export interface RadioGroupRootProps
 }
 
 export interface RadioInputProps
-  extends Omit<
+  extends
+    Omit<
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       'onChange' | 'disabled'
     >,
@@ -78,22 +82,26 @@ export interface RadioInputProps
 }
 
 export interface RadioLabelProps
-  extends React.LabelHTMLAttributes<HTMLLabelElement>,
+  extends
+    React.LabelHTMLAttributes<HTMLLabelElement>,
     VariantProps<typeof radioLabelVariants> {}
 
 export interface RadioDescriptionProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof radioDescriptionVariants> {}
 
 export interface RadioIconProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof radioIconVariants> {
   checked?: boolean;
 }
 
 // Form field props
 export interface RadioFieldProps
-  extends Omit<RadioGroupProps, 'error'>,
+  extends
+    Omit<RadioGroupProps, 'error'>,
     Omit<VariantProps<typeof radioFieldVariants>, 'error'> {
   label?: React.ReactNode;
   helperText?: React.ReactNode;
@@ -113,7 +121,8 @@ export interface RecipeRadioOption {
 }
 
 export interface RecipeRadioGroupProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'title'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'title'>,
     VariantProps<typeof recipeRadioGroupVariants> {
   title?: React.ReactNode;
   options: RecipeRadioOption[];
@@ -129,7 +138,8 @@ export interface RecipeRadioGroupProps
 
 // Animated radio props
 export interface AnimatedRadioProps
-  extends Omit<RadioGroupProps, 'loading'>,
+  extends
+    Omit<RadioGroupProps, 'loading'>,
     VariantProps<typeof animatedRadioVariants> {
   animationDuration?: number;
   loading?: boolean;
@@ -137,7 +147,8 @@ export interface AnimatedRadioProps
 
 // Radio card props for recipe selection
 export interface RadioCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect'>,
     VariantProps<typeof radioCardVariants> {
   value: string;
   label: React.ReactNode;

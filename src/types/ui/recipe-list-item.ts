@@ -17,8 +17,10 @@ import { type RecipeCardRecipe, type RecipeCardActions } from './recipe-card';
  * />
  * ```
  */
-export interface RecipeListItemProps
-  extends Omit<React.HTMLAttributes<HTMLLIElement>, 'onClick'> {
+export interface RecipeListItemProps extends Omit<
+  React.HTMLAttributes<HTMLLIElement>,
+  'onClick'
+> {
   /** Recipe data to display */
   recipe: RecipeCardRecipe;
 

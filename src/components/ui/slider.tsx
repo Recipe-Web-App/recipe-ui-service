@@ -19,7 +19,8 @@ import {
  * Base Slider component props interface
  */
 export interface SliderProps
-  extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>,
+  extends
+    React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>,
     VariantProps<typeof sliderVariants>,
     VariantProps<typeof sliderTrackVariants>,
     VariantProps<typeof sliderRangeVariants> {
@@ -377,8 +378,10 @@ Slider.displayName = 'Slider';
 /**
  * Range Slider component for selecting a range of values
  */
-export interface RangeSliderProps
-  extends Omit<SliderProps, 'value' | 'defaultValue' | 'onValueChange'> {
+export interface RangeSliderProps extends Omit<
+  SliderProps,
+  'value' | 'defaultValue' | 'onValueChange'
+> {
   value?: [number, number];
   defaultValue?: [number, number];
   onValueChange?: (value: [number, number]) => void;
@@ -461,8 +464,10 @@ RangeSlider.displayName = 'RangeSlider';
 /**
  * Temperature Slider for cooking temperatures
  */
-export interface TemperatureSliderProps
-  extends Omit<SliderProps, 'min' | 'max' | 'step' | 'unit'> {
+export interface TemperatureSliderProps extends Omit<
+  SliderProps,
+  'min' | 'max' | 'step' | 'unit'
+> {
   temperatureUnit?: 'C' | 'F';
   min?: number;
   max?: number;
@@ -502,8 +507,10 @@ TemperatureSlider.displayName = 'TemperatureSlider';
 /**
  * Time Slider for cooking times
  */
-export interface TimeSliderProps
-  extends Omit<SliderProps, 'min' | 'max' | 'step' | 'formatValue'> {
+export interface TimeSliderProps extends Omit<
+  SliderProps,
+  'min' | 'max' | 'step' | 'formatValue'
+> {
   timeUnit?: 'minutes' | 'hours';
   maxTime?: number;
 }
@@ -557,8 +564,10 @@ TimeSlider.displayName = 'TimeSlider';
 /**
  * Serving Size Slider for recipe portions
  */
-export interface ServingSizeSliderProps
-  extends Omit<SliderProps, 'min' | 'max' | 'step' | 'unit'> {
+export interface ServingSizeSliderProps extends Omit<
+  SliderProps,
+  'min' | 'max' | 'step' | 'unit'
+> {
   maxServings?: number;
 }
 
@@ -589,11 +598,10 @@ ServingSizeSlider.displayName = 'ServingSizeSlider';
 /**
  * Difficulty Slider for recipe complexity
  */
-export interface DifficultySliderProps
-  extends Omit<
-    SliderProps,
-    'min' | 'max' | 'step' | 'formatValue' | 'stepLabels'
-  > {
+export interface DifficultySliderProps extends Omit<
+  SliderProps,
+  'min' | 'max' | 'step' | 'formatValue' | 'stepLabels'
+> {
   showLabels?: boolean;
 }
 

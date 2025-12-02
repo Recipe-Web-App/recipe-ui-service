@@ -6,7 +6,8 @@ import { cardVariants } from '@/lib/ui/card-variants';
  * Card component props interface
  */
 export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {
   asChild?: boolean;
   interactive?: boolean;
@@ -36,15 +37,13 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * Card Title component props interface
  */
-export interface CardTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   asChild?: boolean;
 }
 
 /**
  * Card Description component props interface
  */
-export interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   asChild?: boolean;
 }

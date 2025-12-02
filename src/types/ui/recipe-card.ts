@@ -69,8 +69,10 @@ export interface RecipeCardRecipe extends RecipeCardMetadata {
 /**
  * RecipeCard component props
  */
-export interface RecipeCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
+export interface RecipeCardProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onClick'
+> {
   recipe: RecipeCardRecipe;
   variant?: 'default' | 'elevated' | 'outlined' | 'ghost' | 'interactive';
   size?: 'sm' | 'default' | 'lg';

@@ -30,7 +30,8 @@ const SelectValue = SelectPrimitive.Value;
  * Select trigger component props interface
  */
 export interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
+  extends
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
     VariantProps<typeof selectTriggerVariants> {
   error?: boolean;
 }
@@ -133,7 +134,8 @@ SelectScrollDownButton.displayName =
  * Select content component props interface
  */
 export interface SelectContentProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>,
     VariantProps<typeof selectContentVariants> {}
 
 /**
@@ -190,7 +192,8 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
  * Select item component props interface
  */
 export interface SelectItemProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>,
+  extends
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>,
     VariantProps<typeof selectItemVariants> {}
 
 /**
@@ -246,11 +249,10 @@ SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 /**
  * Convenience component for complete select field with label and error
  */
-export interface SelectFieldProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>,
-    'children'
-  > {
+export interface SelectFieldProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>,
+  'children'
+> {
   label?: string;
   error?: string;
   required?: boolean;

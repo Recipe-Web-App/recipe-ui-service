@@ -15,7 +15,8 @@ import {
  * Progress root component props interface
  */
 export interface ProgressProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof progressVariants> {
   value?: number;
   max?: number;
@@ -90,7 +91,8 @@ Progress.displayName = 'Progress';
  * Cooking step component props interface
  */
 export interface CookingStepProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cookingStepVariants> {
   stepNumber: number;
   title: string;
@@ -206,8 +208,7 @@ CookingStep.displayName = 'CookingStep';
 /**
  * Cooking progress component props interface
  */
-export interface CookingProgressProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CookingProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   steps: Array<{
     id: string;
     title: string;
@@ -275,7 +276,8 @@ CookingProgress.displayName = 'CookingProgress';
  * Upload progress component props interface
  */
 export interface UploadProgressProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof uploadProgressVariants> {
   fileName: string;
   fileSize?: string;
@@ -481,7 +483,8 @@ UploadProgress.displayName = 'UploadProgress';
  * Timer progress component props interface
  */
 export interface TimerProgressProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof timerProgressVariants> {
   totalTime: number; // in seconds
   remainingTime: number; // in seconds

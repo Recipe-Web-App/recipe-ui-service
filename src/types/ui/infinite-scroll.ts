@@ -53,7 +53,8 @@ export type InfiniteScrollRenderItem<T> = (
 
 // Main InfiniteScroll component props
 export interface InfiniteScrollProps<T = unknown>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onLoad' | 'role'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onLoad' | 'role'>,
     BaseInfiniteScrollProps,
     VariantProps<typeof infiniteScrollVariants> {
   // Data and rendering
@@ -106,7 +107,8 @@ export interface InfiniteScrollProps<T = unknown>
 
 // InfiniteScroll item wrapper props
 export interface InfiniteScrollItemProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof infiniteScrollItemVariants> {
   children: React.ReactNode;
   index?: number;
@@ -116,7 +118,8 @@ export interface InfiniteScrollItemProps
 
 // Loading component props
 export interface InfiniteScrollLoadingProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof infiniteScrollLoadingVariants> {
   text?: string;
   showSkeleton?: boolean;
@@ -126,7 +129,8 @@ export interface InfiniteScrollLoadingProps
 
 // Error component props
 export interface InfiniteScrollErrorProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof infiniteScrollErrorVariants> {
   error: InfiniteScrollError | string;
   onRetry?: () => void;
@@ -135,8 +139,7 @@ export interface InfiniteScrollErrorProps
 }
 
 // Empty state component props
-export interface InfiniteScrollEmptyProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface InfiniteScrollEmptyProps extends React.HTMLAttributes<HTMLDivElement> {
   text?: string;
   icon?: React.ReactNode;
   actionButton?: React.ReactNode;
@@ -172,8 +175,10 @@ export interface SearchResult {
 }
 
 // Recipe-specific infinite scroll props
-export interface RecipeInfiniteScrollProps
-  extends Omit<InfiniteScrollProps<Recipe>, 'renderItem' | 'recipeContext'> {
+export interface RecipeInfiniteScrollProps extends Omit<
+  InfiniteScrollProps<Recipe>,
+  'renderItem' | 'recipeContext'
+> {
   renderItem?: InfiniteScrollRenderItem<Recipe>;
   recipeContext: 'recipes' | 'favorites' | 'meal-plans';
   showAuthor?: boolean;
@@ -183,11 +188,10 @@ export interface RecipeInfiniteScrollProps
   cardVariant?: 'default' | 'compact' | 'detailed';
 }
 
-export interface SearchResultsInfiniteScrollProps
-  extends Omit<
-    InfiniteScrollProps<SearchResult>,
-    'renderItem' | 'recipeContext'
-  > {
+export interface SearchResultsInfiniteScrollProps extends Omit<
+  InfiniteScrollProps<SearchResult>,
+  'renderItem' | 'recipeContext'
+> {
   renderItem?: InfiniteScrollRenderItem<SearchResult>;
   recipeContext: 'search-results';
   searchQuery?: string;

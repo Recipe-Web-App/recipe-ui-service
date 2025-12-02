@@ -19,10 +19,8 @@ export interface BaseDividerProps {
 
 // Main Divider component props
 export interface DividerProps
-  extends Omit<
-      React.HTMLAttributes<HTMLDivElement>,
-      'role' | 'color' | 'style'
-    >,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'role' | 'color' | 'style'>,
     BaseDividerProps,
     VariantProps<typeof dividerVariants> {
   asChild?: boolean;
@@ -31,7 +29,8 @@ export interface DividerProps
 
 // Divider with text props
 export interface DividerWithTextProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'role'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'role'>,
     BaseDividerProps,
     VariantProps<typeof dividerWithTextVariants> {
   text: React.ReactNode;
@@ -43,14 +42,16 @@ export interface DividerWithTextProps
 
 // Divider text styling props
 export interface DividerTextProps
-  extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLSpanElement>, 'color'>,
     VariantProps<typeof dividerTextVariants> {
   as?: 'span' | 'div' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
 // Divider with icon props
 export interface DividerWithIconProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'role'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'role'>,
     BaseDividerProps,
     VariantProps<typeof dividerWithTextVariants> {
   icon: React.ReactNode;
@@ -63,14 +64,16 @@ export interface DividerWithIconProps
 
 // Divider icon styling props
 export interface DividerIconProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof dividerIconVariants> {
   'aria-hidden'?: boolean;
 }
 
 // Recipe-specific divider props
 export interface RecipeDividerProps
-  extends Omit<DividerProps, 'className'>,
+  extends
+    Omit<DividerProps, 'className'>,
     VariantProps<typeof recipeDividerVariants> {
   className?: string;
   label?: string;
@@ -169,7 +172,8 @@ export interface DividerThemeProps {
 
 // Composite divider props combining multiple features
 export interface CompositeDividerProps
-  extends DividerProps,
+  extends
+    DividerProps,
     Partial<DividerAnimationProps>,
     Partial<DividerThemeProps> {
   withText?: string;

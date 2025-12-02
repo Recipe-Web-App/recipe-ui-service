@@ -57,8 +57,10 @@ export type MealPlanCardSize = 'sm' | 'default' | 'lg';
 /**
  * MealPlanCard component props
  */
-export interface MealPlanCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
+export interface MealPlanCardProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onClick'
+> {
   /** Meal plan data to display */
   mealPlan: MealPlanCardMealPlan;
   /** Visual variant */

@@ -42,8 +42,10 @@ export type CollectionCardSize = 'sm' | 'default' | 'lg';
 /**
  * Collection card props interface
  */
-export interface CollectionCardProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'> {
+export interface CollectionCardProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onClick'
+> {
   /** Collection data to display */
   collection: CollectionCardCollection;
   /** Visual variant */

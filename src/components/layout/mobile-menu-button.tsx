@@ -112,8 +112,7 @@ MobileMenuButton.displayName = 'MobileMenuButton';
 /**
  * Alternative hamburger button with different animation style
  */
-export interface AlternativeMobileMenuButtonProps
-  extends MobileMenuButtonProps {
+export interface AlternativeMobileMenuButtonProps extends MobileMenuButtonProps {
   variant?: 'hamburger' | 'dots' | 'arrow';
 }
 

@@ -75,7 +75,8 @@ export type StepChangeHandler = (
  * Main Stepper component props
  */
 export interface StepperProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepperVariants> {
   /** Array of steps to display */
   steps: StepperStep[];
@@ -107,7 +108,8 @@ export interface StepperProps
  * Stepper item component props
  */
 export interface StepperItemProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>,
     VariantProps<typeof stepperItemVariants> {
   /** Step data */
   step: StepperStep;
@@ -131,7 +133,8 @@ export interface StepperItemProps
  * Step indicator component props
  */
 export interface StepIndicatorProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepIndicatorVariants> {
   /** Step number to display */
   stepNumber?: number;
@@ -149,7 +152,8 @@ export interface StepIndicatorProps
  * Step connector component props
  */
 export interface StepConnectorProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepConnectorVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -159,7 +163,8 @@ export interface StepConnectorProps
  * Step header component props
  */
 export interface StepHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepHeaderVariants> {
   /** Step title */
   title: string;
@@ -177,7 +182,8 @@ export interface StepHeaderProps
  * Step content component props
  */
 export interface StepContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepContentVariants> {
   /** Content to display */
   children: React.ReactNode;
@@ -191,7 +197,8 @@ export interface StepContentProps
  * Step controls component props
  */
 export interface StepControlsProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepControlsVariants> {
   /** Whether previous button is disabled */
   canGoPrevious?: boolean;
@@ -225,7 +232,8 @@ export interface StepControlsProps
  * Step progress component props
  */
 export interface StepProgressProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stepProgressVariants> {
   /** Current progress percentage (0-100) */
   progress: number;
@@ -243,7 +251,8 @@ export interface StepProgressProps
  * Recipe stepper component props
  */
 export interface RecipeStepperProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof recipeStepperVariants> {
   /** Recipe workflow steps */
   steps: RecipeWorkflowStep[];
@@ -339,8 +348,7 @@ export interface RecipeInstruction {
 /**
  * Cooking stepper component props
  */
-export interface CookingStepperProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CookingStepperProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Recipe instructions as steps */
   instructions: RecipeInstruction[];
   /** Current instruction step */
@@ -363,7 +371,8 @@ export interface CookingStepperProps
  * Cooking timer component props
  */
 export interface CookingTimerProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cookingTimerVariants> {
   /** Timer duration in seconds */
   duration: number;

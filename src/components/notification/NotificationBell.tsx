@@ -8,8 +8,7 @@ import {
   notificationBadgeVariants,
 } from '@/lib/ui/notification-bell-variants';
 
-export interface NotificationBellProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface NotificationBellProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Number of unread notifications
    * @default 0

@@ -321,8 +321,10 @@ ConfirmationDialog.displayName = 'ConfirmationDialog';
 /**
  * Recipe confirmation dialog props interface
  */
-export interface RecipeConfirmationDialogProps
-  extends Omit<ConfirmationDialogProps, 'type' | 'title'> {
+export interface RecipeConfirmationDialogProps extends Omit<
+  ConfirmationDialogProps,
+  'type' | 'title'
+> {
   action: VariantProps<typeof recipeDialogVariants>['action'];
   recipeName?: string;
   title?: string;

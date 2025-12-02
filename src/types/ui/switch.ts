@@ -8,7 +8,8 @@ import type {
 
 // Base Switch props
 export interface SwitchProps
-  extends Omit<
+  extends
+    Omit<
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       'type' | 'disabled' | 'onChange'
     >,
@@ -28,7 +29,8 @@ export interface SwitchProps
 
 // Switch Root props (for compound component)
 export interface SwitchRootProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     VariantProps<typeof switchVariants> {
   checked?: boolean;
   defaultChecked?: boolean;
@@ -41,7 +43,8 @@ export interface SwitchRootProps
 
 // Switch Track props
 export interface SwitchTrackProps
-  extends Omit<React.HTMLAttributes<HTMLButtonElement>, 'onClick'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLButtonElement>, 'onClick'>,
     VariantProps<typeof switchTrackVariants> {
   checked?: boolean;
   disabled?: boolean;
@@ -49,8 +52,7 @@ export interface SwitchTrackProps
 }
 
 // Switch Thumb props
-export interface SwitchThumbProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
+export interface SwitchThumbProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   checked?: boolean;
   checkedIcon?: React.ReactNode;
@@ -59,14 +61,14 @@ export interface SwitchThumbProps
 
 // Switch Label props
 export interface SwitchLabelProps
-  extends React.LabelHTMLAttributes<HTMLLabelElement>,
+  extends
+    React.LabelHTMLAttributes<HTMLLabelElement>,
     VariantProps<typeof switchLabelVariants> {
   required?: boolean;
 }
 
 // Switch Description props
-export interface SwitchDescriptionProps
-  extends React.HTMLAttributes<HTMLSpanElement> {
+export interface SwitchDescriptionProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
@@ -79,7 +81,8 @@ export interface SwitchFieldProps extends SwitchProps {
 
 // Recipe Switch Group props
 export interface RecipeSwitchGroupProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof recipeSwitchGroupVariants> {
   title?: string;
   switches: RecipeSwitchItemProps[];

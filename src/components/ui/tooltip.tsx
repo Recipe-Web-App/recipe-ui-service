@@ -30,7 +30,8 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
  * Tooltip content component props interface
  */
 export interface TooltipContentProps
-  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>,
     VariantProps<typeof tooltipContentVariants> {
   showArrow?: boolean;
 }
@@ -76,8 +77,10 @@ TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 /**
  * Simple tooltip wrapper component props interface
  */
-export interface SimpleTooltipProps
-  extends Omit<TooltipContentProps, 'children' | 'content'> {
+export interface SimpleTooltipProps extends Omit<
+  TooltipContentProps,
+  'children' | 'content'
+> {
   content: React.ReactNode;
   children: React.ReactNode;
   delayDuration?: number;
@@ -138,8 +141,10 @@ SimpleTooltip.displayName = 'SimpleTooltip';
 /**
  * Cooking term tooltip props interface
  */
-export interface CookingTermTooltipProps
-  extends Omit<SimpleTooltipProps, 'variant' | 'content' | 'children'> {
+export interface CookingTermTooltipProps extends Omit<
+  SimpleTooltipProps,
+  'variant' | 'content' | 'children'
+> {
   term: string;
   definition: string;
   pronunciation?: string;
@@ -229,8 +234,10 @@ CookingTermTooltip.displayName = 'CookingTermTooltip';
 /**
  * Help icon tooltip props interface
  */
-export interface HelpTooltipProps
-  extends Omit<SimpleTooltipProps, 'children' | 'content'> {
+export interface HelpTooltipProps extends Omit<
+  SimpleTooltipProps,
+  'children' | 'content'
+> {
   helpText: React.ReactNode;
   iconVariant?: VariantProps<typeof iconTooltipVariants>['variant'];
   iconSize?: VariantProps<typeof iconTooltipVariants>['size'];
@@ -287,8 +294,10 @@ HelpTooltip.displayName = 'HelpTooltip';
 /**
  * Info icon tooltip props interface
  */
-export interface InfoTooltipProps
-  extends Omit<SimpleTooltipProps, 'children' | 'content'> {
+export interface InfoTooltipProps extends Omit<
+  SimpleTooltipProps,
+  'children' | 'content'
+> {
   infoText: React.ReactNode;
   iconVariant?: VariantProps<typeof iconTooltipVariants>['variant'];
   iconSize?: VariantProps<typeof iconTooltipVariants>['size'];
@@ -345,8 +354,10 @@ InfoTooltip.displayName = 'InfoTooltip';
 /**
  * Keyboard shortcut tooltip props interface
  */
-export interface KeyboardTooltipProps
-  extends Omit<SimpleTooltipProps, 'content'> {
+export interface KeyboardTooltipProps extends Omit<
+  SimpleTooltipProps,
+  'content'
+> {
   shortcut: string | string[];
   description?: string;
 }
@@ -393,8 +404,10 @@ KeyboardTooltip.displayName = 'KeyboardTooltip';
 /**
  * Recipe metric tooltip props interface
  */
-export interface MetricTooltipProps
-  extends Omit<SimpleTooltipProps, 'content' | 'children'> {
+export interface MetricTooltipProps extends Omit<
+  SimpleTooltipProps,
+  'content' | 'children'
+> {
   metric: string;
   value: number;
   unit: string;

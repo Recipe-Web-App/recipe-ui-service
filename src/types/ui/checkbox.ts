@@ -46,7 +46,8 @@ export interface CheckboxProps extends BaseCheckboxProps {
 
 // Compound component props
 export interface CheckboxRootProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultChecked'>,
     Omit<VariantProps<typeof checkboxVariants>, 'disabled'> {
   checked?: boolean | 'indeterminate';
   defaultChecked?: boolean | 'indeterminate';
@@ -58,29 +59,34 @@ export interface CheckboxRootProps
 }
 
 export interface CheckboxInputProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>,
+  extends
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'>,
     Omit<VariantProps<typeof checkboxInputVariants>, 'disabled'> {
   loading?: boolean;
   disabled?: boolean;
 }
 
 export interface CheckboxLabelProps
-  extends React.LabelHTMLAttributes<HTMLLabelElement>,
+  extends
+    React.LabelHTMLAttributes<HTMLLabelElement>,
     VariantProps<typeof checkboxLabelVariants> {}
 
 export interface CheckboxDescriptionProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof checkboxDescriptionVariants> {}
 
 export interface CheckboxIconProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof checkboxIconVariants> {
   checked?: boolean | 'indeterminate';
 }
 
 // Form field props
 export interface CheckboxFieldProps
-  extends Omit<CheckboxProps, 'error'>,
+  extends
+    Omit<CheckboxProps, 'error'>,
     Omit<VariantProps<typeof checkboxFieldVariants>, 'error'> {
   label?: React.ReactNode;
   helperText?: React.ReactNode;
@@ -101,7 +107,8 @@ export interface FilterCheckboxItemProps {
 }
 
 export interface FilterCheckboxGroupProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>,
     VariantProps<typeof filterCheckboxGroupVariants> {
   title?: React.ReactNode;
   items: FilterCheckboxItemProps[];
@@ -117,7 +124,8 @@ export interface FilterCheckboxGroupProps
 
 // Animated checkbox props
 export interface AnimatedCheckboxProps
-  extends Omit<CheckboxProps, 'loading'>,
+  extends
+    Omit<CheckboxProps, 'loading'>,
     VariantProps<typeof animatedCheckboxVariants> {
   animationDuration?: number;
   loading?: boolean;
@@ -125,7 +133,8 @@ export interface AnimatedCheckboxProps
 
 // Search checkbox props
 export interface SearchCheckboxProps
-  extends Omit<CheckboxProps, 'disabled'>,
+  extends
+    Omit<CheckboxProps, 'disabled'>,
     VariantProps<typeof searchCheckboxVariants> {
   searchTerm?: string;
   highlightMatch?: boolean;

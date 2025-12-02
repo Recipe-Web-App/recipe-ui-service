@@ -14,7 +14,8 @@ import {
  * Avatar root component props interface
  */
 export interface AvatarProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarVariants> {}
 
 /**
@@ -34,8 +35,7 @@ Avatar.displayName = 'Avatar';
 /**
  * Avatar image component props interface
  */
-export interface AvatarImageProps
-  extends React.ImgHTMLAttributes<HTMLImageElement> {
+export interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   fallback?: React.ReactNode;
 }
 
@@ -81,7 +81,8 @@ AvatarImage.displayName = 'AvatarImage';
  * Avatar fallback component props interface
  */
 export interface AvatarFallbackProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarFallbackVariants> {}
 
 /**
@@ -104,7 +105,8 @@ AvatarFallback.displayName = 'AvatarFallback';
  * Avatar status indicator component props interface
  */
 export interface AvatarStatusProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarStatusVariants> {
   'aria-label'?: string;
 }
@@ -129,7 +131,8 @@ AvatarStatus.displayName = 'AvatarStatus';
  * Avatar group component props interface
  */
 export interface AvatarGroupProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarGroupVariants> {
   children: React.ReactNode;
   showCount?: boolean;
@@ -276,7 +279,8 @@ UserAvatar.displayName = 'UserAvatar';
  * Recipe author component props interface
  */
 export interface RecipeAuthorProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof recipeAuthorVariants> {
   author: {
     id: string;

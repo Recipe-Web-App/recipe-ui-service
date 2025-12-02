@@ -367,7 +367,7 @@ export const processNavigationWithContext = (
     // Determine if item is active
     const isActive = Boolean(
       item.href === context.currentPath ||
-        (item.href && context.currentPath.startsWith(item.href + '/'))
+      (item.href && context.currentPath.startsWith(item.href + '/'))
     );
 
     // Process children

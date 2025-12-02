@@ -16,7 +16,8 @@ import {
  * Toast component props interface
  */
 export interface ToastProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof toastVariants> {
   // Toast content
   title?: string;

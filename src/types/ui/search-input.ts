@@ -75,7 +75,8 @@ export interface SearchEventHandlers {
  * SearchInput component props interface
  */
 export interface SearchInputProps
-  extends Omit<
+  extends
+    Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
       'size' | 'onChange' | 'onFocus' | 'onBlur' | 'onSubmit'
     >,

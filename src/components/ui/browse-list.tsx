@@ -283,15 +283,14 @@ export const BrowseList = React.forwardRef(BrowseListInner) as <T>(
 /**
  * Simplified BrowseList for basic use cases without pagination
  */
-export interface SimpleBrowseListProps<T>
-  extends Omit<
-    BrowseListProps<T>,
-    | 'currentPage'
-    | 'totalPages'
-    | 'onPageChange'
-    | 'showPagination'
-    | 'paginationProps'
-  > {
+export interface SimpleBrowseListProps<T> extends Omit<
+  BrowseListProps<T>,
+  | 'currentPage'
+  | 'totalPages'
+  | 'onPageChange'
+  | 'showPagination'
+  | 'paginationProps'
+> {
   showPagination?: false;
 }
 

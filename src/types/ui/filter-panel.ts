@@ -167,8 +167,9 @@ export interface FilterValues {
 /**
  * Filter panel variant props
  */
-export interface FilterPanelVariantProps
-  extends VariantProps<typeof filterPanelVariants> {
+export interface FilterPanelVariantProps extends VariantProps<
+  typeof filterPanelVariants
+> {
   variant?: 'default' | 'compact' | 'full';
   size?: 'sm' | 'md' | 'lg';
   position?: 'sidebar' | 'drawer' | 'modal';
@@ -178,7 +179,8 @@ export interface FilterPanelVariantProps
  * Filter panel component props
  */
 export interface FilterPanelProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     FilterPanelVariantProps {
   // Filter Configuration
   /** Array of filter configurations */

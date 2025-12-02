@@ -95,8 +95,10 @@ export interface RetryAnalyticsEvent {
  *
  * Extends ButtonProps but removes conflicting props that are managed internally
  */
-export interface RetryButtonProps
-  extends Omit<ButtonProps, 'loading' | 'disabled' | 'onClick'> {
+export interface RetryButtonProps extends Omit<
+  ButtonProps,
+  'loading' | 'disabled' | 'onClick'
+> {
   // ========== Core Retry Props ==========
   /** Callback to execute on retry */
   onRetry: () => void | Promise<void>;

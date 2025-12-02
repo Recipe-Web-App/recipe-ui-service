@@ -18,8 +18,10 @@ import {
  * A specialized version of BrowseGridProps that works specifically with collections,
  * providing type-safe collection actions and CollectionCard configuration.
  */
-export interface CollectionBrowseGridProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface CollectionBrowseGridProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   // Data
   /** Array of collections to display in the grid */
   collections: CollectionCardCollection[];

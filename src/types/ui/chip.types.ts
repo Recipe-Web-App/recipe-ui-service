@@ -6,7 +6,8 @@ import type { chipVariants } from '@/lib/ui/chip-variants';
  * Base props for Chip component
  */
 export interface ChipProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick' | 'color'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick' | 'color'>,
     VariantProps<typeof chipVariants> {
   /**
    * The content to display in the chip

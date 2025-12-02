@@ -45,7 +45,8 @@ export interface CommandGroup {
  * Main CommandPalette component props
  */
 export interface CommandPaletteProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof commandPaletteVariants>,
     VariantProps<typeof commandPaletteContentVariants> {
   /** Whether the command palette is open */
@@ -92,8 +93,7 @@ export interface CommandPaletteProps
 /**
  * CommandGroup component props
  */
-export interface CommandGroupProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CommandGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Group data */
   group: CommandGroup;
   /** Whether to show the group label */
@@ -115,8 +115,10 @@ export interface CommandGroupProps
 /**
  * CommandItem component props
  */
-export interface CommandItemProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
+export interface CommandItemProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onSelect'
+> {
   /** Command data */
   command: Command;
   /** Whether this item is highlighted/focused */
@@ -140,8 +142,7 @@ export interface CommandItemProps
 /**
  * CommandEmpty component props
  */
-export interface CommandEmptyProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CommandEmptyProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Custom empty state message */
   message?: string;
   /** Custom icon for empty state */
@@ -153,8 +154,7 @@ export interface CommandEmptyProps
 /**
  * CommandSeparator component props
  */
-export interface CommandSeparatorProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CommandSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Custom className */
   className?: string;
 }

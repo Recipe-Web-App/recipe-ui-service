@@ -22,8 +22,9 @@ export type AvatarGroupLayout = 'stacked' | 'grid' | 'inline';
 /**
  * Avatar group base props
  */
-export interface AvatarGroupBaseProps
-  extends VariantProps<typeof avatarGroupVariants> {
+export interface AvatarGroupBaseProps extends VariantProps<
+  typeof avatarGroupVariants
+> {
   /**
    * Array of users to display
    */
@@ -89,7 +90,8 @@ export interface AvatarGroupBaseProps
  * Props for avatar group component
  */
 export interface AvatarGroupProps
-  extends AvatarGroupBaseProps,
+  extends
+    AvatarGroupBaseProps,
     Omit<React.HTMLAttributes<HTMLDivElement>, keyof AvatarGroupBaseProps> {}
 
 /**

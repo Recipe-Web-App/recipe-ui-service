@@ -12,7 +12,8 @@ import { type PaginationProps } from '@/components/ui/pagination';
  * @template T - The type of items to display in the list
  */
 export interface BrowseListProps<T>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
     VariantProps<typeof browseListVariants> {
   // Data
   /** Array of items to display in the list */

@@ -118,7 +118,8 @@ export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
  * Drawer overlay component props
  */
 export interface DrawerOverlayProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof drawerOverlayVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -128,7 +129,8 @@ export interface DrawerOverlayProps
  * Drawer content component props
  */
 export interface DrawerContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof drawerContentVariants> {
   /** Whether to show the close button */
   showClose?: boolean;
@@ -140,7 +142,8 @@ export interface DrawerContentProps
  * Drawer header component props
  */
 export interface DrawerHeaderProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof drawerHeaderVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -150,7 +153,8 @@ export interface DrawerHeaderProps
  * Drawer body component props
  */
 export interface DrawerBodyProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof drawerBodyVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -160,7 +164,8 @@ export interface DrawerBodyProps
  * Drawer footer component props
  */
 export interface DrawerFooterProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof drawerFooterVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -170,7 +175,8 @@ export interface DrawerFooterProps
  * Drawer close button component props
  */
 export interface DrawerCloseProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof drawerCloseVariants> {
   /** Custom close icon */
   icon?: React.ReactNode;
@@ -181,8 +187,7 @@ export interface DrawerCloseProps
 /**
  * Drawer title component props
  */
-export interface DrawerTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface DrawerTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   /** Title level (h1-h6) */
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   /** Additional CSS classes */
@@ -192,8 +197,7 @@ export interface DrawerTitleProps
 /**
  * Drawer description component props
  */
-export interface DrawerDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
+export interface DrawerDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {
   /** Additional CSS classes */
   className?: string;
 }
@@ -202,8 +206,7 @@ export interface DrawerDescriptionProps
  * Navigation drawer component props
  */
 export interface NavigationDrawerProps
-  extends DrawerProps,
-    VariantProps<typeof navigationDrawerVariants> {
+  extends DrawerProps, VariantProps<typeof navigationDrawerVariants> {
   /** Navigation items to display */
   items: NavigationItem[];
   /** Current active item ID */
@@ -234,7 +237,8 @@ export interface NavigationDrawerProps
  * Navigation item component props
  */
 export interface NavigationItemComponentProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onClick'>,
     VariantProps<typeof navigationItemVariants> {
   /** Navigation item data */
   item: NavigationItem;
@@ -250,8 +254,7 @@ export interface NavigationItemComponentProps
  * Recipe drawer component props
  */
 export interface RecipeDrawerProps
-  extends DrawerProps,
-    VariantProps<typeof recipeDrawerVariants> {
+  extends DrawerProps, VariantProps<typeof recipeDrawerVariants> {
   /** Recipe ID */
   recipeId?: string;
   /** Recipe title */

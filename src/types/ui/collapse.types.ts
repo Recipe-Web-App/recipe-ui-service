@@ -9,7 +9,8 @@ import type {
  * Base collapse component props interface
  */
 export interface CollapseProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof collapseVariants> {
   /**
    * Whether the collapse is open by default
@@ -48,8 +49,7 @@ export interface CollapseProps
 /**
  * Collapse trigger component props interface
  */
-export interface CollapseTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface CollapseTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Visual variant of the trigger
    */
@@ -87,7 +87,8 @@ export interface CollapseTriggerProps
  * Collapse content component props interface
  */
 export interface CollapseContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof collapseContentVariants> {
   /**
    * Whether to force mount the content (for SEO or animations)
@@ -120,8 +121,7 @@ export interface CollapseContentProps
  * Recipe-specific collapse props interface
  */
 export interface RecipeCollapseProps
-  extends CollapseProps,
-    VariantProps<typeof recipeSectionCollapseVariants> {
+  extends CollapseProps, VariantProps<typeof recipeSectionCollapseVariants> {
   /**
    * Recipe-specific context for automatic styling
    */
@@ -239,8 +239,7 @@ export interface IngredientNotesCollapseProps extends CollapseProps {
 /**
  * Collapse group props for managing multiple related collapses
  */
-export interface CollapseGroupProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface CollapseGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Whether multiple collapses can be open at once
    * @default true

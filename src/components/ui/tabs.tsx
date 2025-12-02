@@ -17,8 +17,9 @@ import {
 /**
  * Props for the Tabs root component
  */
-export interface TabsProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
+export interface TabsProps extends React.ComponentPropsWithoutRef<
+  typeof TabsPrimitive.Root
+> {
   /** Additional CSS classes */
   className?: string;
 }
@@ -46,7 +47,8 @@ Tabs.displayName = TabsPrimitive.Root.displayName;
  * Props for the TabsList component
  */
 export interface TabsListProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>,
     VariantProps<typeof tabsListVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -75,7 +77,8 @@ TabsList.displayName = TabsPrimitive.List.displayName;
  * Props for the TabsTrigger component
  */
 export interface TabsTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>,
     VariantProps<typeof tabsTriggerVariants> {
   /** Additional CSS classes */
   className?: string;
@@ -104,7 +107,8 @@ TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
  * Props for the TabsContent component
  */
 export interface TabsContentProps
-  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>,
     VariantProps<typeof tabsContentVariants> {
   /** Additional CSS classes */
   className?: string;

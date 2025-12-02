@@ -88,7 +88,8 @@ export interface CopyOptions {
  * Base CopyButton component props
  */
 export interface CopyButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'content'>,
+  extends
+    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'content'>,
     Omit<VariantProps<typeof copyButtonVariants>, 'animation'>,
     CopyCallbacks,
     CopyAccessibility,
@@ -216,8 +217,10 @@ export interface UseCopyButtonReturn {
 /**
  * Recipe-specific copy button variants
  */
-export interface RecipeCopyButtonProps
-  extends Omit<CopyButtonProps, 'content' | 'recipeData' | 'recipe'> {
+export interface RecipeCopyButtonProps extends Omit<
+  CopyButtonProps,
+  'content' | 'recipeData' | 'recipe'
+> {
   recipe: {
     id: string;
     title: string;

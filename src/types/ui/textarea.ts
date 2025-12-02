@@ -9,7 +9,8 @@ import {
  * Base textarea component props interface
  */
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  extends
+    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaVariants> {
   label?: string;
   helperText?: string;
@@ -26,7 +27,8 @@ export interface TextareaProps
  * Recipe textarea component props interface
  */
 export interface RecipeTextareaProps
-  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>,
+  extends
+    Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'>,
     VariantProps<typeof recipeTextareaVariants> {
   label?: string;
   helperText?: string;
