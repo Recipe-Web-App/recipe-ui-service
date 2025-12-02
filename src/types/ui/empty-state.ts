@@ -12,7 +12,8 @@ import {
  * EmptyState component props interface
  */
 export interface EmptyStateProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof emptyStateVariants> {
   asChild?: boolean;
 }
@@ -21,7 +22,8 @@ export interface EmptyStateProps
  * EmptyState Icon component props interface
  */
 export interface EmptyStateIconProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof emptyStateIconVariants> {
   asChild?: boolean;
 }
@@ -30,7 +32,8 @@ export interface EmptyStateIconProps
  * EmptyState Title component props interface
  */
 export interface EmptyStateTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement>,
+  extends
+    React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof emptyStateTitleVariants> {
   asChild?: boolean;
 }
@@ -39,7 +42,8 @@ export interface EmptyStateTitleProps
  * EmptyState Description component props interface
  */
 export interface EmptyStateDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement>,
+  extends
+    React.HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof emptyStateDescriptionVariants> {
   asChild?: boolean;
 }
@@ -48,7 +52,8 @@ export interface EmptyStateDescriptionProps
  * EmptyState Actions component props interface
  */
 export interface EmptyStateActionsProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof emptyStateActionsVariants> {
   asChild?: boolean;
 }

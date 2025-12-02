@@ -10,7 +10,8 @@ import { type ViewMode } from '@/stores/ui/view-preference-store';
  * Can be used in controlled or uncontrolled mode.
  */
 export interface ViewToggleProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     VariantProps<typeof viewToggleVariants> {
   /**
    * Controlled value for the view mode
@@ -51,8 +52,7 @@ export interface ViewToggleProps
 /**
  * Props for individual toggle buttons
  */
-export interface ViewToggleButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ViewToggleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Whether this button is active */
   active?: boolean;
   /** Button size variant */

@@ -15,42 +15,48 @@ import {
  * Table component props interface
  */
 export interface TableProps
-  extends React.TableHTMLAttributes<HTMLTableElement>,
+  extends
+    React.TableHTMLAttributes<HTMLTableElement>,
     VariantProps<typeof tableVariants> {}
 
 /**
  * Table Header component props interface
  */
 export interface TableHeaderProps
-  extends React.HTMLAttributes<HTMLTableSectionElement>,
+  extends
+    React.HTMLAttributes<HTMLTableSectionElement>,
     VariantProps<typeof tableHeaderVariants> {}
 
 /**
  * Table Body component props interface
  */
 export interface TableBodyProps
-  extends React.HTMLAttributes<HTMLTableSectionElement>,
+  extends
+    React.HTMLAttributes<HTMLTableSectionElement>,
     VariantProps<typeof tableBodyVariants> {}
 
 /**
  * Table Footer component props interface
  */
 export interface TableFooterProps
-  extends React.HTMLAttributes<HTMLTableSectionElement>,
+  extends
+    React.HTMLAttributes<HTMLTableSectionElement>,
     VariantProps<typeof tableFooterVariants> {}
 
 /**
  * Table Row component props interface
  */
 export interface TableRowProps
-  extends React.HTMLAttributes<HTMLTableRowElement>,
+  extends
+    React.HTMLAttributes<HTMLTableRowElement>,
     VariantProps<typeof tableRowVariants> {}
 
 /**
  * Table Head component props interface
  */
 export interface TableHeadProps
-  extends Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'align'>,
+  extends
+    Omit<React.ThHTMLAttributes<HTMLTableCellElement>, 'align'>,
     VariantProps<typeof tableHeadVariants> {
   align?: 'left' | 'center' | 'right';
 }
@@ -59,7 +65,8 @@ export interface TableHeadProps
  * Table Cell component props interface
  */
 export interface TableCellProps
-  extends Omit<React.TdHTMLAttributes<HTMLTableCellElement>, 'align'>,
+  extends
+    Omit<React.TdHTMLAttributes<HTMLTableCellElement>, 'align'>,
     VariantProps<typeof tableCellVariants> {
   align?: 'left' | 'center' | 'right';
 }
@@ -68,7 +75,8 @@ export interface TableCellProps
  * Table Caption component props interface
  */
 export interface TableCaptionProps
-  extends React.HTMLAttributes<HTMLTableCaptionElement>,
+  extends
+    React.HTMLAttributes<HTMLTableCaptionElement>,
     VariantProps<typeof tableCaptionVariants> {}
 
 /**
@@ -110,8 +118,10 @@ export interface Ingredient {
 /**
  * Ingredients Table component props interface
  */
-export interface IngredientsTableProps
-  extends Omit<RecipeTableProps, 'columns' | 'data'> {
+export interface IngredientsTableProps extends Omit<
+  RecipeTableProps,
+  'columns' | 'data'
+> {
   ingredients: Ingredient[];
   showCategory?: boolean;
   showNotes?: boolean;
@@ -133,8 +143,10 @@ export interface NutritionItem {
 /**
  * Nutrition Table component props interface
  */
-export interface NutritionTableProps
-  extends Omit<RecipeTableProps, 'columns' | 'data'> {
+export interface NutritionTableProps extends Omit<
+  RecipeTableProps,
+  'columns' | 'data'
+> {
   nutrition: NutritionItem[];
   showDailyValue?: boolean;
   showCategory?: boolean;

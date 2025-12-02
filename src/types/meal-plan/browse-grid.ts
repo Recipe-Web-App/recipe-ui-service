@@ -15,8 +15,10 @@ import {
  * A specialized version of BrowseGridProps that works specifically with meal plans,
  * providing type-safe meal plan actions and MealPlanCard configuration.
  */
-export interface MealPlanBrowseGridProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface MealPlanBrowseGridProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   // Data
   /** Array of meal plans to display in the grid */
   mealPlans: MealPlanCardMealPlan[];

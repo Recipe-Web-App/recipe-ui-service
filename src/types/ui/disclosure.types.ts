@@ -5,7 +5,8 @@ import type { disclosureVariants } from '@/lib/ui/disclosure-variants';
  * Base disclosure component props interface
  */
 export interface DisclosureProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof disclosureVariants> {
   /**
    * Whether the disclosure is open by default
@@ -35,8 +36,7 @@ export interface DisclosureProps
 /**
  * Disclosure trigger (button) component props interface
  */
-export interface DisclosureTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DisclosureTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Icon to display in the trigger
    */
@@ -65,8 +65,7 @@ export interface DisclosureTriggerProps
 /**
  * Disclosure content panel component props interface
  */
-export interface DisclosureContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface DisclosureContentProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Whether to force mount the content (for SEO or animations)
    * @default false
@@ -178,8 +177,7 @@ export interface IngredientNotesDisclosureProps extends DisclosureProps {
 /**
  * Disclosure group props for managing multiple related disclosures
  */
-export interface DisclosureGroupProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface DisclosureGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Spacing between disclosure items
    * @default 'normal'

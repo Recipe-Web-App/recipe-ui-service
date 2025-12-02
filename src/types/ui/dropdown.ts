@@ -11,7 +11,8 @@ import {
  * Dropdown Menu trigger component props interface
  */
 export interface DropdownMenuTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>,
     VariantProps<typeof dropdownTriggerVariants> {
   asChild?: boolean;
 }
@@ -20,12 +21,14 @@ export interface DropdownMenuTriggerProps
  * Dropdown Menu content component props interface
  */
 export interface DropdownMenuContentProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>,
     VariantProps<typeof dropdownContentVariants> {}
 
 /**
  * Dropdown Menu item component props interface
  */
 export interface DropdownMenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>,
     VariantProps<typeof dropdownItemVariants> {}

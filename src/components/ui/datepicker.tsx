@@ -119,8 +119,9 @@ const getCalendarDays = (date: Date): Date[] => {
 /**
  * Base DatePicker component props interface
  */
-export interface DatePickerProps
-  extends VariantProps<typeof datepickerVariants> {
+export interface DatePickerProps extends VariantProps<
+  typeof datepickerVariants
+> {
   // Core date functionality
   value?: Date;
   defaultValue?: Date;
@@ -537,8 +538,9 @@ const formatTime = (date: Date, format: '12h' | '24h' = '12h'): string => {
 /**
  * TimePicker component props interface
  */
-export interface TimePickerProps
-  extends VariantProps<typeof datepickerVariants> {
+export interface TimePickerProps extends VariantProps<
+  typeof datepickerVariants
+> {
   // Core time functionality
   value?: Date;
   defaultValue?: Date;
@@ -798,8 +800,9 @@ TimePicker.displayName = 'TimePicker';
 /**
  * DateTimePicker component props interface
  */
-export interface DateTimePickerProps
-  extends VariantProps<typeof datepickerVariants> {
+export interface DateTimePickerProps extends VariantProps<
+  typeof datepickerVariants
+> {
   // Core date/time functionality
   value?: Date;
   defaultValue?: Date;
@@ -1349,8 +1352,9 @@ const isDateRangeEnd = (date: Date, endDate: Date | null): boolean => {
 /**
  * DateRangePicker component props interface
  */
-export interface DateRangePickerProps
-  extends VariantProps<typeof datepickerVariants> {
+export interface DateRangePickerProps extends VariantProps<
+  typeof datepickerVariants
+> {
   // Core date range functionality
   value?: [Date, Date] | null;
   defaultValue?: [Date, Date] | null;
@@ -1836,8 +1840,10 @@ DateRangePicker.displayName = 'DateRangePicker';
 /**
  * Meal Plan Date Picker - for selecting meal planning dates
  */
-export interface MealPlanDatePickerProps
-  extends Omit<DatePickerProps, 'presetOptions' | 'disabledDaysOfWeek'> {
+export interface MealPlanDatePickerProps extends Omit<
+  DatePickerProps,
+  'presetOptions' | 'disabledDaysOfWeek'
+> {
   mealType?: 'breakfast' | 'lunch' | 'dinner' | 'snack';
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   showWeekNumbers?: boolean;
@@ -1910,8 +1916,10 @@ MealPlanDatePicker.displayName = 'MealPlanDatePicker';
 /**
  * Recipe Schedule Picker - for scheduling cooking times
  */
-export interface RecipeSchedulePickerProps
-  extends Omit<DateTimePickerProps, 'presetOptions'> {
+export interface RecipeSchedulePickerProps extends Omit<
+  DateTimePickerProps,
+  'presetOptions'
+> {
   cookingDuration?: number;
   preparationTime?: number;
   showDurationWarning?: boolean;
@@ -1979,8 +1987,10 @@ RecipeSchedulePicker.displayName = 'RecipeSchedulePicker';
 /**
  * Expiration Date Picker - for tracking food expiration
  */
-export interface ExpirationDatePickerProps
-  extends Omit<DatePickerProps, 'presetOptions' | 'minDate'> {
+export interface ExpirationDatePickerProps extends Omit<
+  DatePickerProps,
+  'presetOptions' | 'minDate'
+> {
   foodType?: 'produce' | 'dairy' | 'meat' | 'pantry' | 'leftovers';
   showExpirationWarning?: boolean;
   warningDays?: number;

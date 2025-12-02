@@ -24,7 +24,8 @@ export interface BrowseGridColumns {
  * @template T - The type of items to display in the grid
  */
 export interface BrowseGridProps<T>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
     VariantProps<typeof browseGridVariants> {
   // Data
   /** Array of items to display in the grid */

@@ -269,8 +269,10 @@ export function AddReviewForm(props: AddReviewFormProps) {
 /**
  * Convenience component for editing reviews
  */
-export interface EditReviewFormProps
-  extends Omit<ReviewFormProps, 'mode' | 'reviewId' | 'initialData'> {
+export interface EditReviewFormProps extends Omit<
+  ReviewFormProps,
+  'mode' | 'reviewId' | 'initialData'
+> {
   reviewId: number;
   initialData: ReviewDto;
 }

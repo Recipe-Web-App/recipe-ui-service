@@ -104,8 +104,10 @@ export interface ServiceErrorBoundaryConfig {
 /**
  * Service error boundary props
  */
-export interface ServiceErrorBoundaryProps
-  extends Omit<BaseErrorBoundaryProps, 'variant'> {
+export interface ServiceErrorBoundaryProps extends Omit<
+  BaseErrorBoundaryProps,
+  'variant'
+> {
   config: ServiceErrorBoundaryConfig;
   variant?: 'inline' | 'card' | 'page';
   showServiceStatus?: boolean;

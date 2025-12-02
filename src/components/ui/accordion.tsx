@@ -18,7 +18,8 @@ import {
  * Accordion root component props interface
  */
 export interface AccordionProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof accordionVariants> {
   type?: 'single' | 'multiple';
   collapsible?: boolean;
@@ -117,8 +118,7 @@ Accordion.displayName = 'Accordion';
 /**
  * Accordion item component props interface
  */
-export interface AccordionItemProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
   disabled?: boolean;
 }
@@ -178,8 +178,7 @@ AccordionItem.displayName = 'AccordionItem';
 /**
  * Accordion trigger component props interface
  */
-export interface AccordionTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value?: string;
   disabled?: boolean;
   isOpen?: boolean;
@@ -268,8 +267,7 @@ AccordionTrigger.displayName = 'AccordionTrigger';
 /**
  * Accordion content component props interface
  */
-export interface AccordionContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface AccordionContentProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
   isOpen?: boolean;
 }
@@ -312,8 +310,7 @@ AccordionContent.displayName = 'AccordionContent';
 /**
  * Recipe section accordion props interface
  */
-export interface RecipeSectionProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface RecipeSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
   title: string;
   section:
@@ -453,8 +450,7 @@ RecipeSection.displayName = 'RecipeSection';
 /**
  * Recipe ingredients list props interface
  */
-export interface RecipeIngredientsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface RecipeIngredientsProps extends React.HTMLAttributes<HTMLDivElement> {
   ingredients: Array<{
     id: string;
     name: string;
@@ -587,8 +583,7 @@ RecipeIngredients.displayName = 'RecipeIngredients';
 /**
  * Recipe instructions list props interface
  */
-export interface RecipeInstructionsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface RecipeInstructionsProps extends React.HTMLAttributes<HTMLDivElement> {
   instructions: Array<{
     id: string;
     step: number;

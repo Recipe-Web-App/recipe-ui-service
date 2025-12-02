@@ -43,8 +43,10 @@ export interface RecipeQuickActionHandlers {
 /**
  * Props for RecipeQuickActions component
  */
-export interface RecipeQuickActionsProps
-  extends Omit<QuickActionsProps, 'actions'> {
+export interface RecipeQuickActionsProps extends Omit<
+  QuickActionsProps,
+  'actions'
+> {
   /**
    * The recipe data to display actions for
    */

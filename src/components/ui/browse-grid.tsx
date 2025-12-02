@@ -284,15 +284,14 @@ export const BrowseGrid = React.forwardRef(BrowseGridInner) as <T>(
 /**
  * Simplified BrowseGrid for basic use cases without pagination
  */
-export interface SimpleBrowseGridProps<T>
-  extends Omit<
-    BrowseGridProps<T>,
-    | 'currentPage'
-    | 'totalPages'
-    | 'onPageChange'
-    | 'showPagination'
-    | 'paginationProps'
-  > {
+export interface SimpleBrowseGridProps<T> extends Omit<
+  BrowseGridProps<T>,
+  | 'currentPage'
+  | 'totalPages'
+  | 'onPageChange'
+  | 'showPagination'
+  | 'paginationProps'
+> {
   showPagination?: false;
 }
 

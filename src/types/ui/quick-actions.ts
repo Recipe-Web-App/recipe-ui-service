@@ -40,8 +40,9 @@ export interface QuickAction {
 /**
  * Quick actions variant props
  */
-export interface QuickActionsVariantProps
-  extends VariantProps<typeof quickActionsVariants> {
+export interface QuickActionsVariantProps extends VariantProps<
+  typeof quickActionsVariants
+> {
   /** Size variant */
   size?: 'sm' | 'md' | 'lg';
   /** Position of the overlay */
@@ -52,7 +53,8 @@ export interface QuickActionsVariantProps
  * Quick actions component props
  */
 export interface QuickActionsProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
     QuickActionsVariantProps {
   // Core Configuration
   /** Array of quick action configurations */

@@ -23,8 +23,9 @@ import {
 /**
  * Pagination component props
  */
-export interface PaginationProps
-  extends VariantProps<typeof paginationVariants> {
+export interface PaginationProps extends VariantProps<
+  typeof paginationVariants
+> {
   // Core pagination state
   currentPage: number;
   totalPages: number;

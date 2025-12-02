@@ -28,7 +28,8 @@ const PopoverAnchor = PopoverPrimitive.Anchor;
  * Popover trigger component props interface
  */
 export interface PopoverTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>,
+  extends
+    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>,
     VariantProps<typeof popoverTriggerVariants> {
   asChild?: boolean;
 }
@@ -84,7 +85,8 @@ PopoverClose.displayName = PopoverPrimitive.Close.displayName;
  * Popover content component props interface
  */
 export interface PopoverContentProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>,
     VariantProps<typeof popoverContentVariants> {
   showArrow?: boolean;
   showClose?: boolean;
@@ -137,8 +139,10 @@ PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 /**
  * Simple popover wrapper component props interface
  */
-export interface SimplePopoverProps
-  extends Omit<PopoverContentProps, 'children' | 'content'> {
+export interface SimplePopoverProps extends Omit<
+  PopoverContentProps,
+  'children' | 'content'
+> {
   content: React.ReactNode;
   children: React.ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
@@ -201,8 +205,10 @@ SimplePopover.displayName = 'SimplePopover';
 /**
  * Menu popover component props interface
  */
-export interface MenuPopoverProps
-  extends Omit<SimplePopoverProps, 'content' | 'children'> {
+export interface MenuPopoverProps extends Omit<
+  SimplePopoverProps,
+  'content' | 'children'
+> {
   items: Array<
     | {
         label: string;
@@ -283,8 +289,10 @@ MenuPopover.displayName = 'MenuPopover';
 /**
  * Form popover component props interface
  */
-export interface FormPopoverProps
-  extends Omit<SimplePopoverProps, 'content' | 'children'> {
+export interface FormPopoverProps extends Omit<
+  SimplePopoverProps,
+  'content' | 'children'
+> {
   title?: string;
   description?: string;
   children: React.ReactNode;
@@ -381,8 +389,10 @@ FormPopover.displayName = 'FormPopover';
 /**
  * Confirm popover component props interface
  */
-export interface ConfirmPopoverProps
-  extends Omit<SimplePopoverProps, 'content' | 'children'> {
+export interface ConfirmPopoverProps extends Omit<
+  SimplePopoverProps,
+  'content' | 'children'
+> {
   title?: string;
   description: string;
   confirmLabel?: string;

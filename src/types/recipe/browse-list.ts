@@ -13,8 +13,10 @@ import {
  *
  * This component provides a compact, scannable list view alternative to the grid view.
  */
-export interface RecipeBrowseListProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface RecipeBrowseListProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   // Data
   /** Array of recipes to display in the list */
   recipes: RecipeListItemRecipe[];
@@ -149,15 +151,14 @@ export interface RecipeBrowseListActions {
  *
  * Useful for smaller lists where pagination is not needed
  */
-export interface SimpleRecipeBrowseListProps
-  extends Omit<
-    RecipeBrowseListProps,
-    | 'currentPage'
-    | 'totalPages'
-    | 'onPageChange'
-    | 'showPagination'
-    | 'paginationProps'
-  > {
+export interface SimpleRecipeBrowseListProps extends Omit<
+  RecipeBrowseListProps,
+  | 'currentPage'
+  | 'totalPages'
+  | 'onPageChange'
+  | 'showPagination'
+  | 'paginationProps'
+> {
   showPagination?: false;
 }
 

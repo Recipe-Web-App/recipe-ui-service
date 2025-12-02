@@ -29,7 +29,8 @@ export interface FileUploadError {
  * Base props for FileUpload component
  */
 export interface FileUploadProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onDrop'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onDrop'>,
     VariantProps<typeof fileUploadVariants> {
   /**
    * Accepted file types (e.g., "image/*", ".pdf,.doc")
@@ -135,8 +136,10 @@ export interface FileUploadProps
 /**
  * Props for FileUploadDropZone component
  */
-export interface FileUploadDropZoneProps
-  extends Omit<FileUploadProps, 'files' | 'onChange' | 'onDelete'> {
+export interface FileUploadDropZoneProps extends Omit<
+  FileUploadProps,
+  'files' | 'onChange' | 'onDelete'
+> {
   /**
    * Whether the drop zone is being dragged over
    */
@@ -211,8 +214,10 @@ export interface FileUploadProgressProps {
 /**
  * Props for recipe-specific image upload
  */
-export interface RecipeImageUploadProps
-  extends Omit<FileUploadProps, 'accept' | 'maxFiles'> {
+export interface RecipeImageUploadProps extends Omit<
+  FileUploadProps,
+  'accept' | 'maxFiles'
+> {
   /**
    * Maximum number of images
    */
@@ -232,8 +237,10 @@ export interface RecipeImageUploadProps
 /**
  * Props for recipe document upload
  */
-export interface RecipeDocumentUploadProps
-  extends Omit<FileUploadProps, 'accept' | 'showPreview'> {
+export interface RecipeDocumentUploadProps extends Omit<
+  FileUploadProps,
+  'accept' | 'showPreview'
+> {
   /**
    * Allowed document types
    */

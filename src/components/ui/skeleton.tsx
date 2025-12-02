@@ -12,7 +12,8 @@ import {
  * Skeleton component props interface
  */
 export interface SkeletonProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof skeletonVariants> {
   width?: string | number;
   height?: string | number;
@@ -120,7 +121,8 @@ Skeleton.displayName = 'Skeleton';
  * Container component props
  */
 export interface SkeletonContainerProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof skeletonContainerVariants> {}
 
 /**
@@ -170,7 +172,8 @@ SkeletonContainer.displayName = 'SkeletonContainer';
  * Text skeleton props
  */
 export interface SkeletonTextProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof skeletonTextVariants> {
   lineCount?: number;
   animation?: VariantProps<typeof skeletonVariants>['animation'];
@@ -233,7 +236,8 @@ SkeletonText.displayName = 'SkeletonText';
  * Avatar skeleton props
  */
 export interface SkeletonAvatarProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof skeletonAvatarVariants> {
   animation?: VariantProps<typeof skeletonVariants>['animation'];
 }

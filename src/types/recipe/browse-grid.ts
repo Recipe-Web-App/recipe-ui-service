@@ -15,8 +15,10 @@ import { DifficultyLevel } from '@/types/recipe-management/common';
  * A specialized version of BrowseGridProps that works specifically with recipes,
  * providing type-safe recipe actions and RecipeCard configuration.
  */
-export interface RecipeBrowseGridProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface RecipeBrowseGridProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'children'
+> {
   // Data
   /** Array of recipes to display in the grid */
   recipes: RecipeCardRecipe[];

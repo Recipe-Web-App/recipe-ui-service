@@ -33,15 +33,19 @@ export interface ToastAlertProps extends Omit<BaseAlertProps, 'variant'> {
   autoClose?: boolean;
 }
 
-export interface BannerAlertProps
-  extends Omit<BaseAlertProps, 'variant' | 'dismissible'> {
+export interface BannerAlertProps extends Omit<
+  BaseAlertProps,
+  'variant' | 'dismissible'
+> {
   variant?: VariantProps<typeof bannerAlertVariants>['variant'];
   position?: VariantProps<typeof bannerAlertVariants>['position'];
   dismissible?: boolean;
 }
 
-export interface InlineAlertProps
-  extends Omit<BaseAlertProps, 'size' | 'actions'> {
+export interface InlineAlertProps extends Omit<
+  BaseAlertProps,
+  'size' | 'actions'
+> {
   variant?: VariantProps<typeof inlineAlertVariants>['variant'];
 }
 
@@ -67,7 +71,8 @@ export interface AlertContextType {
 }
 
 export interface AlertCloseProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof alertCloseVariants> {
   onClose?: () => void;
 }

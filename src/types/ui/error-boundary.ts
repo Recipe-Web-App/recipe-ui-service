@@ -58,8 +58,10 @@ export interface BaseErrorBoundaryProps {
 /**
  * Inline error boundary props for small error displays
  */
-export interface InlineErrorBoundaryProps
-  extends Omit<BaseErrorBoundaryProps, 'variant'> {
+export interface InlineErrorBoundaryProps extends Omit<
+  BaseErrorBoundaryProps,
+  'variant'
+> {
   variant?: Extract<
     VariantProps<typeof errorBoundaryVariants>['variant'],
     'inline' | 'minimal'
@@ -73,8 +75,10 @@ export interface InlineErrorBoundaryProps
 /**
  * Card error boundary props for standard error displays
  */
-export interface CardErrorBoundaryProps
-  extends Omit<BaseErrorBoundaryProps, 'variant'> {
+export interface CardErrorBoundaryProps extends Omit<
+  BaseErrorBoundaryProps,
+  'variant'
+> {
   variant?: Extract<
     VariantProps<typeof errorBoundaryVariants>['variant'],
     'card'
@@ -89,8 +93,10 @@ export interface CardErrorBoundaryProps
 /**
  * Page error boundary props for full-page error displays
  */
-export interface PageErrorBoundaryProps
-  extends Omit<BaseErrorBoundaryProps, 'variant'> {
+export interface PageErrorBoundaryProps extends Omit<
+  BaseErrorBoundaryProps,
+  'variant'
+> {
   variant?: Extract<
     VariantProps<typeof errorBoundaryVariants>['variant'],
     'page'
@@ -107,8 +113,10 @@ export interface PageErrorBoundaryProps
 /**
  * Toast error boundary props for notification-style errors
  */
-export interface ToastErrorBoundaryProps
-  extends Omit<BaseErrorBoundaryProps, 'variant'> {
+export interface ToastErrorBoundaryProps extends Omit<
+  BaseErrorBoundaryProps,
+  'variant'
+> {
   variant?: Extract<
     VariantProps<typeof errorBoundaryVariants>['variant'],
     'toast'
@@ -163,8 +171,7 @@ export interface ErrorBoundaryState {
 /**
  * Error boundary action button props
  */
-export interface ErrorBoundaryButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ErrorBoundaryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   intent?: VariantProps<typeof errorBoundaryButtonVariants>['intent'];
   size?: VariantProps<typeof errorBoundaryButtonVariants>['size'];
   variant?: VariantProps<typeof errorBoundaryButtonVariants>['variant'];
@@ -175,8 +182,7 @@ export interface ErrorBoundaryButtonProps
 /**
  * Error boundary icon props
  */
-export interface ErrorBoundaryIconProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ErrorBoundaryIconProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: VariantProps<typeof errorBoundaryIconVariants>['variant'];
   size?: VariantProps<typeof errorBoundaryIconVariants>['size'];
   children: React.ReactNode;
@@ -185,8 +191,7 @@ export interface ErrorBoundaryIconProps
 /**
  * Error boundary content props
  */
-export interface ErrorBoundaryContentProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ErrorBoundaryContentProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: VariantProps<typeof errorBoundaryContentVariants>['variant'];
   withIcon?: VariantProps<typeof errorBoundaryContentVariants>['withIcon'];
   children: React.ReactNode;
@@ -195,8 +200,7 @@ export interface ErrorBoundaryContentProps
 /**
  * Error boundary actions container props
  */
-export interface ErrorBoundaryActionsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface ErrorBoundaryActionsProps extends React.HTMLAttributes<HTMLDivElement> {
   layout?: VariantProps<typeof errorBoundaryActionVariants>['layout'];
   variant?: VariantProps<typeof errorBoundaryActionVariants>['variant'];
   children: React.ReactNode;

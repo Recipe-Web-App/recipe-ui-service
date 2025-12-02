@@ -6,7 +6,8 @@ import { fabVariants } from '@/lib/ui/floating-action-button-variants';
  * Base FAB props interface
  */
 export interface FloatingActionButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof fabVariants> {
   /**
    * Icon element to display in the FAB
@@ -97,8 +98,10 @@ export interface SpeedDialAction {
 /**
  * Speed Dial FAB props interface
  */
-export interface SpeedDialProps
-  extends Omit<FloatingActionButtonProps, 'onClick'> {
+export interface SpeedDialProps extends Omit<
+  FloatingActionButtonProps,
+  'onClick'
+> {
   /**
    * Actions to display when the speed dial is open
    */

@@ -81,7 +81,8 @@ export interface MealPlanCalendarData {
  * MealSlot component props
  */
 export interface MealSlotProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'slot'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'slot'>,
     VariantProps<typeof mealSlotVariants> {
   /** Meal slot data */
   slot: MealSlot;
@@ -221,7 +222,8 @@ export interface MealViewProps extends React.HTMLAttributes<HTMLDivElement> {
  * MealPlanCalendar main component props
  */
 export interface MealPlanCalendarProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>,
     VariantProps<typeof mealPlanCalendarVariants> {
   /** Meal plan data (controlled) */
   value: MealPlanCalendarData;

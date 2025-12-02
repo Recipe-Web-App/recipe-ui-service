@@ -22,7 +22,8 @@ export interface BaseListProps {
 
 // Main List component props
 export interface ListProps
-  extends Omit<React.HTMLAttributes<HTMLUListElement>, 'role'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLUListElement>, 'role'>,
     BaseListProps,
     VariantProps<typeof listVariants> {
   asChild?: boolean;
@@ -32,7 +33,8 @@ export interface ListProps
 
 // List Item component props
 export interface ListItemProps
-  extends Omit<React.HTMLAttributes<HTMLLIElement>, 'role'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLLIElement>, 'role'>,
     VariantProps<typeof listItemVariants> {
   asChild?: boolean;
   selected?: boolean;
@@ -47,14 +49,16 @@ export interface ListItemProps
 
 // List Item Content props
 export interface ListItemContentProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof listItemContentVariants> {
   children: React.ReactNode;
 }
 
 // List Item Title props
 export interface ListItemTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement>,
+  extends
+    React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof listItemTitleVariants> {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'span';
   children: React.ReactNode;
@@ -62,7 +66,8 @@ export interface ListItemTitleProps
 
 // List Item Description props
 export interface ListItemDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement>,
+  extends
+    React.HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof listItemDescriptionVariants> {
   as?: 'p' | 'div' | 'span';
   children: React.ReactNode;
@@ -70,7 +75,8 @@ export interface ListItemDescriptionProps
 
 // List Item Icon props
 export interface ListItemIconProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends
+    React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof listItemIconVariants> {
   icon?: React.ReactNode;
   children?: React.ReactNode;
@@ -78,8 +84,10 @@ export interface ListItemIconProps
 }
 
 // Checkbox List Item props
-export interface CheckboxListItemProps
-  extends Omit<ListItemProps, 'selected' | 'children'> {
+export interface CheckboxListItemProps extends Omit<
+  ListItemProps,
+  'selected' | 'children'
+> {
   checked?: boolean;
   indeterminate?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -92,13 +100,14 @@ export interface CheckboxListItemProps
 
 // Recipe-specific props
 export interface RecipeListProps
-  extends Omit<ListProps, 'variant'>,
-    VariantProps<typeof recipeListVariants> {
+  extends Omit<ListProps, 'variant'>, VariantProps<typeof recipeListVariants> {
   variant?: VariantProps<typeof listVariants>['variant'];
 }
 
-export interface IngredientListItemProps
-  extends Omit<ListItemProps, 'children'> {
+export interface IngredientListItemProps extends Omit<
+  ListItemProps,
+  'children'
+> {
   ingredient: {
     id: string;
     name: string;
@@ -114,8 +123,10 @@ export interface IngredientListItemProps
   children?: React.ReactNode;
 }
 
-export interface InstructionListItemProps
-  extends Omit<ListItemProps, 'children'> {
+export interface InstructionListItemProps extends Omit<
+  ListItemProps,
+  'children'
+> {
   instruction: {
     id: string;
     step: number;
@@ -131,8 +142,10 @@ export interface InstructionListItemProps
   children?: React.ReactNode;
 }
 
-export interface NutritionListItemProps
-  extends Omit<ListItemProps, 'children'> {
+export interface NutritionListItemProps extends Omit<
+  ListItemProps,
+  'children'
+> {
   nutrition: {
     id: string;
     label: string;
@@ -147,7 +160,8 @@ export interface NutritionListItemProps
 
 // Shopping list props
 export interface ShoppingListProps
-  extends Omit<ListProps, 'variant'>,
+  extends
+    Omit<ListProps, 'variant'>,
     VariantProps<typeof shoppingListVariants> {
   variant?: VariantProps<typeof listVariants>['variant'];
   items: ShoppingListItem[];
@@ -207,8 +221,10 @@ export interface MenuListItemProps extends Omit<ListItemProps, 'onSelect'> {
 }
 
 // Virtual/Performance list props
-export interface VirtualListProps
-  extends Omit<ListProps, 'children' | 'onScroll'> {
+export interface VirtualListProps extends Omit<
+  ListProps,
+  'children' | 'onScroll'
+> {
   items: unknown[];
   itemHeight: number | ((index: number) => number);
   renderItem: (item: unknown, index: number) => React.ReactNode;

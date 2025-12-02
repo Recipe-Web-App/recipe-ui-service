@@ -232,8 +232,10 @@ export function CreateIngredientForm(props: CreateIngredientFormProps) {
 /**
  * Convenience component for editing ingredients
  */
-export interface EditIngredientFormProps
-  extends Omit<IngredientFormProps, 'mode'> {
+export interface EditIngredientFormProps extends Omit<
+  IngredientFormProps,
+  'mode'
+> {
   initialData: RecipeIngredientDto;
 }
 

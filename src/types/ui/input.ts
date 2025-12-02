@@ -6,7 +6,8 @@ import { inputVariants } from '@/lib/ui/input-variants';
  * Base Input component props interface
  */
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
+  extends
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariants> {
   // Input styling
   variant?: 'default' | 'filled' | 'outlined';

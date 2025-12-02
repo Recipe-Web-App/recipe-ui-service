@@ -49,8 +49,10 @@ export interface BreadcrumbItem {
 }
 
 // Content skeleton props
-export interface ContentSkeletonProps
-  extends Omit<BaseContentProps, 'variant'> {
+export interface ContentSkeletonProps extends Omit<
+  BaseContentProps,
+  'variant'
+> {
   variant?: VariantProps<typeof contentSkeletonVariants>['variant'];
   viewMode?: VariantProps<typeof contentSkeletonVariants>['viewMode'];
   count?: number;

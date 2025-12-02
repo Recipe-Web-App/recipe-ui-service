@@ -6,7 +6,8 @@ import {
 } from '@/lib/ui/spinner-variants';
 
 export interface SpinnerProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
     VariantProps<typeof spinnerVariants> {
   /**
    * If true, renders component as child element
