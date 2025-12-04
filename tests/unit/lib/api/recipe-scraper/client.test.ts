@@ -46,7 +46,7 @@ describe('Recipe Scraper API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/recipe-scraper/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://recipe-scraper.local/api/v1/recipe-scraper',
+          baseURL: 'http://recipe-scraper.local/api/recipe-scraper',
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',
