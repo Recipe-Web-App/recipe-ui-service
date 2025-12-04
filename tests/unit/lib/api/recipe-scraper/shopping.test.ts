@@ -51,7 +51,7 @@ describe('Recipe Scraper Shopping API', () => {
       const result = await shoppingApi.getIngredientShoppingInfo(1);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/1/shopping-info'
+        '/ingredients/1/shopping-info'
       );
       expect(result).toEqual(mockResponse);
       expect(result.ingredientName).toBe('Tomatoes');
@@ -77,7 +77,7 @@ describe('Recipe Scraper Shopping API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/2/shopping-info?amount=2'
+        '/ingredients/2/shopping-info?amount=2'
       );
       expect(result.quantity.amount).toBe(2);
     });
@@ -99,7 +99,7 @@ describe('Recipe Scraper Shopping API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/3/shopping-info?measurement=L'
+        '/ingredients/3/shopping-info?measurement=L'
       );
       expect(result.quantity.measurement).toBe('L');
     });
@@ -122,7 +122,7 @@ describe('Recipe Scraper Shopping API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/4/shopping-info?amount=3&measurement=TBSP'
+        '/ingredients/4/shopping-info?amount=3&measurement=TBSP'
       );
       expect(result.quantity.amount).toBe(3);
       expect(result.quantity.measurement).toBe('TBSP');
@@ -222,9 +222,7 @@ describe('Recipe Scraper Shopping API', () => {
 
       const result = await shoppingApi.getRecipeShoppingInfo(123);
 
-      expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/123/shopping-info'
-      );
+      expect(mockClient.get).toHaveBeenCalledWith('/recipes/123/shopping-info');
       expect(result).toEqual(mockResponse);
       expect(result.recipeId).toBe(123);
       expect(result.totalEstimatedCost).toBe('$14.48');

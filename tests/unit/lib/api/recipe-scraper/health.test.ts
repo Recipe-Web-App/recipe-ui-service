@@ -292,7 +292,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       const result = await healthApi.getLegacyHealth();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/api/recipe-scraper/health');
+      expect(mockClient.get).toHaveBeenCalledWith('/health');
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('ok');
     });
@@ -303,7 +303,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
       await expect(healthApi.getLegacyHealth()).rejects.toThrow(
         'Legacy endpoint failed'
       );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/recipe-scraper/health');
+      expect(mockClient.get).toHaveBeenCalledWith('/health');
     });
   });
 });
