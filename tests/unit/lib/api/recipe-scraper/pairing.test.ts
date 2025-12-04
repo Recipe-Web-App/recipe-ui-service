@@ -63,7 +63,7 @@ describe('Recipe Scraper Pairing API', () => {
       const result = await pairingApi.getPairingSuggestions(123);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/123/pairing-suggestions'
+        '/recipes/123/pairing-suggestions'
       );
       expect(result).toEqual(mockResponse);
       expect(result.recipeId).toBe(123);
@@ -95,7 +95,7 @@ describe('Recipe Scraper Pairing API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/456/pairing-suggestions?limit=5&offset=10'
+        '/recipes/456/pairing-suggestions?limit=5&offset=10'
       );
       expect(result.limit).toBe(5);
       expect(result.offset).toBe(10);
@@ -119,7 +119,7 @@ describe('Recipe Scraper Pairing API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/789/pairing-suggestions?count_only=true'
+        '/recipes/789/pairing-suggestions?count_only=true'
       );
       expect(result.pairingSuggestions).toEqual([]);
       expect(result.count).toBe(18);
@@ -153,7 +153,7 @@ describe('Recipe Scraper Pairing API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/101/pairing-suggestions?limit=3&offset=5&count_only=false'
+        '/recipes/101/pairing-suggestions?limit=3&offset=5&count_only=false'
       );
       expect(result.pairingSuggestions).toHaveLength(2);
       expect(result.pairingSuggestions[0].recipeName).toBe('Greek Salad');

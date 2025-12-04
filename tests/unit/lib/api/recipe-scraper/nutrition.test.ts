@@ -53,7 +53,7 @@ describe('Recipe Scraper Nutrition API', () => {
       const result = await nutritionApi.getRecipeNutritionalInfo(123);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/123/nutritional-info'
+        '/recipes/123/nutritional-info'
       );
       expect(result).toEqual(mockResponse);
     });
@@ -99,7 +99,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/123/nutritional-info?include_total=true'
+        '/recipes/123/nutritional-info?include_total=true'
       );
       expect(result.total).toEqual(mockTotal);
       expect(result.total?.macroNutrients?.calories).toBe(2400);
@@ -143,7 +143,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/456/nutritional-info?include_ingredients=true'
+        '/recipes/456/nutritional-info?include_ingredients=true'
       );
       expect(result.ingredients).toBeDefined();
       expect(result.ingredients?.flour).toEqual(mockIngredientInfo);
@@ -167,7 +167,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/recipes/789/nutritional-info?include_total=true&include_ingredients=true'
+        '/recipes/789/nutritional-info?include_total=true&include_ingredients=true'
       );
       expect(result).toEqual(mockResponse);
     });
@@ -208,7 +208,7 @@ describe('Recipe Scraper Nutrition API', () => {
       const result = await nutritionApi.getIngredientNutritionalInfo(1);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/1/nutritional-info'
+        '/ingredients/1/nutritional-info'
       );
       expect(result).toEqual(mockResponse);
       expect(result.quantity.amount).toBe(100);
@@ -253,7 +253,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/2/nutritional-info?amount=2&measurement=CUP'
+        '/ingredients/2/nutritional-info?amount=2&measurement=CUP'
       );
       expect(result).toEqual(mockResponse);
       expect(result.quantity.amount).toBe(2);
@@ -279,7 +279,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/3/nutritional-info?amount=150'
+        '/ingredients/3/nutritional-info?amount=150'
       );
       expect(result.quantity.amount).toBe(150);
       expect(result.quantity.measurement).toBeUndefined();
@@ -300,7 +300,7 @@ describe('Recipe Scraper Nutrition API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/ingredients/4/nutritional-info?measurement=TBSP'
+        '/ingredients/4/nutritional-info?measurement=TBSP'
       );
       expect(result.quantity.measurement).toBe('TBSP');
     });

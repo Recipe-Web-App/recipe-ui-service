@@ -116,15 +116,13 @@ export const healthApi = {
 
   /**
    * Legacy health check endpoint for backwards compatibility (deprecated)
-   * GET /api/recipe-scraper/health
+   * GET /health
    */
   async getLegacyHealth(): Promise<{
     status: string;
   }> {
     try {
-      const response = await recipeScraperClient.get(
-        '/api/recipe-scraper/health'
-      );
+      const response = await recipeScraperClient.get('/health');
       return response.data as {
         status: string;
       };

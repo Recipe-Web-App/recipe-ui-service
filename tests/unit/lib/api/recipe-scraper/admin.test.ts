@@ -39,9 +39,7 @@ describe('Recipe Scraper Admin API', () => {
 
       const result = await adminApi.clearCache();
 
-      expect(mockClient.post).toHaveBeenCalledWith(
-        '/api/recipe-scraper/admin/clear-cache'
-      );
+      expect(mockClient.post).toHaveBeenCalledWith('/admin/clear-cache');
       expect(result).toEqual(mockResponse);
       expect(result.message).toBe('Cache cleared successfully');
       expect(result.success).toBe(true);
@@ -85,9 +83,7 @@ describe('Recipe Scraper Admin API', () => {
       await expect(adminApi.clearCache()).rejects.toThrow(
         'Unauthorized: Admin access required'
       );
-      expect(mockClient.post).toHaveBeenCalledWith(
-        '/api/recipe-scraper/admin/clear-cache'
-      );
+      expect(mockClient.post).toHaveBeenCalledWith('/admin/clear-cache');
     });
 
     it('should handle forbidden access', async () => {

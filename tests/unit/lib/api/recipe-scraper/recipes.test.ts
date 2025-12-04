@@ -86,7 +86,7 @@ describe('Recipe Scraper Recipes API', () => {
       const result = await recipesApi.createRecipe(mockRequest);
 
       expect(mockClient.post).toHaveBeenCalledWith(
-        '/api/recipe-scraper/create-recipe',
+        '/create-recipe',
         mockRequest
       );
       expect(result).toEqual(mockResponse);
@@ -140,7 +140,7 @@ describe('Recipe Scraper Recipes API', () => {
         'Invalid recipe URL'
       );
       expect(mockClient.post).toHaveBeenCalledWith(
-        '/api/recipe-scraper/create-recipe',
+        '/create-recipe',
         mockRequest
       );
     });
@@ -183,9 +183,7 @@ describe('Recipe Scraper Recipes API', () => {
 
       const result = await recipesApi.getPopularRecipes();
 
-      expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/popular-recipes'
-      );
+      expect(mockClient.get).toHaveBeenCalledWith('/popular-recipes');
       expect(result).toEqual(mockResponse);
       expect(result.recipes).toHaveLength(2);
       expect(result.recipes[0].recipeName).toBe('Spaghetti Carbonara');
@@ -211,7 +209,7 @@ describe('Recipe Scraper Recipes API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/popular-recipes?limit=20&offset=40'
+        '/popular-recipes?limit=20&offset=40'
       );
       expect(result.limit).toBe(20);
       expect(result.offset).toBe(40);
@@ -233,7 +231,7 @@ describe('Recipe Scraper Recipes API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/popular-recipes?count_only=true'
+        '/popular-recipes?count_only=true'
       );
       expect(result.recipes).toEqual([]);
       expect(result.count).toBe(1500);
@@ -261,7 +259,7 @@ describe('Recipe Scraper Recipes API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/popular-recipes?limit=5&offset=10&count_only=false'
+        '/popular-recipes?limit=5&offset=10&count_only=false'
       );
       expect(result.recipes).toHaveLength(1);
       expect(result.recipes[0].recipeName).toBe('Pizza Margherita');
@@ -294,9 +292,7 @@ describe('Recipe Scraper Recipes API', () => {
       await expect(recipesApi.getPopularRecipes()).rejects.toThrow(
         'Service unavailable'
       );
-      expect(mockClient.get).toHaveBeenCalledWith(
-        '/api/recipe-scraper/popular-recipes'
-      );
+      expect(mockClient.get).toHaveBeenCalledWith('/popular-recipes');
     });
 
     it('should handle invalid limit parameter', async () => {
