@@ -46,7 +46,7 @@ describe('services config', () => {
 
     it('should have correct recipe scraper service URL', () => {
       expect(SERVICE_URLS.RECIPE_SCRAPER).toBe(
-        'http://recipe-scraper.local/api/v1/recipe-scraper'
+        'http://recipe-scraper.local/api/recipe-scraper'
       );
     });
 
