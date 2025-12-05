@@ -123,6 +123,16 @@ describe('Users API', () => {
       expect(result.totalElements).toBe(0);
     });
 
+    it('should handle response with missing recipes property', async () => {
+      // Backend returns response without recipes property
+      mockedClient.get.mockResolvedValue({ data: {} });
+
+      const result = await usersApi.getMyRecipes();
+
+      expect(result.content).toHaveLength(0);
+      expect(result.totalElements).toBe(0);
+    });
+
     it('should return multiple recipes when user has many', async () => {
       const multipleRecipes = [
         mockRecipeDto,
