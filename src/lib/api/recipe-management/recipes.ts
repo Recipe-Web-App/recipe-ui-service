@@ -134,4 +134,23 @@ export const recipesApi = {
       throw error;
     }
   },
+
+  /**
+   * Get trending recipes
+   * GET /recipes/trending
+   */
+  async getTrendingRecipes(
+    params?: Omit<PaginationParams, 'sort'>
+  ): Promise<SearchRecipesResponse> {
+    try {
+      const queryString = params ? buildQueryParams(params) : '';
+      const response = await recipeManagementClient.get(
+        `/recipes/trending${queryString ? `?${queryString}` : ''}`
+      );
+      return response.data as SearchRecipesResponse;
+    } catch (error) {
+      handleRecipeManagementApiError(error);
+      throw error;
+    }
+  },
 };

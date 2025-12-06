@@ -22,6 +22,8 @@ const RECIPE_REVIEWS = QUERY_KEYS.RECIPE_MANAGEMENT
   .RECIPE_REVIEWS as readonly string[];
 const RECIPE_MEDIA = QUERY_KEYS.RECIPE_MANAGEMENT
   .RECIPE_MEDIA as readonly string[];
+const TRENDING_RECIPES = QUERY_KEYS.RECIPE_MANAGEMENT
+  .TRENDING_RECIPES as readonly string[];
 
 /**
  * Hook to fetch all recipes with optional pagination
@@ -80,6 +82,21 @@ export const useRecipeHistory = (recipeId: number) => {
     },
     enabled: !!recipeId,
     staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
+ * Hook to fetch trending recipes
+ * Results are pre-sorted by trending score (descending)
+ */
+export const useTrendingRecipes = (params?: Omit<PaginationParams, 'sort'>) => {
+  return useQuery({
+    queryKey: [...TRENDING_RECIPES, params],
+    queryFn: (): Promise<SearchRecipesResponse> => {
+      return recipesApi.getTrendingRecipes(params);
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
