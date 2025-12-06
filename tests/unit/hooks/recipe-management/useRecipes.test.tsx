@@ -7,6 +7,7 @@ import {
   useRecipe,
   useRecipeDescription,
   useRecipeHistory,
+  useTrendingRecipes,
   useCreateRecipe,
   useUpdateRecipe,
   useDeleteRecipe,
@@ -25,6 +26,7 @@ jest.mock('@/lib/api/recipe-management', () => ({
     getRecipeById: jest.fn(),
     getRecipeDescription: jest.fn(),
     getRecipeHistory: jest.fn(),
+    getTrendingRecipes: jest.fn(),
     createRecipe: jest.fn(),
     updateRecipe: jest.fn(),
     deleteRecipe: jest.fn(),
@@ -317,6 +319,84 @@ describe('useRecipes hooks', () => {
       mockedRecipesApi.getRecipeHistory.mockRejectedValue(error);
 
       const { result } = renderHook(() => useRecipeHistory(1), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error).toEqual(error);
+    });
+  });
+
+  describe('useTrendingRecipes', () => {
+    it('should fetch trending recipes successfully', async () => {
+      const mockResponse: SearchRecipesResponse = {
+        content: [
+          {
+            recipeId: 1,
+            title: 'Trending Recipe',
+            description: 'A trending recipe',
+            userId: 'user1',
+            servings: 4,
+            createdAt: '2024-01-01T00:00:00Z',
+            updatedAt: '2024-01-01T00:00:00Z',
+          },
+        ],
+        last: true,
+        totalElements: 1,
+        totalPages: 1,
+        first: true,
+        numberOfElements: 1,
+      };
+
+      mockedRecipesApi.getTrendingRecipes.mockResolvedValue(mockResponse);
+
+      const { result } = renderHook(() => useTrendingRecipes(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockResponse);
+      expect(mockedRecipesApi.getTrendingRecipes).toHaveBeenCalledWith(
+        undefined
+      );
+    });
+
+    it('should fetch trending recipes with pagination params', async () => {
+      const params: Omit<PaginationParams, 'sort'> = { page: 1, size: 10 };
+      const mockResponse: SearchRecipesResponse = {
+        content: [],
+        totalElements: 0,
+        totalPages: 0,
+        first: false,
+        last: true,
+        numberOfElements: 0,
+      };
+
+      mockedRecipesApi.getTrendingRecipes.mockResolvedValue(mockResponse);
+
+      const { result } = renderHook(() => useTrendingRecipes(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockResponse);
+      expect(mockedRecipesApi.getTrendingRecipes).toHaveBeenCalledWith(params);
+    });
+
+    it('should handle errors', async () => {
+      const error = new Error('Failed to fetch trending recipes');
+      mockedRecipesApi.getTrendingRecipes.mockRejectedValue(error);
+
+      const { result } = renderHook(() => useTrendingRecipes(), {
         wrapper: createWrapper(),
       });
 

@@ -249,4 +249,35 @@ describe('Recipes API', () => {
       );
     });
   });
+
+  describe('getTrendingRecipes', () => {
+    it('should get trending recipes without parameters', async () => {
+      mockedClient.get.mockResolvedValue({ data: mockSearchResponse });
+
+      const result = await recipesApi.getTrendingRecipes();
+
+      expect(mockedClient.get).toHaveBeenCalledWith('/recipes/trending');
+      expect(result).toEqual(mockSearchResponse);
+    });
+
+    it('should get trending recipes with pagination parameters', async () => {
+      mockedClient.get.mockResolvedValue({ data: mockSearchResponse });
+
+      const params = { page: 1, size: 10 };
+      await recipesApi.getTrendingRecipes(params);
+
+      expect(mockedClient.get).toHaveBeenCalledWith(
+        '/recipes/trending?page=1&size=10'
+      );
+    });
+
+    it('should handle errors', async () => {
+      const error = new Error('Network error');
+      mockedClient.get.mockRejectedValue(error);
+
+      await expect(recipesApi.getTrendingRecipes()).rejects.toThrow(
+        'Network error'
+      );
+    });
+  });
 });
