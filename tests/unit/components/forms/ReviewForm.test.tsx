@@ -9,7 +9,7 @@ import type { ReviewDto } from '@/types/recipe-management/review';
 describe('ReviewForm', () => {
   const mockReviewDto: ReviewDto = {
     reviewId: 1,
-    userId: 1,
+    userId: 'user-1',
     rating: 5,
     comment: 'Great recipe!',
     createdAt: '2023-01-01T00:00:00Z',

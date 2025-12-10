@@ -27,8 +27,8 @@ const sampleRecipe: RecipeDto = {
   difficulty: DifficultyLevel.EASY,
   createdAt: '2024-01-01T10:00:00Z',
   tags: [
-    { tagId: 1, name: 'Dessert', category: 'meal-type' },
-    { tagId: 2, name: 'Baking', category: 'method' },
+    { tagId: 1, name: 'Dessert' },
+    { tagId: 2, name: 'Baking' },
   ],
 };
 

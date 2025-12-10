@@ -167,8 +167,8 @@ describe('RecipeFilters', () => {
       difficulty: DifficultyLevel.EASY,
       createdAt: '2024-01-01',
       tags: [
-        { tagId: 1, name: 'Dessert', category: 'meal-type' },
-        { tagId: 2, name: 'Baking', category: 'method' },
+        { tagId: 1, name: 'Dessert' },
+        { tagId: 2, name: 'Baking' },
       ],
     },
     {
@@ -182,8 +182,8 @@ describe('RecipeFilters', () => {
       difficulty: DifficultyLevel.MEDIUM,
       createdAt: '2024-01-02',
       tags: [
-        { tagId: 3, name: 'Italian', category: 'cuisine' },
-        { tagId: 4, name: 'Pasta', category: 'ingredient' },
+        { tagId: 3, name: 'Italian' },
+        { tagId: 4, name: 'Pasta' },
       ],
     },
     {
@@ -197,8 +197,8 @@ describe('RecipeFilters', () => {
       difficulty: DifficultyLevel.EASY,
       createdAt: '2024-01-03',
       tags: [
-        { tagId: 5, name: 'Vegan', category: 'dietary' },
-        { tagId: 6, name: 'Healthy', category: 'attribute' },
+        { tagId: 5, name: 'Vegan' },
+        { tagId: 6, name: 'Healthy' },
       ],
     },
   ];
@@ -549,7 +549,7 @@ describe('RecipeFilters', () => {
           title: 'Recipe 1',
           servings: 4,
           createdAt: '2024-01-01',
-          tags: [{ tagId: 1, name: 'Italian', category: 'cuisine' }],
+          tags: [{ tagId: 1, name: 'Italian' }],
         },
         {
           recipeId: 2,
@@ -557,7 +557,7 @@ describe('RecipeFilters', () => {
           title: 'Recipe 2',
           servings: 2,
           createdAt: '2024-01-02',
-          tags: [{ tagId: 1, name: 'Italian', category: 'cuisine' }],
+          tags: [{ tagId: 1, name: 'Italian' }],
         },
       ];
 

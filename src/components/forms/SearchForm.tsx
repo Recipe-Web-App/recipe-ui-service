@@ -2,28 +2,15 @@ import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { FormInput, FormSelect } from './FormField';
+import { FormInput } from './FormField';
 import { useSearchForm } from '@/hooks/forms/useSearchForm';
 import type { SearchFormData } from '@/lib/validation/search-schemas';
 import type { SearchRecipesResponse } from '@/types/recipe-management/search';
-import { SearchSortBy } from '@/types/recipe-management/search';
 import { DifficultyLevel } from '@/types/recipe-management/common';
 import { cn } from '@/lib/utils';
 import type { UseFormReturn } from 'react-hook-form';
 import type { PaginationParams } from '@/lib/api/recipe-management/client';
 import { X } from 'lucide-react';
-
-/**
- * Options for sort by dropdown
- */
-const SORT_BY_OPTIONS = [
-  { value: SearchSortBy.RATING_DESC, label: 'Rating (High to Low)' },
-  { value: SearchSortBy.RATING_ASC, label: 'Rating (Low to High)' },
-  { value: SearchSortBy.DATE_DESC, label: 'Newest First' },
-  { value: SearchSortBy.DATE_ASC, label: 'Oldest First' },
-  { value: SearchSortBy.TITLE_ASC, label: 'Title (A-Z)' },
-  { value: SearchSortBy.TITLE_DESC, label: 'Title (Z-A)' },
-];
 
 /**
  * Options for difficulty levels
@@ -99,7 +86,7 @@ export function SearchForm({
   const formValues = form.watch();
   const ingredients = formValues.ingredients ?? [];
   const tags = formValues.tags ?? [];
-  const difficulty = formValues.difficulty ?? [];
+  const difficulty = formValues.difficulty;
 
   // Handle adding ingredient
   const handleAddIngredient = (e: React.FormEvent) => {
@@ -133,16 +120,6 @@ export function SearchForm({
           label="Search"
           placeholder="Search recipes by name or description..."
           helperText="Enter at least 2 characters to search"
-        />
-
-        {/* Sort By */}
-        <FormSelect
-          form={form as UseFormReturn<SearchFormData>}
-          name="sortBy"
-          label="Sort By"
-          placeholder="Select sort order"
-          options={SORT_BY_OPTIONS}
-          helperText="Choose how to order search results"
         />
       </div>
 
@@ -263,7 +240,7 @@ export function SearchForm({
 
           <div className="flex flex-wrap gap-2">
             {DIFFICULTY_OPTIONS.map(option => {
-              const isSelected = difficulty.includes(option.value);
+              const isSelected = difficulty === option.value;
               return (
                 <Button
                   key={option.value}
@@ -308,19 +285,30 @@ export function SearchForm({
         </div>
       )}
 
-      {/* Rating Section */}
+      {/* Servings Section */}
       {!compact && (
         <div className="space-y-4">
-          <h3 className="text-sm font-medium">Minimum Rating</h3>
+          <h3 className="text-sm font-medium">Servings</h3>
 
-          <FormInput
-            form={form as UseFormReturn<SearchFormData>}
-            name="minRating"
-            label="Minimum Rating"
-            type="number"
-            placeholder="1-5"
-            helperText="Recipes with at least this rating"
-          />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <FormInput
+              form={form as UseFormReturn<SearchFormData>}
+              name="minServings"
+              label="Min Servings"
+              type="number"
+              placeholder="e.g., 2"
+              helperText="Minimum number of servings"
+            />
+
+            <FormInput
+              form={form as UseFormReturn<SearchFormData>}
+              name="maxServings"
+              label="Max Servings"
+              type="number"
+              placeholder="e.g., 8"
+              helperText="Maximum number of servings"
+            />
+          </div>
         </div>
       )}
 

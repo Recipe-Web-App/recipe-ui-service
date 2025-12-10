@@ -153,7 +153,8 @@ function useCreateRecipeFormInternal({
         name: '',
         quantity: 1,
         unit: IngredientUnit.UNIT,
-        notes: '',
+        isOptional: false,
+        notes: undefined,
       },
     ]);
   };
@@ -175,6 +176,7 @@ function useCreateRecipeFormInternal({
       {
         stepNumber: currentSteps.length + 1,
         instruction: '',
+        optional: false,
         duration: undefined,
       },
     ]);
@@ -333,7 +335,8 @@ function useEditRecipeFormInternal({
         name: '',
         quantity: 1,
         unit: IngredientUnit.UNIT,
-        notes: '',
+        isOptional: false,
+        notes: undefined,
       },
     ]);
   };
@@ -355,6 +358,7 @@ function useEditRecipeFormInternal({
       {
         stepNumber: currentSteps.length + 1,
         instruction: '',
+        optional: false,
         duration: undefined,
       },
     ]);

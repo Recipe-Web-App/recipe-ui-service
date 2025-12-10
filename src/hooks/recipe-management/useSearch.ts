@@ -20,7 +20,7 @@ export const useSearchRecipes = (
     queryKey: [...QUERY_KEYS.RECIPE_MANAGEMENT.SEARCH, searchData, params],
     queryFn: () => searchApi.searchRecipes(searchData, params),
     enabled: !!(
-      searchData.query ??
+      searchData.recipeNameQuery ??
       searchData.tags?.length ??
       searchData.difficulty
     ),
@@ -36,7 +36,7 @@ export const useSimpleRecipeSearch = (
   query: string,
   params?: PaginationParams
 ) => {
-  const searchData: SearchRecipesRequest = { query };
+  const searchData: SearchRecipesRequest = { recipeNameQuery: query };
 
   return useQuery({
     queryKey: [...QUERY_KEYS.RECIPE_MANAGEMENT.SEARCH, 'simple', query, params],
@@ -85,7 +85,7 @@ export const useAdvancedRecipeSearch = (
     ],
     queryFn: () => searchApi.searchRecipes(filters, params),
     enabled: !!(
-      filters.query ??
+      filters.recipeNameQuery ??
       filters.tags?.length ??
       filters.difficulty ??
       filters.ingredients?.length
@@ -114,16 +114,11 @@ export const useRecipesByTags = (tags: string[], params?: PaginationParams) => {
  * Hook for difficulty-based recipe search
  */
 export const useRecipesByDifficulty = (
-  difficulty: string[],
+  difficulty: DifficultyLevel | undefined,
   params?: PaginationParams
 ) => {
-  // Safely convert string array to DifficultyLevel array with validation
-  const validDifficulties = difficulty.filter((d): d is DifficultyLevel =>
-    Object.values(DifficultyLevel).includes(d as DifficultyLevel)
-  );
-
   const searchData: SearchRecipesRequest = {
-    difficulty: validDifficulties,
+    difficulty,
   };
 
   return useQuery({
@@ -134,7 +129,7 @@ export const useRecipesByDifficulty = (
       params,
     ],
     queryFn: () => searchApi.searchRecipes(searchData, params),
-    enabled: !!difficulty && validDifficulties.length > 0,
+    enabled: !!difficulty,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 15 * 60 * 1000, // 15 minutes
   });

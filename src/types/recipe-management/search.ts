@@ -1,6 +1,9 @@
-import { DifficultyLevel } from './common';
+import { DifficultyLevel, IngredientMatchMode } from './common';
 import { RecipeDto } from './recipe';
 
+/**
+ * @deprecated SearchSortBy is no longer used in the API
+ */
 export enum SearchSortBy {
   RATING_DESC = 'RATING_DESC',
   RATING_ASC = 'RATING_ASC',
@@ -11,14 +14,15 @@ export enum SearchSortBy {
 }
 
 export interface SearchRecipesRequest {
-  query?: string;
+  recipeNameQuery?: string;
   ingredients?: string[];
+  ingredientMatchMode?: IngredientMatchMode;
   tags?: string[];
-  difficulty?: DifficultyLevel[];
-  maxPrepTime?: number;
-  maxCookTime?: number;
-  minRating?: number;
-  sortBy?: SearchSortBy;
+  difficulty?: DifficultyLevel;
+  maxPreparationTime?: number;
+  maxCookingTime?: number;
+  minServings?: number;
+  maxServings?: number;
 }
 
 export interface SearchRecipesResponse {

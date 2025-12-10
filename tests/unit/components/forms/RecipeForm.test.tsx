@@ -118,15 +118,13 @@ describe('RecipeForm', () => {
         stepNumber: 1,
         instruction:
           'Mix the ingredients together carefully until well combined.',
-        duration: 5,
-        order: 1,
+        timerSeconds: 300,
       },
     ],
     tags: [
       {
         tagId: 1,
         name: 'easy',
-        category: 'difficulty',
       },
     ],
   };

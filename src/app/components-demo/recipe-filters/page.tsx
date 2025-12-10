@@ -28,9 +28,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.EASY,
     createdAt: '2024-01-01T10:00:00Z',
     tags: [
-      { tagId: 1, name: 'Dessert', category: 'meal-type' },
-      { tagId: 2, name: 'Baking', category: 'method' },
-      { tagId: 3, name: 'American', category: 'cuisine' },
+      { tagId: 1, name: 'Dessert' },
+      { tagId: 2, name: 'Baking' },
+      { tagId: 3, name: 'American' },
     ],
   },
   {
@@ -44,9 +44,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.MEDIUM,
     createdAt: '2024-01-02T10:00:00Z',
     tags: [
-      { tagId: 4, name: 'Italian', category: 'cuisine' },
-      { tagId: 5, name: 'Pasta', category: 'ingredient' },
-      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+      { tagId: 4, name: 'Italian' },
+      { tagId: 5, name: 'Pasta' },
+      { tagId: 6, name: 'Dinner' },
     ],
   },
   {
@@ -60,9 +60,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.EASY,
     createdAt: '2024-01-03T10:00:00Z',
     tags: [
-      { tagId: 7, name: 'Vegan', category: 'dietary' },
-      { tagId: 8, name: 'Healthy', category: 'attribute' },
-      { tagId: 9, name: 'Lunch', category: 'meal-type' },
+      { tagId: 7, name: 'Vegan' },
+      { tagId: 8, name: 'Healthy' },
+      { tagId: 9, name: 'Lunch' },
     ],
   },
   {
@@ -76,9 +76,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.HARD,
     createdAt: '2024-01-04T10:00:00Z',
     tags: [
-      { tagId: 10, name: 'Thai', category: 'cuisine' },
-      { tagId: 11, name: 'Spicy', category: 'attribute' },
-      { tagId: 6, name: 'Dinner', category: 'meal-type' },
+      { tagId: 10, name: 'Thai' },
+      { tagId: 11, name: 'Spicy' },
+      { tagId: 6, name: 'Dinner' },
     ],
   },
   {
@@ -92,9 +92,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.BEGINNER,
     createdAt: '2024-01-05T10:00:00Z',
     tags: [
-      { tagId: 12, name: 'Breakfast', category: 'meal-type' },
-      { tagId: 8, name: 'Healthy', category: 'attribute' },
-      { tagId: 13, name: 'Quick', category: 'attribute' },
+      { tagId: 12, name: 'Breakfast' },
+      { tagId: 8, name: 'Healthy' },
+      { tagId: 13, name: 'Quick' },
     ],
   },
   {
@@ -108,9 +108,9 @@ const sampleRecipes: RecipeDto[] = [
     difficulty: DifficultyLevel.MEDIUM,
     createdAt: '2024-01-06T10:00:00Z',
     tags: [
-      { tagId: 4, name: 'Italian', category: 'cuisine' },
-      { tagId: 6, name: 'Dinner', category: 'meal-type' },
-      { tagId: 2, name: 'Baking', category: 'method' },
+      { tagId: 4, name: 'Italian' },
+      { tagId: 6, name: 'Dinner' },
+      { tagId: 2, name: 'Baking' },
     ],
   },
 ];

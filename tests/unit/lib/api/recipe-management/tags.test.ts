@@ -31,9 +31,6 @@ describe('Tags API', () => {
   const mockTag: RecipeTagDto = {
     tagId: 1,
     name: 'Italian',
-    category: 'cuisine',
-    description: 'Italian cuisine tag',
-    usageCount: 150,
   };
 
   const mockTagResponse: TagResponse = {
@@ -69,17 +66,14 @@ describe('Tags API', () => {
         {
           tagId: 1,
           name: 'Italian',
-          category: 'cuisine',
         },
         {
           tagId: 2,
           name: 'Pasta',
-          category: 'ingredient',
         },
         {
           tagId: 3,
           name: 'Quick',
-          category: 'time',
         },
       ];
 
@@ -107,13 +101,12 @@ describe('Tags API', () => {
   describe('addTagToRecipe', () => {
     it('should add a new tag to recipe', async () => {
       const addRequest: AddTagRequest = {
-        tagName: 'Vegetarian',
+        name: 'Vegetarian',
       };
 
       const newTag: RecipeTagDto = {
         tagId: 2,
         name: 'Vegetarian',
-        category: 'dietary',
       };
 
       const updatedResponse: TagResponse = {
@@ -136,7 +129,7 @@ describe('Tags API', () => {
 
     it('should handle duplicate tag addition', async () => {
       const addRequest: AddTagRequest = {
-        tagName: 'Italian', // Tag already exists
+        name: 'Italian', // Tag already exists
       };
 
       const error = new Error('Tag already exists');
@@ -149,7 +142,7 @@ describe('Tags API', () => {
 
     it('should handle invalid tag names', async () => {
       const addRequest: AddTagRequest = {
-        tagName: '', // Empty tag name
+        name: '', // Empty tag name
       };
 
       const error = new Error('Tag name cannot be empty');
@@ -163,7 +156,7 @@ describe('Tags API', () => {
     it('should handle very long tag names', async () => {
       const longTagName = 'A'.repeat(100);
       const addRequest: AddTagRequest = {
-        tagName: longTagName,
+        name: longTagName,
       };
 
       const error = new Error('Tag name too long');
@@ -176,13 +169,12 @@ describe('Tags API', () => {
 
     it('should handle special characters in tag names', async () => {
       const addRequest: AddTagRequest = {
-        tagName: 'Gluten-Free & Vegan',
+        name: 'Gluten-Free & Vegan',
       };
 
       const newTag: RecipeTagDto = {
         tagId: 2,
         name: 'Gluten-Free & Vegan',
-        category: 'dietary',
       };
 
       const updatedResponse: TagResponse = {
@@ -225,7 +217,6 @@ describe('Tags API', () => {
       const remainingTag: RecipeTagDto = {
         tagId: 2,
         name: 'Quick',
-        category: 'prep-time',
       };
 
       const updatedResponse: TagResponse = {

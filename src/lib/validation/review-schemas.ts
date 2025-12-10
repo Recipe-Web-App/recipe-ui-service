@@ -25,21 +25,21 @@ export const reviewCommentSchema = z
 
 /**
  * Add review form validation schema
+ * Note: userId is no longer included - it's extracted from auth token on the backend
  */
 export const addReviewFormSchema = z.object({
   rating: reviewRatingSchema,
   comment: reviewCommentSchema,
-  userId: z.number().int().positive(),
 });
 
 /**
  * Edit review form validation schema
+ * Note: userId is no longer included - it's extracted from auth token on the backend
  */
 export const editReviewFormSchema = z.object({
   reviewId: z.number().int().positive(),
   rating: reviewRatingSchema,
   comment: reviewCommentSchema,
-  userId: z.number().int().positive(),
 });
 
 /**
@@ -75,7 +75,6 @@ export function convertToAddReviewRequest(
   return {
     rating: formData.rating,
     comment: formData.comment,
-    userId: formData.userId,
   };
 }
 
@@ -88,7 +87,6 @@ export function convertToEditReviewRequest(
   return {
     rating: formData.rating,
     comment: formData.comment,
-    userId: formData.userId,
   };
 }
 
@@ -100,7 +98,6 @@ export function convertFromReviewDto(review: ReviewDto): EditReviewFormData {
     reviewId: review.reviewId,
     rating: review.rating,
     comment: review.comment ?? '',
-    userId: review.userId,
   };
 }
 
@@ -110,5 +107,4 @@ export function convertFromReviewDto(review: ReviewDto): EditReviewFormData {
 export const addReviewDefaultValues: AddReviewFormData = {
   rating: 5,
   comment: '',
-  userId: 0, // Will be set from auth context
 };

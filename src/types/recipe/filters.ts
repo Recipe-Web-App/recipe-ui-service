@@ -107,8 +107,6 @@ export function extractUniqueTags(recipes: RecipeDto[]): CheckboxOption[] {
     .map(tag => ({
       id: tag.name,
       label: tag.name,
-      description: tag.description,
-      count: tag.usageCount,
     }));
 }
 

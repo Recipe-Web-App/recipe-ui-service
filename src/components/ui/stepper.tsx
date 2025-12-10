@@ -912,12 +912,6 @@ const CookingStepper = React.forwardRef<HTMLDivElement, CookingStepperProps>(
                   <input type="checkbox" className="rounded" />
                   <span>
                     {ingredient.amount} {ingredient.unit} {ingredient.name}
-                    {ingredient.notes && (
-                      <span className="text-muted-foreground">
-                        {' '}
-                        ({ingredient.notes})
-                      </span>
-                    )}
                   </span>
                 </label>
               ))}

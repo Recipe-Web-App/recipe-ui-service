@@ -1,10 +1,10 @@
 export interface ReviewDto {
   reviewId: number;
-  userId: number;
+  recipeId?: number;
+  userId: string;
   rating: number;
   comment?: string;
   createdAt: string;
-  updatedAt?: string;
 }
 
 export interface ReviewResponse {
@@ -17,11 +17,9 @@ export interface ReviewResponse {
 export interface AddReviewRequest {
   rating: number;
   comment?: string;
-  userId: number;
 }
 
 export interface EditReviewRequest {
   rating: number;
   comment?: string;
-  userId: number;
 }

@@ -33,34 +33,37 @@ export interface RecipeFavoriteDto {
 
 export interface CreateRecipeRequest {
   title: string;
-  description?: string;
+  description: string;
   servings: number;
-  prepTime?: number;
-  cookTime?: number;
+  preparationTime?: number;
+  cookingTime?: number;
   difficulty?: DifficultyLevel;
   ingredients: CreateRecipeIngredientRequest[];
   steps: CreateRecipeStepRequest[];
-  tags?: string[];
+  tags?: RecipeTagDto[];
 }
 
 export interface CreateRecipeIngredientRequest {
-  name: string;
+  ingredientId?: number;
+  ingredientName: string;
   quantity: number;
   unit: string;
+  isOptional?: boolean;
   notes?: string;
 }
 
 export interface CreateRecipeStepRequest {
   stepNumber: number;
   instruction: string;
-  duration?: number;
+  optional?: boolean;
+  timerSeconds?: number;
 }
 
 export interface UpdateRecipeRequest {
   title?: string;
   description?: string;
   servings?: number;
-  prepTime?: number;
-  cookTime?: number;
+  preparationTime?: number;
+  cookingTime?: number;
   difficulty?: DifficultyLevel;
 }

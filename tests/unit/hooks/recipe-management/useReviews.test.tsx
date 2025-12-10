@@ -54,11 +54,10 @@ describe('useReviews hooks', () => {
         reviews: [
           {
             reviewId: 1,
-            userId: 1,
+            userId: 'user-123',
             rating: 5,
             comment: 'Great recipe!',
             createdAt: '2024-01-01T00:00:00Z',
-            updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
         reviewCount: 1,
@@ -109,16 +108,14 @@ describe('useReviews hooks', () => {
       const mockRequest: AddReviewRequest = {
         rating: 4,
         comment: 'Nice recipe!',
-        userId: 1,
       };
 
       const mockResponse: ReviewDto = {
         reviewId: 2,
-        userId: 1,
+        userId: 'user-123',
         rating: 4,
         comment: 'Nice recipe!',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z',
       };
 
       mockedReviewsApi.addRecipeReview.mockResolvedValue(mockResponse);
@@ -144,7 +141,6 @@ describe('useReviews hooks', () => {
       const mockRequest: AddReviewRequest = {
         rating: 4,
         comment: 'Nice recipe!',
-        userId: 1,
       };
 
       const error = new Error('Failed to add review');
@@ -169,16 +165,14 @@ describe('useReviews hooks', () => {
       const mockRequest: EditReviewRequest = {
         rating: 5,
         comment: 'Updated comment - amazing!',
-        userId: 1,
       };
 
       const mockResponse: ReviewDto = {
         reviewId: 1,
-        userId: 1,
+        userId: 'user-123',
         rating: 5,
         comment: 'Updated comment - amazing!',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T01:00:00Z',
       };
 
       mockedReviewsApi.editRecipeReview.mockResolvedValue(mockResponse);
@@ -204,7 +198,6 @@ describe('useReviews hooks', () => {
     it('should handle errors', async () => {
       const mockRequest: EditReviewRequest = {
         rating: 5,
-        userId: 1,
       };
 
       const error = new Error('Failed to edit review');
@@ -267,28 +260,24 @@ describe('useReviews hooks', () => {
       const addRequest: AddReviewRequest = {
         rating: 5,
         comment: 'Great!',
-        userId: 1,
       };
       const editRequest: EditReviewRequest = {
         rating: 4,
         comment: 'Good!',
-        userId: 1,
       };
 
       const addResponse: ReviewDto = {
         reviewId: 1,
-        userId: 1,
+        userId: 'user-123',
         rating: 5,
         comment: 'Great!',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z',
       };
 
       const editResponse: ReviewDto = {
         ...addResponse,
         rating: 4,
         comment: 'Good!',
-        updatedAt: '2024-01-01T01:00:00Z',
       };
 
       mockedReviewsApi.addRecipeReview.mockResolvedValue(addResponse);
@@ -342,7 +331,6 @@ describe('useReviews hooks', () => {
         await result.current.addReview({
           rating: 5,
           comment: 'Test',
-          userId: 1,
         });
       } catch (e) {
         expect(e).toEqual(error);

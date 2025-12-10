@@ -100,11 +100,9 @@ describe('useIngredients hooks', () => {
   };
 
   const mockShoppingListItem: ShoppingListItemDto = {
-    name: 'Flour',
-    quantity: 2,
+    ingredientName: 'Flour',
+    totalQuantity: 2,
     unit: IngredientUnit.CUP,
-    category: 'Baking',
-    notes: 'Aisle 5',
   };
 
   const mockShoppingListResponse: ShoppingListResponse = {
@@ -375,25 +373,19 @@ describe('useIngredients hooks', () => {
         recipeTitle: 'Complex Recipe',
         items: [
           {
-            name: 'Flour',
-            quantity: 2,
+            ingredientName: 'Flour',
+            totalQuantity: 2,
             unit: IngredientUnit.CUP,
-            category: 'Baking',
-            notes: 'Aisle 5',
           },
           {
-            name: 'Chicken',
-            quantity: 1,
+            ingredientName: 'Chicken',
+            totalQuantity: 1,
             unit: IngredientUnit.LB,
-            category: 'Meat',
-            notes: 'Aisle 1',
           },
           {
-            name: 'Milk',
-            quantity: 1,
+            ingredientName: 'Milk',
+            totalQuantity: 1,
             unit: IngredientUnit.CUP,
-            category: 'Dairy',
-            notes: 'Aisle 10',
           },
         ],
         generatedAt: '2023-01-01T00:00:00Z',
@@ -409,11 +401,9 @@ describe('useIngredients hooks', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(result.current.data?.items).toHaveLength(3);
-      expect(result.current.data?.items.map(item => item.category)).toEqual([
-        'Baking',
-        'Meat',
-        'Dairy',
-      ]);
+      expect(
+        result.current.data?.items.map(item => item.ingredientName)
+      ).toEqual(['Flour', 'Chicken', 'Milk']);
     });
   });
 
@@ -438,7 +428,6 @@ describe('useIngredients hooks', () => {
 
       const commentData: AddIngredientCommentRequest = {
         comment: 'Great ingredient!',
-        userId: 123,
       };
 
       result.current.mutate({
@@ -468,7 +457,6 @@ describe('useIngredients hooks', () => {
 
       const commentData: AddIngredientCommentRequest = {
         comment: 'Failed comment',
-        userId: 123,
       };
 
       result.current.mutate({
@@ -502,7 +490,7 @@ describe('useIngredients hooks', () => {
       result.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { comment: 'Test', userId: 123 },
+        data: { comment: 'Test' },
       });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -549,7 +537,6 @@ describe('useIngredients hooks', () => {
       const editData: EditIngredientCommentRequest = {
         commentId: 1,
         comment: 'Updated comment',
-        userId: 123,
       };
 
       result.current.mutate({
@@ -579,7 +566,7 @@ describe('useIngredients hooks', () => {
       result.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { commentId: 1, comment: 'Failed edit', userId: 123 },
+        data: { commentId: 1, comment: 'Failed edit' },
       });
 
       await waitFor(() => expect(result.current.isError).toBe(true));
@@ -607,7 +594,7 @@ describe('useIngredients hooks', () => {
       result.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { commentId: 1, comment: 'Edit test', userId: 123 },
+        data: { commentId: 1, comment: 'Edit test' },
       });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -631,7 +618,6 @@ describe('useIngredients hooks', () => {
 
       const deleteData: DeleteIngredientCommentRequest = {
         commentId: 1,
-        userId: 123,
       };
 
       result.current.mutate({
@@ -661,7 +647,7 @@ describe('useIngredients hooks', () => {
       result.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { commentId: 1, userId: 123 },
+        data: { commentId: 1 },
       });
 
       await waitFor(() => expect(result.current.isError).toBe(true));
@@ -690,7 +676,7 @@ describe('useIngredients hooks', () => {
       result.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { commentId: 1, userId: 123 },
+        data: { commentId: 1 },
       });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -799,7 +785,7 @@ describe('useIngredients hooks', () => {
       addCommentResult.current.mutate({
         recipeId: 1,
         ingredientId: 1,
-        data: { comment: 'Test comment', userId: 123 },
+        data: { comment: 'Test comment' },
       });
 
       await waitFor(() =>

@@ -222,7 +222,7 @@ describe('SearchForm', () => {
 
     it('should support difficulty filter', () => {
       const props = {
-        initialFilters: { difficulty: [] },
+        initialFilters: { difficulty: undefined },
       };
       expect(() => React.createElement(SearchForm, props)).not.toThrow();
     });
@@ -231,16 +231,6 @@ describe('SearchForm', () => {
       const props = {
         initialFilters: { maxPrepTime: 30, maxCookTime: 60 },
       };
-      expect(() => React.createElement(SearchForm, props)).not.toThrow();
-    });
-
-    it('should support rating filter', () => {
-      const props = { initialFilters: { minRating: 4 } };
-      expect(() => React.createElement(SearchForm, props)).not.toThrow();
-    });
-
-    it('should support sort by filter', () => {
-      const props = { initialFilters: { sortBy: undefined } };
       expect(() => React.createElement(SearchForm, props)).not.toThrow();
     });
   });

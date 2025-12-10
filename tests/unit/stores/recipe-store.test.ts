@@ -161,7 +161,9 @@ describe('Recipe Store', () => {
       title: 'Draft Recipe',
       description: 'A draft recipe',
       servings: 2,
-      ingredients: [{ name: 'Ingredient 1', quantity: 1, unit: 'cup' }],
+      ingredients: [
+        { ingredientName: 'Ingredient 1', quantity: 1, unit: 'cup' },
+      ],
       steps: [{ stepNumber: 1, instruction: 'Step 1' }],
     };
 
@@ -192,7 +194,7 @@ describe('Recipe Store', () => {
     it('should add ingredient to draft', () => {
       const { result } = renderHook(() => useRecipeStore());
       const newIngredient: CreateRecipeIngredientRequest = {
-        name: 'New Ingredient',
+        ingredientName: 'New Ingredient',
         quantity: 2,
         unit: 'tbsp',
       };

@@ -11,7 +11,7 @@ import {
 
 describe('Form Utils', () => {
   const mockFormData = {
-    name: 'test',
+    ingredientName: 'test',
     email: 'test@example.com',
     age: 25,
   };
@@ -87,7 +87,7 @@ describe('Form Utils', () => {
         })
       );
 
-      const value = getFieldValue(result.current, 'name');
+      const value = getFieldValue(result.current, 'ingredientName');
       expect(value).toBe('test');
     });
 
@@ -99,8 +99,8 @@ describe('Form Utils', () => {
         })
       );
 
-      result.current.setValue('name', 'updated');
-      const value = getFieldValue(result.current, 'name');
+      result.current.setValue('ingredientName', 'updated');
+      const value = getFieldValue(result.current, 'ingredientName');
       expect(value).toBe('updated');
     });
   });
@@ -170,7 +170,7 @@ describe('Form Utils', () => {
         })
       );
 
-      const props = getFormFieldProps(result.current, 'name', {
+      const props = getFormFieldProps(result.current, 'ingredientName', {
         required: true,
         disabled: false,
         loading: false,
@@ -232,7 +232,7 @@ describe('Form Utils', () => {
         formState: mockFormState,
       };
 
-      const props = getFormFieldProps(mockForm, 'name');
+      const props = getFormFieldProps(mockForm, 'ingredientName');
 
       expect(props.disabled).toBe(true);
       expect(props.loading).toBe(true);
@@ -246,7 +246,7 @@ describe('Form Utils', () => {
         })
       );
 
-      const props = getFormFieldProps(result.current, 'name');
+      const props = getFormFieldProps(result.current, 'ingredientName');
 
       expect(props).toEqual({
         error: undefined,

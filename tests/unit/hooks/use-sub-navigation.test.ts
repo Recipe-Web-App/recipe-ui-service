@@ -159,7 +159,7 @@ describe('useSubNavigation', () => {
       mockUseAuthStore.mockReturnValue({
         ...mockAuthStore,
         isAuthenticated: true,
-        user: { id: '1', name: 'Test User', roles: [] },
+        user: { id: '1', ingredientName: 'Test User', roles: [] },
       });
 
       const { result } = renderHook(() => useSubNavigation());
@@ -189,7 +189,7 @@ describe('useSubNavigation', () => {
       mockUseAuthStore.mockReturnValue({
         ...mockAuthStore,
         isAuthenticated: true,
-        user: { id: '1', name: 'Test User', roles: ['user'] },
+        user: { id: '1', ingredientName: 'Test User', roles: ['user'] },
       });
 
       const { result } = renderHook(() => useSubNavigation());
@@ -218,7 +218,11 @@ describe('useSubNavigation', () => {
       mockUseAuthStore.mockReturnValue({
         ...mockAuthStore,
         isAuthenticated: true,
-        user: { id: '1', name: 'Test User', roles: ['admin', 'user'] },
+        user: {
+          id: '1',
+          ingredientName: 'Test User',
+          roles: ['admin', 'user'],
+        },
       });
 
       const { result } = renderHook(() => useSubNavigation());
@@ -484,7 +488,7 @@ describe('useNavItemVisibility', () => {
     mockUseAuthStore.mockReturnValue({
       ...localMockAuthStore,
       isAuthenticated: true,
-      user: { id: '1', name: 'Test User', roles: [] },
+      user: { id: '1', ingredientName: 'Test User', roles: [] },
     });
 
     const { result } = renderHook(() => useNavItemVisibility(mockItem));

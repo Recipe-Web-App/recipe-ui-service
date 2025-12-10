@@ -48,11 +48,9 @@ describe('useSearchForm hook', () => {
       expect(values.query).toBe('');
       expect(values.ingredients).toEqual([]);
       expect(values.tags).toEqual([]);
-      expect(values.difficulty).toEqual([]);
+      expect(values.difficulty).toBeUndefined();
       expect(values.maxPrepTime).toBeUndefined();
       expect(values.maxCookTime).toBeUndefined();
-      expect(values.minRating).toBeUndefined();
-      expect(values.sortBy).toBeUndefined();
     });
 
     it('should initialize with custom initial filters', () => {
@@ -197,50 +195,50 @@ describe('useSearchForm hook', () => {
   });
 
   describe('difficulty management', () => {
-    it('should add difficulty level', () => {
+    it('should set difficulty level', () => {
       const { result } = renderHook(() => useSearchForm(), { wrapper });
 
       act(() => {
         result.current.toggleDifficulty(DifficultyLevel.EASY);
       });
 
-      expect(result.current.form.getValues('difficulty')).toEqual([
-        DifficultyLevel.EASY,
-      ]);
+      expect(result.current.form.getValues('difficulty')).toBe(
+        DifficultyLevel.EASY
+      );
     });
 
-    it('should toggle difficulty levels on and off', () => {
+    it('should toggle difficulty level off when same value', () => {
       const { result } = renderHook(() => useSearchForm(), { wrapper });
 
       act(() => {
         result.current.toggleDifficulty(DifficultyLevel.EASY);
       });
 
-      expect(result.current.form.getValues('difficulty')).toEqual([
-        DifficultyLevel.EASY,
-      ]);
+      expect(result.current.form.getValues('difficulty')).toBe(
+        DifficultyLevel.EASY
+      );
 
       act(() => {
         result.current.toggleDifficulty(DifficultyLevel.EASY);
       });
 
-      expect(result.current.form.getValues('difficulty')).toEqual([]);
+      expect(result.current.form.getValues('difficulty')).toBeUndefined();
     });
 
-    it('should add multiple difficulty levels', () => {
+    it('should replace difficulty when different value selected', () => {
       const { result } = renderHook(() => useSearchForm(), { wrapper });
 
       act(() => {
         result.current.toggleDifficulty(DifficultyLevel.EASY);
-        result.current.toggleDifficulty(DifficultyLevel.MEDIUM);
+      });
+
+      act(() => {
         result.current.toggleDifficulty(DifficultyLevel.HARD);
       });
 
-      expect(result.current.form.getValues('difficulty')).toEqual([
-        DifficultyLevel.EASY,
-        DifficultyLevel.MEDIUM,
-        DifficultyLevel.HARD,
-      ]);
+      expect(result.current.form.getValues('difficulty')).toBe(
+        DifficultyLevel.HARD
+      );
     });
   });
 
@@ -265,16 +263,6 @@ describe('useSearchForm hook', () => {
 
       expect(result.current.form.getValues('maxPrepTime')).toBe(30);
       expect(result.current.form.getValues('maxCookTime')).toBe(60);
-    });
-
-    it('should update rating filter', () => {
-      const { result } = renderHook(() => useSearchForm(), { wrapper });
-
-      act(() => {
-        result.current.form.setValue('minRating', 4);
-      });
-
-      expect(result.current.form.getValues('minRating')).toBe(4);
     });
   });
 
@@ -309,10 +297,9 @@ describe('useSearchForm hook', () => {
         result.current.toggleDifficulty(DifficultyLevel.EASY);
         result.current.form.setValue('maxPrepTime', 30);
         result.current.form.setValue('maxCookTime', 60);
-        result.current.form.setValue('minRating', 4);
       });
 
-      expect(result.current.activeFilterCount).toBe(7);
+      expect(result.current.activeFilterCount).toBe(6);
     });
   });
 

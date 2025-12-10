@@ -5,7 +5,6 @@ import type {
   SearchRecipesResponse,
   RecipeDto,
   DifficultyLevel,
-  SearchSortBy,
 } from '@/types/recipe-management';
 
 // Mock the client
@@ -54,7 +53,7 @@ describe('Search API', () => {
   describe('searchRecipes', () => {
     it('should search recipes with basic query', async () => {
       const searchRequest: SearchRecipesRequest = {
-        query: 'pasta',
+        recipeNameQuery: 'pasta',
       };
 
       mockedClient.post.mockResolvedValue({ data: mockSearchResponse });
@@ -70,7 +69,7 @@ describe('Search API', () => {
 
     it('should search recipes with pagination parameters', async () => {
       const searchRequest: SearchRecipesRequest = {
-        query: 'italian',
+        recipeNameQuery: 'italian',
       };
 
       const params = { page: 1, size: 10, sort: ['title,asc'] };
@@ -87,13 +86,11 @@ describe('Search API', () => {
 
     it('should search recipes with advanced filters', async () => {
       const advancedSearchRequest: SearchRecipesRequest = {
-        query: 'pasta',
+        recipeNameQuery: 'pasta',
         tags: ['italian', 'dinner'],
-        difficulty: ['EASY', 'MEDIUM'] as DifficultyLevel[],
-        maxPrepTime: 30,
-        maxCookTime: 45,
-        minRating: 4.0,
-        sortBy: 'RATING_DESC' as SearchSortBy,
+        difficulty: 'EASY' as DifficultyLevel,
+        maxPreparationTime: 30,
+        maxCookingTime: 45,
       };
 
       const filteredResults: SearchRecipesResponse = {
@@ -141,8 +138,8 @@ describe('Search API', () => {
 
     it('should search recipes with time constraints', async () => {
       const timeConstrainedRequest: SearchRecipesRequest = {
-        maxPrepTime: 30,
-        maxCookTime: 30,
+        maxPreparationTime: 30,
+        maxCookingTime: 30,
       };
 
       const quickMealResults: SearchRecipesResponse = {
@@ -190,7 +187,7 @@ describe('Search API', () => {
 
     it('should handle empty search results', async () => {
       const emptySearchRequest: SearchRecipesRequest = {
-        query: 'nonexistent recipe',
+        recipeNameQuery: 'nonexistent recipe',
       };
 
       const emptyResults: SearchRecipesResponse = {
@@ -213,8 +210,7 @@ describe('Search API', () => {
 
     it('should search recipes with sorting options', async () => {
       const sortedSearchRequest: SearchRecipesRequest = {
-        query: 'chicken',
-        sortBy: 'CREATED_DATE_DESC' as SearchSortBy,
+        recipeNameQuery: 'chicken',
       };
 
       const sortedResults: SearchRecipesResponse = {
@@ -248,14 +244,12 @@ describe('Search API', () => {
 
     it('should handle complex search with multiple criteria', async () => {
       const complexSearchRequest: SearchRecipesRequest = {
-        query: 'healthy dinner',
+        recipeNameQuery: 'healthy dinner',
         tags: ['healthy', 'low-carb'],
-        difficulty: ['EASY'] as DifficultyLevel[],
-        maxPrepTime: 30,
-        maxCookTime: 15,
-        minRating: 4.0,
+        difficulty: 'EASY' as DifficultyLevel,
+        maxPreparationTime: 30,
+        maxCookingTime: 15,
         ingredients: ['chicken', 'vegetables'],
-        sortBy: 'RELEVANCE' as SearchSortBy,
       };
 
       const complexResults: SearchRecipesResponse = {
@@ -279,8 +273,8 @@ describe('Search API', () => {
 
     it('should handle search validation errors', async () => {
       const invalidSearchRequest: SearchRecipesRequest = {
-        query: '', // Empty query
-        maxPrepTime: -10, // Invalid negative time
+        recipeNameQuery: '', // Empty query
+        maxPreparationTime: -10, // Invalid negative time
       };
 
       const error = new Error('Invalid search parameters');
@@ -293,7 +287,7 @@ describe('Search API', () => {
 
     it('should handle search service unavailable errors', async () => {
       const searchRequest: SearchRecipesRequest = {
-        query: 'pasta',
+        recipeNameQuery: 'pasta',
       };
 
       const error = new Error('Search service temporarily unavailable');
@@ -306,7 +300,7 @@ describe('Search API', () => {
 
     it('should handle large result sets with pagination', async () => {
       const largeSearchRequest: SearchRecipesRequest = {
-        query: 'chicken',
+        recipeNameQuery: 'chicken',
       };
 
       const largeResultSet: SearchRecipesResponse = {
@@ -340,7 +334,7 @@ describe('Search API', () => {
 
     it('should handle search timeout errors', async () => {
       const searchRequest: SearchRecipesRequest = {
-        query: 'complex search with many filters',
+        recipeNameQuery: 'complex search with many filters',
         tags: ['tag1', 'tag2', 'tag3'],
         ingredients: ['ingredient1', 'ingredient2'],
       };
@@ -355,7 +349,7 @@ describe('Search API', () => {
 
     it('should search with fuzzy matching for typos', async () => {
       const typoSearchRequest: SearchRecipesRequest = {
-        query: 'spagetti carbonra', // Intentional typos
+        recipeNameQuery: 'spagetti carbonra', // Intentional typos
         // fuzzySearch is not part of SearchRecipesRequest
       };
 

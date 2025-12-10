@@ -318,13 +318,6 @@ export function RecipeForm({
                   required
                 />
               </div>
-
-              <FormInput
-                form={form as UseFormReturn<UnifiedFormData>}
-                name={`ingredients.${index}.notes`}
-                label="Notes (optional)"
-                placeholder="e.g., sifted, room temperature"
-              />
             </div>
           ))}
         </div>
@@ -376,9 +369,9 @@ export function RecipeForm({
                 <FormInput
                   form={form as UseFormReturn<UnifiedFormData>}
                   name={`steps.${index}.duration`}
-                  label="Duration (minutes, optional)"
+                  label="Duration (seconds, optional)"
                   type="number"
-                  placeholder="5"
+                  placeholder="300"
                 />
               </div>
 
