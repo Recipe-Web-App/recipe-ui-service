@@ -54,12 +54,10 @@ describe('useTags hooks', () => {
           {
             tagId: 1,
             name: 'vegetarian',
-            category: 'dietary',
           },
           {
             tagId: 2,
             name: 'quick',
-            category: 'time',
           },
         ],
       };
@@ -106,7 +104,7 @@ describe('useTags hooks', () => {
   describe('useAddTagToRecipe', () => {
     it('should add tag successfully', async () => {
       const mockRequest: AddTagRequest = {
-        tagName: 'healthy',
+        name: 'healthy',
       };
 
       const mockResponse: TagResponse = {
@@ -114,7 +112,6 @@ describe('useTags hooks', () => {
         tag: {
           tagId: 3,
           name: 'healthy',
-          category: 'dietary',
         },
         addedAt: '2024-01-01T01:00:00Z',
       };
@@ -137,7 +134,7 @@ describe('useTags hooks', () => {
 
     it('should handle errors', async () => {
       const mockRequest: AddTagRequest = {
-        tagName: 'healthy',
+        name: 'healthy',
       };
 
       const error = new Error('Failed to add tag');
@@ -168,7 +165,6 @@ describe('useTags hooks', () => {
         removedTag: {
           tagId: 1,
           name: 'vegetarian',
-          category: 'dietary',
         },
         removedAt: '2024-01-01T01:00:00Z',
       };
@@ -216,7 +212,7 @@ describe('useTags hooks', () => {
 
   describe('useRecipeTagManager', () => {
     it('should provide tag management functions', async () => {
-      const addRequest: AddTagRequest = { tagName: 'spicy' };
+      const addRequest: AddTagRequest = { name: 'spicy' };
       const removeRequest: RemoveTagRequest = { tagName: 'vegetarian' };
 
       const addResponse: TagResponse = {
@@ -224,7 +220,6 @@ describe('useTags hooks', () => {
         tag: {
           tagId: 3,
           name: 'spicy',
-          category: 'flavor',
         },
         addedAt: '2024-01-01T01:00:00Z',
       };
@@ -234,7 +229,6 @@ describe('useTags hooks', () => {
         removedTag: {
           tagId: 1,
           name: 'vegetarian',
-          category: 'dietary',
         },
         removedAt: '2024-01-01T02:00:00Z',
       };
@@ -277,7 +271,7 @@ describe('useTags hooks', () => {
       });
 
       try {
-        await result.current.addTag({ tagName: 'test' });
+        await result.current.addTag({ name: 'test' });
       } catch (e) {
         expect(e).toEqual(error);
       }

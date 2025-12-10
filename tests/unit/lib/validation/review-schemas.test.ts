@@ -65,7 +65,6 @@ describe('Review Schemas', () => {
     const validData = {
       rating: 5,
       comment: 'Excellent recipe!',
-      userId: 1,
     };
 
     it('should validate complete review data', () => {
@@ -76,36 +75,16 @@ describe('Review Schemas', () => {
     it('should allow optional comment', () => {
       const dataWithoutComment = {
         rating: 4,
-        userId: 1,
       };
       const result = addReviewFormSchema.parse(dataWithoutComment);
       expect(result.rating).toBe(4);
-      expect(result.userId).toBe(1);
     });
 
     it('should require rating', () => {
       const dataWithoutRating = {
         comment: 'Nice',
-        userId: 1,
       };
       expect(() => addReviewFormSchema.parse(dataWithoutRating)).toThrow();
-    });
-
-    it('should require userId', () => {
-      const dataWithoutUserId = {
-        rating: 5,
-        comment: 'Great!',
-      };
-      expect(() => addReviewFormSchema.parse(dataWithoutUserId)).toThrow();
-    });
-
-    it('should validate userId is positive', () => {
-      const dataWithInvalidUserId = {
-        rating: 5,
-        comment: 'Great!',
-        userId: -1,
-      };
-      expect(() => addReviewFormSchema.parse(dataWithInvalidUserId)).toThrow();
     });
   });
 
@@ -114,7 +93,6 @@ describe('Review Schemas', () => {
       reviewId: 1,
       rating: 4,
       comment: 'Updated comment',
-      userId: 1,
     };
 
     it('should validate complete edit data', () => {
@@ -126,7 +104,6 @@ describe('Review Schemas', () => {
       const dataWithoutReviewId = {
         rating: 4,
         comment: 'Updated',
-        userId: 1,
       };
       expect(() => editReviewFormSchema.parse(dataWithoutReviewId)).toThrow();
     });
@@ -136,7 +113,6 @@ describe('Review Schemas', () => {
         reviewId: 0,
         rating: 4,
         comment: 'Updated',
-        userId: 1,
       };
       expect(() =>
         editReviewFormSchema.parse(dataWithInvalidReviewId)
@@ -149,24 +125,20 @@ describe('Review Schemas', () => {
       const formData = {
         rating: 5,
         comment: 'Delicious!',
-        userId: 1,
       };
       const result = convertToAddReviewRequest(formData);
       expect(result).toEqual({
         rating: 5,
         comment: 'Delicious!',
-        userId: 1,
       });
     });
 
     it('should handle optional comment', () => {
       const formData = {
         rating: 4,
-        userId: 1,
       };
       const result = convertToAddReviewRequest(formData);
       expect(result.rating).toBe(4);
-      expect(result.userId).toBe(1);
       expect(result.comment).toBeUndefined();
     });
   });
@@ -177,13 +149,11 @@ describe('Review Schemas', () => {
         reviewId: 1,
         rating: 4,
         comment: 'Updated review',
-        userId: 1,
       };
       const result = convertToEditReviewRequest(formData);
       expect(result).toEqual({
         rating: 4,
         comment: 'Updated review',
-        userId: 1,
       });
     });
   });
@@ -192,7 +162,7 @@ describe('Review Schemas', () => {
     it('should convert ReviewDto to form data', () => {
       const reviewDto: ReviewDto = {
         reviewId: 1,
-        userId: 1,
+        userId: 'user-123',
         rating: 5,
         comment: 'Great recipe',
         createdAt: '2023-01-01T00:00:00Z',
@@ -202,14 +172,13 @@ describe('Review Schemas', () => {
         reviewId: 1,
         rating: 5,
         comment: 'Great recipe',
-        userId: 1,
       });
     });
 
     it('should handle missing comment', () => {
       const reviewDto: ReviewDto = {
         reviewId: 1,
-        userId: 1,
+        userId: 'user-123',
         rating: 4,
         createdAt: '2023-01-01T00:00:00Z',
       };
@@ -223,7 +192,6 @@ describe('Review Schemas', () => {
       expect(addReviewDefaultValues).toEqual({
         rating: 5,
         comment: '',
-        userId: 0,
       });
     });
   });

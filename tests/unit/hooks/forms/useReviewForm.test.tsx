@@ -31,7 +31,7 @@ describe('useReviewForm hooks', () => {
 
   const mockReviewDto: ReviewDto = {
     reviewId: 1,
-    userId: 1,
+    userId: 'user-123',
     rating: 5,
     comment: 'Great recipe!',
     createdAt: '2023-01-01T00:00:00Z',
@@ -61,7 +61,6 @@ describe('useReviewForm hooks', () => {
       const values = result.current.form.getValues();
       expect(values.rating).toBe(5);
       expect(values.comment).toBe('');
-      expect(values.userId).toBe(0);
     });
 
     it('should have correct initial state', () => {
@@ -132,7 +131,6 @@ describe('useReviewForm hooks', () => {
       expect(formValues.reviewId).toBe(1);
       expect(formValues.rating).toBe(5);
       expect(formValues.comment).toBe('Great recipe!');
-      expect(formValues.userId).toBe(1);
     });
 
     it('should have correct initial state', () => {

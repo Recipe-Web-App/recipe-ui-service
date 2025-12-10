@@ -148,7 +148,6 @@ describe('Recipe Schemas', () => {
         name: 'Flour',
         quantity: 2,
         unit: IngredientUnit.CUP,
-        notes: 'All-purpose',
       };
       expect(recipeIngredientSchema.parse(validIngredient)).toEqual(
         validIngredient
@@ -252,7 +251,6 @@ describe('Recipe Schemas', () => {
             name: 'Flour',
             quantity: 2,
             unit: IngredientUnit.CUP,
-            notes: 'All-purpose',
           },
         ],
         steps: [
@@ -314,7 +312,6 @@ describe('Recipe Schemas', () => {
             name: 'Sugar',
             quantity: 1,
             unit: IngredientUnit.CUP,
-            notes: 'White sugar',
           },
         ],
         steps: [
@@ -357,7 +354,6 @@ describe('Recipe Schemas', () => {
             name: 'Flour',
             quantity: 2,
             unit: IngredientUnit.CUP,
-            notes: 'All-purpose',
           },
         ],
         steps: [
@@ -377,15 +373,16 @@ describe('Recipe Schemas', () => {
         title: 'Test Recipe',
         description: 'A test recipe',
         servings: 4,
-        prepTime: 15,
-        cookTime: 30,
+        preparationTime: 15,
+        cookingTime: 30,
         difficulty: DifficultyLevel.EASY,
         ingredients: [
           {
-            name: 'Flour',
+            ingredientName: 'Flour',
             quantity: 2,
             unit: IngredientUnit.CUP,
-            notes: 'All-purpose',
+            isOptional: undefined,
+            notes: undefined,
           },
         ],
         steps: [
@@ -393,10 +390,14 @@ describe('Recipe Schemas', () => {
             stepNumber: 1,
             instruction:
               'Mix the ingredients together carefully until well combined.',
-            duration: 5,
+            timerSeconds: 5,
+            optional: undefined,
           },
         ],
-        tags: ['easy', 'vegetarian'],
+        tags: [
+          { name: 'easy', tagId: 0 },
+          { name: 'vegetarian', tagId: 0 },
+        ],
       });
     });
   });
@@ -429,15 +430,13 @@ describe('Recipe Schemas', () => {
             stepNumber: 1,
             instruction:
               'Mix the ingredients together carefully until well combined.',
-            duration: 5,
-            order: 1,
+            timerSeconds: 5,
           },
         ],
         tags: [
           {
             tagId: 1,
             name: 'easy',
-            category: 'difficulty',
           },
         ],
       };
@@ -457,6 +456,7 @@ describe('Recipe Schemas', () => {
             name: 'Flour',
             quantity: 2,
             unit: IngredientUnit.CUP,
+            isOptional: false,
             notes: undefined,
           },
         ],
@@ -466,6 +466,7 @@ describe('Recipe Schemas', () => {
             instruction:
               'Mix the ingredients together carefully until well combined.',
             duration: 5,
+            optional: undefined,
           },
         ],
         tags: ['easy'],
@@ -487,7 +488,8 @@ describe('Recipe Schemas', () => {
             name: '',
             quantity: 1,
             unit: IngredientUnit.UNIT,
-            notes: '',
+            isOptional: false,
+            notes: undefined,
           },
         ],
         steps: [
@@ -495,6 +497,7 @@ describe('Recipe Schemas', () => {
             stepNumber: 1,
             instruction: '',
             duration: undefined,
+            optional: false,
           },
         ],
         tags: [],

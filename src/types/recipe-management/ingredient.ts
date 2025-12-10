@@ -35,27 +35,25 @@ export interface ShoppingListResponse {
 }
 
 export interface ShoppingListItemDto {
-  name: string;
-  quantity: number;
+  ingredientId?: number;
+  ingredientName: string;
+  totalQuantity: number;
   unit: IngredientUnit;
-  category: string;
-  notes?: string;
+  isOptional?: boolean;
+  estimatedPrice?: number;
 }
 
 export interface AddIngredientCommentRequest {
   comment: string;
-  userId: number;
 }
 
 export interface EditIngredientCommentRequest {
   commentId: number;
   comment: string;
-  userId: number;
 }
 
 export interface DeleteIngredientCommentRequest {
   commentId: number;
-  userId: number;
 }
 
 export interface IngredientCommentResponse {

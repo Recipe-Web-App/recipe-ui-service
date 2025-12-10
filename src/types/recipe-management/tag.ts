@@ -1,9 +1,6 @@
 export interface RecipeTagDto {
   tagId: number;
   name: string;
-  category: string;
-  description?: string;
-  usageCount?: number;
 }
 
 export interface TagResponse {
@@ -16,8 +13,7 @@ export interface TagResponse {
 }
 
 export interface AddTagRequest {
-  tagName: string;
-  category?: string;
+  name: string;
 }
 
 export interface RemoveTagRequest {

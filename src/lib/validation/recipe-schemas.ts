@@ -10,6 +10,7 @@ import type {
   CreateRecipeIngredientRequest,
   CreateRecipeStepRequest,
 } from '@/types/recipe-management/recipe';
+import type { RecipeTagDto } from '@/types/recipe-management/tag';
 
 /**
  * Recipe title validation schema
@@ -79,6 +80,7 @@ export const recipeIngredientSchema = z.object({
     .min(0.01, 'Quantity must be greater than 0')
     .max(10000, 'Quantity must not exceed 10,000'),
   unit: z.nativeEnum(IngredientUnit),
+  isOptional: z.boolean().optional(),
   notes: z
     .string()
     .max(500, 'Notes must not exceed 500 characters')
@@ -100,6 +102,7 @@ export const recipeStepSchema = z.object({
     .min(10, 'Step instruction must be at least 10 characters')
     .max(1000, 'Step instruction must not exceed 1000 characters')
     .trim(),
+  optional: z.boolean().optional(),
   duration: z
     .number()
     .int('Duration must be a whole number')
@@ -227,16 +230,17 @@ export function convertToCreateRecipeRequest(
 ): CreateRecipeRequest {
   return {
     title: formData.title,
-    description: formData.description,
+    description: formData.description ?? '',
     servings: formData.servings,
-    prepTime: formData.prepTime,
-    cookTime: formData.cookTime,
+    preparationTime: formData.prepTime,
+    cookingTime: formData.cookTime,
     difficulty: formData.difficulty,
     ingredients: formData.ingredients.map(
       (ingredient): CreateRecipeIngredientRequest => ({
-        name: ingredient.name,
+        ingredientName: ingredient.name,
         quantity: ingredient.quantity,
         unit: ingredient.unit,
+        isOptional: ingredient.isOptional,
         notes: ingredient.notes,
       })
     ),
@@ -244,10 +248,16 @@ export function convertToCreateRecipeRequest(
       (step): CreateRecipeStepRequest => ({
         stepNumber: step.stepNumber,
         instruction: step.instruction,
-        duration: step.duration,
+        optional: step.optional,
+        timerSeconds: step.duration,
       })
     ),
-    tags: formData.tags,
+    tags: formData.tags?.map(
+      (tagName): RecipeTagDto => ({
+        tagId: 0,
+        name: tagName,
+      })
+    ),
   };
 }
 
@@ -269,10 +279,10 @@ export function convertToUpdateRecipeRequest(
     updateData.servings = formData.servings;
   }
   if (formData.prepTime !== undefined) {
-    updateData.prepTime = formData.prepTime;
+    updateData.preparationTime = formData.prepTime;
   }
   if (formData.cookTime !== undefined) {
-    updateData.cookTime = formData.cookTime;
+    updateData.cookingTime = formData.cookTime;
   }
   if (formData.difficulty !== undefined) {
     updateData.difficulty = formData.difficulty;
@@ -298,13 +308,15 @@ export function convertFromRecipeDto(recipe: RecipeDto): EditRecipeFormData {
         name: ingredient.ingredientName,
         quantity: ingredient.quantity,
         unit: ingredient.unit,
-        notes: undefined, // Note: RecipeIngredientDto doesn't have notes field
+        isOptional: ingredient.isOptional,
+        notes: undefined,
       })) ?? [],
     steps:
       recipe.steps?.map(step => ({
         stepNumber: step.stepNumber,
         instruction: step.instruction,
-        duration: step.duration,
+        optional: step.optional,
+        duration: step.timerSeconds,
       })) ?? [],
     tags: recipe.tags?.map(tag => tag.name) ?? [],
   };
@@ -342,13 +354,15 @@ export const createRecipeDefaultValues: RecipeFormData = {
       name: '',
       quantity: 1,
       unit: IngredientUnit.UNIT,
-      notes: '',
+      isOptional: false,
+      notes: undefined,
     },
   ],
   steps: [
     {
       stepNumber: 1,
       instruction: '',
+      optional: false,
       duration: undefined,
     },
   ],

@@ -36,8 +36,7 @@ describe('Steps API', () => {
     stepId: 1,
     stepNumber: 1,
     instruction: 'Preheat the oven to 350°F',
-    duration: 5,
-    order: 1,
+    timerSeconds: 300,
   };
 
   const mockStepResponse: StepResponse = {
@@ -48,8 +47,8 @@ describe('Steps API', () => {
   const mockStepComment: StepCommentDto = {
     commentId: 1,
     stepId: 1,
-    userId: 123,
-    comment: 'Great step, very clear instructions!',
+    userId: 'user-123',
+    commentText: 'Great step, very clear instructions!',
     createdAt: '2023-01-01T10:00:00Z',
     updatedAt: '2023-01-01T10:00:00Z',
   };
@@ -131,7 +130,6 @@ describe('Steps API', () => {
     it('should add step comment', async () => {
       const commentRequest: AddStepCommentRequest = {
         comment: 'This step is very helpful!',
-        userId: 123,
       };
 
       mockedClient.post.mockResolvedValue({ data: mockStepComment });
@@ -150,25 +148,23 @@ describe('Steps API', () => {
         'This is a very detailed comment about this step. '.repeat(10);
       const commentRequest: AddStepCommentRequest = {
         comment: longComment,
-        userId: 123,
       };
 
       const commentWithLongText = {
         ...mockStepComment,
-        comment: longComment,
+        commentText: longComment,
       };
 
       mockedClient.post.mockResolvedValue({ data: commentWithLongText });
 
       const result = await stepsApi.addStepComment(1, 1, commentRequest);
 
-      expect(result.comment).toBe(longComment);
+      expect(result.commentText).toBe(longComment);
     });
 
     it('should handle comment validation errors', async () => {
       const invalidComment: AddStepCommentRequest = {
         comment: '',
-        userId: 123,
       };
 
       const error = new Error('Comment cannot be empty');
@@ -185,12 +181,11 @@ describe('Steps API', () => {
       const editRequest: EditStepCommentRequest = {
         commentId: 1,
         comment: 'Updated comment with better information',
-        userId: 123,
       };
 
       const updatedComment = {
         ...mockStepComment,
-        comment: editRequest.comment,
+        commentText: editRequest.comment,
         updatedAt: '2023-01-02T10:00:00Z',
       };
 
@@ -209,7 +204,6 @@ describe('Steps API', () => {
       const editRequest: EditStepCommentRequest = {
         commentId: 1,
         comment: "Trying to edit someone else's comment",
-        userId: 123,
       };
 
       const error = new Error('Permission denied');
@@ -224,7 +218,6 @@ describe('Steps API', () => {
       const editRequest: EditStepCommentRequest = {
         commentId: 999,
         comment: 'Editing non-existent comment',
-        userId: 123,
       };
 
       const error = new Error('Comment not found');
@@ -240,7 +233,6 @@ describe('Steps API', () => {
     it('should delete step comment with reason', async () => {
       const deleteRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 123,
       };
 
       mockedClient.delete.mockResolvedValue({ data: undefined });
@@ -256,7 +248,6 @@ describe('Steps API', () => {
     it('should delete step comment without reason', async () => {
       const deleteRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 123,
       };
 
       mockedClient.delete.mockResolvedValue({ data: undefined });
@@ -272,7 +263,6 @@ describe('Steps API', () => {
     it('should handle delete permission errors', async () => {
       const deleteRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 123,
       };
 
       const error = new Error('Permission denied');
@@ -286,7 +276,6 @@ describe('Steps API', () => {
     it('should handle comment not found during deletion', async () => {
       const deleteRequest: DeleteStepCommentRequest = {
         commentId: 999,
-        userId: 123,
       };
 
       const error = new Error('Comment not found');
@@ -300,7 +289,6 @@ describe('Steps API', () => {
     it('should handle already deleted comments', async () => {
       const deleteRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 123,
       };
 
       const error = new Error('Comment already deleted');

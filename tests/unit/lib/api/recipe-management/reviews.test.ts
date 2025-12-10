@@ -31,11 +31,10 @@ describe('Reviews API', () => {
 
   const mockReview: ReviewDto = {
     reviewId: 1,
-    userId: 123,
+    userId: 'user-123',
     rating: 5,
     comment: 'Absolutely delicious! Will make again.',
     createdAt: '2023-01-01T10:00:00Z',
-    updatedAt: '2023-01-01T10:00:00Z',
   };
 
   const mockReviewResponse: ReviewResponse = {
@@ -76,27 +75,24 @@ describe('Reviews API', () => {
       const multipleReviews: ReviewDto[] = [
         {
           reviewId: 1,
-          userId: 123,
+          userId: 'user-123',
           rating: 5,
           comment: 'Perfect recipe!',
           createdAt: '2023-01-01T10:00:00Z',
-          updatedAt: '2023-01-01T10:00:00Z',
         },
         {
           reviewId: 2,
-          userId: 456,
+          userId: 'user-123',
           rating: 4,
           comment: 'Very good, but could use more seasoning.',
           createdAt: '2023-01-02T10:00:00Z',
-          updatedAt: '2023-01-02T10:00:00Z',
         },
         {
           reviewId: 3,
-          userId: 789,
+          userId: 'user-123',
           rating: 3,
           comment: 'It was okay.',
           createdAt: '2023-01-03T10:00:00Z',
-          updatedAt: '2023-01-03T10:00:00Z',
         },
       ];
 
@@ -131,7 +127,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 5,
         comment: 'Amazing recipe! Easy to follow and delicious.',
-        userId: 123,
       };
 
       mockedClient.post.mockResolvedValue({ data: mockReview });
@@ -148,7 +143,6 @@ describe('Reviews API', () => {
     it('should add review with only rating (no comment)', async () => {
       const addRequest: AddReviewRequest = {
         rating: 4,
-        userId: 123,
       };
 
       const reviewWithoutComment = {
@@ -169,7 +163,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 1,
         comment: 'Did not like this recipe at all.',
-        userId: 123,
       };
 
       const lowRatingReview = {
@@ -189,7 +182,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 5,
         comment: 'Perfect in every way!',
-        userId: 123,
       };
 
       mockedClient.post.mockResolvedValue({ data: mockReview });
@@ -203,7 +195,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 6, // Invalid rating
         comment: 'This rating should not be allowed',
-        userId: 123,
       };
 
       const error = new Error('Rating must be between 1 and 5');
@@ -218,7 +209,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 4,
         comment: 'Trying to review again',
-        userId: 123,
       };
 
       const error = new Error('User has already reviewed this recipe');
@@ -234,7 +224,6 @@ describe('Reviews API', () => {
       const addRequest: AddReviewRequest = {
         rating: 5,
         comment: longComment,
-        userId: 123,
       };
 
       const error = new Error('Comment exceeds maximum length');
@@ -251,14 +240,12 @@ describe('Reviews API', () => {
       const editRequest: EditReviewRequest = {
         rating: 4,
         comment: 'Updated my review - still very good but not perfect',
-        userId: 123,
       };
 
       const updatedReview = {
         ...mockReview,
         rating: 4,
         comment: 'Updated my review - still very good but not perfect',
-        updatedAt: '2023-01-05T10:00:00Z',
       };
 
       mockedClient.put.mockResolvedValue({ data: updatedReview });
@@ -276,13 +263,11 @@ describe('Reviews API', () => {
     it('should edit only rating', async () => {
       const editRequest: EditReviewRequest = {
         rating: 3,
-        userId: 123,
       };
 
       const updatedReview = {
         ...mockReview,
         rating: 3,
-        updatedAt: '2023-01-05T10:00:00Z',
       };
 
       mockedClient.put.mockResolvedValue({ data: updatedReview });
@@ -297,13 +282,11 @@ describe('Reviews API', () => {
       const editRequest: EditReviewRequest = {
         rating: 5,
         comment: 'Updated comment only',
-        userId: 123,
       };
 
       const updatedReview = {
         ...mockReview,
         comment: 'Updated comment only',
-        updatedAt: '2023-01-05T10:00:00Z',
       };
 
       mockedClient.put.mockResolvedValue({ data: updatedReview });
@@ -318,7 +301,6 @@ describe('Reviews API', () => {
       const editRequest: EditReviewRequest = {
         rating: 4,
         comment: 'Trying to edit non-existent review',
-        userId: 123,
       };
 
       const error = new Error('Review not found');
@@ -333,7 +315,6 @@ describe('Reviews API', () => {
       const editRequest: EditReviewRequest = {
         rating: 4,
         comment: "Trying to edit someone else's review",
-        userId: 123,
       };
 
       const error = new Error('Permission denied');

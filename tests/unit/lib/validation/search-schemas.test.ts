@@ -2,11 +2,9 @@ import {
   searchQuerySchema,
   ingredientsListSchema,
   tagsListSchema,
-  difficultyListSchema,
+  difficultySchema,
   maxPrepTimeSchema,
   maxCookTimeSchema,
-  minRatingSchema,
-  sortBySchema,
   searchFormSchema,
   convertToSearchRecipesRequest,
   convertFromSearchRecipesRequest,
@@ -16,7 +14,6 @@ import {
 } from '@/lib/validation/search-schemas';
 import { DifficultyLevel } from '@/types/recipe-management/common';
 import type { SearchRecipesRequest } from '@/types/recipe-management/search';
-import { SearchSortBy } from '@/types/recipe-management/search';
 
 describe('Search Schemas', () => {
   describe('searchQuerySchema', () => {
@@ -115,18 +112,22 @@ describe('Search Schemas', () => {
     });
   });
 
-  describe('difficultyListSchema', () => {
-    it('should validate valid difficulty lists', () => {
-      const difficulties = [DifficultyLevel.EASY, DifficultyLevel.MEDIUM];
-      expect(difficultyListSchema.parse(difficulties)).toEqual(difficulties);
+  describe('difficultySchema', () => {
+    it('should validate valid difficulty levels', () => {
+      expect(difficultySchema.parse(DifficultyLevel.EASY)).toBe(
+        DifficultyLevel.EASY
+      );
+      expect(difficultySchema.parse(DifficultyLevel.MEDIUM)).toBe(
+        DifficultyLevel.MEDIUM
+      );
     });
 
     it('should allow undefined', () => {
-      expect(difficultyListSchema.parse(undefined)).toBeUndefined();
+      expect(difficultySchema.parse(undefined)).toBeUndefined();
     });
 
     it('should reject invalid difficulty levels', () => {
-      expect(() => difficultyListSchema.parse(['INVALID'])).toThrow();
+      expect(() => difficultySchema.parse('INVALID')).toThrow();
     });
   });
 
@@ -188,60 +189,15 @@ describe('Search Schemas', () => {
     });
   });
 
-  describe('minRatingSchema', () => {
-    it('should validate valid ratings', () => {
-      expect(minRatingSchema.parse(1)).toBe(1);
-      expect(minRatingSchema.parse(3)).toBe(3);
-      expect(minRatingSchema.parse(5)).toBe(5);
-    });
-
-    it('should allow undefined', () => {
-      expect(minRatingSchema.parse(undefined)).toBeUndefined();
-    });
-
-    it('should reject ratings below 1', () => {
-      expect(() => minRatingSchema.parse(0)).toThrow(
-        'Rating must be at least 1 star'
-      );
-    });
-
-    it('should reject ratings above 5', () => {
-      expect(() => minRatingSchema.parse(6)).toThrow(
-        'Rating must not exceed 5 stars'
-      );
-    });
-  });
-
-  describe('sortBySchema', () => {
-    it('should validate valid sort options', () => {
-      expect(sortBySchema.parse(SearchSortBy.RATING_DESC)).toBe(
-        SearchSortBy.RATING_DESC
-      );
-      expect(sortBySchema.parse(SearchSortBy.DATE_ASC)).toBe(
-        SearchSortBy.DATE_ASC
-      );
-    });
-
-    it('should allow undefined', () => {
-      expect(sortBySchema.parse(undefined)).toBeUndefined();
-    });
-
-    it('should reject invalid sort options', () => {
-      expect(() => sortBySchema.parse('INVALID')).toThrow();
-    });
-  });
-
   describe('searchFormSchema', () => {
     it('should validate complete search form data', () => {
       const formData = {
         query: 'pasta',
         ingredients: ['tomato', 'basil'],
         tags: ['italian', 'quick'],
-        difficulty: [DifficultyLevel.EASY],
+        difficulty: DifficultyLevel.EASY,
         maxPrepTime: 30,
         maxCookTime: 60,
-        minRating: 4,
-        sortBy: SearchSortBy.RATING_DESC,
       };
       expect(searchFormSchema.parse(formData)).toEqual(formData);
     });
@@ -266,22 +222,18 @@ describe('Search Schemas', () => {
         query: 'pasta',
         ingredients: ['tomato', 'basil'],
         tags: ['italian'],
-        difficulty: [DifficultyLevel.EASY, DifficultyLevel.MEDIUM],
+        difficulty: DifficultyLevel.EASY,
         maxPrepTime: 30,
         maxCookTime: 60,
-        minRating: 4,
-        sortBy: SearchSortBy.RATING_DESC,
       };
       const result = convertToSearchRecipesRequest(formData);
       expect(result).toEqual({
-        query: 'pasta',
+        recipeNameQuery: 'pasta',
         ingredients: ['tomato', 'basil'],
         tags: ['italian'],
-        difficulty: [DifficultyLevel.EASY, DifficultyLevel.MEDIUM],
-        maxPrepTime: 30,
-        maxCookTime: 60,
-        minRating: 4,
-        sortBy: SearchSortBy.RATING_DESC,
+        difficulty: DifficultyLevel.EASY,
+        maxPreparationTime: 30,
+        maxCookingTime: 60,
       });
     });
 
@@ -293,11 +245,9 @@ describe('Search Schemas', () => {
         difficulty: undefined,
         maxPrepTime: undefined,
         maxCookTime: undefined,
-        minRating: undefined,
-        sortBy: undefined,
       };
       const result = convertToSearchRecipesRequest(formData);
-      expect(result).toEqual({ query: 'pizza' });
+      expect(result).toEqual({ recipeNameQuery: 'pizza' });
     });
 
     it('should omit empty arrays', () => {
@@ -305,35 +255,34 @@ describe('Search Schemas', () => {
         query: 'soup',
         ingredients: [],
         tags: [],
-        difficulty: [],
+        difficulty: undefined,
       };
       const result = convertToSearchRecipesRequest(formData);
-      expect(result).toEqual({ query: 'soup' });
+      expect(result).toEqual({ recipeNameQuery: 'soup' });
     });
   });
 
   describe('convertFromSearchRecipesRequest', () => {
     it('should convert API request to form data', () => {
       const searchData: SearchRecipesRequest = {
-        query: 'pasta',
+        recipeNameQuery: 'pasta',
         ingredients: ['tomato'],
         tags: ['italian'],
-        difficulty: [DifficultyLevel.EASY],
-        maxPrepTime: 30,
-        maxCookTime: 60,
-        minRating: 4,
-        sortBy: SearchSortBy.RATING_DESC,
+        difficulty: DifficultyLevel.EASY,
+        maxPreparationTime: 30,
+        maxCookingTime: 60,
       };
       const result = convertFromSearchRecipesRequest(searchData);
       expect(result).toEqual({
         query: 'pasta',
         ingredients: ['tomato'],
+        ingredientMatchMode: undefined,
         tags: ['italian'],
-        difficulty: [DifficultyLevel.EASY],
+        difficulty: DifficultyLevel.EASY,
         maxPrepTime: 30,
         maxCookTime: 60,
-        minRating: 4,
-        sortBy: SearchSortBy.RATING_DESC,
+        minServings: undefined,
+        maxServings: undefined,
       });
     });
 
@@ -343,12 +292,13 @@ describe('Search Schemas', () => {
       expect(result).toEqual({
         query: '',
         ingredients: [],
+        ingredientMatchMode: undefined,
         tags: [],
-        difficulty: [],
+        difficulty: undefined,
         maxPrepTime: undefined,
         maxCookTime: undefined,
-        minRating: undefined,
-        sortBy: undefined,
+        minServings: undefined,
+        maxServings: undefined,
       });
     });
   });
@@ -358,12 +308,13 @@ describe('Search Schemas', () => {
       expect(searchFormDefaultValues).toEqual({
         query: '',
         ingredients: [],
+        ingredientMatchMode: undefined,
         tags: [],
-        difficulty: [],
+        difficulty: undefined,
         maxPrepTime: undefined,
         maxCookTime: undefined,
-        minRating: undefined,
-        sortBy: undefined,
+        minServings: undefined,
+        maxServings: undefined,
       });
     });
   });
@@ -387,18 +338,13 @@ describe('Search Schemas', () => {
     it('should return true when difficulty is present', () => {
       const formData = {
         ...searchFormDefaultValues,
-        difficulty: [DifficultyLevel.EASY],
+        difficulty: DifficultyLevel.EASY,
       };
       expect(hasActiveFilters(formData)).toBe(true);
     });
 
     it('should return true when time constraints are present', () => {
       const formData = { ...searchFormDefaultValues, maxPrepTime: 30 };
-      expect(hasActiveFilters(formData)).toBe(true);
-    });
-
-    it('should return true when rating is present', () => {
-      const formData = { ...searchFormDefaultValues, minRating: 4 };
       expect(hasActiveFilters(formData)).toBe(true);
     });
 
@@ -415,16 +361,15 @@ describe('Search Schemas', () => {
   describe('countActiveFilters', () => {
     it('should count all active filters', () => {
       const formData = {
+        ...searchFormDefaultValues,
         query: 'pasta',
         ingredients: ['tomato'],
         tags: ['italian'],
-        difficulty: [DifficultyLevel.EASY],
+        difficulty: DifficultyLevel.EASY,
         maxPrepTime: 30,
         maxCookTime: 60,
-        minRating: 4,
-        sortBy: undefined,
       };
-      expect(countActiveFilters(formData)).toBe(7);
+      expect(countActiveFilters(formData)).toBe(6);
     });
 
     it('should return 0 when no filters are active', () => {

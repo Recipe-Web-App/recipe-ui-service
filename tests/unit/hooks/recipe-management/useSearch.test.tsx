@@ -49,9 +49,9 @@ describe('useSearch hooks', () => {
   describe('useSearchRecipes', () => {
     it('should search recipes successfully', async () => {
       const searchData: SearchRecipesRequest = {
-        query: 'chicken',
+        recipeNameQuery: 'chicken',
         tags: ['dinner'],
-        difficulty: [DifficultyLevel.EASY],
+        difficulty: DifficultyLevel.EASY,
       };
 
       const mockResponse: SearchRecipesResponse = {
@@ -102,7 +102,7 @@ describe('useSearch hooks', () => {
     });
 
     it('should handle errors', async () => {
-      const searchData: SearchRecipesRequest = { query: 'test' };
+      const searchData: SearchRecipesRequest = { recipeNameQuery: 'test' };
       const error = new Error('Search failed');
       mockedSearchApi.searchRecipes.mockRejectedValue(error);
 
@@ -152,7 +152,7 @@ describe('useSearch hooks', () => {
 
       expect(result.current.data).toEqual(mockResponse);
       expect(mockedSearchApi.searchRecipes).toHaveBeenCalledWith(
-        { query },
+        { recipeNameQuery: query },
         undefined
       );
     });
@@ -199,9 +199,9 @@ describe('useSearch hooks', () => {
 
       // Start with a query that's too short to trigger immediate search
       const { rerender } = renderHook(
-        ({ query }) => useDebouncedRecipeSearch(query, 300),
+        ({ recipeNameQuery }) => useDebouncedRecipeSearch(recipeNameQuery, 300),
         {
-          initialProps: { query: 'c' },
+          initialProps: { recipeNameQuery: 'c' },
           wrapper: createWrapper(),
         }
       );
@@ -211,16 +211,16 @@ describe('useSearch hooks', () => {
 
       // Fast changes should not trigger search due to debouncing
       act(() => {
-        rerender({ query: 'ch' });
+        rerender({ recipeNameQuery: 'ch' });
       });
       act(() => {
-        rerender({ query: 'chi' });
+        rerender({ recipeNameQuery: 'chi' });
       });
       act(() => {
-        rerender({ query: 'chic' });
+        rerender({ recipeNameQuery: 'chic' });
       });
       act(() => {
-        rerender({ query: 'chick' });
+        rerender({ recipeNameQuery: 'chick' });
       });
 
       // Still should not have searched due to debouncing
@@ -233,7 +233,7 @@ describe('useSearch hooks', () => {
 
       await waitFor(() => {
         expect(mockedSearchApi.searchRecipes).toHaveBeenCalledWith(
-          { query: 'chick' },
+          { recipeNameQuery: 'chick' },
           undefined
         );
       });
@@ -243,9 +243,9 @@ describe('useSearch hooks', () => {
   describe('useAdvancedRecipeSearch', () => {
     it('should search with advanced filters', async () => {
       const filters: SearchRecipesRequest = {
-        query: 'chicken',
+        recipeNameQuery: 'chicken',
         tags: ['dinner', 'easy'],
-        difficulty: [DifficultyLevel.EASY, DifficultyLevel.MEDIUM],
+        difficulty: DifficultyLevel.EASY,
         ingredients: ['chicken', 'rice'],
       };
 
@@ -328,7 +328,7 @@ describe('useSearch hooks', () => {
 
   describe('useRecipesByDifficulty', () => {
     it('should search recipes by difficulty', async () => {
-      const difficulty = [DifficultyLevel.EASY, DifficultyLevel.MEDIUM];
+      const difficulty = DifficultyLevel.EASY;
       const mockResponse: SearchRecipesResponse = {
         content: [],
         last: true,
@@ -355,8 +355,8 @@ describe('useSearch hooks', () => {
       );
     });
 
-    it('should filter out invalid difficulty levels', async () => {
-      const difficulty = [DifficultyLevel.EASY, 'INVALID' as DifficultyLevel];
+    it('should handle medium difficulty', async () => {
+      const difficulty = DifficultyLevel.MEDIUM;
       const mockResponse: SearchRecipesResponse = {
         content: [],
         last: true,
@@ -377,13 +377,13 @@ describe('useSearch hooks', () => {
       });
 
       expect(mockedSearchApi.searchRecipes).toHaveBeenCalledWith(
-        { difficulty: [DifficultyLevel.EASY] },
+        { difficulty: DifficultyLevel.MEDIUM },
         undefined
       );
     });
 
-    it('should handle disabled state with empty difficulty', () => {
-      const { result } = renderHook(() => useRecipesByDifficulty([]), {
+    it('should handle disabled state with undefined difficulty', () => {
+      const { result } = renderHook(() => useRecipesByDifficulty(undefined), {
         wrapper: createWrapper(),
       });
 
@@ -453,10 +453,12 @@ describe('useSearch hooks', () => {
       });
 
       act(() => {
-        result.current.updateSearch({ query: 'chicken' });
+        result.current.updateSearch({ recipeNameQuery: 'chicken' });
       });
 
-      expect(result.current.searchCriteria).toEqual({ query: 'chicken' });
+      expect(result.current.searchCriteria).toEqual({
+        recipeNameQuery: 'chicken',
+      });
     });
 
     it('should update pagination params', () => {
@@ -477,7 +479,7 @@ describe('useSearch hooks', () => {
       });
 
       act(() => {
-        result.current.updateSearch({ query: 'chicken' });
+        result.current.updateSearch({ recipeNameQuery: 'chicken' });
       });
       act(() => {
         result.current.updateParams({ page: 1 });

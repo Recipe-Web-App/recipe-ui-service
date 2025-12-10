@@ -1,7 +1,9 @@
 import { z } from 'zod';
-import { DifficultyLevel } from '@/types/recipe-management/common';
+import {
+  DifficultyLevel,
+  IngredientMatchMode,
+} from '@/types/recipe-management/common';
 import type { SearchRecipesRequest } from '@/types/recipe-management/search';
-import { SearchSortBy } from '@/types/recipe-management/search';
 
 /**
  * Search query validation schema
@@ -42,10 +44,25 @@ export const tagsListSchema = z
   .optional();
 
 /**
- * Difficulty list validation schema
+ * Difficulty validation schema (single value, not array)
  */
-export const difficultyListSchema = z
-  .array(z.nativeEnum(DifficultyLevel))
+export const difficultySchema = z.nativeEnum(DifficultyLevel).optional();
+
+/**
+ * Ingredient match mode validation schema
+ */
+export const ingredientMatchModeSchema = z
+  .nativeEnum(IngredientMatchMode)
+  .optional();
+
+/**
+ * Servings validation schema
+ */
+export const servingsSchema = z
+  .number()
+  .int('Servings must be a whole number')
+  .min(1, 'Servings must be at least 1')
+  .max(100, 'Servings must not exceed 100')
   .optional();
 
 /**
@@ -69,31 +86,18 @@ export const maxCookTimeSchema = z
   .optional();
 
 /**
- * Minimum rating validation schema
- */
-export const minRatingSchema = z
-  .number()
-  .min(1, 'Rating must be at least 1 star')
-  .max(5, 'Rating must not exceed 5 stars')
-  .optional();
-
-/**
- * Sort by validation schema
- */
-export const sortBySchema = z.nativeEnum(SearchSortBy).optional();
-
-/**
  * Search form validation schema
  */
 export const searchFormSchema = z.object({
   query: searchQuerySchema,
   ingredients: ingredientsListSchema,
+  ingredientMatchMode: ingredientMatchModeSchema,
   tags: tagsListSchema,
-  difficulty: difficultyListSchema,
+  difficulty: difficultySchema,
   maxPrepTime: maxPrepTimeSchema,
   maxCookTime: maxCookTimeSchema,
-  minRating: minRatingSchema,
-  sortBy: sortBySchema,
+  minServings: servingsSchema,
+  maxServings: servingsSchema,
 });
 
 /**
@@ -120,28 +124,31 @@ export function convertToSearchRecipesRequest(
   const request: SearchRecipesRequest = {};
 
   if (formData.query) {
-    request.query = formData.query;
+    request.recipeNameQuery = formData.query;
   }
   if (formData.ingredients && formData.ingredients.length > 0) {
     request.ingredients = formData.ingredients;
   }
+  if (formData.ingredientMatchMode) {
+    request.ingredientMatchMode = formData.ingredientMatchMode;
+  }
   if (formData.tags && formData.tags.length > 0) {
     request.tags = formData.tags;
   }
-  if (formData.difficulty && formData.difficulty.length > 0) {
+  if (formData.difficulty) {
     request.difficulty = formData.difficulty;
   }
   if (formData.maxPrepTime !== undefined) {
-    request.maxPrepTime = formData.maxPrepTime;
+    request.maxPreparationTime = formData.maxPrepTime;
   }
   if (formData.maxCookTime !== undefined) {
-    request.maxCookTime = formData.maxCookTime;
+    request.maxCookingTime = formData.maxCookTime;
   }
-  if (formData.minRating !== undefined) {
-    request.minRating = formData.minRating;
+  if (formData.minServings !== undefined) {
+    request.minServings = formData.minServings;
   }
-  if (formData.sortBy) {
-    request.sortBy = formData.sortBy;
+  if (formData.maxServings !== undefined) {
+    request.maxServings = formData.maxServings;
   }
 
   return request;
@@ -154,14 +161,15 @@ export function convertFromSearchRecipesRequest(
   searchData: SearchRecipesRequest
 ): SearchFormData {
   return {
-    query: searchData.query ?? '',
+    query: searchData.recipeNameQuery ?? '',
     ingredients: searchData.ingredients ?? [],
+    ingredientMatchMode: searchData.ingredientMatchMode,
     tags: searchData.tags ?? [],
-    difficulty: searchData.difficulty ?? [],
-    maxPrepTime: searchData.maxPrepTime,
-    maxCookTime: searchData.maxCookTime,
-    minRating: searchData.minRating,
-    sortBy: searchData.sortBy,
+    difficulty: searchData.difficulty,
+    maxPrepTime: searchData.maxPreparationTime,
+    maxCookTime: searchData.maxCookingTime,
+    minServings: searchData.minServings,
+    maxServings: searchData.maxServings,
   };
 }
 
@@ -171,12 +179,13 @@ export function convertFromSearchRecipesRequest(
 export const searchFormDefaultValues: SearchFormData = {
   query: '',
   ingredients: [],
+  ingredientMatchMode: undefined,
   tags: [],
-  difficulty: [],
+  difficulty: undefined,
   maxPrepTime: undefined,
   maxCookTime: undefined,
-  minRating: undefined,
-  sortBy: undefined,
+  minServings: undefined,
+  maxServings: undefined,
 };
 
 /**
@@ -186,10 +195,11 @@ export function hasActiveFilters(formData: SearchFormData): boolean {
   if (formData.query && formData.query.length >= 2) return true;
   if (formData.ingredients && formData.ingredients.length > 0) return true;
   if (formData.tags && formData.tags.length > 0) return true;
-  if (formData.difficulty && formData.difficulty.length > 0) return true;
+  if (formData.difficulty !== undefined) return true;
   if (formData.maxPrepTime !== undefined) return true;
   if (formData.maxCookTime !== undefined) return true;
-  if (formData.minRating !== undefined) return true;
+  if (formData.minServings !== undefined) return true;
+  if (formData.maxServings !== undefined) return true;
   return false;
 }
 
@@ -202,10 +212,11 @@ export function countActiveFilters(formData: SearchFormData): number {
   if (formData.query && formData.query.length >= 2) count++;
   if (formData.ingredients && formData.ingredients.length > 0) count++;
   if (formData.tags && formData.tags.length > 0) count++;
-  if (formData.difficulty && formData.difficulty.length > 0) count++;
+  if (formData.difficulty !== undefined) count++;
   if (formData.maxPrepTime !== undefined) count++;
   if (formData.maxCookTime !== undefined) count++;
-  if (formData.minRating !== undefined) count++;
+  if (formData.minServings !== undefined) count++;
+  if (formData.maxServings !== undefined) count++;
 
   return count;
 }

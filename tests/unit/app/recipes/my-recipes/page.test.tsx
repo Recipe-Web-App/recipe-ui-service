@@ -415,7 +415,7 @@ const createMockRecipe = (overrides: Partial<RecipeDto> = {}): RecipeDto => ({
   servings: 4,
   createdAt: '2024-01-01T10:00:00Z',
   updatedAt: '2024-01-01T10:00:00Z',
-  tags: [{ tagId: 1, name: 'dinner', category: 'meal-type' }],
+  tags: [{ tagId: 1, name: 'dinner' }],
   ingredients: [],
   steps: [],
   comments: [],

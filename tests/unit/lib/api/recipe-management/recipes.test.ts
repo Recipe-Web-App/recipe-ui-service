@@ -90,21 +90,20 @@ describe('Recipes API', () => {
         description: 'A new test recipe',
         servings: 4,
         difficulty: 'MEDIUM' as DifficultyLevel,
-        prepTime: 20,
-        cookTime: 40,
+        preparationTime: 20,
+        cookingTime: 40,
         ingredients: [
           {
-            name: 'Test Ingredient',
+            ingredientName: 'Test Ingredient',
             quantity: 1,
             unit: 'CUP',
-            notes: 'Optional notes',
           },
         ],
         steps: [
           {
             stepNumber: 1,
             instruction: 'Test instruction',
-            duration: 5,
+            timerSeconds: 300,
           },
         ],
       };
@@ -120,6 +119,7 @@ describe('Recipes API', () => {
     it('should handle creation errors', async () => {
       const createRequest: CreateRecipeRequest = {
         title: 'Invalid Recipe',
+        description: 'Test description',
         servings: 0,
         ingredients: [],
         steps: [],
@@ -160,8 +160,8 @@ describe('Recipes API', () => {
         description: 'Updated description',
         servings: 6,
         difficulty: 'HARD' as DifficultyLevel,
-        prepTime: 25,
-        cookTime: 45,
+        preparationTime: 25,
+        cookingTime: 45,
       };
 
       const updatedRecipe = { ...mockRecipeDto, ...updateRequest };

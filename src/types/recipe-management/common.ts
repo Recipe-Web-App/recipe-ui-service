@@ -58,10 +58,17 @@ export enum MediaFormat {
 }
 
 export enum ProcessingStatus {
-  PENDING = 'PENDING',
+  INITIATED = 'INITIATED',
+  UPLOADING = 'UPLOADING',
   PROCESSING = 'PROCESSING',
   COMPLETE = 'COMPLETE',
   FAILED = 'FAILED',
+  EXPIRED = 'EXPIRED',
+}
+
+export enum IngredientMatchMode {
+  AND = 'AND',
+  OR = 'OR',
 }
 
 export enum RevisionType {
@@ -92,6 +99,8 @@ export interface RecipeManagementErrorResponse {
   message: string;
   timestamp: string;
   path: string;
+  status: number;
+  requestId?: string;
   details?: Record<string, unknown>;
 }
 

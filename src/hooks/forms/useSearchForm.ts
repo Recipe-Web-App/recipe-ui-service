@@ -205,13 +205,12 @@ export function useSearchForm(options?: SearchFormOptions): SearchFormReturn {
     [form]
   );
 
-  // Toggle difficulty level
+  // Set difficulty level (single value now, not array)
   const toggleDifficulty = useCallback(
     (level: DifficultyLevel) => {
-      const currentDifficulty = form.getValues('difficulty') ?? [];
-      const newDifficulty = currentDifficulty.includes(level)
-        ? currentDifficulty.filter(d => d !== level)
-        : [...currentDifficulty, level];
+      const currentDifficulty = form.getValues('difficulty');
+      // Toggle off if same, otherwise set new value
+      const newDifficulty = currentDifficulty === level ? undefined : level;
       form.setValue('difficulty', newDifficulty, {
         shouldValidate: true,
         shouldDirty: true,
@@ -259,11 +258,11 @@ export function useSearchForm(options?: SearchFormOptions): SearchFormReturn {
   if (formValues.ingredients && formValues.ingredients.length > 0)
     activeFilterCount++;
   if (formValues.tags && formValues.tags.length > 0) activeFilterCount++;
-  if (formValues.difficulty && formValues.difficulty.length > 0)
-    activeFilterCount++;
+  if (formValues.difficulty !== undefined) activeFilterCount++;
   if (formValues.maxPrepTime !== undefined) activeFilterCount++;
   if (formValues.maxCookTime !== undefined) activeFilterCount++;
-  if (formValues.minRating !== undefined) activeFilterCount++;
+  if (formValues.minServings !== undefined) activeFilterCount++;
+  if (formValues.maxServings !== undefined) activeFilterCount++;
 
   return {
     form,

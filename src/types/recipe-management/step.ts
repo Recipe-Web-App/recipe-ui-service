@@ -1,16 +1,20 @@
 export interface RecipeStepDto {
   stepId: number;
+  recipeId?: number;
   stepNumber: number;
   instruction: string;
-  duration?: number;
-  order: number;
+  optional?: boolean;
+  timerSeconds?: number;
+  createdAt?: string;
 }
 
 export interface StepCommentDto {
   commentId: number;
+  recipeId?: number;
   stepId: number;
-  userId: number;
-  comment: string;
+  userId: string;
+  commentText: string;
+  isPublic?: boolean;
   createdAt: string;
   updatedAt?: string;
 }
@@ -24,18 +28,16 @@ export interface StepResponse {
 
 export interface AddStepCommentRequest {
   comment: string;
-  userId: number;
+  isPublic?: boolean;
 }
 
 export interface EditStepCommentRequest {
   commentId: number;
   comment: string;
-  userId: number;
 }
 
 export interface DeleteStepCommentRequest {
   commentId: number;
-  userId: number;
 }
 
 export interface StepCommentResponse {

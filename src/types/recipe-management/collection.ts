@@ -53,9 +53,11 @@ export interface CollectionRecipeDto {
  * Collection collaborator with permissions metadata
  */
 export interface CollaboratorDto {
+  collectionId?: number;
   userId: string;
   username: string;
   grantedBy: string;
+  grantedByUsername?: string;
   grantedAt: string;
 }
 

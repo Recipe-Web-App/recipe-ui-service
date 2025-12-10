@@ -58,11 +58,9 @@ describe('Ingredients API', () => {
   };
 
   const mockShoppingListItem: ShoppingListItemDto = {
-    name: 'Flour',
-    quantity: 2,
+    ingredientName: 'Flour',
+    totalQuantity: 2,
     unit: 'CUP' as IngredientUnit,
-    category: 'Baking',
-    notes: 'All-purpose flour',
   };
 
   const mockShoppingListResponse: ShoppingListResponse = {
@@ -114,7 +112,7 @@ describe('Ingredients API', () => {
         ingredients: [
           {
             ...mockIngredient,
-            quantity: 4, // doubled
+            totalQuantity: 4, // doubled
             comments: [],
           },
         ],
@@ -136,7 +134,7 @@ describe('Ingredients API', () => {
         ingredients: [
           {
             ...mockIngredient,
-            quantity: 1, // halved
+            totalQuantity: 1, // halved
             comments: [],
           },
         ],
@@ -205,7 +203,6 @@ describe('Ingredients API', () => {
     it('should add ingredient comment', async () => {
       const commentRequest: AddIngredientCommentRequest = {
         comment: 'This ingredient works well',
-        userId: 1,
       };
 
       mockedClient.post.mockResolvedValue({ data: mockCommentResponse });
@@ -226,7 +223,6 @@ describe('Ingredients API', () => {
     it('should handle comment validation errors', async () => {
       const invalidComment: AddIngredientCommentRequest = {
         comment: '',
-        userId: 1,
       };
 
       const error = new Error('Comment cannot be empty');
@@ -243,7 +239,6 @@ describe('Ingredients API', () => {
       const editRequest: EditIngredientCommentRequest = {
         commentId: 1,
         comment: 'Updated comment',
-        userId: 1,
       };
 
       const updatedCommentResponse = {
@@ -274,7 +269,6 @@ describe('Ingredients API', () => {
       const editRequest: EditIngredientCommentRequest = {
         commentId: 1,
         comment: 'Updated comment',
-        userId: 1,
       };
 
       const error = new Error('Comment not found');
@@ -290,7 +284,6 @@ describe('Ingredients API', () => {
     it('should delete ingredient comment', async () => {
       const deleteRequest: DeleteIngredientCommentRequest = {
         commentId: 1,
-        userId: 1,
       };
 
       const deleteResponse = {
@@ -315,7 +308,6 @@ describe('Ingredients API', () => {
     it('should handle delete comment errors', async () => {
       const deleteRequest: DeleteIngredientCommentRequest = {
         commentId: 1,
-        userId: 1,
       };
 
       const error = new Error('Comment already deleted');
@@ -329,7 +321,6 @@ describe('Ingredients API', () => {
     it('should handle delete comment successfully', async () => {
       const deleteRequest: DeleteIngredientCommentRequest = {
         commentId: 1,
-        userId: 1,
       };
 
       const deleteResponse = {

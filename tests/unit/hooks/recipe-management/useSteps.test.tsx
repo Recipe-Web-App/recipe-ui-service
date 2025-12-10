@@ -61,15 +61,13 @@ describe('useSteps hooks', () => {
             stepId: 1,
             stepNumber: 1,
             instruction: 'Preheat oven to 350°F',
-            duration: 5,
-            order: 1,
+            timerSeconds: 300,
           },
           {
             stepId: 2,
             stepNumber: 2,
             instruction: 'Mix ingredients',
-            duration: 10,
-            order: 2,
+            timerSeconds: 600,
           },
         ],
       };
@@ -121,10 +119,9 @@ describe('useSteps hooks', () => {
           {
             commentId: 1,
             stepId: 1,
-            userId: 1,
-            comment: 'Great tip!',
+            userId: 'user-123',
+            commentText: 'Great tip!',
             createdAt: '2024-01-01T00:00:00Z',
-            updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
       };
@@ -172,16 +169,14 @@ describe('useSteps hooks', () => {
     it('should add step comment successfully', async () => {
       const mockRequest: AddStepCommentRequest = {
         comment: 'This step is confusing',
-        userId: 1,
       };
 
       const mockResponse: StepCommentDto = {
         commentId: 2,
         stepId: 1,
-        userId: 1,
-        comment: 'This step is confusing',
+        userId: 'user-123',
+        commentText: 'This step is confusing',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z',
       };
 
       mockedStepsApi.addStepComment.mockResolvedValue(mockResponse);
@@ -207,7 +202,6 @@ describe('useSteps hooks', () => {
     it('should handle errors', async () => {
       const mockRequest: AddStepCommentRequest = {
         comment: 'Test comment',
-        userId: 1,
       };
 
       const error = new Error('Failed to add comment');
@@ -232,16 +226,14 @@ describe('useSteps hooks', () => {
       const mockRequest: EditStepCommentRequest = {
         commentId: 1,
         comment: 'Updated comment text',
-        userId: 1,
       };
 
       const mockResponse: StepCommentDto = {
         commentId: 1,
         stepId: 1,
-        userId: 1,
-        comment: 'Updated comment text',
+        userId: 'user-123',
+        commentText: 'Updated comment text',
         createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T01:00:00Z',
       };
 
       mockedStepsApi.editStepComment.mockResolvedValue(mockResponse);
@@ -268,7 +260,6 @@ describe('useSteps hooks', () => {
       const mockRequest: EditStepCommentRequest = {
         commentId: 1,
         comment: 'Updated comment',
-        userId: 1,
       };
 
       const error = new Error('Failed to edit comment');
@@ -292,7 +283,6 @@ describe('useSteps hooks', () => {
     it('should delete step comment successfully', async () => {
       const mockRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 1,
       };
 
       const mockResponse = undefined;
@@ -320,7 +310,6 @@ describe('useSteps hooks', () => {
     it('should handle errors', async () => {
       const mockRequest: DeleteStepCommentRequest = {
         commentId: 1,
-        userId: 1,
       };
 
       const error = new Error('Failed to delete comment');
