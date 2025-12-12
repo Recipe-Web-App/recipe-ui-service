@@ -364,6 +364,159 @@ describe('ReviewStep', () => {
     });
   });
 
+  describe('Tag confirmation prompt', () => {
+    it('should show confirmation prompt when input loses focus with text', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.type(tagInput, 'vegetarian');
+      await user.tab(); // Trigger blur
+
+      expect(screen.getByText(/as a tag\?/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /^yes$/i })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /^no$/i })).toBeInTheDocument();
+    });
+
+    it('should add tag when clicking Yes on confirmation', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.type(tagInput, 'vegetarian');
+      await user.tab();
+
+      await user.click(screen.getByRole('button', { name: /^yes$/i }));
+
+      expect(screen.getByText('vegetarian')).toBeInTheDocument();
+      expect(screen.queryByText(/as a tag\?/i)).not.toBeInTheDocument();
+    });
+
+    it('should dismiss prompt and clear input when clicking No', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.type(tagInput, 'vegetarian');
+      await user.tab();
+
+      await user.click(screen.getByRole('button', { name: /^no$/i }));
+
+      expect(screen.queryByText(/as a tag\?/i)).not.toBeInTheDocument();
+      expect(tagInput).toHaveValue('');
+    });
+
+    it('should not show prompt for empty input on blur', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.click(tagInput);
+      await user.tab();
+
+      expect(screen.queryByText(/as a tag\?/i)).not.toBeInTheDocument();
+    });
+
+    it('should not show prompt for duplicate tag on blur', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      // 'dessert' is already in validFormData tags
+      await user.type(tagInput, 'dessert');
+      await user.tab();
+
+      expect(screen.queryByText(/as a tag\?/i)).not.toBeInTheDocument();
+    });
+  });
+
   describe('Action buttons', () => {
     it('should display Save as Draft and Publish buttons', () => {
       render(

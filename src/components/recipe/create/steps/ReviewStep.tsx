@@ -74,6 +74,7 @@ export function ReviewStep({
   isSavingDraft,
 }: ReviewStepProps) {
   const [newTag, setNewTag] = React.useState('');
+  const [pendingTag, setPendingTag] = React.useState<string | null>(null);
   const {
     watch,
     setValue,
@@ -90,7 +91,28 @@ export function ReviewStep({
     if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 20) {
       setValue('tags', [...tags, trimmedTag], { shouldValidate: true });
       setNewTag('');
+      setPendingTag(null);
     }
+  };
+
+  const handleInputBlur = () => {
+    const trimmedTag = newTag.trim();
+    if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 20) {
+      setPendingTag(trimmedTag);
+    }
+  };
+
+  const handleConfirmPendingTag = () => {
+    if (pendingTag) {
+      setValue('tags', [...tags, pendingTag], { shouldValidate: true });
+      setNewTag('');
+      setPendingTag(null);
+    }
+  };
+
+  const handleDismissPendingTag = () => {
+    setPendingTag(null);
+    setNewTag('');
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
@@ -269,6 +291,7 @@ export function ReviewStep({
               value={newTag}
               onChange={e => setNewTag(e.target.value)}
               onKeyDown={handleKeyDown}
+              onBlur={handleInputBlur}
               placeholder="Add a tag (e.g., Italian, Vegetarian)"
               size="sm"
               className="flex-1"
@@ -285,8 +308,36 @@ export function ReviewStep({
             </Button>
           </div>
           <p className="text-muted-foreground text-xs">
-            Tags help others discover your recipe. Press Enter to add a tag.
+            Tags help others discover your recipe. Press Enter or click away to
+            add a tag.
           </p>
+
+          {/* Pending Tag Confirmation */}
+          {pendingTag && (
+            <div className="bg-muted/50 flex items-center justify-between rounded-md px-3 py-2">
+              <span className="text-sm">
+                Add &ldquo;<strong>{pendingTag}</strong>&rdquo; as a tag?
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleDismissPendingTag}
+                >
+                  No
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="default"
+                  onClick={handleConfirmPendingTag}
+                >
+                  Yes
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
 
         <Divider />
