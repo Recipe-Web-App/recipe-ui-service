@@ -12,7 +12,6 @@ import {
   quantityInputHelperTextVariants,
 } from '@/lib/ui/quantity-input-variants';
 import {
-  getSmartStep,
   incrementValue,
   decrementValue,
   roundToPrecision,
@@ -86,17 +85,6 @@ const QuantityInput = React.forwardRef<HTMLInputElement, QuantityInputProps>(
 
     // Get the current numeric value
     const numericValue = typeof value === 'number' ? value : null;
-
-    // Calculate the current step based on smart stepping or fixed step
-    const getCurrentStep = React.useCallback(
-      (currentValue: number) => {
-        if (smartStep) {
-          return getSmartStep(currentValue, stepConfig);
-        }
-        return step;
-      },
-      [smartStep, stepConfig, step]
-    );
 
     // Handle increment
     const handleIncrement = React.useCallback(() => {
@@ -383,9 +371,7 @@ const QuantityInput = React.forwardRef<HTMLInputElement, QuantityInputProps>(
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             className={cn(quantityInputVariants({ size }), inputClassName)}
-            step={
-              smartStep ? getCurrentStep(numericValue ?? defaultValue) : step
-            }
+            step="any"
             min={min}
             max={max}
             {...accessibilityProps}

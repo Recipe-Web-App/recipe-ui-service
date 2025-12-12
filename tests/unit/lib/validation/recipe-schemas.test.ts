@@ -89,7 +89,12 @@ describe('Recipe Schemas', () => {
       expect(recipePrepTimeSchema.parse(0)).toBe(0);
       expect(recipePrepTimeSchema.parse(30)).toBe(30);
       expect(recipePrepTimeSchema.parse(1440)).toBe(1440);
-      expect(recipePrepTimeSchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined (prep time is required)', () => {
+      expect(() => recipePrepTimeSchema.parse(undefined)).toThrow(
+        'Preparation time is required'
+      );
     });
 
     it('should reject invalid prep times', () => {
@@ -110,7 +115,12 @@ describe('Recipe Schemas', () => {
       expect(recipeCookTimeSchema.parse(0)).toBe(0);
       expect(recipeCookTimeSchema.parse(45)).toBe(45);
       expect(recipeCookTimeSchema.parse(1440)).toBe(1440);
-      expect(recipeCookTimeSchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined (cook time is required)', () => {
+      expect(() => recipeCookTimeSchema.parse(undefined)).toThrow(
+        'Cooking time is required'
+      );
     });
 
     it('should reject invalid cook times', () => {
@@ -480,8 +490,8 @@ describe('Recipe Schemas', () => {
         title: '',
         description: '',
         servings: 4,
-        prepTime: undefined,
-        cookTime: undefined,
+        prepTime: 0,
+        cookTime: 0,
         difficulty: undefined,
         ingredients: [
           {

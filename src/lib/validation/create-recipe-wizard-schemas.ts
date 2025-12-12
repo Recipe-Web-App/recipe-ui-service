@@ -22,11 +22,22 @@ export const basicInfoStepSchema = z.object({
 });
 
 /**
+ * Servings schema for wizard step validation (required)
+ * The base recipeServingsSchema is optional to allow clearing during editing,
+ * but step validation requires a value before proceeding.
+ */
+const requiredServingsSchema = z
+  .number({ message: 'Servings is required' })
+  .int('Servings must be a whole number')
+  .min(1, 'Servings must be at least 1')
+  .max(100, 'Servings must not exceed 100');
+
+/**
  * Timing Step Schema
  * Validates: servings, prepTime, cookTime, difficulty
  */
 export const timingStepSchema = z.object({
-  servings: recipeServingsSchema,
+  servings: requiredServingsSchema,
   prepTime: recipePrepTimeSchema,
   cookTime: recipeCookTimeSchema,
   difficulty: recipeDifficultySchema,
@@ -115,12 +126,14 @@ export const tagsSchema = z.object({
 /**
  * Complete wizard form schema
  * Combines all step schemas for full form validation
+ * Note: Uses optional recipeServingsSchema to allow clearing during editing.
+ * Step validation (timingStepSchema) enforces the requirement when clicking Next.
  */
 export const createRecipeWizardFormSchema = z.object({
   // Basic Info
   title: recipeTitleSchema,
   description: recipeDescriptionSchema,
-  // Timing
+  // Timing - use optional schema for editing; step validation enforces requirement
   servings: recipeServingsSchema,
   prepTime: recipePrepTimeSchema,
   cookTime: recipeCookTimeSchema,

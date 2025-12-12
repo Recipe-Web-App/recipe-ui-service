@@ -70,9 +70,36 @@ describe('Create Recipe Wizard Schemas', () => {
       expect(result.success).toBe(true);
     });
 
-    it('should validate with optional fields', () => {
+    it('should validate with optional difficulty', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
+        prepTime: 15,
+        cookTime: 30,
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject missing prepTime', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        cookTime: 30,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject missing cookTime', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        prepTime: 15,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should accept zero prepTime and cookTime', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        prepTime: 0,
+        cookTime: 0,
       });
       expect(result.success).toBe(true);
     });
@@ -80,6 +107,8 @@ describe('Create Recipe Wizard Schemas', () => {
     it('should reject invalid servings', () => {
       const result = timingStepSchema.safeParse({
         servings: 0,
+        prepTime: 15,
+        cookTime: 30,
       });
       expect(result.success).toBe(false);
     });
@@ -87,6 +116,8 @@ describe('Create Recipe Wizard Schemas', () => {
     it('should reject servings over 100', () => {
       const result = timingStepSchema.safeParse({
         servings: 101,
+        prepTime: 15,
+        cookTime: 30,
       });
       expect(result.success).toBe(false);
     });
@@ -95,6 +126,7 @@ describe('Create Recipe Wizard Schemas', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
         prepTime: -1,
+        cookTime: 30,
       });
       expect(result.success).toBe(false);
     });
@@ -103,6 +135,25 @@ describe('Create Recipe Wizard Schemas', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
         prepTime: 1441,
+        cookTime: 30,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject negative cook time', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        prepTime: 15,
+        cookTime: -1,
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject cook time over 1440 minutes', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        prepTime: 15,
+        cookTime: 1441,
       });
       expect(result.success).toBe(false);
     });
@@ -307,6 +358,8 @@ describe('Create Recipe Wizard Schemas', () => {
       const minimalData = {
         title: 'Test Recipe',
         servings: 4,
+        prepTime: 0,
+        cookTime: 0,
         ingredients: [
           { id: '1', name: 'Test ingredient', quantity: 1, unit: 'CUP' },
         ],
@@ -343,7 +396,7 @@ describe('Create Recipe Wizard Schemas', () => {
     });
 
     it('should validate timing step', () => {
-      const data = { servings: 4, prepTime: 15 };
+      const data = { servings: 4, prepTime: 15, cookTime: 30 };
       const result = validateStep(CreateRecipeWizardStep.TIMING, data);
       expect(result.success).toBe(true);
     });
@@ -376,6 +429,8 @@ describe('Create Recipe Wizard Schemas', () => {
     const validData: Partial<CreateRecipeFormData> = {
       title: 'Test Recipe',
       servings: 4,
+      prepTime: 15,
+      cookTime: 30,
       ingredients: [{ id: '1', name: 'Test', quantity: 1, unit: 'CUP' }],
       steps: [{ id: '1', stepNumber: 1, instruction: 'Test instruction here' }],
     };
@@ -399,7 +454,12 @@ describe('Create Recipe Wizard Schemas', () => {
     });
 
     it('should validate partial progress', () => {
-      const partialData = { title: 'Test Recipe', servings: 4 };
+      const partialData = {
+        title: 'Test Recipe',
+        servings: 4,
+        prepTime: 15,
+        cookTime: 30,
+      };
       const result = validateStepsUpTo(
         CreateRecipeWizardStep.TIMING,
         partialData

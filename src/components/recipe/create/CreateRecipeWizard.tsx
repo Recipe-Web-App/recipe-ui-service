@@ -15,6 +15,7 @@ import { useToastStore } from '@/stores/ui/toast-store';
 import {
   createRecipeWizardFormSchema,
   validateStep,
+  stepFields,
 } from '@/lib/validation/create-recipe-wizard-schemas';
 import { cn } from '@/lib/utils';
 import {
@@ -293,14 +294,18 @@ export function CreateRecipeWizard({
 
   // Handler for next button
   const handleNext = React.useCallback(async () => {
-    const isStepValid = await validateCurrentStep(currentStep);
-    if (isStepValid && currentStepIndex < totalSteps - 1) {
+    // Get fields for current step and trigger React Hook Form validation
+    // This populates the errors object so validation messages display in the UI
+    const fieldsToValidate = stepFields[currentStep as CreateRecipeWizardStep];
+    const isValid = await form.trigger(fieldsToValidate);
+
+    if (isValid && currentStepIndex < totalSteps - 1) {
       const nextStep = WIZARD_STEPS[currentStepIndex + 1];
       if (nextStep) {
         setCurrentStep(nextStep.id);
       }
     }
-  }, [currentStep, currentStepIndex, totalSteps, validateCurrentStep]);
+  }, [currentStep, currentStepIndex, totalSteps, form]);
 
   // Don't render until initialized
   if (!isInitialized && showRestoreDialog) {

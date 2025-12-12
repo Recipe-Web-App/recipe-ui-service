@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -114,32 +114,47 @@ describe('TimingStep', () => {
       expect(servingsInput).toHaveValue(8);
     });
 
-    it('should clamp value to minimum of 1', async () => {
+    it('should allow clearing the field completely', async () => {
       const user = userEvent.setup();
+      let formRef: ReturnType<typeof useForm<CreateRecipeFormData>> | undefined;
 
       render(
         <TestWrapper>
-          {form => (
-            <TimingStep
-              form={form}
-              isActive={true}
-              stepIndex={1}
-              totalSteps={5}
-            />
-          )}
+          {form => {
+            formRef = form;
+            return (
+              <TimingStep
+                form={form}
+                isActive={true}
+                stepIndex={1}
+                totalSteps={5}
+              />
+            );
+          }}
         </TestWrapper>
       );
 
-      const servingsInput = screen.getByLabelText(/servings/i);
-      // Triple-click to select all, then type 0
-      await user.tripleClick(servingsInput);
-      await user.keyboard('0');
+      const servingsInput = screen.getByLabelText(
+        /servings/i
+      ) as HTMLInputElement;
+      expect(servingsInput).toHaveValue(4);
 
-      // The component clamps to min 1
-      expect(servingsInput).toHaveValue(1);
+      // Clear the input using user.clear()
+      await user.clear(servingsInput);
+
+      // Wait for form state to update
+      await waitFor(() => {
+        expect(formRef?.getValues('servings')).toBeUndefined();
+      });
+
+      // Blur should not auto-fill the value
+      fireEvent.blur(servingsInput);
+
+      // Check form value is still undefined after blur (no clamping/auto-fill)
+      expect(formRef?.getValues('servings')).toBeUndefined();
     });
 
-    it('should clamp value to maximum of 100', async () => {
+    it('should allow typing values outside range for editing purposes', async () => {
       const user = userEvent.setup();
 
       render(
@@ -160,8 +175,8 @@ describe('TimingStep', () => {
       await user.tripleClick(servingsInput);
       await user.keyboard('150');
 
-      // The component clamps to max 100
-      expect(servingsInput).toHaveValue(100);
+      // Value should be what user typed (validation happens on form submit)
+      expect(servingsInput).toHaveValue(150);
     });
   });
 

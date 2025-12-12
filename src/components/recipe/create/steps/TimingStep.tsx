@@ -69,6 +69,23 @@ function combineToMinutes(hours: string, minutes: string): number | undefined {
 }
 
 /**
+ * Convert servings number to string for display
+ */
+function getServingsDisplay(servings: number | undefined): string {
+  if (servings === undefined) return '';
+  return String(servings);
+}
+
+/**
+ * Parse servings string to number
+ */
+function parseServings(value: string): number | undefined {
+  if (value === '') return undefined;
+  const num = parseInt(value, 10);
+  return isNaN(num) ? undefined : num;
+}
+
+/**
  * TimingStep Component
  *
  * Second step of the recipe creation wizard.
@@ -101,21 +118,20 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
               control={control}
               render={({ field }) => (
                 <Input
-                  {...field}
                   type="number"
                   label="Servings"
                   placeholder="e.g., 4"
                   required
                   min={1}
                   max={100}
+                  value={getServingsDisplay(field.value)}
                   onChange={e => {
-                    const value = parseInt(e.target.value, 10);
-                    if (!isNaN(value)) {
-                      field.onChange(Math.max(1, Math.min(100, value)));
-                    }
+                    field.onChange(parseServings(e.target.value));
                   }}
+                  onBlur={field.onBlur}
                   errorText={errors.servings?.message}
                   helperText="Number of portions"
+                  aria-label="Servings"
                 />
               )}
             />
@@ -124,7 +140,7 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
           {/* Prep Time - spans 2 columns */}
           <div className="sm:border-border space-y-2 sm:col-span-2 sm:border-r sm:pr-4">
             <label className="text-sm leading-none font-medium">
-              Prep Time
+              Prep Time <span className="text-destructive">*</span>
             </label>
             <Controller
               name="prepTime"
@@ -179,7 +195,7 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
           {/* Cook Time - spans 2 columns */}
           <div className="space-y-2 sm:col-span-2">
             <label className="text-sm leading-none font-medium">
-              Cook Time
+              Cook Time <span className="text-destructive">*</span>
             </label>
             <Controller
               name="cookTime"

@@ -69,11 +69,13 @@ export interface BasicInfoStepData {
 
 /**
  * Timing step form data
+ * Note: servings is optional to allow clearing the field during editing.
+ * Step validation enforces the requirement when clicking Next.
  */
 export interface TimingStepData {
-  servings: number;
-  prepTime?: number;
-  cookTime?: number;
+  servings?: number;
+  prepTime: number;
+  cookTime: number;
   difficulty?: DifficultyLevel;
 }
 
@@ -127,16 +129,17 @@ export interface TagsStepData {
  * Complete wizard form data
  * Combines all step data into a single form
  * Note: tags is optional here to match Zod schema input type,
- * but defaults to [] in both schema and default values
+ * but defaults to [] in both schema and default values.
+ * Servings is optional to allow clearing during editing; step validation enforces the requirement.
  */
 export interface CreateRecipeFormData {
   // Basic Info
   title: string;
   description?: string;
   // Timing
-  servings: number;
-  prepTime?: number;
-  cookTime?: number;
+  servings?: number;
+  prepTime: number;
+  cookTime: number;
   difficulty?: DifficultyLevel;
   // Ingredients
   ingredients: IngredientFormData[];
@@ -153,8 +156,8 @@ export const CREATE_RECIPE_DEFAULT_VALUES: CreateRecipeFormData = {
   title: '',
   description: '',
   servings: 4,
-  prepTime: undefined,
-  cookTime: undefined,
+  prepTime: 0,
+  cookTime: 0,
   difficulty: undefined,
   ingredients: [
     {
@@ -251,7 +254,7 @@ export function convertFormDataToRequest(
   return {
     title: formData.title,
     description: formData.description ?? '',
-    servings: formData.servings,
+    servings: formData.servings ?? 4, // Validated before calling; fallback for type safety
     preparationTime: formData.prepTime,
     cookingTime: formData.cookTime,
     difficulty: formData.difficulty,

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Plus, Trash2, Clock } from 'lucide-react';
-import { Controller, useFieldArray } from 'react-hook-form';
+import { Controller, useFieldArray, type FieldErrors } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -22,9 +22,41 @@ import {
 } from '@/components/ui/sortable-list';
 import {
   createEmptyInstruction,
+  type CreateRecipeFormData,
   type InstructionFormData,
   type StepComponentProps,
 } from '@/types/recipe/create-recipe-wizard';
+
+/**
+ * Type for individual instruction field errors
+ */
+interface InstructionFieldError {
+  instruction?: { message?: string };
+  duration?: { message?: string };
+}
+
+/**
+ * Safely get instruction error message at a specific index
+ * Uses Array.prototype.at() to avoid object injection warnings
+ */
+function getInstructionError(
+  errors: FieldErrors<CreateRecipeFormData>,
+  index: number,
+  field: 'instruction' | 'duration'
+): string | undefined {
+  const stepErrors = errors.steps;
+  if (!stepErrors || !Array.isArray(stepErrors)) return undefined;
+  const stepError = stepErrors.at(index) as InstructionFieldError | undefined;
+  if (!stepError) return undefined;
+  switch (field) {
+    case 'instruction':
+      return stepError.instruction?.message;
+    case 'duration':
+      return stepError.duration?.message;
+    default:
+      return undefined;
+  }
+}
 
 /**
  * InstructionsStep Component
@@ -157,8 +189,11 @@ export function InstructionsStep({ form, isActive }: StepComponentProps) {
                       autoResize
                       showCharacterCount
                       maxLength={1000}
-                      // eslint-disable-next-line security/detect-object-injection
-                      errorMessage={errors.steps?.[index]?.instruction?.message}
+                      errorMessage={getInstructionError(
+                        errors,
+                        index,
+                        'instruction'
+                      )}
                       aria-label={`Step ${index + 1} instruction`}
                       className="w-full"
                     />
