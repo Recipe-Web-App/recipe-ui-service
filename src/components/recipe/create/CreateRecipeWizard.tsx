@@ -148,13 +148,16 @@ export function CreateRecipeWizard({
   };
 
   // Step validation function
-  const validateCurrentStep = async (stepId: string): Promise<boolean> => {
-    const result = validateStep(
-      stepId as CreateRecipeWizardStep,
-      form.getValues()
-    );
-    return result.success;
-  };
+  const validateCurrentStep = React.useCallback(
+    async (stepId: string): Promise<boolean> => {
+      const result = validateStep(
+        stepId as CreateRecipeWizardStep,
+        form.getValues()
+      );
+      return result.success;
+    },
+    [form]
+  );
 
   // Navigate to a specific step
   const goToStep = React.useCallback((step: CreateRecipeWizardStep) => {
@@ -278,34 +281,26 @@ export function CreateRecipeWizard({
     [] // Truly static - no dependencies
   );
 
-  // Custom controls for navigation (hide default controls on review step)
-  const customControls =
-    currentStep === CreateRecipeWizardStep.REVIEW ? (
-      <div /> // Review step has its own buttons
-    ) : (
-      <StepControls
-        canGoPrevious={currentStepIndex > 0}
-        canGoNext={currentStepIndex < totalSteps - 1}
-        showFinish={false}
-        onPrevious={() => {
-          if (currentStepIndex > 0) {
-            const prevStep = WIZARD_STEPS[currentStepIndex - 1];
-            if (prevStep) {
-              setCurrentStep(prevStep.id);
-            }
-          }
-        }}
-        onNext={async () => {
-          const isStepValid = await validateCurrentStep(currentStep);
-          if (isStepValid && currentStepIndex < totalSteps - 1) {
-            const nextStep = WIZARD_STEPS[currentStepIndex + 1];
-            if (nextStep) {
-              setCurrentStep(nextStep.id);
-            }
-          }
-        }}
-      />
-    );
+  // Handler for previous button
+  const handlePrevious = React.useCallback(() => {
+    if (currentStepIndex > 0) {
+      const prevStep = WIZARD_STEPS[currentStepIndex - 1];
+      if (prevStep) {
+        setCurrentStep(prevStep.id);
+      }
+    }
+  }, [currentStepIndex]);
+
+  // Handler for next button
+  const handleNext = React.useCallback(async () => {
+    const isStepValid = await validateCurrentStep(currentStep);
+    if (isStepValid && currentStepIndex < totalSteps - 1) {
+      const nextStep = WIZARD_STEPS[currentStepIndex + 1];
+      if (nextStep) {
+        setCurrentStep(nextStep.id);
+      }
+    }
+  }, [currentStep, currentStepIndex, totalSteps, validateCurrentStep]);
 
   // Don't render until initialized
   if (!isInitialized && showRestoreDialog) {
@@ -384,7 +379,7 @@ export function CreateRecipeWizard({
               showProgress={true}
               orientation="horizontal"
               size="default"
-              controls={customControls}
+              controls={<div />}
             />
 
             {/* Step content renders DIRECTLY via conditional rendering */}
@@ -436,6 +431,20 @@ export function CreateRecipeWizard({
                 />
               )}
             </div>
+
+            {/* Navigation controls - positioned below content for visibility */}
+            {currentStep !== CreateRecipeWizardStep.REVIEW && (
+              <StepControls
+                canGoPrevious={currentStepIndex > 0}
+                canGoNext={currentStepIndex < totalSteps - 1}
+                showFinish={false}
+                size="lg"
+                alignment="center"
+                onPrevious={handlePrevious}
+                onNext={handleNext}
+                className="mt-8 border-t pt-6"
+              />
+            )}
           </form>
         </CardContent>
       </Card>
