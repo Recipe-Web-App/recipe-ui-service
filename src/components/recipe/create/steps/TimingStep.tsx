@@ -1,11 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Minus, Plus } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { RadioGroup } from '@/components/ui/radio';
+import { cn } from '@/lib/utils';
 import {
   Card,
   CardContent,
@@ -17,40 +15,58 @@ import { DifficultyLevel } from '@/types/recipe-management/common';
 import type { StepComponentProps } from '@/types/recipe/create-recipe-wizard';
 
 /**
- * Difficulty level options for radio group
+ * Difficulty level options for segmented control
  */
 const DIFFICULTY_OPTIONS = [
   {
     id: DifficultyLevel.BEGINNER,
     value: DifficultyLevel.BEGINNER,
     label: 'Beginner',
-    description: 'Perfect for first-time cooks',
   },
-  {
-    id: DifficultyLevel.EASY,
-    value: DifficultyLevel.EASY,
-    label: 'Easy',
-    description: 'Simple recipes with few steps',
-  },
+  { id: DifficultyLevel.EASY, value: DifficultyLevel.EASY, label: 'Easy' },
   {
     id: DifficultyLevel.MEDIUM,
     value: DifficultyLevel.MEDIUM,
     label: 'Medium',
-    description: 'Some cooking experience helpful',
   },
-  {
-    id: DifficultyLevel.HARD,
-    value: DifficultyLevel.HARD,
-    label: 'Hard',
-    description: 'Advanced techniques required',
-  },
+  { id: DifficultyLevel.HARD, value: DifficultyLevel.HARD, label: 'Hard' },
   {
     id: DifficultyLevel.EXPERT,
     value: DifficultyLevel.EXPERT,
     label: 'Expert',
-    description: 'For professional chefs',
   },
 ];
+
+/**
+ * Get hours component from total minutes
+ */
+function getHoursFromMinutes(totalMinutes: number | undefined): string {
+  if (totalMinutes === undefined || totalMinutes === 0) return '';
+  const hours = Math.floor(totalMinutes / 60);
+  return hours > 0 ? String(hours) : '';
+}
+
+/**
+ * Get minutes remainder from total minutes
+ */
+function getMinutesRemainder(totalMinutes: number | undefined): string {
+  if (totalMinutes === undefined) return '';
+  const mins = totalMinutes % 60;
+  // Show minutes if there are any, or if there are no hours but total is 0
+  if (mins > 0) return String(mins);
+  if (totalMinutes > 0 && totalMinutes % 60 === 0) return '';
+  return '';
+}
+
+/**
+ * Combine hours and minutes strings into total minutes
+ */
+function combineToMinutes(hours: string, minutes: string): number | undefined {
+  const h = parseInt(hours, 10) || 0;
+  const m = parseInt(minutes, 10) || 0;
+  if (h === 0 && m === 0) return undefined;
+  return h * 60 + m;
+}
 
 /**
  * TimingStep Component
@@ -63,17 +79,9 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
     control,
     formState: { errors },
     watch,
-    setValue,
   } = form;
 
-  const servings = watch('servings') ?? 4;
-
   if (!isActive) return null;
-
-  const handleServingsChange = (delta: number) => {
-    const newValue = Math.max(1, Math.min(100, servings + delta));
-    setValue('servings', newValue, { shouldValidate: true });
-  };
 
   return (
     <Card className="border-0 shadow-none">
@@ -84,22 +92,10 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6 px-0">
-        {/* Servings */}
-        <div className="space-y-2">
-          <label className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Servings <span className="text-destructive">*</span>
-          </label>
-          <div className="flex items-center gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => handleServingsChange(-1)}
-              disabled={servings <= 1}
-              aria-label="Decrease servings"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
+        {/* Servings & Time Inputs */}
+        <div className="grid gap-4 sm:grid-cols-5">
+          {/* Servings */}
+          <div className="sm:border-border space-y-2 sm:border-r sm:pr-4">
             <Controller
               name="servings"
               control={control}
@@ -107,100 +103,130 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
                 <Input
                   {...field}
                   type="number"
+                  label="Servings"
+                  placeholder="e.g., 4"
+                  required
                   min={1}
                   max={100}
-                  className="w-20 text-center"
                   onChange={e => {
                     const value = parseInt(e.target.value, 10);
                     if (!isNaN(value)) {
                       field.onChange(Math.max(1, Math.min(100, value)));
                     }
                   }}
-                  aria-label="Number of servings"
+                  errorText={errors.servings?.message}
+                  helperText="Number of portions"
                 />
               )}
             />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => handleServingsChange(1)}
-              disabled={servings >= 100}
-              aria-label="Increase servings"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-            <span className="text-muted-foreground text-sm">servings</span>
           </div>
-          {errors.servings && (
-            <p className="text-destructive text-sm">
-              {errors.servings.message}
-            </p>
-          )}
-        </div>
 
-        {/* Time Inputs */}
-        <div className="grid gap-4 sm:grid-cols-2">
-          {/* Prep Time */}
-          <div className="space-y-2">
+          {/* Prep Time - spans 2 columns */}
+          <div className="sm:border-border space-y-2 sm:col-span-2 sm:border-r sm:pr-4">
+            <label className="text-sm leading-none font-medium">
+              Prep Time
+            </label>
             <Controller
               name="prepTime"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  label="Prep Time"
-                  placeholder="e.g., 15"
-                  rightIcon={
-                    <span className="text-muted-foreground text-sm">min</span>
-                  }
-                  min={0}
-                  max={1440}
-                  value={field.value ?? ''}
-                  onChange={e => {
-                    const value =
-                      e.target.value === ''
-                        ? undefined
-                        : parseInt(e.target.value, 10);
-                    field.onChange(value);
-                  }}
-                  errorText={errors.prepTime?.message}
-                  helperText="Time to prepare ingredients"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    rightIcon={
+                      <span className="text-muted-foreground text-sm">hr</span>
+                    }
+                    min={0}
+                    max={24}
+                    value={getHoursFromMinutes(field.value)}
+                    onChange={e => {
+                      const hours = e.target.value;
+                      const currentMins = getMinutesRemainder(field.value);
+                      field.onChange(combineToMinutes(hours, currentMins));
+                    }}
+                    aria-label="Prep time hours"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    rightIcon={
+                      <span className="text-muted-foreground text-sm">min</span>
+                    }
+                    min={0}
+                    max={59}
+                    value={getMinutesRemainder(field.value)}
+                    onChange={e => {
+                      const minutes = e.target.value;
+                      const currentHours = getHoursFromMinutes(field.value);
+                      field.onChange(combineToMinutes(currentHours, minutes));
+                    }}
+                    aria-label="Prep time minutes"
+                  />
+                </div>
               )}
             />
+            {errors.prepTime && (
+              <p className="text-destructive text-sm">
+                {errors.prepTime.message}
+              </p>
+            )}
+            <p className="text-muted-foreground text-sm">
+              Time to prepare ingredients
+            </p>
           </div>
 
-          {/* Cook Time */}
-          <div className="space-y-2">
+          {/* Cook Time - spans 2 columns */}
+          <div className="space-y-2 sm:col-span-2">
+            <label className="text-sm leading-none font-medium">
+              Cook Time
+            </label>
             <Controller
               name="cookTime"
               control={control}
               render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  label="Cook Time"
-                  placeholder="e.g., 30"
-                  rightIcon={
-                    <span className="text-muted-foreground text-sm">min</span>
-                  }
-                  min={0}
-                  max={1440}
-                  value={field.value ?? ''}
-                  onChange={e => {
-                    const value =
-                      e.target.value === ''
-                        ? undefined
-                        : parseInt(e.target.value, 10);
-                    field.onChange(value);
-                  }}
-                  errorText={errors.cookTime?.message}
-                  helperText="Active cooking time"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    rightIcon={
+                      <span className="text-muted-foreground text-sm">hr</span>
+                    }
+                    min={0}
+                    max={24}
+                    value={getHoursFromMinutes(field.value)}
+                    onChange={e => {
+                      const hours = e.target.value;
+                      const currentMins = getMinutesRemainder(field.value);
+                      field.onChange(combineToMinutes(hours, currentMins));
+                    }}
+                    aria-label="Cook time hours"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    rightIcon={
+                      <span className="text-muted-foreground text-sm">min</span>
+                    }
+                    min={0}
+                    max={59}
+                    value={getMinutesRemainder(field.value)}
+                    onChange={e => {
+                      const minutes = e.target.value;
+                      const currentHours = getHoursFromMinutes(field.value);
+                      field.onChange(combineToMinutes(currentHours, minutes));
+                    }}
+                    aria-label="Cook time minutes"
+                  />
+                </div>
               )}
             />
+            {errors.cookTime && (
+              <p className="text-destructive text-sm">
+                {errors.cookTime.message}
+              </p>
+            )}
+            <p className="text-muted-foreground text-sm">Active cooking time</p>
           </div>
         </div>
 
@@ -223,16 +249,41 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
             name="difficulty"
             control={control}
             render={({ field }) => (
-              <RadioGroup
-                value={field.value}
-                onValueChange={field.onChange}
-                options={DIFFICULTY_OPTIONS}
-                orientation="vertical"
-                size="sm"
-                error={errors.difficulty?.message}
-              />
+              <div
+                role="radiogroup"
+                aria-label="Difficulty level"
+                className="border-border inline-flex rounded-md border"
+              >
+                {DIFFICULTY_OPTIONS.map((option, index) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={field.value === option.value}
+                    onClick={() => field.onChange(option.value)}
+                    className={cn(
+                      'px-4 py-2 text-sm font-medium transition-colors',
+                      'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                      index === 0 && 'rounded-l-md',
+                      index === DIFFICULTY_OPTIONS.length - 1 && 'rounded-r-md',
+                      index !== DIFFICULTY_OPTIONS.length - 1 &&
+                        'border-border border-r',
+                      field.value === option.value
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-background hover:bg-muted'
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             )}
           />
+          {errors.difficulty && (
+            <p className="text-destructive text-sm">
+              {errors.difficulty.message}
+            </p>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -83,13 +83,13 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const servingsInput = screen.getByLabelText(/number of servings/i);
+      const servingsInput = screen.getByLabelText(/servings/i);
       expect(servingsInput).toHaveValue(4);
     });
   });
 
   describe('Servings control', () => {
-    it('should increment servings when plus button is clicked', async () => {
+    it('should allow direct input of servings value', async () => {
       const user = userEvent.setup();
 
       render(
@@ -105,15 +105,16 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const incrementButton = screen.getByLabelText(/increase servings/i);
-      const servingsInput = screen.getByLabelText(/number of servings/i);
-
+      const servingsInput = screen.getByLabelText(/servings/i);
       expect(servingsInput).toHaveValue(4);
-      await user.click(incrementButton);
-      expect(servingsInput).toHaveValue(5);
+
+      // Triple-click to select all, then type new value
+      await user.tripleClick(servingsInput);
+      await user.keyboard('8');
+      expect(servingsInput).toHaveValue(8);
     });
 
-    it('should decrement servings when minus button is clicked', async () => {
+    it('should clamp value to minimum of 1', async () => {
       const user = userEvent.setup();
 
       render(
@@ -129,24 +130,20 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const decrementButton = screen.getByLabelText(/decrease servings/i);
-      const servingsInput = screen.getByLabelText(/number of servings/i);
+      const servingsInput = screen.getByLabelText(/servings/i);
+      // Triple-click to select all, then type 0
+      await user.tripleClick(servingsInput);
+      await user.keyboard('0');
 
-      expect(servingsInput).toHaveValue(4);
-      await user.click(decrementButton);
-      expect(servingsInput).toHaveValue(3);
+      // The component clamps to min 1
+      expect(servingsInput).toHaveValue(1);
     });
 
-    it('should not go below 1 serving', async () => {
+    it('should clamp value to maximum of 100', async () => {
       const user = userEvent.setup();
 
       render(
-        <TestWrapper
-          defaultValues={{
-            ...CREATE_RECIPE_DEFAULT_VALUES,
-            servings: 1,
-          }}
-        >
+        <TestWrapper>
           {form => (
             <TimingStep
               form={form}
@@ -158,38 +155,18 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const decrementButton = screen.getByLabelText(/decrease servings/i);
-      expect(decrementButton).toBeDisabled();
-    });
+      const servingsInput = screen.getByLabelText(/servings/i);
+      // Triple-click to select all, then type 150
+      await user.tripleClick(servingsInput);
+      await user.keyboard('150');
 
-    it('should not go above 100 servings', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <TestWrapper
-          defaultValues={{
-            ...CREATE_RECIPE_DEFAULT_VALUES,
-            servings: 100,
-          }}
-        >
-          {form => (
-            <TimingStep
-              form={form}
-              isActive={true}
-              stepIndex={1}
-              totalSteps={5}
-            />
-          )}
-        </TestWrapper>
-      );
-
-      const incrementButton = screen.getByLabelText(/increase servings/i);
-      expect(incrementButton).toBeDisabled();
+      // The component clamps to max 100
+      expect(servingsInput).toHaveValue(100);
     });
   });
 
   describe('Time inputs', () => {
-    it('should allow entering prep time', async () => {
+    it('should allow entering prep time in hours and minutes', async () => {
       const user = userEvent.setup();
 
       render(
@@ -205,13 +182,17 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const prepTimeInput = screen.getByPlaceholderText(/e\.g\., 15/i);
-      await user.type(prepTimeInput, '20');
+      const prepHoursInput = screen.getByLabelText(/prep time hours/i);
+      const prepMinutesInput = screen.getByLabelText(/prep time minutes/i);
 
-      expect(prepTimeInput).toHaveValue(20);
+      await user.type(prepHoursInput, '1');
+      await user.type(prepMinutesInput, '30');
+
+      expect(prepHoursInput).toHaveValue(1);
+      expect(prepMinutesInput).toHaveValue(30);
     });
 
-    it('should allow entering cook time', async () => {
+    it('should allow entering cook time in hours and minutes', async () => {
       const user = userEvent.setup();
 
       render(
@@ -227,15 +208,115 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      const cookTimeInput = screen.getByPlaceholderText(/e\.g\., 30/i);
-      await user.type(cookTimeInput, '45');
+      const cookHoursInput = screen.getByLabelText(/cook time hours/i);
+      const cookMinutesInput = screen.getByLabelText(/cook time minutes/i);
 
-      expect(cookTimeInput).toHaveValue(45);
+      await user.type(cookHoursInput, '2');
+      await user.type(cookMinutesInput, '45');
+
+      expect(cookHoursInput).toHaveValue(2);
+      expect(cookMinutesInput).toHaveValue(45);
+    });
+
+    it('should display existing prep time in hours and minutes', () => {
+      render(
+        <TestWrapper
+          defaultValues={{
+            ...CREATE_RECIPE_DEFAULT_VALUES,
+            prepTime: 90, // 1 hour 30 minutes
+          }}
+        >
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const prepHoursInput = screen.getByLabelText(/prep time hours/i);
+      const prepMinutesInput = screen.getByLabelText(/prep time minutes/i);
+
+      expect(prepHoursInput).toHaveValue(1);
+      expect(prepMinutesInput).toHaveValue(30);
+    });
+
+    it('should display existing cook time in hours and minutes', () => {
+      render(
+        <TestWrapper
+          defaultValues={{
+            ...CREATE_RECIPE_DEFAULT_VALUES,
+            cookTime: 150, // 2 hours 30 minutes
+          }}
+        >
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const cookHoursInput = screen.getByLabelText(/cook time hours/i);
+      const cookMinutesInput = screen.getByLabelText(/cook time minutes/i);
+
+      expect(cookHoursInput).toHaveValue(2);
+      expect(cookMinutesInput).toHaveValue(30);
+    });
+
+    it('should handle minutes-only input correctly', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const prepMinutesInput = screen.getByLabelText(/prep time minutes/i);
+      await user.type(prepMinutesInput, '45');
+
+      expect(prepMinutesInput).toHaveValue(45);
+    });
+
+    it('should handle hours-only input correctly', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const cookHoursInput = screen.getByLabelText(/cook time hours/i);
+      await user.type(cookHoursInput, '2');
+
+      expect(cookHoursInput).toHaveValue(2);
     });
   });
 
   describe('Difficulty selection', () => {
-    it('should display all difficulty options', () => {
+    it('should display all difficulty options as segmented control', () => {
       render(
         <TestWrapper>
           {form => (
@@ -249,14 +330,19 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByText('Beginner')).toBeInTheDocument();
-      expect(screen.getByText('Easy')).toBeInTheDocument();
-      expect(screen.getByText('Medium')).toBeInTheDocument();
-      expect(screen.getByText('Hard')).toBeInTheDocument();
-      expect(screen.getByText('Expert')).toBeInTheDocument();
+      // All options should be visible as radio buttons in a segmented control
+      expect(
+        screen.getByRole('radio', { name: 'Beginner' })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Easy' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Medium' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Hard' })).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Expert' })).toBeInTheDocument();
     });
 
-    it('should show descriptions for difficulty levels', () => {
+    it('should select difficulty when clicked', async () => {
+      const user = userEvent.setup();
+
       render(
         <TestWrapper>
           {form => (
@@ -270,12 +356,32 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
-      expect(
-        screen.getByText(/perfect for first-time cooks/i)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/simple recipes with few steps/i)
-      ).toBeInTheDocument();
+      const mediumOption = screen.getByRole('radio', { name: 'Medium' });
+      expect(mediumOption).toHaveAttribute('aria-checked', 'false');
+
+      await user.click(mediumOption);
+
+      expect(mediumOption).toHaveAttribute('aria-checked', 'true');
+    });
+
+    it('should have proper radiogroup accessibility', () => {
+      render(
+        <TestWrapper>
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const radiogroup = screen.getByRole('radiogroup', {
+        name: /difficulty level/i,
+      });
+      expect(radiogroup).toBeInTheDocument();
     });
   });
 

@@ -82,6 +82,9 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
     },
     ref
   ) => {
+    // Track previous currentStep prop to detect external changes
+    const prevCurrentStepRef = React.useRef(currentStep);
+
     // State management
     const [state, setState] = React.useState<StepperState>(() => {
       const initialState: StepperState = {
@@ -140,6 +143,26 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
         }
       }
     }, [state, persistState, storageKey]);
+
+    // Sync internal state with controlled currentStep prop
+    React.useEffect(() => {
+      if (currentStep && currentStep !== prevCurrentStepRef.current) {
+        // Find the index of the new current step
+        const newStepIndex = steps.findIndex(step => step.id === currentStep);
+
+        // Mark all steps before the current one as completed
+        const stepsToComplete = steps
+          .slice(0, newStepIndex)
+          .map(step => step.id);
+
+        setState(prev => ({
+          ...prev,
+          currentStepId: currentStep,
+          completedSteps: new Set([...prev.completedSteps, ...stepsToComplete]),
+        }));
+      }
+      prevCurrentStepRef.current = currentStep;
+    }, [currentStep, steps]);
 
     // Current step information
     const currentStepIndex = steps.findIndex(
