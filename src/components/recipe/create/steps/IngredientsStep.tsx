@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Controller, useFieldArray } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
+import { QuantityInput } from '@/components/ui/quantity-input';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -168,23 +169,23 @@ export function IngredientsStep({ form, isActive }: StepComponentProps) {
                 </div>
 
                 {/* Quantity */}
-                <div className="w-20">
+                <div className="w-24">
                   <Controller
                     name={`ingredients.${index}.quantity` as const}
                     control={control}
                     render={({ field }) => (
-                      <Input
-                        {...field}
-                        type="number"
+                      <QuantityInput
+                        value={field.value ?? ''}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        name={field.name}
                         placeholder="Qty"
                         size="sm"
                         min={0.01}
-                        step={0.25}
-                        value={field.value ?? ''}
-                        onChange={e => {
-                          const value = parseFloat(e.target.value);
-                          field.onChange(isNaN(value) ? '' : value);
-                        }}
+                        max={10000}
+                        smartStep
+                        precision={2}
+                        defaultValue={1}
                         errorText={getIngredientError(
                           errors,
                           index,

@@ -320,4 +320,355 @@ describe('IngredientsStep', () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe('Quantity input smart stepping', () => {
+    it('should render quantity input with increment/decrement buttons', () => {
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      // Should have +/- buttons for the quantity input
+      const quantityContainer = screen
+        .getByLabelText(/ingredient 1 quantity/i)
+        .closest('div')?.parentElement;
+
+      expect(quantityContainer).toBeInTheDocument();
+      expect(
+        within(quantityContainer!).getByLabelText('Decrease quantity')
+      ).toBeInTheDocument();
+      expect(
+        within(quantityContainer!).getByLabelText('Increase quantity')
+      ).toBeInTheDocument();
+    });
+
+    it('should increment quantity by 0.25 for small values', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value to 1
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '1');
+
+      // Click increment button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const incrementBtn = within(quantityContainer!).getByLabelText(
+        'Increase quantity'
+      );
+      await user.click(incrementBtn);
+
+      // Should be 1.25 (smart step of 0.25 for values < 10)
+      expect(qtyInput).toHaveValue(1.25);
+    });
+
+    it('should increment quantity by 0.5 for medium values', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value to 10
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '10');
+
+      // Click increment button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const incrementBtn = within(quantityContainer!).getByLabelText(
+        'Increase quantity'
+      );
+      await user.click(incrementBtn);
+
+      // Should be 10.5 (smart step of 0.5 for values 10-100)
+      expect(qtyInput).toHaveValue(10.5);
+    });
+
+    it('should increment quantity by 1 for large values', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value to 100
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '100');
+
+      // Click increment button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const incrementBtn = within(quantityContainer!).getByLabelText(
+        'Increase quantity'
+      );
+      await user.click(incrementBtn);
+
+      // Should be 101 (smart step of 1 for values >= 100)
+      expect(qtyInput).toHaveValue(101);
+    });
+
+    it('should start from 1 when empty and increment is clicked', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Clear the input
+      await user.clear(qtyInput);
+
+      // Click increment button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const incrementBtn = within(quantityContainer!).getByLabelText(
+        'Increase quantity'
+      );
+      await user.click(incrementBtn);
+
+      // Should start from default value of 1 and increment by 0.25
+      expect(qtyInput).toHaveValue(1.25);
+    });
+
+    it('should decrement quantity correctly', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value to 2
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '2');
+
+      // Click decrement button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const decrementBtn = within(quantityContainer!).getByLabelText(
+        'Decrease quantity'
+      );
+      await user.click(decrementBtn);
+
+      // Should be 1.75 (smart step of 0.25 for values < 10)
+      expect(qtyInput).toHaveValue(1.75);
+    });
+
+    it('should not decrement below minimum value', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value close to min
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '0.1');
+
+      // Click decrement button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const decrementBtn = within(quantityContainer!).getByLabelText(
+        'Decrease quantity'
+      );
+      await user.click(decrementBtn);
+
+      // Should be at minimum (0.01)
+      expect(qtyInput).toHaveValue(0.01);
+    });
+
+    it('should support keyboard increment with ArrowUp', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '5');
+
+      // Press ArrowUp
+      await user.keyboard('{ArrowUp}');
+
+      // Should increment by 0.25
+      expect(qtyInput).toHaveValue(5.25);
+    });
+
+    it('should support keyboard decrement with ArrowDown', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set initial value
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '5');
+
+      // Press ArrowDown
+      await user.keyboard('{ArrowDown}');
+
+      // Should decrement by 0.25
+      expect(qtyInput).toHaveValue(4.75);
+    });
+
+    it('should snap odd values to nearest step on increment', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set a value not on step boundary (0.01)
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '0.01');
+
+      // Click increment button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const incrementBtn = within(quantityContainer!).getByLabelText(
+        'Increase quantity'
+      );
+      await user.click(incrementBtn);
+
+      // Should snap to 0.25 instead of adding 0.25 to get 0.26
+      expect(qtyInput).toHaveValue(0.25);
+    });
+
+    it('should snap odd values to nearest step on decrement', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <IngredientsStep
+              form={form}
+              isActive={true}
+              stepIndex={2}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const qtyInput = screen.getByLabelText(/ingredient 1 quantity/i);
+
+      // Set a value not on step boundary (0.26)
+      await user.clear(qtyInput);
+      await user.type(qtyInput, '0.26');
+
+      // Click decrement button
+      const quantityContainer = qtyInput.closest('div')?.parentElement;
+      const decrementBtn = within(quantityContainer!).getByLabelText(
+        'Decrease quantity'
+      );
+      await user.click(decrementBtn);
+
+      // Should snap to 0.25 instead of subtracting 0.25 to get 0.01
+      expect(qtyInput).toHaveValue(0.25);
+    });
+  });
 });
