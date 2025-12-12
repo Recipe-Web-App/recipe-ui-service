@@ -35,7 +35,6 @@ import {
 export function InstructionsStep({ form, isActive }: StepComponentProps) {
   const {
     control,
-    register,
     formState: { errors },
     watch,
     setValue,
@@ -145,17 +144,25 @@ export function InstructionsStep({ form, isActive }: StepComponentProps) {
                 </div>
 
                 {/* Instruction Text */}
-                <Textarea
-                  {...register(`steps.${index}.instruction` as const)}
-                  placeholder={`Describe step ${index + 1} in detail...`}
-                  rows={3}
-                  autoResize
-                  showCharacterCount
-                  maxLength={1000}
-                  // eslint-disable-next-line security/detect-object-injection
-                  errorMessage={errors.steps?.[index]?.instruction?.message}
-                  aria-label={`Step ${index + 1} instruction`}
-                  className="w-full"
+                <Controller
+                  name={`steps.${index}.instruction` as const}
+                  control={control}
+                  render={({ field }) => (
+                    <Textarea
+                      value={field.value ?? ''}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      placeholder={`Describe step ${index + 1} in detail...`}
+                      rows={3}
+                      autoResize
+                      showCharacterCount
+                      maxLength={1000}
+                      // eslint-disable-next-line security/detect-object-injection
+                      errorMessage={errors.steps?.[index]?.instruction?.message}
+                      aria-label={`Step ${index + 1} instruction`}
+                      className="w-full"
+                    />
+                  )}
                 />
               </SortableItemContent>
 
