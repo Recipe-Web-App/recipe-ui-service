@@ -5,7 +5,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Loader2, Save, AlertTriangle } from 'lucide-react';
-import { Stepper, StepControls } from '@/components/ui/stepper';
+import {
+  Stepper,
+  StepControls,
+  type StepperRef,
+} from '@/components/ui/stepper';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ConfirmationDialog } from '@/components/ui/dialog';
@@ -98,6 +102,9 @@ export function CreateRecipeWizard({
     typeof setInterval
   > | null>(null);
 
+  // Ref for stepper imperative control (reset state, mark step complete)
+  const stepperRef = React.useRef<StepperRef>(null);
+
   React.useEffect(() => {
     if (!isInitialized) return;
 
@@ -144,6 +151,15 @@ export function CreateRecipeWizard({
 
   const handleDiscardDraft = () => {
     clearDraftRecipe();
+    // Clear stepper localStorage state directly since stepper isn't mounted yet
+    // (the dialog is shown before the stepper is rendered)
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('create-recipe-wizard-step');
+      } catch (error) {
+        console.warn('Failed to clear stepper state from localStorage:', error);
+      }
+    }
     setShowRestoreDialog(false);
     setIsInitialized(true);
   };
@@ -230,11 +246,15 @@ export function CreateRecipeWizard({
     // Convert form data to API request
     const request = convertFormDataToRequest(currentFormData);
 
+    // Mark Review step as complete to show 100% progress
+    stepperRef.current?.markStepComplete(CreateRecipeWizardStep.REVIEW);
+
     try {
       const newRecipe = await createRecipe.mutateAsync(request);
 
-      // Clear draft after successful creation
+      // Clear draft and stepper state after successful creation
       clearDraftRecipe();
+      stepperRef.current?.resetState();
 
       // Show success toast
       addSuccessToast('Recipe published successfully!');
@@ -246,6 +266,9 @@ export function CreateRecipeWizard({
         router.push(`/recipes/${newRecipe.recipeId}`);
       }
     } catch (error) {
+      // Revert progress to 80% on failure
+      stepperRef.current?.markStepIncomplete(CreateRecipeWizardStep.REVIEW);
+
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to create recipe';
       addErrorToast(errorMessage);
@@ -372,6 +395,7 @@ export function CreateRecipeWizard({
           <form onSubmit={e => e.preventDefault()}>
             {/* Stepper handles ONLY navigation - no form content */}
             <Stepper
+              ref={stepperRef}
               steps={stepperSteps}
               currentStep={currentStep}
               onStepChange={newStep =>

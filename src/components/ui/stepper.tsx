@@ -43,6 +43,7 @@ import type {
   StepperStep,
   StepperState,
   StepperNavigationContext,
+  StepperRef,
 } from '@/types/ui/stepper';
 
 /**
@@ -59,7 +60,7 @@ import type {
  * - Accessible keyboard navigation
  * - Mobile-responsive design
  */
-const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
+const Stepper = React.forwardRef<StepperRef, StepperProps>(
   (
     {
       className,
@@ -82,6 +83,9 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
     },
     ref
   ) => {
+    // Internal ref for the container div
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
     // Track previous currentStep prop to detect external changes
     const prevCurrentStepRef = React.useRef(currentStep);
 
@@ -126,6 +130,55 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
 
       return initialState;
     });
+
+    // Expose imperative handle for external control
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        resetState: () => {
+          // Reset state to initial values
+          setState({
+            currentStepId: currentStep ?? defaultStep ?? steps[0]?.id ?? '',
+            completedSteps: new Set(),
+            errorSteps: new Set(),
+            skippedSteps: new Set(),
+            stepData: {},
+            isLoading: false,
+            errors: {},
+          });
+
+          // Clear localStorage if persistence is enabled
+          if (persistState && typeof window !== 'undefined') {
+            try {
+              localStorage.removeItem(storageKey);
+            } catch (error) {
+              console.warn(
+                'Failed to clear stepper state from localStorage:',
+                error
+              );
+            }
+          }
+        },
+        markStepComplete: (stepId: string) => {
+          setState(prev => ({
+            ...prev,
+            completedSteps: new Set([...prev.completedSteps, stepId]),
+            errorSteps: new Set(
+              [...prev.errorSteps].filter(id => id !== stepId)
+            ),
+          }));
+        },
+        markStepIncomplete: (stepId: string) => {
+          setState(prev => ({
+            ...prev,
+            completedSteps: new Set(
+              [...prev.completedSteps].filter(id => id !== stepId)
+            ),
+          }));
+        },
+      }),
+      [currentStep, defaultStep, steps, persistState, storageKey]
+    );
 
     // Persist state when it changes
     React.useEffect(() => {
@@ -275,7 +328,7 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
 
     return (
       <div
-        ref={ref}
+        ref={containerRef}
         className={cn(
           stepperVariants({ orientation, variant, size }),
           className
@@ -1116,6 +1169,7 @@ export {
 
 export type {
   StepperProps,
+  StepperRef,
   StepperItemProps,
   StepIndicatorProps,
   StepConnectorProps,

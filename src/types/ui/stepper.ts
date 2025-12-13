@@ -13,6 +13,19 @@ import {
 } from '@/lib/ui/stepper-variants';
 
 /**
+ * Stepper imperative handle interface
+ * Exposes methods for external control of stepper state
+ */
+export interface StepperRef {
+  /** Reset stepper state to initial values and clear localStorage */
+  resetState: () => void;
+  /** Mark a specific step as complete */
+  markStepComplete: (stepId: string) => void;
+  /** Mark a specific step as incomplete (remove from completedSteps) */
+  markStepIncomplete: (stepId: string) => void;
+}
+
+/**
  * Individual step data structure
  */
 export interface StepperStep {

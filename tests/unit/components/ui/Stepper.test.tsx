@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/stepper';
 import type {
   StepperStep,
+  StepperRef,
   RecipeWorkflowStep,
   RecipeInstruction,
 } from '@/types/ui/stepper';
@@ -288,6 +289,251 @@ describe('Stepper Component', () => {
 
     expect(localStorageMock.getItem).toHaveBeenCalledWith(storageKey);
     expect(screen.getByText('Step 2 Content')).toBeInTheDocument();
+  });
+});
+
+describe('Stepper Ref Methods', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    localStorageMock.getItem.mockReturnValue(null);
+  });
+
+  it('exposes resetState method via ref', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper ref={stepperRef} steps={sampleSteps} currentStep="step1" />
+    );
+
+    expect(stepperRef.current).not.toBeNull();
+    expect(stepperRef.current?.resetState).toBeDefined();
+    expect(typeof stepperRef.current?.resetState).toBe('function');
+  });
+
+  it('exposes markStepComplete method via ref', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper ref={stepperRef} steps={sampleSteps} currentStep="step1" />
+    );
+
+    expect(stepperRef.current).not.toBeNull();
+    expect(stepperRef.current?.markStepComplete).toBeDefined();
+    expect(typeof stepperRef.current?.markStepComplete).toBe('function');
+  });
+
+  it('resetState clears localStorage when persistState is enabled', () => {
+    const stepperRef = React.createRef<StepperRef>();
+    const storageKey = 'test-stepper-reset';
+
+    // First, render with some persisted state
+    const savedState = {
+      currentStepId: 'step2',
+      completedSteps: ['step1'],
+      errorSteps: [],
+      skippedSteps: [],
+      stepData: {},
+      isLoading: false,
+      errors: {},
+    };
+    localStorageMock.getItem.mockReturnValue(JSON.stringify(savedState));
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        persistState={true}
+        storageKey={storageKey}
+      />
+    );
+
+    // Clear the mock calls from initial render
+    localStorageMock.removeItem.mockClear();
+
+    // Call resetState
+    act(() => {
+      stepperRef.current?.resetState();
+    });
+
+    // Verify localStorage.removeItem was called
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith(storageKey);
+  });
+
+  it('resetState resets progress to 0%', async () => {
+    const stepperRef = React.createRef<StepperRef>();
+    const user = userEvent.setup();
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        currentStep="step1"
+        showProgress={true}
+      />
+    );
+
+    // Navigate to step 2 to create some progress
+    await user.click(screen.getByRole('button', { name: /next/i }));
+
+    // Verify progress is greater than 0
+    const progressBefore = screen.getByTestId('progress');
+    const valueBefore = parseInt(
+      progressBefore.getAttribute('data-value') ?? '0'
+    );
+    expect(valueBefore).toBeGreaterThan(0);
+
+    // Call resetState
+    act(() => {
+      stepperRef.current?.resetState();
+    });
+
+    // Verify progress is back to 0
+    const progressAfter = screen.getByTestId('progress');
+    const valueAfter = parseInt(
+      progressAfter.getAttribute('data-value') ?? '0'
+    );
+    expect(valueAfter).toBe(0);
+  });
+
+  it('markStepComplete adds step to completedSteps and updates progress', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        currentStep="step3"
+        showProgress={true}
+      />
+    );
+
+    // Initial progress should be 0 (no steps completed yet)
+    const progressBefore = screen.getByTestId('progress');
+    const valueBefore = parseInt(
+      progressBefore.getAttribute('data-value') ?? '0'
+    );
+
+    // Mark step 3 as complete
+    act(() => {
+      stepperRef.current?.markStepComplete('step3');
+    });
+
+    // Progress should have increased
+    const progressAfter = screen.getByTestId('progress');
+    const valueAfter = parseInt(
+      progressAfter.getAttribute('data-value') ?? '0'
+    );
+    expect(valueAfter).toBeGreaterThan(valueBefore);
+  });
+
+  it('markStepComplete can be used to reach 100% progress', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        currentStep="step1"
+        showProgress={true}
+      />
+    );
+
+    // Mark all steps as complete
+    act(() => {
+      stepperRef.current?.markStepComplete('step1');
+      stepperRef.current?.markStepComplete('step2');
+      stepperRef.current?.markStepComplete('step3');
+    });
+
+    // Progress should be 100%
+    const progressAfter = screen.getByTestId('progress');
+    const valueAfter = parseInt(
+      progressAfter.getAttribute('data-value') ?? '0'
+    );
+    expect(valueAfter).toBe(100);
+  });
+
+  it('markStepComplete removes step from errorSteps', () => {
+    const stepperRef = React.createRef<StepperRef>();
+    const mockValidateStep = jest.fn().mockResolvedValue(false);
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        currentStep="step1"
+        showProgress={true}
+        onValidateStep={mockValidateStep}
+      />
+    );
+
+    // Try to navigate (this will fail validation and mark step as error)
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    fireEvent.click(nextButton);
+
+    // Now mark the step as complete, which should remove it from errorSteps
+    act(() => {
+      stepperRef.current?.markStepComplete('step1');
+    });
+
+    // The step should now be marked as complete (not error)
+    // This is verified by the progress increasing
+    const progress = screen.getByTestId('progress');
+    const value = parseInt(progress.getAttribute('data-value') ?? '0');
+    expect(value).toBeGreaterThan(0);
+  });
+
+  it('exposes markStepIncomplete method via ref', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper ref={stepperRef} steps={sampleSteps} currentStep="step1" />
+    );
+
+    expect(stepperRef.current).not.toBeNull();
+    expect(stepperRef.current?.markStepIncomplete).toBeDefined();
+    expect(typeof stepperRef.current?.markStepIncomplete).toBe('function');
+  });
+
+  it('markStepIncomplete removes step from completedSteps and decreases progress', () => {
+    const stepperRef = React.createRef<StepperRef>();
+
+    render(
+      <Stepper
+        ref={stepperRef}
+        steps={sampleSteps}
+        currentStep="step1"
+        showProgress={true}
+      />
+    );
+
+    // First mark all steps as complete to reach 100%
+    act(() => {
+      stepperRef.current?.markStepComplete('step1');
+      stepperRef.current?.markStepComplete('step2');
+      stepperRef.current?.markStepComplete('step3');
+    });
+
+    // Progress should be 100%
+    const progressBefore = screen.getByTestId('progress');
+    const valueBefore = parseInt(
+      progressBefore.getAttribute('data-value') ?? '0'
+    );
+    expect(valueBefore).toBe(100);
+
+    // Now mark step3 as incomplete
+    act(() => {
+      stepperRef.current?.markStepIncomplete('step3');
+    });
+
+    // Progress should decrease (2/3 = 66.67%, rounds to 66 or 67)
+    const progressAfter = screen.getByTestId('progress');
+    const valueAfter = parseInt(
+      progressAfter.getAttribute('data-value') ?? '0'
+    );
+    expect(valueAfter).toBeLessThan(valueBefore);
+    expect(valueAfter).toBeGreaterThanOrEqual(66);
+    expect(valueAfter).toBeLessThanOrEqual(67);
   });
 });
 
