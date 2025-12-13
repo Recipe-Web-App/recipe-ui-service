@@ -517,6 +517,186 @@ describe('ReviewStep', () => {
     });
   });
 
+  describe('Duplicate tag handling', () => {
+    it('should show error when adding duplicate tag', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      // 'dessert' is already in validFormData tags
+      await user.type(tagInput, 'dessert');
+
+      const addButtons = screen.getAllByRole('button');
+      const addTagButton = addButtons.find(btn =>
+        btn.querySelector('svg.lucide-plus')
+      );
+
+      if (addTagButton) {
+        await user.click(addTagButton);
+      }
+
+      expect(
+        screen.getByText('This tag has already been added')
+      ).toBeInTheDocument();
+    });
+
+    it('should show error for case-insensitive duplicates', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      // 'dessert' is already in validFormData tags, try with different case
+      await user.type(tagInput, 'DESSERT');
+
+      const addButtons = screen.getAllByRole('button');
+      const addTagButton = addButtons.find(btn =>
+        btn.querySelector('svg.lucide-plus')
+      );
+
+      if (addTagButton) {
+        await user.click(addTagButton);
+      }
+
+      expect(
+        screen.getByText('This tag has already been added')
+      ).toBeInTheDocument();
+    });
+
+    it('should clear error when input changes', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.type(tagInput, 'dessert');
+
+      const addButtons = screen.getAllByRole('button');
+      const addTagButton = addButtons.find(btn =>
+        btn.querySelector('svg.lucide-plus')
+      );
+
+      if (addTagButton) {
+        await user.click(addTagButton);
+      }
+
+      // Error should be visible
+      expect(
+        screen.getByText('This tag has already been added')
+      ).toBeInTheDocument();
+
+      // Type something new
+      await user.type(tagInput, 's');
+
+      // Error should be cleared
+      expect(
+        screen.queryByText('This tag has already been added')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should clear error after successfully adding a tag', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <ReviewStep
+              form={form}
+              isActive={true}
+              stepIndex={4}
+              totalSteps={5}
+              onEditStep={mockOnEditStep}
+              isSubmitting={false}
+              onSaveDraft={mockOnSaveDraft}
+              onPublish={mockOnPublish}
+              isSavingDraft={false}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      const tagInput = screen.getByPlaceholderText(/add a tag/i);
+      await user.type(tagInput, 'dessert');
+
+      const addButtons = screen.getAllByRole('button');
+      const addTagButton = addButtons.find(btn =>
+        btn.querySelector('svg.lucide-plus')
+      );
+
+      if (addTagButton) {
+        await user.click(addTagButton);
+      }
+
+      // Error should be visible
+      expect(
+        screen.getByText('This tag has already been added')
+      ).toBeInTheDocument();
+
+      // Clear and type a unique tag
+      await user.clear(tagInput);
+      await user.type(tagInput, 'vegetarian');
+
+      if (addTagButton) {
+        await user.click(addTagButton);
+      }
+
+      // Error should be cleared and tag should be added
+      expect(
+        screen.queryByText('This tag has already been added')
+      ).not.toBeInTheDocument();
+      expect(screen.getByText('vegetarian')).toBeInTheDocument();
+    });
+  });
+
   describe('Action buttons', () => {
     it('should display Save as Draft and Publish buttons', () => {
       render(

@@ -75,6 +75,7 @@ export function ReviewStep({
 }: ReviewStepProps) {
   const [newTag, setNewTag] = React.useState('');
   const [pendingTag, setPendingTag] = React.useState<string | null>(null);
+  const [tagError, setTagError] = React.useState<string | null>(null);
   const {
     watch,
     setValue,
@@ -88,16 +89,37 @@ export function ReviewStep({
 
   const handleAddTag = () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 20) {
-      setValue('tags', [...tags, trimmedTag], { shouldValidate: true });
-      setNewTag('');
-      setPendingTag(null);
+    if (!trimmedTag) {
+      return;
     }
+
+    // Case-insensitive duplicate check
+    const isDuplicate = tags.some(
+      tag => tag.toLowerCase() === trimmedTag.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      setTagError('This tag has already been added');
+      return;
+    }
+
+    if (tags.length >= 20) {
+      setTagError('Maximum of 20 tags allowed');
+      return;
+    }
+
+    setValue('tags', [...tags, trimmedTag], { shouldValidate: true });
+    setNewTag('');
+    setPendingTag(null);
+    setTagError(null);
   };
 
   const handleInputBlur = () => {
     const trimmedTag = newTag.trim();
-    if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 20) {
+    const isDuplicate = tags.some(
+      tag => tag.toLowerCase() === trimmedTag.toLowerCase()
+    );
+    if (trimmedTag && !isDuplicate && tags.length < 20) {
       setPendingTag(trimmedTag);
     }
   };
@@ -289,13 +311,17 @@ export function ReviewStep({
           <div className="flex gap-2">
             <Input
               value={newTag}
-              onChange={e => setNewTag(e.target.value)}
+              onChange={e => {
+                setNewTag(e.target.value);
+                setTagError(null);
+              }}
               onKeyDown={handleKeyDown}
               onBlur={handleInputBlur}
               placeholder="Add a tag (e.g., Italian, Vegetarian)"
               size="sm"
               className="flex-1"
               disabled={tags.length >= 20}
+              state={tagError ? 'error' : 'default'}
             />
             <Button
               type="button"
@@ -307,6 +333,11 @@ export function ReviewStep({
               <Plus className="h-4 w-4" />
             </Button>
           </div>
+          {tagError && (
+            <p className="text-destructive text-sm" role="alert">
+              {tagError}
+            </p>
+          )}
           <p className="text-muted-foreground text-xs">
             Tags help others discover your recipe. Press Enter or click away to
             add a tag.
