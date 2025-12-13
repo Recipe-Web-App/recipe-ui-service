@@ -186,6 +186,18 @@ describe('Create Recipe Wizard Types', () => {
 
       expect(request.description).toBe('');
     });
+
+    it('should convert empty string notes to undefined', () => {
+      const dataWithEmptyNotes: CreateRecipeFormData = {
+        ...validFormData,
+        ingredients: [
+          { id: '1', name: 'Flour', quantity: 2, unit: 'CUP', notes: '' },
+        ],
+      };
+      const request = convertFormDataToRequest(dataWithEmptyNotes);
+
+      expect(request.ingredients[0]?.notes).toBeUndefined();
+    });
   });
 
   describe('createEmptyIngredient', () => {

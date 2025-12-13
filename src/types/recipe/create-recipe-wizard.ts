@@ -263,7 +263,8 @@ export function convertFormDataToRequest(
         ingredientName: ing.name,
         quantity: ing.quantity,
         unit: ing.unit,
-        notes: ing.notes ?? undefined,
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- Convert empty string to undefined
+        notes: ing.notes || undefined,
       })
     ),
     steps: formData.steps.map(
