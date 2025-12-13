@@ -614,13 +614,9 @@ describe('Create Recipe Wizard Schemas', () => {
       const partialData = {
         title: 'Test Recipe',
         description: 'A test description',
-        servings: 4,
-        prepTime: 15,
-        cookTime: 30,
-        difficulty: DifficultyLevel.MEDIUM,
       };
       const result = validateStepsUpTo(
-        CreateRecipeWizardStep.TIMING,
+        CreateRecipeWizardStep.BASIC_INFO,
         partialData
       );
       expect(result.success).toBe(true);

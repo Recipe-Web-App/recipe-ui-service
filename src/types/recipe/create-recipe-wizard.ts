@@ -38,11 +38,6 @@ export const WIZARD_STEPS: WizardStepConfig[] = [
     description: 'Recipe name and description',
   },
   {
-    id: CreateRecipeWizardStep.TIMING,
-    title: 'Timing & Servings',
-    description: 'Prep time, cook time, and servings',
-  },
-  {
     id: CreateRecipeWizardStep.INGREDIENTS,
     title: 'Ingredients',
     description: 'List all ingredients needed',
@@ -51,6 +46,11 @@ export const WIZARD_STEPS: WizardStepConfig[] = [
     id: CreateRecipeWizardStep.INSTRUCTIONS,
     title: 'Instructions',
     description: 'Step-by-step cooking instructions',
+  },
+  {
+    id: CreateRecipeWizardStep.TIMING,
+    title: 'Timing & Servings',
+    description: 'Prep time, cook time, and servings',
   },
   {
     id: CreateRecipeWizardStep.REVIEW,

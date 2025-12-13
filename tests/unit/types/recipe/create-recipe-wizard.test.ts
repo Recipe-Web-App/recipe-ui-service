@@ -50,9 +50,9 @@ describe('Create Recipe Wizard Types', () => {
 
     it('should have correct step order', () => {
       expect(WIZARD_STEPS[0]?.id).toBe(CreateRecipeWizardStep.BASIC_INFO);
-      expect(WIZARD_STEPS[1]?.id).toBe(CreateRecipeWizardStep.TIMING);
-      expect(WIZARD_STEPS[2]?.id).toBe(CreateRecipeWizardStep.INGREDIENTS);
-      expect(WIZARD_STEPS[3]?.id).toBe(CreateRecipeWizardStep.INSTRUCTIONS);
+      expect(WIZARD_STEPS[1]?.id).toBe(CreateRecipeWizardStep.INGREDIENTS);
+      expect(WIZARD_STEPS[2]?.id).toBe(CreateRecipeWizardStep.INSTRUCTIONS);
+      expect(WIZARD_STEPS[3]?.id).toBe(CreateRecipeWizardStep.TIMING);
       expect(WIZARD_STEPS[4]?.id).toBe(CreateRecipeWizardStep.REVIEW);
     });
 
@@ -246,9 +246,9 @@ describe('Create Recipe Wizard Types', () => {
   describe('getStepIndex', () => {
     it('should return correct index for each step', () => {
       expect(getStepIndex(CreateRecipeWizardStep.BASIC_INFO)).toBe(0);
-      expect(getStepIndex(CreateRecipeWizardStep.TIMING)).toBe(1);
-      expect(getStepIndex(CreateRecipeWizardStep.INGREDIENTS)).toBe(2);
-      expect(getStepIndex(CreateRecipeWizardStep.INSTRUCTIONS)).toBe(3);
+      expect(getStepIndex(CreateRecipeWizardStep.INGREDIENTS)).toBe(1);
+      expect(getStepIndex(CreateRecipeWizardStep.INSTRUCTIONS)).toBe(2);
+      expect(getStepIndex(CreateRecipeWizardStep.TIMING)).toBe(3);
       expect(getStepIndex(CreateRecipeWizardStep.REVIEW)).toBe(4);
     });
   });

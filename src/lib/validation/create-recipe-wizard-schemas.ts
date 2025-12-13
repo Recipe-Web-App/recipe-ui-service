@@ -236,9 +236,9 @@ export function validateStepsUpTo(
 ): { success: boolean; firstInvalidStep?: CreateRecipeWizardStep } {
   const stepOrder = [
     CreateRecipeWizardStep.BASIC_INFO,
-    CreateRecipeWizardStep.TIMING,
     CreateRecipeWizardStep.INGREDIENTS,
     CreateRecipeWizardStep.INSTRUCTIONS,
+    CreateRecipeWizardStep.TIMING,
     CreateRecipeWizardStep.REVIEW,
   ];
 
