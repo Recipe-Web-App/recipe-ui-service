@@ -68,14 +68,47 @@ export const wizardIngredientSchema = z.object({
 });
 
 /**
+ * Validates that ingredient names are unique (case-insensitive)
+ * Adds error to ALL occurrences of duplicate names
+ */
+function validateUniqueIngredientNames(
+  ingredients: z.infer<typeof wizardIngredientSchema>[],
+  ctx: z.RefinementCtx
+): void {
+  const nameIndices = new Map<string, number[]>();
+
+  ingredients.forEach((ing, index) => {
+    const normalizedName = ing.name.toLowerCase().trim();
+    if (normalizedName) {
+      const indices = nameIndices.get(normalizedName) ?? [];
+      indices.push(index);
+      nameIndices.set(normalizedName, indices);
+    }
+  });
+
+  nameIndices.forEach(indices => {
+    if (indices.length > 1) {
+      indices.forEach(index => {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Duplicate ingredient name',
+          path: [index, 'name'],
+        });
+      });
+    }
+  });
+}
+
+/**
  * Ingredients Step Schema
- * Validates: ingredients array (min 1, max 50)
+ * Validates: ingredients array (min 1, max 50, no duplicates)
  */
 export const ingredientsStepSchema = z.object({
   ingredients: z
     .array(wizardIngredientSchema)
     .min(1, 'At least one ingredient is required')
-    .max(50, 'Recipe cannot have more than 50 ingredients'),
+    .max(50, 'Recipe cannot have more than 50 ingredients')
+    .superRefine(validateUniqueIngredientNames),
 });
 
 /**
@@ -142,7 +175,8 @@ export const createRecipeWizardFormSchema = z.object({
   ingredients: z
     .array(wizardIngredientSchema)
     .min(1, 'At least one ingredient is required')
-    .max(50, 'Recipe cannot have more than 50 ingredients'),
+    .max(50, 'Recipe cannot have more than 50 ingredients')
+    .superRefine(validateUniqueIngredientNames),
   // Instructions
   steps: z
     .array(wizardInstructionSchema)

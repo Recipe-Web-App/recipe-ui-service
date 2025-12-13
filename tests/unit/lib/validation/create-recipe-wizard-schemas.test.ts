@@ -250,6 +250,75 @@ describe('Create Recipe Wizard Schemas', () => {
       const result = ingredientsStepSchema.safeParse({ ingredients });
       expect(result.success).toBe(false);
     });
+
+    describe('duplicate ingredient validation', () => {
+      it('should reject duplicate ingredient names', () => {
+        const data = {
+          ingredients: [
+            { id: '1', name: 'Flour', quantity: 1, unit: 'CUP' },
+            { id: '2', name: 'Flour', quantity: 2, unit: 'CUP' },
+          ],
+        };
+        const result = ingredientsStepSchema.safeParse(data);
+
+        expect(result.success).toBe(false);
+        if (!result.success) {
+          expect(result.error.issues).toHaveLength(2);
+          expect(result.error.issues[0]?.path).toEqual([
+            'ingredients',
+            0,
+            'name',
+          ]);
+          expect(result.error.issues[1]?.path).toEqual([
+            'ingredients',
+            1,
+            'name',
+          ]);
+        }
+      });
+
+      it('should reject duplicates case-insensitively', () => {
+        const data = {
+          ingredients: [
+            { id: '1', name: 'Flour', quantity: 1, unit: 'CUP' },
+            { id: '2', name: 'flour', quantity: 2, unit: 'CUP' },
+          ],
+        };
+        const result = ingredientsStepSchema.safeParse(data);
+
+        expect(result.success).toBe(false);
+      });
+
+      it('should allow unique ingredient names', () => {
+        const data = {
+          ingredients: [
+            { id: '1', name: 'Flour', quantity: 1, unit: 'CUP' },
+            { id: '2', name: 'Sugar', quantity: 2, unit: 'CUP' },
+          ],
+        };
+        const result = ingredientsStepSchema.safeParse(data);
+
+        expect(result.success).toBe(true);
+      });
+
+      it('should mark all occurrences as errors when duplicated', () => {
+        const data = {
+          ingredients: [
+            { id: '1', name: 'Salt', quantity: 1, unit: 'TSP' },
+            { id: '2', name: 'Flour', quantity: 1, unit: 'CUP' },
+            { id: '3', name: 'flour', quantity: 2, unit: 'CUP' },
+            { id: '4', name: 'FLOUR', quantity: 3, unit: 'CUP' },
+          ],
+        };
+        const result = ingredientsStepSchema.safeParse(data);
+
+        expect(result.success).toBe(false);
+        if (!result.success) {
+          // All 3 flour instances should have errors, Salt should be fine
+          expect(result.error.issues).toHaveLength(3);
+        }
+      });
+    });
   });
 
   describe('wizardInstructionSchema', () => {
