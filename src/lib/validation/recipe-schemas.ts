@@ -27,9 +27,9 @@ export const recipeTitleSchema = z
  */
 export const recipeDescriptionSchema = z
   .string()
+  .min(1, 'Description is required')
   .max(2000, 'Description must not exceed 2000 characters')
-  .trim()
-  .optional();
+  .trim();
 
 /**
  * Recipe servings validation schema
@@ -64,7 +64,9 @@ export const recipeCookTimeSchema = z
 /**
  * Recipe difficulty validation schema
  */
-export const recipeDifficultySchema = z.nativeEnum(DifficultyLevel).optional();
+export const recipeDifficultySchema = z.nativeEnum(DifficultyLevel, {
+  message: 'Difficulty level is required',
+});
 
 /**
  * Recipe ingredient validation schema for form inputs
@@ -304,7 +306,7 @@ export function convertFromRecipeDto(recipe: RecipeDto): EditRecipeFormData {
     servings: recipe.servings,
     prepTime: recipe.preparationTime ?? 0,
     cookTime: recipe.cookingTime ?? 0,
-    difficulty: recipe.difficulty,
+    difficulty: recipe.difficulty ?? DifficultyLevel.MEDIUM,
     ingredients:
       recipe.ingredients?.map(ingredient => ({
         name: ingredient.ingredientName,
@@ -333,11 +335,11 @@ export function convertFromRecipeDtoToUpdate(
   return {
     recipeId: recipe.recipeId,
     title: recipe.title,
-    description: recipe.description,
+    description: recipe.description ?? '',
     servings: recipe.servings,
     prepTime: recipe.preparationTime ?? 0,
     cookTime: recipe.cookingTime ?? 0,
-    difficulty: recipe.difficulty,
+    difficulty: recipe.difficulty ?? DifficultyLevel.MEDIUM,
   };
 }
 
@@ -350,7 +352,7 @@ export const createRecipeDefaultValues: RecipeFormData = {
   servings: 4,
   prepTime: 0,
   cookTime: 0,
-  difficulty: undefined,
+  difficulty: DifficultyLevel.MEDIUM,
   ingredients: [
     {
       name: '',

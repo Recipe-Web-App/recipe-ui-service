@@ -53,11 +53,22 @@ describe('Recipe Schemas', () => {
       expect(recipeDescriptionSchema.parse('A great recipe')).toBe(
         'A great recipe'
       );
-      expect(recipeDescriptionSchema.parse(undefined)).toBeUndefined();
-      expect(recipeDescriptionSchema.parse('')).toBe('');
+      expect(recipeDescriptionSchema.parse('  Spaced description  ')).toBe(
+        'Spaced description'
+      );
     });
 
-    it('should reject invalid descriptions', () => {
+    it('should reject empty description', () => {
+      expect(() => recipeDescriptionSchema.parse('')).toThrow(
+        'Description is required'
+      );
+    });
+
+    it('should reject undefined description', () => {
+      expect(() => recipeDescriptionSchema.parse(undefined)).toThrow();
+    });
+
+    it('should reject description that is too long', () => {
       expect(() => recipeDescriptionSchema.parse('a'.repeat(2001))).toThrow(
         'Description must not exceed 2000 characters'
       );
@@ -138,13 +149,27 @@ describe('Recipe Schemas', () => {
 
   describe('recipeDifficultySchema', () => {
     it('should validate valid difficulty levels', () => {
+      expect(recipeDifficultySchema.parse(DifficultyLevel.BEGINNER)).toBe(
+        DifficultyLevel.BEGINNER
+      );
       expect(recipeDifficultySchema.parse(DifficultyLevel.EASY)).toBe(
         DifficultyLevel.EASY
+      );
+      expect(recipeDifficultySchema.parse(DifficultyLevel.MEDIUM)).toBe(
+        DifficultyLevel.MEDIUM
+      );
+      expect(recipeDifficultySchema.parse(DifficultyLevel.HARD)).toBe(
+        DifficultyLevel.HARD
       );
       expect(recipeDifficultySchema.parse(DifficultyLevel.EXPERT)).toBe(
         DifficultyLevel.EXPERT
       );
-      expect(recipeDifficultySchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined difficulty', () => {
+      expect(() => recipeDifficultySchema.parse(undefined)).toThrow(
+        'Difficulty level is required'
+      );
     });
 
     it('should reject invalid difficulty levels', () => {
@@ -492,7 +517,7 @@ describe('Recipe Schemas', () => {
         servings: 4,
         prepTime: 0,
         cookTime: 0,
-        difficulty: undefined,
+        difficulty: DifficultyLevel.MEDIUM,
         ingredients: [
           {
             name: '',

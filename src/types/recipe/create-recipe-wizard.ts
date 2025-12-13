@@ -4,7 +4,7 @@ import type {
   CreateRecipeIngredientRequest,
   CreateRecipeStepRequest,
 } from '@/types/recipe-management/recipe';
-import type { DifficultyLevel } from '@/types/recipe-management/common';
+import { DifficultyLevel } from '@/types/recipe-management/common';
 
 /**
  * Wizard step identifiers
@@ -64,7 +64,7 @@ export const WIZARD_STEPS: WizardStepConfig[] = [
  */
 export interface BasicInfoStepData {
   title: string;
-  description?: string;
+  description: string;
 }
 
 /**
@@ -76,7 +76,7 @@ export interface TimingStepData {
   servings?: number;
   prepTime: number;
   cookTime: number;
-  difficulty?: DifficultyLevel;
+  difficulty: DifficultyLevel;
 }
 
 /**
@@ -135,12 +135,12 @@ export interface TagsStepData {
 export interface CreateRecipeFormData {
   // Basic Info
   title: string;
-  description?: string;
+  description: string;
   // Timing
   servings?: number;
   prepTime: number;
   cookTime: number;
-  difficulty?: DifficultyLevel;
+  difficulty: DifficultyLevel;
   // Ingredients
   ingredients: IngredientFormData[];
   // Instructions
@@ -158,7 +158,7 @@ export const CREATE_RECIPE_DEFAULT_VALUES: CreateRecipeFormData = {
   servings: 4,
   prepTime: 0,
   cookTime: 0,
-  difficulty: undefined,
+  difficulty: DifficultyLevel.MEDIUM,
   ingredients: [
     {
       id: crypto.randomUUID(),

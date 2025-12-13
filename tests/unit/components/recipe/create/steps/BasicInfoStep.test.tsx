@@ -91,6 +91,27 @@ describe('BasicInfoStep', () => {
       expect(titleInput).toHaveAttribute('aria-required', 'true');
       expect(titleInput).toHaveAttribute('required');
     });
+
+    it('should show required indicator for description via aria-required', () => {
+      render(
+        <TestWrapper>
+          {form => (
+            <BasicInfoStep
+              form={form}
+              isActive={true}
+              stepIndex={0}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      // The description textarea should have aria-required attribute
+      const descriptionTextarea = screen.getByPlaceholderText(
+        /tell us about this recipe/i
+      );
+      expect(descriptionTextarea).toHaveAttribute('aria-required', 'true');
+    });
   });
 
   describe('Input behavior', () => {
@@ -223,6 +244,38 @@ describe('BasicInfoStep', () => {
         await screen.findByText('Recipe title must be at least 3 characters')
       ).toBeInTheDocument();
     });
+
+    it('should show error for empty description when form trigger is called', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => (
+            <>
+              <BasicInfoStep
+                form={form}
+                isActive={true}
+                stepIndex={0}
+                totalSteps={5}
+              />
+              <button type="button" onClick={() => form.trigger('description')}>
+                Validate Description
+              </button>
+            </>
+          )}
+        </TestWrapper>
+      );
+
+      // Trigger validation explicitly
+      await user.click(
+        screen.getByRole('button', { name: /validate description/i })
+      );
+
+      // Error message should appear (wait for validation)
+      expect(
+        await screen.findByText('Description is required')
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Helper text', () => {
@@ -245,7 +298,7 @@ describe('BasicInfoStep', () => {
       ).toBeInTheDocument();
     });
 
-    it('should display helper text for description', () => {
+    it('should display helper text for description without Optional prefix', () => {
       render(
         <TestWrapper>
           {form => (
@@ -259,9 +312,11 @@ describe('BasicInfoStep', () => {
         </TestWrapper>
       );
 
+      // Helper text should not indicate optional anymore
       expect(
         screen.getByText(/share the story behind your recipe/i)
       ).toBeInTheDocument();
+      expect(screen.queryByText(/optional/i)).not.toBeInTheDocument();
     });
   });
 });

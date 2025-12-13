@@ -29,11 +29,19 @@ describe('Create Recipe Wizard Schemas', () => {
       expect(result.success).toBe(true);
     });
 
-    it('should validate with optional description', () => {
+    it('should reject missing description', () => {
       const result = basicInfoStepSchema.safeParse({
         title: 'Delicious Pasta',
       });
-      expect(result.success).toBe(true);
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject empty description', () => {
+      const result = basicInfoStepSchema.safeParse({
+        title: 'Delicious Pasta',
+        description: '',
+      });
+      expect(result.success).toBe(false);
     });
 
     it('should reject empty title', () => {
@@ -47,6 +55,7 @@ describe('Create Recipe Wizard Schemas', () => {
     it('should reject title that is too short', () => {
       const result = basicInfoStepSchema.safeParse({
         title: 'ab',
+        description: 'A wonderful pasta recipe',
       });
       expect(result.success).toBe(false);
     });
@@ -54,6 +63,7 @@ describe('Create Recipe Wizard Schemas', () => {
     it('should reject title that is too long', () => {
       const result = basicInfoStepSchema.safeParse({
         title: 'a'.repeat(201),
+        description: 'A wonderful pasta recipe',
       });
       expect(result.success).toBe(false);
     });
@@ -70,19 +80,30 @@ describe('Create Recipe Wizard Schemas', () => {
       expect(result.success).toBe(true);
     });
 
-    it('should validate with optional difficulty', () => {
+    it('should reject missing difficulty', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
         prepTime: 15,
         cookTime: 30,
       });
-      expect(result.success).toBe(true);
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject undefined difficulty', () => {
+      const result = timingStepSchema.safeParse({
+        servings: 4,
+        prepTime: 15,
+        cookTime: 30,
+        difficulty: undefined,
+      });
+      expect(result.success).toBe(false);
     });
 
     it('should reject missing prepTime', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -91,6 +112,7 @@ describe('Create Recipe Wizard Schemas', () => {
       const result = timingStepSchema.safeParse({
         servings: 4,
         prepTime: 15,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -100,6 +122,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 4,
         prepTime: 0,
         cookTime: 0,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(true);
     });
@@ -109,6 +132,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 0,
         prepTime: 15,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -118,6 +142,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 101,
         prepTime: 15,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -127,6 +152,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 4,
         prepTime: -1,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -136,6 +162,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 4,
         prepTime: 1441,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -145,6 +172,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 4,
         prepTime: 15,
         cookTime: -1,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -154,6 +182,7 @@ describe('Create Recipe Wizard Schemas', () => {
         servings: 4,
         prepTime: 15,
         cookTime: 1441,
+        difficulty: DifficultyLevel.MEDIUM,
       });
       expect(result.success).toBe(false);
     });
@@ -423,9 +452,47 @@ describe('Create Recipe Wizard Schemas', () => {
       expect(result.success).toBe(true);
     });
 
-    it('should validate form with minimal data', () => {
+    it('should validate form with minimal required data', () => {
       const minimalData = {
         title: 'Test Recipe',
+        description: 'A test description',
+        servings: 4,
+        prepTime: 0,
+        cookTime: 0,
+        difficulty: DifficultyLevel.MEDIUM,
+        ingredients: [
+          { id: '1', name: 'Test ingredient', quantity: 1, unit: 'CUP' },
+        ],
+        steps: [
+          { id: '1', stepNumber: 1, instruction: 'Test instruction step' },
+        ],
+      };
+      const result = createRecipeWizardFormSchema.safeParse(minimalData);
+      expect(result.success).toBe(true);
+    });
+
+    it('should reject missing description', () => {
+      const data = {
+        title: 'Test Recipe',
+        servings: 4,
+        prepTime: 0,
+        cookTime: 0,
+        difficulty: DifficultyLevel.MEDIUM,
+        ingredients: [
+          { id: '1', name: 'Test ingredient', quantity: 1, unit: 'CUP' },
+        ],
+        steps: [
+          { id: '1', stepNumber: 1, instruction: 'Test instruction step' },
+        ],
+      };
+      const result = createRecipeWizardFormSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
+
+    it('should reject missing difficulty', () => {
+      const data = {
+        title: 'Test Recipe',
+        description: 'A test description',
         servings: 4,
         prepTime: 0,
         cookTime: 0,
@@ -436,8 +503,8 @@ describe('Create Recipe Wizard Schemas', () => {
           { id: '1', stepNumber: 1, instruction: 'Test instruction step' },
         ],
       };
-      const result = createRecipeWizardFormSchema.safeParse(minimalData);
-      expect(result.success).toBe(true);
+      const result = createRecipeWizardFormSchema.safeParse(data);
+      expect(result.success).toBe(false);
     });
 
     it('should reject more than 20 tags', () => {
@@ -452,7 +519,7 @@ describe('Create Recipe Wizard Schemas', () => {
 
   describe('validateStep', () => {
     it('should validate basic info step', () => {
-      const data = { title: 'Test Recipe', description: 'Description' };
+      const data = { title: 'Test Recipe', description: 'A test description' };
       const result = validateStep(CreateRecipeWizardStep.BASIC_INFO, data);
       expect(result.success).toBe(true);
     });
@@ -464,10 +531,29 @@ describe('Create Recipe Wizard Schemas', () => {
       expect(result.errors).toBeDefined();
     });
 
+    it('should return errors for missing description', () => {
+      const data = { title: 'Test Recipe' };
+      const result = validateStep(CreateRecipeWizardStep.BASIC_INFO, data);
+      expect(result.success).toBe(false);
+      expect(result.errors).toBeDefined();
+    });
+
     it('should validate timing step', () => {
-      const data = { servings: 4, prepTime: 15, cookTime: 30 };
+      const data = {
+        servings: 4,
+        prepTime: 15,
+        cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
+      };
       const result = validateStep(CreateRecipeWizardStep.TIMING, data);
       expect(result.success).toBe(true);
+    });
+
+    it('should return errors for missing difficulty in timing step', () => {
+      const data = { servings: 4, prepTime: 15, cookTime: 30 };
+      const result = validateStep(CreateRecipeWizardStep.TIMING, data);
+      expect(result.success).toBe(false);
+      expect(result.errors).toBeDefined();
     });
 
     it('should validate ingredients step', () => {
@@ -497,9 +583,11 @@ describe('Create Recipe Wizard Schemas', () => {
   describe('validateStepsUpTo', () => {
     const validData: Partial<CreateRecipeFormData> = {
       title: 'Test Recipe',
+      description: 'A test description',
       servings: 4,
       prepTime: 15,
       cookTime: 30,
+      difficulty: DifficultyLevel.MEDIUM,
       ingredients: [{ id: '1', name: 'Test', quantity: 1, unit: 'CUP' }],
       steps: [{ id: '1', stepNumber: 1, instruction: 'Test instruction here' }],
     };
@@ -525,9 +613,11 @@ describe('Create Recipe Wizard Schemas', () => {
     it('should validate partial progress', () => {
       const partialData = {
         title: 'Test Recipe',
+        description: 'A test description',
         servings: 4,
         prepTime: 15,
         cookTime: 30,
+        difficulty: DifficultyLevel.MEDIUM,
       };
       const result = validateStepsUpTo(
         CreateRecipeWizardStep.TIMING,
@@ -539,7 +629,7 @@ describe('Create Recipe Wizard Schemas', () => {
 
   describe('getStepErrorMessages', () => {
     it('should return empty array for valid step', () => {
-      const data = { title: 'Test Recipe' };
+      const data = { title: 'Test Recipe', description: 'A test description' };
       const errors = getStepErrorMessages(
         CreateRecipeWizardStep.BASIC_INFO,
         data
@@ -548,19 +638,29 @@ describe('Create Recipe Wizard Schemas', () => {
     });
 
     it('should return error messages for invalid step', () => {
-      const data = { title: '' };
+      const data = { title: '', description: 'A test description' };
       const errors = getStepErrorMessages(
         CreateRecipeWizardStep.BASIC_INFO,
         data
       );
       expect(errors.length).toBeGreaterThan(0);
-      expect(errors.some(e => e.includes('title'))).toBe(true);
+      expect(errors.some(e => e.toLowerCase().includes('title'))).toBe(true);
+    });
+
+    it('should return error messages for missing description', () => {
+      const data = { title: 'Test Recipe' };
+      const errors = getStepErrorMessages(
+        CreateRecipeWizardStep.BASIC_INFO,
+        data
+      );
+      // Verify there are errors when description is missing
+      expect(errors.length).toBeGreaterThan(0);
     });
   });
 
   describe('isStepComplete', () => {
     it('should return true for complete step', () => {
-      const data = { title: 'Test Recipe' };
+      const data = { title: 'Test Recipe', description: 'A test description' };
       expect(isStepComplete(CreateRecipeWizardStep.BASIC_INFO, data)).toBe(
         true
       );
@@ -568,6 +668,13 @@ describe('Create Recipe Wizard Schemas', () => {
 
     it('should return false for incomplete step', () => {
       const data = { title: '' };
+      expect(isStepComplete(CreateRecipeWizardStep.BASIC_INFO, data)).toBe(
+        false
+      );
+    });
+
+    it('should return false for missing description', () => {
+      const data = { title: 'Test Recipe' };
       expect(isStepComplete(CreateRecipeWizardStep.BASIC_INFO, data)).toBe(
         false
       );

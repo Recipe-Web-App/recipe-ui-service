@@ -180,13 +180,6 @@ describe('Create Recipe Wizard Types', () => {
       expect(request.description).toBe('');
     });
 
-    it('should convert undefined description to empty string', () => {
-      const dataWithNoDesc = { ...validFormData, description: undefined };
-      const request = convertFormDataToRequest(dataWithNoDesc);
-
-      expect(request.description).toBe('');
-    });
-
     it('should convert empty string notes to undefined', () => {
       const dataWithEmptyNotes: CreateRecipeFormData = {
         ...validFormData,

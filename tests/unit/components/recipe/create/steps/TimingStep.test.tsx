@@ -355,6 +355,25 @@ describe('TimingStep', () => {
       expect(screen.getByRole('radio', { name: 'Expert' })).toBeInTheDocument();
     });
 
+    it('should show required indicator for difficulty level', () => {
+      render(
+        <TestWrapper>
+          {form => (
+            <TimingStep
+              form={form}
+              isActive={true}
+              stepIndex={1}
+              totalSteps={5}
+            />
+          )}
+        </TestWrapper>
+      );
+
+      // The label should contain a required indicator (*)
+      const difficultyLabel = screen.getByText(/difficulty level/i);
+      expect(difficultyLabel.textContent).toContain('*');
+    });
+
     it('should select difficulty when clicked', async () => {
       const user = userEvent.setup();
 
@@ -371,12 +390,18 @@ describe('TimingStep', () => {
         </TestWrapper>
       );
 
+      // Medium is selected by default now, so let's test clicking on Easy
+      const easyOption = screen.getByRole('radio', { name: 'Easy' });
       const mediumOption = screen.getByRole('radio', { name: 'Medium' });
-      expect(mediumOption).toHaveAttribute('aria-checked', 'false');
 
-      await user.click(mediumOption);
-
+      // Medium should be selected by default (MEDIUM is the default difficulty)
       expect(mediumOption).toHaveAttribute('aria-checked', 'true');
+      expect(easyOption).toHaveAttribute('aria-checked', 'false');
+
+      await user.click(easyOption);
+
+      expect(easyOption).toHaveAttribute('aria-checked', 'true');
+      expect(mediumOption).toHaveAttribute('aria-checked', 'false');
     });
 
     it('should have proper radiogroup accessibility', () => {

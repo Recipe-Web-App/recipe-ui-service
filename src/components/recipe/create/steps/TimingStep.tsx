@@ -259,7 +259,7 @@ export function TimingStep({ form, isActive }: StepComponentProps) {
         {/* Difficulty Level */}
         <div className="space-y-3">
           <label className="text-sm leading-none font-medium">
-            Difficulty Level
+            Difficulty Level <span className="text-destructive">*</span>
           </label>
           <Controller
             name="difficulty"

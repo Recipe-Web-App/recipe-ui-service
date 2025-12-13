@@ -54,12 +54,13 @@ export function BasicInfoStep({ form, isActive }: StepComponentProps) {
             id="description"
             label="Description"
             placeholder="Tell us about this recipe - what inspired it, what makes it unique, or any tips for success..."
+            required
             {...register('description')}
             errorMessage={errors.description?.message}
             maxLength={2000}
             rows={4}
             autoResize
-            helperText="Optional: Share the story behind your recipe"
+            helperText="Share the story behind your recipe"
           />
         </div>
       </CardContent>
