@@ -72,6 +72,15 @@ describe('Textarea', () => {
     expect(textarea).toHaveValue('default value');
   });
 
+  it('syncs with external value prop changes (controlled mode)', () => {
+    const { rerender } = render(<Textarea value="initial value" />);
+    const textarea = screen.getByRole('textbox');
+    expect(textarea).toHaveValue('initial value');
+
+    rerender(<Textarea value="updated value" />);
+    expect(textarea).toHaveValue('updated value');
+  });
+
   it('displays helper text', () => {
     render(<Textarea helperText="This is helper text" />);
     expect(screen.getByText('This is helper text')).toBeInTheDocument();

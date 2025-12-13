@@ -6,7 +6,7 @@ import { cva } from 'class-variance-authority';
 export const stepperVariants = cva(['flex', 'items-start', 'w-full'], {
   variants: {
     orientation: {
-      horizontal: ['flex-row', 'space-x-4', 'overflow-x-auto', 'pb-2'],
+      horizontal: ['flex-col'],
       vertical: ['flex-col', 'space-y-4'],
     },
     variant: {

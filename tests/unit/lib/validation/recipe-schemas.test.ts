@@ -53,11 +53,22 @@ describe('Recipe Schemas', () => {
       expect(recipeDescriptionSchema.parse('A great recipe')).toBe(
         'A great recipe'
       );
-      expect(recipeDescriptionSchema.parse(undefined)).toBeUndefined();
-      expect(recipeDescriptionSchema.parse('')).toBe('');
+      expect(recipeDescriptionSchema.parse('  Spaced description  ')).toBe(
+        'Spaced description'
+      );
     });
 
-    it('should reject invalid descriptions', () => {
+    it('should reject empty description', () => {
+      expect(() => recipeDescriptionSchema.parse('')).toThrow(
+        'Description is required'
+      );
+    });
+
+    it('should reject undefined description', () => {
+      expect(() => recipeDescriptionSchema.parse(undefined)).toThrow();
+    });
+
+    it('should reject description that is too long', () => {
       expect(() => recipeDescriptionSchema.parse('a'.repeat(2001))).toThrow(
         'Description must not exceed 2000 characters'
       );
@@ -89,7 +100,12 @@ describe('Recipe Schemas', () => {
       expect(recipePrepTimeSchema.parse(0)).toBe(0);
       expect(recipePrepTimeSchema.parse(30)).toBe(30);
       expect(recipePrepTimeSchema.parse(1440)).toBe(1440);
-      expect(recipePrepTimeSchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined (prep time is required)', () => {
+      expect(() => recipePrepTimeSchema.parse(undefined)).toThrow(
+        'Preparation time is required'
+      );
     });
 
     it('should reject invalid prep times', () => {
@@ -110,7 +126,12 @@ describe('Recipe Schemas', () => {
       expect(recipeCookTimeSchema.parse(0)).toBe(0);
       expect(recipeCookTimeSchema.parse(45)).toBe(45);
       expect(recipeCookTimeSchema.parse(1440)).toBe(1440);
-      expect(recipeCookTimeSchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined (cook time is required)', () => {
+      expect(() => recipeCookTimeSchema.parse(undefined)).toThrow(
+        'Cooking time is required'
+      );
     });
 
     it('should reject invalid cook times', () => {
@@ -128,13 +149,27 @@ describe('Recipe Schemas', () => {
 
   describe('recipeDifficultySchema', () => {
     it('should validate valid difficulty levels', () => {
+      expect(recipeDifficultySchema.parse(DifficultyLevel.BEGINNER)).toBe(
+        DifficultyLevel.BEGINNER
+      );
       expect(recipeDifficultySchema.parse(DifficultyLevel.EASY)).toBe(
         DifficultyLevel.EASY
+      );
+      expect(recipeDifficultySchema.parse(DifficultyLevel.MEDIUM)).toBe(
+        DifficultyLevel.MEDIUM
+      );
+      expect(recipeDifficultySchema.parse(DifficultyLevel.HARD)).toBe(
+        DifficultyLevel.HARD
       );
       expect(recipeDifficultySchema.parse(DifficultyLevel.EXPERT)).toBe(
         DifficultyLevel.EXPERT
       );
-      expect(recipeDifficultySchema.parse(undefined)).toBeUndefined();
+    });
+
+    it('should reject undefined difficulty', () => {
+      expect(() => recipeDifficultySchema.parse(undefined)).toThrow(
+        'Difficulty level is required'
+      );
     });
 
     it('should reject invalid difficulty levels', () => {
@@ -480,9 +515,9 @@ describe('Recipe Schemas', () => {
         title: '',
         description: '',
         servings: 4,
-        prepTime: undefined,
-        cookTime: undefined,
-        difficulty: undefined,
+        prepTime: 0,
+        cookTime: 0,
+        difficulty: DifficultyLevel.MEDIUM,
         ingredients: [
           {
             name: '',
