@@ -11,8 +11,14 @@ expect.extend(toHaveNoViolations);
 // Mock dependencies
 jest.mock('@/components/ui/list', () => ({
   ListItem: React.forwardRef(
-    ({ children, onClick, ...props }: any, ref: any) => (
-      <li ref={ref} onClick={onClick} data-testid="list-item" {...props}>
+    ({ children, onSelect, ...props }: any, ref: any) => (
+      <li
+        ref={ref}
+        onClick={onSelect}
+        tabIndex={onSelect ? 0 : undefined}
+        data-testid="list-item"
+        {...props}
+      >
         {children}
       </li>
     )
