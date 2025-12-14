@@ -7,21 +7,33 @@ import {
   convertToEditReviewRequest,
   convertFromReviewDto,
   addReviewDefaultValues,
+  VALID_RATINGS,
 } from '@/lib/validation/review-schemas';
 import type { ReviewDto } from '@/types/recipe-management/review';
 
 describe('Review Schemas', () => {
   describe('reviewRatingSchema', () => {
-    it('should validate valid ratings', () => {
+    it('should validate whole number ratings', () => {
       expect(reviewRatingSchema.parse(1)).toBe(1);
+      expect(reviewRatingSchema.parse(2)).toBe(2);
       expect(reviewRatingSchema.parse(3)).toBe(3);
+      expect(reviewRatingSchema.parse(4)).toBe(4);
       expect(reviewRatingSchema.parse(5)).toBe(5);
     });
 
-    it('should reject ratings below 1', () => {
+    it('should validate half-star ratings', () => {
+      expect(reviewRatingSchema.parse(0.5)).toBe(0.5);
+      expect(reviewRatingSchema.parse(1.5)).toBe(1.5);
+      expect(reviewRatingSchema.parse(2.5)).toBe(2.5);
+      expect(reviewRatingSchema.parse(3.5)).toBe(3.5);
+      expect(reviewRatingSchema.parse(4.5)).toBe(4.5);
+    });
+
+    it('should reject ratings below 0.5', () => {
       expect(() => reviewRatingSchema.parse(0)).toThrow(
-        'Rating must be at least 1 star'
+        'Rating must be at least 0.5 stars'
       );
+      expect(() => reviewRatingSchema.parse(0.25)).toThrow();
       expect(() => reviewRatingSchema.parse(-1)).toThrow();
     });
 
@@ -29,12 +41,23 @@ describe('Review Schemas', () => {
       expect(() => reviewRatingSchema.parse(6)).toThrow(
         'Rating must not exceed 5 stars'
       );
+      expect(() => reviewRatingSchema.parse(5.5)).toThrow();
     });
 
-    it('should reject non-integer ratings', () => {
-      expect(() => reviewRatingSchema.parse(3.5)).toThrow(
-        'Rating must be a whole number'
+    it('should reject invalid increments (not 0.5)', () => {
+      expect(() => reviewRatingSchema.parse(3.3)).toThrow(
+        'Rating must be in 0.5 star increments'
       );
+      expect(() => reviewRatingSchema.parse(2.7)).toThrow(
+        'Rating must be in 0.5 star increments'
+      );
+      expect(() => reviewRatingSchema.parse(1.25)).toThrow(
+        'Rating must be in 0.5 star increments'
+      );
+    });
+
+    it('should export VALID_RATINGS constant', () => {
+      expect(VALID_RATINGS).toEqual([0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]);
     });
   });
 
@@ -86,6 +109,15 @@ describe('Review Schemas', () => {
       };
       expect(() => addReviewFormSchema.parse(dataWithoutRating)).toThrow();
     });
+
+    it('should validate half-star ratings', () => {
+      const halfStarData = {
+        rating: 3.5,
+        comment: 'Pretty good!',
+      };
+      const result = addReviewFormSchema.parse(halfStarData);
+      expect(result).toEqual(halfStarData);
+    });
   });
 
   describe('editReviewFormSchema', () => {
@@ -117,6 +149,16 @@ describe('Review Schemas', () => {
       expect(() =>
         editReviewFormSchema.parse(dataWithInvalidReviewId)
       ).toThrow();
+    });
+
+    it('should validate half-star ratings in edit mode', () => {
+      const halfStarData = {
+        reviewId: 1,
+        rating: 2.5,
+        comment: 'Updated with half star',
+      };
+      const result = editReviewFormSchema.parse(halfStarData);
+      expect(result).toEqual(halfStarData);
     });
   });
 

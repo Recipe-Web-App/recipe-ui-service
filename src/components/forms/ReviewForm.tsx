@@ -37,7 +37,7 @@ export interface ReviewFormProps {
 }
 
 /**
- * Star rating input component
+ * Star rating input component with half-star support
  */
 interface StarRatingProps {
   value: number;
@@ -48,37 +48,79 @@ interface StarRatingProps {
 function StarRating({ value, onChange, disabled }: StarRatingProps) {
   const [hoverRating, setHoverRating] = React.useState(0);
 
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    starIndex: number
+  ) => {
+    if (disabled) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const isLeftHalf = x < rect.width / 2;
+    setHoverRating(isLeftHalf ? starIndex - 0.5 : starIndex);
+  };
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    starIndex: number
+  ) => {
+    if (disabled) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const isLeftHalf = x < rect.width / 2;
+    onChange(isLeftHalf ? starIndex - 0.5 : starIndex);
+  };
+
+  const displayRating = hoverRating || value;
+
+  const formatRatingText = (rating: number): string => {
+    if (rating === 0) return 'Select rating';
+    if (rating === 1) return '1 star';
+    return `${rating} stars`;
+  };
+
   return (
     <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map(rating => {
-        const isActive = rating <= (hoverRating || value);
+      {[1, 2, 3, 4, 5].map(starIndex => {
+        // Determine fill state for this star
+        const isFull = starIndex <= displayRating;
+        const isHalf = !isFull && starIndex - 0.5 === displayRating;
+
         return (
           <button
-            key={rating}
+            key={starIndex}
             type="button"
             disabled={disabled}
-            onMouseEnter={() => !disabled && setHoverRating(rating)}
+            onMouseMove={e => handleMouseMove(e, starIndex)}
             onMouseLeave={() => setHoverRating(0)}
-            onClick={() => !disabled && onChange(rating)}
+            onClick={e => handleClick(e, starIndex)}
             className={cn(
-              'transition-colors',
+              'relative transition-colors',
               disabled && 'cursor-not-allowed opacity-50'
             )}
-            aria-label={`Rate ${rating} stars`}
+            aria-label={`Rate ${starIndex} stars`}
           >
-            <Star
-              className={cn(
-                'h-8 w-8',
-                isActive
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'fill-none text-gray-300'
-              )}
-            />
+            {/* Background (empty) star */}
+            <Star className="h-8 w-8 fill-none text-gray-300" />
+
+            {/* Full star overlay */}
+            {isFull && (
+              <Star className="absolute inset-0 h-8 w-8 fill-yellow-400 text-yellow-400" />
+            )}
+
+            {/* Half star overlay */}
+            {isHalf && (
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ width: '50%' }}
+              >
+                <Star className="h-8 w-8 fill-yellow-400 text-yellow-400" />
+              </div>
+            )}
           </button>
         );
       })}
       <span className="ml-2 text-sm text-gray-600">
-        {value > 0 ? `${value} star${value !== 1 ? 's' : ''}` : 'Select rating'}
+        {formatRatingText(value)}
       </span>
     </div>
   );
