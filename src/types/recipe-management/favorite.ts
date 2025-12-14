@@ -1,5 +1,5 @@
 import { PaginationParams } from '@/lib/api/recipe-management/client';
-import { SearchRecipesResponse } from './search';
+import { RecipeDto } from './recipe';
 
 // Re-export RecipeFavoriteDto for convenience
 export type { RecipeFavoriteDto } from './recipe';
@@ -17,6 +17,14 @@ export interface GetFavoriteRecipesParams extends PaginationParams {
 
 /**
  * Response type for favorite recipes list
- * Reuses SearchRecipesResponse structure for consistency
+ * Matches the actual backend API response format
+ * Uses 'recipes' instead of 'content' per backend contract
  */
-export type FavoriteRecipesResponse = SearchRecipesResponse;
+export interface FavoriteRecipesResponse {
+  recipes: RecipeDto[];
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+}

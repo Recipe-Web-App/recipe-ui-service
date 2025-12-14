@@ -5,7 +5,7 @@ import { axe, toHaveNoViolations } from 'jest-axe';
 import FavoriteRecipesPage from '@/app/(main)/recipes/favorites/page';
 import { DifficultyLevel } from '@/types/recipe-management/common';
 import type { RecipeDto } from '@/types/recipe-management/recipe';
-import type { SearchRecipesResponse } from '@/types/recipe-management/search';
+import type { FavoriteRecipesResponse } from '@/types/recipe-management/favorite';
 
 expect.extend(toHaveNoViolations);
 
@@ -368,8 +368,8 @@ const mockFavoriteRecipes: RecipeDto[] = [
   }),
 ];
 
-const mockPageData: SearchRecipesResponse = {
-  content: mockFavoriteRecipes,
+const mockPageData: FavoriteRecipesResponse = {
+  recipes: mockFavoriteRecipes,
   totalElements: 3,
   totalPages: 1,
   last: true,
@@ -418,7 +418,7 @@ describe('FavoriteRecipesPage', () => {
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
         data: {
           ...mockPageData,
-          content: [mockFavoriteRecipes[0]],
+          recipes: [mockFavoriteRecipes[0]],
           totalElements: 1,
           numberOfElements: 1,
         },
@@ -463,7 +463,7 @@ describe('FavoriteRecipesPage', () => {
 
     it('shows empty state when no favorites exist', () => {
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -500,7 +500,7 @@ describe('FavoriteRecipesPage', () => {
 
     it('hides filters sidebar when no favorites exist', () => {
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -601,7 +601,7 @@ describe('FavoriteRecipesPage', () => {
       );
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -710,7 +710,7 @@ describe('FavoriteRecipesPage', () => {
       });
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [ownedRecipe] },
+        data: { ...mockPageData, recipes: [ownedRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -741,7 +741,7 @@ describe('FavoriteRecipesPage', () => {
       });
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [ownedRecipe] },
+        data: { ...mockPageData, recipes: [ownedRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -795,7 +795,7 @@ describe('FavoriteRecipesPage', () => {
       );
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -812,7 +812,7 @@ describe('FavoriteRecipesPage', () => {
       );
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -885,9 +885,9 @@ describe('FavoriteRecipesPage', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles undefined data content gracefully', () => {
+    it('handles undefined data recipes gracefully', () => {
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { content: undefined },
+        data: { recipes: undefined },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -924,7 +924,7 @@ describe('FavoriteRecipesPage', () => {
       };
 
       (useFavoriteRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [minimalRecipe] },
+        data: { ...mockPageData, recipes: [minimalRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
