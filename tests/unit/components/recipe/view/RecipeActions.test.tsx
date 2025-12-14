@@ -158,7 +158,7 @@ describe('RecipeActions', () => {
       );
 
       const icons = document.querySelectorAll('[aria-hidden="true"]');
-      expect(icons.length).toBe(3); // Heart, Share2, Bookmark
+      expect(icons.length).toBe(3); // Heart, Share2, SquarePlus
     });
 
     it('should have unique aria-labels for all buttons', () => {

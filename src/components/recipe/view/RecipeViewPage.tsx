@@ -25,7 +25,7 @@ import {
   ChefHat,
   Heart,
   Share2,
-  Bookmark,
+  SquarePlus,
   Check,
   Minus,
   Plus,
@@ -335,7 +335,7 @@ export function RecipeViewPage({ recipeId, className }: RecipeViewPageProps) {
               size="icon"
               aria-label="Save to collection"
             >
-              <Bookmark className="h-4 w-4" />
+              <SquarePlus className="h-4 w-4" />
             </Button>
           </div>
         </div>

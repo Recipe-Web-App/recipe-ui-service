@@ -82,7 +82,7 @@ jest.mock('lucide-react', () => ({
   ChefHat: () => <span data-testid="chef-icon">Chef</span>,
   Heart: () => <span data-testid="heart-icon">Heart</span>,
   Share2: () => <span data-testid="share-icon">Share</span>,
-  Bookmark: () => <span data-testid="bookmark-icon">Bookmark</span>,
+  SquarePlus: () => <span data-testid="square-plus-icon">SquarePlus</span>,
   Star: () => <span data-testid="star-icon">Star</span>,
   Check: () => <span data-testid="check-icon">Check</span>,
   Minus: () => <span data-testid="minus-icon">-</span>,
