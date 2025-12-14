@@ -6,13 +6,23 @@ import type {
 } from '@/types/recipe-management/review';
 
 /**
+ * Valid rating values (0.5 increments from 0.5 to 5)
+ */
+export const VALID_RATINGS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5] as const;
+export type ValidRating = (typeof VALID_RATINGS)[number];
+
+/**
  * Review rating validation schema
+ * Allows half-star increments (0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5)
  */
 export const reviewRatingSchema = z
   .number()
-  .int('Rating must be a whole number')
-  .min(1, 'Rating must be at least 1 star')
-  .max(5, 'Rating must not exceed 5 stars');
+  .min(0.5, 'Rating must be at least 0.5 stars')
+  .max(5, 'Rating must not exceed 5 stars')
+  .refine(
+    val => VALID_RATINGS.includes(val as ValidRating),
+    'Rating must be in 0.5 star increments'
+  );
 
 /**
  * Review comment validation schema
