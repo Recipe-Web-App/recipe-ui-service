@@ -4,17 +4,31 @@ import RecipePage from '@/app/(main)/recipes/[id]/page';
 
 // Mock next/navigation
 const mockNotFound = jest.fn();
+const mockGet = jest.fn().mockReturnValue(null);
 jest.mock('next/navigation', () => ({
   notFound: () => {
     mockNotFound();
     throw new Error('NEXT_NOT_FOUND');
   },
+  useSearchParams: () => ({
+    get: mockGet,
+  }),
 }));
 
 // Mock the RecipeViewPage component
 jest.mock('@/components/recipe/view', () => ({
-  RecipeViewPage: ({ recipeId }: { recipeId: number }) => (
-    <div data-testid="recipe-view-page" data-recipe-id={recipeId}>
+  RecipeViewPage: ({
+    recipeId,
+    sourcePage,
+  }: {
+    recipeId: number;
+    sourcePage?: string;
+  }) => (
+    <div
+      data-testid="recipe-view-page"
+      data-recipe-id={recipeId}
+      data-source-page={sourcePage ?? ''}
+    >
       Recipe View Page for {recipeId}
     </div>
   ),

@@ -56,7 +56,7 @@ describe('useFavorites hooks', () => {
   };
 
   const mockFavoriteRecipesResponse: FavoriteRecipesResponse = {
-    content: [
+    recipes: [
       {
         recipeId: 123,
         userId: 'user-789',
@@ -146,7 +146,7 @@ describe('useFavorites hooks', () => {
 
     it('should handle empty favorites list', async () => {
       const emptyResponse: FavoriteRecipesResponse = {
-        content: [],
+        recipes: [],
         totalElements: 0,
         totalPages: 0,
         first: true,
@@ -164,7 +164,7 @@ describe('useFavorites hooks', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(result.current.data?.content).toHaveLength(0);
+      expect(result.current.data?.recipes).toHaveLength(0);
       expect(result.current.data?.totalElements).toBe(0);
     });
 

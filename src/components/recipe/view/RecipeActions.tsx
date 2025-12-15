@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Heart, Share2, Bookmark } from 'lucide-react';
+import { Heart, Share2, SquarePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -80,7 +80,7 @@ export const RecipeActions = React.forwardRef<
         aria-label="Save to collection"
         data-testid="bookmark-button"
       >
-        <Bookmark className="h-4 w-4" aria-hidden="true" />
+        <SquarePlus className="h-4 w-4" aria-hidden="true" />
       </Button>
     </div>
   );

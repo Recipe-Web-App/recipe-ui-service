@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
+import { useBreadcrumbStore } from '@/stores/ui/breadcrumb-store';
 import {
   generateBreadcrumbsFromPath,
   enrichBreadcrumbsWithContext,
@@ -108,6 +109,12 @@ export function useBreadcrumbs(
   const { isAuthenticated, user } = useAuthStore();
   const { breakpoint } = useLayoutStore();
 
+  // Get custom breadcrumbs reactively from global store
+  // This triggers re-renders when the store updates (unlike .subscribe() which doesn't)
+  const storeCustomBreadcrumbs = useBreadcrumbStore(
+    state => state.customBreadcrumbs
+  );
+
   // State
   const [breadcrumbs, setBreadcrumbs] = React.useState<BreadcrumbItem[]>([]);
   const [customBreadcrumbs, setCustomBreadcrumbs] = React.useState<
@@ -139,7 +146,17 @@ export function useBreadcrumbs(
 
   // Generate breadcrumbs
   const generateBreadcrumbs = React.useCallback(async () => {
-    // If custom breadcrumbs are set, use them
+    // Check global store for custom breadcrumbs FIRST (shared across components)
+    const storeCustomBreadcrumbs =
+      useBreadcrumbStore.getState().customBreadcrumbs;
+    if (storeCustomBreadcrumbs) {
+      setBreadcrumbs(storeCustomBreadcrumbs);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+
+    // Then check local custom breadcrumbs (from hook options)
     if (customBreadcrumbs) {
       setBreadcrumbs(customBreadcrumbs);
       setIsLoading(false);
@@ -215,9 +232,10 @@ export function useBreadcrumbs(
   }, []);
 
   return {
-    breadcrumbs,
-    isLoading,
-    error,
+    // Prioritize global store breadcrumbs (set by RecipeViewPage) over local state
+    breadcrumbs: storeCustomBreadcrumbs ?? breadcrumbs,
+    isLoading: storeCustomBreadcrumbs ? false : isLoading,
+    error: storeCustomBreadcrumbs ? null : error,
     refresh,
     setCustom,
     clearCustom,

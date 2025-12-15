@@ -3,7 +3,6 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   useRecipeWithDetails,
@@ -13,6 +12,7 @@ import {
 } from '@/hooks/recipe-management';
 import { useAuthStore } from '@/stores/auth-store';
 import { useToastStore } from '@/stores/ui/toast-store';
+import { useBreadcrumbStore } from '@/stores/ui/breadcrumb-store';
 import { useSessionStorage } from '@/hooks/use-session-storage';
 import { RecipeViewSkeleton } from './RecipeViewSkeleton';
 import { ReviewModal } from './ReviewModal';
@@ -25,7 +25,7 @@ import {
   ChefHat,
   Heart,
   Share2,
-  Bookmark,
+  SquarePlus,
   Check,
   Minus,
   Plus,
@@ -36,10 +36,47 @@ import type { TagResponse } from '@/types/recipe-management/tag';
 import type { ReviewResponse } from '@/types/recipe-management/review';
 
 /**
+ * Valid source page identifiers
+ */
+type SourcePageKey = 'my-recipes' | 'favorites' | 'trending';
+
+/**
+ * Source page mapping for breadcrumb labels
+ */
+const SOURCE_PAGE_MAP: Record<SourcePageKey, { label: string; href: string }> =
+  {
+    'my-recipes': { label: 'Browse My Recipes', href: '/recipes/my-recipes' },
+    favorites: { label: 'Browse Favorites', href: '/recipes/favorites' },
+    trending: { label: 'Browse Trending', href: '/recipes/trending' },
+  };
+
+/**
+ * Safely get source page info from the map
+ * This avoids the security/detect-object-injection ESLint rule
+ */
+function getSourcePageInfo(
+  key: string | undefined
+): { label: string; href: string } | null {
+  if (!key) return null;
+  switch (key) {
+    case 'my-recipes':
+      return SOURCE_PAGE_MAP['my-recipes'];
+    case 'favorites':
+      return SOURCE_PAGE_MAP['favorites'];
+    case 'trending':
+      return SOURCE_PAGE_MAP['trending'];
+    default:
+      return null;
+  }
+}
+
+/**
  * RecipeViewPage Props
  */
 export interface RecipeViewPageProps {
   recipeId: number;
+  /** Source page identifier for breadcrumb context (e.g., 'my-recipes', 'favorites', 'trending') */
+  sourcePage?: string;
   className?: string;
 }
 
@@ -49,10 +86,15 @@ export interface RecipeViewPageProps {
  * Main container component for viewing a recipe's full details.
  * Orchestrates data fetching and renders all recipe sections.
  */
-export function RecipeViewPage({ recipeId, className }: RecipeViewPageProps) {
+export function RecipeViewPage({
+  recipeId,
+  sourcePage,
+  className,
+}: RecipeViewPageProps) {
   const router = useRouter();
   const { authUser, isAuthenticated } = useAuthStore();
   const { addSuccessToast, addErrorToast } = useToastStore();
+  const { setCustomBreadcrumbs, clearCustomBreadcrumbs } = useBreadcrumbStore();
 
   // Fetch recipe data with all details
   const { recipe, ingredients, steps, tags, reviews, isLoading, hasError } =
@@ -76,6 +118,51 @@ export function RecipeViewPage({ recipeId, className }: RecipeViewPageProps) {
       setScaledServings(recipe.data.servings);
     }
   }, [recipe.data?.servings, scaledServings, setScaledServings]);
+
+  // Set custom breadcrumbs when recipe data is available
+  // Uses global store so BreadcrumbHeader in Layout can see the update
+  React.useEffect(() => {
+    if (recipe.data?.title) {
+      // Type for breadcrumb items - icon is optional
+      type BreadcrumbItemType = {
+        id: string;
+        label: string;
+        href?: string;
+        icon?: string;
+      };
+
+      const breadcrumbs: BreadcrumbItemType[] = [
+        { id: 'home', label: 'Home', href: '/', icon: 'Home' },
+      ];
+
+      // Add source page if provided and valid
+      const sourceInfo = getSourcePageInfo(sourcePage);
+      if (sourceInfo) {
+        breadcrumbs.push({
+          id: 'source',
+          label: sourceInfo.label,
+          href: sourceInfo.href,
+        });
+      } else {
+        // Default to "Recipes" if no source
+        breadcrumbs.push({ id: 'recipes', label: 'Recipes', href: '/recipes' });
+      }
+
+      // Add current recipe
+      breadcrumbs.push({ id: 'recipe', label: recipe.data.title });
+
+      setCustomBreadcrumbs(breadcrumbs);
+    }
+
+    return () => {
+      clearCustomBreadcrumbs();
+    };
+  }, [
+    recipe.data?.title,
+    sourcePage,
+    setCustomBreadcrumbs,
+    clearCustomBreadcrumbs,
+  ]);
 
   // Checked ingredients state (persisted per session)
   const [checkedIngredients, setCheckedIngredients] = useSessionStorage<
@@ -265,19 +352,6 @@ export function RecipeViewPage({ recipeId, className }: RecipeViewPageProps) {
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Breadcrumb */}
-      <nav className="text-muted-foreground flex items-center gap-2 text-sm">
-        <Link href="/" className="hover:text-foreground flex items-center">
-          <Home className="h-4 w-4" />
-        </Link>
-        <ChevronRight className="h-4 w-4" />
-        <Link href="/recipes" className="hover:text-foreground">
-          Recipes
-        </Link>
-        <ChevronRight className="h-4 w-4" />
-        <span className="text-foreground truncate">{recipeData.title}</span>
-      </nav>
-
       {/* Recipe Header */}
       <div className="space-y-4">
         {/* Hero image placeholder - would use media.data when available */}
@@ -335,7 +409,7 @@ export function RecipeViewPage({ recipeId, className }: RecipeViewPageProps) {
               size="icon"
               aria-label="Save to collection"
             >
-              <Bookmark className="h-4 w-4" />
+              <SquarePlus className="h-4 w-4" />
             </Button>
           </div>
         </div>

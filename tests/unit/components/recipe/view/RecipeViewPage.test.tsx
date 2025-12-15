@@ -53,6 +53,17 @@ jest.mock('@/hooks/use-session-storage', () => ({
   useSessionStorage: jest.fn(),
 }));
 
+// Mock useBreadcrumbStore
+const mockSetCustomBreadcrumbs = jest.fn();
+const mockClearCustomBreadcrumbs = jest.fn();
+jest.mock('@/stores/ui/breadcrumb-store', () => ({
+  useBreadcrumbStore: () => ({
+    setCustomBreadcrumbs: mockSetCustomBreadcrumbs,
+    clearCustomBreadcrumbs: mockClearCustomBreadcrumbs,
+    customBreadcrumbs: null,
+  }),
+}));
+
 // Mock ReviewModal component
 jest.mock('@/components/recipe/view/ReviewModal', () => ({
   ReviewModal: ({
@@ -82,7 +93,7 @@ jest.mock('lucide-react', () => ({
   ChefHat: () => <span data-testid="chef-icon">Chef</span>,
   Heart: () => <span data-testid="heart-icon">Heart</span>,
   Share2: () => <span data-testid="share-icon">Share</span>,
-  Bookmark: () => <span data-testid="bookmark-icon">Bookmark</span>,
+  SquarePlus: () => <span data-testid="square-plus-icon">SquarePlus</span>,
   Star: () => <span data-testid="star-icon">Star</span>,
   Check: () => <span data-testid="check-icon">Check</span>,
   Minus: () => <span data-testid="minus-icon">-</span>,
@@ -173,6 +184,8 @@ describe('RecipeViewPage', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSetCustomBreadcrumbs.mockClear();
+    mockClearCustomBreadcrumbs.mockClear();
 
     // Mock toast store
     mockAddSuccessToast = jest.fn();
@@ -328,16 +341,72 @@ describe('RecipeViewPage', () => {
       ).toBeInTheDocument();
     });
 
-    it('should render breadcrumb navigation', () => {
+    it('should set custom breadcrumbs with recipe title', async () => {
       render(<RecipeViewPage recipeId={1} />);
 
-      expect(
-        screen.getByRole('link', { name: /recipes/i })
-      ).toBeInTheDocument();
-      // Title appears in both breadcrumb and heading
-      expect(
-        screen.getAllByText('Delicious Pasta').length
-      ).toBeGreaterThanOrEqual(1);
+      await waitFor(() => {
+        expect(mockSetCustomBreadcrumbs).toHaveBeenCalledWith([
+          { id: 'home', label: 'Home', href: '/', icon: 'Home' },
+          { id: 'recipes', label: 'Recipes', href: '/recipes' },
+          { id: 'recipe', label: 'Delicious Pasta' },
+        ]);
+      });
+    });
+
+    it('should set custom breadcrumbs with source page when provided', async () => {
+      render(<RecipeViewPage recipeId={1} sourcePage="my-recipes" />);
+
+      await waitFor(() => {
+        expect(mockSetCustomBreadcrumbs).toHaveBeenCalledWith([
+          { id: 'home', label: 'Home', href: '/', icon: 'Home' },
+          {
+            id: 'source',
+            label: 'Browse My Recipes',
+            href: '/recipes/my-recipes',
+          },
+          { id: 'recipe', label: 'Delicious Pasta' },
+        ]);
+      });
+    });
+
+    it('should set custom breadcrumbs with favorites source', async () => {
+      render(<RecipeViewPage recipeId={1} sourcePage="favorites" />);
+
+      await waitFor(() => {
+        expect(mockSetCustomBreadcrumbs).toHaveBeenCalledWith([
+          { id: 'home', label: 'Home', href: '/', icon: 'Home' },
+          {
+            id: 'source',
+            label: 'Browse Favorites',
+            href: '/recipes/favorites',
+          },
+          { id: 'recipe', label: 'Delicious Pasta' },
+        ]);
+      });
+    });
+
+    it('should set custom breadcrumbs with trending source', async () => {
+      render(<RecipeViewPage recipeId={1} sourcePage="trending" />);
+
+      await waitFor(() => {
+        expect(mockSetCustomBreadcrumbs).toHaveBeenCalledWith([
+          { id: 'home', label: 'Home', href: '/', icon: 'Home' },
+          {
+            id: 'source',
+            label: 'Browse Trending',
+            href: '/recipes/trending',
+          },
+          { id: 'recipe', label: 'Delicious Pasta' },
+        ]);
+      });
+    });
+
+    it('should clear custom breadcrumbs on unmount', () => {
+      const { unmount } = render(<RecipeViewPage recipeId={1} />);
+
+      unmount();
+
+      expect(mockClearCustomBreadcrumbs).toHaveBeenCalled();
     });
 
     it('should render metadata badges', () => {

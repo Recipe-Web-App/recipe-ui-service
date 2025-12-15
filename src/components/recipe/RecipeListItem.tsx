@@ -208,8 +208,7 @@ export const RecipeListItem = React.forwardRef<
           recipeListItemVariants({ variant, size, interactive: isInteractive }),
           className
         )}
-        onClick={isInteractive ? onClick : undefined}
-        tabIndex={isInteractive ? 0 : undefined}
+        onSelect={isInteractive ? onClick : undefined}
         aria-label={
           ariaLabel ??
           (isInteractive ? `View recipe: ${recipe.title}` : undefined)

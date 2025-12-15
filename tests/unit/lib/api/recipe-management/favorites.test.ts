@@ -34,7 +34,7 @@ describe('Favorites API', () => {
   };
 
   const mockFavoriteRecipesResponse: FavoriteRecipesResponse = {
-    content: [
+    recipes: [
       {
         recipeId: 123,
         userId: 'user-789',
@@ -112,7 +112,7 @@ describe('Favorites API', () => {
 
     it('should handle empty favorites list', async () => {
       const emptyResponse: FavoriteRecipesResponse = {
-        content: [],
+        recipes: [],
         totalElements: 0,
         totalPages: 0,
         first: true,
@@ -123,7 +123,7 @@ describe('Favorites API', () => {
 
       const result = await favoritesApi.getFavoriteRecipes();
 
-      expect(result.content).toHaveLength(0);
+      expect(result.recipes).toHaveLength(0);
       expect(result.totalElements).toBe(0);
     });
 

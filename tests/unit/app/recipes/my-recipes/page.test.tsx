@@ -704,7 +704,7 @@ describe('MyRecipesPage', () => {
       const recipeTitle = screen.getByText('Pasta Carbonara');
       await user.click(recipeTitle);
 
-      expect(mockPush).toHaveBeenCalledWith('/recipes/1');
+      expect(mockPush).toHaveBeenCalledWith('/recipes/1?from=my-recipes');
     });
 
     it('navigates to edit page when Edit is clicked', async () => {

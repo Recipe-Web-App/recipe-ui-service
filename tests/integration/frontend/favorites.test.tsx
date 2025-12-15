@@ -59,7 +59,7 @@ describe('Favorites Integration Tests', () => {
   };
 
   const mockFavoriteRecipesResponse: FavoriteRecipesResponse = {
-    content: [
+    recipes: [
       {
         recipeId: 123,
         userId: 'user-789',
@@ -83,7 +83,7 @@ describe('Favorites Integration Tests', () => {
     it('should complete the full favorite/unfavorite workflow', async () => {
       // Step 1: Fetch favorites (initially empty)
       const emptyResponse: FavoriteRecipesResponse = {
-        content: [],
+        recipes: [],
         totalElements: 0,
         totalPages: 0,
         first: true,
@@ -100,7 +100,7 @@ describe('Favorites Integration Tests', () => {
         expect(fetchResult.current.isSuccess).toBe(true);
       });
 
-      expect(fetchResult.current.data?.content).toHaveLength(0);
+      expect(fetchResult.current.data?.recipes).toHaveLength(0);
 
       // Step 2: Favorite a recipe
       mockedClient.post.mockResolvedValueOnce({ data: mockFavoriteDto });
@@ -134,8 +134,8 @@ describe('Favorites Integration Tests', () => {
         expect(fetchAfterFavoriteResult.current.isSuccess).toBe(true);
       });
 
-      expect(fetchAfterFavoriteResult.current.data?.content).toHaveLength(1);
-      expect(fetchAfterFavoriteResult.current.data?.content[0].recipeId).toBe(
+      expect(fetchAfterFavoriteResult.current.data?.recipes).toHaveLength(1);
+      expect(fetchAfterFavoriteResult.current.data?.recipes[0].recipeId).toBe(
         123
       );
 
@@ -247,7 +247,7 @@ describe('Favorites Integration Tests', () => {
   describe('Pagination and Filtering', () => {
     it('should fetch paginated favorites', async () => {
       const paginatedResponse: FavoriteRecipesResponse = {
-        content: [mockFavoriteRecipesResponse.content[0]],
+        recipes: [mockFavoriteRecipesResponse.recipes[0]],
         totalElements: 10,
         totalPages: 2,
         first: false,
@@ -275,7 +275,7 @@ describe('Favorites Integration Tests', () => {
 
       expect(result.current.data?.totalElements).toBe(10);
       expect(result.current.data?.totalPages).toBe(2);
-      expect(result.current.data?.content).toHaveLength(1);
+      expect(result.current.data?.recipes).toHaveLength(1);
       expect(mockedClient.get).toHaveBeenCalledWith(
         '/favorites/recipes?page=1&size=5&sort=favoritedAt%2Cdesc'
       );

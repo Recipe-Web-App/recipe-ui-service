@@ -239,7 +239,7 @@ export default function MyRecipesPage() {
       if (isSelectionMode) {
         handleToggleSelect(recipe.recipeId);
       } else {
-        router.push(`/recipes/${recipe.recipeId}`);
+        router.push(`/recipes/${recipe.recipeId}?from=my-recipes`);
       }
     },
     [isSelectionMode, handleToggleSelect, router]
