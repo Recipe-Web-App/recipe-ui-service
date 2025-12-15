@@ -633,7 +633,7 @@ describe('FavoriteRecipesPage', () => {
       const recipeTitle = screen.getByText('Pasta Carbonara');
       await user.click(recipeTitle);
 
-      expect(mockPush).toHaveBeenCalledWith('/recipes/1');
+      expect(mockPush).toHaveBeenCalledWith('/recipes/1?from=favorites');
     });
 
     it('opens add to collection modal when clicked', async () => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { use } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { RecipeViewPage } from '@/components/recipe/view';
 
@@ -10,6 +11,8 @@ interface RecipePageProps {
 
 export default function RecipePage({ params }: RecipePageProps) {
   const { id } = use(params);
+  const searchParams = useSearchParams();
+  const sourcePage = searchParams.get('from') ?? undefined;
   const recipeId = parseInt(id, 10);
 
   // Validate the ID is a valid number
@@ -19,7 +22,7 @@ export default function RecipePage({ params }: RecipePageProps) {
 
   return (
     <div className="container py-8">
-      <RecipeViewPage recipeId={recipeId} />
+      <RecipeViewPage recipeId={recipeId} sourcePage={sourcePage} />
     </div>
   );
 }

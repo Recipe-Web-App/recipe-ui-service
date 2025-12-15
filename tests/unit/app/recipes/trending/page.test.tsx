@@ -640,7 +640,7 @@ describe('TrendingRecipesPage', () => {
       const recipeTitle = screen.getByText('Pasta Carbonara');
       await user.click(recipeTitle);
 
-      expect(mockPush).toHaveBeenCalledWith('/recipes/1');
+      expect(mockPush).toHaveBeenCalledWith('/recipes/1?from=trending');
     });
 
     it('opens add to collection modal when clicked', async () => {

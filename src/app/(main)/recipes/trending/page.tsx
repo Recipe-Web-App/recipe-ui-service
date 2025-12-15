@@ -247,7 +247,7 @@ export default function TrendingRecipesPage() {
   // Recipe action handlers
   const handleRecipeClick = useCallback(
     (recipe: RecipeCardRecipe) => {
-      router.push(`/recipes/${recipe.recipeId}`);
+      router.push(`/recipes/${recipe.recipeId}?from=trending`);
     },
     [router]
   );

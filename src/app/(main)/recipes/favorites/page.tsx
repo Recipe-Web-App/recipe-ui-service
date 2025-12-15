@@ -210,7 +210,7 @@ export default function FavoriteRecipesPage() {
   // Recipe action handlers
   const handleRecipeClick = useCallback(
     (recipe: RecipeCardRecipe) => {
-      router.push(`/recipes/${recipe.recipeId}`);
+      router.push(`/recipes/${recipe.recipeId}?from=favorites`);
     },
     [router]
   );
