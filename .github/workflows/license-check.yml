@@ -59,7 +59,7 @@ jobs:
           license-checker --production --summary >> license-report.md
 
       - name: Upload license report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: license-report
           path: |
