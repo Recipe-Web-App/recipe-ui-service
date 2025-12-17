@@ -193,7 +193,7 @@ describe('CollaboratorPickerSection', () => {
       const user = userEvent.setup();
 
       mockUseSearchUsers.mockReturnValue({
-        data: { users: [], totalCount: 0 },
+        data: { results: [], totalCount: 0 },
         isLoading: false,
         error: null,
       });
@@ -238,7 +238,7 @@ describe('CollaboratorPickerSection', () => {
 
       mockUseSearchUsers.mockReturnValue({
         data: {
-          users: [
+          results: [
             { userId: '1', username: 'john_doe', fullName: 'John Doe' },
             { userId: '2', username: 'jane_doe', fullName: 'Jane Doe' },
           ],
@@ -296,7 +296,9 @@ describe('CollaboratorPickerSection', () => {
 
       mockUseSearchUsers.mockReturnValue({
         data: {
-          users: [{ userId: '1', username: 'john_doe', fullName: 'John Doe' }],
+          results: [
+            { userId: '1', username: 'john_doe', fullName: 'John Doe' },
+          ],
           totalCount: 1,
         },
         isLoading: false,

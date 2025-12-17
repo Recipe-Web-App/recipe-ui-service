@@ -174,7 +174,7 @@ export function CollaboratorPickerSection({
             <h4 className="text-sm font-medium">Search Results</h4>
             <div className="border-border max-h-[250px] overflow-y-auto rounded-lg border p-2">
               <UserSearchResults
-                users={searchResponse?.users ?? []}
+                users={searchResponse?.results ?? []}
                 selectedUserIds={selectedUserIds}
                 onAddUser={handleAddCollaborator}
                 isLoading={isLoading}
