@@ -52,6 +52,17 @@ jest.mock('@/hooks/user-management', () => ({
   useSearchUsers: (...args: unknown[]) => mockUseSearchUsers(...args),
 }));
 
+jest.mock('@/stores/auth-store', () => ({
+  useAuthStore: () => ({
+    user: {
+      id: 'current-user-id',
+      name: 'Current User',
+      email: 'current@test.com',
+    },
+    authUser: null,
+  }),
+}));
+
 // Import component after mocks are set up
 import { CreateCollectionForm } from '@/components/collection/create/CreateCollectionForm';
 

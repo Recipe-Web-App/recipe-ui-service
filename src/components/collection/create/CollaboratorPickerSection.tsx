@@ -15,6 +15,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { useSearchUsers } from '@/hooks/user-management';
+import { useAuthStore } from '@/stores/auth-store';
 import { createCollaboratorFormData } from '@/types/collection/create-collection-form';
 import { CollaborationMode } from '@/types/recipe-management/common';
 import { cn } from '@/lib/utils';
@@ -57,12 +58,23 @@ export function CollaboratorPickerSection({
   const isSpecificUsersMode =
     collaborationMode === CollaborationMode.SPECIFIC_USERS;
 
+  // Get current user ID from auth store to filter from search results
+  const { user, authUser } = useAuthStore();
+  const currentUserId = user?.id ?? authUser?.user_id;
+
   // Search for users
   const {
     data: searchResponse,
     isLoading,
     error,
   } = useSearchUsers(searchQuery, { page: 0, size: 10 });
+
+  // Filter out the current user from search results
+  const filteredSearchResults = React.useMemo(() => {
+    const results = searchResponse?.results ?? [];
+    if (!currentUserId) return results;
+    return results.filter(user => user.userId !== currentUserId);
+  }, [searchResponse?.results, currentUserId]);
 
   // Create set of selected user IDs for quick lookup
   const selectedUserIds = React.useMemo(
@@ -174,7 +186,7 @@ export function CollaboratorPickerSection({
             <h4 className="text-sm font-medium">Search Results</h4>
             <div className="border-border max-h-[250px] overflow-y-auto rounded-lg border p-2">
               <UserSearchResults
-                users={searchResponse?.results ?? []}
+                users={filteredSearchResults}
                 selectedUserIds={selectedUserIds}
                 onAddUser={handleAddCollaborator}
                 isLoading={isLoading}

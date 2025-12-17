@@ -13,14 +13,21 @@ import {
 } from '@/types/collection/create-collection-form';
 import { CollaborationMode } from '@/types/recipe-management/common';
 
-// Mock the search hook
+// Mock the user management hooks
 jest.mock('@/hooks/user-management', () => ({
   useSearchUsers: jest.fn(),
 }));
 
+// Mock the auth store
+jest.mock('@/stores/auth-store', () => ({
+  useAuthStore: jest.fn(),
+}));
+
 import { useSearchUsers } from '@/hooks/user-management';
+import { useAuthStore } from '@/stores/auth-store';
 
 const mockUseSearchUsers = useSearchUsers as jest.Mock;
+const mockUseAuthStore = useAuthStore as unknown as jest.Mock;
 
 // Create a test wrapper with QueryClient
 function createTestWrapper() {
@@ -65,6 +72,14 @@ describe('CollaboratorPickerSection', () => {
       data: null,
       isLoading: false,
       error: null,
+    });
+    mockUseAuthStore.mockReturnValue({
+      user: {
+        id: 'current-user-id',
+        name: 'Current User',
+        email: 'current@test.com',
+      },
+      authUser: null,
     });
   });
 
@@ -282,6 +297,50 @@ describe('CollaboratorPickerSection', () => {
       await user.type(searchInput, 'test');
 
       expect(screen.getByText('Search failed')).toBeInTheDocument();
+    });
+
+    it('should filter out the current user from search results', async () => {
+      const user = userEvent.setup();
+
+      mockUseAuthStore.mockReturnValue({
+        user: {
+          id: 'current-user-id',
+          name: 'Current User',
+          email: 'current@test.com',
+        },
+        authUser: null,
+      });
+
+      mockUseSearchUsers.mockReturnValue({
+        data: {
+          results: [
+            {
+              userId: 'current-user-id',
+              username: 'currentuser',
+              fullName: 'Current User',
+            },
+            { userId: '2', username: 'other_user', fullName: 'Other User' },
+          ],
+          totalCount: 2,
+        },
+        isLoading: false,
+        error: null,
+      });
+
+      render(
+        <TestWrapper defaultValues={defaultValues}>
+          {form => <CollaboratorPickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchInput = screen.getByLabelText(/search users/i);
+      await user.type(searchInput, 'user');
+
+      // Current user should not be displayed
+      expect(screen.queryByText('currentuser')).not.toBeInTheDocument();
+      // Other user should be displayed
+      expect(screen.getByText('other_user')).toBeInTheDocument();
+      expect(screen.getByText('Other User')).toBeInTheDocument();
     });
   });
 
