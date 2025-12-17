@@ -68,8 +68,8 @@ export function RecipePickerSection({
 
   // Transform search results to RecipeSearchResult format
   const searchResults: RecipeSearchResult[] = React.useMemo(() => {
-    if (!searchResponse?.content) return [];
-    return searchResponse.content.map(recipe => ({
+    if (!searchResponse?.recipes) return [];
+    return searchResponse.recipes.map(recipe => ({
       recipeId: recipe.recipeId,
       title: recipe.title,
       description: recipe.description,

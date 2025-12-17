@@ -4,10 +4,7 @@ import {
   buildQueryParams,
   type PaginationParams,
 } from './client';
-import type {
-  SearchRecipesResponse,
-  RecipeDto,
-} from '@/types/recipe-management';
+import type { SearchRecipesResponse } from '@/types/recipe-management';
 
 export const usersApi = {
   /**
@@ -23,18 +20,9 @@ export const usersApi = {
         `/users/me/recipes${queryString ? `?${queryString}` : ''}`
       );
 
-      // Transform response: backend returns { recipes: [...] }, frontend expects SearchRecipesResponse
-      const data = response.data as { recipes: RecipeDto[] };
-      const recipes = data.recipes ?? [];
-
-      return {
-        content: recipes,
-        totalElements: recipes.length,
-        totalPages: 1,
-        first: true,
-        last: true,
-        numberOfElements: recipes.length,
-      };
+      // Return response as SearchRecipesResponse - backend returns matching structure
+      const responseData = response.data as SearchRecipesResponse;
+      return responseData;
     } catch (error) {
       handleRecipeManagementApiError(error);
       throw error;

@@ -375,12 +375,15 @@ const mockTrendingRecipes: RecipeDto[] = [
 ];
 
 const mockPageData: SearchRecipesResponse = {
-  content: mockTrendingRecipes,
+  recipes: mockTrendingRecipes,
+  page: 0,
+  size: 10,
   totalElements: 3,
   totalPages: 1,
   last: true,
   first: true,
   numberOfElements: 3,
+  empty: false,
 };
 
 describe('TrendingRecipesPage', () => {
@@ -431,7 +434,7 @@ describe('TrendingRecipesPage', () => {
       (useTrendingRecipes as jest.Mock).mockReturnValue({
         data: {
           ...mockPageData,
-          content: [mockTrendingRecipes[0]],
+          recipes: [mockTrendingRecipes[0]],
           totalElements: 1,
           numberOfElements: 1,
         },
@@ -480,7 +483,7 @@ describe('TrendingRecipesPage', () => {
 
     it('shows empty state when no trending recipes exist', () => {
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -521,7 +524,7 @@ describe('TrendingRecipesPage', () => {
 
     it('hides filters sidebar when no trending recipes exist', () => {
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -608,7 +611,7 @@ describe('TrendingRecipesPage', () => {
       );
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -703,7 +706,7 @@ describe('TrendingRecipesPage', () => {
       });
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [favoritedRecipe] },
+        data: { ...mockPageData, recipes: [favoritedRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -753,7 +756,7 @@ describe('TrendingRecipesPage', () => {
       });
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [ownedRecipe] },
+        data: { ...mockPageData, recipes: [ownedRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -784,7 +787,7 @@ describe('TrendingRecipesPage', () => {
       });
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [ownedRecipe] },
+        data: { ...mockPageData, recipes: [ownedRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -838,7 +841,7 @@ describe('TrendingRecipesPage', () => {
       );
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -855,7 +858,7 @@ describe('TrendingRecipesPage', () => {
       );
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -930,7 +933,7 @@ describe('TrendingRecipesPage', () => {
   describe('Edge Cases', () => {
     it('handles undefined data content gracefully', () => {
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { content: undefined },
+        data: { recipes: undefined },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -971,7 +974,7 @@ describe('TrendingRecipesPage', () => {
       };
 
       (useTrendingRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [minimalRecipe] },
+        data: { ...mockPageData, recipes: [minimalRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,

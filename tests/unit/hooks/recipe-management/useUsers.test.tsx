@@ -44,12 +44,15 @@ describe('useUsers hooks', () => {
   };
 
   const mockSearchResponse: SearchRecipesResponse = {
-    content: [mockRecipeDto],
+    recipes: [mockRecipeDto],
+    page: 0,
+    size: 10,
     totalElements: 1,
     totalPages: 1,
     first: true,
     last: true,
     numberOfElements: 1,
+    empty: false,
   };
 
   beforeEach(() => {
@@ -92,12 +95,15 @@ describe('useUsers hooks', () => {
 
     it('should handle empty results', async () => {
       const emptyResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         totalElements: 0,
         totalPages: 0,
         first: true,
         last: true,
         numberOfElements: 0,
+        empty: true,
       };
       mockedUsersApi.getMyRecipes.mockResolvedValue(emptyResponse);
 
@@ -109,7 +115,7 @@ describe('useUsers hooks', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(result.current.data?.content).toHaveLength(0);
+      expect(result.current.data?.recipes).toHaveLength(0);
       expect(result.current.data?.totalElements).toBe(0);
     });
 
@@ -130,16 +136,19 @@ describe('useUsers hooks', () => {
 
     it('should return multiple recipes', async () => {
       const multipleRecipesResponse: SearchRecipesResponse = {
-        content: [
+        recipes: [
           mockRecipeDto,
           { ...mockRecipeDto, recipeId: 2, title: 'My Second Recipe' },
           { ...mockRecipeDto, recipeId: 3, title: 'My Third Recipe' },
         ],
+        page: 0,
+        size: 10,
         totalElements: 3,
         totalPages: 1,
         first: true,
         last: true,
         numberOfElements: 3,
+        empty: false,
       };
       mockedUsersApi.getMyRecipes.mockResolvedValue(multipleRecipesResponse);
 
@@ -151,7 +160,7 @@ describe('useUsers hooks', () => {
         expect(result.current.isSuccess).toBe(true);
       });
 
-      expect(result.current.data?.content).toHaveLength(3);
+      expect(result.current.data?.recipes).toHaveLength(3);
       expect(result.current.data?.totalElements).toBe(3);
     });
 

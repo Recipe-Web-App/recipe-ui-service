@@ -158,7 +158,17 @@ describe('RecipePickerSection', () => {
       const user = userEvent.setup();
 
       mockUseDebouncedRecipeSearch.mockReturnValue({
-        data: { content: [], totalElements: 0 },
+        data: {
+          recipes: [],
+          page: 0,
+          size: 10,
+          totalElements: 0,
+          totalPages: 0,
+          first: true,
+          last: true,
+          numberOfElements: 0,
+          empty: true,
+        },
         isLoading: false,
         error: null,
       });
@@ -203,11 +213,18 @@ describe('RecipePickerSection', () => {
 
       mockUseDebouncedRecipeSearch.mockReturnValue({
         data: {
-          content: [
+          recipes: [
             { recipeId: 1, title: 'Chocolate Cake', description: 'Delicious' },
             { recipeId: 2, title: 'Apple Pie', description: 'Sweet' },
           ],
+          page: 0,
+          size: 10,
           totalElements: 2,
+          totalPages: 1,
+          first: true,
+          last: true,
+          numberOfElements: 2,
+          empty: false,
         },
         isLoading: false,
         error: null,
@@ -254,10 +271,17 @@ describe('RecipePickerSection', () => {
 
       mockUseDebouncedRecipeSearch.mockReturnValue({
         data: {
-          content: [
+          recipes: [
             { recipeId: 1, title: 'Chocolate Cake', description: 'Delicious' },
           ],
+          page: 0,
+          size: 10,
           totalElements: 1,
+          totalPages: 1,
+          first: true,
+          last: true,
+          numberOfElements: 1,
+          empty: false,
         },
         isLoading: false,
         error: null,
@@ -290,8 +314,15 @@ describe('RecipePickerSection', () => {
 
       mockUseDebouncedRecipeSearch.mockReturnValue({
         data: {
-          content: [{ recipeId: 1, title: 'Test Recipe', description: 'Test' }],
+          recipes: [{ recipeId: 1, title: 'Test Recipe', description: 'Test' }],
+          page: 0,
+          size: 10,
           totalElements: 1,
+          totalPages: 1,
+          first: true,
+          last: true,
+          numberOfElements: 1,
+          empty: false,
         },
         isLoading: false,
         error: null,

@@ -115,7 +115,7 @@ export const useCreateRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: [newRecipe, ...oldData.content],
+            recipes: [newRecipe, ...oldData.recipes],
             totalElements: oldData.totalElements + 1,
           };
         }
@@ -156,7 +156,7 @@ export const useUpdateRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.map(recipe =>
+            recipes: oldData.recipes.map(recipe =>
               recipe.recipeId === variables.recipeId ? updatedRecipe : recipe
             ),
           };
@@ -189,7 +189,7 @@ export const useDeleteRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.filter(
+            recipes: oldData.recipes.filter(
               recipe => recipe.recipeId !== recipeId
             ),
             totalElements: Math.max(0, oldData.totalElements - 1),

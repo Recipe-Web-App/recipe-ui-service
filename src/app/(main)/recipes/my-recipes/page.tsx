@@ -170,8 +170,8 @@ export default function MyRecipesPage() {
   // Delete mutation
   const deleteRecipeMutation = useDeleteRecipe();
 
-  // Get content from data
-  const dataContent = data?.content;
+  // Get recipes from data
+  const dataContent = data?.recipes;
 
   // Map and filter recipes
   const allRecipes = useMemo(() => {
@@ -370,7 +370,7 @@ export default function MyRecipesPage() {
         {!hasNoRecipes && (
           <aside className="w-full shrink-0 lg:w-64">
             <RecipeFilters
-              recipes={data?.content ?? []}
+              recipes={data?.recipes ?? []}
               values={filters}
               onFilterChange={handleFilterChange}
               totalResults={filteredRecipes.length}
