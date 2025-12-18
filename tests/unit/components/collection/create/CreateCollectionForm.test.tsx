@@ -46,10 +46,20 @@ jest.mock('@/hooks/recipe-management', () => ({
   }),
   useDebouncedRecipeSearch: (...args: unknown[]) =>
     mockUseDebouncedRecipeSearch(...args),
+  useSuggestedRecipes: () => ({
+    data: { recipes: [], totalElements: 0 },
+    isLoading: false,
+    error: null,
+  }),
 }));
 
 jest.mock('@/hooks/user-management', () => ({
   useSearchUsers: (...args: unknown[]) => mockUseSearchUsers(...args),
+  useSuggestedUsers: () => ({
+    data: { results: [], totalCount: 0 },
+    isLoading: false,
+    error: null,
+  }),
 }));
 
 jest.mock('@/stores/auth-store', () => ({

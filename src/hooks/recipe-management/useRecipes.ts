@@ -102,6 +102,24 @@ export const useTrendingRecipes = (params?: Omit<PaginationParams, 'sort'>) => {
 };
 
 /**
+ * Hook to fetch suggested/recent recipes (for recipe picker)
+ */
+export const useSuggestedRecipes = (
+  limit: number = 5,
+  enabled: boolean = true
+) => {
+  return useQuery({
+    queryKey: [...RECIPES, 'suggested', limit],
+    queryFn: (): Promise<SearchRecipesResponse> => {
+      return recipesApi.getAllRecipes({ size: limit });
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
  * Hook to create a new recipe
  */
 export const useCreateRecipe = () => {

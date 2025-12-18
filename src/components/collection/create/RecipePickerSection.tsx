@@ -4,6 +4,7 @@ import * as React from 'react';
 import { UseFormReturn, Controller, useWatch } from 'react-hook-form';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -16,7 +17,10 @@ import {
   RecipeSearchResults,
   type RecipeSearchResult,
 } from './RecipeSearchResults';
-import { useDebouncedRecipeSearch } from '@/hooks/recipe-management';
+import {
+  useDebouncedRecipeSearch,
+  useSuggestedRecipes,
+} from '@/hooks/recipe-management';
 import { createCollectionRecipeFormData } from '@/types/collection/create-collection-form';
 import type {
   CreateCollectionFormData,
@@ -48,17 +52,43 @@ export function RecipePickerSection({
     setValue,
     formState: { errors },
   } = form;
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchInput, setSearchInput] = React.useState('');
+  const [submittedQuery, setSubmittedQuery] = React.useState('');
 
   // Watch recipes to get current selections
   const recipes = useWatch({ control, name: 'recipes' });
 
-  // Search for recipes with debounce
+  // Search for recipes - only triggers when submittedQuery changes (on button click/Enter)
   const {
     data: searchResponse,
-    isLoading,
-    error,
-  } = useDebouncedRecipeSearch(searchQuery, 300, { page: 0, size: 10 });
+    isLoading: isSearchLoading,
+    error: searchError,
+  } = useDebouncedRecipeSearch(submittedQuery, 0, { page: 0, size: 10 });
+
+  // Fetch suggested recipes when no search has been performed
+  const {
+    data: suggestedResponse,
+    isLoading: isSuggestedLoading,
+    error: suggestedError,
+  } = useSuggestedRecipes(5, !submittedQuery && isActive);
+
+  // Handle search submission
+  const handleSearch = React.useCallback(() => {
+    if (searchInput.trim().length >= 2) {
+      setSubmittedQuery(searchInput.trim());
+    }
+  }, [searchInput]);
+
+  // Handle Enter key press
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSearch();
+      }
+    },
+    [handleSearch]
+  );
 
   // Create set of selected recipe IDs for quick lookup
   const selectedRecipeIds = React.useMemo(
@@ -76,6 +106,17 @@ export function RecipePickerSection({
       imageUrl: undefined, // RecipeDto doesn't have imageUrl in the search response
     }));
   }, [searchResponse]);
+
+  // Transform suggested recipes to RecipeSearchResult format
+  const suggestedRecipes: RecipeSearchResult[] = React.useMemo(() => {
+    if (!suggestedResponse?.recipes) return [];
+    return suggestedResponse.recipes.map(recipe => ({
+      recipeId: recipe.recipeId,
+      title: recipe.title,
+      description: recipe.description,
+      imageUrl: undefined,
+    }));
+  }, [suggestedResponse]);
 
   // Handle adding a recipe
   const handleAddRecipe = React.useCallback(
@@ -147,24 +188,58 @@ export function RecipePickerSection({
 
         {/* Search Input */}
         <div className="space-y-2">
-          <Input
-            id="recipe-search"
-            label="Search Recipes"
-            placeholder="Search by recipe name..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            leftIcon={<Search className="h-4 w-4" />}
-            disabled={isMaxRecipesReached}
-            helperText={
-              isMaxRecipesReached
-                ? 'Maximum recipes reached. Remove some to add more.'
-                : undefined
-            }
-          />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <Input
+                id="recipe-search"
+                label="Search Recipes"
+                placeholder="Search by recipe name..."
+                value={searchInput}
+                onChange={e => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                leftIcon={<Search className="h-4 w-4" />}
+                disabled={isMaxRecipesReached}
+                helperText={
+                  isMaxRecipesReached
+                    ? 'Maximum recipes reached. Remove some to add more.'
+                    : searchInput.length > 0 && searchInput.length < 2
+                      ? 'Enter at least 2 characters to search'
+                      : undefined
+                }
+              />
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleSearch}
+              disabled={isMaxRecipesReached || searchInput.trim().length < 2}
+              className="mt-6"
+              aria-label="Search recipes"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
+        {/* Suggested Recipes (shown when no search performed) */}
+        {!submittedQuery && suggestedRecipes.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium">Suggested Recipes</h4>
+            <div className="border-border max-h-[300px] overflow-y-auto rounded-lg border p-2">
+              <RecipeSearchResults
+                results={suggestedRecipes}
+                selectedRecipeIds={selectedRecipeIds}
+                onAddRecipe={handleAddRecipe}
+                isLoading={isSuggestedLoading}
+                error={suggestedError?.message ?? null}
+                searchQuery="suggested"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Search Results */}
-        {searchQuery && (
+        {submittedQuery && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Search Results</h4>
             <div className="border-border max-h-[300px] overflow-y-auto rounded-lg border p-2">
@@ -172,9 +247,9 @@ export function RecipePickerSection({
                 results={searchResults}
                 selectedRecipeIds={selectedRecipeIds}
                 onAddRecipe={handleAddRecipe}
-                isLoading={isLoading}
-                error={error?.message ?? null}
-                searchQuery={searchQuery}
+                isLoading={isSearchLoading}
+                error={searchError?.message ?? null}
+                searchQuery={submittedQuery}
               />
             </div>
           </div>

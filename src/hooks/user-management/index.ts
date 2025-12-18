@@ -3,6 +3,7 @@ export {
   useUser,
   useCurrentUser,
   useSearchUsers,
+  useSuggestedUsers,
   useUpdateCurrentUser,
   useRequestAccountDeletion,
   useConfirmAccountDeletion,

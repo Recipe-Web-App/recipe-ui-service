@@ -11,6 +11,7 @@ export {
   useUpdateRecipe,
   useDeleteRecipe,
   useTrendingRecipes,
+  useSuggestedRecipes,
 } from './useRecipes';
 
 // Ingredient Management

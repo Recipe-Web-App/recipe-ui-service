@@ -16,6 +16,7 @@ import { CollaborationMode } from '@/types/recipe-management/common';
 // Mock the user management hooks
 jest.mock('@/hooks/user-management', () => ({
   useSearchUsers: jest.fn(),
+  useSuggestedUsers: jest.fn(),
 }));
 
 // Mock the auth store
@@ -23,10 +24,11 @@ jest.mock('@/stores/auth-store', () => ({
   useAuthStore: jest.fn(),
 }));
 
-import { useSearchUsers } from '@/hooks/user-management';
+import { useSearchUsers, useSuggestedUsers } from '@/hooks/user-management';
 import { useAuthStore } from '@/stores/auth-store';
 
 const mockUseSearchUsers = useSearchUsers as jest.Mock;
+const mockUseSuggestedUsers = useSuggestedUsers as jest.Mock;
 const mockUseAuthStore = useAuthStore as unknown as jest.Mock;
 
 // Create a test wrapper with QueryClient
@@ -70,6 +72,11 @@ describe('CollaboratorPickerSection', () => {
     jest.clearAllMocks();
     mockUseSearchUsers.mockReturnValue({
       data: null,
+      isLoading: false,
+      error: null,
+    });
+    mockUseSuggestedUsers.mockReturnValue({
+      data: { results: [], totalCount: 0 },
       isLoading: false,
       error: null,
     });
@@ -117,7 +124,9 @@ describe('CollaboratorPickerSection', () => {
       );
 
       expect(screen.getByText('Add Collaborators')).toBeInTheDocument();
-      expect(screen.getByLabelText(/search users/i)).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/search by username/i)
+      ).toBeInTheDocument();
     });
 
     it('should not render when inactive', () => {
@@ -189,7 +198,7 @@ describe('CollaboratorPickerSection', () => {
       collaborationMode: CollaborationMode.SPECIFIC_USERS,
     };
 
-    it('should update search query when typing', async () => {
+    it('should update search input when typing', async () => {
       const user = userEvent.setup();
 
       render(
@@ -198,13 +207,51 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
       await user.type(searchInput, 'john');
 
       expect(searchInput).toHaveValue('john');
     });
 
-    it('should show search results section when there is a query', async () => {
+    it('should disable search button when input is less than 2 characters', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper defaultValues={defaultValues}>
+          {form => <CollaboratorPickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchButton = screen.getByRole('button', {
+        name: /search users/i,
+      });
+      expect(searchButton).toBeDisabled();
+
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'j');
+
+      expect(searchButton).toBeDisabled();
+    });
+
+    it('should enable search button when input has 2+ characters', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper defaultValues={defaultValues}>
+          {form => <CollaboratorPickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'jo');
+
+      const searchButton = screen.getByRole('button', {
+        name: /search users/i,
+      });
+      expect(searchButton).toBeEnabled();
+    });
+
+    it('should show search results section when search button is clicked', async () => {
       const user = userEvent.setup();
 
       mockUseSearchUsers.mockReturnValue({
@@ -219,8 +266,34 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
       await user.type(searchInput, 'test');
+
+      const searchButton = screen.getByRole('button', {
+        name: /search users/i,
+      });
+      await user.click(searchButton);
+
+      expect(screen.getByText('Search Results')).toBeInTheDocument();
+    });
+
+    it('should show search results when Enter is pressed', async () => {
+      const user = userEvent.setup();
+
+      mockUseSearchUsers.mockReturnValue({
+        data: { results: [], totalCount: 0 },
+        isLoading: false,
+        error: null,
+      });
+
+      render(
+        <TestWrapper defaultValues={defaultValues}>
+          {form => <CollaboratorPickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(screen.getByText('Search Results')).toBeInTheDocument();
     });
@@ -240,8 +313,8 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
-      await user.type(searchInput, 'test');
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(
         screen.getByLabelText('Loading user search results')
@@ -269,8 +342,8 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
-      await user.type(searchInput, 'doe');
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'doe{enter}');
 
       expect(screen.getByText('john_doe')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -293,8 +366,8 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
-      await user.type(searchInput, 'test');
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(screen.getByText('Search failed')).toBeInTheDocument();
     });
@@ -333,8 +406,8 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
-      await user.type(searchInput, 'user');
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'user{enter}');
 
       // Current user should not be displayed
       expect(screen.queryByText('currentuser')).not.toBeInTheDocument();
@@ -370,8 +443,8 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
-      await user.type(searchInput, 'john');
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
+      await user.type(searchInput, 'john{enter}');
 
       const addButton = screen.getByRole('button', { name: 'Add john_doe' });
       await user.click(addButton);
@@ -444,7 +517,7 @@ describe('CollaboratorPickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search users/i);
+      const searchInput = screen.getByPlaceholderText(/search by username/i);
       expect(searchInput).toBeDisabled();
       expect(
         screen.getByText(

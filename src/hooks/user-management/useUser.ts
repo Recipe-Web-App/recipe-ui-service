@@ -49,6 +49,22 @@ export const useSearchUsers = (query: string, params?: PaginationParams) => {
 };
 
 /**
+ * Hook to fetch suggested/recent users (without search query)
+ */
+export const useSuggestedUsers = (
+  limit: number = 5,
+  enabled: boolean = true
+) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.USER_MANAGEMENT.USERS, 'suggested', limit],
+    queryFn: () => usersApi.searchUsers({ limit }),
+    enabled,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
  * Hook to update the current user's profile
  */
 export const useUpdateCurrentUser = () => {

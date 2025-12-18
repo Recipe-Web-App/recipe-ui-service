@@ -14,7 +14,7 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { useSearchUsers } from '@/hooks/user-management';
+import { useSearchUsers, useSuggestedUsers } from '@/hooks/user-management';
 import { useAuthStore } from '@/stores/auth-store';
 import { createCollaboratorFormData } from '@/types/collection/create-collection-form';
 import { CollaborationMode } from '@/types/recipe-management/common';
@@ -48,7 +48,8 @@ export function CollaboratorPickerSection({
     setValue,
     formState: { errors },
   } = form;
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchInput, setSearchInput] = React.useState('');
+  const [submittedQuery, setSubmittedQuery] = React.useState('');
 
   // Watch collaboration mode and collaborators
   const collaborationMode = useWatch({ control, name: 'collaborationMode' });
@@ -62,12 +63,37 @@ export function CollaboratorPickerSection({
   const { user, authUser } = useAuthStore();
   const currentUserId = user?.id ?? authUser?.user_id;
 
-  // Search for users
+  // Search for users - only triggers when submittedQuery changes (on button click/Enter)
   const {
     data: searchResponse,
-    isLoading,
-    error,
-  } = useSearchUsers(searchQuery, { page: 0, size: 10 });
+    isLoading: isSearchLoading,
+    error: searchError,
+  } = useSearchUsers(submittedQuery, { page: 0, size: 10 });
+
+  // Fetch suggested users when no search has been performed
+  const {
+    data: suggestedResponse,
+    isLoading: isSuggestedLoading,
+    error: suggestedError,
+  } = useSuggestedUsers(5, !submittedQuery && isSpecificUsersMode);
+
+  // Handle search submission
+  const handleSearch = React.useCallback(() => {
+    if (searchInput.trim().length >= 2) {
+      setSubmittedQuery(searchInput.trim());
+    }
+  }, [searchInput]);
+
+  // Handle Enter key press
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSearch();
+      }
+    },
+    [handleSearch]
+  );
 
   // Filter out the current user from search results
   const filteredSearchResults = React.useMemo(() => {
@@ -75,6 +101,13 @@ export function CollaboratorPickerSection({
     if (!currentUserId) return results;
     return results.filter(user => user.userId !== currentUserId);
   }, [searchResponse?.results, currentUserId]);
+
+  // Filter out the current user from suggested users
+  const filteredSuggestedUsers = React.useMemo(() => {
+    const results = suggestedResponse?.results ?? [];
+    if (!currentUserId) return results;
+    return results.filter(user => user.userId !== currentUserId);
+  }, [suggestedResponse?.results, currentUserId]);
 
   // Create set of selected user IDs for quick lookup
   const selectedUserIds = React.useMemo(
@@ -164,24 +197,60 @@ export function CollaboratorPickerSection({
 
         {/* Search Input */}
         <div className="space-y-2">
-          <Input
-            id="collaborator-search"
-            label="Search Users"
-            placeholder="Search by username..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            leftIcon={<Search className="h-4 w-4" />}
-            disabled={isMaxCollaboratorsReached}
-            helperText={
-              isMaxCollaboratorsReached
-                ? 'Maximum collaborators reached. Remove some to add more.'
-                : undefined
-            }
-          />
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <Input
+                id="collaborator-search"
+                label="Search Users"
+                placeholder="Search by username..."
+                value={searchInput}
+                onChange={e => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                leftIcon={<Search className="h-4 w-4" />}
+                disabled={isMaxCollaboratorsReached}
+                helperText={
+                  isMaxCollaboratorsReached
+                    ? 'Maximum collaborators reached. Remove some to add more.'
+                    : searchInput.length > 0 && searchInput.length < 2
+                      ? 'Enter at least 2 characters to search'
+                      : undefined
+                }
+              />
+            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleSearch}
+              disabled={
+                isMaxCollaboratorsReached || searchInput.trim().length < 2
+              }
+              className="mt-6"
+              aria-label="Search users"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
+        {/* Suggested Users (shown when no search performed) */}
+        {!submittedQuery && filteredSuggestedUsers.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium">Suggested Users</h4>
+            <div className="border-border max-h-[250px] overflow-y-auto rounded-lg border p-2">
+              <UserSearchResults
+                users={filteredSuggestedUsers}
+                selectedUserIds={selectedUserIds}
+                onAddUser={handleAddCollaborator}
+                isLoading={isSuggestedLoading}
+                error={suggestedError?.message ?? null}
+                searchQuery=""
+              />
+            </div>
+          </div>
+        )}
+
         {/* Search Results */}
-        {searchQuery && (
+        {submittedQuery && (
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Search Results</h4>
             <div className="border-border max-h-[250px] overflow-y-auto rounded-lg border p-2">
@@ -189,9 +258,9 @@ export function CollaboratorPickerSection({
                 users={filteredSearchResults}
                 selectedUserIds={selectedUserIds}
                 onAddUser={handleAddCollaborator}
-                isLoading={isLoading}
-                error={error?.message ?? null}
-                searchQuery={searchQuery}
+                isLoading={isSearchLoading}
+                error={searchError?.message ?? null}
+                searchQuery={submittedQuery}
               />
             </div>
           </div>

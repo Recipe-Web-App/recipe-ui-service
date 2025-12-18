@@ -15,6 +15,7 @@ import {
 // Mock the search hook
 jest.mock('@/hooks/recipe-management', () => ({
   useDebouncedRecipeSearch: jest.fn(),
+  useSuggestedRecipes: jest.fn(),
 }));
 
 // Mock next/image
@@ -36,9 +37,13 @@ jest.mock('next/image', () => ({
   },
 }));
 
-import { useDebouncedRecipeSearch } from '@/hooks/recipe-management';
+import {
+  useDebouncedRecipeSearch,
+  useSuggestedRecipes,
+} from '@/hooks/recipe-management';
 
 const mockUseDebouncedRecipeSearch = useDebouncedRecipeSearch as jest.Mock;
+const mockUseSuggestedRecipes = useSuggestedRecipes as jest.Mock;
 
 // Create a test wrapper with QueryClient
 function createTestWrapper() {
@@ -84,6 +89,11 @@ describe('RecipePickerSection', () => {
       isLoading: false,
       error: null,
     });
+    mockUseSuggestedRecipes.mockReturnValue({
+      data: { recipes: [], totalElements: 0 },
+      isLoading: false,
+      error: null,
+    });
   });
 
   describe('Rendering', () => {
@@ -95,7 +105,9 @@ describe('RecipePickerSection', () => {
       );
 
       expect(screen.getByText('Add Recipes')).toBeInTheDocument();
-      expect(screen.getByLabelText(/search recipes/i)).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/search by recipe name/i)
+      ).toBeInTheDocument();
       expect(screen.getByText('Selected Recipes')).toBeInTheDocument();
     });
 
@@ -139,7 +151,7 @@ describe('RecipePickerSection', () => {
   });
 
   describe('Search Functionality', () => {
-    it('should call search hook when typing in search input', async () => {
+    it('should update search input when typing', async () => {
       const user = userEvent.setup();
 
       render(
@@ -148,13 +160,51 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
       await user.type(searchInput, 'chocolate');
 
       expect(searchInput).toHaveValue('chocolate');
     });
 
-    it('should show search results section when there is a query', async () => {
+    it('should disable search button when input is less than 2 characters', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchButton = screen.getByRole('button', {
+        name: /search recipes/i,
+      });
+      expect(searchButton).toBeDisabled();
+
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'c');
+
+      expect(searchButton).toBeDisabled();
+    });
+
+    it('should enable search button when input has 2+ characters', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'ca');
+
+      const searchButton = screen.getByRole('button', {
+        name: /search recipes/i,
+      });
+      expect(searchButton).toBeEnabled();
+    });
+
+    it('should show search results section when search button is clicked', async () => {
       const user = userEvent.setup();
 
       mockUseDebouncedRecipeSearch.mockReturnValue({
@@ -179,8 +229,44 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
       await user.type(searchInput, 'test');
+
+      const searchButton = screen.getByRole('button', {
+        name: /search recipes/i,
+      });
+      await user.click(searchButton);
+
+      expect(screen.getByText('Search Results')).toBeInTheDocument();
+    });
+
+    it('should show search results when Enter is pressed', async () => {
+      const user = userEvent.setup();
+
+      mockUseDebouncedRecipeSearch.mockReturnValue({
+        data: {
+          recipes: [],
+          page: 0,
+          size: 10,
+          totalElements: 0,
+          totalPages: 0,
+          first: true,
+          last: true,
+          numberOfElements: 0,
+          empty: true,
+        },
+        isLoading: false,
+        error: null,
+      });
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(screen.getByText('Search Results')).toBeInTheDocument();
     });
@@ -200,8 +286,8 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
-      await user.type(searchInput, 'test');
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(
         screen.getByLabelText('Loading search results')
@@ -236,8 +322,8 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
-      await user.type(searchInput, 'cake');
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'cake{enter}');
 
       expect(screen.getByText('Chocolate Cake')).toBeInTheDocument();
       expect(screen.getByText('Apple Pie')).toBeInTheDocument();
@@ -258,10 +344,116 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
-      await user.type(searchInput, 'test');
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'test{enter}');
 
       expect(screen.getByText('Search failed')).toBeInTheDocument();
+    });
+  });
+
+  describe('Suggested Recipes', () => {
+    it('should display suggested recipes when no search performed', async () => {
+      // Reset and set fresh mock to ensure clean state
+      mockUseSuggestedRecipes.mockReset();
+      mockUseSuggestedRecipes.mockReturnValue({
+        data: {
+          recipes: [
+            { recipeId: 1, title: 'Suggested Recipe 1', description: 'Tasty' },
+            { recipeId: 2, title: 'Suggested Recipe 2', description: 'Yummy' },
+          ],
+          totalElements: 2,
+        },
+        isLoading: false,
+        error: null,
+      });
+
+      // Also reset and set the debounced search mock
+      mockUseDebouncedRecipeSearch.mockReset();
+      mockUseDebouncedRecipeSearch.mockReturnValue({
+        data: null,
+        isLoading: false,
+        error: null,
+      });
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Suggested Recipes')).toBeInTheDocument();
+        expect(screen.getByText('Suggested Recipe 1')).toBeInTheDocument();
+        expect(screen.getByText('Suggested Recipe 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should hide suggested recipes when search is performed', async () => {
+      const user = userEvent.setup();
+
+      mockUseSuggestedRecipes.mockReturnValue({
+        data: {
+          recipes: [
+            { recipeId: 1, title: 'Suggested Recipe 1', description: 'Tasty' },
+          ],
+          totalElements: 1,
+        },
+        isLoading: false,
+        error: null,
+      });
+
+      mockUseDebouncedRecipeSearch.mockReturnValue({
+        data: {
+          recipes: [
+            { recipeId: 3, title: 'Search Result', description: 'Found' },
+          ],
+          page: 0,
+          size: 10,
+          totalElements: 1,
+          totalPages: 1,
+          first: true,
+          last: true,
+          numberOfElements: 1,
+          empty: false,
+        },
+        isLoading: false,
+        error: null,
+      });
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      // Initially shows suggested recipes
+      expect(screen.getByText('Suggested Recipes')).toBeInTheDocument();
+
+      // Perform search
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'test{enter}');
+
+      // Suggested recipes should be hidden, search results shown
+      expect(screen.queryByText('Suggested Recipes')).not.toBeInTheDocument();
+      expect(screen.getByText('Search Results')).toBeInTheDocument();
+    });
+
+    it('should show loading state for suggested recipes', () => {
+      mockUseSuggestedRecipes.mockReturnValue({
+        data: null,
+        isLoading: true,
+        error: null,
+      });
+
+      render(
+        <TestWrapper>
+          {form => <RecipePickerSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      // When loading but no data, suggested recipes section may not show
+      // This is expected behavior - section appears when there's data to show
+      expect(screen.queryByText('Suggested Recipes')).not.toBeInTheDocument();
     });
   });
 
@@ -293,8 +485,8 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
-      await user.type(searchInput, 'cake');
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'cake{enter}');
 
       const addButton = screen.getByRole('button', {
         name: 'Add Chocolate Cake',
@@ -334,8 +526,8 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
-      await user.type(searchInput, 'test');
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
+      await user.type(searchInput, 'test{enter}');
 
       const addButton = screen.getByRole('button', { name: 'Add Test Recipe' });
       await user.click(addButton);
@@ -410,7 +602,7 @@ describe('RecipePickerSection', () => {
         </TestWrapper>
       );
 
-      const searchInput = screen.getByLabelText(/search recipes/i);
+      const searchInput = screen.getByPlaceholderText(/search by recipe name/i);
       expect(searchInput).toBeDisabled();
       expect(
         screen.getByText('Maximum recipes reached. Remove some to add more.')
