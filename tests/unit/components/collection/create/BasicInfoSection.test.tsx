@@ -241,7 +241,7 @@ describe('BasicInfoSection', () => {
     });
   });
 
-  describe('Visibility RadioGroup', () => {
+  describe('Visibility Segmented Control', () => {
     it('should render all visibility options', () => {
       render(
         <TestWrapper>
@@ -249,9 +249,13 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByLabelText('Private')).toBeInTheDocument();
-      expect(screen.getByLabelText('Friends Only')).toBeInTheDocument();
-      expect(screen.getByLabelText('Public')).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'Private' })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'Friends Only' })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('radio', { name: 'Public' })).toBeInTheDocument();
     });
 
     it('should have Private selected by default', () => {
@@ -261,8 +265,8 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const privateRadio = screen.getByLabelText('Private');
-      expect(privateRadio).toBeChecked();
+      const privateRadio = screen.getByRole('radio', { name: 'Private' });
+      expect(privateRadio).toHaveAttribute('aria-checked', 'true');
     });
 
     it('should allow changing visibility', async () => {
@@ -274,33 +278,18 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const publicRadio = screen.getByLabelText('Public');
+      const publicRadio = screen.getByRole('radio', { name: 'Public' });
       await user.click(publicRadio);
 
-      expect(publicRadio).toBeChecked();
-      expect(screen.getByLabelText('Private')).not.toBeChecked();
-    });
-
-    it('should show visibility descriptions', () => {
-      render(
-        <TestWrapper>
-          {form => <BasicInfoSection form={form} isActive={true} />}
-        </TestWrapper>
+      expect(publicRadio).toHaveAttribute('aria-checked', 'true');
+      expect(screen.getByRole('radio', { name: 'Private' })).toHaveAttribute(
+        'aria-checked',
+        'false'
       );
-
-      expect(
-        screen.getByText('Only you can see this collection')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Only your friends can see this collection')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Anyone can see this collection')
-      ).toBeInTheDocument();
     });
   });
 
-  describe('Collaboration Mode RadioGroup', () => {
+  describe('Collaboration Mode Segmented Control', () => {
     it('should render all collaboration mode options', () => {
       render(
         <TestWrapper>
@@ -308,9 +297,15 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      expect(screen.getByLabelText('Owner Only')).toBeInTheDocument();
-      expect(screen.getByLabelText('Specific Users')).toBeInTheDocument();
-      expect(screen.getByLabelText('All Users')).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'Owner Only' })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'Specific Users' })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('radio', { name: 'All Users' })
+      ).toBeInTheDocument();
     });
 
     it('should have Owner Only selected by default', () => {
@@ -320,8 +315,8 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const ownerOnlyRadio = screen.getByLabelText('Owner Only');
-      expect(ownerOnlyRadio).toBeChecked();
+      const ownerOnlyRadio = screen.getByRole('radio', { name: 'Owner Only' });
+      expect(ownerOnlyRadio).toHaveAttribute('aria-checked', 'true');
     });
 
     it('should allow changing collaboration mode', async () => {
@@ -333,29 +328,16 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const specificUsersRadio = screen.getByLabelText('Specific Users');
+      const specificUsersRadio = screen.getByRole('radio', {
+        name: 'Specific Users',
+      });
       await user.click(specificUsersRadio);
 
-      expect(specificUsersRadio).toBeChecked();
-      expect(screen.getByLabelText('Owner Only')).not.toBeChecked();
-    });
-
-    it('should show collaboration mode descriptions', () => {
-      render(
-        <TestWrapper>
-          {form => <BasicInfoSection form={form} isActive={true} />}
-        </TestWrapper>
+      expect(specificUsersRadio).toHaveAttribute('aria-checked', 'true');
+      expect(screen.getByRole('radio', { name: 'Owner Only' })).toHaveAttribute(
+        'aria-checked',
+        'false'
       );
-
-      expect(
-        screen.getByText('Only you can add or remove recipes')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Invite specific users to collaborate')
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Anyone can add recipes to this collection')
-      ).toBeInTheDocument();
     });
   });
 
@@ -500,8 +482,14 @@ describe('BasicInfoSection', () => {
           /describe what makes this collection special/i
         )
       ).toHaveValue('A test collection');
-      expect(screen.getByLabelText('Public')).toBeChecked();
-      expect(screen.getByLabelText('All Users')).toBeChecked();
+      expect(screen.getByRole('radio', { name: 'Public' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
+      expect(screen.getByRole('radio', { name: 'All Users' })).toHaveAttribute(
+        'aria-checked',
+        'true'
+      );
       expect(screen.getByText('tag1')).toBeInTheDocument();
       expect(screen.getByText('tag2')).toBeInTheDocument();
     });

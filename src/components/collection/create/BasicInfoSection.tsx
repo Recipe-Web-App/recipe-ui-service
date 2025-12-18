@@ -4,8 +4,8 @@ import * as React from 'react';
 import { UseFormReturn, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup } from '@/components/ui/radio';
 import { ChipInput } from '@/components/ui/chip';
+import { cn } from '@/lib/utils';
 import {
   Card,
   CardContent,
@@ -48,23 +48,6 @@ export function BasicInfoSection({
   } = form;
 
   if (!isActive) return null;
-
-  // Transform options to match RadioGroup expected format
-  const visibilityRadioOptions = VISIBILITY_OPTIONS.map(option => ({
-    id: `visibility-${option.value}`,
-    value: option.value,
-    label: option.label,
-    description: option.description,
-  }));
-
-  const collaborationModeRadioOptions = COLLABORATION_MODE_OPTIONS.map(
-    option => ({
-      id: `collaboration-${option.value}`,
-      value: option.value,
-      label: option.label,
-      description: option.description,
-    })
-  );
 
   return (
     <Card className="border-0 shadow-none">
@@ -114,45 +97,102 @@ export function BasicInfoSection({
         </div>
 
         {/* Visibility */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium" id="visibility-label">
+        <div className="space-y-3">
+          <label
+            className="mb-2 block text-sm font-medium"
+            id="visibility-label"
+          >
             Visibility
           </label>
           <Controller
             name="visibility"
             control={control}
             render={({ field }) => (
-              <RadioGroup
-                name="visibility"
-                options={visibilityRadioOptions}
-                value={field.value}
-                onValueChange={field.onChange}
-                error={errors.visibility?.message}
+              <div
+                role="radiogroup"
                 aria-labelledby="visibility-label"
-              />
+                className="border-border mt-2 inline-flex rounded-md border"
+              >
+                {VISIBILITY_OPTIONS.map((option, index) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={field.value === option.value}
+                    onClick={() => field.onChange(option.value)}
+                    className={cn(
+                      'px-6 py-2 text-sm font-medium transition-colors',
+                      'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                      index === 0 && 'rounded-l-md',
+                      index === VISIBILITY_OPTIONS.length - 1 && 'rounded-r-md',
+                      index !== VISIBILITY_OPTIONS.length - 1 &&
+                        'border-border border-r',
+                      field.value === option.value
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-background hover:bg-muted'
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             )}
           />
+          {errors.visibility && (
+            <p className="text-destructive text-sm">
+              {errors.visibility.message}
+            </p>
+          )}
         </div>
 
         {/* Collaboration Mode */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium" id="collaboration-mode-label">
+        <div className="space-y-3">
+          <label
+            className="mb-2 block text-sm font-medium"
+            id="collaboration-mode-label"
+          >
             Collaboration Mode
           </label>
           <Controller
             name="collaborationMode"
             control={control}
             render={({ field }) => (
-              <RadioGroup
-                name="collaborationMode"
-                options={collaborationModeRadioOptions}
-                value={field.value}
-                onValueChange={field.onChange}
-                error={errors.collaborationMode?.message}
+              <div
+                role="radiogroup"
                 aria-labelledby="collaboration-mode-label"
-              />
+                className="border-border mt-2 inline-flex rounded-md border"
+              >
+                {COLLABORATION_MODE_OPTIONS.map((option, index) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={field.value === option.value}
+                    onClick={() => field.onChange(option.value)}
+                    className={cn(
+                      'px-6 py-2 text-sm font-medium transition-colors',
+                      'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+                      index === 0 && 'rounded-l-md',
+                      index === COLLABORATION_MODE_OPTIONS.length - 1 &&
+                        'rounded-r-md',
+                      index !== COLLABORATION_MODE_OPTIONS.length - 1 &&
+                        'border-border border-r',
+                      field.value === option.value
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-background hover:bg-muted'
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
             )}
           />
+          {errors.collaborationMode && (
+            <p className="text-destructive text-sm">
+              {errors.collaborationMode.message}
+            </p>
+          )}
         </div>
 
         {/* Tags */}

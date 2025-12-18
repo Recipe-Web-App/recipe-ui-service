@@ -257,7 +257,9 @@ describe('CreateCollectionForm', () => {
       );
 
       // Find and click the Specific Users radio button
-      const specificUsersRadio = screen.getByLabelText(/specific users/i);
+      const specificUsersRadio = screen.getByRole('radio', {
+        name: /specific users/i,
+      });
       await user.click(specificUsersRadio);
 
       await waitFor(() => {
