@@ -49,7 +49,7 @@ export interface CreateCollectionFormProps {
  * CreateCollectionForm Component
  *
  * Main form component for creating a new collection.
- * Combines BasicInfoSection, RecipePickerSection, and CollaboratorPickerSection
+ * Combines BasicInfoSection, CollaboratorPickerSection, and RecipePickerSection
  * into a single-page form.
  */
 export function CreateCollectionForm({
@@ -188,11 +188,11 @@ export function CreateCollectionForm({
           {/* Basic Information Section */}
           <BasicInfoSection form={form} isActive={true} />
 
-          {/* Recipe Picker Section */}
-          <RecipePickerSection form={form} isActive={true} />
-
           {/* Collaborator Picker Section (conditionally shown) */}
           <CollaboratorPickerSection form={form} isActive={showCollaborators} />
+
+          {/* Recipe Picker Section */}
+          <RecipePickerSection form={form} isActive={true} />
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4 border-t pt-6">
