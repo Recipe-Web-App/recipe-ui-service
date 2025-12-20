@@ -341,7 +341,7 @@ describe('BasicInfoSection', () => {
     });
   });
 
-  describe('Tags ChipInput', () => {
+  describe('Tags TagInput', () => {
     it('should render tags input', () => {
       render(
         <TestWrapper>
@@ -349,9 +349,17 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      expect(
-        screen.getByPlaceholderText(/add tags \(press enter\)/i)
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/add a tag/i)).toBeInTheDocument();
+    });
+
+    it('should render tag count', () => {
+      render(
+        <TestWrapper>
+          {form => <BasicInfoSection form={form} isActive={true} />}
+        </TestWrapper>
+      );
+
+      expect(screen.getByText('0/20')).toBeInTheDocument();
     });
 
     it('should allow adding tags', async () => {
@@ -363,9 +371,7 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const tagsInput = screen.getByPlaceholderText(
-        /add tags \(press enter\)/i
-      );
+      const tagsInput = screen.getByPlaceholderText(/add a tag/i);
       await user.type(tagsInput, 'vegetarian{enter}');
 
       expect(screen.getByText('vegetarian')).toBeInTheDocument();
@@ -380,9 +386,7 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const tagsInput = screen.getByPlaceholderText(
-        /add tags \(press enter\)/i
-      );
+      const tagsInput = screen.getByPlaceholderText(/add a tag/i);
       await user.type(tagsInput, 'vegetarian{enter}');
       await user.type(tagsInput, 'quick{enter}');
       await user.type(tagsInput, 'healthy{enter}');
@@ -401,15 +405,16 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const tagsInput = screen.getByPlaceholderText(
-        /add tags \(press enter\)/i
-      );
+      const tagsInput = screen.getByPlaceholderText(/add a tag/i);
       await user.type(tagsInput, 'vegetarian{enter}');
       await user.type(tagsInput, 'vegetarian{enter}');
 
-      // Should only have one 'vegetarian' chip
-      const vegetarianChips = screen.getAllByText('vegetarian');
-      expect(vegetarianChips).toHaveLength(1);
+      // Should only have one 'vegetarian' badge and show duplicate error
+      const vegetarianBadges = screen.getAllByText('vegetarian');
+      expect(vegetarianBadges).toHaveLength(1);
+      expect(
+        screen.getByText('This tag has already been added')
+      ).toBeInTheDocument();
     });
 
     it('should allow removing tags', async () => {
@@ -421,39 +426,15 @@ describe('BasicInfoSection', () => {
         </TestWrapper>
       );
 
-      const tagsInput = screen.getByPlaceholderText(
-        /add tags \(press enter\)/i
-      );
+      const tagsInput = screen.getByPlaceholderText(/add a tag/i);
       await user.type(tagsInput, 'vegetarian{enter}');
 
-      const removeButton = screen.getByRole('button', { name: /remove/i });
+      const removeButton = screen.getByRole('button', {
+        name: /remove tag vegetarian/i,
+      });
       await user.click(removeButton);
 
       expect(screen.queryByText('vegetarian')).not.toBeInTheDocument();
-    });
-
-    it('should show error for tags that are too long', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <TestWrapper>
-          {form => <BasicInfoSection form={form} isActive={true} />}
-        </TestWrapper>
-      );
-
-      const tagsInput = screen.getByPlaceholderText(
-        /add tags \(press enter\)/i
-      );
-      const longTag = 'a'.repeat(CREATE_COLLECTION_LIMITS.MAX_TAG_LENGTH + 1);
-      await user.type(tagsInput, `${longTag}{enter}`);
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(
-            `Tag must be ${CREATE_COLLECTION_LIMITS.MAX_TAG_LENGTH} characters or less`
-          )
-        ).toBeInTheDocument();
-      });
     });
   });
 

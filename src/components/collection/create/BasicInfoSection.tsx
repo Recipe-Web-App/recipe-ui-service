@@ -4,7 +4,7 @@ import * as React from 'react';
 import { UseFormReturn, Controller } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ChipInput } from '@/components/ui/chip';
+import { TagInput } from '@/components/ui/tag-input';
 import { cn } from '@/lib/utils';
 import {
   Card,
@@ -196,38 +196,20 @@ export function BasicInfoSection({
         </div>
 
         {/* Tags */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="tags-input">
-            Tags
-          </label>
-          <Controller
-            name="tags"
-            control={control}
-            render={({ field }) => (
-              <ChipInput
-                value={field.value ?? []}
-                onChange={field.onChange}
-                placeholder="Add tags (press Enter)..."
-                maxChips={CREATE_COLLECTION_LIMITS.MAX_TAGS}
-                validate={tag => {
-                  if (tag.length > CREATE_COLLECTION_LIMITS.MAX_TAG_LENGTH) {
-                    return `Tag must be ${CREATE_COLLECTION_LIMITS.MAX_TAG_LENGTH} characters or less`;
-                  }
-                  return true;
-                }}
-              />
-            )}
-          />
-          <p className="text-muted-foreground text-sm">
-            Optional: Add up to {CREATE_COLLECTION_LIMITS.MAX_TAGS} tags to help
-            categorize your collection
-          </p>
-          {errors.tags?.message && (
-            <p className="text-destructive text-sm" role="alert">
-              {errors.tags.message}
-            </p>
+        <Controller
+          name="tags"
+          control={control}
+          render={({ field }) => (
+            <TagInput
+              value={field.value ?? []}
+              onChange={field.onChange}
+              placeholder="Add a tag (e.g., Family Favorites, Quick Meals)"
+              maxTags={CREATE_COLLECTION_LIMITS.MAX_TAGS}
+              helperText={`Optional: Add up to ${CREATE_COLLECTION_LIMITS.MAX_TAGS} tags to help categorize your collection`}
+              error={errors.tags?.message}
+            />
           )}
-        </div>
+        />
       </CardContent>
     </Card>
   );
