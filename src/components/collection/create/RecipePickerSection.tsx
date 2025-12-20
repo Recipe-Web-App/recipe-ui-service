@@ -134,7 +134,10 @@ export function RecipePickerSection({
         recipes.length
       );
 
-      setValue('recipes', [...recipes, newRecipe], { shouldValidate: true });
+      setValue('recipes', [...recipes, newRecipe], {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
     [recipes, selectedRecipeIds, setValue]
   );
@@ -145,7 +148,10 @@ export function RecipePickerSection({
       const updatedRecipes = recipes
         .filter(r => r.id !== recipeId)
         .map((r, index) => ({ ...r, displayOrder: index }));
-      setValue('recipes', updatedRecipes, { shouldValidate: true });
+      setValue('recipes', updatedRecipes, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
     [recipes, setValue]
   );
@@ -153,7 +159,10 @@ export function RecipePickerSection({
   // Handle reordering recipes
   const handleReorderRecipes = React.useCallback(
     (reorderedRecipes: CollectionRecipeFormData[]) => {
-      setValue('recipes', reorderedRecipes, { shouldValidate: true });
+      setValue('recipes', reorderedRecipes, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
     [setValue]
   );

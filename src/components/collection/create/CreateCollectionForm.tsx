@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Save, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ConfirmationDialog } from '@/components/ui/dialog';
 import { BasicInfoSection } from './BasicInfoSection';
 import { RecipePickerSection } from './RecipePickerSection';
 import { CollaboratorPickerSection } from './CollaboratorPickerSection';
@@ -27,6 +28,8 @@ import type { CollectionDto } from '@/types/recipe-management';
 import { useCreateCollection } from '@/hooks/recipe-management';
 import { collectionRecipesApi } from '@/lib/api/recipe-management/collection-recipes';
 import { collectionCollaboratorsApi } from '@/lib/api/recipe-management/collection-collaborators';
+import { useCollectionStore } from '@/stores/collection-store';
+import { useToastStore } from '@/stores/ui/toast-store';
 import { cn } from '@/lib/utils';
 
 /**
@@ -62,6 +65,32 @@ export function CreateCollectionForm({
   const [submitError, setSubmitError] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+  // Draft restoration state
+  const [showRestoreDialog, setShowRestoreDialog] = React.useState(false);
+  const [isInitialized, setIsInitialized] = React.useState(false);
+
+  // Draft saving state
+  const [isSavingDraft, setIsSavingDraft] = React.useState(false);
+  const [lastSaved, setLastSaved] = React.useState<Date | null>(null);
+  const autoSaveIntervalRef = React.useRef<ReturnType<
+    typeof setInterval
+  > | null>(null);
+
+  // Ref to track dirty state for use in callbacks (avoids stale closure issues)
+  const isDirtyRef = React.useRef(false);
+
+  // Toast store for notifications
+  const { addSuccessToast, addErrorToast } = useToastStore();
+
+  // Collection store for draft management
+  const {
+    draftCollection,
+    hasUnsavedDraft,
+    setDraftCollection,
+    clearDraftCollection,
+    setDraftSaving,
+  } = useCollectionStore();
+
   // Initialize form with React Hook Form and Zod validation
   const form = useForm<CreateCollectionFormData>({
     resolver: zodResolver(
@@ -74,8 +103,14 @@ export function CreateCollectionForm({
     mode: 'onChange',
   });
 
-  const { handleSubmit, watch, formState } = form;
+  const { handleSubmit, watch, formState, reset } = form;
   const { isValid, isDirty, errors } = formState;
+
+  // Keep isDirtyRef in sync with form's isDirty state
+  // This allows interval/event callbacks to access the latest value
+  React.useEffect(() => {
+    isDirtyRef.current = isDirty;
+  }, [isDirty]);
 
   // Watch collaboration mode for conditional rendering
   const collaborationMode = watch('collaborationMode');
@@ -84,6 +119,101 @@ export function CreateCollectionForm({
 
   // Create collection mutation
   const createCollectionMutation = useCreateCollection();
+
+  // Check for existing draft on mount
+  React.useEffect(() => {
+    if (!isInitialized && hasUnsavedDraft() && !initialValues) {
+      setShowRestoreDialog(true);
+    } else {
+      setIsInitialized(true);
+    }
+  }, [hasUnsavedDraft, initialValues, isInitialized]);
+
+  // Auto-save draft every 30 seconds when form is dirty
+  // Note: We use isDirtyRef to get the latest dirty state without
+  // recreating the interval on every form change
+  React.useEffect(() => {
+    if (!isInitialized) {
+      return;
+    }
+
+    autoSaveIntervalRef.current = setInterval(() => {
+      if (isDirtyRef.current) {
+        const currentData = form.getValues();
+        setDraftSaving(true);
+        setDraftCollection(currentData);
+        setDraftSaving(false);
+        setLastSaved(new Date());
+      }
+    }, 10000);
+
+    return () => {
+      if (autoSaveIntervalRef.current) {
+        clearInterval(autoSaveIntervalRef.current);
+      }
+    };
+  }, [isInitialized, form, setDraftSaving, setDraftCollection]);
+
+  // Save draft when user closes browser or navigates away
+  React.useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (isDirtyRef.current) {
+        const currentData = form.getValues();
+        setDraftCollection(currentData);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [form, setDraftCollection]);
+
+  /**
+   * Handle restoring draft from storage.
+   */
+  const handleRestoreDraft = React.useCallback(() => {
+    if (draftCollection) {
+      reset({
+        ...CREATE_COLLECTION_DEFAULT_VALUES,
+        ...draftCollection,
+      });
+    }
+    setShowRestoreDialog(false);
+    setIsInitialized(true);
+  }, [draftCollection, reset]);
+
+  /**
+   * Handle discarding draft and starting fresh.
+   */
+  const handleDiscardDraft = React.useCallback(() => {
+    clearDraftCollection();
+    setShowRestoreDialog(false);
+    setIsInitialized(true);
+  }, [clearDraftCollection]);
+
+  /**
+   * Handle manually saving draft.
+   */
+  const handleSaveDraft = React.useCallback(async () => {
+    setIsSavingDraft(true);
+    try {
+      const currentData = form.getValues();
+      setDraftSaving(true);
+      setDraftCollection(currentData);
+      setDraftSaving(false);
+      setLastSaved(new Date());
+      addSuccessToast('Draft saved successfully');
+    } catch {
+      addErrorToast('Failed to save draft');
+    } finally {
+      setIsSavingDraft(false);
+    }
+  }, [
+    form,
+    setDraftSaving,
+    setDraftCollection,
+    addSuccessToast,
+    addErrorToast,
+  ]);
 
   /**
    * Handle form submission.
@@ -138,6 +268,9 @@ export function CreateCollectionForm({
         await Promise.all(collaboratorPromises);
       }
 
+      // Clear draft after successful creation
+      clearDraftCollection();
+
       // Success callback
       onSuccess?.(collectionResponse);
     } catch (error) {
@@ -166,6 +299,24 @@ export function CreateCollectionForm({
   // Check if form has validation errors to show
   const hasErrors = Object.keys(errors).length > 0;
 
+  // Show draft restoration dialog before initializing
+  if (!isInitialized && showRestoreDialog) {
+    return (
+      <ConfirmationDialog
+        open={showRestoreDialog}
+        onOpenChange={setShowRestoreDialog}
+        title="Restore Draft?"
+        description="You have an unsaved draft collection from a previous session. Would you like to continue where you left off?"
+        icon={<AlertTriangle className="h-5 w-5" />}
+        confirmText="Restore Draft"
+        cancelText="Start Fresh"
+        onConfirm={handleRestoreDraft}
+        onCancel={handleDiscardDraft}
+        type="save"
+      />
+    );
+  }
+
   return (
     <Card className={cn('w-full', className)}>
       <CardHeader>
@@ -173,6 +324,22 @@ export function CreateCollectionForm({
         <CardDescription>
           Create a new collection to organize and share your favorite recipes.
         </CardDescription>
+        {/* Auto-save indicator */}
+        <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
+          {isSavingDraft ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Saving...</span>
+            </>
+          ) : lastSaved ? (
+            <>
+              <Save className="h-4 w-4" />
+              <span>Last saved {formatLastSaved(lastSaved)}</span>
+            </>
+          ) : isDirty ? (
+            <span>Unsaved changes</span>
+          ) : null}
+        </div>
       </CardHeader>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -205,6 +372,26 @@ export function CreateCollectionForm({
 
           {/* Form Actions */}
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:justify-end">
+            {isDirty && !isSavingDraft && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleSaveDraft}
+                disabled={isSavingDraft || isSubmitting}
+              >
+                {isSavingDraft ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save Draft
+                  </>
+                )}
+              </Button>
+            )}
             {onCancel && (
               <Button
                 type="button"
@@ -237,3 +424,28 @@ export function CreateCollectionForm({
 }
 
 CreateCollectionForm.displayName = 'CreateCollectionForm';
+
+/**
+ * Format the last saved time for display.
+ */
+function formatLastSaved(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+
+  if (diffSeconds < 10) {
+    return 'just now';
+  }
+  if (diffSeconds < 60) {
+    return `${diffSeconds} seconds ago`;
+  }
+  if (diffMinutes === 1) {
+    return '1 minute ago';
+  }
+  if (diffMinutes < 60) {
+    return `${diffMinutes} minutes ago`;
+  }
+
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}

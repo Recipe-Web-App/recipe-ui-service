@@ -131,6 +131,7 @@ export function CollaboratorPickerSection({
 
       setValue('collaborators', [...collaborators, newCollaborator], {
         shouldValidate: true,
+        shouldDirty: true,
       });
     },
     [collaborators, selectedUserIds, setValue]
@@ -142,7 +143,10 @@ export function CollaboratorPickerSection({
       const updatedCollaborators = collaborators.filter(
         c => c.id !== collaboratorId
       );
-      setValue('collaborators', updatedCollaborators, { shouldValidate: true });
+      setValue('collaborators', updatedCollaborators, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
     [collaborators, setValue]
   );

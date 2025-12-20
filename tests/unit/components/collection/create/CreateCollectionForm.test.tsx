@@ -73,6 +73,56 @@ jest.mock('@/stores/auth-store', () => ({
   }),
 }));
 
+// Mock collection store
+const mockHasUnsavedDraft = jest.fn().mockReturnValue(false);
+const mockSetDraftCollection = jest.fn();
+const mockClearDraftCollection = jest.fn();
+const mockSetDraftSaving = jest.fn();
+
+const mockCollectionStoreState = {
+  draftCollection: null as {
+    name: string;
+    description: string;
+    visibility: CollectionVisibility;
+    collaborationMode: CollaborationMode;
+    tags: string[];
+    recipes: {
+      id: string;
+      recipeId: number;
+      recipeTitle: string;
+      recipeDescription: string;
+      displayOrder: number;
+    }[];
+    collaborators: {
+      id: string;
+      userId: string;
+      userName: string;
+      userEmail: string;
+    }[];
+  } | null,
+  draftCollectionId: null as string | null,
+  draftLastModified: null as Date | null,
+  hasUnsavedDraft: mockHasUnsavedDraft,
+  setDraftCollection: mockSetDraftCollection,
+  clearDraftCollection: mockClearDraftCollection,
+  setDraftSaving: mockSetDraftSaving,
+};
+
+jest.mock('@/stores/collection-store', () => ({
+  useCollectionStore: () => mockCollectionStoreState,
+}));
+
+// Mock toast store
+const mockAddSuccessToast = jest.fn();
+const mockAddErrorToast = jest.fn();
+
+jest.mock('@/stores/ui/toast-store', () => ({
+  useToastStore: () => ({
+    addSuccessToast: mockAddSuccessToast,
+    addErrorToast: mockAddErrorToast,
+  }),
+}));
+
 // Import component after mocks are set up
 import { CreateCollectionForm } from '@/components/collection/create/CreateCollectionForm';
 
@@ -97,6 +147,12 @@ describe('CreateCollectionForm', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Reset collection store mocks
+    mockHasUnsavedDraft.mockReturnValue(false);
+    mockCollectionStoreState.draftCollection = null;
+    mockCollectionStoreState.draftCollectionId = null;
+    mockCollectionStoreState.draftLastModified = null;
 
     // Default mock implementations
     mockUseDebouncedRecipeSearch.mockReturnValue({
@@ -509,6 +565,271 @@ describe('CreateCollectionForm', () => {
       // Public visibility should be selected - the radio input has aria-label
       const publicRadio = screen.getByRole('radio', { name: /public/i });
       expect(publicRadio).toBeChecked();
+    });
+  });
+
+  describe('Draft Functionality', () => {
+    it('should show restore dialog when draft exists', async () => {
+      mockHasUnsavedDraft.mockReturnValue(true);
+      mockCollectionStoreState.draftCollection = {
+        name: 'My Draft Collection',
+        description: 'Draft description',
+        visibility: CollectionVisibility.PRIVATE,
+        collaborationMode: CollaborationMode.OWNER_ONLY,
+        tags: [],
+        recipes: [],
+        collaborators: [],
+      };
+      mockCollectionStoreState.draftLastModified = new Date();
+
+      const Wrapper = createTestWrapper();
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Restore Draft?')).toBeInTheDocument();
+      });
+    });
+
+    it('should not show restore dialog when no draft exists', async () => {
+      mockHasUnsavedDraft.mockReturnValue(false);
+
+      const Wrapper = createTestWrapper();
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText('Restore Draft?')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should not show restore dialog when initialValues provided', async () => {
+      mockHasUnsavedDraft.mockReturnValue(true);
+      mockCollectionStoreState.draftCollection = {
+        name: 'My Draft Collection',
+        description: '',
+        visibility: CollectionVisibility.PRIVATE,
+        collaborationMode: CollaborationMode.OWNER_ONLY,
+        tags: [],
+        recipes: [],
+        collaborators: [],
+      };
+
+      const Wrapper = createTestWrapper();
+      render(
+        <Wrapper>
+          <CreateCollectionForm
+            initialValues={{
+              name: 'Provided Name',
+            }}
+          />
+        </Wrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByText('Restore Draft?')).not.toBeInTheDocument();
+        expect(screen.getByLabelText(/collection name/i)).toHaveValue(
+          'Provided Name'
+        );
+      });
+    });
+
+    it('should restore draft when "Restore Draft" is clicked', async () => {
+      const user = userEvent.setup();
+
+      mockHasUnsavedDraft.mockReturnValue(true);
+      mockCollectionStoreState.draftCollection = {
+        name: 'My Draft Collection',
+        description: 'Draft description',
+        visibility: CollectionVisibility.PUBLIC,
+        collaborationMode: CollaborationMode.OWNER_ONLY,
+        tags: ['tag1'],
+        recipes: [],
+        collaborators: [],
+      };
+      mockCollectionStoreState.draftLastModified = new Date();
+
+      const Wrapper = createTestWrapper();
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Restore Draft?')).toBeInTheDocument();
+      });
+
+      const restoreButton = screen.getByRole('button', {
+        name: /restore draft/i,
+      });
+      await user.click(restoreButton);
+
+      await waitFor(() => {
+        expect(screen.queryByText('Restore Draft?')).not.toBeInTheDocument();
+        expect(screen.getByLabelText(/collection name/i)).toHaveValue(
+          'My Draft Collection'
+        );
+      });
+    });
+
+    it('should clear draft when "Start Fresh" is clicked', async () => {
+      const user = userEvent.setup();
+
+      mockHasUnsavedDraft.mockReturnValue(true);
+      mockCollectionStoreState.draftCollection = {
+        name: 'My Draft Collection',
+        description: '',
+        visibility: CollectionVisibility.PRIVATE,
+        collaborationMode: CollaborationMode.OWNER_ONLY,
+        tags: [],
+        recipes: [],
+        collaborators: [],
+      };
+      mockCollectionStoreState.draftLastModified = new Date();
+
+      const Wrapper = createTestWrapper();
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Restore Draft?')).toBeInTheDocument();
+      });
+
+      const startFreshButton = screen.getByRole('button', {
+        name: /start fresh/i,
+      });
+      await user.click(startFreshButton);
+
+      await waitFor(() => {
+        expect(mockClearDraftCollection).toHaveBeenCalled();
+        expect(screen.queryByText('Restore Draft?')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should show Save Draft button when form has changes', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      // Initially no Save Draft button
+      expect(
+        screen.queryByRole('button', { name: /save draft/i })
+      ).not.toBeInTheDocument();
+
+      // Make changes
+      const nameInput = screen.getByLabelText(/collection name/i);
+      await user.type(nameInput, 'New Collection');
+
+      // Save Draft button should appear
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /save draft/i })
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should save draft when Save Draft button is clicked', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      // Make changes
+      const nameInput = screen.getByLabelText(/collection name/i);
+      await user.type(nameInput, 'New Collection');
+
+      // Click Save Draft
+      const saveDraftButton = await screen.findByRole('button', {
+        name: /save draft/i,
+      });
+      await user.click(saveDraftButton);
+
+      await waitFor(() => {
+        expect(mockSetDraftSaving).toHaveBeenCalledWith(true);
+        expect(mockSetDraftCollection).toHaveBeenCalled();
+        expect(mockAddSuccessToast).toHaveBeenCalledWith(
+          'Draft saved successfully'
+        );
+      });
+    });
+
+    it('should clear draft on successful form submission', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      const validInitialRecipe = {
+        id: 'recipe-1-123',
+        recipeId: 1,
+        recipeTitle: 'Test Recipe',
+        recipeDescription: 'Delicious',
+        displayOrder: 0,
+      };
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm
+            onSuccess={mockOnSuccess}
+            initialValues={{
+              name: 'My Test Collection',
+              recipes: [validInitialRecipe],
+            }}
+          />
+        </Wrapper>
+      );
+
+      const submitButton = screen.getByRole('button', {
+        name: /create collection/i,
+      });
+
+      await waitFor(() => {
+        expect(submitButton).not.toBeDisabled();
+      });
+
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        expect(mockClearDraftCollection).toHaveBeenCalled();
+        expect(mockOnSuccess).toHaveBeenCalled();
+      });
+    });
+
+    it('should show unsaved changes indicator when form is dirty', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm />
+        </Wrapper>
+      );
+
+      // Make changes
+      const nameInput = screen.getByLabelText(/collection name/i);
+      await user.type(nameInput, 'New Collection');
+
+      // Should show unsaved changes indicator
+      await waitFor(() => {
+        expect(screen.getByText('Unsaved changes')).toBeInTheDocument();
+      });
     });
   });
 });
