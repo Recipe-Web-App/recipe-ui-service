@@ -246,6 +246,8 @@ export function CreateCollectionForm({
       });
 
       // Clear draft after successful creation
+      // Reset dirty ref first to prevent beforeunload handler from re-saving
+      isDirtyRef.current = false;
       clearDraftCollection();
 
       // Success callback
