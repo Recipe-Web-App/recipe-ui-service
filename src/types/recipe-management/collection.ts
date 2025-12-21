@@ -70,12 +70,20 @@ export interface PageCollectionDto extends PageInfo {
 
 /**
  * Request to create a new collection
+ *
+ * Supports batch operations during creation:
+ * - recipeIds: Add recipes to the collection in a single request
+ * - collaboratorIds: Add collaborators (only applicable when collaborationMode is SPECIFIC_USERS)
  */
 export interface CreateCollectionRequest {
   name: string;
   description?: string;
   visibility: CollectionVisibility;
   collaborationMode: CollaborationMode;
+  /** Optional array of recipe IDs to add during creation (auto-ordered by position) */
+  recipeIds?: number[];
+  /** Optional array of user IDs to add as collaborators (only for SPECIFIC_USERS mode) */
+  collaboratorIds?: string[];
 }
 
 /**

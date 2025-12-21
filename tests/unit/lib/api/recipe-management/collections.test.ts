@@ -139,6 +139,64 @@ describe('Collections API', () => {
         })
       ).rejects.toThrow('Creation failed');
     });
+
+    it('should create collection with recipeIds and collaboratorIds (batch operations)', async () => {
+      const createRequest: CreateCollectionRequest = {
+        name: 'Batch Collection',
+        description: 'With recipes and collaborators',
+        visibility: CollectionVisibility.PRIVATE,
+        collaborationMode: CollaborationMode.SPECIFIC_USERS,
+        recipeIds: [1, 2, 3],
+        collaboratorIds: ['uuid-1', 'uuid-2'],
+      };
+
+      const mockResponse: CollectionDto = {
+        ...mockCollectionDto,
+        name: 'Batch Collection',
+        description: 'With recipes and collaborators',
+        visibility: CollectionVisibility.PRIVATE,
+        collaborationMode: CollaborationMode.SPECIFIC_USERS,
+        recipeCount: 3,
+        collaboratorCount: 2,
+      };
+
+      mockedClient.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await collectionsApi.createCollection(createRequest);
+
+      expect(mockedClient.post).toHaveBeenCalledWith(
+        '/collections',
+        createRequest
+      );
+      expect(result.recipeCount).toBe(3);
+      expect(result.collaboratorCount).toBe(2);
+    });
+
+    it('should create collection with only recipeIds', async () => {
+      const createRequest: CreateCollectionRequest = {
+        name: 'Recipe Collection',
+        visibility: CollectionVisibility.PUBLIC,
+        collaborationMode: CollaborationMode.OWNER_ONLY,
+        recipeIds: [10, 20],
+      };
+
+      const mockResponse: CollectionDto = {
+        ...mockCollectionDto,
+        name: 'Recipe Collection',
+        recipeCount: 2,
+        collaboratorCount: 0,
+      };
+
+      mockedClient.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await collectionsApi.createCollection(createRequest);
+
+      expect(mockedClient.post).toHaveBeenCalledWith(
+        '/collections',
+        createRequest
+      );
+      expect(result.recipeCount).toBe(2);
+    });
   });
 
   describe('getCollectionById', () => {

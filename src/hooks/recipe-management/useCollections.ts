@@ -67,6 +67,10 @@ export const useSearchCollections = (
 
 /**
  * Hook to create a new collection
+ *
+ * Supports batch operations:
+ * - recipeIds: Add recipes during creation
+ * - collaboratorIds: Add collaborators during creation (SPECIFIC_USERS mode only)
  */
 export const useCreateCollection = () => {
   const queryClient = useQueryClient();
@@ -92,10 +96,10 @@ export const useCreateCollection = () => {
         queryKey: COLLECTIONS,
       });
 
-      // Set the new collection in cache
-      queryClient.setQueryData([...COLLECTION, newCollection.collectionId], {
-        ...newCollection,
-        recipes: [],
+      // Invalidate collection detail query - we don't have full recipe DTOs
+      // so let consumers refetch if they need the details
+      queryClient.invalidateQueries({
+        queryKey: [...COLLECTION, newCollection.collectionId],
       });
     },
   });

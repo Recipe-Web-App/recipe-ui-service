@@ -26,8 +26,6 @@ import {
 import { CollaborationMode } from '@/types/recipe-management/common';
 import type { CollectionDto } from '@/types/recipe-management';
 import { useCreateCollection } from '@/hooks/recipe-management';
-import { collectionRecipesApi } from '@/lib/api/recipe-management/collection-recipes';
-import { collectionCollaboratorsApi } from '@/lib/api/recipe-management/collection-collaborators';
 import { useCollectionStore } from '@/stores/collection-store';
 import { useToastStore } from '@/stores/ui/toast-store';
 import { cn } from '@/lib/utils';
@@ -217,56 +215,35 @@ export function CreateCollectionForm({
 
   /**
    * Handle form submission.
-   * Creates the collection, then adds recipes and collaborators.
+   * Creates the collection with recipes and collaborators in a single API call.
    */
   const onSubmit = async (data: CreateCollectionFormData) => {
     setSubmitError(null);
     setIsSubmitting(true);
 
     try {
-      // Step 1: Create the collection
+      // Sort recipes by displayOrder to preserve user's ordering
+      const sortedRecipes = [...data.recipes].sort(
+        (a, b) => a.displayOrder - b.displayOrder
+      );
+      const recipeIds = sortedRecipes.map(r => r.recipeId);
+
+      // Extract collaborator IDs
+      const collaboratorIds = data.collaborators.map(c => c.userId);
+
+      // Single API call with all data (batch operations)
       const collectionResponse = await createCollectionMutation.mutateAsync({
         name: data.name,
         description: data.description || undefined,
         visibility: data.visibility,
         collaborationMode: data.collaborationMode,
+        recipeIds: recipeIds.length > 0 ? recipeIds : undefined,
+        collaboratorIds:
+          data.collaborationMode === CollaborationMode.SPECIFIC_USERS &&
+          collaboratorIds.length > 0
+            ? collaboratorIds
+            : undefined,
       });
-
-      const collectionId = collectionResponse.collectionId;
-
-      // Step 2: Add recipes to the collection
-      if (data.recipes.length > 0) {
-        const recipePromises = data.recipes.map(recipe =>
-          collectionRecipesApi.addRecipeToCollection(
-            collectionId,
-            recipe.recipeId
-          )
-        );
-        await Promise.all(recipePromises);
-
-        // Reorder recipes if needed (to match display order from form)
-        if (data.recipes.length > 1) {
-          await collectionRecipesApi.reorderRecipes(collectionId, {
-            recipes: data.recipes.map((recipe, index) => ({
-              recipeId: recipe.recipeId,
-              displayOrder: index,
-            })),
-          });
-        }
-      }
-
-      // Step 3: Add collaborators if in SPECIFIC_USERS mode
-      if (
-        data.collaborationMode === CollaborationMode.SPECIFIC_USERS &&
-        data.collaborators.length > 0
-      ) {
-        const collaboratorPromises = data.collaborators.map(collaborator =>
-          collectionCollaboratorsApi.addCollaborator(collectionId, {
-            userId: collaborator.userId,
-          })
-        );
-        await Promise.all(collaboratorPromises);
-      }
 
       // Clear draft after successful creation
       clearDraftCollection();

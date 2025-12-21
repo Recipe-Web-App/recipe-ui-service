@@ -334,17 +334,9 @@ describe('CreateCollectionForm', () => {
       displayOrder: 0,
     };
 
-    it('should submit form with valid data', async () => {
+    it('should submit form with valid data including recipeIds (batch operation)', async () => {
       const user = userEvent.setup();
       const Wrapper = createTestWrapper();
-
-      mockAddRecipeToCollection.mockResolvedValue({
-        recipeId: 1,
-        recipeTitle: 'Test Recipe',
-        displayOrder: 0,
-        addedBy: 'user',
-        addedAt: new Date().toISOString(),
-      });
 
       render(
         <Wrapper>
@@ -369,18 +361,124 @@ describe('CreateCollectionForm', () => {
 
       await user.click(submitButton);
 
+      // Verify mutation was called with recipeIds (batch operation)
       await waitFor(() => {
         expect(mockMutateAsync).toHaveBeenCalledWith({
           name: 'My Test Collection',
           description: undefined,
           visibility: CollectionVisibility.PRIVATE,
           collaborationMode: CollaborationMode.OWNER_ONLY,
+          recipeIds: [1], // Batch: recipe IDs passed directly
         });
       });
+
+      // Verify NO separate API calls for adding recipes (old behavior)
+      expect(mockAddRecipeToCollection).not.toHaveBeenCalled();
+      expect(mockReorderRecipes).not.toHaveBeenCalled();
 
       await waitFor(() => {
         expect(mockOnSuccess).toHaveBeenCalled();
       });
+    });
+
+    it('should submit form with collaboratorIds when SPECIFIC_USERS mode', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      const validCollaborator = {
+        id: 'collab-1',
+        userId: 'user-uuid-123',
+        username: 'testuser',
+        displayName: 'Test User',
+      };
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm
+            onSuccess={mockOnSuccess}
+            initialValues={{
+              name: 'Team Collection',
+              collaborationMode: CollaborationMode.SPECIFIC_USERS,
+              recipes: [validInitialRecipe],
+              collaborators: [validCollaborator],
+            }}
+          />
+        </Wrapper>
+      );
+
+      const submitButton = screen.getByRole('button', {
+        name: /create collection/i,
+      });
+
+      await waitFor(() => {
+        expect(submitButton).not.toBeDisabled();
+      });
+
+      await user.click(submitButton);
+
+      // Verify mutation was called with both recipeIds and collaboratorIds
+      await waitFor(() => {
+        expect(mockMutateAsync).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: 'Team Collection',
+            collaborationMode: CollaborationMode.SPECIFIC_USERS,
+            recipeIds: [1],
+            collaboratorIds: ['user-uuid-123'],
+          })
+        );
+      });
+
+      // Verify NO separate API calls for adding collaborators (old behavior)
+      expect(mockAddCollaborator).not.toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(mockOnSuccess).toHaveBeenCalled();
+      });
+    });
+
+    it('should not include collaboratorIds when not in SPECIFIC_USERS mode', async () => {
+      const user = userEvent.setup();
+      const Wrapper = createTestWrapper();
+
+      render(
+        <Wrapper>
+          <CreateCollectionForm
+            onSuccess={mockOnSuccess}
+            initialValues={{
+              name: 'My Collection',
+              collaborationMode: CollaborationMode.OWNER_ONLY,
+              recipes: [validInitialRecipe],
+              collaborators: [], // No collaborators for OWNER_ONLY
+            }}
+          />
+        </Wrapper>
+      );
+
+      const submitButton = screen.getByRole('button', {
+        name: /create collection/i,
+      });
+
+      await waitFor(() => {
+        expect(submitButton).not.toBeDisabled();
+      });
+
+      await user.click(submitButton);
+
+      // Verify collaboratorIds is not included
+      await waitFor(() => {
+        expect(mockMutateAsync).toHaveBeenCalledWith({
+          name: 'My Collection',
+          description: undefined,
+          visibility: CollectionVisibility.PRIVATE,
+          collaborationMode: CollaborationMode.OWNER_ONLY,
+          recipeIds: [1],
+          // collaboratorIds should NOT be present
+        });
+      });
+
+      // Verify the call does not include collaboratorIds
+      const callArgs = mockMutateAsync.mock.calls[0][0];
+      expect(callArgs.collaboratorIds).toBeUndefined();
     });
 
     it('should show loading state during submission', async () => {
