@@ -110,7 +110,7 @@ function useCreateRecipeFormInternal({
         if (oldData) {
           return {
             ...oldData,
-            content: [data, ...oldData.content],
+            recipes: [data, ...oldData.recipes],
             totalElements: oldData.totalElements + 1,
           };
         }
@@ -292,7 +292,7 @@ function useEditRecipeFormInternal({
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.map(recipe =>
+            recipes: oldData.recipes.map(recipe =>
               recipe.recipeId === recipeId ? data : recipe
             ),
           };
@@ -466,7 +466,7 @@ function useUpdateRecipeFormInternal({
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.map(recipe =>
+            recipes: oldData.recipes.map(recipe =>
               recipe.recipeId === recipeId ? data : recipe
             ),
           };

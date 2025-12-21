@@ -438,12 +438,15 @@ const mockRecipes: RecipeDto[] = [
 ];
 
 const mockPageData: SearchRecipesResponse = {
-  content: mockRecipes,
+  recipes: mockRecipes,
+  page: 0,
+  size: 10,
   totalElements: 3,
   totalPages: 1,
   last: true,
   first: true,
   numberOfElements: 3,
+  empty: false,
 };
 
 describe('MyRecipesPage', () => {
@@ -488,7 +491,7 @@ describe('MyRecipesPage', () => {
       (useMyRecipes as jest.Mock).mockReturnValue({
         data: {
           ...mockPageData,
-          content: [mockRecipes[0]],
+          recipes: [mockRecipes[0]],
           totalElements: 1,
           numberOfElements: 1,
         },
@@ -533,7 +536,7 @@ describe('MyRecipesPage', () => {
 
     it('shows empty state when no recipes exist', () => {
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -567,7 +570,7 @@ describe('MyRecipesPage', () => {
 
     it('hides filters sidebar when no recipes exist', () => {
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [] },
+        data: { ...mockPageData, recipes: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -672,7 +675,7 @@ describe('MyRecipesPage', () => {
       );
 
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -883,7 +886,7 @@ describe('MyRecipesPage', () => {
       );
 
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -900,7 +903,7 @@ describe('MyRecipesPage', () => {
       );
 
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: manyRecipes, totalElements: 25 },
+        data: { ...mockPageData, recipes: manyRecipes, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -975,7 +978,7 @@ describe('MyRecipesPage', () => {
   describe('Edge Cases', () => {
     it('handles undefined data content gracefully', () => {
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { content: undefined },
+        data: { recipes: undefined },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
@@ -1012,7 +1015,7 @@ describe('MyRecipesPage', () => {
       };
 
       (useMyRecipes as jest.Mock).mockReturnValue({
-        data: { ...mockPageData, content: [minimalRecipe] },
+        data: { ...mockPageData, recipes: [minimalRecipe] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,

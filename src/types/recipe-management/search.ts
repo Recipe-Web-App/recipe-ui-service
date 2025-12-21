@@ -26,10 +26,13 @@ export interface SearchRecipesRequest {
 }
 
 export interface SearchRecipesResponse {
-  content: RecipeDto[];
+  recipes: RecipeDto[];
+  page: number;
+  size: number;
   totalElements: number;
   totalPages: number;
   first: boolean;
   last: boolean;
   numberOfElements: number;
+  empty: boolean;
 }

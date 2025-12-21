@@ -102,6 +102,24 @@ export const useTrendingRecipes = (params?: Omit<PaginationParams, 'sort'>) => {
 };
 
 /**
+ * Hook to fetch suggested/recent recipes (for recipe picker)
+ */
+export const useSuggestedRecipes = (
+  limit: number = 5,
+  enabled: boolean = true
+) => {
+  return useQuery({
+    queryKey: [...RECIPES, 'suggested', limit],
+    queryFn: (): Promise<SearchRecipesResponse> => {
+      return recipesApi.getAllRecipes({ size: limit });
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
  * Hook to create a new recipe
  */
 export const useCreateRecipe = () => {
@@ -115,7 +133,7 @@ export const useCreateRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: [newRecipe, ...oldData.content],
+            recipes: [newRecipe, ...oldData.recipes],
             totalElements: oldData.totalElements + 1,
           };
         }
@@ -156,7 +174,7 @@ export const useUpdateRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.map(recipe =>
+            recipes: oldData.recipes.map(recipe =>
               recipe.recipeId === variables.recipeId ? updatedRecipe : recipe
             ),
           };
@@ -189,7 +207,7 @@ export const useDeleteRecipe = () => {
         if (oldData) {
           return {
             ...oldData,
-            content: oldData.content.filter(
+            recipes: oldData.recipes.filter(
               recipe => recipe.recipeId !== recipeId
             ),
             totalElements: Math.max(0, oldData.totalElements - 1),

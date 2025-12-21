@@ -160,7 +160,7 @@ describe('useUser hooks', () => {
   describe('useSearchUsers', () => {
     it('should search users with query parameters', async () => {
       const mockSearchResponse: UserSearchResponse = {
-        users: [
+        results: [
           {
             userId: 'user-123',
             username: 'testuser',

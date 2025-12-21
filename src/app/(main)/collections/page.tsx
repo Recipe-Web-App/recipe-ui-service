@@ -1,25 +1,24 @@
-import type { Metadata } from 'next';
-import { SectionHubPage } from '@/components/layout/section-hub-page';
+'use client';
 
-export function generateMetadata(): Metadata {
-  return {
-    title: 'Collections | Recipe App',
-    description: 'Browse and manage your recipe collections.',
-  };
-}
+import { SectionHubPage } from '@/components/layout/section-hub-page';
+import { CollectionDraftBanner } from '@/components/collection';
 
 /**
  * Collections Hub Page
  *
  * Landing page for the Collections section. Displays a card grid
  * of sub-page navigation options for managing recipe collections.
+ * Also shows a draft banner if the user has an unsaved collection draft.
  */
 export default function CollectionsPage() {
   return (
-    <SectionHubPage
-      sectionId="collections"
-      title="Collections"
-      description="Curated recipe collections for every occasion"
-    />
+    <div className="space-y-6">
+      <CollectionDraftBanner />
+      <SectionHubPage
+        sectionId="collections"
+        title="Collections"
+        description="Curated recipe collections for every occasion"
+      />
+    </div>
   );
 }

@@ -58,7 +58,7 @@ describe('useRecipes hooks', () => {
   describe('useRecipes', () => {
     it('should fetch all recipes successfully', async () => {
       const mockResponse: SearchRecipesResponse = {
-        content: [
+        recipes: [
           {
             recipeId: 1,
             title: 'Test Recipe',
@@ -69,11 +69,14 @@ describe('useRecipes hooks', () => {
             updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 1,
         totalPages: 1,
         first: true,
         numberOfElements: 1,
+        empty: false,
       };
 
       mockedRecipesApi.getAllRecipes.mockResolvedValue(mockResponse);
@@ -93,12 +96,15 @@ describe('useRecipes hooks', () => {
     it('should fetch recipes with pagination params', async () => {
       const params: PaginationParams = { page: 1, size: 10 };
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 1,
+        size: 10,
         totalElements: 0,
         totalPages: 0,
         first: false,
         last: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedRecipesApi.getAllRecipes.mockResolvedValue(mockResponse);
@@ -333,7 +339,7 @@ describe('useRecipes hooks', () => {
   describe('useTrendingRecipes', () => {
     it('should fetch trending recipes successfully', async () => {
       const mockResponse: SearchRecipesResponse = {
-        content: [
+        recipes: [
           {
             recipeId: 1,
             title: 'Trending Recipe',
@@ -344,11 +350,14 @@ describe('useRecipes hooks', () => {
             updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 1,
         totalPages: 1,
         first: true,
         numberOfElements: 1,
+        empty: false,
       };
 
       mockedRecipesApi.getTrendingRecipes.mockResolvedValue(mockResponse);
@@ -370,12 +379,15 @@ describe('useRecipes hooks', () => {
     it('should fetch trending recipes with pagination params', async () => {
       const params: Omit<PaginationParams, 'sort'> = { page: 1, size: 10 };
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 1,
+        size: 10,
         totalElements: 0,
         totalPages: 0,
         first: false,
         last: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedRecipesApi.getTrendingRecipes.mockResolvedValue(mockResponse);

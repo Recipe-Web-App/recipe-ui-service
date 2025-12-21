@@ -42,12 +42,15 @@ describe('Search API', () => {
   };
 
   const mockSearchResponse: SearchRecipesResponse = {
-    content: [mockRecipe],
+    recipes: [mockRecipe],
+    page: 0,
+    size: 10,
     totalElements: 1,
     totalPages: 1,
     first: true,
     last: true,
     numberOfElements: 1,
+    empty: false,
   };
 
   describe('searchRecipes', () => {
@@ -95,7 +98,7 @@ describe('Search API', () => {
 
       const filteredResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Featured Pasta Recipe',
@@ -107,7 +110,7 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(advancedSearchRequest);
 
-      expect(result.content[0].title).toBe('Featured Pasta Recipe');
+      expect(result.recipes[0].title).toBe('Featured Pasta Recipe');
     });
 
     it('should search recipes by ingredients', async () => {
@@ -117,7 +120,7 @@ describe('Search API', () => {
 
       const ingredientResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Pasta with Eggs and Cheese',
@@ -133,7 +136,7 @@ describe('Search API', () => {
         '/recipes/search',
         ingredientSearchRequest
       );
-      expect(result.content[0].title).toBe('Pasta with Eggs and Cheese');
+      expect(result.recipes[0].title).toBe('Pasta with Eggs and Cheese');
     });
 
     it('should search recipes with time constraints', async () => {
@@ -144,7 +147,7 @@ describe('Search API', () => {
 
       const quickMealResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Quick Pasta Salad',
@@ -157,7 +160,7 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(timeConstrainedRequest);
 
-      expect(result.content[0].cookingTime).toBeLessThanOrEqual(30);
+      expect(result.recipes[0].cookingTime).toBeLessThanOrEqual(30);
     });
 
     it('should search recipes with dietary preferences', async () => {
@@ -168,7 +171,7 @@ describe('Search API', () => {
 
       const dietaryResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Vegetarian Gluten-Free Pasta',
@@ -182,7 +185,7 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(dietarySearchRequest);
 
-      expect(result.content[0].title).toContain('Vegetarian Gluten-Free');
+      expect(result.recipes[0].title).toContain('Vegetarian Gluten-Free');
     });
 
     it('should handle empty search results', async () => {
@@ -191,12 +194,15 @@ describe('Search API', () => {
       };
 
       const emptyResults: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         totalElements: 0,
         totalPages: 0,
         first: true,
         last: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedClient.post.mockResolvedValue({ data: emptyResults });
@@ -204,7 +210,7 @@ describe('Search API', () => {
       const result = await searchApi.searchRecipes(emptySearchRequest);
 
       expect(result.numberOfElements).toBe(0);
-      expect(result.content).toHaveLength(0);
+      expect(result.recipes).toHaveLength(0);
       expect(result.totalElements).toBe(0);
     });
 
@@ -215,7 +221,7 @@ describe('Search API', () => {
 
       const sortedResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Newest Chicken Recipe',
@@ -236,9 +242,9 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(sortedSearchRequest);
 
-      expect(result.content).toHaveLength(2);
-      expect(new Date(result.content[0].createdAt).getTime()).toBeGreaterThan(
-        new Date(result.content[1].createdAt).getTime()
+      expect(result.recipes).toHaveLength(2);
+      expect(new Date(result.recipes[0].createdAt).getTime()).toBeGreaterThan(
+        new Date(result.recipes[1].createdAt).getTime()
       );
     });
 
@@ -254,7 +260,7 @@ describe('Search API', () => {
 
       const complexResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Healthy Keto Chicken Bowl',
@@ -267,8 +273,8 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(complexSearchRequest);
 
-      expect(result.content[0].title).toContain('Healthy');
-      expect(result.content[0].title).toContain('Healthy');
+      expect(result.recipes[0].title).toContain('Healthy');
+      expect(result.recipes[0].title).toContain('Healthy');
     });
 
     it('should handle search validation errors', async () => {
@@ -304,16 +310,19 @@ describe('Search API', () => {
       };
 
       const largeResultSet: SearchRecipesResponse = {
-        content: Array.from({ length: 20 }, (_, i) => ({
+        recipes: Array.from({ length: 20 }, (_, i) => ({
           ...mockRecipe,
           recipeId: i + 1,
           title: `Chicken Recipe ${i + 1}`,
         })),
+        page: 0,
+        size: 20,
         totalElements: 150,
         totalPages: 8,
         first: true,
         last: false,
         numberOfElements: 20,
+        empty: false,
       };
 
       const paginationParams = { page: 0, size: 20 };
@@ -325,7 +334,7 @@ describe('Search API', () => {
         paginationParams
       );
 
-      expect(result.content).toHaveLength(20);
+      expect(result.recipes).toHaveLength(20);
       expect(result.totalElements).toBe(150);
       expect(result.totalPages).toBe(8);
       expect(result.first).toBe(true);
@@ -355,7 +364,7 @@ describe('Search API', () => {
 
       const fuzzyResults: SearchRecipesResponse = {
         ...mockSearchResponse,
-        content: [
+        recipes: [
           {
             ...mockRecipe,
             title: 'Spaghetti Carbonara', // Correct spelling matched
@@ -367,7 +376,7 @@ describe('Search API', () => {
 
       const result = await searchApi.searchRecipes(typoSearchRequest);
 
-      expect(result.content[0].title).toBe('Spaghetti Carbonara');
+      expect(result.recipes[0].title).toBe('Spaghetti Carbonara');
     });
   });
 });

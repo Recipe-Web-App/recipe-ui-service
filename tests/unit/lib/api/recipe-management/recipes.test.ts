@@ -46,12 +46,15 @@ describe('Recipes API', () => {
   };
 
   const mockSearchResponse: SearchRecipesResponse = {
-    content: [mockRecipeDto],
+    recipes: [mockRecipeDto],
+    page: 0,
+    size: 10,
     totalElements: 1,
     totalPages: 1,
     first: true,
     last: true,
     numberOfElements: 1,
+    empty: false,
   };
 
   describe('getAllRecipes', () => {

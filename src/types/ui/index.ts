@@ -15,6 +15,7 @@ export * from './switch';
 export * from './radio';
 export * from './checkbox';
 export * from './list';
+export * from './tag-input.types';
 
 // Combined UI State Type for reference
 import type { ToastState } from './toast';

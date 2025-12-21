@@ -1,19 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Pencil,
-  Clock,
-  Users,
-  ChefHat,
-  Plus,
-  X,
-  Check,
-  Loader2,
-} from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Pencil, Clock, Users, ChefHat, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { TagInput } from '@/components/ui/tag-input';
 import {
   Card,
   CardContent,
@@ -73,9 +64,6 @@ export function ReviewStep({
   onPublish,
   isSavingDraft,
 }: ReviewStepProps) {
-  const [newTag, setNewTag] = React.useState('');
-  const [pendingTag, setPendingTag] = React.useState<string | null>(null);
-  const [tagError, setTagError] = React.useState<string | null>(null);
   const {
     watch,
     setValue,
@@ -86,71 +74,6 @@ export function ReviewStep({
   const tags = watch('tags') ?? [];
 
   if (!isActive) return null;
-
-  const handleAddTag = () => {
-    const trimmedTag = newTag.trim();
-    if (!trimmedTag) {
-      return;
-    }
-
-    // Case-insensitive duplicate check
-    const isDuplicate = tags.some(
-      tag => tag.toLowerCase() === trimmedTag.toLowerCase()
-    );
-
-    if (isDuplicate) {
-      setTagError('This tag has already been added');
-      return;
-    }
-
-    if (tags.length >= 20) {
-      setTagError('Maximum of 20 tags allowed');
-      return;
-    }
-
-    setValue('tags', [...tags, trimmedTag], { shouldValidate: true });
-    setNewTag('');
-    setPendingTag(null);
-    setTagError(null);
-  };
-
-  const handleInputBlur = () => {
-    const trimmedTag = newTag.trim();
-    const isDuplicate = tags.some(
-      tag => tag.toLowerCase() === trimmedTag.toLowerCase()
-    );
-    if (trimmedTag && !isDuplicate && tags.length < 20) {
-      setPendingTag(trimmedTag);
-    }
-  };
-
-  const handleConfirmPendingTag = () => {
-    if (pendingTag) {
-      setValue('tags', [...tags, pendingTag], { shouldValidate: true });
-      setNewTag('');
-      setPendingTag(null);
-    }
-  };
-
-  const handleDismissPendingTag = () => {
-    setPendingTag(null);
-    setNewTag('');
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setValue(
-      'tags',
-      tags.filter(tag => tag !== tagToRemove),
-      { shouldValidate: true }
-    );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddTag();
-    }
-  };
 
   const totalTime = (formData.prepTime ?? 0) + (formData.cookTime ?? 0);
 
@@ -280,96 +203,15 @@ export function ReviewStep({
         <Divider />
 
         {/* Tags Section */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h4 className="font-medium">Tags</h4>
-            <span className="text-muted-foreground text-xs">
-              {tags.length}/20
-            </span>
-          </div>
-
-          {/* Current Tags */}
-          {tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="pr-1">
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTag(tag)}
-                    className="hover:bg-muted ml-1 rounded-full p-0.5"
-                    aria-label={`Remove tag ${tag}`}
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          {/* Add Tag Input */}
-          <div className="flex gap-2">
-            <Input
-              value={newTag}
-              onChange={e => {
-                setNewTag(e.target.value);
-                setTagError(null);
-              }}
-              onKeyDown={handleKeyDown}
-              onBlur={handleInputBlur}
-              placeholder="Add a tag (e.g., Italian, Vegetarian)"
-              size="sm"
-              className="flex-1"
-              disabled={tags.length >= 20}
-              state={tagError ? 'error' : 'default'}
-            />
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={handleAddTag}
-              disabled={!newTag.trim() || tags.length >= 20}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-          {tagError && (
-            <p className="text-destructive text-sm" role="alert">
-              {tagError}
-            </p>
-          )}
-          <p className="text-muted-foreground text-xs">
-            Tags help others discover your recipe. Press Enter or click away to
-            add a tag.
-          </p>
-
-          {/* Pending Tag Confirmation */}
-          {pendingTag && (
-            <div className="bg-muted/50 flex items-center justify-between rounded-md px-3 py-2">
-              <span className="text-sm">
-                Add &ldquo;<strong>{pendingTag}</strong>&rdquo; as a tag?
-              </span>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={handleDismissPendingTag}
-                >
-                  No
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="default"
-                  onClick={handleConfirmPendingTag}
-                >
-                  Yes
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
+        <TagInput
+          value={tags}
+          onChange={newTags =>
+            setValue('tags', newTags, { shouldValidate: true })
+          }
+          placeholder="Add a tag (e.g., Italian, Vegetarian)"
+          maxTags={20}
+          helperText="Tags help others discover your recipe."
+        />
 
         <Divider />
 

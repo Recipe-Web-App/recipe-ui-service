@@ -1,51 +1,25 @@
 'use client';
 
-import { ComingSoonPage } from '@/components/layout/coming-soon-page';
-import {
-  FolderPlus,
-  Image,
-  Search,
-  GripVertical,
-  Users,
-  Eye,
-} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { CreateCollectionForm } from '@/components/collection/create';
+import type { CollectionDto } from '@/types/recipe-management';
 
 export default function CreateCollectionPage() {
+  const router = useRouter();
+
+  const handleSuccess = (collection: CollectionDto) => {
+    // Navigate to the newly created collection
+    router.push(`/collections/${collection.collectionId}`);
+  };
+
+  const handleCancel = () => {
+    // Navigate back to collections list
+    router.push('/collections');
+  };
+
   return (
-    <ComingSoonPage
-      title="Create Collection"
-      description="Curate and organize your favorite recipes into themed collections. Perfect for meal planning, special occasions, or sharing with friends."
-      icon={FolderPlus}
-      section="Collections"
-      backHref="/collections"
-      backLabel="Browse Collections"
-      features={[
-        {
-          title: 'Visual picker',
-          description: 'Search and select recipes to add',
-          icon: Search,
-        },
-        {
-          title: 'Cover images',
-          description: 'Choose from recipe images or upload custom',
-          icon: Image,
-        },
-        {
-          title: 'Drag & drop',
-          description: 'Reorder recipes in your collection',
-          icon: GripVertical,
-        },
-        {
-          title: 'Collaborate',
-          description: 'Invite others to contribute',
-          icon: Users,
-        },
-        {
-          title: 'Preview mode',
-          description: 'See how it looks before publishing',
-          icon: Eye,
-        },
-      ]}
-    />
+    <div className="container mx-auto max-w-4xl px-4 py-8">
+      <CreateCollectionForm onSuccess={handleSuccess} onCancel={handleCancel} />
+    </div>
   );
 }

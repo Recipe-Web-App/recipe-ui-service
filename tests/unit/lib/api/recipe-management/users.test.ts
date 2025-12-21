@@ -41,31 +41,32 @@ describe('Users API', () => {
   };
 
   const mockSearchResponse: SearchRecipesResponse = {
-    content: [mockRecipeDto],
+    recipes: [mockRecipeDto],
+    page: 0,
+    size: 10,
     totalElements: 1,
     totalPages: 1,
     first: true,
     last: true,
     numberOfElements: 1,
+    empty: false,
   };
 
   describe('getMyRecipes', () => {
     it('should get user recipes without parameters', async () => {
-      // Mock the actual backend response format (uses 'recipes' key)
       mockedClient.get.mockResolvedValue({
-        data: { recipes: [mockRecipeDto] },
+        data: mockSearchResponse,
       });
 
       const result = await usersApi.getMyRecipes();
 
       expect(mockedClient.get).toHaveBeenCalledWith('/users/me/recipes');
-      // API transforms { recipes: [...] } to SearchRecipesResponse format
       expect(result).toEqual(mockSearchResponse);
     });
 
     it('should get user recipes with pagination parameters', async () => {
       mockedClient.get.mockResolvedValue({
-        data: { recipes: [mockRecipeDto] },
+        data: mockSearchResponse,
       });
 
       const params = { page: 1, size: 10, sort: ['title,asc'] };
@@ -78,7 +79,7 @@ describe('Users API', () => {
 
     it('should get user recipes with page only', async () => {
       mockedClient.get.mockResolvedValue({
-        data: { recipes: [mockRecipeDto] },
+        data: mockSearchResponse,
       });
 
       const params = { page: 2 };
@@ -89,7 +90,7 @@ describe('Users API', () => {
 
     it('should get user recipes with size only', async () => {
       mockedClient.get.mockResolvedValue({
-        data: { recipes: [mockRecipeDto] },
+        data: mockSearchResponse,
       });
 
       const params = { size: 20 };
@@ -114,38 +115,49 @@ describe('Users API', () => {
       await expect(usersApi.getMyRecipes()).rejects.toThrow('Unauthorized');
     });
 
-    it('should return empty content when user has no recipes', async () => {
-      mockedClient.get.mockResolvedValue({ data: { recipes: [] } });
+    it('should return empty recipes when user has no recipes', async () => {
+      const emptyResponse: SearchRecipesResponse = {
+        recipes: [],
+        page: 0,
+        size: 10,
+        totalElements: 0,
+        totalPages: 0,
+        first: true,
+        last: true,
+        numberOfElements: 0,
+        empty: true,
+      };
+      mockedClient.get.mockResolvedValue({ data: emptyResponse });
 
       const result = await usersApi.getMyRecipes();
 
-      expect(result.content).toHaveLength(0);
-      expect(result.totalElements).toBe(0);
-    });
-
-    it('should handle response with missing recipes property', async () => {
-      // Backend returns response without recipes property
-      mockedClient.get.mockResolvedValue({ data: {} });
-
-      const result = await usersApi.getMyRecipes();
-
-      expect(result.content).toHaveLength(0);
+      expect(result.recipes).toHaveLength(0);
       expect(result.totalElements).toBe(0);
     });
 
     it('should return multiple recipes when user has many', async () => {
-      const multipleRecipes = [
-        mockRecipeDto,
-        { ...mockRecipeDto, recipeId: 2, title: 'My Second Recipe' },
-        { ...mockRecipeDto, recipeId: 3, title: 'My Third Recipe' },
-      ];
+      const multipleRecipesResponse: SearchRecipesResponse = {
+        recipes: [
+          mockRecipeDto,
+          { ...mockRecipeDto, recipeId: 2, title: 'My Second Recipe' },
+          { ...mockRecipeDto, recipeId: 3, title: 'My Third Recipe' },
+        ],
+        page: 0,
+        size: 10,
+        totalElements: 3,
+        totalPages: 1,
+        first: true,
+        last: true,
+        numberOfElements: 3,
+        empty: false,
+      };
       mockedClient.get.mockResolvedValue({
-        data: { recipes: multipleRecipes },
+        data: multipleRecipesResponse,
       });
 
       const result = await usersApi.getMyRecipes();
 
-      expect(result.content).toHaveLength(3);
+      expect(result.recipes).toHaveLength(3);
       expect(result.totalElements).toBe(3);
     });
   });

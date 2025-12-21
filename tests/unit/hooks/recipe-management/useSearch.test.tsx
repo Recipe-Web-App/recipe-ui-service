@@ -55,7 +55,7 @@ describe('useSearch hooks', () => {
       };
 
       const mockResponse: SearchRecipesResponse = {
-        content: [
+        recipes: [
           {
             recipeId: 1,
             title: 'Chicken Recipe',
@@ -66,11 +66,14 @@ describe('useSearch hooks', () => {
             updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 1,
         totalPages: 1,
         first: true,
         numberOfElements: 1,
+        empty: false,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -122,7 +125,7 @@ describe('useSearch hooks', () => {
     it('should search with simple query', async () => {
       const query = 'pasta';
       const mockResponse: SearchRecipesResponse = {
-        content: [
+        recipes: [
           {
             recipeId: 1,
             title: 'Pasta Recipe',
@@ -133,11 +136,14 @@ describe('useSearch hooks', () => {
             updatedAt: '2024-01-01T00:00:00Z',
           },
         ],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 1,
         totalPages: 1,
         first: true,
         numberOfElements: 1,
+        empty: false,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -187,12 +193,15 @@ describe('useSearch hooks', () => {
 
     it('should debounce search queries', async () => {
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -250,12 +259,15 @@ describe('useSearch hooks', () => {
       };
 
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -291,12 +303,15 @@ describe('useSearch hooks', () => {
     it('should search recipes by tags', async () => {
       const tags = ['vegetarian', 'quick'];
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -330,12 +345,15 @@ describe('useSearch hooks', () => {
     it('should search recipes by difficulty', async () => {
       const difficulty = DifficultyLevel.EASY;
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -358,12 +376,15 @@ describe('useSearch hooks', () => {
     it('should handle medium difficulty', async () => {
       const difficulty = DifficultyLevel.MEDIUM;
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);
@@ -396,12 +417,15 @@ describe('useSearch hooks', () => {
     it('should search recipes by ingredients', async () => {
       const ingredients = ['chicken', 'rice', 'vegetables'];
       const mockResponse: SearchRecipesResponse = {
-        content: [],
+        recipes: [],
+        page: 0,
+        size: 10,
         last: true,
         totalElements: 0,
         totalPages: 0,
         first: true,
         numberOfElements: 0,
+        empty: true,
       };
 
       mockedSearchApi.searchRecipes.mockResolvedValue(mockResponse);

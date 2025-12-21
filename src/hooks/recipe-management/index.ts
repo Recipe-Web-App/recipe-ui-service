@@ -11,6 +11,7 @@ export {
   useUpdateRecipe,
   useDeleteRecipe,
   useTrendingRecipes,
+  useSuggestedRecipes,
 } from './useRecipes';
 
 // Ingredient Management
@@ -108,6 +109,16 @@ export {
 
 // User Operations
 export { useMyRecipes } from './useUsers';
+
+// Collection Management
+export {
+  useCollections,
+  useCollection,
+  useSearchCollections,
+  useCreateCollection,
+  useUpdateCollection,
+  useDeleteCollection,
+} from './useCollections';
 
 // Health Monitoring
 export {
