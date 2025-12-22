@@ -1,12 +1,19 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { useMyRecipes } from '@/hooks/recipe-management/useUsers';
+import {
+  useMyRecipes,
+  useMyCollections,
+} from '@/hooks/recipe-management/useUsers';
 import { usersApi } from '@/lib/api/recipe-management/users';
 import type {
   RecipeDto,
   SearchRecipesResponse,
   DifficultyLevel,
+  CollectionDto,
+  PageCollectionDto,
+  CollectionVisibility,
+  CollaborationMode,
 } from '@/types/recipe-management';
 
 // Mock the API
@@ -53,6 +60,32 @@ describe('useUsers hooks', () => {
     last: true,
     numberOfElements: 1,
     empty: false,
+  };
+
+  const mockCollectionDto: CollectionDto = {
+    collectionId: 1,
+    userId: 'user-123',
+    name: 'My Collection',
+    description: 'A collection I created',
+    visibility: 'PRIVATE' as CollectionVisibility,
+    collaborationMode: 'VIEW_ONLY' as CollaborationMode,
+    recipeCount: 5,
+    collaboratorCount: 0,
+    createdAt: '2023-01-01T10:00:00Z',
+    updatedAt: '2023-01-02T10:00:00Z',
+  };
+
+  const mockPageCollectionDto: PageCollectionDto = {
+    content: [mockCollectionDto],
+    number: 0,
+    size: 10,
+    totalElements: 1,
+    totalPages: 1,
+    first: true,
+    last: true,
+    numberOfElements: 1,
+    empty: false,
+    sort: { sorted: false, unsorted: true, empty: true },
   };
 
   beforeEach(() => {
@@ -188,6 +221,166 @@ describe('useUsers hooks', () => {
       // Both should have been called with different params
       expect(mockedUsersApi.getMyRecipes).toHaveBeenCalledWith(params1);
       expect(mockedUsersApi.getMyRecipes).toHaveBeenCalledWith(params2);
+    });
+  });
+
+  describe('useMyCollections', () => {
+    it('should fetch user collections successfully', async () => {
+      mockedUsersApi.getMyCollections.mockResolvedValue(mockPageCollectionDto);
+
+      const { result } = renderHook(() => useMyCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      // Initially loading
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockPageCollectionDto);
+      expect(mockedUsersApi.getMyCollections).toHaveBeenCalledWith(undefined);
+    });
+
+    it('should fetch user collections with pagination parameters', async () => {
+      mockedUsersApi.getMyCollections.mockResolvedValue(mockPageCollectionDto);
+
+      const params = { page: 1, size: 10, sort: ['name,asc'] };
+      const { result } = renderHook(() => useMyCollections(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(mockedUsersApi.getMyCollections).toHaveBeenCalledWith(params);
+    });
+
+    it('should fetch user collections with includeCollaborations', async () => {
+      mockedUsersApi.getMyCollections.mockResolvedValue(mockPageCollectionDto);
+
+      const params = { includeCollaborations: true };
+      const { result } = renderHook(() => useMyCollections(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(mockedUsersApi.getMyCollections).toHaveBeenCalledWith(params);
+    });
+
+    it('should handle empty results', async () => {
+      const emptyResponse: PageCollectionDto = {
+        content: [],
+        number: 0,
+        size: 10,
+        totalElements: 0,
+        totalPages: 0,
+        first: true,
+        last: true,
+        numberOfElements: 0,
+        empty: true,
+        sort: { sorted: false, unsorted: true, empty: true },
+      };
+      mockedUsersApi.getMyCollections.mockResolvedValue(emptyResponse);
+
+      const { result } = renderHook(() => useMyCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data?.content).toHaveLength(0);
+      expect(result.current.data?.totalElements).toBe(0);
+      expect(result.current.data?.empty).toBe(true);
+    });
+
+    it('should handle API errors', async () => {
+      const error = new Error('Network error');
+      mockedUsersApi.getMyCollections.mockRejectedValue(error);
+
+      const { result } = renderHook(() => useMyCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error).toBeDefined();
+    });
+
+    it('should return multiple collections', async () => {
+      const multipleCollectionsResponse: PageCollectionDto = {
+        content: [
+          mockCollectionDto,
+          {
+            ...mockCollectionDto,
+            collectionId: 2,
+            name: 'My Second Collection',
+          },
+          {
+            ...mockCollectionDto,
+            collectionId: 3,
+            name: 'My Third Collection',
+          },
+        ],
+        number: 0,
+        size: 10,
+        totalElements: 3,
+        totalPages: 1,
+        first: true,
+        last: true,
+        numberOfElements: 3,
+        empty: false,
+        sort: { sorted: false, unsorted: true, empty: true },
+      };
+      mockedUsersApi.getMyCollections.mockResolvedValue(
+        multipleCollectionsResponse
+      );
+
+      const { result } = renderHook(() => useMyCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data?.content).toHaveLength(3);
+      expect(result.current.data?.totalElements).toBe(3);
+    });
+
+    it('should include pagination params in query key for deduplication', async () => {
+      mockedUsersApi.getMyCollections.mockResolvedValue(mockPageCollectionDto);
+
+      const params1 = { page: 0, size: 10 };
+      const params2 = { page: 1, size: 10 };
+
+      const wrapper = createWrapper();
+
+      const { result: result1 } = renderHook(() => useMyCollections(params1), {
+        wrapper,
+      });
+
+      const { result: result2 } = renderHook(() => useMyCollections(params2), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result1.current.isSuccess).toBe(true);
+        expect(result2.current.isSuccess).toBe(true);
+      });
+
+      // Both should have been called with different params
+      expect(mockedUsersApi.getMyCollections).toHaveBeenCalledWith(params1);
+      expect(mockedUsersApi.getMyCollections).toHaveBeenCalledWith(params2);
     });
   });
 });

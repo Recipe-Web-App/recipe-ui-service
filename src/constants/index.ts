@@ -64,6 +64,7 @@ export const QUERY_KEYS = {
 
     // User-scoped operations
     MY_RECIPES: ['recipeManagement', 'myRecipes'],
+    MY_COLLECTIONS: ['recipeManagement', 'myCollections'],
 
     // Recipe discovery
     TRENDING_RECIPES: ['recipeManagement', 'trendingRecipes'],

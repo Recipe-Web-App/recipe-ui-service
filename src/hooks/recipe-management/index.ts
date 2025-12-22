@@ -108,7 +108,7 @@ export {
 } from './useFavorites';
 
 // User Operations
-export { useMyRecipes } from './useUsers';
+export { useMyRecipes, useMyCollections } from './useUsers';
 
 // Collection Management
 export {
