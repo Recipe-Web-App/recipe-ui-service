@@ -110,6 +110,7 @@ repos:
       - id: semgrep
         args: [--config=auto, --error]
         exclude: ^tests/
+        language_version: python3.13
 
   # Container security with Trivy (using local hook for better control)
   - repo: local
