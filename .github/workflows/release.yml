@@ -27,7 +27,7 @@ on:
         type: boolean
 
 env:
-  NODE_VERSION: '20'
+  BUN_VERSION: 'latest'
 
 permissions:
   contents: write
@@ -58,14 +58,13 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 📋 Analyze conventional commits
         id: conventional-commits
@@ -116,21 +115,21 @@ jobs:
           fi
 
           # Calculate new version
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          CURRENT_VERSION=$(bun -e 'console.log(require("./package.json").version)')
 
           if [ "$SHOULD_RELEASE" == "true" ]; then
             case $RELEASE_TYPE in
               major)
-                NEW_VERSION=$(npx semver -i major $CURRENT_VERSION)
+                NEW_VERSION=$(bunx semver -i major $CURRENT_VERSION)
                 ;;
               minor)
-                NEW_VERSION=$(npx semver -i minor $CURRENT_VERSION)
+                NEW_VERSION=$(bunx semver -i minor $CURRENT_VERSION)
                 ;;
               patch)
-                NEW_VERSION=$(npx semver -i patch $CURRENT_VERSION)
+                NEW_VERSION=$(bunx semver -i patch $CURRENT_VERSION)
                 ;;
               prerelease)
-                NEW_VERSION=$(npx semver -i prerelease --preid=beta $CURRENT_VERSION)
+                NEW_VERSION=$(bunx semver -i prerelease --preid=beta $CURRENT_VERSION)
                 ;;
               *)
                 NEW_VERSION=$CURRENT_VERSION
@@ -180,18 +179,17 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_TOKEN }}
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔢 Update version
         run: |
-          npm version ${{ needs.analyze-commits.outputs.new-version }} --no-git-tag-version
+          bun version ${{ needs.analyze-commits.outputs.new-version }} --no-git-tag-version
           echo "✅ Updated version to ${{ needs.analyze-commits.outputs.new-version }}"
 
       - name: 📄 Update CHANGELOG.md
@@ -213,7 +211,7 @@ jobs:
           git checkout -b "$BRANCH_NAME"
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add package.json package-lock.json CHANGELOG.md
+          git add package.json bun.lockb CHANGELOG.md
           git commit -m "chore(release): bump version to v${{ needs.analyze-commits.outputs.new-version }}"
           git push origin "$BRANCH_NAME"
           echo "✅ Created release branch: $BRANCH_NAME"
@@ -279,18 +277,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build application
         run: |
-          npm run build
+          bun run build
           echo "✅ Application built successfully"
 
       - name: 📦 Create platform-specific archive
@@ -350,8 +347,8 @@ jobs:
           git config user.email "actions@github.com"
 
           # Update package.json version
-          npm version $VERSION --no-git-tag-version
-          git add package.json package-lock.json
+          bun version $VERSION --no-git-tag-version
+          git add package.json bun.lockb
           git commit -m "chore(release): bump version to v$VERSION" || true
 
           # Create and push tag

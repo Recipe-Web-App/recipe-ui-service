@@ -8,8 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
-  PNPM_VERSION: '8'
+  BUN_VERSION: 'latest'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,23 +27,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎨 Code formatting check
-        run: npm run format:check
+        run: bun run format:check
 
       - name: 🔬 ESLint analysis
-        run: npm run lint:check
+        run: bun run lint:check
 
       - name: 📝 TypeScript type checking
-        run: npm run type-check
+        run: bun run type-check
 
       - name: 🔒 Secret detection
         run: |
@@ -73,14 +71,13 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔍 npm audit
         run: |
@@ -120,23 +117,22 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        bun-version: [latest]
 
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun ${{ matrix.bun-version }}
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          bun-version: ${{ matrix.bun-version }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🧪 Run unit tests
-        run: npm run test:unit -- --coverage --watchAll=false
+        run: bun run test:unit -- --coverage --watchAll=false
         env:
           CI: true
 
@@ -170,17 +166,16 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔗 Run ${{ matrix.test-type }} integration tests
-        run: npm run test:integration:${{ matrix.test-type }}
+        run: bun run test:integration:${{ matrix.test-type }}
         env:
           CI: true
 
@@ -204,27 +199,26 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
         env:
           CI: true
 
       - name: 📊 Bundle analysis
-        run: npm run analyze
+        run: bun run analyze
         env:
           ANALYZE: true
 
       - name: 📏 Bundle size check
-        run: npm run size-limit
+        run: bun run size-limit
 
       - name: 🗂️ Cache build artifacts
         uses: actions/cache@v5
@@ -256,14 +250,13 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v7
@@ -272,18 +265,18 @@ jobs:
 
       - name: 🚀 Start application
         run: |
-          npm start &
+          bun run start &
           npx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 📊 Lighthouse CI
-        run: npm run perf:lighthouse
+        run: bun run perf:lighthouse
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: ⚡ Bundle performance check
-        run: npm run perf:bundle
+        run: bun run perf:bundle
 
       - name: 📈 Upload performance results
         if: always()
@@ -305,24 +298,23 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔍 Unused dependency check
-        run: npm run knip:production
+        run: bun run knip:production
 
       - name: 🔄 Circular dependency check
-        run: npm run madge
+        run: bun run madge
 
       - name: 📄 License compliance check
         run: |
-          npx license-checker --summary --production --excludePrivatePackages
+          bunx license-checker --summary --production --excludePrivatePackages
           echo "✅ License compliance verified"
 
   # Consolidation Job

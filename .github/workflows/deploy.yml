@@ -21,7 +21,7 @@ on:
         type: boolean
 
 env:
-  NODE_VERSION: '20'
+  BUN_VERSION: 'latest'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -51,31 +51,32 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔍 Security pre-flight
         run: |
           npx secretlint "**/*"
-          npm audit --audit-level=high
+          # npm audit removed
           echo "✅ Security pre-flight checks passed"
 
-      - name: 🧪 Run critical tests
+      - name: 🧪 Run unit tests
         run: |
-          npm run test:unit
-          npm run test:integration:frontend
+          bun run test:unit
+          bun run test:integration:frontend
           echo "✅ Critical tests passed"
 
-      - name: 🏗️ Build verification
+      - name: 🏗️ Build application
+        run: bun run build
+
+      - name: 📏 Check bundle size
         run: |
-          npm run build
-          npm run size-limit
+          bun run size-limit
           echo "✅ Build verification passed"
 
       - name: 📋 Extract version
@@ -84,7 +85,7 @@ jobs:
           if [[ ${{ github.ref }} == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/}
           else
-            VERSION=$(node -p "require('./package.json').version")-${GITHUB_SHA::7}
+            VERSION=$(bun --silent --filter . --exec "node -p \"require('./package.json').version\"")-${GITHUB_SHA::7}
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Deployment version: $VERSION"
@@ -229,9 +230,8 @@ jobs:
 
       - name: 🧪 Post-deployment smoke tests
         run: |
-          # Run smoke tests against staging
-          npm ci --prefer-offline --no-audit
-          STAGING_URL=https://staging.recipe-app.example.com npm run test:e2e:smoke
+          bun install --frozen-lockfile
+          STAGING_URL=https://staging.recipe-app.example.com bun run test:e2e:smoke
 
   # Job 4: Integration Tests on Staging
   staging-integration-tests:
@@ -244,27 +244,26 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium
 
       - name: 🧪 Run integration tests against staging
         run: |
-          STAGING_URL=https://staging.recipe-app.example.com npm run test:integration:staging
+          STAGING_URL=https://staging.recipe-app.example.com bun run test:integration:staging
         env:
           CI: true
 
       - name: ⚡ Performance tests on staging
         run: |
-          STAGING_URL=https://staging.recipe-app.example.com npm run perf:vitals
+          STAGING_URL=https://staging.recipe-app.example.com bun run perf:vitals
 
       - name: 📤 Upload test results
         if: always()
@@ -356,6 +355,9 @@ jobs:
           # Update service selector to point to green deployment
           kubectl patch service recipe-ui-service -n production -p '{"spec":{"selector":{"app":"recipe-ui-service-green"}}}'
           echo "✅ Traffic switched to green deployment"
+
+      - name: ⚡ Check Web Vitals
+        run: bun run perf:vitals
 
       - name: ⏳ Soak period
         run: |

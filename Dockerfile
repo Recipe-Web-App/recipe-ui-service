@@ -10,7 +10,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 # Stage 1: Dependencies
-FROM node:23-alpine3.19 AS deps
+FROM oven/bun:1-alpine AS deps
 LABEL stage=deps \
       org.opencontainers.image.title="Recipe UI Service - Dependencies" \
       org.opencontainers.image.description="Dependencies stage for Recipe UI Service" \
@@ -37,17 +37,16 @@ RUN apk update && \
 ENV TZ=UTC
 
 # Copy package files with specific ownership
-COPY --chown=node:node package*.json ./
+COPY --chown=bun:bun package.json bun.lockb ./
 
 # Verify package integrity and install dependencies
-RUN npm ci --only=production --frozen-lockfile --audit=false --fund=false && \
-    npm cache clean --force
+RUN bun install --frozen-lockfile --production
 
 # Remove package files to reduce attack surface
-RUN rm -f package*.json
+RUN rm -f package.json bun.lockb
 
 # Stage 2: Builder
-FROM node:23-alpine3.19 AS builder
+FROM oven/bun:1-alpine AS builder
 LABEL stage=builder \
       org.opencontainers.image.title="Recipe UI Service - Builder" \
       org.opencontainers.image.description="Build stage for Recipe UI Service" \
@@ -67,18 +66,17 @@ RUN apk add --no-cache \
     rm -rf /var/cache/apk/*
 
 # Copy production node_modules from deps stage
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=deps --chown=bun:bun /app/node_modules ./node_modules
 
 # Copy package files
-COPY --chown=node:node package*.json ./
+COPY --chown=bun:bun package.json bun.lockb ./
 
 # Install all dependencies (including devDependencies) with mount cache
-RUN --mount=type=cache,target=/root/.npm \
-    --mount=type=cache,target=/app/.next/cache \
-    npm ci --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,target=/root/.bun \
+    bun install --frozen-lockfile
 
 # Copy source code with proper ownership and .dockerignore respect
-COPY --chown=node:node . .
+COPY --chown=bun:bun . .
 
 # Set build environment variables
 ENV NEXT_TELEMETRY_DISABLED=1 \
@@ -88,30 +86,16 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 
 # Build the application with optimizations
 RUN --mount=type=cache,target=/app/.next/cache \
-    npm run build && \
-    npm run analyze && \
-    npm prune --production && \
-    npm cache clean --force
+    bun run build && \
+    bun run analyze && \
+    rm -rf node_modules && \
+    bun install --frozen-lockfile --production
 
 # Verify build artifacts
 RUN test -d .next || (echo "Build failed: .next not found" && exit 1)
 
-# Stage 3: Runtime Security Scanner (Optional)
-FROM builder AS security-scanner
-LABEL stage=security-scanner
-
-# Install security scanning tools
-# Using latest versions from Alpine 3.19 repository
-RUN apk add --no-cache \
-        curl \
-        jq && \
-    rm -rf /var/cache/apk/*
-
-# Run security scans (optional, can be skipped in CI)
-RUN npm audit --production --audit-level=high || true
-
-# Stage 4: Final Runtime
-FROM node:23-alpine3.19 AS runner
+# Stage 3: Final Runtime
+FROM oven/bun:1-alpine AS runner
 LABEL stage=runner \
       org.opencontainers.image.title="Recipe UI Service" \
       org.opencontainers.image.description="Production-ready Recipe UI Service" \
@@ -136,10 +120,9 @@ RUN apk update && \
         tini && \
     rm -rf /var/cache/apk/* && \
     # Create app directory with secure permissions
-    mkdir -p /app && \
-    # Create non-root user with specific UID/GID
-    addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 --ingroup nodejs --home /app nextjs
+    mkdir -p /app
+    # bun user already exists in oven/bun image, widely used id 1000
+    # verify user exists or rely on default bun user (uid 1000)
 
 # Set secure environment variables
 ENV NODE_ENV=production \
@@ -154,17 +137,17 @@ ENV NODE_ENV=production \
 WORKDIR /app
 
 # Copy built application with proper ownership and minimal files
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=bun:bun /app/public ./public
+COPY --from=builder --chown=bun:bun /app/.next ./.next
+COPY --from=builder --chown=bun:bun /app/node_modules ./node_modules
+COPY --from=builder --chown=bun:bun /app/package.json ./package.json
 
 # Health checks handled by Kubernetes probes
 
 # Set final permissions and switch to non-root user
-RUN chown -R nextjs:nodejs /app && \
+RUN chown -R bun:bun /app && \
     chmod 755 /app
-USER nextjs
+USER bun
 
 # Create non-root owned directories for Next.js
 RUN mkdir -p .next/cache && \
@@ -183,7 +166,8 @@ ENV NODE_OPTIONS="--max-old-space-size=896"
 ENTRYPOINT ["tini", "--"]
 
 # Add startup script with graceful shutdown
-CMD ["sh", "-c", "trap 'echo Received SIGTERM, shutting down gracefully; kill -TERM $PID; wait $PID' TERM; npm start & PID=$!; wait $PID"]
+# Add startup script with graceful shutdown
+CMD ["sh", "-c", "trap 'echo Received SIGTERM, shutting down gracefully; kill -TERM $PID; wait $PID' TERM; bun run start & PID=$!; wait $PID"]
 
 # Add build metadata as labels (populated by CI/CD)
 LABEL build.number="${BUILD_NUMBER:-unknown}" \
