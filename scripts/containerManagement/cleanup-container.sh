@@ -61,6 +61,11 @@ kubectl delete ingress recipe-ui-ingress -n "$NAMESPACE" --ignore-not-found
 print_status "ok" "Ingress deletion completed"
 
 print_separator
+echo -e "${CYAN}🚪 Deleting HTTPRoute (Kong Gateway)...${NC}"
+kubectl delete httproute recipe-ui-ingress-recipe-ui-local -n "$NAMESPACE" --ignore-not-found
+print_status "ok" "HTTPRoute deletion completed"
+
+print_separator
 echo -e "${CYAN}🔒 Deleting network policy...${NC}"
 kubectl delete networkpolicy recipe-ui-network-policy -n "$NAMESPACE" --ignore-not-found
 print_status "ok" "Network policy deletion completed"

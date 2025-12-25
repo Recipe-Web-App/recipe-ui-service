@@ -157,22 +157,28 @@ print_separator "-"
 kubectl apply -f "${CONFIG_DIR}/networkpolicy.yaml"
 
 print_separator "="
-echo -e "${CYAN}⏳ Waiting for Ingress controller to be ready...${NC}"
+echo -e "${CYAN}⏳ Waiting for Kong Gateway to be ready...${NC}"
 print_separator "-"
 
-kubectl wait --namespace ingress-nginx \
-    --for=condition=Ready pod \
-    --selector=app.kubernetes.io/component=controller \
-    --timeout=90s
+kubectl wait --namespace sous-chef-gateway \
+    --for=condition=Programmed gateway \
+    --selector=app.kubernetes.io/name=kong \
+    --timeout=90s 2>/dev/null || {
+    print_status "warning" "Kong Gateway not found or not ready, checking for pods..."
+    kubectl wait --namespace sous-chef-gateway \
+        --for=condition=Ready pod \
+        --selector=app.kubernetes.io/name=kong \
+        --timeout=90s 2>/dev/null || print_status "warning" "Kong Gateway pods not found, continuing..."
+}
 
 print_separator "-"
-print_status "ok" "Ingress controller is running."
+print_status "ok" "Kong Gateway check completed."
 
 print_separator "="
-echo -e "${CYAN}📥 Applying Ingress resource...${NC}"
+echo -e "${CYAN}🚪 Applying HTTPRoute (Kong Gateway)...${NC}"
 print_separator "-"
 
-kubectl apply -f "${CONFIG_DIR}/ingress.yaml"
+kubectl apply -f "${CONFIG_DIR}/gateway-route.yaml"
 
 print_separator "="
 echo -e "${CYAN}⏳ Waiting for Recipe UI Service pod to be ready...${NC}"
@@ -201,7 +207,7 @@ echo "$MINIKUBE_IP recipe-ui.local" | tee -a /etc/hosts
 print_status "ok" "/etc/hosts updated with recipe-ui.local pointing to $MINIKUBE_IP"
 
 print_separator "="
-echo -e "${GREEN}🌍 You can now access your app at: http://recipe-ui.local${NC}"
+echo -e "${GREEN}🌍 You can now access your app at: http://sous-chef-proxy.local${NC}"
 
 POD_NAME=$(kubectl get pods -n "$NAMESPACE" -l app=recipe-ui-service -o jsonpath="{.items[0].metadata.name}")
 SERVICE_JSON=$(kubectl get svc recipe-ui-service -n "$NAMESPACE" -o json)
@@ -214,8 +220,8 @@ echo -e "${CYAN}🛰️  Access info:${NC}"
 echo "  Pod: $POD_NAME"
 echo "  Service: $SERVICE_IP:$SERVICE_PORT"
 echo "  Ingress Hosts: $INGRESS_HOSTS"
-echo "  Health Check: http://recipe-ui.local/api/v1/recipe-ui/health"
-echo "  Readiness Check: http://recipe-ui.local/api/v1/recipe-ui/health/ready"
-echo "  Liveness Check: http://recipe-ui.local/api/v1/recipe-ui/health/live"
-echo "  Metrics: http://recipe-ui.local/api/v1/recipe-ui/metrics"
+echo "  Health Check: http://sous-chef-proxy.local/api/v1/recipe-ui/health"
+echo "  Readiness Check: http://sous-chef-proxy.local/api/v1/recipe-ui/health/ready"
+echo "  Liveness Check: http://sous-chef-proxy.local/api/v1/recipe-ui/health/live"
+echo "  Metrics: http://sous-chef-proxy.local/api/v1/recipe-ui/metrics"
 print_separator "="
