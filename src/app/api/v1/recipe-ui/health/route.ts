@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
+import v8 from 'node:v8';
 
 export async function GET() {
   const requestId = `health-${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -23,14 +24,15 @@ export async function GET() {
     });
 
     // Calculate memory usage percentages
+    const heapStats = v8.getHeapStatistics();
     const memoryUsagePercent =
-      (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
+      (memoryUsage.heapUsed / heapStats.heap_size_limit) * 100;
 
     console.log('[Health] Memory details', {
       requestId,
       rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
       heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
-      heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+      heapLimit: `${Math.round(heapStats.heap_size_limit / 1024 / 1024)}MB`,
       usagePercent: `${memoryUsagePercent.toFixed(2)}%`,
       external: `${Math.round(memoryUsage.external / 1024 / 1024)}MB`,
       arrayBuffers: `${Math.round(memoryUsage.arrayBuffers / 1024 / 1024)}MB`,
@@ -58,7 +60,7 @@ export async function GET() {
       memory: {
         rss: `${Math.round(memoryUsage.rss / 1024 / 1024)}MB`,
         heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
-        heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
+        heapLimit: `${Math.round(heapStats.heap_size_limit / 1024 / 1024)}MB`,
         usagePercent: `${Math.round(memoryUsagePercent)}%`,
       },
       cpu: {

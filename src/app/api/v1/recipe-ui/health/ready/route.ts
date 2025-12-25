@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
+import v8 from 'node:v8';
 
 export async function GET() {
   const requestId = `ready-${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -22,8 +23,9 @@ export async function GET() {
     });
 
     // Readiness checks - more comprehensive than liveness
+    const heapStats = v8.getHeapStatistics();
     const memoryUsagePercent =
-      (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
+      (memoryUsage.heapUsed / heapStats.heap_size_limit) * 100;
     const checks = {
       uptime: uptime > 5, // Allow faster startup while ensuring Next.js is initialized
       memory: memoryUsagePercent < 95,
@@ -69,8 +71,8 @@ export async function GET() {
       checks,
       memory: {
         heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
-        heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)}MB`,
-        usagePercent: `${Math.round((memoryUsage.heapUsed / memoryUsage.heapTotal) * 100)}%`,
+        heapLimit: `${Math.round(heapStats.heap_size_limit / 1024 / 1024)}MB`,
+        usagePercent: `${Math.round((memoryUsage.heapUsed / heapStats.heap_size_limit) * 100)}%`,
       },
       requestId,
     };

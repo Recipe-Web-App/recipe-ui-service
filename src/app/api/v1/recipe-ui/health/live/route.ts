@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
+import v8 from 'node:v8';
 
 export async function GET() {
   const requestId = `live-${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -19,8 +20,9 @@ export async function GET() {
 
     // Liveness check - only check if process is responsive
     // Memory checks belong in readiness probe, not liveness
+    const heapStats = v8.getHeapStatistics();
     const memoryUsagePercent =
-      (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
+      (memoryUsage.heapUsed / heapStats.heap_size_limit) * 100;
     const hasMinimumUptime = uptime > 5;
 
     // Simple liveness check - only restart if process startup failed

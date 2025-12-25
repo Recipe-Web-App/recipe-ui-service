@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { StatusCodes } from 'http-status-codes';
+import v8 from 'node:v8';
 
 export async function GET() {
   const requestId = `metrics-${Date.now()}-${Math.random().toString(36).substring(7)}`;
@@ -12,8 +13,9 @@ export async function GET() {
     const cpuUsage = process.cpuUsage();
 
     // Calculate memory usage percentages
+    const heapStats = v8.getHeapStatistics();
     const memoryUsagePercent =
-      (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
+      (memoryUsage.heapUsed / heapStats.heap_size_limit) * 100;
 
     // Format uptime in human-readable format
     const uptimeHours = Math.floor(uptime / 3600);
@@ -32,6 +34,7 @@ export async function GET() {
           rss: memoryUsage.rss,
           heapUsed: memoryUsage.heapUsed,
           heapTotal: memoryUsage.heapTotal,
+          heapLimit: heapStats.heap_size_limit,
           external: memoryUsage.external,
           arrayBuffers: memoryUsage.arrayBuffers,
         },
@@ -39,6 +42,7 @@ export async function GET() {
           rss: Math.round(memoryUsage.rss / 1024 / 1024),
           heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024),
           heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+          heapLimit: Math.round(heapStats.heap_size_limit / 1024 / 1024),
           external: Math.round(memoryUsage.external / 1024 / 1024),
           arrayBuffers: Math.round(memoryUsage.arrayBuffers / 1024 / 1024),
         },
