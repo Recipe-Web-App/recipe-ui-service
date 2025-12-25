@@ -45,7 +45,7 @@ describe('Notification API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/notification/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://notification-service.local/api/v1/notification',
+          baseURL: 'http://sous-chef-proxy.local/api/v1/notification',
           timeout: 15000,
           headers: {
             'Content-Type': 'application/json',

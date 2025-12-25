@@ -13,38 +13,38 @@ export const SERVICE_URLS = {
   /**
    * Auth Service - OAuth2 authentication and authorization
    */
-  AUTH: 'http://auth-service.local/api/v1/auth',
+  AUTH: 'http://sous-chef-proxy.local/api/v1/auth',
 
   /**
    * Meal Plan Management Service - Meal planning and scheduling
    */
   MEAL_PLAN_MANAGEMENT:
-    'http://meal-plan-management.local/api/v1/meal-plan-management',
+    'http://sous-chef-proxy.local/api/v1/meal-plan-management',
 
   /**
    * Media Management Service - File upload and media processing
    */
-  MEDIA_MANAGEMENT: 'http://media-management.local/api/v1/media-management',
+  MEDIA_MANAGEMENT: 'http://sous-chef-proxy.local/api/v1/media-management',
 
   /**
    * Notification Service - Email notifications and alerts
    */
-  NOTIFICATION: 'http://notification-service.local/api/v1/notification',
+  NOTIFICATION: 'http://sous-chef-proxy.local/api/v1/notification',
 
   /**
    * Recipe Management Service - Recipe CRUD operations
    */
-  RECIPE_MANAGEMENT: 'http://recipe-management.local/api/v1/recipe-management',
+  RECIPE_MANAGEMENT: 'http://sous-chef-proxy.local/api/v1/recipe-management',
 
   /**
    * Recipe Scraper Service - Web scraping and recipe import
    */
-  RECIPE_SCRAPER: 'http://recipe-scraper.local/api/recipe-scraper',
+  RECIPE_SCRAPER: 'http://sous-chef-proxy.local/api/recipe-scraper',
 
   /**
    * User Management Service - User profiles and preferences
    */
-  USER_MANAGEMENT: 'http://user-management.local/api/v1/user-management',
+  USER_MANAGEMENT: 'http://sous-chef-proxy.local/api/v1/user-management',
 } as const;
 
 /**

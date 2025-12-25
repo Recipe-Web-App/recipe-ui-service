@@ -23,36 +23,38 @@ describe('services config', () => {
     });
 
     it('should have correct auth service URL', () => {
-      expect(SERVICE_URLS.AUTH).toBe('http://auth-service.local/api/v1/auth');
+      expect(SERVICE_URLS.AUTH).toBe(
+        'http://sous-chef-proxy.local/api/v1/auth'
+      );
     });
 
     it('should have correct meal plan management service URL', () => {
       expect(SERVICE_URLS.MEAL_PLAN_MANAGEMENT).toBe(
-        'http://meal-plan-management.local/api/v1/meal-plan-management'
+        'http://sous-chef-proxy.local/api/v1/meal-plan-management'
       );
     });
 
     it('should have correct media management service URL', () => {
       expect(SERVICE_URLS.MEDIA_MANAGEMENT).toBe(
-        'http://media-management.local/api/v1/media-management'
+        'http://sous-chef-proxy.local/api/v1/media-management'
       );
     });
 
     it('should have correct recipe management service URL', () => {
       expect(SERVICE_URLS.RECIPE_MANAGEMENT).toBe(
-        'http://recipe-management.local/api/v1/recipe-management'
+        'http://sous-chef-proxy.local/api/v1/recipe-management'
       );
     });
 
     it('should have correct recipe scraper service URL', () => {
       expect(SERVICE_URLS.RECIPE_SCRAPER).toBe(
-        'http://recipe-scraper.local/api/recipe-scraper'
+        'http://sous-chef-proxy.local/api/recipe-scraper'
       );
     });
 
     it('should have correct user management service URL', () => {
       expect(SERVICE_URLS.USER_MANAGEMENT).toBe(
-        'http://user-management.local/api/v1/user-management'
+        'http://sous-chef-proxy.local/api/v1/user-management'
       );
     });
   });
@@ -60,7 +62,7 @@ describe('services config', () => {
   describe('getServiceUrl', () => {
     it('should return service URL from SERVICE_URLS constant', () => {
       const url = getServiceUrl('AUTH');
-      expect(url).toBe('http://auth-service.local/api/v1/auth');
+      expect(url).toBe('http://sous-chef-proxy.local/api/v1/auth');
     });
 
     it('should handle all service keys', () => {
@@ -82,13 +84,13 @@ describe('services config', () => {
 
     it('should return correct URL for each service', () => {
       expect(getServiceUrl('AUTH')).toBe(
-        'http://auth-service.local/api/v1/auth'
+        'http://sous-chef-proxy.local/api/v1/auth'
       );
       expect(getServiceUrl('RECIPE_MANAGEMENT')).toBe(
-        'http://recipe-management.local/api/v1/recipe-management'
+        'http://sous-chef-proxy.local/api/v1/recipe-management'
       );
       expect(getServiceUrl('MEAL_PLAN_MANAGEMENT')).toBe(
-        'http://meal-plan-management.local/api/v1/meal-plan-management'
+        'http://sous-chef-proxy.local/api/v1/meal-plan-management'
       );
     });
   });

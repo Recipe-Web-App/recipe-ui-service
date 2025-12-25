@@ -48,7 +48,7 @@ describe('User Management API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/user-management/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://user-management.local/api/v1/user-management',
+          baseURL: 'http://sous-chef-proxy.local/api/v1/user-management',
           timeout: 15000,
           headers: {
             'Content-Type': 'application/json',

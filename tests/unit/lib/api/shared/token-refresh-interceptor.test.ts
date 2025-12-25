@@ -90,7 +90,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh endpoint success (using global axios mock)
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(200, {
           token: {
@@ -133,7 +133,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh success
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(200, {
           token: {
@@ -170,7 +170,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh endpoint (track call count)
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .reply(() => {
           refreshCallCount++;
@@ -219,7 +219,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh endpoint failure
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(500, { error: 'Refresh failed' });
 
@@ -246,7 +246,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock successful refresh
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(200, {
           token: {
@@ -282,7 +282,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh endpoint returning 401 (expired refresh token)
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(401);
 
@@ -319,7 +319,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock refresh failure
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(500, { error: 'Refresh failed' });
 
@@ -338,7 +338,7 @@ describe('Token Refresh Interceptor', () => {
       // Mock network error on refresh
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .networkError();
 
@@ -445,7 +445,7 @@ describe('Token Refresh Interceptor', () => {
       mockAdapter.onGet('/protected').replyOnce(401);
       globalAxiosMock
         .onPost(
-          'http://auth-service.local/api/v1/auth/user-management/auth/refresh'
+          'http://sous-chef-proxy.local/api/v1/auth/user-management/auth/refresh'
         )
         .replyOnce(500);
 

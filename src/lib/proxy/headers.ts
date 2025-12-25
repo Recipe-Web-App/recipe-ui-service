@@ -88,12 +88,12 @@ export function buildCSPHeader(
       // Allow .local domains for local development with ingress
       ...(isDevelopment
         ? [
-            'http://auth-service.local',
-            'http://recipe-management.local',
-            'http://recipe-scraper.local',
-            'http://media-management.local',
-            'http://user-management.local',
-            'http://meal-plan-management.local',
+            'http://sous-chef-proxy.local',
+            'http://sous-chef-proxy.local',
+            'http://sous-chef-proxy.local',
+            'http://sous-chef-proxy.local',
+            'http://sous-chef-proxy.local',
+            'http://sous-chef-proxy.local',
             'ws://localhost:*', // WebSocket connections in dev
           ]
         : []),
