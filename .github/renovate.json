@@ -1,0 +1,200 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":separateMajorReleases"
+  ],
+  "description": "Renovate configuration for recipe-ui-service (Bun + Next.js)",
+  "timezone": "US/Eastern",
+  "schedule": ["before 9am on Monday"],
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 100,
+  "assignees": ["jsamuelsen11"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "rebaseWhen": "auto",
+  "platformAutomerge": true,
+
+  "bun": {
+    "enabled": true
+  },
+
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 5am on the first day of the month"],
+    "commitMessageAction": "Update",
+    "commitMessageExtra": "lockfile maintenance"
+  },
+
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "dependencies"],
+    "schedule": ["at any time"],
+    "prPriority": 10
+  },
+
+  "packageRules": [
+    {
+      "description": "Production dependencies - patch updates (automerge)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "production-patch",
+      "groupSlug": "production-patch",
+      "labels": ["dependencies", "javascript"],
+      "commitMessagePrefix": "deps(deps):",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Production dependencies - minor updates (manual review)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "production-minor",
+      "groupSlug": "production-minor",
+      "labels": ["dependencies", "javascript"],
+      "commitMessagePrefix": "deps(deps):",
+      "automerge": false
+    },
+    {
+      "description": "Production dependencies - major updates (manual review)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "javascript", "breaking"],
+      "commitMessagePrefix": "deps(deps):",
+      "automerge": false
+    },
+    {
+      "description": "Development dependencies - minor and patch updates",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "development-minor-patch",
+      "groupSlug": "development-minor-patch",
+      "labels": ["dependencies", "javascript"],
+      "commitMessagePrefix": "deps-dev(deps-dev):",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Development dependencies - major updates (manual review)",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies", "javascript", "breaking"],
+      "commitMessagePrefix": "deps-dev(deps-dev):",
+      "automerge": false
+    },
+    {
+      "description": "GitHub Actions - group all updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "groupSlug": "github-actions",
+      "labels": ["dependencies", "github-actions"],
+      "commitMessagePrefix": "ci(deps):",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Docker base images",
+      "matchManagers": ["dockerfile"],
+      "labels": ["dependencies", "docker"],
+      "commitMessagePrefix": "docker(deps):",
+      "automerge": false
+    },
+    {
+      "description": "Docker Compose",
+      "matchManagers": ["docker-compose"],
+      "labels": ["dependencies", "docker"],
+      "commitMessagePrefix": "docker(deps):",
+      "automerge": false
+    },
+    {
+      "description": "React ecosystem - group together",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "groupName": "react",
+      "groupSlug": "react"
+    },
+    {
+      "description": "Next.js ecosystem",
+      "matchPackagePatterns": ["^next", "^@next/"],
+      "groupName": "nextjs",
+      "groupSlug": "nextjs"
+    },
+    {
+      "description": "Radix UI components - group together",
+      "matchPackagePatterns": ["^@radix-ui/"],
+      "groupName": "radix-ui",
+      "groupSlug": "radix-ui"
+    },
+    {
+      "description": "TanStack packages - group together",
+      "matchPackagePatterns": ["^@tanstack/"],
+      "groupName": "tanstack",
+      "groupSlug": "tanstack"
+    },
+    {
+      "description": "Testing Library packages",
+      "matchPackagePatterns": ["^@testing-library/"],
+      "groupName": "testing-library",
+      "groupSlug": "testing-library"
+    },
+    {
+      "description": "ESLint ecosystem",
+      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
+      "groupName": "eslint",
+      "groupSlug": "eslint"
+    },
+    {
+      "description": "Playwright testing",
+      "matchPackagePatterns": ["^@playwright/", "^playwright"],
+      "groupName": "playwright",
+      "groupSlug": "playwright"
+    },
+    {
+      "description": "TypeScript and types",
+      "matchPackagePatterns": ["^typescript$", "^@types/"],
+      "groupName": "typescript",
+      "groupSlug": "typescript"
+    },
+    {
+      "description": "Security scanning tools",
+      "matchPackageNames": [
+        "secretlint",
+        "@secretlint/secretlint-rule-preset-recommend"
+      ],
+      "matchPackagePatterns": ["^@axe-core/"],
+      "groupName": "security-tools",
+      "groupSlug": "security-tools"
+    },
+    {
+      "description": "Pin Bun runtime version in Dockerfiles",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["oven/bun"],
+      "versioning": "docker"
+    }
+  ],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Bun version in GitHub Actions",
+      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "matchStrings": [
+        "BUN_VERSION:\\s*['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
+      ],
+      "depNameTemplate": "oven-sh/bun",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}
