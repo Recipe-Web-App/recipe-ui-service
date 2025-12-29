@@ -1,7 +1,7 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npm run build && npm run start',
+      startServerCommand: 'bun run build && bun run start',
       startServerTimeout: 30000,
       url: ['http://localhost:3000'],
       numberOfRuns: 3,

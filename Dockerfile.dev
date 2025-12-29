@@ -1,7 +1,7 @@
 # Development Dockerfile for Recipe UI Service
 # Optimized for hot reload and development workflow
 
-FROM node:23-alpine3.19
+FROM oven/bun:1-alpine
 
 # Install development tools
 RUN apk add --no-cache \
@@ -11,21 +11,18 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json bun.lockb ./
 
 # Install all dependencies (including dev dependencies)
-RUN npm ci
+RUN bun install
 
-# Create non-root user for development
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 --ingroup nodejs nextjs
-
+# bun user exists in oven/bun image, we can just use it
 # Change ownership
-RUN chown -R nextjs:nodejs /app
-USER nextjs
+RUN chown -R bun:bun /app
+USER bun
 
 # Expose port
 EXPOSE 3000
 
 # Development command (will be overridden by docker-compose)
-CMD ["npm", "run", "dev"]
+CMD ["bun", "run", "dev"]

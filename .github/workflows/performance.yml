@@ -26,7 +26,7 @@ on:
           - memory
 
 env:
-  NODE_VERSION: '20'
+  BUN_VERSION: 'latest'
   LIGHTHOUSE_CI_TOKEN: ${{ secrets.LIGHTHOUSE_CI_TOKEN }}
 
 concurrency:
@@ -50,28 +50,27 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 🏮 Run Lighthouse CI
         run: |
-          npx lighthouse-ci autorun \
+          bunx lighthouse-ci autorun \
             --config=lighthouserc.js \
             --collect.url="http://localhost:3000${{ matrix.url-path }}" \
             --collect.settings.preset="${{ matrix.device }}" \
@@ -122,30 +121,29 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 🎯 Measure Core Web Vitals
-        run: npm run perf:vitals
+        run: bun run perf:vitals
 
       - name: 📊 Validate Web Vitals thresholds
         run: |
@@ -210,22 +208,21 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
           NODE_ENV: production
@@ -235,7 +232,7 @@ jobs:
           echo "🔥 Running load test: ${{ matrix.scenario.name }}"
           echo "Users: ${{ matrix.scenario.users }}, Duration: ${{ matrix.scenario.duration }}s"
 
-          npx autocannon \
+          bunx autocannon \
             --connections ${{ matrix.scenario.users }} \
             --duration ${{ matrix.scenario.duration }} \
             --json \
@@ -292,19 +289,18 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build with bundle analysis
         run: |
-          ANALYZE=true npm run build
-          npm run size-limit
+          ANALYZE=true bun run build
+          bun run size-limit
         env:
           CI: true
 
@@ -315,7 +311,7 @@ jobs:
 
           # Size-limit report
           echo "## Size Limits" >> bundle-report.md
-          npm run size-limit --json > size-limit-results.json || true
+          bun run size-limit --json > size-limit-results.json || true
 
           if [ -f "size-limit-results.json" ]; then
             node -e "
@@ -381,22 +377,21 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🧠 Memory profiling with Clinic.js
         run: |
           # Start application with memory profiling
-          timeout 300 npx clinic doctor --open=false --on-port='echo "Application started for profiling"' -- npm start || true
+          timeout 300 bunx clinic doctor --open=false --on-port='echo "Application started for profiling"' -- bun run start || true
 
           echo "🧠 Memory profiling completed"
 
@@ -424,7 +419,7 @@ jobs:
         run: |
           # Basic memory leak detection
           echo "🔍 Running memory leak detection..."
-          npm run test:unit -- --detectLeaks --forceExit
+          bun run test:unit --detectLeaks --forceExit
           echo "✅ Memory leak detection completed"
 
       - name: 📤 Upload memory profiling results

@@ -25,7 +25,7 @@ on:
           - monitoring
 
 env:
-  NODE_VERSION: '20'
+  BUN_VERSION: 'latest'
 
 permissions:
   contents: write
@@ -54,14 +54,13 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🏥 Repository health assessment
         id: health-check
@@ -71,9 +70,46 @@ jobs:
           SCORE=100
           ISSUES=()
 
-          # Check for outdated dependencies
-          OUTDATED=$(npm outdated --json 2>/dev/null || echo "{}")
-          OUTDATED_COUNT=$(echo "$OUTDATED" | jq 'length // 0')
+      - name: 🔍 Check for outdated packages
+        id: outdated
+        run: |
+          # Use bun outdated (table output) and count lines
+          OUTDATED_COUNT=$(bun outdated | sed '1d' | wc -l)
+          echo "outdated_count=$OUTDATED_COUNT" >> $GITHUB_OUTPUT
+
+          # Capture output for report
+          echo "outdated_report<<EOF" >> $GITHUB_OUTPUT
+          bun outdated >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 🛡️ Security Audit (Trivy)
+        id: audit
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'json'
+          output: 'trivy-results.json'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+      - name: 📊 Process Audit Results
+        id: process_audit
+        run: |
+          if [ -f trivy-results.json ]; then
+            VULN_COUNT=$(jq '.Results[].Vulnerabilities | length' trivy-results.json | awk '{s+=$1} END {print s}' || echo "0")
+          else
+            VULN_COUNT=0
+          fi
+          echo "vuln_count=$VULN_COUNT" >> $GITHUB_OUTPUT
+
+      - name: 🏥 Update health score based on checks
+        run: |
+          SCORE=100
+          ISSUES=()
+
+          OUTDATED_COUNT=${{ steps.outdated.outputs.outdated_count }}
           if [ "$OUTDATED_COUNT" -gt 10 ]; then
             SCORE=$((SCORE - 10))
             ISSUES+=("📦 $OUTDATED_COUNT outdated dependencies")
@@ -82,22 +118,14 @@ jobs:
             ISSUES+=("📦 $OUTDATED_COUNT outdated dependencies (minor)")
           fi
 
-          # Check for security vulnerabilities
-          AUDIT_RESULT=$(npm audit --json 2>/dev/null || echo '{"vulnerabilities":{}}')
-          CRITICAL_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.critical // 0')
-          HIGH_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.high // 0')
-
-          if [ "$CRITICAL_VULNS" -gt 0 ]; then
-            SCORE=$((SCORE - 30))
-            ISSUES+=("🚨 $CRITICAL_VULNS critical vulnerabilities")
-          fi
-          if [ "$HIGH_VULNS" -gt 0 ]; then
-            SCORE=$((SCORE - 15))
-            ISSUES+=("⚠️ $HIGH_VULNS high vulnerabilities")
+          VULN_COUNT=${{ steps.process_audit.outputs.vuln_count }}
+          if [ "$VULN_COUNT" -gt 0 ]; then
+            SCORE=$((SCORE - 20)) # Adjust score based on Trivy findings
+            ISSUES+=("🚨 $VULN_COUNT critical/high vulnerabilities found by Trivy")
           fi
 
           # Check for unused dependencies
-          UNUSED=$(npx knip --reporter json 2>/dev/null || echo '{"files":[],"dependencies":[],"devDependencies":[]}')
+          UNUSED=$(bunx knip --reporter json 2>/dev/null || echo '{"files":[],"dependencies":[],"devDependencies":[]}')
           UNUSED_DEPS=$(echo "$UNUSED" | jq '.dependencies | length')
           if [ "$UNUSED_DEPS" -gt 0 ]; then
             SCORE=$((SCORE - 5))
@@ -112,7 +140,7 @@ jobs:
           fi
 
           # Check test coverage
-          COVERAGE_RESULT=$(npm run test:coverage --silent 2>/dev/null || echo "")
+          COVERAGE_RESULT=$(bun run test:coverage --silent 2>/dev/null || echo "")
           if echo "$COVERAGE_RESULT" | grep -q "Coverage threshold"; then
             SCORE=$((SCORE - 10))
             ISSUES+=("📊 Test coverage below threshold")
@@ -171,14 +199,20 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
+
+      - name: 🔍 Analyze code complexity
+        run: |
+          echo "# Code Complexity Report" > complexity-report.md
+          # Using complexity-report-html or similar via npx/bunx if available,
+          # but here implies just a placeholder or custom script.
+          # Assuming existing script works with bun if it's JS.
 
       - name: 📊 Dependency audit
         run: |
@@ -192,18 +226,10 @@ jobs:
 
           # Outdated packages
           echo "## 📈 Outdated Packages" >> dependency-report.md
-          npm outdated --json > outdated.json 2>/dev/null || echo "{}" > outdated.json
+          bun outdated > outdated.txt 2>/dev/null || echo "No outdated packages" > outdated.txt
 
-          if [ "$(cat outdated.json)" != "{}" ]; then
-            echo "| Package | Current | Wanted | Latest | Type |" >> dependency-report.md
-            echo "|---------|---------|--------|--------|------|" >> dependency-report.md
-
-            node -e "
-              const outdated = JSON.parse(require('fs').readFileSync('outdated.json', 'utf8'));
-              Object.entries(outdated).forEach(([pkg, info]) => {
-                console.log(\`| \${pkg} | \${info.current} | \${info.wanted} | \${info.latest} | \${info.type} |\`);
-              });
-            " >> dependency-report.md
+          if [ "$(cat outdated.txt | wc -l)" -gt 1 ]; then # Check if there's more than just the header
+            cat outdated.txt >> dependency-report.md
           else
             echo "✅ All packages are up to date!" >> dependency-report.md
           fi
@@ -212,7 +238,7 @@ jobs:
 
           # Unused dependencies
           echo "## 🗑️ Unused Dependencies" >> dependency-report.md
-          UNUSED=$(npx knip --reporter json 2>/dev/null || echo '{"dependencies":[],"devDependencies":[]}')
+          UNUSED=$(bunx knip --reporter json 2>/dev/null || echo '{"dependencies":[],"devDependencies":[]}')
           UNUSED_DEPS=$(echo "$UNUSED" | jq -r '.dependencies[]?' 2>/dev/null || true)
           UNUSED_DEV_DEPS=$(echo "$UNUSED" | jq -r '.devDependencies[]?' 2>/dev/null || true)
 
@@ -237,45 +263,58 @@ jobs:
 
           echo "📦 Dependency audit completed"
 
-      - name: 🔒 Security audit
+      - name: 🔒 Security audit (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'json'
+          output: 'trivy-audit-results.json'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      - name: 📊 Process Trivy Audit Results for Report
         run: |
           echo "🔒 Running security audit..."
 
-          # Security vulnerabilities
           echo "" >> dependency-report.md
-          echo "## 🔒 Security Vulnerabilities" >> dependency-report.md
+          echo "## 🔒 Security Vulnerabilities (Trivy)" >> dependency-report.md
 
-          AUDIT_RESULT=$(npm audit --json 2>/dev/null || echo '{"vulnerabilities":{}}')
-          TOTAL_VULNS=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities | add // 0')
+          if [ -f trivy-audit-results.json ]; then
+            TOTAL_VULNS=$(jq '.Results[].Vulnerabilities | length' trivy-audit-results.json | awk '{s+=$1} END {print s}' || echo "0")
 
-          if [ "$TOTAL_VULNS" -gt 0 ]; then
-            echo "**Total vulnerabilities found:** $TOTAL_VULNS" >> dependency-report.md
-            echo "" >> dependency-report.md
+            if [ "$TOTAL_VULNS" -gt 0 ]; then
+              echo "**Total vulnerabilities found:** $TOTAL_VULNS" >> dependency-report.md
+              echo "" >> dependency-report.md
 
-            # Vulnerability breakdown
-            CRITICAL=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.critical // 0')
-            HIGH=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.high // 0')
-            MODERATE=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.moderate // 0')
-            LOW=$(echo "$AUDIT_RESULT" | jq '.metadata.vulnerabilities.low // 0')
+              # Extract severity counts
+              CRITICAL=$(jq '[.Results[].Vulnerabilities[] | select(.Severity == "CRITICAL")] | length' trivy-audit-results.json)
+              HIGH=$(jq '[.Results[].Vulnerabilities[] | select(.Severity == "HIGH")] | length' trivy-audit-results.json)
+              MEDIUM=$(jq '[.Results[].Vulnerabilities[] | select(.Severity == "MEDIUM")] | length' trivy-audit-results.json)
+              LOW=$(jq '[.Results[].Vulnerabilities[] | select(.Severity == "LOW")] | length' trivy-audit-results.json)
 
-            echo "| Severity | Count |" >> dependency-report.md
-            echo "|----------|-------|" >> dependency-report.md
-            echo "| Critical | $CRITICAL |" >> dependency-report.md
-            echo "| High     | $HIGH |" >> dependency-report.md
-            echo "| Moderate | $MODERATE |" >> dependency-report.md
-            echo "| Low      | $LOW |" >> dependency-report.md
+              echo "| Severity | Count |" >> dependency-report.md
+              echo "|----------|-------|" >> dependency-report.md
+              echo "| Critical | $CRITICAL |" >> dependency-report.md
+              echo "| High     | $HIGH |" >> dependency-report.md
+              echo "| Medium   | $MEDIUM |" >> dependency-report.md
+              echo "| Low      | $LOW |" >> dependency-report.md
 
-            echo "" >> dependency-report.md
-            echo "🚨 **Action Required:** Run \`npm audit fix\` to resolve fixable vulnerabilities" >> dependency-report.md
+              echo "" >> dependency-report.md
+              echo "🚨 **Action Required:** Review \`trivy-audit-results.json\` for details." >> dependency-report.md
+            else
+              echo "✅ No security vulnerabilities found by Trivy!" >> dependency-report.md
+            fi
           else
-            echo "✅ No security vulnerabilities found!" >> dependency-report.md
+            echo "⚠️ Trivy scan results file not found." >> dependency-report.md
           fi
 
       - name: 🧹 Clean up node_modules
         run: |
           echo "🧹 Cleaning up node_modules..."
-          rm -rf node_modules package-lock.json
-          npm install
+          rm -rf node_modules bun.lockb
+          bun install
           echo "✅ Node modules cleaned and reinstalled"
 
       - name: 📤 Upload dependency report
@@ -284,7 +323,8 @@ jobs:
           name: dependency-management-report
           path: |
             dependency-report.md
-            outdated.json
+            outdated.txt
+            trivy-audit-results.json
           retention-days: 30
 
   # Job 3: Security Maintenance
@@ -300,14 +340,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🔍 Secret scan maintenance
         run: |

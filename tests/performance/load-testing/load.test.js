@@ -70,7 +70,7 @@ describe('Load Testing Performance', () => {
     console.log('Starting Next.js server for load testing...');
 
     return new Promise((resolve, reject) => {
-      serverProcess = spawn('npm', ['start'], {
+      serverProcess = spawn('bun', ['run', 'start'], {
         env: { ...process.env, PORT: '3001' },
         stdio: 'pipe',
       });

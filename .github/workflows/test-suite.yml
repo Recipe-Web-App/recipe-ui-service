@@ -24,7 +24,7 @@ on:
           - cross-browser
 
 env:
-  NODE_VERSION: '20'
+  BUN_VERSION: 'latest'
   PLAYWRIGHT_BROWSERS_PATH: ~/.cache/playwright
 
 concurrency:
@@ -49,18 +49,18 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 📥 Get Playwright version
         id: playwright-version
-        run: echo "version=$(npx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+        run: echo "version=$(bunx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
 
       - name: 🎭 Cache Playwright browsers
         uses: actions/cache@v5
@@ -71,21 +71,21 @@ jobs:
 
       - name: 🎭 Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+        run: bunx playwright install --with-deps
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 🧪 Run E2E tests
         run: |
-          npx playwright test tests/e2e \
+          bunx playwright test tests/e2e \
             --project=${{ matrix.browser }} \
             --shard=${{ matrix.shard }} \
             --reporter=blob
@@ -111,14 +111,14 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 📥 Download blob reports
         uses: actions/download-artifact@v7
@@ -128,7 +128,7 @@ jobs:
           merge-multiple: true
 
       - name: 📊 Merge reports
-        run: npx playwright merge-reports --reporter html ./all-blob-reports
+        run: bunx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: 📤 Upload HTML report
         uses: actions/upload-artifact@v6
@@ -165,30 +165,30 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 👁️ Run visual tests
-        run: npm run test:visual
+        run: bun run test:visual
 
       - name: 📤 Upload visual test results
         if: always()
@@ -211,30 +211,30 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: ♿ Run accessibility tests
-        run: npm run test:a11y
+        run: bun run test:a11y
 
       - name: 📊 Generate accessibility report
         if: always()
@@ -264,41 +264,41 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
       - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps chromium
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: ⚡ Core Web Vitals tests
-        run: npm run perf:vitals
+        run: bun run perf:vitals
 
       - name: 📊 Lighthouse performance audit
-        run: npm run perf:lighthouse
+        run: bun run perf:lighthouse
 
       - name: 🔄 Load testing
-        run: npm run perf:load
+        run: bun run perf:load
 
       - name: 📈 Performance budget check
         run: |
           echo "Checking performance budgets..."
-          npm run size-limit
+          bun run size-limit
           echo "✅ Performance budgets validated"
 
       - name: 📤 Upload performance results
@@ -333,24 +333,7 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v6
 
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
-
-      - name: 🎭 Install Playwright browsers
-        run: npx playwright install --with-deps ${{ matrix.browser }}
-
-      - name: 🏗️ Build application
-        run: npm run build
-
-      - name: 🚀 Start application
-        run: |
-          npm start &
+          bun run start &
           npx wait-on http://localhost:3000 --timeout 60000
         shell: bash
         env:
@@ -388,27 +371,34 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+      - name: 📥 Checkout code
+        uses: actions/checkout@v6
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+          cache: true
 
       - name: 🔧 Install dependencies
-        run: npm ci --prefer-offline --no-audit
+        run: bun install --frozen-lockfile
 
-      - name: 🎭 Install Playwright
-        run: npx playwright install --with-deps chromium
+      - name: 🎭 Install Playwright Browsers
+        run: bunx playwright install --with-deps chromium
 
       - name: 🏗️ Build application
-        run: npm run build
+        run: bun run build
 
       - name: 🚀 Start application
         run: |
-          npm start &
-          npx wait-on http://localhost:3000 --timeout 60000
+          bun run start &
+          bunx wait-on http://localhost:3000 --timeout 60000
         env:
           CI: true
 
       - name: 📱 Run mobile tests
         run: |
-          npx playwright test tests/e2e/critical-paths \
+          bunx playwright test tests/e2e/critical-paths \
             --project=chromium \
             --global-timeout=300000 \
             --config=playwright.config.ts

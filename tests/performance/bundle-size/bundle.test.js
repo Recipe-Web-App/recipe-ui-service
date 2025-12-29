@@ -39,7 +39,7 @@ describe('Bundle Size Performance Tests', () => {
   beforeAll(async () => {
     // Ensure we have a fresh build
     console.log('Building application for bundle analysis...');
-    await execAsync('npm run build');
+    await execAsync('bun run build');
     buildDir = path.join(process.cwd(), '.next');
   });
 
@@ -134,7 +134,7 @@ describe('Bundle Size Performance Tests', () => {
   });
 
   test('should have efficient tree-shaking', async () => {
-    await execAsync('npm run analyze 2>&1 || echo "Analysis complete"');
+    await execAsync('bun run analyze 2>&1 || echo "Analysis complete"');
 
     // Check that common unused libraries are not included
     const buildManifest = path.join(buildDir, '_buildManifest.js');
@@ -210,14 +210,10 @@ describe('Bundle Size Performance Tests', () => {
 
   test('should not have duplicate dependencies', async () => {
     try {
-      const { stdout } = await execAsync('npm ls --depth=0 --json');
-      const dependenciesText =
+      // Use 'bun bun.lockb' to output the lockfile in Yarn format, which is textual and parsable
+      const { stdout } = await execAsync('bun bun.lockb');
+      const lockfileContent =
         typeof stdout === 'string' ? stdout : String(stdout);
-      const parsedDependencies = JSON.parse(dependenciesText);
-      const dependencies =
-        parsedDependencies && typeof parsedDependencies === 'object'
-          ? parsedDependencies
-          : {};
 
       // Check for common duplicate packages
       const potentialDuplicates = [
@@ -229,38 +225,54 @@ describe('Bundle Size Performance Tests', () => {
       ];
 
       for (const dep of potentialDuplicates) {
-        if (
-          dependencies &&
-          typeof dependencies === 'object' &&
-          'dependencies' in dependencies
-        ) {
-          const depsObject = dependencies.dependencies;
-          if (
-            depsObject &&
-            typeof depsObject === 'object' &&
-            dep in depsObject
-          ) {
-            // Check if there are multiple versions
-            const { stdout: versionsOutput } = await execAsync(
-              `npm ls "${dep}" --depth=10`
+        // Regex to find blocks: "package-name@range1, package-name@range2:":
+        // then find the version line inside.
+        // Simplified approach: find all 'version "x.y.z"' lines that follow a line starting with the package name key
+
+        // We'll split by blocks to be safe
+        const blocks = lockfileContent.split('\n\n');
+        const versions = new Set();
+
+        for (const block of blocks) {
+          if (!block.trim()) continue;
+
+          const lines = block.split('\n');
+          const header = lines[0];
+
+          // Check if header starts with our package name (exact match or scoped)
+          // valid patterns: "react@^18.2.0:", "@types/react@...", "react@npm:..."
+          // We want exact package name match at start of string or after comma
+
+          // Regex: (^|, )package-name@
+          const isTargetPackage = new RegExp(`(^|,\\s*)${dep}@`).test(header);
+
+          if (isTargetPackage) {
+            const versionLine = lines.find(l =>
+              l.trim().startsWith('version "')
             );
-            const versionsText =
-              typeof versionsOutput === 'string'
-                ? versionsOutput
-                : String(versionsOutput);
-
-            // Use a safer approach to count occurrences
-            const depOccurrences = versionsText.split(dep).length - 1;
-
-            if (depOccurrences > 1) {
-              console.warn(`Potential duplicate dependency: ${dep}`);
-              // This is a warning, not a failure, as some duplicates might be necessary
+            if (versionLine) {
+              const version = versionLine.match(/version "([^"]+)"/)?.[1];
+              if (version) {
+                versions.add(version);
+              }
             }
           }
         }
+
+        if (versions.size > 1) {
+          console.warn(
+            `Potential duplicate dependency: ${dep} (Found versions: ${Array.from(versions).join(', ')})`
+          );
+          // This is a warning, not a failure, as some duplicates might be necessary
+        }
+
+        // Optional: Fail if strict no-duplicates is required for specific critical libs
+        if (versions.size > 1 && (dep === 'react' || dep === 'react-dom')) {
+          // console.error(\`Critical duplicate found: \${dep}\`);
+        }
       }
-    } catch {
-      console.log('Dependency analysis completed with warnings');
+    } catch (error) {
+      console.log('Dependency analysis failed:', error);
     }
   });
 });
