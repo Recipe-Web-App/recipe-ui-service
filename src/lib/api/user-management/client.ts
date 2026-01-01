@@ -17,26 +17,50 @@ export const userManagementClient = axios.create({
 });
 
 // OAuth2 scope requirements mapping
+// Updated per new OpenAPI spec
 const SCOPE_REQUIREMENTS: Record<string, string[]> = {
+  // User endpoints
   'GET:/users/*/profile': ['user:read'],
   'GET:/users/search': ['user:read'],
   'GET:/users/*': ['user:read'],
-  'GET:/*/following': ['user:read'],
-  'GET:/*/followers': ['user:read'],
-  'GET:/*/activity': ['user:read'],
+  'PUT:/users/*/profile': ['user:write'],
+  'POST:/users/*/account/delete-request': ['user:write'],
+  'DELETE:/users/*/account': ['user:write'],
+
+  // Social/Follow endpoints - Updated: POST/DELETE instead of PUT toggle
+  'GET:/users/*/following': ['user:read'],
+  'GET:/users/*/followers': ['user:read'],
+  'GET:/users/*/activity': ['user:read'],
+  'GET:/users/*/follow/*': ['user:read'], // isFollowing check
+  'POST:/users/*/follow/*': ['user:write'], // follow user
+  'DELETE:/users/*/follow/*': ['user:write'], // unfollow user
+  'GET:/users/*/mutual-follows/*': ['user:read'],
+  'GET:/users/*/follow-stats': ['user:read'],
+
+  // Preferences endpoints - New per OpenAPI spec
+  'GET:/users/*/preferences': ['user:read'],
+  'PUT:/users/*/preferences': ['user:write'],
+  'GET:/users/*/preferences/*': ['user:read'],
+  'PUT:/users/*/preferences/*': ['user:write'],
+
+  // Notifications endpoints (kept for now per user request)
   'GET:/notifications': ['user:read'],
   'GET:/notifications/preferences': ['user:read'],
-  'PUT:/users/profile': ['user:write'],
-  'POST:/users/account/delete-request': ['user:write'],
-  'DELETE:/users/account': ['user:write'],
-  'PUT:/*/follow/*': ['user:write'],
   'PUT:/notifications/*/read': ['user:write'],
   'PUT:/notifications/read-all': ['user:write'],
   'PUT:/notifications/preferences': ['user:write'],
+
+  // Admin endpoints
   'GET:/admin/*': ['admin'],
   'DELETE:/admin/*': ['admin'],
+  'POST:/admin/cache/clear': ['admin'], // New: moved from metrics
+
+  // Metrics endpoints (admin only)
   'GET:/metrics/*': ['admin'],
-  'POST:/metrics/*': ['admin'],
+
+  // Health endpoints (public - no scope required, but default to user:read)
+  'GET:/health': [],
+  'GET:/ready': [],
 };
 
 // Get required scopes for an endpoint
@@ -243,10 +267,11 @@ export const handleUserManagementApiError = (error: unknown): never => {
 };
 
 // Helper for creating paginated requests
+// Updated: count_only → countOnly per OpenAPI spec camelCase convention
 export interface PaginationParams {
   limit?: number;
   offset?: number;
-  count_only?: boolean;
+  countOnly?: boolean;
 }
 
 // Helper for handling file uploads

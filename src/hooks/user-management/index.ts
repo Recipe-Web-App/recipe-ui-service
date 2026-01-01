@@ -10,22 +10,19 @@ export {
 } from './useUser';
 
 // Social Features Hooks
+// Updated: Removed "me" hooks and useToggleFollowUser per OpenAPI spec
 export {
   useFollowing,
   useFollowers,
-  useCurrentUserFollowing,
-  useCurrentUserFollowers,
   useFollowUser,
   useUnfollowUser,
-  useToggleFollowUser,
   useIsFollowing,
   useMutualFollows,
   useFollowStats,
   useUserActivity,
-  useCurrentUserActivity,
 } from './useSocial';
 
-// Notification Management Hooks
+// Notification Management Hooks (kept for now per user request)
 export {
   useNotifications,
   useAllNotifications,
@@ -41,25 +38,54 @@ export {
   useClearReadNotifications,
 } from './useNotifications';
 
-// User Preferences Hooks
+// Legacy User Preferences Hooks (kept for backward compatibility)
+export {
+  useUserPreferences as useLegacyUserPreferences,
+  useNotificationPreferences as useLegacyNotificationPreferences,
+  useDisplayPreferences as useLegacyDisplayPreferences,
+  usePrivacyPreferences as useLegacyPrivacyPreferences,
+  useUpdateUserPreferences as useLegacyUpdateUserPreferences,
+  useUpdateNotificationPreferences as useLegacyUpdateNotificationPreferences,
+  useToggleNotificationSetting,
+  useUpdateDisplayPreferences as useLegacyUpdateDisplayPreferences,
+  useUpdatePrivacyPreferences as useLegacyUpdatePrivacyPreferences,
+} from './useUserPreferences';
+
+// New Preferences Hooks - 9 category system per OpenAPI spec
 export {
   useUserPreferences,
+  useCurrentUserPreferences,
+  useUpdateUserPreferences,
+  usePreferenceCategory,
   useNotificationPreferences,
   useDisplayPreferences,
   usePrivacyPreferences,
-  useUpdateUserPreferences,
+  useAccessibilityPreferences,
+  useLanguagePreferences,
+  useSecurityPreferences,
+  useSocialPreferences,
+  useSoundPreferences,
+  useThemePreferences,
   useUpdateNotificationPreferences,
-  useToggleNotificationSetting,
   useUpdateDisplayPreferences,
   useUpdatePrivacyPreferences,
-} from './useUserPreferences';
+  useUpdateAccessibilityPreferences,
+  useUpdateLanguagePreferences,
+  useUpdateSecurityPreferences,
+  useUpdateSocialPreferences,
+  useUpdateSoundPreferences,
+  useUpdateThemePreferences,
+  useResetPreferenceCategory,
+  useAllPreferencesFlat,
+} from './usePreferences';
 
 // Admin Operations Hooks
+// Updated: Removed hooks for deleted endpoints, added useClearCache and useReadinessCheck
 export {
   useUserStats,
-  useForceLogout,
-  useBatchForceLogout,
+  useClearCache,
   useHealthCheck,
+  useReadinessCheck,
   useComprehensiveHealth,
   usePerformanceMetrics,
   useHealthMonitor,
@@ -86,6 +112,24 @@ export type {
   NotificationPreferences,
   HealthCheckResponse,
   ComprehensiveHealthResponse,
+  ReadinessResponse,
+  LivenessResponse,
   PerformanceMetrics,
   UserStatsResponse,
+  CacheClearRequest,
+  CacheClearResponse,
+  // New preference types
+  PreferenceCategory,
+  UserPreferencesResponse,
+  UserPreferencesUpdateRequest,
+  PreferenceCategoryResponse,
+  NotificationPreferencesUpdate,
+  DisplayPreferencesUpdate,
+  PrivacyPreferencesUpdate,
+  AccessibilityPreferencesUpdate,
+  LanguagePreferencesUpdate,
+  SecurityPreferencesUpdate,
+  SocialPreferencesUpdate,
+  SoundPreferencesUpdate,
+  ThemePreferencesUpdate,
 } from '@/types/user-management';

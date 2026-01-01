@@ -57,16 +57,36 @@ export const socialApi = {
   },
 
   /**
-   * Follow or unfollow a user
-   * The same endpoint handles both actions based on current follow state
+   * Follow a user
    * Requires: user:write scope
+   * Updated to use POST per OpenAPI spec (was PUT toggle)
    */
-  async toggleFollowUser(
+  async followUser(
     userId: string,
     targetUserId: string
   ): Promise<FollowResponse> {
     try {
-      const response = await userManagementClient.put(
+      const response = await userManagementClient.post(
+        `/users/${userId}/follow/${targetUserId}`
+      );
+      return response.data as FollowResponse;
+    } catch (error) {
+      handleUserManagementApiError(error);
+      throw error; // This line should never be reached since handleUserManagementApiError throws
+    }
+  },
+
+  /**
+   * Unfollow a user
+   * Requires: user:write scope
+   * Updated to use DELETE per OpenAPI spec (was PUT toggle)
+   */
+  async unfollowUser(
+    userId: string,
+    targetUserId: string
+  ): Promise<FollowResponse> {
+    try {
+      const response = await userManagementClient.delete(
         `/users/${userId}/follow/${targetUserId}`
       );
       return response.data as FollowResponse;
@@ -99,66 +119,18 @@ export const socialApi = {
   },
 
   /**
-   * Get current user's following list
-   * Convenience method using 'me' identifier
-   * Requires: user:read scope
-   */
-  async getCurrentUserFollowing(
-    params?: PaginationParams
-  ): Promise<GetFollowedUsersResponse> {
-    return this.getFollowing('me', params);
-  },
-
-  /**
-   * Get current user's followers list
-   * Convenience method using 'me' identifier
-   * Requires: user:read scope
-   */
-  async getCurrentUserFollowers(
-    params?: PaginationParams
-  ): Promise<GetFollowedUsersResponse> {
-    return this.getFollowers('me', params);
-  },
-
-  /**
-   * Follow a user (current user follows target user)
-   * Convenience method for the current user
-   * Requires: user:write scope
-   */
-  async followUser(targetUserId: string): Promise<FollowResponse> {
-    return this.toggleFollowUser('me', targetUserId);
-  },
-
-  /**
-   * Unfollow a user (current user unfollows target user)
-   * Note: This uses the same endpoint as followUser - the API handles the toggle
-   * Requires: user:write scope
-   */
-  async unfollowUser(targetUserId: string): Promise<FollowResponse> {
-    return this.toggleFollowUser('me', targetUserId);
-  },
-
-  /**
-   * Get current user's activity summary
-   * Convenience method using 'me' identifier
-   * Requires: user:read scope
-   */
-  async getCurrentUserActivity(
-    params?: UserActivityParams
-  ): Promise<UserActivityResponse> {
-    return this.getUserActivity('me', params);
-  },
-
-  /**
-   * Check if current user is following a specific user
+   * Check if a user is following another user
    * Helper method to determine follow status
    * Requires: user:read scope
    */
-  async isFollowingUser(targetUserId: string): Promise<boolean> {
+  async isFollowingUser(
+    userId: string,
+    targetUserId: string
+  ): Promise<boolean> {
     try {
-      // Get current user's following list and check if target user is in it
+      // Get user's following list and check if target user is in it
       // For large following lists, this might need pagination
-      const following = await this.getCurrentUserFollowing({ limit: 100 });
+      const following = await this.getFollowing(userId, { limit: 100 });
 
       return (
         following.followedUsers?.some(user => user.userId === targetUserId) ??
@@ -171,26 +143,27 @@ export const socialApi = {
   },
 
   /**
-   * Get mutual follows between current user and target user
-   * Helper method to find users that both the current user and target user follow
+   * Get mutual follows between two users
+   * Helper method to find users that both users follow
    * Requires: user:read scope
    */
-  async getMutualFollows(targetUserId: string): Promise<string[]> {
+  async getMutualFollows(
+    userId: string,
+    targetUserId: string
+  ): Promise<string[]> {
     try {
-      const [currentUserFollowing, targetUserFollowing] = await Promise.all([
-        this.getCurrentUserFollowing({ limit: 1000 }), // Adjust limit as needed
+      const [userFollowing, targetUserFollowing] = await Promise.all([
+        this.getFollowing(userId, { limit: 1000 }),
         this.getFollowing(targetUserId, { limit: 1000 }),
       ]);
 
-      const currentFollowing =
-        currentUserFollowing.followedUsers?.map(u => u.userId) ?? [];
-      const targetFollowing =
+      const userFollowingIds =
+        userFollowing.followedUsers?.map(u => u.userId) ?? [];
+      const targetFollowingIds =
         targetUserFollowing.followedUsers?.map(u => u.userId) ?? [];
 
       // Find intersection of the two arrays
-      return currentFollowing.filter(userId =>
-        targetFollowing.includes(userId)
-      );
+      return userFollowingIds.filter(id => targetFollowingIds.includes(id));
     } catch {
       return [];
     }
@@ -207,8 +180,8 @@ export const socialApi = {
   }> {
     try {
       const [following, followers] = await Promise.all([
-        this.getFollowing(userId, { count_only: true }),
-        this.getFollowers(userId, { count_only: true }),
+        this.getFollowing(userId, { countOnly: true }),
+        this.getFollowers(userId, { countOnly: true }),
       ]);
 
       return {

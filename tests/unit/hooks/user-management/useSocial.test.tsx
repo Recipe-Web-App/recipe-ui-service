@@ -3,16 +3,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   useFollowing,
   useFollowers,
-  useCurrentUserFollowing,
-  useCurrentUserFollowers,
   useFollowUser,
   useUnfollowUser,
-  useToggleFollowUser,
   useIsFollowing,
   useMutualFollows,
   useFollowStats,
   useUserActivity,
-  useCurrentUserActivity,
 } from '@/hooks/user-management/useSocial';
 import { socialApi } from '@/lib/api/user-management';
 import type {
@@ -27,16 +23,12 @@ jest.mock('@/lib/api/user-management', () => ({
   socialApi: {
     getFollowing: jest.fn(),
     getFollowers: jest.fn(),
-    getCurrentUserFollowing: jest.fn(),
-    getCurrentUserFollowers: jest.fn(),
     followUser: jest.fn(),
     unfollowUser: jest.fn(),
-    toggleFollowUser: jest.fn(),
     isFollowingUser: jest.fn(),
     getMutualFollows: jest.fn(),
     getFollowStats: jest.fn(),
     getUserActivity: jest.fn(),
-    getCurrentUserActivity: jest.fn(),
   },
 }));
 
@@ -141,81 +133,6 @@ describe('useSocial hooks', () => {
     });
   });
 
-  describe('useCurrentUserFollowing', () => {
-    it('should fetch current user following list', async () => {
-      const mockCurrentUserFollowing: GetFollowedUsersResponse = {
-        followedUsers: [
-          {
-            userId: 'following-user-1',
-            username: 'followinguser1',
-            email: 'following1@example.com',
-            fullName: 'Following User 1',
-            bio: 'Following user 1 bio',
-            isActive: true,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-02T00:00:00Z',
-          },
-        ],
-        totalCount: 1,
-        limit: 100,
-        offset: 0,
-      };
-      mockedSocialApi.getCurrentUserFollowing.mockResolvedValue(
-        mockCurrentUserFollowing
-      );
-
-      const { result } = renderHook(() => useCurrentUserFollowing(10, 0), {
-        wrapper: createWrapper(),
-      });
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedSocialApi.getCurrentUserFollowing).toHaveBeenCalledWith({
-        limit: 10,
-        offset: 0,
-      });
-      expect(result.current.data).toEqual(mockCurrentUserFollowing);
-    });
-  });
-
-  describe('useCurrentUserFollowers', () => {
-    it('should fetch current user followers list', async () => {
-      const mockCurrentUserFollowers: GetFollowedUsersResponse = {
-        followedUsers: [
-          {
-            userId: 'following-user-1',
-            username: 'followinguser1',
-            email: 'following1@example.com',
-            fullName: 'Following User 1',
-            bio: 'Following user 1 bio',
-            isActive: true,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-02T00:00:00Z',
-          },
-        ],
-        totalCount: 1,
-        limit: 100,
-        offset: 0,
-      };
-
-      mockedSocialApi.getCurrentUserFollowers.mockResolvedValue(
-        mockCurrentUserFollowers
-      );
-
-      const { result } = renderHook(() => useCurrentUserFollowers(10, 0), {
-        wrapper: createWrapper(),
-      });
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedSocialApi.getCurrentUserFollowers).toHaveBeenCalledWith({
-        limit: 10,
-        offset: 0,
-      });
-      expect(result.current.data).toEqual(mockCurrentUserFollowers);
-    });
-  });
-
   describe('useFollowUser', () => {
     it('should follow a user successfully', async () => {
       const mockFollowResponse: FollowResponse = {
@@ -229,11 +146,15 @@ describe('useSocial hooks', () => {
         wrapper: createWrapper(),
       });
 
-      result.current.mutate('target-user-456');
+      result.current.mutate({
+        userId: 'current-user-123',
+        targetUserId: 'target-user-456',
+      });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
       expect(mockedSocialApi.followUser).toHaveBeenCalledWith(
+        'current-user-123',
         'target-user-456'
       );
       expect(result.current.data).toEqual(mockFollowResponse);
@@ -247,7 +168,10 @@ describe('useSocial hooks', () => {
         wrapper: createWrapper(),
       });
 
-      result.current.mutate('target-user-456');
+      result.current.mutate({
+        userId: 'current-user-123',
+        targetUserId: 'target-user-456',
+      });
 
       await waitFor(() => expect(result.current.isError).toBe(true));
       expect(result.current.error).toBe(error);
@@ -267,30 +191,6 @@ describe('useSocial hooks', () => {
         wrapper: createWrapper(),
       });
 
-      result.current.mutate('target-user-456');
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedSocialApi.unfollowUser).toHaveBeenCalledWith(
-        'target-user-456'
-      );
-      expect(result.current.data).toEqual(mockUnfollowResponse);
-    });
-  });
-
-  describe('useToggleFollowUser', () => {
-    it('should toggle follow status successfully', async () => {
-      const mockToggleResponse: FollowResponse = {
-        message: 'Now following user',
-        isFollowing: true,
-      };
-
-      mockedSocialApi.toggleFollowUser.mockResolvedValue(mockToggleResponse);
-
-      const { result } = renderHook(() => useToggleFollowUser(), {
-        wrapper: createWrapper(),
-      });
-
       result.current.mutate({
         userId: 'current-user-123',
         targetUserId: 'target-user-456',
@@ -298,11 +198,11 @@ describe('useSocial hooks', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockedSocialApi.toggleFollowUser).toHaveBeenCalledWith(
+      expect(mockedSocialApi.unfollowUser).toHaveBeenCalledWith(
         'current-user-123',
         'target-user-456'
       );
-      expect(result.current.data).toEqual(mockToggleResponse);
+      expect(result.current.data).toEqual(mockUnfollowResponse);
     });
   });
 
@@ -312,22 +212,41 @@ describe('useSocial hooks', () => {
 
       mockedSocialApi.isFollowingUser.mockResolvedValue(mockFollowStatus);
 
-      const { result } = renderHook(() => useIsFollowing('target-user-456'), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () => useIsFollowing('current-user-123', 'target-user-456'),
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
       expect(mockedSocialApi.isFollowingUser).toHaveBeenCalledWith(
+        'current-user-123',
         'target-user-456'
       );
       expect(result.current.data).toEqual(mockFollowStatus);
     });
 
+    it('should not check when userId is empty', () => {
+      const { result } = renderHook(
+        () => useIsFollowing('', 'target-user-456'),
+        {
+          wrapper: createWrapper(),
+        }
+      );
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(mockedSocialApi.isFollowingUser).not.toHaveBeenCalled();
+    });
+
     it('should not check when targetUserId is empty', () => {
-      const { result } = renderHook(() => useIsFollowing(''), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () => useIsFollowing('current-user-123', ''),
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       expect(result.current.fetchStatus).toBe('idle');
       expect(mockedSocialApi.isFollowingUser).not.toHaveBeenCalled();
@@ -344,16 +263,32 @@ describe('useSocial hooks', () => {
 
       mockedSocialApi.getMutualFollows.mockResolvedValue(mockMutualFollows);
 
-      const { result } = renderHook(() => useMutualFollows('target-user-456'), {
-        wrapper: createWrapper(),
-      });
+      const { result } = renderHook(
+        () => useMutualFollows('current-user-123', 'target-user-456'),
+        {
+          wrapper: createWrapper(),
+        }
+      );
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
       expect(mockedSocialApi.getMutualFollows).toHaveBeenCalledWith(
+        'current-user-123',
         'target-user-456'
       );
       expect(result.current.data).toEqual(mockMutualFollows);
+    });
+
+    it('should not fetch when userId is empty', () => {
+      const { result } = renderHook(
+        () => useMutualFollows('', 'target-user-456'),
+        {
+          wrapper: createWrapper(),
+        }
+      );
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(mockedSocialApi.getMutualFollows).not.toHaveBeenCalled();
     });
   });
 
@@ -442,66 +377,6 @@ describe('useSocial hooks', () => {
 
       expect(result.current.fetchStatus).toBe('idle');
       expect(mockedSocialApi.getUserActivity).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('useCurrentUserActivity', () => {
-    it('should fetch current user activity', async () => {
-      const mockCurrentUserActivity: UserActivityResponse = {
-        userId: 'user-123',
-        recentRecipes: [
-          {
-            recipeId: 1,
-            title: 'Test Recipe',
-            createdAt: '2023-01-08T00:00:00Z',
-          },
-        ],
-        recentFollows: [
-          {
-            userId: 'followed-user-1',
-            username: 'followeduser1',
-            followedAt: '2023-01-07T00:00:00Z',
-          },
-        ],
-        recentReviews: [
-          {
-            reviewId: 1,
-            recipeId: 1,
-            rating: 5,
-            comment: 'Great recipe!',
-            createdAt: '2023-01-06T00:00:00Z',
-          },
-        ],
-        recentFavorites: [
-          {
-            recipeId: 2,
-            title: 'Favorite Recipe',
-            favoritedAt: '2023-01-05T00:00:00Z',
-          },
-        ],
-      };
-
-      mockedSocialApi.getCurrentUserActivity.mockResolvedValue(
-        mockCurrentUserActivity
-      );
-
-      const activityParams: UserActivityParams = {
-        per_type_limit: 20,
-      };
-
-      const { result } = renderHook(
-        () => useCurrentUserActivity(activityParams),
-        {
-          wrapper: createWrapper(),
-        }
-      );
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedSocialApi.getCurrentUserActivity).toHaveBeenCalledWith(
-        activityParams
-      );
-      expect(result.current.data).toEqual(mockCurrentUserActivity);
     });
   });
 });

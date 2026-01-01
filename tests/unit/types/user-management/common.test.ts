@@ -19,9 +19,9 @@ describe('User Management Common Types', () => {
         {},
         { limit: 10 },
         { offset: 20 },
-        { count_only: true },
+        { countOnly: true },
         { limit: 10, offset: 20 },
-        { limit: 10, offset: 20, count_only: false },
+        { limit: 10, offset: 20, countOnly: false },
       ];
 
       validParams.forEach(params => {
@@ -32,8 +32,8 @@ describe('User Management Common Types', () => {
         if (params.offset !== undefined) {
           expect(typeof params.offset).toBe('number');
         }
-        if (params.count_only !== undefined) {
-          expect(typeof params.count_only).toBe('boolean');
+        if (params.countOnly !== undefined) {
+          expect(typeof params.countOnly).toBe('boolean');
         }
       });
     });
@@ -110,23 +110,23 @@ describe('User Management Common Types', () => {
   });
 
   describe('OAuth2ScopeError', () => {
-    it('should have all required fields', () => {
+    it('should have all required fields with camelCase', () => {
       const scopeError: OAuth2ScopeError = {
         detail: 'Missing required scope: user:write',
-        error_code: 'INSUFFICIENT_SCOPE',
-        required_scopes: ['user:write'],
-        available_scopes: ['user:read', 'profile'],
+        errorCode: 'INSUFFICIENT_SCOPE',
+        requiredScopes: ['user:write'],
+        availableScopes: ['user:read', 'profile'],
       };
 
       expect(typeof scopeError.detail).toBe('string');
-      expect(typeof scopeError.error_code).toBe('string');
-      expect(Array.isArray(scopeError.required_scopes)).toBe(true);
-      expect(Array.isArray(scopeError.available_scopes)).toBe(true);
+      expect(typeof scopeError.errorCode).toBe('string');
+      expect(Array.isArray(scopeError.requiredScopes)).toBe(true);
+      expect(Array.isArray(scopeError.availableScopes)).toBe(true);
       expect(
-        scopeError.required_scopes.every(scope => typeof scope === 'string')
+        scopeError.requiredScopes.every(scope => typeof scope === 'string')
       ).toBe(true);
       expect(
-        scopeError.available_scopes.every(scope => typeof scope === 'string')
+        scopeError.availableScopes.every(scope => typeof scope === 'string')
       ).toBe(true);
     });
   });
@@ -172,18 +172,18 @@ describe('User Management Common Types', () => {
       });
     });
 
-    it('should validate ReadinessStatus values', () => {
+    it('should validate ReadinessStatus values (UPPERCASE per OpenAPI spec)', () => {
       const validStatuses: ReadinessStatus[] = [
-        'ready',
-        'degraded',
-        'not_ready',
+        'READY',
+        'DEGRADED',
+        'NOT_READY',
       ];
       validStatuses.forEach(status => {
-        expect(['ready', 'degraded', 'not_ready']).toContain(status);
+        expect(['READY', 'DEGRADED', 'NOT_READY']).toContain(status);
       });
     });
 
-    it('should validate ProfileVisibility values', () => {
+    it('should validate ProfileVisibility values (legacy lowercase)', () => {
       const validVisibilities: ProfileVisibility[] = [
         'public',
         'followers_only',
@@ -194,10 +194,10 @@ describe('User Management Common Types', () => {
       });
     });
 
-    it('should validate Theme values', () => {
-      const validThemes: Theme[] = ['light', 'dark', 'auto'];
+    it('should validate Theme values (legacy lowercase)', () => {
+      const validThemes: Theme[] = ['light', 'dark', 'system'];
       validThemes.forEach(theme => {
-        expect(['light', 'dark', 'auto']).toContain(theme);
+        expect(['light', 'dark', 'system']).toContain(theme);
       });
     });
   });

@@ -1,3 +1,9 @@
+// TODO: [USER-MGMT-UPDATE] This file uses useCurrentUser() which was updated to fetch
+// profile via getUserProfile(userId) instead of the non-existent /users/me/profile endpoint.
+// Review this component to ensure it works correctly with the updated hook implementation.
+// The hook now requires userId from the auth store - verify auth state is available when
+// this form is rendered.
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback, useState, useEffect } from 'react';

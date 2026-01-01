@@ -186,13 +186,13 @@ describe('Users API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await usersApi.searchUsers({
-        q: 'test',
+        query: 'test',
         limit: 10,
         offset: 0,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/search?q=test&limit=10&offset=0'
+        '/users/search?query=test&limit=10&offset=0'
       );
       expect(result).toEqual(mockResponse);
     });
@@ -213,7 +213,7 @@ describe('Users API', () => {
       expect(result).toEqual(mockResponse);
     });
 
-    it('should handle search with count_only parameter', async () => {
+    it('should handle search with countOnly parameter', async () => {
       const mockResponse: UserSearchResponse = {
         results: [],
         totalCount: 50,
@@ -223,10 +223,10 @@ describe('Users API', () => {
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
-      const result = await usersApi.searchUsers({ count_only: true });
+      const result = await usersApi.searchUsers({ countOnly: true });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/search?count_only=true'
+        '/users/search?countOnly=true'
       );
       expect(result).toEqual(mockResponse);
     });
@@ -255,26 +255,6 @@ describe('Users API', () => {
       mockClient.get.mockRejectedValue(new Error('User not found'));
 
       await expect(usersApi.getUser('nonexistent')).rejects.toThrow();
-    });
-  });
-
-  describe('getCurrentUserProfile', () => {
-    it('should get current user profile using me identifier', async () => {
-      const mockProfile: UserProfileResponse = {
-        userId: 'current',
-        username: 'currentuser',
-        email: 'current@example.com',
-        isActive: true,
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockProfile });
-
-      const result = await usersApi.getCurrentUserProfile();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/users/me/profile');
-      expect(result).toEqual(mockProfile);
     });
   });
 
@@ -344,7 +324,7 @@ describe('Users API', () => {
 
       expect(result).toBe(true);
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/search?q=newuser&limit=1&count_only=true'
+        '/users/search?query=newuser&limit=1&countOnly=true'
       );
     });
 

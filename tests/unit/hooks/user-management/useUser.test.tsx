@@ -22,7 +22,6 @@ import type {
 jest.mock('@/lib/api/user-management', () => ({
   usersApi: {
     getUserProfile: jest.fn(),
-    getCurrentUserProfile: jest.fn(),
     searchUsers: jest.fn(),
     updateProfile: jest.fn(),
     requestAccountDeletion: jest.fn(),
@@ -58,6 +57,7 @@ describe('useUser hooks', () => {
     jest.clearAllMocks();
     mockedUseAuthStore.mockReturnValue({
       isAuthenticated: true,
+      user: { id: 'user-123', name: 'Test User', email: 'test@example.com' },
       authUser: null,
       token: 'mock-token',
       setAuthUser: jest.fn(),
@@ -114,7 +114,7 @@ describe('useUser hooks', () => {
   });
 
   describe('useCurrentUser', () => {
-    it('should fetch current user profile when authenticated', async () => {
+    it('should fetch current user profile using user.id from auth store', async () => {
       const mockCurrentUser: UserProfileResponse = {
         userId: 'user-123',
         username: 'testuser',
@@ -126,7 +126,7 @@ describe('useUser hooks', () => {
         updatedAt: '2023-01-02T00:00:00Z',
       };
 
-      mockedUsersApi.getCurrentUserProfile.mockResolvedValue(mockCurrentUser);
+      mockedUsersApi.getUserProfile.mockResolvedValue(mockCurrentUser);
 
       const { result } = renderHook(() => useCurrentUser(), {
         wrapper: createWrapper(),
@@ -134,13 +134,15 @@ describe('useUser hooks', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockedUsersApi.getCurrentUserProfile).toHaveBeenCalled();
+      // Should call getUserProfile with the user.id from auth store
+      expect(mockedUsersApi.getUserProfile).toHaveBeenCalledWith('user-123');
       expect(result.current.data).toEqual(mockCurrentUser);
     });
 
     it('should not fetch when not authenticated', () => {
       mockedUseAuthStore.mockReturnValue({
         isAuthenticated: false,
+        user: null,
         authUser: null,
         token: null,
         setAuthUser: jest.fn(),
@@ -153,7 +155,26 @@ describe('useUser hooks', () => {
       });
 
       expect(result.current.fetchStatus).toBe('idle');
-      expect(mockedUsersApi.getCurrentUserProfile).not.toHaveBeenCalled();
+      expect(mockedUsersApi.getUserProfile).not.toHaveBeenCalled();
+    });
+
+    it('should not fetch when user.id is not available', () => {
+      mockedUseAuthStore.mockReturnValue({
+        isAuthenticated: true,
+        user: null,
+        authUser: null,
+        token: 'mock-token',
+        setAuthUser: jest.fn(),
+        setToken: jest.fn(),
+        clearAuth: jest.fn(),
+      });
+
+      const { result } = renderHook(() => useCurrentUser(), {
+        wrapper: createWrapper(),
+      });
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(mockedUsersApi.getUserProfile).not.toHaveBeenCalled();
     });
   });
 
@@ -186,8 +207,9 @@ describe('useUser hooks', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
+      // Updated: 'q' param renamed to 'query' per OpenAPI spec
       expect(mockedUsersApi.searchUsers).toHaveBeenCalledWith({
-        q: 'test',
+        query: 'test',
         limit: 10,
         offset: 0,
       });
@@ -196,6 +218,15 @@ describe('useUser hooks', () => {
 
     it('should not search when query is empty', () => {
       const { result } = renderHook(() => useSearchUsers(''), {
+        wrapper: createWrapper(),
+      });
+
+      expect(result.current.fetchStatus).toBe('idle');
+      expect(mockedUsersApi.searchUsers).not.toHaveBeenCalled();
+    });
+
+    it('should not search when query is too short', () => {
+      const { result } = renderHook(() => useSearchUsers('a'), {
         wrapper: createWrapper(),
       });
 
