@@ -34,7 +34,6 @@ export type {
   UserAccountDeleteRequest,
   UserAccountDeleteRequestResponse,
   UserConfirmAccountDeleteResponse,
-  UserPreferences,
 
   // Social types
   FollowResponse,

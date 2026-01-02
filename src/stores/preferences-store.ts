@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type {
-  UserPreferences,
+  UserPreferencesResponse,
   DisplayPreferences,
   NotificationPreferences,
   PrivacyPreferences,
-  Theme,
+  ThemeEnum,
 } from '@/types/user-management';
 
 interface PreferencesState {
   // Backend preferences (synced with user-management service)
-  preferences: UserPreferences | null;
+  preferences: UserPreferencesResponse | null;
 
   // Loading and sync states
   isLoading: boolean;
@@ -18,7 +18,7 @@ interface PreferencesState {
   lastSyncedAt: number | null;
 
   // Actions for managing preferences
-  setPreferences: (preferences: UserPreferences) => void;
+  setPreferences: (preferences: UserPreferencesResponse) => void;
   updateDisplayPreferences: (preferences: Partial<DisplayPreferences>) => void;
   updateNotificationPreferences: (
     preferences: Partial<NotificationPreferences>
@@ -35,7 +35,7 @@ interface PreferencesState {
   getDisplayPreferences: () => DisplayPreferences | undefined;
   getNotificationPreferences: () => NotificationPreferences | undefined;
   getPrivacyPreferences: () => PrivacyPreferences | undefined;
-  getTheme: () => Theme | undefined;
+  getTheme: () => ThemeEnum | undefined;
   getLanguage: () => string | undefined;
   getTimezone: () => string | undefined;
 
@@ -55,7 +55,7 @@ export const usePreferencesStore = create<PreferencesState>()(
       lastSyncedAt: null,
 
       // Actions for managing preferences
-      setPreferences: (preferences: UserPreferences) => {
+      setPreferences: (preferences: UserPreferencesResponse) => {
         set({
           preferences,
           isSync: true,
@@ -68,8 +68,9 @@ export const usePreferencesStore = create<PreferencesState>()(
         set({
           preferences: {
             ...current,
-            display_preferences: {
-              ...current?.display_preferences,
+            userId: current?.userId ?? '',
+            display: {
+              ...current?.display,
               ...updates,
             },
           },
@@ -84,8 +85,9 @@ export const usePreferencesStore = create<PreferencesState>()(
         set({
           preferences: {
             ...current,
-            notification_preferences: {
-              ...current?.notification_preferences,
+            userId: current?.userId ?? '',
+            notification: {
+              ...current?.notification,
               ...updates,
             },
           },
@@ -98,8 +100,9 @@ export const usePreferencesStore = create<PreferencesState>()(
         set({
           preferences: {
             ...current,
-            privacy_preferences: {
-              ...current?.privacy_preferences,
+            userId: current?.userId ?? '',
+            privacy: {
+              ...current?.privacy,
               ...updates,
             },
           },
@@ -133,27 +136,28 @@ export const usePreferencesStore = create<PreferencesState>()(
 
       // Getters
       getDisplayPreferences: () => {
-        return get().preferences?.display_preferences;
+        return get().preferences?.display;
       },
 
       getNotificationPreferences: () => {
-        return get().preferences?.notification_preferences;
+        return get().preferences?.notification;
       },
 
       getPrivacyPreferences: () => {
-        return get().preferences?.privacy_preferences;
+        return get().preferences?.privacy;
       },
 
       getTheme: () => {
-        return get().preferences?.display_preferences?.theme;
+        return get().preferences?.theme?.customTheme;
       },
 
       getLanguage: () => {
-        return get().preferences?.display_preferences?.language;
+        return get().preferences?.language?.primaryLanguage;
       },
 
       getTimezone: () => {
-        return get().preferences?.display_preferences?.timezone;
+        // Timezone is no longer in display preferences per new schema
+        return undefined;
       },
 
       // Utility methods
@@ -164,18 +168,18 @@ export const usePreferencesStore = create<PreferencesState>()(
         switch (category) {
           case 'notification':
             return (
-              !!preferences.notification_preferences &&
-              Object.keys(preferences.notification_preferences).length > 0
+              !!preferences.notification &&
+              Object.keys(preferences.notification).length > 0
             );
           case 'privacy':
             return (
-              !!preferences.privacy_preferences &&
-              Object.keys(preferences.privacy_preferences).length > 0
+              !!preferences.privacy &&
+              Object.keys(preferences.privacy).length > 0
             );
           case 'display':
             return (
-              !!preferences.display_preferences &&
-              Object.keys(preferences.display_preferences).length > 0
+              !!preferences.display &&
+              Object.keys(preferences.display).length > 0
             );
           default:
             return false;

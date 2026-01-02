@@ -10,7 +10,6 @@ import type {
   NotificationReadAllResponse,
   NotificationDeleteRequest,
   NotificationDeleteResponse,
-  UserPreferences,
   PaginationParams,
 } from '@/types/user-management';
 
@@ -130,41 +129,6 @@ export const notificationsApi = {
   },
 
   /**
-   * Get current user's notification preferences
-   * Requires: user:read scope
-   */
-  async getNotificationPreferences(): Promise<UserPreferences> {
-    try {
-      const response = await userManagementClient.get(
-        '/notifications/preferences'
-      );
-      return response.data as UserPreferences;
-    } catch (error) {
-      handleUserManagementApiError(error);
-      throw error; // This line should never be reached since handleUserManagementApiError throws
-    }
-  },
-
-  /**
-   * Update current user's notification preferences
-   * Requires: user:write scope
-   */
-  async updateNotificationPreferences(
-    preferences: UserPreferences
-  ): Promise<UserPreferences> {
-    try {
-      const response = await userManagementClient.put(
-        '/notifications/preferences',
-        preferences
-      );
-      return response.data as UserPreferences;
-    } catch (error) {
-      handleUserManagementApiError(error);
-      throw error; // This line should never be reached since handleUserManagementApiError throws
-    }
-  },
-
-  /**
    * Get all notifications (read and unread)
    * Convenience method to get all notifications without filtering
    * Requires: user:read scope
@@ -235,41 +199,6 @@ export const notificationsApi = {
 
       // Delete them
       return await this.deleteNotifications(notificationIds);
-    } catch (error) {
-      handleUserManagementApiError(error);
-      throw error; // This line should never be reached since handleUserManagementApiError throws
-    }
-  },
-
-  /**
-   * Enable/disable specific notification types
-   * Helper method to update specific notification preferences
-   * Requires: user:write scope
-   */
-  async updateNotificationTypeSettings(updates: {
-    email_notifications?: boolean;
-    push_notifications?: boolean;
-    follow_notifications?: boolean;
-    like_notifications?: boolean;
-    comment_notifications?: boolean;
-    recipe_notifications?: boolean;
-    system_notifications?: boolean;
-  }): Promise<UserPreferences> {
-    try {
-      // Get current preferences
-      const currentPrefs = await this.getNotificationPreferences();
-
-      // Merge updates with current preferences
-      const updatedPrefs: UserPreferences = {
-        ...currentPrefs,
-        notification_preferences: {
-          ...currentPrefs.notification_preferences,
-          ...updates,
-        },
-      };
-
-      // Update preferences
-      return await this.updateNotificationPreferences(updatedPrefs);
     } catch (error) {
       handleUserManagementApiError(error);
       throw error; // This line should never be reached since handleUserManagementApiError throws

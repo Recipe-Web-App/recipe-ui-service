@@ -38,20 +38,7 @@ export {
   useClearReadNotifications,
 } from './useNotifications';
 
-// Legacy User Preferences Hooks (kept for backward compatibility)
-export {
-  useUserPreferences as useLegacyUserPreferences,
-  useNotificationPreferences as useLegacyNotificationPreferences,
-  useDisplayPreferences as useLegacyDisplayPreferences,
-  usePrivacyPreferences as useLegacyPrivacyPreferences,
-  useUpdateUserPreferences as useLegacyUpdateUserPreferences,
-  useUpdateNotificationPreferences as useLegacyUpdateNotificationPreferences,
-  useToggleNotificationSetting,
-  useUpdateDisplayPreferences as useLegacyUpdateDisplayPreferences,
-  useUpdatePrivacyPreferences as useLegacyUpdatePrivacyPreferences,
-} from './useUserPreferences';
-
-// New Preferences Hooks - 9 category system per OpenAPI spec
+// Preferences Hooks - 9 category system per OpenAPI spec
 export {
   useUserPreferences,
   useCurrentUserPreferences,
@@ -108,8 +95,6 @@ export type {
   NotificationReadResponse,
   NotificationReadAllResponse,
   NotificationDeleteResponse,
-  UserPreferences,
-  NotificationPreferences,
   HealthCheckResponse,
   ComprehensiveHealthResponse,
   ReadinessResponse,

@@ -31,12 +31,6 @@ export type {
   UserAccountDeleteRequest,
   UserAccountDeleteRequestResponse,
   UserConfirmAccountDeleteResponse,
-  UserPreferences,
-  NotificationPreferences,
-  PrivacyPreferences,
-  DisplayPreferences,
-  UserPreferenceResponse,
-  UpdateUserPreferenceRequest,
 } from './user';
 
 // Social Features - Following System & Activity
@@ -92,6 +86,17 @@ export type {
 
 // Preferences - New 9-category preference system per OpenAPI spec
 export type {
+  // Base preference types (NEW schema with camelCase properties)
+  NotificationPreferences,
+  DisplayPreferences,
+  PrivacyPreferences,
+  AccessibilityPreferences,
+  LanguagePreferences,
+  SecurityPreferences,
+  SocialPreferences,
+  SoundPreferences,
+  ThemePreferences,
+  // Response and Update types
   UserPreferencesResponse,
   UserPreferencesUpdateRequest,
   PreferenceCategoryResponse,

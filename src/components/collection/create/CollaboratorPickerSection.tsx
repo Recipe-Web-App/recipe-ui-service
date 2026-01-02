@@ -68,7 +68,7 @@ export function CollaboratorPickerSection({
     data: searchResponse,
     isLoading: isSearchLoading,
     error: searchError,
-  } = useSearchUsers(submittedQuery, { page: 0, size: 10 });
+  } = useSearchUsers(submittedQuery, { limit: 10, offset: 0 });
 
   // Fetch suggested users when no search has been performed
   const {
