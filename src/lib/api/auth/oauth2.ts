@@ -11,6 +11,11 @@ import type {
   RevokeRequest,
   UserInfo,
   OAuthDiscovery,
+  ClientRegistrationRequest,
+  ClientRegistrationResponse,
+  ClientDetails,
+  ClientSecretRotationRequest,
+  ClientSecretRotationResponse,
 } from '@/types/auth';
 
 export const oauth2Api = {
@@ -161,7 +166,89 @@ export const oauth2Api = {
       return response.data as UserInfo;
     } catch (error) {
       handleAuthApiError(error);
-      throw error; // This line should never be reached since handleAuthApiError throws
+      throw error;
+    }
+  },
+
+  async getUserInfoPost(accessToken?: string): Promise<UserInfo> {
+    try {
+      const data = accessToken ? { access_token: accessToken } : {};
+      const response = await authClient.post('/oauth2/userinfo', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        transformRequest: [
+          function (data) {
+            return new URLSearchParams(data).toString();
+          },
+        ],
+      });
+      return response.data as UserInfo;
+    } catch (error) {
+      handleAuthApiError(error);
+      throw error;
+    }
+  },
+
+  async authorizePost(params: AuthorizeParams): Promise<void> {
+    try {
+      await authClient.post('/oauth2/authorize', params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        transformRequest: [
+          function (data) {
+            const searchParams = new URLSearchParams();
+            Object.entries(data).forEach(([key, value]) => {
+              if (value) searchParams.append(key, value as string);
+            });
+            return searchParams.toString();
+          },
+        ],
+        maxRedirects: 0,
+        validateStatus: status => status >= 200 && status < 400,
+      });
+    } catch (error) {
+      handleAuthApiError(error);
+      throw error;
+    }
+  },
+
+  async registerClient(
+    data: ClientRegistrationRequest
+  ): Promise<ClientRegistrationResponse> {
+    try {
+      const response = await authClient.post('/oauth/clients', data);
+      return response.data as ClientRegistrationResponse;
+    } catch (error) {
+      handleAuthApiError(error);
+      throw error;
+    }
+  },
+
+  async getClient(clientId: string): Promise<ClientDetails> {
+    try {
+      const response = await authClient.get(`/oauth/clients/${clientId}`);
+      return response.data as ClientDetails;
+    } catch (error) {
+      handleAuthApiError(error);
+      throw error;
+    }
+  },
+
+  async rotateClientSecret(
+    clientId: string,
+    data: ClientSecretRotationRequest
+  ): Promise<ClientSecretRotationResponse> {
+    try {
+      const response = await authClient.put(
+        `/oauth/clients/${clientId}/secret`,
+        data
+      );
+      return response.data as ClientSecretRotationResponse;
+    } catch (error) {
+      handleAuthApiError(error);
+      throw error;
     }
   },
 };
