@@ -10,7 +10,6 @@ export {
 // User management APIs
 export * from './users';
 export * from './social';
-export * from './notifications';
 export * from './admin';
 export * from './metrics';
 export * from './health';
@@ -40,15 +39,6 @@ export type {
   GetFollowedUsersResponse,
   UserActivityResponse,
   UserActivityParams,
-
-  // Notification types (kept for now per user request)
-  Notification,
-  NotificationListResponse,
-  NotificationCountResponse,
-  NotificationReadResponse,
-  NotificationReadAllResponse,
-  NotificationDeleteRequest,
-  NotificationDeleteResponse,
 
   // Admin types - Updated per OpenAPI spec
   UserStatsResponse,

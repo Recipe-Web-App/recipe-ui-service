@@ -17,7 +17,7 @@ import {
   DEFAULT_TYPE_MAPPING,
   type NotificationDisplayType,
 } from '@/types/ui/notification';
-import type { Notification } from '@/types/user-management/notifications';
+import type { UserNotification } from '@/types/notification';
 
 /**
  * Format a date string to relative time (e.g., "2 hours ago")
@@ -56,24 +56,24 @@ function formatRelativeTime(dateString: string): string {
 }
 
 /**
- * Map notification type string to display type for styling
+ * Map notification category to display type for styling
  */
-function mapNotificationType(type: string): NotificationDisplayType {
-  const lowerType = type.toLowerCase();
+function mapNotificationCategory(category: string): NotificationDisplayType {
+  const lowerCategory = category.toLowerCase();
   // eslint-disable-next-line security/detect-object-injection
-  return DEFAULT_TYPE_MAPPING[lowerType] ?? 'default';
+  return DEFAULT_TYPE_MAPPING[lowerCategory] ?? 'default';
 }
 
 export interface NotificationItemProps {
   /**
    * The notification data from the API
    */
-  notification: Notification;
+  notification: UserNotification;
 
   /**
    * Callback when notification is clicked
    */
-  onClick?: (notification: Notification) => void;
+  onClick?: (notification: UserNotification) => void;
 
   /**
    * Callback when mark as read is clicked
@@ -131,7 +131,9 @@ export const NotificationItem = React.forwardRef<
     },
     ref
   ) => {
-    const displayType = mapNotificationType(notification.notificationType);
+    const displayType = mapNotificationCategory(
+      notification.notificationCategory
+    );
     const relativeTime = formatRelativeTime(notification.createdAt);
 
     const handleClick = () => {

@@ -6,6 +6,7 @@ import {
 } from '@/hooks/notification/useNotificationStatus';
 import { managementApi } from '@/lib/api/notification';
 import {
+  NotificationCategory,
   NotificationStatus,
   NotificationType,
   type NotificationDetail,
@@ -41,19 +42,36 @@ describe('useNotificationStatus hook', () => {
   describe('useNotificationStatus', () => {
     it('should fetch notification status with default includeMessage', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440111',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440001',
-        recipient_email: 'john.doe@example.com',
-        subject: 'Recipe Shared',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.SENT,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:30:00Z',
-        queued_at: '2025-10-28T14:30:01Z',
-        sent_at: '2025-10-28T14:30:15Z',
-        failed_at: null,
+        notificationId: '770e8400-e29b-41d4-a716-446655440111',
+        userId: '550e8400-e29b-41d4-a716-446655440001',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:30:00Z',
+        updatedAt: '2025-10-28T14:30:15Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'John Doe',
+        },
+        title: 'Recipe Shared',
+        message: 'John Doe shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'john.doe@example.com',
+            createdAt: '2025-10-28T14:30:00Z',
+            updatedAt: '2025-10-28T14:30:15Z',
+            queuedAt: '2025-10-28T14:30:01Z',
+            sentAt: '2025-10-28T14:30:15Z',
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -79,20 +97,36 @@ describe('useNotificationStatus hook', () => {
 
     it('should fetch notification status with message included', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440111',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440001',
-        recipient_email: 'john.doe@example.com',
-        subject: 'Recipe Shared',
+        notificationId: '770e8400-e29b-41d4-a716-446655440111',
+        userId: '550e8400-e29b-41d4-a716-446655440001',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:30:00Z',
+        updatedAt: '2025-10-28T14:30:15Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'John Doe',
+        },
+        title: 'Recipe Shared',
         message: 'Full HTML email content here...',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.SENT,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:30:00Z',
-        queued_at: '2025-10-28T14:30:01Z',
-        sent_at: '2025-10-28T14:30:15Z',
-        failed_at: null,
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'john.doe@example.com',
+            createdAt: '2025-10-28T14:30:00Z',
+            updatedAt: '2025-10-28T14:30:15Z',
+            queuedAt: '2025-10-28T14:30:01Z',
+            sentAt: '2025-10-28T14:30:15Z',
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -128,19 +162,36 @@ describe('useNotificationStatus hook', () => {
 
     it('should handle notification with pending status', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440112',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440002',
-        recipient_email: 'jane.smith@example.com',
-        subject: 'Recipe Shared',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.PENDING,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:35:00Z',
-        queued_at: null,
-        sent_at: null,
-        failed_at: null,
+        notificationId: '770e8400-e29b-41d4-a716-446655440112',
+        userId: '550e8400-e29b-41d4-a716-446655440002',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:35:00Z',
+        updatedAt: '2025-10-28T14:35:00Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'Jane Smith',
+        },
+        title: 'Recipe Shared',
+        message: 'Jane Smith shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.PENDING,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'jane.smith@example.com',
+            createdAt: '2025-10-28T14:35:00Z',
+            updatedAt: '2025-10-28T14:35:00Z',
+            queuedAt: null,
+            sentAt: null,
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -156,26 +207,45 @@ describe('useNotificationStatus hook', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(result.current.data?.status).toBe(NotificationStatus.PENDING);
-      expect(result.current.data?.queued_at).toBeNull();
-      expect(result.current.data?.sent_at).toBeNull();
+      expect(result.current.data?.deliveryStatuses[0].status).toBe(
+        NotificationStatus.PENDING
+      );
+      expect(result.current.data?.deliveryStatuses[0].queuedAt).toBeNull();
+      expect(result.current.data?.deliveryStatuses[0].sentAt).toBeNull();
     });
 
     it('should handle notification with queued status', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440113',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440003',
-        recipient_email: 'user@example.com',
-        subject: 'Recipe Shared',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.QUEUED,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:40:00Z',
-        queued_at: '2025-10-28T14:40:01Z',
-        sent_at: null,
-        failed_at: null,
+        notificationId: '770e8400-e29b-41d4-a716-446655440113',
+        userId: '550e8400-e29b-41d4-a716-446655440003',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:40:00Z',
+        updatedAt: '2025-10-28T14:40:01Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'User',
+        },
+        title: 'Recipe Shared',
+        message: 'User shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.QUEUED,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'user@example.com',
+            createdAt: '2025-10-28T14:40:00Z',
+            updatedAt: '2025-10-28T14:40:01Z',
+            queuedAt: '2025-10-28T14:40:01Z',
+            sentAt: null,
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -191,26 +261,45 @@ describe('useNotificationStatus hook', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(result.current.data?.status).toBe(NotificationStatus.QUEUED);
-      expect(result.current.data?.queued_at).toBeDefined();
-      expect(result.current.data?.sent_at).toBeNull();
+      expect(result.current.data?.deliveryStatuses[0].status).toBe(
+        NotificationStatus.QUEUED
+      );
+      expect(result.current.data?.deliveryStatuses[0].queuedAt).toBeDefined();
+      expect(result.current.data?.deliveryStatuses[0].sentAt).toBeNull();
     });
 
     it('should handle notification with failed status', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440114',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440004',
-        recipient_email: 'invalid@example.com',
-        subject: 'Recipe Shared',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.FAILED,
-        error_message: 'SMTP connection failed',
-        retry_count: 3,
-        max_retries: 3,
-        created_at: '2025-10-28T14:45:00Z',
-        queued_at: '2025-10-28T14:45:01Z',
-        sent_at: null,
-        failed_at: '2025-10-28T14:45:30Z',
+        notificationId: '770e8400-e29b-41d4-a716-446655440114',
+        userId: '550e8400-e29b-41d4-a716-446655440004',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:45:00Z',
+        updatedAt: '2025-10-28T14:45:30Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'User',
+        },
+        title: 'Recipe Shared',
+        message: 'User shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.FAILED,
+            retryCount: 3,
+            errorMessage: 'SMTP connection failed',
+            recipientEmail: 'invalid@example.com',
+            createdAt: '2025-10-28T14:45:00Z',
+            updatedAt: '2025-10-28T14:45:30Z',
+            queuedAt: '2025-10-28T14:45:01Z',
+            sentAt: null,
+            failedAt: '2025-10-28T14:45:30Z',
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -226,10 +315,81 @@ describe('useNotificationStatus hook', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(result.current.data?.status).toBe(NotificationStatus.FAILED);
-      expect(result.current.data?.error_message).toBe('SMTP connection failed');
-      expect(result.current.data?.retry_count).toBe(3);
-      expect(result.current.data?.failed_at).toBeDefined();
+      expect(result.current.data?.deliveryStatuses[0].status).toBe(
+        NotificationStatus.FAILED
+      );
+      expect(result.current.data?.deliveryStatuses[0].errorMessage).toBe(
+        'SMTP connection failed'
+      );
+      expect(result.current.data?.deliveryStatuses[0].retryCount).toBe(3);
+      expect(result.current.data?.deliveryStatuses[0].failedAt).toBeDefined();
+    });
+
+    it('should handle notification with multiple delivery channels', async () => {
+      const mockNotification: NotificationDetail = {
+        notificationId: '770e8400-e29b-41d4-a716-446655440115',
+        userId: '550e8400-e29b-41d4-a716-446655440005',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:50:00Z',
+        updatedAt: '2025-10-28T14:50:15Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'User',
+        },
+        title: 'Recipe Shared',
+        message: 'User shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'user@example.com',
+            createdAt: '2025-10-28T14:50:00Z',
+            updatedAt: '2025-10-28T14:50:15Z',
+            queuedAt: '2025-10-28T14:50:01Z',
+            sentAt: '2025-10-28T14:50:15Z',
+            failedAt: null,
+          },
+          {
+            notificationType: NotificationType.IN_APP,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            createdAt: '2025-10-28T14:50:00Z',
+            updatedAt: '2025-10-28T14:50:02Z',
+            queuedAt: '2025-10-28T14:50:01Z',
+            sentAt: '2025-10-28T14:50:02Z',
+            failedAt: null,
+          },
+        ],
+      };
+
+      mockedManagementApi.getNotificationById.mockResolvedValue(
+        mockNotification
+      );
+
+      const { result } = renderHook(
+        () => useNotificationStatus('770e8400-e29b-41d4-a716-446655440115'),
+        {
+          wrapper: createWrapper(),
+        }
+      );
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+      expect(result.current.data?.deliveryStatuses).toHaveLength(2);
+      expect(result.current.data?.deliveryStatuses[0].notificationType).toBe(
+        NotificationType.EMAIL
+      );
+      expect(result.current.data?.deliveryStatuses[1].notificationType).toBe(
+        NotificationType.IN_APP
+      );
     });
 
     it('should handle 404 not found error', async () => {
@@ -286,19 +446,36 @@ describe('useNotificationStatus hook', () => {
   describe('useNotificationStatusOnce', () => {
     it('should fetch notification status once without polling', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440111',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440001',
-        recipient_email: 'john.doe@example.com',
-        subject: 'Recipe Shared',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.SENT,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:30:00Z',
-        queued_at: '2025-10-28T14:30:01Z',
-        sent_at: '2025-10-28T14:30:15Z',
-        failed_at: null,
+        notificationId: '770e8400-e29b-41d4-a716-446655440111',
+        userId: '550e8400-e29b-41d4-a716-446655440001',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:30:00Z',
+        updatedAt: '2025-10-28T14:30:15Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'John Doe',
+        },
+        title: 'Recipe Shared',
+        message: 'John Doe shared a recipe with you',
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'john.doe@example.com',
+            createdAt: '2025-10-28T14:30:00Z',
+            updatedAt: '2025-10-28T14:30:15Z',
+            queuedAt: '2025-10-28T14:30:01Z',
+            sentAt: '2025-10-28T14:30:15Z',
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(
@@ -339,20 +516,36 @@ describe('useNotificationStatus hook', () => {
 
     it('should fetch with message included', async () => {
       const mockNotification: NotificationDetail = {
-        notification_id: '770e8400-e29b-41d4-a716-446655440111',
-        recipient_id: '550e8400-e29b-41d4-a716-446655440001',
-        recipient_email: 'john.doe@example.com',
-        subject: 'Recipe Shared',
+        notificationId: '770e8400-e29b-41d4-a716-446655440111',
+        userId: '550e8400-e29b-41d4-a716-446655440001',
+        notificationCategory: NotificationCategory.RECIPE_SHARED,
+        isRead: false,
+        isDeleted: false,
+        createdAt: '2025-10-28T14:30:00Z',
+        updatedAt: '2025-10-28T14:30:15Z',
+        notificationData: {
+          templateVersion: '1.0',
+          recipeId: 123,
+          recipeTitle: 'Test Recipe',
+          actorId: 'user-2',
+          actorName: 'John Doe',
+        },
+        title: 'Recipe Shared',
         message: 'Full HTML content',
-        notification_type: NotificationType.EMAIL,
-        status: NotificationStatus.SENT,
-        error_message: '',
-        retry_count: 0,
-        max_retries: 3,
-        created_at: '2025-10-28T14:30:00Z',
-        queued_at: '2025-10-28T14:30:01Z',
-        sent_at: '2025-10-28T14:30:15Z',
-        failed_at: null,
+        deliveryStatuses: [
+          {
+            notificationType: NotificationType.EMAIL,
+            status: NotificationStatus.SENT,
+            retryCount: 0,
+            errorMessage: null,
+            recipientEmail: 'john.doe@example.com',
+            createdAt: '2025-10-28T14:30:00Z',
+            updatedAt: '2025-10-28T14:30:15Z',
+            queuedAt: '2025-10-28T14:30:01Z',
+            sentAt: '2025-10-28T14:30:15Z',
+            failedAt: null,
+          },
+        ],
       };
 
       mockedManagementApi.getNotificationById.mockResolvedValue(

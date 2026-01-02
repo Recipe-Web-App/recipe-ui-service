@@ -12,14 +12,14 @@ import {
 } from '@/components/ui/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
 import { NotificationItem } from './NotificationItem';
-import type { Notification } from '@/types/user-management/notifications';
+import type { UserNotification } from '@/types/notification';
 import type { NotificationFilter } from '@/types/ui/notification';
 
 export interface NotificationListProps {
   /**
    * Array of notifications to display
    */
-  notifications: Notification[];
+  notifications: UserNotification[];
 
   /**
    * Whether notifications are being loaded
@@ -35,7 +35,7 @@ export interface NotificationListProps {
   /**
    * Callback when a notification is clicked
    */
-  onNotificationClick?: (notification: Notification) => void;
+  onNotificationClick?: (notification: UserNotification) => void;
 
   /**
    * Callback when mark as read is clicked

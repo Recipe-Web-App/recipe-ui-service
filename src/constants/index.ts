@@ -47,8 +47,6 @@ export const QUERY_KEYS = {
     USERS: ['userManagement', 'users'],
     FOLLOWING: ['userManagement', 'following'],
     FOLLOWERS: ['userManagement', 'followers'],
-    NOTIFICATIONS: ['userManagement', 'notifications'],
-    UNREAD_COUNT: ['userManagement', 'unreadCount'],
     PREFERENCES: ['userManagement', 'preferences'],
     ACTIVITY: ['userManagement', 'activity'],
     HEALTH: ['userManagement', 'health'],
@@ -191,9 +189,24 @@ export const QUERY_KEYS = {
     STEP_MEDIA: ['mediaManagement', 'stepMedia'],
   },
   NOTIFICATION: {
-    // Notification operations
+    // Notification detail
     NOTIFICATION: ['notification', 'notification'],
-    SHARE: ['notification', 'share'],
+
+    // User notifications (inbox)
+    MY_NOTIFICATIONS: ['notification', 'myNotifications'],
+    UNREAD_NOTIFICATIONS: ['notification', 'unreadNotifications'],
+    UNREAD_COUNT: ['notification', 'unreadCount'],
+    HAS_NEW: ['notification', 'hasNew'],
+    USER_NOTIFICATIONS: ['notification', 'userNotifications'],
+
+    // Admin
+    STATS: ['notification', 'stats'],
+    RETRY_STATUS: ['notification', 'retryStatus'],
+    TEMPLATES: ['notification', 'templates'],
+
+    // Health
+    READINESS: ['notification', 'readiness'],
+    LIVENESS: ['notification', 'liveness'],
   },
 } as const;
 

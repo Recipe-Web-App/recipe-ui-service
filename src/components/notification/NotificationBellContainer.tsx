@@ -8,11 +8,11 @@ import {
   useMarkNotificationAsRead,
   useMarkAllNotificationsAsRead,
   useDeleteNotification,
-} from '@/hooks/user-management/useNotifications';
+} from '@/hooks/notification';
 import { useToastStore } from '@/stores/ui/toast-store';
 import { NotificationBell } from './NotificationBell';
 import { NotificationPanel } from './NotificationPanel';
-import type { Notification } from '@/types/user-management/notifications';
+import type { UserNotification } from '@/types/notification';
 
 export interface NotificationBellContainerProps {
   /**
@@ -121,7 +121,7 @@ export const NotificationBellContainer: React.FC<
     }
   };
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (notification: UserNotification) => {
     // Mark as read if unread
     if (!notification.isRead) {
       markAsRead(notification.notificationId);
