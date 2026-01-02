@@ -41,6 +41,9 @@ export const QUERY_KEYS = {
     HEALTH: ['auth', 'health'],
     READINESS: ['auth', 'readiness'],
     LIVENESS: ['auth', 'liveness'],
+    CLIENT: ['auth', 'client'],
+    CLIENTS: ['auth', 'clients'],
+    SESSION_STATS: ['auth', 'sessionStats'],
   },
   USER_MANAGEMENT: {
     USER: ['userManagement', 'user'],

@@ -28,10 +28,16 @@ describe('Health API', () => {
       const mockResponse: HealthResponse = {
         status: 'healthy',
         timestamp: '2023-01-01T12:00:00Z',
-        checks: {
-          redis: 'up',
-        },
         version: '1.0.0',
+        uptime: '2h15m30s',
+        components: {
+          redis: {
+            status: 'healthy',
+            message: 'Redis is healthy',
+            last_checked: '2023-01-01T12:00:00Z',
+            response_time: '2ms',
+          },
+        },
       };
 
       mockedAuthClient.get.mockResolvedValue({ data: mockResponse });
@@ -46,8 +52,12 @@ describe('Health API', () => {
       const mockResponse: HealthResponse = {
         status: 'unhealthy',
         timestamp: '2023-01-01T12:00:00Z',
-        checks: {
-          redis: 'down',
+        components: {
+          redis: {
+            status: 'unhealthy',
+            message: 'Redis connection failed',
+            last_checked: '2023-01-01T12:00:00Z',
+          },
         },
       };
 

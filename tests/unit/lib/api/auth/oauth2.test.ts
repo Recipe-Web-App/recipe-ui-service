@@ -7,6 +7,12 @@ import type {
   AuthorizationCodeRequest,
   ClientCredentialsRequest,
   RefreshTokenRequest,
+  ClientRegistrationRequest,
+  ClientRegistrationResponse,
+  ClientDetails,
+  ClientSecretRotationRequest,
+  ClientSecretRotationResponse,
+  UserInfo,
 } from '@/types/auth';
 import { AxiosHeaders } from 'axios';
 
@@ -15,6 +21,7 @@ jest.mock('@/lib/api/auth/client', () => ({
   authClient: {
     get: jest.fn(),
     post: jest.fn(),
+    put: jest.fn(),
     defaults: { baseURL: 'http://localhost:8080/api/v1/auth' },
   },
   handleAuthApiError: jest.fn().mockImplementation(error => {
@@ -552,6 +559,284 @@ describe('OAuth2 API', () => {
       expect(transformedData).toBe(
         'grant_type=refresh_token&refresh_token=refresh-token'
       );
+    });
+
+    it('should transform request data for getUserInfoPost endpoint', async () => {
+      const mockUserInfo = {
+        sub: 'user123',
+        email: 'user@example.com',
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: mockUserInfo };
+      });
+
+      await oauth2Api.getUserInfoPost('test-token');
+
+      expect(transformedData).toBe('access_token=test-token');
+    });
+
+    it('should transform request data for authorizePost endpoint', async () => {
+      const params = {
+        response_type: 'code' as const,
+        client_id: 'test-client',
+        redirect_uri: 'http://localhost:3000/callback',
+        code_challenge: 'test-challenge',
+        code_challenge_method: 'S256' as const,
+      };
+
+      let transformedData: string | undefined;
+      mockedAuthClient.post.mockImplementation(async (_url, data, config) => {
+        if (
+          config?.transformRequest &&
+          Array.isArray(config.transformRequest)
+        ) {
+          transformedData = config.transformRequest[0].call(
+            { headers: new AxiosHeaders() } as any,
+            data,
+            new AxiosHeaders()
+          );
+        }
+        return { data: {} };
+      });
+
+      await oauth2Api.authorizePost(params);
+
+      expect(transformedData).toContain('response_type=code');
+      expect(transformedData).toContain('client_id=test-client');
+      expect(transformedData).toContain(
+        'redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback'
+      );
+      expect(transformedData).toContain('code_challenge=test-challenge');
+      expect(transformedData).toContain('code_challenge_method=S256');
+    });
+  });
+
+  describe('getUserInfoPost', () => {
+    it('should get user info via POST with access token', async () => {
+      const mockUserInfo: UserInfo = {
+        sub: 'user123',
+        email: 'user@example.com',
+        name: 'Test User',
+      };
+
+      mockedAuthClient.post.mockResolvedValue({ data: mockUserInfo });
+
+      const result = await oauth2Api.getUserInfoPost('test-access-token');
+
+      expect(mockedAuthClient.post).toHaveBeenCalledWith(
+        '/oauth2/userinfo',
+        { access_token: 'test-access-token' },
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          transformRequest: expect.any(Array),
+        }
+      );
+      expect(result).toEqual(mockUserInfo);
+    });
+
+    it('should get user info via POST without access token', async () => {
+      const mockUserInfo: UserInfo = {
+        sub: 'user123',
+        email: 'user@example.com',
+      };
+
+      mockedAuthClient.post.mockResolvedValue({ data: mockUserInfo });
+
+      const result = await oauth2Api.getUserInfoPost();
+
+      expect(mockedAuthClient.post).toHaveBeenCalledWith(
+        '/oauth2/userinfo',
+        {},
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          transformRequest: expect.any(Array),
+        }
+      );
+      expect(result).toEqual(mockUserInfo);
+    });
+
+    it('should handle user info POST error', async () => {
+      const error = new Error('Unauthorized');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(oauth2Api.getUserInfoPost('bad-token')).rejects.toThrow(
+        'Unauthorized'
+      );
+    });
+  });
+
+  describe('authorizePost', () => {
+    it('should send authorization request via POST', async () => {
+      const params = {
+        response_type: 'code' as const,
+        client_id: 'test-client',
+        redirect_uri: 'http://localhost:3000/callback',
+        scope: 'openid profile',
+        state: 'test-state',
+        code_challenge: 'test-challenge',
+        code_challenge_method: 'S256' as const,
+      };
+
+      mockedAuthClient.post.mockResolvedValue({});
+
+      await oauth2Api.authorizePost(params);
+
+      expect(mockedAuthClient.post).toHaveBeenCalledWith(
+        '/oauth2/authorize',
+        params,
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          transformRequest: expect.any(Array),
+          maxRedirects: 0,
+          validateStatus: expect.any(Function),
+        }
+      );
+    });
+
+    it('should handle authorize POST error', async () => {
+      const params = {
+        response_type: 'code' as const,
+        client_id: 'invalid-client',
+        redirect_uri: 'http://localhost:3000/callback',
+        code_challenge: 'test-challenge',
+      };
+
+      const error = new Error('Invalid client');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(oauth2Api.authorizePost(params)).rejects.toThrow(
+        'Invalid client'
+      );
+    });
+  });
+
+  describe('registerClient', () => {
+    it('should register a new OAuth2 client', async () => {
+      const request: ClientRegistrationRequest = {
+        name: 'Test App',
+        redirect_uris: ['http://localhost:3000/callback'],
+        scopes: ['openid', 'profile'],
+        grant_types: ['authorization_code', 'refresh_token'],
+      };
+
+      const mockResponse: ClientRegistrationResponse = {
+        client_id: 'new-client-id',
+        client_secret: 'new-client-secret', // pragma: allowlist secret
+        name: 'Test App',
+        redirect_uris: ['http://localhost:3000/callback'],
+        scopes: ['openid', 'profile'],
+        grant_types: ['authorization_code', 'refresh_token'],
+      };
+
+      mockedAuthClient.post.mockResolvedValue({ data: mockResponse });
+
+      const result = await oauth2Api.registerClient(request);
+
+      expect(mockedAuthClient.post).toHaveBeenCalledWith(
+        '/oauth/clients',
+        request
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle client registration error', async () => {
+      const request: ClientRegistrationRequest = {
+        name: 'Test App',
+        redirect_uris: ['http://localhost:3000/callback'],
+      };
+
+      const error = new Error('Registration failed');
+      mockedAuthClient.post.mockRejectedValue(error);
+
+      await expect(oauth2Api.registerClient(request)).rejects.toThrow(
+        'Registration failed'
+      );
+    });
+  });
+
+  describe('getClient', () => {
+    it('should get OAuth2 client details', async () => {
+      const mockClient: ClientDetails = {
+        client_id: 'test-client-id',
+        name: 'Test App',
+        redirect_uris: ['http://localhost:3000/callback'],
+        scopes: ['openid', 'profile'],
+        grant_types: ['authorization_code'],
+        is_active: true,
+        created_at: '2023-01-01T00:00:00Z',
+        updated_at: '2023-01-01T00:00:00Z',
+      };
+
+      mockedAuthClient.get.mockResolvedValue({ data: mockClient });
+
+      const result = await oauth2Api.getClient('test-client-id');
+
+      expect(mockedAuthClient.get).toHaveBeenCalledWith(
+        '/oauth/clients/test-client-id'
+      );
+      expect(result).toEqual(mockClient);
+    });
+
+    it('should handle get client error', async () => {
+      const error = new Error('Client not found');
+      mockedAuthClient.get.mockRejectedValue(error);
+
+      await expect(oauth2Api.getClient('unknown-client')).rejects.toThrow(
+        'Client not found'
+      );
+    });
+  });
+
+  describe('rotateClientSecret', () => {
+    it('should rotate OAuth2 client secret', async () => {
+      const request: ClientSecretRotationRequest = {
+        current_secret: 'old-secret', // pragma: allowlist secret
+      };
+
+      const mockResponse: ClientSecretRotationResponse = {
+        client_id: 'test-client-id',
+        new_secret: 'new-generated-secret', // pragma: allowlist secret
+        message:
+          'Client secret rotated successfully. Store this secret securely - it will not be shown again.',
+      };
+
+      mockedAuthClient.put.mockResolvedValue({ data: mockResponse });
+
+      const result = await oauth2Api.rotateClientSecret(
+        'test-client-id',
+        request
+      );
+
+      expect(mockedAuthClient.put).toHaveBeenCalledWith(
+        '/oauth/clients/test-client-id/secret',
+        request
+      );
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle rotate client secret error', async () => {
+      const request: ClientSecretRotationRequest = {
+        current_secret: 'wrong-secret', // pragma: allowlist secret
+      };
+
+      const error = new Error('Invalid credentials');
+      mockedAuthClient.put.mockRejectedValue(error);
+
+      await expect(
+        oauth2Api.rotateClientSecret('test-client-id', request)
+      ).rejects.toThrow('Invalid credentials');
     });
   });
 });
