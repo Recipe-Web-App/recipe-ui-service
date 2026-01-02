@@ -46,105 +46,11 @@ export const useFollowers = (
 };
 
 /**
- * Hook to get current user's following list
- */
-export const useCurrentUserFollowing = (limit?: number, offset?: number) => {
-  return useQuery({
-    queryKey: [
-      ...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING,
-      'current',
-      { limit, offset },
-    ],
-    queryFn: () => socialApi.getCurrentUserFollowing({ limit, offset }),
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-/**
- * Hook to get current user's followers list
- */
-export const useCurrentUserFollowers = (limit?: number, offset?: number) => {
-  return useQuery({
-    queryKey: [
-      ...QUERY_KEYS.USER_MANAGEMENT.FOLLOWERS,
-      'current',
-      { limit, offset },
-    ],
-    queryFn: () => socialApi.getCurrentUserFollowers({ limit, offset }),
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    gcTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-/**
  * Hook to follow a user
+ * Updated: Now requires both userId and targetUserId per OpenAPI spec (no /me endpoint)
+ * Uses POST instead of PUT toggle
  */
 export const useFollowUser = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (targetUserId: string) => socialApi.followUser(targetUserId),
-    onSuccess: (_, targetUserId) => {
-      // Invalidate following lists
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING],
-      });
-
-      // Invalidate followers list for the target user
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWERS, targetUserId],
-      });
-
-      // Invalidate mutual follows
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS, targetUserId],
-      });
-
-      // Invalidate follow stats
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS,
-      });
-    },
-  });
-};
-
-/**
- * Hook to unfollow a user
- */
-export const useUnfollowUser = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (targetUserId: string) => socialApi.unfollowUser(targetUserId),
-    onSuccess: (_, targetUserId) => {
-      // Invalidate following lists
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING],
-      });
-
-      // Invalidate followers list for the target user
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWERS, targetUserId],
-      });
-
-      // Invalidate mutual follows
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS, targetUserId],
-      });
-
-      // Invalidate follow stats
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS,
-      });
-    },
-  });
-};
-
-/**
- * Hook to toggle follow status for a user
- */
-export const useToggleFollowUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -154,22 +60,11 @@ export const useToggleFollowUser = () => {
     }: {
       userId: string;
       targetUserId: string;
-    }) => socialApi.toggleFollowUser(userId, targetUserId),
-    onMutate: async ({ targetUserId }) => {
-      // Cancel outgoing refetches
-      await queryClient.cancelQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING],
-      });
-
-      // Optimistically update the cache (if needed)
-      // This would require knowing the current follow state
-
-      return { targetUserId };
-    },
-    onSuccess: (_, { targetUserId }) => {
-      // Invalidate following lists
+    }) => socialApi.followUser(userId, targetUserId),
+    onSuccess: (_, { userId, targetUserId }) => {
+      // Invalidate following lists for the user
       queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING],
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING, userId],
       });
 
       // Invalidate followers list for the target user
@@ -179,38 +74,115 @@ export const useToggleFollowUser = () => {
 
       // Invalidate mutual follows
       queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS, targetUserId],
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS],
       });
 
-      // Invalidate follow stats
+      // Invalidate follow stats for both users
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS,
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS, targetUserId],
+      });
+
+      // Invalidate isFollowing check
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING,
+          'check',
+          userId,
+          targetUserId,
+        ],
       });
     },
   });
 };
 
 /**
- * Hook to check if the current user is following a target user
+ * Hook to unfollow a user
+ * Updated: Now requires both userId and targetUserId per OpenAPI spec (no /me endpoint)
+ * Uses DELETE instead of PUT toggle
  */
-export const useIsFollowing = (targetUserId: string) => {
+export const useUnfollowUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      userId,
+      targetUserId,
+    }: {
+      userId: string;
+      targetUserId: string;
+    }) => socialApi.unfollowUser(userId, targetUserId),
+    onSuccess: (_, { userId, targetUserId }) => {
+      // Invalidate following lists for the user
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING, userId],
+      });
+
+      // Invalidate followers list for the target user
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWERS, targetUserId],
+      });
+
+      // Invalidate mutual follows
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS],
+      });
+
+      // Invalidate follow stats for both users
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS, userId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOW_STATS, targetUserId],
+      });
+
+      // Invalidate isFollowing check
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING,
+          'check',
+          userId,
+          targetUserId,
+        ],
+      });
+    },
+  });
+};
+
+/**
+ * Hook to check if a user is following another user
+ * Updated: Now requires userId parameter (no /me endpoint)
+ */
+export const useIsFollowing = (userId: string, targetUserId: string) => {
   return useQuery({
-    queryKey: [...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING, 'check', targetUserId],
-    queryFn: () => socialApi.isFollowingUser(targetUserId),
-    enabled: !!targetUserId,
+    queryKey: [
+      ...QUERY_KEYS.USER_MANAGEMENT.FOLLOWING,
+      'check',
+      userId,
+      targetUserId,
+    ],
+    queryFn: () => socialApi.isFollowingUser(userId, targetUserId),
+    enabled: !!userId && !!targetUserId,
     staleTime: 60 * 1000, // 1 minute
     gcTime: 2 * 60 * 1000, // 2 minutes
   });
 };
 
 /**
- * Hook to get mutual follows between current user and target user
+ * Hook to get mutual follows between two users
+ * Updated: Now requires userId parameter (no /me endpoint)
  */
-export const useMutualFollows = (targetUserId: string) => {
+export const useMutualFollows = (userId: string, targetUserId: string) => {
   return useQuery({
-    queryKey: [...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS, targetUserId],
-    queryFn: () => socialApi.getMutualFollows(targetUserId),
-    enabled: !!targetUserId,
+    queryKey: [
+      ...QUERY_KEYS.USER_MANAGEMENT.MUTUAL_FOLLOWS,
+      userId,
+      targetUserId,
+    ],
+    queryFn: () => socialApi.getMutualFollows(userId, targetUserId),
+    enabled: !!userId && !!targetUserId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
@@ -240,18 +212,6 @@ export const useUserActivity = (
     queryKey: [...QUERY_KEYS.USER_MANAGEMENT.ACTIVITY, userId, params],
     queryFn: () => socialApi.getUserActivity(userId, params),
     enabled: !!userId,
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-/**
- * Hook to get current user's activity
- */
-export const useCurrentUserActivity = (params?: UserActivityParams) => {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.USER_MANAGEMENT.ACTIVITY, 'current', params],
-    queryFn: () => socialApi.getCurrentUserActivity(params),
     staleTime: 60 * 1000, // 1 minute
     gcTime: 5 * 60 * 1000, // 5 minutes
   });

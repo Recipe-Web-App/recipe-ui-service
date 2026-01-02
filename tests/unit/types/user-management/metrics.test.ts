@@ -1,8 +1,6 @@
 import type {
   PerformanceMetrics,
   CacheMetrics,
-  CacheClearRequest,
-  CacheClearResponse,
   SystemMetrics,
   DetailedHealthMetrics,
 } from '@/types/user-management/metrics';
@@ -14,119 +12,103 @@ describe('User Management Metrics Types', () => {
       expect(typeof emptyMetrics).toBe('object');
     });
 
-    it('should validate response time metrics', () => {
+    it('should validate response time metrics with camelCase', () => {
       const responseMetrics: PerformanceMetrics = {
-        response_times: {
-          average_ms: 150,
-          p50_ms: 120,
-          p95_ms: 300,
-          p99_ms: 500,
+        responseTimes: {
+          averageMs: 150,
+          p50Ms: 120,
+          p95Ms: 300,
+          p99Ms: 500,
         },
       };
 
-      expect(typeof responseMetrics.response_times).toBe('object');
-      expect(typeof responseMetrics.response_times!.average_ms).toBe('number');
-      expect(responseMetrics.response_times!.p50_ms).toBeLessThanOrEqual(
-        responseMetrics.response_times!.average_ms!
+      expect(typeof responseMetrics.responseTimes).toBe('object');
+      expect(typeof responseMetrics.responseTimes!.averageMs).toBe('number');
+      expect(responseMetrics.responseTimes!.p50Ms).toBeLessThanOrEqual(
+        responseMetrics.responseTimes!.averageMs!
       );
-      expect(responseMetrics.response_times!.p95_ms).toBeGreaterThan(
-        responseMetrics.response_times!.p50_ms!
+      expect(responseMetrics.responseTimes!.p95Ms).toBeGreaterThan(
+        responseMetrics.responseTimes!.p50Ms!
       );
-      expect(responseMetrics.response_times!.p99_ms).toBeGreaterThan(
-        responseMetrics.response_times!.p95_ms!
+      expect(responseMetrics.responseTimes!.p99Ms).toBeGreaterThan(
+        responseMetrics.responseTimes!.p95Ms!
       );
     });
 
-    it('should validate request count metrics', () => {
+    it('should validate request count metrics with camelCase', () => {
       const requestMetrics: PerformanceMetrics = {
-        request_counts: {
-          total_requests: 10000,
-          requests_per_minute: 150,
-          active_sessions: 45,
+        requestCounts: {
+          totalRequests: 10000,
         },
       };
 
-      expect(typeof requestMetrics.request_counts).toBe('object');
-      expect(requestMetrics.request_counts!.total_requests).toBeGreaterThan(0);
-      expect(
-        requestMetrics.request_counts!.requests_per_minute
-      ).toBeGreaterThan(0);
-      expect(
-        requestMetrics.request_counts!.active_sessions
-      ).toBeGreaterThanOrEqual(0);
+      expect(typeof requestMetrics.requestCounts).toBe('object');
+      expect(requestMetrics.requestCounts!.totalRequests).toBeGreaterThan(0);
     });
 
-    it('should validate error rate metrics', () => {
+    it('should validate error rate metrics with camelCase', () => {
       const errorMetrics: PerformanceMetrics = {
-        error_rates: {
-          total_errors: 25,
-          error_rate_percent: 2.5,
-          '4xx_errors': 20,
-          '5xx_errors': 5,
+        errorRates: {
+          totalErrors: 25,
+          errorRatePercent: 2.5,
+          '4xxErrors': 20,
+          '5xxErrors': 5,
         },
       };
 
-      expect(typeof errorMetrics.error_rates).toBe('object');
+      expect(typeof errorMetrics.errorRates).toBe('object');
       expect(
-        errorMetrics.error_rates!['4xx_errors']! +
-          errorMetrics.error_rates!['5xx_errors']!
-      ).toBe(errorMetrics.error_rates!.total_errors);
-      expect(
-        errorMetrics.error_rates!.error_rate_percent
-      ).toBeGreaterThanOrEqual(0);
-      expect(errorMetrics.error_rates!.error_rate_percent).toBeLessThanOrEqual(
+        errorMetrics.errorRates!['4xxErrors']! +
+          errorMetrics.errorRates!['5xxErrors']!
+      ).toBe(errorMetrics.errorRates!.totalErrors);
+      expect(errorMetrics.errorRates!.errorRatePercent).toBeGreaterThanOrEqual(
+        0
+      );
+      expect(errorMetrics.errorRates!.errorRatePercent).toBeLessThanOrEqual(
         100
       );
     });
 
-    it('should validate database metrics', () => {
+    it('should validate database metrics with camelCase', () => {
       const dbMetrics: PerformanceMetrics = {
         database: {
-          active_connections: 15,
-          max_connections: 50,
-          avg_query_time_ms: 25,
-          slow_queries_count: 3,
+          activeConnections: 15,
+          maxConnections: 50,
         },
       };
 
       expect(typeof dbMetrics.database).toBe('object');
-      expect(dbMetrics.database!.active_connections).toBeLessThanOrEqual(
-        dbMetrics.database!.max_connections!
+      expect(dbMetrics.database!.activeConnections).toBeLessThanOrEqual(
+        dbMetrics.database!.maxConnections!
       );
-      expect(dbMetrics.database!.avg_query_time_ms).toBeGreaterThan(0);
-      expect(dbMetrics.database!.slow_queries_count).toBeGreaterThanOrEqual(0);
     });
 
     it('should handle complete performance metrics', () => {
       const completeMetrics: PerformanceMetrics = {
-        response_times: {
-          average_ms: 200,
-          p50_ms: 180,
-          p95_ms: 400,
-          p99_ms: 800,
+        responseTimes: {
+          averageMs: 200,
+          p50Ms: 180,
+          p95Ms: 400,
+          p99Ms: 800,
         },
-        request_counts: {
-          total_requests: 50000,
-          requests_per_minute: 300,
-          active_sessions: 120,
+        requestCounts: {
+          totalRequests: 50000,
         },
-        error_rates: {
-          total_errors: 150,
-          error_rate_percent: 0.3,
-          '4xx_errors': 120,
-          '5xx_errors': 30,
+        errorRates: {
+          totalErrors: 150,
+          errorRatePercent: 0.3,
+          '4xxErrors': 120,
+          '5xxErrors': 30,
         },
         database: {
-          active_connections: 25,
-          max_connections: 100,
-          avg_query_time_ms: 15,
-          slow_queries_count: 2,
+          activeConnections: 25,
+          maxConnections: 100,
         },
       };
 
-      expect(completeMetrics).toHaveProperty('response_times');
-      expect(completeMetrics).toHaveProperty('request_counts');
-      expect(completeMetrics).toHaveProperty('error_rates');
+      expect(completeMetrics).toHaveProperty('responseTimes');
+      expect(completeMetrics).toHaveProperty('requestCounts');
+      expect(completeMetrics).toHaveProperty('errorRates');
       expect(completeMetrics).toHaveProperty('database');
     });
   });
@@ -137,90 +119,43 @@ describe('User Management Metrics Types', () => {
       expect(typeof emptyMetrics).toBe('object');
     });
 
-    it('should validate cache usage metrics', () => {
+    it('should validate cache usage metrics with camelCase', () => {
       const cacheMetrics: CacheMetrics = {
-        memory_usage: '2147483648',
-        memory_usage_human: '2.0GB',
-        keys_count: 15000,
-        hit_rate: 0.85,
-        connected_clients: 12,
-        evicted_keys: 500,
-        expired_keys: 1200,
+        memoryUsage: '2147483648',
+        memoryUsageHuman: '2.0GB',
+        keysCount: 15000,
+        hitRate: 0.85,
+        connectedClients: 12,
+        evictedKeys: 500,
+        expiredKeys: 1200,
       };
 
-      expect(typeof cacheMetrics.memory_usage).toBe('string');
-      expect(typeof cacheMetrics.memory_usage_human).toBe('string');
-      expect(typeof cacheMetrics.keys_count).toBe('number');
-      expect(typeof cacheMetrics.hit_rate).toBe('number');
-      expect(cacheMetrics.hit_rate).toBeGreaterThanOrEqual(0);
-      expect(cacheMetrics.hit_rate).toBeLessThanOrEqual(1);
-      expect(cacheMetrics.keys_count).toBeGreaterThanOrEqual(0);
-      expect(cacheMetrics.connected_clients).toBeGreaterThanOrEqual(0);
-      expect(cacheMetrics.evicted_keys).toBeGreaterThanOrEqual(0);
-      expect(cacheMetrics.expired_keys).toBeGreaterThanOrEqual(0);
+      expect(typeof cacheMetrics.memoryUsage).toBe('string');
+      expect(typeof cacheMetrics.memoryUsageHuman).toBe('string');
+      expect(typeof cacheMetrics.keysCount).toBe('number');
+      expect(typeof cacheMetrics.hitRate).toBe('number');
+      expect(cacheMetrics.hitRate).toBeGreaterThanOrEqual(0);
+      expect(cacheMetrics.hitRate).toBeLessThanOrEqual(1);
+      expect(cacheMetrics.keysCount).toBeGreaterThanOrEqual(0);
+      expect(cacheMetrics.connectedClients).toBeGreaterThanOrEqual(0);
+      expect(cacheMetrics.evictedKeys).toBeGreaterThanOrEqual(0);
+      expect(cacheMetrics.expiredKeys).toBeGreaterThanOrEqual(0);
     });
 
     it('should handle edge cases for cache metrics', () => {
       const edgeCaseMetrics: CacheMetrics = {
-        memory_usage: '0',
-        memory_usage_human: '0B',
-        keys_count: 0,
-        hit_rate: 0,
-        connected_clients: 0,
-        evicted_keys: 0,
-        expired_keys: 0,
+        memoryUsage: '0',
+        memoryUsageHuman: '0B',
+        keysCount: 0,
+        hitRate: 0,
+        connectedClients: 0,
+        evictedKeys: 0,
+        expiredKeys: 0,
       };
 
-      expect(edgeCaseMetrics.keys_count).toBe(0);
-      expect(edgeCaseMetrics.hit_rate).toBe(0);
-      expect(edgeCaseMetrics.connected_clients).toBe(0);
-    });
-  });
-
-  describe('CacheClearRequest', () => {
-    it('should allow optional pattern', () => {
-      const emptyRequest: CacheClearRequest = {};
-      expect(typeof emptyRequest).toBe('object');
-      expect(emptyRequest.pattern).toBeUndefined();
-    });
-
-    it('should validate pattern property', () => {
-      const patternRequest: CacheClearRequest = {
-        pattern: 'user:*',
-      };
-
-      expect(typeof patternRequest.pattern).toBe('string');
-      expect(patternRequest.pattern).toBe('user:*');
-    });
-  });
-
-  describe('CacheClearResponse', () => {
-    it('should allow all optional properties', () => {
-      const emptyResponse: CacheClearResponse = {};
-      expect(typeof emptyResponse).toBe('object');
-    });
-
-    it('should validate successful cache clear response', () => {
-      const successResponse: CacheClearResponse = {
-        message: 'Cache cleared successfully',
-        pattern: 'recipe:*',
-        cleared_count: 1250,
-      };
-
-      expect(typeof successResponse.message).toBe('string');
-      expect(typeof successResponse.pattern).toBe('string');
-      expect(typeof successResponse.cleared_count).toBe('number');
-      expect(successResponse.cleared_count).toBeGreaterThanOrEqual(0);
-    });
-
-    it('should handle no matches response', () => {
-      const noMatchResponse: CacheClearResponse = {
-        message: 'No keys matched the pattern',
-        pattern: 'nonexistent:*',
-        cleared_count: 0,
-      };
-
-      expect(noMatchResponse.cleared_count).toBe(0);
+      expect(edgeCaseMetrics.keysCount).toBe(0);
+      expect(edgeCaseMetrics.hitRate).toBe(0);
+      expect(edgeCaseMetrics.connectedClients).toBe(0);
     });
   });
 
@@ -241,98 +176,98 @@ describe('User Management Metrics Types', () => {
       );
     });
 
-    it('should validate system metrics', () => {
+    it('should validate system metrics with camelCase', () => {
       const systemMetrics: SystemMetrics = {
         system: {
-          cpu_usage_percent: 65.5,
-          memory_total_gb: 16.0,
-          memory_used_gb: 8.2,
-          memory_usage_percent: 51.25,
-          disk_total_gb: 500.0,
-          disk_used_gb: 125.0,
-          disk_usage_percent: 25.0,
+          cpuUsagePercent: 65.5,
+          memoryTotalGb: 16.0,
+          memoryUsedGb: 8.2,
+          memoryUsagePercent: 51.25,
+          diskTotalGb: 500.0,
+          diskUsedGb: 125.0,
+          diskUsagePercent: 25.0,
         },
       };
 
       expect(typeof systemMetrics.system).toBe('object');
-      expect(systemMetrics.system!.cpu_usage_percent).toBeGreaterThanOrEqual(0);
-      expect(systemMetrics.system!.cpu_usage_percent).toBeLessThanOrEqual(100);
-      expect(systemMetrics.system!.memory_used_gb).toBeLessThanOrEqual(
-        systemMetrics.system!.memory_total_gb!
+      expect(systemMetrics.system!.cpuUsagePercent).toBeGreaterThanOrEqual(0);
+      expect(systemMetrics.system!.cpuUsagePercent).toBeLessThanOrEqual(100);
+      expect(systemMetrics.system!.memoryUsedGb).toBeLessThanOrEqual(
+        systemMetrics.system!.memoryTotalGb!
       );
-      expect(systemMetrics.system!.disk_used_gb).toBeLessThanOrEqual(
-        systemMetrics.system!.disk_total_gb!
+      expect(systemMetrics.system!.diskUsedGb).toBeLessThanOrEqual(
+        systemMetrics.system!.diskTotalGb!
       );
-      expect(systemMetrics.system!.memory_usage_percent).toBeCloseTo(
-        (systemMetrics.system!.memory_used_gb! /
-          systemMetrics.system!.memory_total_gb!) *
+      expect(systemMetrics.system!.memoryUsagePercent).toBeCloseTo(
+        (systemMetrics.system!.memoryUsedGb! /
+          systemMetrics.system!.memoryTotalGb!) *
           100,
         1
       );
-      expect(systemMetrics.system!.disk_usage_percent).toBeCloseTo(
-        (systemMetrics.system!.disk_used_gb! /
-          systemMetrics.system!.disk_total_gb!) *
+      expect(systemMetrics.system!.diskUsagePercent).toBeCloseTo(
+        (systemMetrics.system!.diskUsedGb! /
+          systemMetrics.system!.diskTotalGb!) *
           100,
         1
       );
     });
 
-    it('should validate process metrics', () => {
+    it('should validate process metrics with camelCase', () => {
       const processMetrics: SystemMetrics = {
         process: {
-          memory_rss_mb: 256,
-          memory_vms_mb: 512,
-          cpu_percent: 12.5,
-          num_threads: 8,
-          open_files: 45,
+          memoryRssMb: 256,
+          memoryVmsMb: 512,
+          cpuPercent: 12.5,
+          numThreads: 8,
+          openFiles: 45,
         },
       };
 
       expect(typeof processMetrics.process).toBe('object');
-      expect(processMetrics.process!.memory_rss_mb).toBeGreaterThan(0);
-      expect(processMetrics.process!.memory_vms_mb).toBeGreaterThanOrEqual(
-        processMetrics.process!.memory_rss_mb!
+      expect(processMetrics.process!.memoryRssMb).toBeGreaterThan(0);
+      expect(processMetrics.process!.memoryVmsMb).toBeGreaterThanOrEqual(
+        processMetrics.process!.memoryRssMb!
       );
-      expect(processMetrics.process!.cpu_percent).toBeGreaterThanOrEqual(0);
-      expect(processMetrics.process!.num_threads).toBeGreaterThan(0);
-      expect(processMetrics.process!.open_files).toBeGreaterThanOrEqual(0);
+      expect(processMetrics.process!.cpuPercent).toBeGreaterThanOrEqual(0);
+      expect(processMetrics.process!.numThreads).toBeGreaterThan(0);
+      expect(processMetrics.process!.openFiles).toBeGreaterThanOrEqual(0);
     });
 
-    it('should validate uptime', () => {
+    it('should validate uptime with camelCase', () => {
       const uptimeMetrics: SystemMetrics = {
-        uptime_seconds: 86400, // 24 hours
+        uptimeSeconds: 86400, // 24 hours
       };
 
-      expect(typeof uptimeMetrics.uptime_seconds).toBe('number');
-      expect(uptimeMetrics.uptime_seconds).toBeGreaterThan(0);
+      expect(typeof uptimeMetrics.uptimeSeconds).toBe('number');
+      expect(uptimeMetrics.uptimeSeconds).toBeGreaterThan(0);
     });
 
     it('should handle complete system metrics', () => {
       const completeMetrics: SystemMetrics = {
         timestamp: '2023-12-01T15:30:00Z',
         system: {
-          cpu_usage_percent: 75.0,
-          memory_total_gb: 32.0,
-          memory_used_gb: 16.0,
-          memory_usage_percent: 50.0,
-          disk_total_gb: 1000.0,
-          disk_used_gb: 250.0,
-          disk_usage_percent: 25.0,
+          cpuUsagePercent: 75.0,
+          memoryTotalGb: 32.0,
+          memoryUsedGb: 16.0,
+          memoryUsagePercent: 50.0,
+          diskTotalGb: 1000.0,
+          diskUsedGb: 250.0,
+          diskUsagePercent: 25.0,
         },
         process: {
-          memory_rss_mb: 512,
-          memory_vms_mb: 768,
-          cpu_percent: 25.0,
-          num_threads: 16,
-          open_files: 128,
+          memoryRssMb: 512,
+          memoryVmsMb: 768,
+          cpuPercent: 25.0,
+          numThreads: 16,
+          openFiles: 128,
         },
-        uptime_seconds: 172800, // 48 hours
+        uptimeSeconds: 172800, // 48 hours
       };
 
       expect(completeMetrics).toHaveProperty('timestamp');
       expect(completeMetrics).toHaveProperty('system');
       expect(completeMetrics).toHaveProperty('process');
-      expect(completeMetrics).toHaveProperty('uptime_seconds');
+      expect(completeMetrics).toHaveProperty('uptimeSeconds');
     });
   });
 
@@ -342,25 +277,25 @@ describe('User Management Metrics Types', () => {
       expect(typeof emptyMetrics).toBe('object');
     });
 
-    it('should validate overall status', () => {
+    it('should validate overall status with camelCase', () => {
       const healthyMetrics: DetailedHealthMetrics = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
       };
 
       expect(['healthy', 'degraded', 'unhealthy']).toContain(
-        healthyMetrics.overall_status
+        healthyMetrics.overallStatus
       );
     });
 
-    it('should validate redis service metrics', () => {
+    it('should validate redis service metrics with camelCase', () => {
       const redisMetrics: DetailedHealthMetrics = {
         services: {
           redis: {
             status: 'healthy',
-            response_time_ms: 5,
-            memory_usage: '1.5GB',
-            connected_clients: 25,
-            hit_rate_percent: 85.5,
+            responseTimeMs: 5,
+            memoryUsage: '1.5GB',
+            connectedClients: 25,
+            hitRatePercent: 85.5,
           },
         },
       };
@@ -369,27 +304,27 @@ describe('User Management Metrics Types', () => {
       expect(['healthy', 'unhealthy']).toContain(
         redisMetrics.services!.redis!.status
       );
-      expect(redisMetrics.services!.redis!.response_time_ms).toBeGreaterThan(0);
-      expect(typeof redisMetrics.services!.redis!.memory_usage).toBe('string');
+      expect(redisMetrics.services!.redis!.responseTimeMs).toBeGreaterThan(0);
+      expect(typeof redisMetrics.services!.redis!.memoryUsage).toBe('string');
       expect(
-        redisMetrics.services!.redis!.connected_clients
+        redisMetrics.services!.redis!.connectedClients
       ).toBeGreaterThanOrEqual(0);
       expect(
-        redisMetrics.services!.redis!.hit_rate_percent
+        redisMetrics.services!.redis!.hitRatePercent
       ).toBeGreaterThanOrEqual(0);
-      expect(
-        redisMetrics.services!.redis!.hit_rate_percent
-      ).toBeLessThanOrEqual(100);
+      expect(redisMetrics.services!.redis!.hitRatePercent).toBeLessThanOrEqual(
+        100
+      );
     });
 
-    it('should validate database service metrics', () => {
+    it('should validate database service metrics with camelCase', () => {
       const dbMetrics: DetailedHealthMetrics = {
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 15,
-            active_connections: 20,
-            max_connections: 100,
+            responseTimeMs: 15,
+            activeConnections: 20,
+            maxConnections: 100,
           },
         },
       };
@@ -398,16 +333,16 @@ describe('User Management Metrics Types', () => {
       expect(['healthy', 'unhealthy']).toContain(
         dbMetrics.services!.database!.status
       );
-      expect(dbMetrics.services!.database!.response_time_ms).toBeGreaterThan(0);
+      expect(dbMetrics.services!.database!.responseTimeMs).toBeGreaterThan(0);
       expect(
-        dbMetrics.services!.database!.active_connections
+        dbMetrics.services!.database!.activeConnections
       ).toBeGreaterThanOrEqual(0);
       expect(
-        dbMetrics.services!.database!.active_connections
-      ).toBeLessThanOrEqual(dbMetrics.services!.database!.max_connections!);
+        dbMetrics.services!.database!.activeConnections
+      ).toBeLessThanOrEqual(dbMetrics.services!.database!.maxConnections!);
     });
 
-    it('should validate application metrics', () => {
+    it('should validate application metrics with camelCase', () => {
       const appMetrics: DetailedHealthMetrics = {
         application: {
           version: '2.1.0',
@@ -416,7 +351,7 @@ describe('User Management Metrics Types', () => {
             authentication: 'enabled',
             caching: 'enabled',
             monitoring: 'enabled',
-            security_headers: 'enabled',
+            securityHeaders: 'enabled',
           },
         },
       };
@@ -431,20 +366,20 @@ describe('User Management Metrics Types', () => {
     it('should handle unhealthy system state', () => {
       const unhealthyMetrics: DetailedHealthMetrics = {
         timestamp: '2023-12-01T15:45:00Z',
-        overall_status: 'unhealthy',
+        overallStatus: 'unhealthy',
         services: {
           redis: {
             status: 'unhealthy',
-            response_time_ms: 5000,
-            memory_usage: '8.0GB',
-            connected_clients: 0,
-            hit_rate_percent: 0,
+            responseTimeMs: 5000,
+            memoryUsage: '8.0GB',
+            connectedClients: 0,
+            hitRatePercent: 0,
           },
           database: {
             status: 'unhealthy',
-            response_time_ms: 30000,
-            active_connections: 0,
-            max_connections: 100,
+            responseTimeMs: 30000,
+            activeConnections: 0,
+            maxConnections: 100,
           },
         },
         application: {
@@ -454,43 +389,43 @@ describe('User Management Metrics Types', () => {
             authentication: 'degraded',
             caching: 'disabled',
             monitoring: 'enabled',
-            security_headers: 'enabled',
+            securityHeaders: 'enabled',
           },
         },
       };
 
-      expect(unhealthyMetrics.overall_status).toBe('unhealthy');
+      expect(unhealthyMetrics.overallStatus).toBe('unhealthy');
       expect(unhealthyMetrics.services!.redis!.status).toBe('unhealthy');
       expect(unhealthyMetrics.services!.database!.status).toBe('unhealthy');
+      expect(unhealthyMetrics.services!.redis!.responseTimeMs).toBeGreaterThan(
+        1000
+      );
       expect(
-        unhealthyMetrics.services!.redis!.response_time_ms
-      ).toBeGreaterThan(1000);
-      expect(
-        unhealthyMetrics.services!.database!.response_time_ms
+        unhealthyMetrics.services!.database!.responseTimeMs
       ).toBeGreaterThan(1000);
     });
 
     it('should handle degraded system state', () => {
       const degradedMetrics: DetailedHealthMetrics = {
-        overall_status: 'degraded',
+        overallStatus: 'degraded',
         services: {
           redis: {
             status: 'healthy',
-            response_time_ms: 8,
-            memory_usage: '2.5GB',
-            connected_clients: 50,
-            hit_rate_percent: 75.0,
+            responseTimeMs: 8,
+            memoryUsage: '2.5GB',
+            connectedClients: 50,
+            hitRatePercent: 75.0,
           },
           database: {
             status: 'unhealthy',
-            response_time_ms: 500,
-            active_connections: 5,
-            max_connections: 100,
+            responseTimeMs: 500,
+            activeConnections: 5,
+            maxConnections: 100,
           },
         },
       };
 
-      expect(degradedMetrics.overall_status).toBe('degraded');
+      expect(degradedMetrics.overallStatus).toBe('degraded');
       expect(degradedMetrics.services!.redis!.status).toBe('healthy');
       expect(degradedMetrics.services!.database!.status).toBe('unhealthy');
     });
@@ -498,20 +433,20 @@ describe('User Management Metrics Types', () => {
     it('should handle complete detailed health metrics', () => {
       const completeMetrics: DetailedHealthMetrics = {
         timestamp: '2023-12-01T15:30:00Z',
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         services: {
           redis: {
             status: 'healthy',
-            response_time_ms: 3,
-            memory_usage: '1.2GB',
-            connected_clients: 40,
-            hit_rate_percent: 92.5,
+            responseTimeMs: 3,
+            memoryUsage: '1.2GB',
+            connectedClients: 40,
+            hitRatePercent: 92.5,
           },
           database: {
             status: 'healthy',
-            response_time_ms: 12,
-            active_connections: 35,
-            max_connections: 100,
+            responseTimeMs: 12,
+            activeConnections: 35,
+            maxConnections: 100,
           },
         },
         application: {
@@ -521,13 +456,13 @@ describe('User Management Metrics Types', () => {
             authentication: 'enabled',
             caching: 'enabled',
             monitoring: 'enabled',
-            security_headers: 'enabled',
+            securityHeaders: 'enabled',
           },
         },
       };
 
       expect(completeMetrics).toHaveProperty('timestamp');
-      expect(completeMetrics).toHaveProperty('overall_status');
+      expect(completeMetrics).toHaveProperty('overallStatus');
       expect(completeMetrics).toHaveProperty('services');
       expect(completeMetrics).toHaveProperty('application');
       expect(completeMetrics.services).toHaveProperty('redis');

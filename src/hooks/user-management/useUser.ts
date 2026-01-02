@@ -22,14 +22,21 @@ export const useUser = (userId: string) => {
 
 /**
  * Hook to fetch the current authenticated user
+ * Updated to use user.id from auth store since /users/me endpoint doesn't exist
  */
 export const useCurrentUser = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
+  const userId = user?.id;
 
   return useQuery({
     queryKey: [...QUERY_KEYS.USER_MANAGEMENT.USER, 'current'],
-    queryFn: () => usersApi.getCurrentUserProfile(),
-    enabled: isAuthenticated,
+    queryFn: () => {
+      if (!userId) {
+        throw new Error('User ID not available in auth store');
+      }
+      return usersApi.getUserProfile(userId);
+    },
+    enabled: isAuthenticated && !!userId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
@@ -37,11 +44,12 @@ export const useCurrentUser = () => {
 
 /**
  * Hook to search users by query
+ * Updated: 'q' param renamed to 'query' per OpenAPI spec
  */
 export const useSearchUsers = (query: string, params?: PaginationParams) => {
   return useQuery({
     queryKey: [...QUERY_KEYS.USER_MANAGEMENT.USERS, 'search', query, params],
-    queryFn: () => usersApi.searchUsers({ q: query, ...params }),
+    queryFn: () => usersApi.searchUsers({ query, ...params }),
     enabled: !!query && query.length >= 2, // Only search with at least 2 characters
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 5 * 60 * 1000, // 5 minutes

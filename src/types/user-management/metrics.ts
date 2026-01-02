@@ -1,90 +1,76 @@
-// Performance Metrics
+// Performance Metrics - aligned with OpenAPI spec (camelCase)
 export interface PerformanceMetrics {
-  response_times?: {
-    average_ms?: number;
-    p50_ms?: number;
-    p95_ms?: number;
-    p99_ms?: number;
+  responseTimes?: {
+    averageMs?: number;
+    p50Ms?: number;
+    p95Ms?: number;
+    p99Ms?: number;
   };
-  request_counts?: {
-    total_requests?: number;
-    requests_per_minute?: number;
-    active_sessions?: number;
+  requestCounts?: {
+    totalRequests?: number;
   };
-  error_rates?: {
-    total_errors?: number;
-    error_rate_percent?: number;
-    '4xx_errors'?: number;
-    '5xx_errors'?: number;
+  errorRates?: {
+    totalErrors?: number;
+    errorRatePercent?: number;
+    '4xxErrors'?: number;
+    '5xxErrors'?: number;
   };
   database?: {
-    active_connections?: number;
-    max_connections?: number;
-    avg_query_time_ms?: number;
-    slow_queries_count?: number;
+    activeConnections?: number;
+    maxConnections?: number;
   };
 }
 
-// Cache Metrics
+// Cache Metrics - aligned with OpenAPI spec (camelCase)
 export interface CacheMetrics {
-  memory_usage?: string;
-  memory_usage_human?: string;
-  keys_count?: number;
-  hit_rate?: number;
-  connected_clients?: number;
-  evicted_keys?: number;
-  expired_keys?: number;
+  memoryUsage?: string;
+  memoryUsageHuman?: string;
+  keysCount?: number;
+  hitRate?: number;
+  connectedClients?: number;
+  evictedKeys?: number;
+  expiredKeys?: number;
 }
 
-export interface CacheClearRequest {
-  pattern?: string;
-}
-
-export interface CacheClearResponse {
-  message?: string;
-  pattern?: string;
-  cleared_count?: number;
-}
-
-// System Metrics
+// System Metrics - aligned with OpenAPI spec (camelCase)
 export interface SystemMetrics {
   timestamp?: string;
   system?: {
-    cpu_usage_percent?: number;
-    memory_total_gb?: number;
-    memory_used_gb?: number;
-    memory_usage_percent?: number;
-    disk_total_gb?: number;
-    disk_used_gb?: number;
-    disk_usage_percent?: number;
+    cpuUsagePercent?: number;
+    memoryTotalGb?: number;
+    memoryUsedGb?: number;
+    memoryUsagePercent?: number;
+    diskTotalGb?: number;
+    diskUsedGb?: number;
+    diskUsagePercent?: number;
   };
   process?: {
-    memory_rss_mb?: number;
-    memory_vms_mb?: number;
-    cpu_percent?: number;
-    num_threads?: number;
-    open_files?: number;
+    memoryRssMb?: number;
+    memoryVmsMb?: number;
+    cpuPercent?: number;
+    numThreads?: number;
+    openFiles?: number;
   };
-  uptime_seconds?: number;
+  uptimeSeconds?: number;
 }
 
-// Detailed Health Metrics
+// Detailed Health Metrics - aligned with OpenAPI spec (camelCase)
 export interface DetailedHealthMetrics {
   timestamp?: string;
-  overall_status?: 'healthy' | 'degraded' | 'unhealthy';
+  overallStatus?: 'healthy' | 'degraded' | 'unhealthy';
   services?: {
     redis?: {
       status?: 'healthy' | 'unhealthy';
-      response_time_ms?: number;
-      memory_usage?: string;
-      connected_clients?: number;
-      hit_rate_percent?: number;
+      responseTimeMs?: number;
+      memoryUsage?: string;
+      connectedClients?: number;
+      hitRatePercent?: number;
     };
     database?: {
       status?: 'healthy' | 'unhealthy';
-      response_time_ms?: number;
-      active_connections?: number;
-      max_connections?: number;
+      responseTimeMs?: number;
+      activeConnections?: number;
+      maxConnections?: number;
     };
   };
   application?: {
@@ -94,7 +80,7 @@ export interface DetailedHealthMetrics {
       authentication?: string;
       caching?: string;
       monitoring?: string;
-      security_headers?: string;
+      securityHeaders?: string;
     };
   };
 }

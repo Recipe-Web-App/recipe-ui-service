@@ -89,10 +89,10 @@ export const usersApi = {
    */
   async searchUsers(
     params: {
-      q?: string; // Search query
+      query?: string; // Search query (updated from 'q' per OpenAPI spec)
       limit?: number;
       offset?: number;
-      count_only?: boolean;
+      countOnly?: boolean; // Updated from 'count_only' per OpenAPI spec
     } & PaginationParams
   ): Promise<UserSearchResponse> {
     try {
@@ -122,15 +122,6 @@ export const usersApi = {
       handleUserManagementApiError(error);
       throw error; // This line should never be reached since handleUserManagementApiError throws
     }
-  },
-
-  /**
-   * Get current user's own profile
-   * Convenience method that uses the 'me' identifier
-   * Requires: user:read scope
-   */
-  async getCurrentUserProfile(): Promise<UserProfileResponse> {
-    return this.getUserProfile('me');
   },
 
   /**
@@ -165,9 +156,9 @@ export const usersApi = {
   async isUsernameAvailable(username: string): Promise<boolean> {
     try {
       const result = await this.searchUsers({
-        q: username,
+        query: username,
         limit: 1,
-        count_only: true,
+        countOnly: true,
       });
 
       // If totalCount is 0, username is available

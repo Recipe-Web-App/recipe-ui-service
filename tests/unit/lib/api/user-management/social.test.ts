@@ -1,8 +1,5 @@
 import { socialApi } from '@/lib/api/user-management/social';
-import {
-  userManagementClient,
-  buildQueryParams,
-} from '@/lib/api/user-management/client';
+import { userManagementClient } from '@/lib/api/user-management/client';
 import type {
   FollowResponse,
   GetFollowedUsersResponse,
@@ -142,50 +139,57 @@ describe('Social API', () => {
     });
   });
 
-  describe('toggleFollowUser', () => {
-    it('should follow a user successfully', async () => {
+  describe('followUser', () => {
+    it('should follow a user successfully using POST', async () => {
       const mockResponse: FollowResponse = {
         message: 'Successfully followed user',
         isFollowing: true,
       };
 
-      mockClient.put.mockResolvedValue({ data: mockResponse });
+      mockClient.post.mockResolvedValue({ data: mockResponse });
 
-      const result = await socialApi.toggleFollowUser(
-        'current-user',
-        'target-user'
-      );
+      const result = await socialApi.followUser('current-user', 'target-user');
 
-      expect(mockClient.put).toHaveBeenCalledWith(
+      expect(mockClient.post).toHaveBeenCalledWith(
         '/users/current-user/follow/target-user'
       );
       expect(result).toEqual(mockResponse);
     });
 
-    it('should unfollow a user successfully', async () => {
+    it('should handle follow user error', async () => {
+      mockClient.post.mockRejectedValue(new Error('User not found'));
+
+      await expect(
+        socialApi.followUser('current-user', 'target-user')
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('unfollowUser', () => {
+    it('should unfollow a user successfully using DELETE', async () => {
       const mockResponse: FollowResponse = {
         message: 'Successfully unfollowed user',
         isFollowing: false,
       };
 
-      mockClient.put.mockResolvedValue({ data: mockResponse });
+      mockClient.delete.mockResolvedValue({ data: mockResponse });
 
-      const result = await socialApi.toggleFollowUser(
+      const result = await socialApi.unfollowUser(
         'current-user',
         'target-user'
       );
 
-      expect(mockClient.put).toHaveBeenCalledWith(
+      expect(mockClient.delete).toHaveBeenCalledWith(
         '/users/current-user/follow/target-user'
       );
       expect(result).toEqual(mockResponse);
     });
 
-    it('should handle toggle follow error', async () => {
-      mockClient.put.mockRejectedValue(new Error('User not found'));
+    it('should handle unfollow user error', async () => {
+      mockClient.delete.mockRejectedValue(new Error('Not following user'));
 
       await expect(
-        socialApi.toggleFollowUser('current-user', 'target-user')
+        socialApi.unfollowUser('current-user', 'target-user')
       ).rejects.toThrow();
     });
   });
@@ -244,119 +248,6 @@ describe('Social API', () => {
     });
   });
 
-  describe('getCurrentUserFollowing', () => {
-    it('should get current user following list', async () => {
-      const mockResponse: GetFollowedUsersResponse = {
-        followedUsers: [
-          {
-            userId: '123',
-            username: 'followed1',
-            isActive: true,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
-        totalCount: 1,
-        limit: 20,
-        offset: 0,
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await socialApi.getCurrentUserFollowing();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/users/me/following');
-      expect(result).toEqual(mockResponse);
-    });
-  });
-
-  describe('getCurrentUserFollowers', () => {
-    it('should get current user followers list', async () => {
-      const mockResponse: GetFollowedUsersResponse = {
-        followedUsers: [
-          {
-            userId: '456',
-            username: 'follower1',
-            isActive: true,
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
-        totalCount: 1,
-        limit: 20,
-        offset: 0,
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await socialApi.getCurrentUserFollowers();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/users/me/followers');
-      expect(result).toEqual(mockResponse);
-    });
-  });
-
-  describe('followUser', () => {
-    it('should follow a user using current user context', async () => {
-      const mockResponse: FollowResponse = {
-        message: 'Successfully followed user',
-        isFollowing: true,
-      };
-
-      mockClient.put.mockResolvedValue({ data: mockResponse });
-
-      const result = await socialApi.followUser('target-user');
-
-      expect(mockClient.put).toHaveBeenCalledWith(
-        '/users/me/follow/target-user'
-      );
-      expect(result).toEqual(mockResponse);
-    });
-  });
-
-  describe('unfollowUser', () => {
-    it('should unfollow a user using current user context', async () => {
-      const mockResponse: FollowResponse = {
-        message: 'Successfully unfollowed user',
-        isFollowing: false,
-      };
-
-      mockClient.put.mockResolvedValue({ data: mockResponse });
-
-      const result = await socialApi.unfollowUser('target-user');
-
-      expect(mockClient.put).toHaveBeenCalledWith(
-        '/users/me/follow/target-user'
-      );
-      expect(result).toEqual(mockResponse);
-    });
-  });
-
-  describe('getCurrentUserActivity', () => {
-    it('should get current user activity', async () => {
-      const mockResponse: UserActivityResponse = {
-        userId: 'current-user',
-        recentRecipes: [],
-        recentFollows: [],
-        recentReviews: [],
-        recentFavorites: [
-          {
-            recipeId: 2,
-            title: 'Another Favorite Recipe',
-            favoritedAt: '2023-01-01T00:00:00Z',
-          },
-        ],
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await socialApi.getCurrentUserActivity();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/users/me/activity');
-      expect(result).toEqual(mockResponse);
-    });
-  });
-
   describe('isFollowingUser', () => {
     it('should return true when user is following target user', async () => {
       const mockResponse: GetFollowedUsersResponse = {
@@ -376,10 +267,13 @@ describe('Social API', () => {
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
-      const result = await socialApi.isFollowingUser('target-user');
+      const result = await socialApi.isFollowingUser(
+        'current-user',
+        'target-user'
+      );
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/me/following?limit=100'
+        '/users/current-user/following?limit=100'
       );
       expect(result).toBe(true);
     });
@@ -402,7 +296,10 @@ describe('Social API', () => {
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
-      const result = await socialApi.isFollowingUser('target-user');
+      const result = await socialApi.isFollowingUser(
+        'current-user',
+        'target-user'
+      );
 
       expect(result).toBe(false);
     });
@@ -410,7 +307,10 @@ describe('Social API', () => {
     it('should return false on error for safety', async () => {
       mockClient.get.mockRejectedValue(new Error('Network error'));
 
-      const result = await socialApi.isFollowingUser('target-user');
+      const result = await socialApi.isFollowingUser(
+        'current-user',
+        'target-user'
+      );
 
       expect(result).toBe(false);
     });
@@ -480,11 +380,14 @@ describe('Social API', () => {
         .mockResolvedValueOnce({ data: currentUserFollowing })
         .mockResolvedValueOnce({ data: targetUserFollowing });
 
-      const result = await socialApi.getMutualFollows('target-user');
+      const result = await socialApi.getMutualFollows(
+        'current-user',
+        'target-user'
+      );
 
       expect(mockClient.get).toHaveBeenCalledTimes(2);
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/me/following?limit=1000'
+        '/users/current-user/following?limit=1000'
       );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/users/target-user/following?limit=1000'
@@ -495,7 +398,10 @@ describe('Social API', () => {
     it('should return empty array on error', async () => {
       mockClient.get.mockRejectedValue(new Error('Network error'));
 
-      const result = await socialApi.getMutualFollows('target-user');
+      const result = await socialApi.getMutualFollows(
+        'current-user',
+        'target-user'
+      );
 
       expect(result).toEqual([]);
     });
@@ -525,10 +431,10 @@ describe('Social API', () => {
 
       expect(mockClient.get).toHaveBeenCalledTimes(2);
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/user123/following?count_only=true'
+        '/users/user123/following?countOnly=true'
       );
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/users/user123/followers?count_only=true'
+        '/users/user123/followers?countOnly=true'
       );
       expect(result).toEqual({
         followingCount: 15,

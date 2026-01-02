@@ -2,9 +2,9 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   useUserStats,
-  useForceLogout,
-  useBatchForceLogout,
+  useClearCache,
   useHealthCheck,
+  useReadinessCheck,
   useComprehensiveHealth,
   usePerformanceMetrics,
   useHealthMonitor,
@@ -13,20 +13,22 @@ import {
 import { adminApi, healthApi, metricsApi } from '@/lib/api/user-management';
 import type {
   UserStatsResponse,
-  HealthCheckResponse,
+  LivenessResponse,
+  ReadinessResponse,
   ComprehensiveHealthResponse,
   PerformanceMetrics,
+  CacheClearResponse,
 } from '@/types/user-management';
 
 // Mock the APIs
 jest.mock('@/lib/api/user-management', () => ({
   adminApi: {
     getUserStats: jest.fn(),
-    forceUserLogout: jest.fn(),
-    batchForceLogout: jest.fn(),
+    clearCache: jest.fn(),
   },
   healthApi: {
     getHealthCheck: jest.fn(),
+    getReadinessCheck: jest.fn(),
     getComprehensiveHealth: jest.fn(),
     monitorHealth: jest.fn(),
     getHealthSummary: jest.fn(),
@@ -61,11 +63,12 @@ describe('useAdmin hooks', () => {
   describe('useUserStats', () => {
     it('should fetch user statistics', async () => {
       const mockUserStats: UserStatsResponse = {
-        total_users: 1000,
-        active_users: 750,
-        new_users_today: 25,
-        new_users_this_week: 150,
-        new_users_this_month: 500,
+        totalUsers: 1000,
+        activeUsers: 750,
+        inactiveUsers: 250,
+        newUsersToday: 25,
+        newUsersThisWeek: 150,
+        newUsersThisMonth: 500,
       };
 
       mockedAdminApi.getUserStats.mockResolvedValue(mockUserStats);
@@ -93,104 +96,68 @@ describe('useAdmin hooks', () => {
     });
   });
 
-  describe('useForceLogout', () => {
-    it('should force logout a single user', async () => {
-      const mockResponse = {
-        message: 'User logged out successfully',
-        userId: 'user-123',
-        success: true,
+  describe('useClearCache', () => {
+    it('should clear cache successfully', async () => {
+      const mockResponse: CacheClearResponse = {
+        message: 'Cache cleared successfully',
+        clearedCount: 150,
       };
 
-      mockedAdminApi.forceUserLogout.mockResolvedValue(mockResponse);
+      mockedAdminApi.clearCache.mockResolvedValue(mockResponse);
 
-      const { result } = renderHook(() => useForceLogout(), {
+      const { result } = renderHook(() => useClearCache(), {
         wrapper: createWrapper(),
       });
 
-      result.current.mutate('user-123');
+      result.current.mutate({ keyPattern: 'user:*' });
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(mockedAdminApi.forceUserLogout).toHaveBeenCalledWith('user-123');
+      expect(mockedAdminApi.clearCache).toHaveBeenCalledWith({
+        keyPattern: 'user:*',
+      });
       expect(result.current.data).toEqual(mockResponse);
     });
 
-    it('should handle force logout error', async () => {
-      const error = new Error('User not found');
-      mockedAdminApi.forceUserLogout.mockRejectedValue(error);
+    it('should clear all cache when no request provided', async () => {
+      const mockResponse: CacheClearResponse = {
+        message: 'All cache cleared',
+        clearedCount: 500,
+      };
 
-      const { result } = renderHook(() => useForceLogout(), {
+      mockedAdminApi.clearCache.mockResolvedValue(mockResponse);
+
+      const { result } = renderHook(() => useClearCache(), {
         wrapper: createWrapper(),
       });
 
-      result.current.mutate('nonexistent-user');
+      result.current.mutate(undefined);
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+      expect(mockedAdminApi.clearCache).toHaveBeenCalledWith(undefined);
+      expect(result.current.data).toEqual(mockResponse);
+    });
+
+    it('should handle cache clear error', async () => {
+      const error = new Error('Unauthorized');
+      mockedAdminApi.clearCache.mockRejectedValue(error);
+
+      const { result } = renderHook(() => useClearCache(), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ keyPattern: 'session:*' });
 
       await waitFor(() => expect(result.current.isError).toBe(true));
       expect(result.current.error).toBe(error);
     });
   });
 
-  describe('useBatchForceLogout', () => {
-    it('should force logout multiple users', async () => {
-      const mockResponse = {
-        successful: ['user-123', 'user-456', 'user-789'],
-        failed: [],
-        summary: {
-          total: 3,
-          successful: 3,
-          failed: 0,
-        },
-      };
-
-      mockedAdminApi.batchForceLogout.mockResolvedValue(mockResponse);
-
-      const userIds = ['user-123', 'user-456', 'user-789'];
-      const { result } = renderHook(() => useBatchForceLogout(), {
-        wrapper: createWrapper(),
-      });
-
-      result.current.mutate(userIds);
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedAdminApi.batchForceLogout).toHaveBeenCalledWith(userIds);
-      expect(result.current.data).toEqual(mockResponse);
-    });
-
-    it('should handle partial batch logout failures', async () => {
-      const mockResponse = {
-        successful: ['user-123', 'user-456'],
-        failed: [{ userId: 'user-789', error: 'User not found' }],
-        summary: {
-          total: 3,
-          successful: 2,
-          failed: 1,
-        },
-      };
-
-      mockedAdminApi.batchForceLogout.mockResolvedValue(mockResponse);
-
-      const userIds = ['user-123', 'user-456', 'user-789'];
-      const { result } = renderHook(() => useBatchForceLogout(), {
-        wrapper: createWrapper(),
-      });
-
-      result.current.mutate(userIds);
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-      expect(mockedAdminApi.batchForceLogout).toHaveBeenCalledWith(userIds);
-      expect(result.current.data).toEqual(mockResponse);
-    });
-  });
-
   describe('useHealthCheck', () => {
-    it('should perform basic health check', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
-        message: 'Mock Health Check',
-        timestamp: '2023-01-08T04:00:00Z',
-        uptime_seconds: 3600,
+    it('should perform basic health/liveness check', async () => {
+      const mockHealthResponse: LivenessResponse = {
+        status: 'UP',
       };
 
       mockedHealthApi.getHealthCheck.mockResolvedValue(mockHealthResponse);
@@ -206,46 +173,80 @@ describe('useAdmin hooks', () => {
     });
   });
 
+  describe('useReadinessCheck', () => {
+    it('should perform readiness check', async () => {
+      const mockReadinessResponse: ReadinessResponse = {
+        status: 'READY',
+        database: {
+          status: 'healthy',
+        },
+        redis: {
+          status: 'healthy',
+        },
+      };
+
+      mockedHealthApi.getReadinessCheck.mockResolvedValue(
+        mockReadinessResponse
+      );
+
+      const { result } = renderHook(() => useReadinessCheck(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+      expect(mockedHealthApi.getReadinessCheck).toHaveBeenCalled();
+      expect(result.current.data).toEqual(mockReadinessResponse);
+    });
+
+    it('should handle degraded readiness status', async () => {
+      const mockReadinessResponse: ReadinessResponse = {
+        status: 'DEGRADED',
+        database: {
+          status: 'unhealthy',
+          message: 'Database connection timeout',
+        },
+        redis: {
+          status: 'healthy',
+        },
+      };
+
+      mockedHealthApi.getReadinessCheck.mockResolvedValue(
+        mockReadinessResponse
+      );
+
+      const { result } = renderHook(() => useReadinessCheck(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+      expect(result.current.data?.status).toBe('DEGRADED');
+    });
+  });
+
   describe('useComprehensiveHealth', () => {
     it('should perform comprehensive health check', async () => {
       const mockComprehensiveHealth: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         timestamp: '2023-01-08T04:00:00Z',
-        uptime_seconds: 86400,
+        uptimeSeconds: 86400,
         version: '1.0.0',
         environment: 'production',
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 10,
-            last_check: '2023-01-08T04:00:00Z',
+            responseTimeMs: 10,
+            activeConnections: 50,
+            maxConnections: 100,
           },
           redis: {
             status: 'healthy',
-            response_time_ms: 5,
-            last_check: '2023-01-08T04:00:00Z',
+            responseTimeMs: 5,
+            memoryUsage: '256MB',
+            connectedClients: 10,
+            hitRatePercent: 95,
           },
-          external_services: [
-            {
-              name: 'Mock Service',
-              url: 'https://mockservice.com/api/health',
-              status: 'healthy',
-              response_time_ms: 100,
-              last_check: '2023-01-08T04:00:00Z',
-              error_message: undefined,
-            },
-          ],
-        },
-        system_resources: {
-          cpu_usage_percent: 55.5,
-          memory_usage_percent: 70.2,
-          disk_usage_percent: 80.1,
-        },
-        application_health: {
-          active_sessions: 100,
-          request_rate_per_minute: 200,
-          error_rate_percent: 0.5,
-          avg_response_time_ms: 150,
         },
       };
 
@@ -267,28 +268,24 @@ describe('useAdmin hooks', () => {
   describe('usePerformanceMetrics', () => {
     it('should fetch performance metrics', async () => {
       const mockPerformanceMetrics: PerformanceMetrics = {
-        response_times: {
-          average_ms: 150,
-          p50_ms: 120,
-          p95_ms: 300,
-          p99_ms: 500,
+        responseTimes: {
+          averageMs: 150,
+          p50Ms: 120,
+          p95Ms: 300,
+          p99Ms: 500,
         },
-        request_counts: {
-          total_requests: 100000,
-          requests_per_minute: 200,
-          active_sessions: 100,
+        requestCounts: {
+          totalRequests: 100000,
         },
-        error_rates: {
-          total_errors: 500,
-          error_rate_percent: 0.5,
-          '4xx_errors': 300,
-          '5xx_errors': 200,
+        errorRates: {
+          totalErrors: 500,
+          errorRatePercent: 0.5,
+          '4xxErrors': 300,
+          '5xxErrors': 200,
         },
         database: {
-          active_connections: 50,
-          max_connections: 100,
-          avg_query_time_ms: 20,
-          slow_queries_count: 5,
+          activeConnections: 50,
+          maxConnections: 100,
         },
       };
 
@@ -312,10 +309,7 @@ describe('useAdmin hooks', () => {
       const mockMonitorResponse = {
         isHealthy: true,
         health: {
-          status: 'healthy' as const,
-          timestamp: '2023-01-08T04:00:00Z',
-          uptime: 3600,
-          version: '1.0.0',
+          status: 'UP' as const,
         },
         attempts: 1,
       };
@@ -339,10 +333,7 @@ describe('useAdmin hooks', () => {
       const mockMonitorResponse = {
         isHealthy: true,
         health: {
-          status: 'healthy' as const,
-          timestamp: '2023-01-08T04:00:00Z',
-          uptime: 3600,
-          version: '1.0.0',
+          status: 'UP' as const,
         },
         attempts: 1,
       };
@@ -366,18 +357,21 @@ describe('useAdmin hooks', () => {
   describe('useHealthSummary', () => {
     it('should fetch health summary with comprehensive data', async () => {
       const mockHealthSummary = {
-        basic: {
-          status: 'healthy' as const,
-          message: 'System is healthy',
-          timestamp: '2023-01-08T04:00:00Z',
-          uptime_seconds: 172800,
-        },
-        uptime: {
-          uptime_seconds: 172800,
-          uptime_human: '2 days',
+        liveness: {
+          status: 'UP' as const,
         },
         readiness: {
-          status: 'ready' as const,
+          status: 'READY' as const,
+          database: {
+            status: 'healthy',
+          },
+          redis: {
+            status: 'healthy',
+          },
+        },
+        uptime: {
+          uptimeSeconds: 172800,
+          uptimeHuman: '2d',
         },
       };
 

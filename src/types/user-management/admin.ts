@@ -1,41 +1,20 @@
-import type { HealthStatus } from './common';
-
-// Redis Session Management
-export interface RedisSessionStatsResponse {
-  total_sessions?: number;
-  active_sessions?: number;
-  memory_usage?: string;
-  ttl_info?: Record<string, unknown>;
-}
-
-export interface ClearSessionsResponse {
-  success?: boolean;
-  message?: string;
-  sessions_cleared?: number;
-}
-
-// User Statistics
+// User Statistics - aligned with OpenAPI spec (camelCase)
 export interface UserStatsResponse {
-  total_users?: number;
-  active_users?: number;
-  inactive_users?: number;
-  new_users_today?: number;
-  new_users_this_week?: number;
-  new_users_this_month?: number;
+  totalUsers?: number;
+  activeUsers?: number;
+  inactiveUsers?: number;
+  newUsersToday?: number;
+  newUsersThisWeek?: number;
+  newUsersThisMonth?: number;
 }
 
-// System Health
-export interface SystemHealthResponse {
-  status?: HealthStatus;
-  database_status?: 'healthy' | 'unhealthy';
-  redis_status?: 'healthy' | 'unhealthy';
-  uptime_seconds?: number;
-  version?: string;
+// Cache Clear Request/Response - moved from metrics to admin
+export interface CacheClearRequest {
+  keyPattern?: string;
 }
 
-// Force Logout
-export interface ForceLogoutResponse {
-  success?: boolean;
+export interface CacheClearResponse {
   message?: string;
-  sessions_cleared?: number;
+  pattern?: string;
+  clearedCount?: number;
 }

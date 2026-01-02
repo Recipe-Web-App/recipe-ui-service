@@ -70,7 +70,8 @@ describe('User Management API Client', () => {
       expect(getRequiredScopes('GET', '/users/abc-def/profile')).toEqual([
         'user:read',
       ]);
-      expect(getRequiredScopes('PUT', '/users/profile')).toEqual([
+      // PUT profile requires user ID in path
+      expect(getRequiredScopes('PUT', '/users/123/profile')).toEqual([
         'user:write',
       ]);
     });
@@ -91,9 +92,17 @@ describe('User Management API Client', () => {
     });
 
     it('should return correct scopes for following/followers endpoints', () => {
-      expect(getRequiredScopes('GET', '/123/following')).toEqual(['user:read']);
-      expect(getRequiredScopes('GET', '/123/followers')).toEqual(['user:read']);
-      expect(getRequiredScopes('PUT', '/123/follow/456')).toEqual([
+      expect(getRequiredScopes('GET', '/users/123/following')).toEqual([
+        'user:read',
+      ]);
+      expect(getRequiredScopes('GET', '/users/123/followers')).toEqual([
+        'user:read',
+      ]);
+      // Follow is POST, Unfollow is DELETE (updated from PUT toggle)
+      expect(getRequiredScopes('POST', '/users/123/follow/456')).toEqual([
+        'user:write',
+      ]);
+      expect(getRequiredScopes('DELETE', '/users/123/follow/456')).toEqual([
         'user:write',
       ]);
     });
@@ -121,10 +130,11 @@ describe('User Management API Client', () => {
     });
 
     it('should return correct scopes for account management endpoints', () => {
+      // Account delete-request requires user ID in path
       expect(
-        getRequiredScopes('POST', '/users/account/delete-request')
+        getRequiredScopes('POST', '/users/123/account/delete-request')
       ).toEqual(['user:write']);
-      expect(getRequiredScopes('DELETE', '/users/account')).toEqual([
+      expect(getRequiredScopes('DELETE', '/users/123/account')).toEqual([
         'user:write',
       ]);
     });
@@ -134,11 +144,18 @@ describe('User Management API Client', () => {
       expect(getRequiredScopes('DELETE', '/admin/users/123')).toEqual([
         'admin',
       ]);
+      // Cache clear moved to admin
+      expect(getRequiredScopes('POST', '/admin/cache/clear')).toEqual([
+        'admin',
+      ]);
     });
 
     it('should return correct scopes for metrics endpoints', () => {
+      // Only GET is mapped for metrics (admin read-only)
       expect(getRequiredScopes('GET', '/metrics/usage')).toEqual(['admin']);
-      expect(getRequiredScopes('POST', '/metrics/events')).toEqual(['admin']);
+      expect(getRequiredScopes('GET', '/metrics/performance')).toEqual([
+        'admin',
+      ]);
     });
 
     it('should return default scope for unknown endpoints', () => {
@@ -154,10 +171,10 @@ describe('User Management API Client', () => {
       expect(getRequiredScopes('get', '/users/123/profile')).toEqual([
         'user:read',
       ]);
-      expect(getRequiredScopes('put', '/users/profile')).toEqual([
+      expect(getRequiredScopes('put', '/users/123/profile')).toEqual([
         'user:write',
       ]);
-      expect(getRequiredScopes('post', '/metrics/events')).toEqual(['admin']);
+      expect(getRequiredScopes('get', '/metrics/system')).toEqual(['admin']);
     });
 
     it('should handle URLs with query parameters', () => {

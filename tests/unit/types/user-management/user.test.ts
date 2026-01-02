@@ -6,12 +6,6 @@ import type {
   UserAccountDeleteRequest,
   UserAccountDeleteRequestResponse,
   UserConfirmAccountDeleteResponse,
-  NotificationPreferences,
-  PrivacyPreferences,
-  DisplayPreferences,
-  UserPreferences,
-  UserPreferenceResponse,
-  UpdateUserPreferenceRequest,
 } from '@/types/user-management/user';
 
 describe('User Management User Types', () => {
@@ -148,122 +142,6 @@ describe('User Management User Types', () => {
 
       expect(typeof response.userId).toBe('string');
       expect(typeof response.deactivatedAt).toBe('string');
-    });
-  });
-
-  describe('Notification Preferences', () => {
-    it('should allow all optional boolean properties', () => {
-      const preferences: NotificationPreferences = {};
-      expect(typeof preferences).toBe('object');
-    });
-
-    it('should validate all notification preference fields', () => {
-      const preferences: NotificationPreferences = {
-        email_notifications: true,
-        push_notifications: false,
-        follow_notifications: true,
-        like_notifications: true,
-        comment_notifications: false,
-        recipe_notifications: true,
-        system_notifications: true,
-      };
-
-      Object.values(preferences).forEach(value => {
-        expect(typeof value).toBe('boolean');
-      });
-    });
-  });
-
-  describe('Privacy Preferences', () => {
-    it('should allow all optional properties', () => {
-      const preferences: PrivacyPreferences = {};
-      expect(typeof preferences).toBe('object');
-    });
-
-    it('should validate privacy preference fields', () => {
-      const preferences: PrivacyPreferences = {
-        profile_visibility: 'public',
-        show_email: false,
-        show_full_name: true,
-        allow_follows: true,
-        allow_messages: false,
-      };
-
-      expect(['public', 'followers_only', 'private']).toContain(
-        preferences.profile_visibility
-      );
-      expect(typeof preferences.show_email).toBe('boolean');
-      expect(typeof preferences.show_full_name).toBe('boolean');
-      expect(typeof preferences.allow_follows).toBe('boolean');
-      expect(typeof preferences.allow_messages).toBe('boolean');
-    });
-  });
-
-  describe('Display Preferences', () => {
-    it('should allow all optional properties', () => {
-      const preferences: DisplayPreferences = {};
-      expect(typeof preferences).toBe('object');
-    });
-
-    it('should validate display preference fields', () => {
-      const preferences: DisplayPreferences = {
-        theme: 'dark',
-        language: 'en',
-        timezone: 'UTC',
-      };
-
-      expect(['light', 'dark', 'auto']).toContain(preferences.theme);
-      expect(typeof preferences.language).toBe('string');
-      expect(typeof preferences.timezone).toBe('string');
-    });
-  });
-
-  describe('User Preferences', () => {
-    it('should allow nested preference objects', () => {
-      const userPreferences: UserPreferences = {
-        notification_preferences: {
-          email_notifications: true,
-          push_notifications: false,
-        },
-        privacy_preferences: {
-          profile_visibility: 'followers_only',
-          show_email: false,
-        },
-        display_preferences: {
-          theme: 'dark',
-          language: 'en',
-        },
-      };
-
-      expect(typeof userPreferences.notification_preferences).toBe('object');
-      expect(typeof userPreferences.privacy_preferences).toBe('object');
-      expect(typeof userPreferences.display_preferences).toBe('object');
-    });
-
-    it('should validate UserPreferenceResponse wrapper', () => {
-      const response: UserPreferenceResponse = {
-        preferences: {
-          notification_preferences: {
-            email_notifications: true,
-          },
-        },
-      };
-
-      expect(typeof response.preferences).toBe('object');
-    });
-
-    it('should validate UpdateUserPreferenceRequest', () => {
-      const updateRequest: UpdateUserPreferenceRequest = {
-        notification_preferences: {
-          email_notifications: false,
-        },
-        privacy_preferences: {
-          profile_visibility: 'private',
-        },
-      };
-
-      expect(typeof updateRequest.notification_preferences).toBe('object');
-      expect(typeof updateRequest.privacy_preferences).toBe('object');
     });
   });
 

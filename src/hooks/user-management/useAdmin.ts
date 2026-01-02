@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi, healthApi, metricsApi } from '@/lib/api/user-management';
 import { QUERY_KEYS } from '@/constants';
+import type { CacheClearRequest } from '@/types/user-management';
 
 /**
  * Hook to get user statistics (admin only)
@@ -15,34 +16,19 @@ export const useUserStats = () => {
 };
 
 /**
- * Hook to force logout a user (admin only)
+ * Hook to clear cache (admin only)
+ * Updated: Moved from metrics to admin per OpenAPI spec
+ * Endpoint: POST /admin/cache/clear
  */
-export const useForceLogout = () => {
+export const useClearCache = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userId: string) => adminApi.forceUserLogout(userId),
+    mutationFn: (request?: CacheClearRequest) => adminApi.clearCache(request),
     onSuccess: () => {
-      // Invalidate user stats
+      // Invalidate metrics queries since cache was cleared
       queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.USERS, 'stats'],
-      });
-    },
-  });
-};
-
-/**
- * Hook to batch force logout multiple users (admin only)
- */
-export const useBatchForceLogout = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (userIds: string[]) => adminApi.batchForceLogout(userIds),
-    onSuccess: () => {
-      // Invalidate user stats
-      queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.USER_MANAGEMENT.USERS, 'stats'],
+        queryKey: QUERY_KEYS.USER_MANAGEMENT.METRICS,
       });
     },
   });
@@ -51,12 +37,28 @@ export const useBatchForceLogout = () => {
 // Health and Metrics Hooks for Admin
 
 /**
- * Hook to get basic health check
+ * Hook to get basic health/liveness check
  */
 export const useHealthCheck = () => {
   return useQuery({
     queryKey: QUERY_KEYS.USER_MANAGEMENT.HEALTH,
     queryFn: () => healthApi.getHealthCheck(),
+    staleTime: 30 * 1000, // 30 seconds
+    gcTime: 60 * 1000, // 1 minute
+    refetchInterval: 60 * 1000, // Refetch every minute
+  });
+};
+
+/**
+ * Hook to get readiness check
+ * New: Added per OpenAPI spec for Kubernetes readiness probes
+ * Returns degraded status when database is down but Redis is healthy
+ * Returns 503 when Redis is unavailable
+ */
+export const useReadinessCheck = () => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.USER_MANAGEMENT.HEALTH, 'ready'],
+    queryFn: () => healthApi.getReadinessCheck(),
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 60 * 1000, // 1 minute
     refetchInterval: 60 * 1000, // Refetch every minute

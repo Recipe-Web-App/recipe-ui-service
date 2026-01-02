@@ -1,9 +1,9 @@
 import { healthApi } from '@/lib/api/user-management/health';
 import { userManagementClient } from '@/lib/api/user-management/client';
 import type {
-  HealthCheckResponse,
+  LivenessResponse,
+  ReadinessResponse,
   ComprehensiveHealthResponse,
-  HealthHistoryResponse,
 } from '@/types/user-management';
 
 // Mock the client module
@@ -28,7 +28,6 @@ const mockClient = userManagementClient as jest.Mocked<
 describe('Health API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset timers for timeout tests
     jest.clearAllTimers();
     jest.useFakeTimers();
   });
@@ -38,11 +37,9 @@ describe('Health API', () => {
   });
 
   describe('getHealthCheck', () => {
-    it('should get basic health check successfully', async () => {
-      const mockResponse: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+    it('should get basic health/liveness check successfully', async () => {
+      const mockResponse: LivenessResponse = {
+        status: 'UP',
       };
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
@@ -60,55 +57,79 @@ describe('Health API', () => {
     });
   });
 
-  describe('getLivenessCheck', () => {
-    it('should get liveness check successfully', async () => {
-      const mockResponse = { status: 'ok' };
+  describe('getReadinessCheck', () => {
+    it('should get readiness check successfully', async () => {
+      const mockResponse: ReadinessResponse = {
+        status: 'READY',
+        database: {
+          status: 'healthy',
+        },
+        redis: {
+          status: 'healthy',
+        },
+      };
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
-      const result = await healthApi.getLivenessCheck();
+      const result = await healthApi.getReadinessCheck();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/live');
+      expect(mockClient.get).toHaveBeenCalledWith('/ready');
       expect(result).toEqual(mockResponse);
     });
 
-    it('should handle liveness check error', async () => {
-      mockClient.get.mockRejectedValue(new Error('Liveness probe failed'));
+    it('should handle degraded readiness status', async () => {
+      const mockResponse: ReadinessResponse = {
+        status: 'DEGRADED',
+        database: {
+          status: 'unhealthy',
+          message: 'Database connection failed',
+        },
+        redis: {
+          status: 'healthy',
+        },
+      };
 
-      await expect(healthApi.getLivenessCheck()).rejects.toThrow();
+      mockClient.get.mockResolvedValue({ data: mockResponse });
+
+      const result = await healthApi.getReadinessCheck();
+
+      expect(result.status).toBe('DEGRADED');
+    });
+
+    it('should handle readiness check error', async () => {
+      mockClient.get.mockRejectedValue(new Error('Readiness probe failed'));
+
+      await expect(healthApi.getReadinessCheck()).rejects.toThrow();
     });
   });
 
   describe('getComprehensiveHealth', () => {
     it('should get comprehensive health check successfully', async () => {
       const mockResponse: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 7200,
+        uptimeSeconds: 7200,
+        version: '1.0.0',
+        environment: 'production',
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 8.5,
-            connection_pool: {
-              active_connections: 12,
-              idle_connections: 8,
-              max_connections: 20,
-            },
+            responseTimeMs: 8.5,
+            activeConnections: 12,
+            maxConnections: 20,
           },
           redis: {
             status: 'healthy',
-            response_time_ms: 2.1,
-            memory: { used_memory_human: '45.6MB' },
-            connectivity: {
-              connected_clients: 15,
-            },
-            performance: { hit_rate_percent: 94.2 },
+            responseTimeMs: 2.1,
+            memoryUsage: '45.6MB',
+            connectedClients: 15,
+            hitRatePercent: 94.2,
           },
         },
-        system_resources: {
-          cpu_usage_percent: 35.2,
-          memory_usage_percent: 68.5,
-          disk_usage_percent: 42.1,
+        systemResources: {
+          cpuUsagePercent: 35.2,
+          memoryUsagePercent: 68.5,
+          diskUsagePercent: 42.1,
         },
       };
 
@@ -127,157 +148,30 @@ describe('Health API', () => {
     });
   });
 
-  describe('getHealthHistory', () => {
-    it('should get health history without parameters', async () => {
-      const mockResponse: HealthHistoryResponse = {
-        entries: [
-          {
-            timestamp: '2023-01-01T00:00:00Z',
-            overall_status: 'healthy',
-            metrics: {
-              response_time_ms: 120.5,
-            },
-          },
-          {
-            timestamp: '2023-01-01T01:00:00Z',
-            overall_status: 'healthy',
-            metrics: {
-              response_time_ms: 115.2,
-            },
-          },
-        ],
-        period_start: '2023-01-01T00:00:00Z',
-        period_end: '2023-01-01T02:00:00Z',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getHealthHistory();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/health/history');
-      expect(result).toEqual(mockResponse);
-    });
-
-    it('should get health history with parameters', async () => {
-      const mockResponse: HealthHistoryResponse = {
-        entries: [
-          {
-            timestamp: '2023-01-01T12:00:00Z',
-            overall_status: 'healthy',
-            metrics: {
-              response_time_ms: 110.0,
-            },
-          },
-        ],
-        period_start: '2023-01-01T12:00:00Z',
-        period_end: '2023-01-01T13:00:00Z',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getHealthHistory({
-        period_start: '2023-01-01T12:00:00Z',
-        period_end: '2023-01-01T13:00:00Z',
-        limit: 50,
-      });
-
-      expect(mockClient.get).toHaveBeenCalledWith(
-        '/health/history?period_start=2023-01-01T12%3A00%3A00Z&period_end=2023-01-01T13%3A00%3A00Z&limit=50'
-      );
-      expect(result).toEqual(mockResponse);
-    });
-
-    it('should handle health history error', async () => {
-      mockClient.get.mockRejectedValue(new Error('History data unavailable'));
-
-      await expect(healthApi.getHealthHistory()).rejects.toThrow();
-    });
-  });
-
-  describe('getReadinessCheck', () => {
-    it('should return ready status when health check is healthy', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockHealthResponse });
-
-      const result = await healthApi.getReadinessCheck();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/health');
-      expect(result).toEqual({
-        status: 'ready',
-        checks: {
-          database: 'pass',
-          redis: 'pass',
-          external_services: 'pass',
-        },
-      });
-    });
-
-    it('should return not ready status when health check is unhealthy', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'unhealthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockHealthResponse });
-
-      const result = await healthApi.getReadinessCheck();
-
-      expect(result).toEqual({
-        status: 'not_ready',
-        checks: {
-          database: 'fail',
-          redis: 'fail',
-          external_services: 'fail',
-        },
-      });
-    });
-
-    it('should return not ready status on health check error', async () => {
-      mockClient.get.mockRejectedValue(new Error('Health check failed'));
-
-      const result = await healthApi.getReadinessCheck();
-
-      expect(result).toEqual({
-        status: 'not_ready',
-        checks: {
-          database: 'fail',
-          redis: 'fail',
-          external_services: 'fail',
-        },
-      });
-    });
-  });
-
   describe('getUptime', () => {
     it('should return uptime information', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
+      const mockHealthResponse: ComprehensiveHealthResponse = {
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 7265, // 2 hours, 1 minute, 5 seconds
+        uptimeSeconds: 7265, // 2 hours, 1 minute, 5 seconds
       };
 
       mockClient.get.mockResolvedValue({ data: mockHealthResponse });
 
       const result = await healthApi.getUptime();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/health');
+      expect(mockClient.get).toHaveBeenCalledWith('/metrics/health/detailed');
       expect(result).toEqual({
-        uptime_seconds: 7265,
-        uptime_human: '2h 1m',
+        uptimeSeconds: 7265,
+        uptimeHuman: '2h 1m',
       });
     });
 
     it('should handle uptime calculation for days', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
+      const mockHealthResponse: ComprehensiveHealthResponse = {
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 269700, // 3 days, 2 hours, 55 minutes
+        uptimeSeconds: 269700, // 3 days, 2 hours, 55 minutes
       };
 
       mockClient.get.mockResolvedValue({ data: mockHealthResponse });
@@ -285,16 +179,16 @@ describe('Health API', () => {
       const result = await healthApi.getUptime();
 
       expect(result).toEqual({
-        uptime_seconds: 269700,
-        uptime_human: '3d 2h 55m',
+        uptimeSeconds: 269700,
+        uptimeHuman: '3d 2h 55m',
       });
     });
 
     it('should handle uptime less than a minute', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
+      const mockHealthResponse: ComprehensiveHealthResponse = {
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 45,
+        uptimeSeconds: 45,
       };
 
       mockClient.get.mockResolvedValue({ data: mockHealthResponse });
@@ -302,8 +196,8 @@ describe('Health API', () => {
       const result = await healthApi.getUptime();
 
       expect(result).toEqual({
-        uptime_seconds: 45,
-        uptime_human: '< 1m',
+        uptimeSeconds: 45,
+        uptimeHuman: '< 1m',
       });
     });
 
@@ -313,18 +207,16 @@ describe('Health API', () => {
       const result = await healthApi.getUptime();
 
       expect(result).toEqual({
-        uptime_seconds: 0,
-        uptime_human: 'Unknown',
+        uptimeSeconds: 0,
+        uptimeHuman: 'Unknown',
       });
     });
   });
 
   describe('monitorHealth', () => {
     it('should return healthy status on first attempt', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+      const mockHealthResponse: LivenessResponse = {
+        status: 'UP',
       };
 
       mockClient.get.mockResolvedValue({ data: mockHealthResponse });
@@ -342,10 +234,8 @@ describe('Health API', () => {
     it('should retry on failure and eventually succeed', async () => {
       jest.useRealTimers(); // Use real timers for this test
 
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+      const mockHealthResponse: LivenessResponse = {
+        status: 'UP',
       };
 
       mockClient.get
@@ -405,95 +295,97 @@ describe('Health API', () => {
 
   describe('getHealthSummary', () => {
     it('should get health summary without detailed health (no admin permissions)', async () => {
-      const mockBasicHealth: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+      const mockLiveness: LivenessResponse = {
+        status: 'UP',
       };
 
-      const mockUptime = {
-        uptime_seconds: 3600,
-        uptime_human: '1h',
-      };
-
-      const mockReadiness = {
-        status: 'ready' as const,
-        checks: {
-          database: 'pass' as const,
-          redis: 'pass' as const,
-          external_services: 'pass' as const,
+      const mockReadiness: ReadinessResponse = {
+        status: 'READY',
+        database: {
+          status: 'healthy',
+        },
+        redis: {
+          status: 'healthy',
         },
       };
 
-      // Mock the health check calls made by getUptime and getReadinessCheck
+      const mockComprehensive: ComprehensiveHealthResponse = {
+        overallStatus: 'healthy',
+        timestamp: '2023-01-01T00:00:00Z',
+        uptimeSeconds: 3600,
+      };
+
+      // Mock calls in order
       mockClient.get
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getHealthSummary
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getUptime
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getReadinessCheck
-        .mockRejectedValueOnce(new Error('Access denied')); // getComprehensiveHealth
+        .mockResolvedValueOnce({ data: mockLiveness }) // getHealthCheck
+        .mockResolvedValueOnce({ data: mockReadiness }) // getReadinessCheck
+        .mockResolvedValueOnce({ data: mockComprehensive }) // getUptime -> getComprehensiveHealth
+        .mockRejectedValueOnce(new Error('Access denied')); // getComprehensiveHealth for detailed
 
       const result = await healthApi.getHealthSummary();
 
-      expect(result).toEqual({
-        basic: mockBasicHealth,
-        detailed: undefined,
-        uptime: mockUptime,
-        readiness: mockReadiness,
+      expect(result.liveness).toEqual(mockLiveness);
+      expect(result.readiness).toEqual(mockReadiness);
+      expect(result.uptime).toEqual({
+        uptimeSeconds: 3600,
+        uptimeHuman: '1h',
       });
+      expect(result.detailed).toBeUndefined();
     });
 
     it('should get health summary with detailed health (admin permissions)', async () => {
-      const mockBasicHealth: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+      const mockLiveness: LivenessResponse = {
+        status: 'UP',
       };
 
-      const mockDetailedHealth: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+      const mockReadiness: ReadinessResponse = {
+        status: 'READY',
+        database: {
+          status: 'healthy',
+        },
+        redis: {
+          status: 'healthy',
+        },
+      };
+
+      const mockComprehensive: ComprehensiveHealthResponse = {
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
+        version: '1.0.0',
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 5.5,
-            connection_pool: {
-              active_connections: 10,
-              idle_connections: 5,
-              max_connections: 15,
-            },
+            responseTimeMs: 5.5,
+            activeConnections: 10,
+            maxConnections: 15,
           },
           redis: {
             status: 'healthy',
-            response_time_ms: 1.2,
-            memory: { used_memory_human: '30.5MB' },
-            connectivity: { connected_clients: 12 },
-            performance: { hit_rate_percent: 95.5 },
+            responseTimeMs: 1.2,
+            memoryUsage: '30.5MB',
+            connectedClients: 12,
+            hitRatePercent: 95.5,
           },
-        },
-        system_resources: {
-          cpu_usage_percent: 25.0,
-          memory_usage_percent: 60.0,
-          disk_usage_percent: 35.0,
         },
       };
 
-      // Mock calls in order they are made
+      // Mock calls in order
       mockClient.get
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getHealthSummary
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getUptime
-        .mockResolvedValueOnce({ data: mockBasicHealth }) // getHealthCheck in getReadinessCheck
-        .mockResolvedValueOnce({ data: mockDetailedHealth }); // getComprehensiveHealth
+        .mockResolvedValueOnce({ data: mockLiveness }) // getHealthCheck
+        .mockResolvedValueOnce({ data: mockReadiness }) // getReadinessCheck
+        .mockResolvedValueOnce({ data: mockComprehensive }) // getUptime -> getComprehensiveHealth
+        .mockResolvedValueOnce({ data: mockComprehensive }); // getComprehensiveHealth for detailed
 
       const result = await healthApi.getHealthSummary();
 
-      expect(result.basic).toEqual(mockBasicHealth);
-      expect(result.detailed).toEqual(mockDetailedHealth);
+      expect(result.liveness).toEqual(mockLiveness);
+      expect(result.readiness).toEqual(mockReadiness);
+      expect(result.detailed).toEqual(mockComprehensive);
       expect(result.uptime).toEqual({
-        uptime_seconds: 3600,
-        uptime_human: '1h',
+        uptimeSeconds: 3600,
+        uptimeHuman: '1h',
       });
-      expect(result.readiness.status).toBe('ready');
     });
 
     it('should handle health summary error', async () => {
@@ -506,33 +398,23 @@ describe('Health API', () => {
   describe('checkServiceComponent', () => {
     it('should check database component successfully', async () => {
       const mockDetailedHealth: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 8.5,
-            connection_pool: {
-              active_connections: 12,
-              idle_connections: 8,
-              max_connections: 20,
-            },
+            responseTimeMs: 8.5,
+            activeConnections: 12,
+            maxConnections: 20,
           },
           redis: {
             status: 'healthy',
-            response_time_ms: 2.1,
-            memory: { used_memory_human: '45.6MB' },
-            connectivity: {
-              connected_clients: 15,
-            },
-            performance: { hit_rate_percent: 94.2 },
+            responseTimeMs: 2.1,
+            memoryUsage: '45.6MB',
+            connectedClients: 15,
+            hitRatePercent: 94.2,
           },
-        },
-        system_resources: {
-          cpu_usage_percent: 35.2,
-          memory_usage_percent: 68.5,
-          disk_usage_percent: 42.1,
         },
       };
 
@@ -544,37 +426,31 @@ describe('Health API', () => {
       expect(result).toEqual({
         component: 'database',
         status: 'healthy',
-        response_time_ms: 8.5,
+        responseTimeMs: 8.5,
         details: mockDetailedHealth.services?.database,
       });
     });
 
     it('should check redis component successfully', async () => {
       const mockDetailedHealth: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
         services: {
           database: {
             status: 'healthy',
-            response_time_ms: 8.5,
-            connection_pool: {
-              active_connections: 12,
-              idle_connections: 8,
-              max_connections: 20,
-            },
+            responseTimeMs: 8.5,
+            activeConnections: 12,
+            maxConnections: 20,
           },
           redis: {
             status: 'healthy',
-            response_time_ms: 2.1,
-            memory: { used_memory_human: '45.6MB' },
-            connectivity: {
-              connected_clients: 15,
-            },
-            performance: { hit_rate_percent: 94.2 },
+            responseTimeMs: 2.1,
+            memoryUsage: '45.6MB',
+            connectedClients: 15,
+            hitRatePercent: 94.2,
           },
         },
-        system_resources: {},
       };
 
       mockClient.get.mockResolvedValue({ data: mockDetailedHealth });
@@ -584,7 +460,7 @@ describe('Health API', () => {
       expect(result).toEqual({
         component: 'redis',
         status: 'healthy',
-        response_time_ms: 2.1,
+        responseTimeMs: 2.1,
         details: mockDetailedHealth.services?.redis,
       });
     });
@@ -603,11 +479,10 @@ describe('Health API', () => {
 
     it('should handle missing component data', async () => {
       const mockDetailedHealth: ComprehensiveHealthResponse = {
-        overall_status: 'healthy',
+        overallStatus: 'healthy',
         timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
         services: {},
-        system_resources: {},
       };
 
       mockClient.get.mockResolvedValue({ data: mockDetailedHealth });
@@ -617,7 +492,7 @@ describe('Health API', () => {
       expect(result).toEqual({
         component: 'database',
         status: 'unhealthy',
-        response_time_ms: undefined,
+        responseTimeMs: undefined,
         details: undefined,
       });
     });
@@ -625,10 +500,8 @@ describe('Health API', () => {
 
   describe('getHealthCheckWithTimeout', () => {
     it('should return health check within timeout', async () => {
-      const mockHealthResponse: HealthCheckResponse = {
-        status: 'healthy',
-        timestamp: '2023-01-01T00:00:00Z',
-        uptime_seconds: 3600,
+      const mockHealthResponse: LivenessResponse = {
+        status: 'UP',
       };
 
       mockClient.get.mockResolvedValue({ data: mockHealthResponse });

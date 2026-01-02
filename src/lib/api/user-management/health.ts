@@ -1,24 +1,29 @@
 import { userManagementClient, handleUserManagementApiError } from './client';
 import type {
-  HealthCheckResponse,
   ComprehensiveHealthResponse,
-  HealthHistoryResponse,
+  ReadinessResponse,
+  LivenessResponse,
 } from '@/types/user-management';
 
 /**
  * Health monitoring API functions
  * Basic health endpoints are public, detailed health requires admin scope
+ *
+ * Note: Per OpenAPI spec update:
+ * - /live endpoint removed (use /health for liveness)
+ * - /health/history endpoint removed
+ * - /ready endpoint added for readiness checks
  */
 export const healthApi = {
   /**
-   * Basic health check
+   * Basic health/liveness check
    * Simple liveness check - returns basic service status
    * No authentication required
    */
-  async getHealthCheck(): Promise<HealthCheckResponse> {
+  async getHealthCheck(): Promise<LivenessResponse> {
     try {
       const response = await userManagementClient.get('/health');
-      return response.data as HealthCheckResponse;
+      return response.data as LivenessResponse;
     } catch (error) {
       handleUserManagementApiError(error);
       throw error; // This line should never be reached since handleUserManagementApiError throws
@@ -26,14 +31,16 @@ export const healthApi = {
   },
 
   /**
-   * Liveness probe
-   * Kubernetes/container orchestration compatible liveness endpoint
+   * Readiness check
+   * Returns 200 OK if service is ready to accept traffic
+   * Returns degraded status when database is down but Redis is healthy
+   * Returns 503 when Redis is unavailable (JWT sessions are critical)
    * No authentication required
    */
-  async getLivenessCheck(): Promise<{ status: 'ok' }> {
+  async getReadinessCheck(): Promise<ReadinessResponse> {
     try {
-      const response = await userManagementClient.get('/live');
-      return response.data as { status: 'ok' };
+      const response = await userManagementClient.get('/ready');
+      return response.data as ReadinessResponse;
     } catch (error) {
       handleUserManagementApiError(error);
       throw error; // This line should never be reached since handleUserManagementApiError throws
@@ -58,86 +65,17 @@ export const healthApi = {
   },
 
   /**
-   * Get health history
-   * Historical health status data for trend analysis
-   * Requires: admin scope
-   */
-  async getHealthHistory(params?: {
-    period_start?: string;
-    period_end?: string;
-    limit?: number;
-  }): Promise<HealthHistoryResponse> {
-    try {
-      const queryParams = new URLSearchParams();
-      if (params?.period_start)
-        queryParams.append('period_start', params.period_start);
-      if (params?.period_end)
-        queryParams.append('period_end', params.period_end);
-      if (params?.limit) queryParams.append('limit', params.limit.toString());
-
-      const queryString = queryParams.toString();
-      const url = queryString
-        ? `/health/history?${queryString}`
-        : '/health/history';
-
-      const response = await userManagementClient.get(url);
-      return response.data as HealthHistoryResponse;
-    } catch (error) {
-      handleUserManagementApiError(error);
-      throw error; // This line should never be reached since handleUserManagementApiError throws
-    }
-  },
-
-  /**
-   * Check if service is ready to accept traffic
-   * Readiness check that validates all dependencies
-   * No authentication required
-   */
-  async getReadinessCheck(): Promise<{
-    status: 'ready' | 'not_ready';
-    checks: {
-      database: 'pass' | 'fail';
-      redis: 'pass' | 'fail';
-      external_services: 'pass' | 'fail';
-    };
-  }> {
-    try {
-      const health = await this.getHealthCheck();
-
-      // Basic readiness logic based on health check
-      const isReady = health.status === 'healthy';
-
-      return {
-        status: isReady ? 'ready' : 'not_ready',
-        checks: {
-          database: isReady ? 'pass' : 'fail',
-          redis: isReady ? 'pass' : 'fail',
-          external_services: isReady ? 'pass' : 'fail',
-        },
-      };
-    } catch {
-      return {
-        status: 'not_ready',
-        checks: {
-          database: 'fail',
-          redis: 'fail',
-          external_services: 'fail',
-        },
-      };
-    }
-  },
-
-  /**
    * Get service uptime
    * Calculate service uptime from health check response
    */
   async getUptime(): Promise<{
-    uptime_seconds: number;
-    uptime_human: string;
+    uptimeSeconds: number;
+    uptimeHuman: string;
   }> {
     try {
-      const health = await this.getHealthCheck();
-      const uptimeSeconds = health.uptime_seconds ?? 0;
+      // Use comprehensive health which has uptime info
+      const health = await this.getComprehensiveHealth();
+      const uptimeSeconds = health.uptimeSeconds ?? 0;
 
       // Convert seconds to human readable format
       const days = Math.floor(uptimeSeconds / 86400);
@@ -151,13 +89,13 @@ export const healthApi = {
       if (!uptimeHuman) uptimeHuman = '< 1m';
 
       return {
-        uptime_seconds: uptimeSeconds,
-        uptime_human: uptimeHuman.trim(),
+        uptimeSeconds,
+        uptimeHuman: uptimeHuman.trim(),
       };
     } catch {
       return {
-        uptime_seconds: 0,
-        uptime_human: 'Unknown',
+        uptimeSeconds: 0,
+        uptimeHuman: 'Unknown',
       };
     }
   },
@@ -171,7 +109,7 @@ export const healthApi = {
     retryDelay?: number;
   }): Promise<{
     isHealthy: boolean;
-    health: HealthCheckResponse | null;
+    health: LivenessResponse | null;
     attempts: number;
     lastError?: string;
   }> {
@@ -188,7 +126,7 @@ export const healthApi = {
         const health = await this.getHealthCheck();
 
         return {
-          isHealthy: health.status === 'healthy',
+          isHealthy: health.status === 'UP',
           health,
           attempts,
         };
@@ -216,16 +154,16 @@ export const healthApi = {
    * Requires: admin scope for detailed information
    */
   async getHealthSummary(): Promise<{
-    basic: HealthCheckResponse;
+    liveness: LivenessResponse;
+    readiness: ReadinessResponse;
     detailed?: ComprehensiveHealthResponse;
-    uptime: { uptime_seconds: number; uptime_human: string };
-    readiness: { status: 'ready' | 'not_ready' };
+    uptime: { uptimeSeconds: number; uptimeHuman: string };
   }> {
     try {
-      const [basic, uptime, readiness] = await Promise.all([
+      const [liveness, readiness, uptime] = await Promise.all([
         this.getHealthCheck(),
-        this.getUptime(),
         this.getReadinessCheck(),
+        this.getUptime(),
       ]);
 
       let detailed: ComprehensiveHealthResponse | undefined;
@@ -238,10 +176,10 @@ export const healthApi = {
       }
 
       return {
-        basic,
+        liveness,
+        readiness,
         detailed,
         uptime,
-        readiness,
       };
     } catch (error) {
       handleUserManagementApiError(error);
@@ -257,7 +195,7 @@ export const healthApi = {
   async checkServiceComponent(component: 'database' | 'redis'): Promise<{
     component: string;
     status: 'healthy' | 'unhealthy';
-    response_time_ms?: number;
+    responseTimeMs?: number;
     details?: Record<string, unknown>;
   }> {
     try {
@@ -272,7 +210,7 @@ export const healthApi = {
       return {
         component,
         status: componentData?.status ?? 'unhealthy',
-        response_time_ms: componentData?.response_time_ms,
+        responseTimeMs: componentData?.responseTimeMs,
         details: componentData as Record<string, unknown>,
       };
     } catch {
@@ -290,7 +228,7 @@ export const healthApi = {
    */
   async getHealthCheckWithTimeout(
     timeoutMs: number = 5000
-  ): Promise<HealthCheckResponse> {
+  ): Promise<LivenessResponse> {
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => reject(new Error('Health check timeout')), timeoutMs);
     });

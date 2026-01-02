@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { usePreferencesStore } from '@/stores/preferences-store';
 import type {
-  UserPreferences,
+  UserPreferencesResponse,
   DisplayPreferences,
   NotificationPreferences,
   PrivacyPreferences,
@@ -29,35 +29,46 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Test data
+// Test data - using new schema with camelCase property names
 const mockDisplayPreferences: DisplayPreferences = {
-  theme: 'dark',
-  language: 'en',
-  timezone: 'America/New_York',
+  fontSize: 'MEDIUM',
+  colorScheme: 'DARK',
+  layoutDensity: 'COMFORTABLE',
+  showImages: true,
+  compactMode: false,
 };
 
 const mockNotificationPreferences: NotificationPreferences = {
-  email_notifications: true,
-  push_notifications: false,
-  follow_notifications: true,
-  like_notifications: false,
-  comment_notifications: true,
-  recipe_notifications: true,
-  system_notifications: false,
+  emailNotifications: true,
+  pushNotifications: false,
+  smsNotifications: false,
+  marketingEmails: false,
+  securityAlerts: true,
+  activitySummaries: true,
+  recipeRecommendations: true,
+  socialInteractions: false,
 };
 
 const mockPrivacyPreferences: PrivacyPreferences = {
-  profile_visibility: 'public',
-  show_email: false,
-  show_full_name: true,
-  allow_follows: true,
-  allow_messages: false,
+  profileVisibility: 'PUBLIC',
+  recipeVisibility: 'PUBLIC',
+  activityVisibility: 'FRIENDS_ONLY',
+  contactInfoVisibility: 'PRIVATE',
+  dataSharing: false,
+  analyticsTracking: true,
 };
 
-const mockUserPreferences: UserPreferences = {
-  display_preferences: mockDisplayPreferences,
-  notification_preferences: mockNotificationPreferences,
-  privacy_preferences: mockPrivacyPreferences,
+const mockUserPreferences: UserPreferencesResponse = {
+  userId: 'test-user-id',
+  display: mockDisplayPreferences,
+  notification: mockNotificationPreferences,
+  privacy: mockPrivacyPreferences,
+  theme: {
+    customTheme: 'DARK',
+  },
+  language: {
+    primaryLanguage: 'EN',
+  },
 };
 
 describe('usePreferencesStore', () => {
@@ -103,17 +114,13 @@ describe('usePreferencesStore', () => {
       });
 
       // Update display preferences
-      const updates = { theme: 'light' as const };
+      const updates = { colorScheme: 'LIGHT' as const };
       act(() => {
         result.current.updateDisplayPreferences(updates);
       });
 
-      expect(result.current.preferences?.display_preferences?.theme).toBe(
-        'light'
-      );
-      expect(result.current.preferences?.display_preferences?.language).toBe(
-        'en'
-      );
+      expect(result.current.preferences?.display?.colorScheme).toBe('LIGHT');
+      expect(result.current.preferences?.display?.fontSize).toBe('MEDIUM');
       expect(result.current.isSync).toBe(false);
     });
 
@@ -125,12 +132,12 @@ describe('usePreferencesStore', () => {
       });
 
       act(() => {
-        result.current.updateDisplayPreferences({ timezone: 'Europe/London' });
+        result.current.updateDisplayPreferences({ compactMode: true });
       });
 
-      expect(result.current.preferences?.display_preferences).toEqual({
+      expect(result.current.preferences?.display).toEqual({
         ...mockDisplayPreferences,
-        timezone: 'Europe/London',
+        compactMode: true,
       });
     });
 
@@ -138,12 +145,10 @@ describe('usePreferencesStore', () => {
       const { result } = renderHook(() => usePreferencesStore());
 
       act(() => {
-        result.current.updateDisplayPreferences({ theme: 'dark' });
+        result.current.updateDisplayPreferences({ colorScheme: 'DARK' });
       });
 
-      expect(result.current.preferences?.display_preferences?.theme).toBe(
-        'dark'
-      );
+      expect(result.current.preferences?.display?.colorScheme).toBe('DARK');
       expect(result.current.isSync).toBe(false);
     });
   });
@@ -156,18 +161,17 @@ describe('usePreferencesStore', () => {
         result.current.setPreferences(mockUserPreferences);
       });
 
-      const updates = { email_notifications: false };
+      const updates = { emailNotifications: false };
       act(() => {
         result.current.updateNotificationPreferences(updates);
       });
 
-      expect(
-        result.current.preferences?.notification_preferences
-          ?.email_notifications
-      ).toBe(false);
-      expect(
-        result.current.preferences?.notification_preferences?.push_notifications
-      ).toBe(false);
+      expect(result.current.preferences?.notification?.emailNotifications).toBe(
+        false
+      );
+      expect(result.current.preferences?.notification?.pushNotifications).toBe(
+        false
+      );
       expect(result.current.isSync).toBe(false);
     });
   });
@@ -180,14 +184,14 @@ describe('usePreferencesStore', () => {
         result.current.setPreferences(mockUserPreferences);
       });
 
-      const updates = { profile_visibility: 'private' as const };
+      const updates = { profileVisibility: 'PRIVATE' as const };
       act(() => {
         result.current.updatePrivacyPreferences(updates);
       });
 
-      expect(
-        result.current.preferences?.privacy_preferences?.profile_visibility
-      ).toBe('private');
+      expect(result.current.preferences?.privacy?.profileVisibility).toBe(
+        'PRIVATE'
+      );
       expect(result.current.isSync).toBe(false);
     });
   });
@@ -215,7 +219,7 @@ describe('usePreferencesStore', () => {
 
       // Set out of sync first
       act(() => {
-        result.current.updateDisplayPreferences({ theme: 'light' });
+        result.current.updateDisplayPreferences({ colorScheme: 'LIGHT' });
       });
 
       expect(result.current.isSync).toBe(false);
@@ -294,17 +298,18 @@ describe('usePreferencesStore', () => {
 
     it('should get theme', () => {
       const { result } = renderHook(() => usePreferencesStore());
-      expect(result.current.getTheme()).toBe('dark');
+      expect(result.current.getTheme()).toBe('DARK');
     });
 
     it('should get language', () => {
       const { result } = renderHook(() => usePreferencesStore());
-      expect(result.current.getLanguage()).toBe('en');
+      expect(result.current.getLanguage()).toBe('EN');
     });
 
-    it('should get timezone', () => {
+    it('should get timezone (returns undefined per new schema)', () => {
       const { result } = renderHook(() => usePreferencesStore());
-      expect(result.current.getTimezone()).toBe('America/New_York');
+      // Timezone is no longer in the new schema
+      expect(result.current.getTimezone()).toBeUndefined();
     });
 
     it('should return undefined for getters when preferences are null', () => {
@@ -341,9 +346,10 @@ describe('usePreferencesStore', () => {
 
       act(() => {
         result.current.setPreferences({
-          display_preferences: {},
-          notification_preferences: {},
-          privacy_preferences: {},
+          userId: 'test-user-id',
+          display: {},
+          notification: {},
+          privacy: {},
         });
       });
 

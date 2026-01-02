@@ -11,6 +11,14 @@ export type {
   ReadinessStatus,
   ProfileVisibility,
   Theme,
+  // New preference enums per OpenAPI spec
+  FontSizeEnum,
+  ColorSchemeEnum,
+  LayoutDensityEnum,
+  ProfileVisibilityEnum,
+  LanguageEnum,
+  ThemeEnum,
+  PreferenceCategory,
 } from './common';
 
 // User Management - Core User Types
@@ -23,12 +31,6 @@ export type {
   UserAccountDeleteRequest,
   UserAccountDeleteRequestResponse,
   UserConfirmAccountDeleteResponse,
-  UserPreferences,
-  NotificationPreferences,
-  PrivacyPreferences,
-  DisplayPreferences,
-  UserPreferenceResponse,
-  UpdateUserPreferenceRequest,
 } from './user';
 
 // Social Features - Following System & Activity
@@ -43,7 +45,7 @@ export type {
   UserActivityParams,
 } from './social';
 
-// Notifications - User Communication
+// Notifications - User Communication (kept for now per user request)
 export type {
   Notification,
   NotificationListResponse,
@@ -55,32 +57,56 @@ export type {
 } from './notifications';
 
 // Admin Operations - Management & Statistics
+// Updated: Removed types for deleted endpoints per OpenAPI spec
 export type {
-  RedisSessionStatsResponse,
-  ClearSessionsResponse,
   UserStatsResponse,
-  SystemHealthResponse,
-  ForceLogoutResponse,
+  CacheClearRequest,
+  CacheClearResponse,
 } from './admin';
 
 // Metrics & Monitoring - Performance & System Health
 export type {
   PerformanceMetrics,
   CacheMetrics,
-  CacheClearRequest,
-  CacheClearResponse,
   SystemMetrics,
   DetailedHealthMetrics,
 } from './metrics';
 
 // Health Monitoring - Service Status & Diagnostics
+// Updated: Added ReadinessResponse, LivenessResponse per OpenAPI spec
 export type {
   HealthCheckResponse,
   ServiceStatus,
   DatabaseHealth,
   RedisHealth,
-  ExternalServiceHealth,
   ComprehensiveHealthResponse,
-  HealthHistoryEntry,
-  HealthHistoryResponse,
+  ReadinessResponse,
+  LivenessResponse,
 } from './health';
+
+// Preferences - New 9-category preference system per OpenAPI spec
+export type {
+  // Base preference types (NEW schema with camelCase properties)
+  NotificationPreferences,
+  DisplayPreferences,
+  PrivacyPreferences,
+  AccessibilityPreferences,
+  LanguagePreferences,
+  SecurityPreferences,
+  SocialPreferences,
+  SoundPreferences,
+  ThemePreferences,
+  // Response and Update types
+  UserPreferencesResponse,
+  UserPreferencesUpdateRequest,
+  PreferenceCategoryResponse,
+  NotificationPreferencesUpdate,
+  DisplayPreferencesUpdate,
+  PrivacyPreferencesUpdate,
+  AccessibilityPreferencesUpdate,
+  LanguagePreferencesUpdate,
+  SecurityPreferencesUpdate,
+  SocialPreferencesUpdate,
+  SoundPreferencesUpdate,
+  ThemePreferencesUpdate,
+} from './preferences';

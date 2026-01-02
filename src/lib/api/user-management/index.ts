@@ -14,6 +14,7 @@ export * from './notifications';
 export * from './admin';
 export * from './metrics';
 export * from './health';
+export * from './preferences';
 
 // Re-export types for convenience
 export type {
@@ -23,6 +24,7 @@ export type {
   CountOnlyResponse,
   ErrorResponse,
   HealthStatus,
+  PreferenceCategory,
 
   // User management types
   User,
@@ -32,7 +34,6 @@ export type {
   UserAccountDeleteRequest,
   UserAccountDeleteRequestResponse,
   UserConfirmAccountDeleteResponse,
-  UserPreferences,
 
   // Social types
   FollowResponse,
@@ -40,7 +41,7 @@ export type {
   UserActivityResponse,
   UserActivityParams,
 
-  // Notification types
+  // Notification types (kept for now per user request)
   Notification,
   NotificationListResponse,
   NotificationCountResponse,
@@ -49,23 +50,34 @@ export type {
   NotificationDeleteRequest,
   NotificationDeleteResponse,
 
-  // Admin types
-  RedisSessionStatsResponse,
-  ClearSessionsResponse,
+  // Admin types - Updated per OpenAPI spec
   UserStatsResponse,
-  SystemHealthResponse,
-  ForceLogoutResponse,
+  CacheClearRequest,
+  CacheClearResponse,
 
   // Metrics types
   PerformanceMetrics,
   CacheMetrics,
-  CacheClearRequest,
-  CacheClearResponse,
   SystemMetrics,
   DetailedHealthMetrics,
 
-  // Health types
+  // Health types - Updated per OpenAPI spec
   HealthCheckResponse,
   ComprehensiveHealthResponse,
-  HealthHistoryResponse,
+  ReadinessResponse,
+  LivenessResponse,
+
+  // Preferences types - New per OpenAPI spec
+  UserPreferencesResponse,
+  UserPreferencesUpdateRequest,
+  PreferenceCategoryResponse,
+  NotificationPreferencesUpdate,
+  DisplayPreferencesUpdate,
+  PrivacyPreferencesUpdate,
+  AccessibilityPreferencesUpdate,
+  LanguagePreferencesUpdate,
+  SecurityPreferencesUpdate,
+  SocialPreferencesUpdate,
+  SoundPreferencesUpdate,
+  ThemePreferencesUpdate,
 } from '@/types/user-management';

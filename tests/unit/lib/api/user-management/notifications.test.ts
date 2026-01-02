@@ -6,7 +6,6 @@ import type {
   NotificationReadResponse,
   NotificationReadAllResponse,
   NotificationDeleteResponse,
-  UserPreferences,
 } from '@/types/user-management';
 
 // Mock the client module
@@ -229,102 +228,6 @@ describe('Notifications API', () => {
     });
   });
 
-  describe('getNotificationPreferences', () => {
-    it('should get notification preferences successfully', async () => {
-      const mockResponse: UserPreferences = {
-        display_preferences: {
-          theme: 'light',
-          language: 'en',
-          timezone: 'UTC',
-        },
-        notification_preferences: {
-          email_notifications: true,
-          push_notifications: false,
-          follow_notifications: true,
-          like_notifications: false,
-          comment_notifications: true,
-          recipe_notifications: true,
-          system_notifications: true,
-        },
-        privacy_preferences: {
-          profile_visibility: 'public',
-          show_email: false,
-          allow_follows: true,
-        },
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await notificationsApi.getNotificationPreferences();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/notifications/preferences');
-      expect(result).toEqual(mockResponse);
-    });
-
-    it('should handle get preferences error', async () => {
-      mockClient.get.mockRejectedValue(new Error('Preferences not found'));
-
-      await expect(
-        notificationsApi.getNotificationPreferences()
-      ).rejects.toThrow();
-    });
-  });
-
-  describe('updateNotificationPreferences', () => {
-    it('should update notification preferences successfully', async () => {
-      const updateData: UserPreferences = {
-        display_preferences: {
-          theme: 'dark',
-          language: 'en',
-          timezone: 'UTC',
-        },
-        notification_preferences: {
-          email_notifications: false,
-          push_notifications: true,
-          follow_notifications: true,
-          like_notifications: true,
-          comment_notifications: false,
-          recipe_notifications: true,
-          system_notifications: true,
-        },
-        privacy_preferences: {
-          profile_visibility: 'private',
-          show_email: false,
-          allow_follows: true,
-        },
-      };
-
-      mockClient.put.mockResolvedValue({ data: updateData });
-
-      const result =
-        await notificationsApi.updateNotificationPreferences(updateData);
-
-      expect(mockClient.put).toHaveBeenCalledWith(
-        '/notifications/preferences',
-        updateData
-      );
-      expect(result).toEqual(updateData);
-    });
-
-    it('should handle update preferences error', async () => {
-      const updateData: UserPreferences = {
-        display_preferences: {
-          theme: 'dark',
-          language: 'en',
-          timezone: 'UTC',
-        },
-        notification_preferences: {},
-        privacy_preferences: {},
-      };
-
-      mockClient.put.mockRejectedValue(new Error('Update failed'));
-
-      await expect(
-        notificationsApi.updateNotificationPreferences(updateData)
-      ).rejects.toThrow();
-    });
-  });
-
   describe('getAllNotifications', () => {
     it('should get all notifications', async () => {
       const mockResponse: NotificationListResponse = {
@@ -525,68 +428,6 @@ describe('Notifications API', () => {
       );
 
       await expect(notificationsApi.clearReadNotifications()).rejects.toThrow();
-    });
-  });
-
-  describe('updateNotificationTypeSettings', () => {
-    it('should update specific notification type settings', async () => {
-      const currentPrefs: UserPreferences = {
-        display_preferences: {
-          theme: 'light',
-          language: 'en',
-          timezone: 'UTC',
-        },
-        notification_preferences: {
-          email_notifications: true,
-          push_notifications: false,
-          follow_notifications: true,
-          like_notifications: false,
-          comment_notifications: true,
-          recipe_notifications: true,
-          system_notifications: true,
-        },
-        privacy_preferences: {
-          profile_visibility: 'public',
-          show_email: false,
-          allow_follows: true,
-        },
-      };
-
-      const updatedPrefs: UserPreferences = {
-        ...currentPrefs,
-        notification_preferences: {
-          ...currentPrefs.notification_preferences,
-          push_notifications: true,
-          like_notifications: true,
-        },
-      };
-
-      mockClient.get.mockResolvedValue({ data: currentPrefs });
-      mockClient.put.mockResolvedValue({ data: updatedPrefs });
-
-      const result = await notificationsApi.updateNotificationTypeSettings({
-        push_notifications: true,
-        like_notifications: true,
-      });
-
-      expect(mockClient.get).toHaveBeenCalledWith('/notifications/preferences');
-      expect(mockClient.put).toHaveBeenCalledWith(
-        '/notifications/preferences',
-        updatedPrefs
-      );
-      expect(result).toEqual(updatedPrefs);
-    });
-
-    it('should handle update notification type settings error', async () => {
-      mockClient.get.mockRejectedValue(
-        new Error('Failed to get current preferences')
-      );
-
-      await expect(
-        notificationsApi.updateNotificationTypeSettings({
-          email_notifications: false,
-        })
-      ).rejects.toThrow();
     });
   });
 
