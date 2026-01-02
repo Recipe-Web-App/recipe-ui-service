@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { NotificationList } from './NotificationList';
-import type { Notification } from '@/types/user-management/notifications';
+import type { UserNotification } from '@/types/notification';
 import type { NotificationFilter } from '@/types/ui/notification';
 
 const FILTER_LABELS: Record<NotificationFilter, string> = {
@@ -33,7 +33,7 @@ export interface NotificationPanelProps {
   /**
    * Notifications to display
    */
-  notifications: Notification[];
+  notifications: UserNotification[];
 
   /**
    * Whether notifications are loading
@@ -65,7 +65,7 @@ export interface NotificationPanelProps {
   /**
    * Callback when a notification is clicked
    */
-  onNotificationClick?: (notification: Notification) => void;
+  onNotificationClick?: (notification: UserNotification) => void;
 
   /**
    * Callback when mark as read is clicked
@@ -170,17 +170,34 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
     }
 
     return notifications.filter(notification => {
-      const type = notification.notificationType.toLowerCase();
+      const category = notification.notificationCategory.toLowerCase();
 
       switch (filter) {
         case 'social':
-          return ['follow', 'share', 'collection_add'].includes(type);
+          return [
+            'new_follower',
+            'mention',
+            'recipe_shared',
+            'recipe_collected',
+          ].includes(category);
         case 'activity':
-          return ['like', 'comment', 'rating', 'featured', 'trending'].includes(
-            type
-          );
+          return [
+            'recipe_published',
+            'recipe_liked',
+            'recipe_commented',
+            'recipe_rated',
+            'recipe_featured',
+            'recipe_trending',
+          ].includes(category);
         case 'system':
-          return ['welcome', 'update', 'maintenance'].includes(type);
+          return [
+            'welcome',
+            'password_reset',
+            'password_changed',
+            'email_changed',
+            'maintenance',
+            'system_alert',
+          ].includes(category);
         default:
           return true;
       }

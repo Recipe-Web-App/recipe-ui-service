@@ -6,20 +6,28 @@ import {
   NotificationItem,
   type NotificationItemProps,
 } from '@/components/notification';
-import type { Notification } from '@/types/user-management/notifications';
+import type {
+  UserNotification,
+  NotificationCategory,
+} from '@/types/notification';
 
 expect.extend(toHaveNoViolations);
 
-const mockNotification: Notification = {
+const mockNotification: UserNotification = {
   notificationId: '1',
   userId: 'user-1',
   title: 'Test Notification',
   message: 'This is a test notification message',
-  notificationType: 'follow',
+  notificationCategory: 'NEW_FOLLOWER' as NotificationCategory,
   isRead: false,
   isDeleted: false,
   createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
   updatedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+  notificationData: {
+    templateVersion: '1.0',
+    followerId: 'user-2',
+    followerName: 'John',
+  },
 };
 
 const renderNotificationItem = (props: Partial<NotificationItemProps> = {}) => {
@@ -98,26 +106,41 @@ describe('NotificationItem', () => {
     });
   });
 
-  describe('Notification Types', () => {
-    test('applies social type styling (blue border)', () => {
+  describe('Notification Categories', () => {
+    test('applies social category styling (blue border)', () => {
       renderNotificationItem({
-        notification: { ...mockNotification, notificationType: 'follow' },
+        notification: {
+          ...mockNotification,
+          notificationCategory: 'NEW_FOLLOWER' as NotificationCategory,
+        },
       });
       const item = screen.getByRole('button');
       expect(item).toHaveClass('border-l-blue-500');
     });
 
-    test('applies activity type styling (green border)', () => {
+    test('applies activity category styling (green border)', () => {
       renderNotificationItem({
-        notification: { ...mockNotification, notificationType: 'like' },
+        notification: {
+          ...mockNotification,
+          notificationCategory: 'RECIPE_LIKED' as NotificationCategory,
+          notificationData: {
+            templateVersion: '1.0',
+            recipeId: 1,
+            recipeTitle: 'Test Recipe',
+          },
+        },
       });
       const item = screen.getByRole('button');
       expect(item).toHaveClass('border-l-green-500');
     });
 
-    test('applies system type styling (orange border)', () => {
+    test('applies system category styling (orange border)', () => {
       renderNotificationItem({
-        notification: { ...mockNotification, notificationType: 'update' },
+        notification: {
+          ...mockNotification,
+          notificationCategory: 'MAINTENANCE' as NotificationCategory,
+          notificationData: { templateVersion: '1.0' },
+        },
       });
       const item = screen.getByRole('button');
       expect(item).toHaveClass('border-l-orange-500');

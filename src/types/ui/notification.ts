@@ -2,7 +2,7 @@
  * UI-specific types for notification components
  *
  * These types are for UI state and display logic, not API data.
- * API notification types are in @/types/user-management/notifications.ts
+ * API notification types are in @/types/notification.
  */
 
 /**
@@ -59,26 +59,32 @@ export type NotificationTypeMapping = {
 };
 
 /**
- * Default mapping of notification types to display types
- * Can be extended based on actual notification types from backend
+ * Default mapping of notification categories to display types
+ * Based on NotificationCategory enum from notification service OpenAPI spec
  */
 export const DEFAULT_TYPE_MAPPING: NotificationTypeMapping = {
-  // Social types
-  follow: 'social',
-  share: 'social',
-  collection_add: 'social',
+  // Social categories
+  new_follower: 'social',
+  mention: 'social',
+  recipe_shared: 'social',
+  recipe_collected: 'social',
+  collection_invite: 'social',
 
-  // Activity types
-  like: 'activity',
-  comment: 'activity',
-  rating: 'activity',
-  featured: 'activity',
-  trending: 'activity',
+  // Activity categories (recipe engagement)
+  recipe_published: 'activity',
+  recipe_liked: 'activity',
+  recipe_commented: 'activity',
+  recipe_rated: 'activity',
+  recipe_featured: 'activity',
+  recipe_trending: 'activity',
 
-  // System types
+  // System categories
   welcome: 'system',
-  update: 'system',
+  password_reset: 'system', // pragma: allowlist secret
+  password_changed: 'system', // pragma: allowlist secret
+  email_changed: 'system',
   maintenance: 'system',
+  system_alert: 'system',
 
   // Default fallback
   default: 'default',

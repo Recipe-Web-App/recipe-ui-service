@@ -45,17 +45,6 @@ export type {
   UserActivityParams,
 } from './social';
 
-// Notifications - User Communication (kept for now per user request)
-export type {
-  Notification,
-  NotificationListResponse,
-  NotificationCountResponse,
-  NotificationReadResponse,
-  NotificationReadAllResponse,
-  NotificationDeleteRequest,
-  NotificationDeleteResponse,
-} from './notifications';
-
 // Admin Operations - Management & Statistics
 // Updated: Removed types for deleted endpoints per OpenAPI spec
 export type {

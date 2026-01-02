@@ -8,65 +8,95 @@ import {
   NotificationPanel,
 } from '@/components/notification';
 import { Button } from '@/components/ui/button';
-import type { Notification } from '@/types/user-management/notifications';
+import type {
+  UserNotification,
+  NotificationCategory,
+} from '@/types/notification';
 import type { NotificationFilter } from '@/types/ui/notification';
 
-// Mock notifications for demo
-const mockNotifications: Notification[] = [
+// Mock notifications for demo using the new notification service schema
+const mockNotifications: UserNotification[] = [
   {
     notificationId: '1',
     userId: 'user-1',
     title: 'New follower',
     message: 'John Doe started following you',
-    notificationType: 'follow',
+    notificationCategory: 'NEW_FOLLOWER' as NotificationCategory,
     isRead: false,
     isDeleted: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
     updatedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+    notificationData: {
+      templateVersion: '1.0',
+      followerId: 'user-2',
+      followerName: 'John Doe',
+    },
   },
   {
     notificationId: '2',
     userId: 'user-1',
     title: 'Recipe shared',
     message: 'Sarah shared "Chocolate Cake" with you',
-    notificationType: 'share',
+    notificationCategory: 'RECIPE_SHARED' as NotificationCategory,
     isRead: false,
     isDeleted: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // 1 hour ago
     updatedAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+    notificationData: {
+      templateVersion: '1.0',
+      recipeId: 123,
+      recipeTitle: 'Chocolate Cake',
+      actorId: 'user-3',
+      actorName: 'Sarah',
+    },
   },
   {
     notificationId: '3',
     userId: 'user-1',
     title: 'New comment',
     message: 'Mike commented on your recipe "Pasta Carbonara"',
-    notificationType: 'comment',
+    notificationCategory: 'RECIPE_COMMENTED' as NotificationCategory,
     isRead: false,
     isDeleted: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+    notificationData: {
+      templateVersion: '1.0',
+      recipeId: 456,
+      recipeTitle: 'Pasta Carbonara',
+      actorId: 'user-4',
+      actorName: 'Mike',
+      commentId: 789,
+    },
   },
   {
     notificationId: '4',
     userId: 'user-1',
     title: 'Recipe liked',
     message: '5 people liked your recipe "Thai Green Curry"',
-    notificationType: 'like',
+    notificationCategory: 'RECIPE_LIKED' as NotificationCategory,
     isRead: true,
     isDeleted: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+    notificationData: {
+      templateVersion: '1.0',
+      recipeId: 101,
+      recipeTitle: 'Thai Green Curry',
+      actorName: '5 people',
+    },
   },
   {
     notificationId: '5',
     userId: 'user-1',
-    title: 'System update',
-    message: 'New features are now available! Check them out.',
-    notificationType: 'update',
+    title: 'Welcome!',
+    message: 'Welcome to RecipeApp! Start exploring recipes.',
+    notificationCategory: 'WELCOME' as NotificationCategory,
     isRead: true,
     isDeleted: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 days ago
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    notificationData: { templateVersion: '1.0', username: 'user-1' },
   },
 ];
 

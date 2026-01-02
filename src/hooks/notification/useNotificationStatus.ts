@@ -5,14 +5,30 @@ import { NotificationStatus } from '@/types/notification';
 import type { NotificationDetail } from '@/types/notification';
 
 /**
+ * Helper to check if all delivery statuses are complete (SENT, FAILED, or ABORTED)
+ */
+const isDeliveryComplete = (notification: NotificationDetail): boolean => {
+  if (!notification.deliveryStatuses?.length) {
+    return false;
+  }
+
+  return notification.deliveryStatuses.every(
+    delivery =>
+      delivery.status === NotificationStatus.SENT ||
+      delivery.status === NotificationStatus.FAILED ||
+      delivery.status === NotificationStatus.ABORTED
+  );
+};
+
+/**
  * Hook to get notification status and poll for delivery status
  *
- * Automatically polls every 10 seconds while the notification is pending or queued.
- * Stops polling when the notification is sent or failed.
+ * Automatically polls every 10 seconds while any delivery channel is pending or queued.
+ * Stops polling when all delivery channels are sent, failed, or aborted.
  *
  * @param notificationId - Notification UUID to track
  * @param includeMessage - Include the full message body in response (default: false)
- * @returns Query result with notification details and status
+ * @returns Query result with notification details and delivery statuses
  */
 export const useNotificationStatus = (
   notificationId: string | undefined,
@@ -28,14 +44,11 @@ export const useNotificationStatus = (
     enabled: !!notificationId,
     staleTime: 30 * 1000, // 30 seconds
     gcTime: 5 * 60 * 1000, // 5 minutes
-    // Poll every 10 seconds while notification is pending or queued
+    // Poll every 10 seconds while any delivery is pending or queued
     refetchInterval: query => {
       const notificationData = query.state.data;
-      // Stop polling if status is sent or failed
-      if (
-        notificationData?.status === NotificationStatus.SENT ||
-        notificationData?.status === NotificationStatus.FAILED
-      ) {
+      // Stop polling if all deliveries are complete
+      if (notificationData && isDeliveryComplete(notificationData)) {
         return false;
       }
       // Poll every 10 seconds for pending/queued notifications
@@ -51,7 +64,7 @@ export const useNotificationStatus = (
  *
  * @param notificationId - Notification UUID to track
  * @param includeMessage - Include the full message body in response (default: false)
- * @returns Query result with notification details and status
+ * @returns Query result with notification details and delivery statuses
  */
 export const useNotificationStatusOnce = (
   notificationId: string | undefined,

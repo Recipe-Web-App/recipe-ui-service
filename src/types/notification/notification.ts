@@ -1,103 +1,161 @@
 /**
  * Notification Detail Types for Notification Service
  *
- * Types for querying and managing notification status.
+ * Types for querying and managing notification delivery status.
+ * Based on notification-service-openapi.yaml specification.
  */
 
+import type {
+  NotificationCategory,
+  NotificationStatus,
+  NotificationType,
+} from './enums';
+import type { NotificationData } from './notification-data';
+
 /**
- * Notification status enum
+ * Delivery status for a specific notification channel
+ * Tracks the delivery lifecycle for each channel (EMAIL, IN_APP, PUSH, SMS)
  */
-export enum NotificationStatus {
-  PENDING = 'pending',
-  QUEUED = 'queued',
-  SENT = 'sent',
-  FAILED = 'failed',
+export interface NotificationDeliveryStatus {
+  /**
+   * Notification delivery channel type
+   */
+  notificationType: NotificationType;
+
+  /**
+   * Current delivery status
+   */
+  status: NotificationStatus;
+
+  /**
+   * Number of retry attempts (null if no retries attempted)
+   */
+  retryCount?: number | null;
+
+  /**
+   * Error message if status is FAILED
+   */
+  errorMessage?: string | null;
+
+  /**
+   * Recipient email address (for EMAIL channel only)
+   */
+  recipientEmail?: string | null;
+
+  /**
+   * Timestamp when status record was created
+   */
+  createdAt: string;
+
+  /**
+   * Timestamp when status record was last updated
+   */
+  updatedAt: string;
+
+  /**
+   * Timestamp when notification was queued for delivery
+   */
+  queuedAt?: string | null;
+
+  /**
+   * Timestamp when notification was successfully sent
+   */
+  sentAt?: string | null;
+
+  /**
+   * Timestamp when notification permanently failed
+   */
+  failedAt?: string | null;
 }
 
 /**
- * Notification type enum
- */
-export enum NotificationType {
-  EMAIL = 'email',
-}
-
-/**
- * Detailed notification information
+ * Detailed notification information including delivery statuses
+ * Returned from GET /notifications/{notificationId}
+ *
+ * The title and message fields are computed on-the-fly from
+ * notificationCategory + notificationData. They are not stored in the database.
  */
 export interface NotificationDetail {
   /**
    * Notification UUID
    */
-  notification_id: string;
+  notificationId: string;
 
   /**
-   * Recipient user ID (null for email-only notifications)
+   * User UUID who owns this notification
    */
-  recipient_id: string | null;
+  userId: string;
 
   /**
-   * Recipient email address
+   * Notification category for template identification
    */
-  recipient_email: string;
+  notificationCategory: NotificationCategory;
 
   /**
-   * Email subject line
+   * Whether the notification has been read (in-app state)
    */
-  subject: string;
+  isRead: boolean;
 
   /**
-   * Message body (excluded by default to reduce payload size)
-   * Use include_message query parameter to retrieve
+   * Whether the notification has been soft deleted
    */
-  message?: string;
-
-  /**
-   * Notification delivery type
-   */
-  notification_type: NotificationType;
-
-  /**
-   * Current notification status
-   */
-  status: NotificationStatus;
-
-  /**
-   * Error message if status is failed (empty string when no error)
-   */
-  error_message: string;
-
-  /**
-   * Number of retry attempts
-   */
-  retry_count: number;
-
-  /**
-   * Maximum number of retries allowed
-   */
-  max_retries: number;
+  isDeleted: boolean;
 
   /**
    * Timestamp when notification was created
    */
-  created_at: string;
+  createdAt: string;
 
   /**
-   * Timestamp when notification was queued (null if not yet queued)
+   * Timestamp when notification was last updated
    */
-  queued_at: string | null;
+  updatedAt: string;
 
   /**
-   * Timestamp when notification was sent (null if not yet sent)
+   * Template parameters including templateVersion for historical rendering.
+   * The schema varies based on notificationCategory.
    */
-  sent_at: string | null;
+  notificationData: NotificationData;
 
   /**
-   * Timestamp when notification failed (null if not failed)
+   * Computed title from notificationCategory + notificationData (not stored in DB)
    */
-  failed_at: string | null;
+  title: string;
 
   /**
-   * Template-specific metadata
+   * Computed message from notificationCategory + notificationData (not stored in DB)
    */
-  metadata?: Record<string, unknown>;
+  message: string;
+
+  /**
+   * Delivery status for each channel (EMAIL, IN_APP, PUSH, SMS)
+   * A single notification can have multiple delivery statuses if sent via multiple channels
+   */
+  deliveryStatuses: NotificationDeliveryStatus[];
+}
+
+/**
+ * Paginated list of notification details
+ * Returned from admin endpoints that list notifications
+ */
+export interface NotificationListResponse {
+  /**
+   * List of notifications
+   */
+  results: NotificationDetail[];
+
+  /**
+   * Total number of notifications matching filters
+   */
+  count: number;
+
+  /**
+   * URL to next page (null if no next page)
+   */
+  next: string | null;
+
+  /**
+   * URL to previous page (null if no previous page)
+   */
+  previous: string | null;
 }

@@ -8,26 +8,45 @@ describe('Notification API Index', () => {
     expect(notificationApi.buildQueryParams).toBeDefined();
   });
 
-  it('should export API modules', () => {
-    expect(notificationApi.shareApi).toBeDefined();
+  it('should export user notifications API', () => {
+    expect(notificationApi.userNotificationsApi).toBeDefined();
+  });
+
+  it('should export notification sending APIs', () => {
+    expect(notificationApi.recipeNotificationsApi).toBeDefined();
+    expect(notificationApi.socialNotificationsApi).toBeDefined();
+    expect(notificationApi.activityNotificationsApi).toBeDefined();
+    expect(notificationApi.systemNotificationsApi).toBeDefined();
+  });
+
+  it('should export management API', () => {
     expect(notificationApi.managementApi).toBeDefined();
   });
 
-  it('should export enums', () => {
-    expect(notificationApi.NotificationStatus).toBeDefined();
-    expect(notificationApi.NotificationType).toBeDefined();
+  it('should export admin API', () => {
+    expect(notificationApi.adminApi).toBeDefined();
+  });
+
+  it('should export health API', () => {
+    expect(notificationApi.healthApi).toBeDefined();
   });
 
   it('should have all expected exports', () => {
     const expectedExports = [
+      // Client utilities
       'notificationClient',
       'NotificationApiError',
       'handleNotificationApiError',
       'buildQueryParams',
-      'shareApi',
+      // APIs
+      'userNotificationsApi',
+      'recipeNotificationsApi',
+      'socialNotificationsApi',
+      'activityNotificationsApi',
+      'systemNotificationsApi',
       'managementApi',
-      'NotificationStatus',
-      'NotificationType',
+      'adminApi',
+      'healthApi',
     ];
 
     expectedExports.forEach(exportName => {

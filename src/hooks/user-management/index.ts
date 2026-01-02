@@ -22,22 +22,6 @@ export {
   useUserActivity,
 } from './useSocial';
 
-// Notification Management Hooks (kept for now per user request)
-export {
-  useNotifications,
-  useAllNotifications,
-  useUnreadNotifications,
-  useReadNotifications,
-  useNotificationsByType,
-  useUnreadNotificationCount,
-  useHasNewNotifications,
-  useMarkNotificationAsRead,
-  useMarkAllNotificationsAsRead,
-  useDeleteNotification,
-  useDeleteNotifications,
-  useClearReadNotifications,
-} from './useNotifications';
-
 // Preferences Hooks - 9 category system per OpenAPI spec
 export {
   useUserPreferences,
@@ -90,11 +74,6 @@ export type {
   FollowResponse,
   UserActivityResponse,
   UserActivityParams,
-  NotificationListResponse,
-  NotificationCountResponse,
-  NotificationReadResponse,
-  NotificationReadAllResponse,
-  NotificationDeleteResponse,
   HealthCheckResponse,
   ComprehensiveHealthResponse,
   ReadinessResponse,
