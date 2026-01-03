@@ -110,10 +110,18 @@ export const QUERY_KEYS = {
     COLLECTION_RECIPES: ['recipeManagement', 'collectionRecipes'],
     COLLECTION_COLLABORATORS: ['recipeManagement', 'collectionCollaborators'],
 
-    // Favorite operations
+    // Favorite operations (recipes)
     FAVORITES: ['recipeManagement', 'favorites'],
     USER_FAVORITES: ['recipeManagement', 'userFavorites'],
     RECIPE_FAVORITE_STATUS: ['recipeManagement', 'recipeFavoriteStatus'],
+
+    // Favorite operations (collections)
+    COLLECTION_FAVORITES: ['recipeManagement', 'collectionFavorites'],
+    USER_COLLECTION_FAVORITES: ['recipeManagement', 'userCollectionFavorites'],
+    COLLECTION_FAVORITE_STATUS: [
+      'recipeManagement',
+      'collectionFavoriteStatus',
+    ],
 
     // Health and monitoring
     HEALTH: ['recipeManagement', 'health'],

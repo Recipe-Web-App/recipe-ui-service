@@ -15,4 +15,5 @@ export * from './collection';
 export * from './search';
 export * from './comment';
 export * from './favorite';
+export * from './collection-favorite';
 export * from './health';
