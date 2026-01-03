@@ -22,6 +22,7 @@ export * from './collection-recipes';
 export * from './collection-collaborators';
 export * from './comments';
 export * from './favorites';
+export * from './collection-favorites';
 export * from './users';
 export * from './health';
 export * from './monitoring';
@@ -115,9 +116,13 @@ export type {
   CollectionVisibility,
   CollaborationMode,
 
-  // Favorite types
+  // Favorite types (recipes)
   GetFavoriteRecipesParams,
   FavoriteRecipesResponse,
+
+  // Favorite types (collections)
+  CollectionFavoriteDto,
+  GetFavoriteCollectionsParams,
 
   // Comment types
   RecipeCommentDto,

@@ -99,13 +99,21 @@ export {
   useDeleteRecipeComment,
 } from './useRecipeComments';
 
-// Favorite Management
+// Favorite Management (Recipes)
 export {
   useFavoriteRecipes,
   useFavoriteRecipe,
   useUnfavoriteRecipe,
   useIsRecipeFavorited,
 } from './useFavorites';
+
+// Favorite Management (Collections)
+export {
+  useFavoriteCollections,
+  useFavoriteCollection,
+  useUnfavoriteCollection,
+  useIsCollectionFavorited,
+} from './useCollectionFavorites';
 
 // User Operations
 export { useMyRecipes, useMyCollections } from './useUsers';
