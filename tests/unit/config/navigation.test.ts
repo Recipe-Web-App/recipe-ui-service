@@ -152,7 +152,6 @@ describe('Navigation Configuration', () => {
           'collections-create',
           'collections-my-collections',
           'collections-favorites',
-          'collections-popular',
           'collections-trending',
           'collections-shared',
         ];
@@ -177,7 +176,6 @@ describe('Navigation Configuration', () => {
           'meal-plans-create',
           'meal-plans-my-plans',
           'meal-plans-favorites',
-          'meal-plans-popular',
           'meal-plans-trending',
           'meal-plans-shared',
         ];
