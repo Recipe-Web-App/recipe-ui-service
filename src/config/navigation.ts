@@ -136,16 +136,6 @@ export const collectionsSubNavigation: NavItem[] = [
     },
   },
   {
-    id: 'collections-popular',
-    label: 'Browse Popular Collections',
-    href: '/collections/popular',
-    icon: TrendingUp,
-    metadata: {
-      sortOrder: 40,
-      tooltip: 'Discover popular collections',
-    },
-  },
-  {
     id: 'collections-trending',
     label: 'Browse Trending Collections',
     href: '/collections/trending',
@@ -203,16 +193,6 @@ export const mealPlansSubNavigation: NavItem[] = [
       sortOrder: 30,
       requiredAuth: true,
       tooltip: 'Your favorite meal plans',
-    },
-  },
-  {
-    id: 'meal-plans-popular',
-    label: 'Browse Popular Meal Plans',
-    href: '/meal-plans/popular',
-    icon: TrendingUp,
-    metadata: {
-      sortOrder: 40,
-      tooltip: 'Discover popular meal plans',
     },
   },
   {

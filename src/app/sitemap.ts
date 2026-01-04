@@ -43,14 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/meal-plans/create',
     '/meal-plans/favorites',
     '/meal-plans/my-plans',
-    '/meal-plans/popular',
     '/meal-plans/shared',
     '/meal-plans/trending',
     // Collections
     '/collections/create',
     '/collections/favorites',
     '/collections/my-collections',
-    '/collections/popular',
     '/collections/shared',
     '/collections/trending',
     // Feed
