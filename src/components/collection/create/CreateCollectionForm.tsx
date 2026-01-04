@@ -243,6 +243,7 @@ export function CreateCollectionForm({
           collaboratorIds.length > 0
             ? collaboratorIds
             : undefined,
+        tags: data.tags.length > 0 ? data.tags : undefined,
       });
 
       // Clear draft after successful creation

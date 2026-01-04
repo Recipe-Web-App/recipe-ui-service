@@ -109,6 +109,7 @@ export const QUERY_KEYS = {
     COLLECTION: ['recipeManagement', 'collection'],
     COLLECTION_RECIPES: ['recipeManagement', 'collectionRecipes'],
     COLLECTION_COLLABORATORS: ['recipeManagement', 'collectionCollaborators'],
+    COLLECTION_TAGS: ['recipeManagement', 'collectionTags'],
 
     // Favorite operations (recipes)
     FAVORITES: ['recipeManagement', 'favorites'],

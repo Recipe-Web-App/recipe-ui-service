@@ -20,6 +20,7 @@ export * from './media';
 export * from './collections';
 export * from './collection-recipes';
 export * from './collection-collaborators';
+export * from './collection-tags';
 export * from './comments';
 export * from './favorites';
 export * from './collection-favorites';
@@ -115,6 +116,8 @@ export type {
   ReorderRecipesRequest,
   CollectionVisibility,
   CollaborationMode,
+  CollectionTagDto,
+  CollectionTagResponse,
 
   // Favorite types (recipes)
   GetFavoriteRecipesParams,

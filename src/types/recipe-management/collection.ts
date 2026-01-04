@@ -5,6 +5,22 @@ import type {
 } from './common';
 
 /**
+ * Tag associated with a collection
+ */
+export interface CollectionTagDto {
+  tagId: number;
+  name: string;
+}
+
+/**
+ * Response containing collection tags
+ */
+export interface CollectionTagResponse {
+  collectionId: number;
+  tags: CollectionTagDto[];
+}
+
+/**
  * Basic collection DTO with metadata and counts
  */
 export interface CollectionDto {
@@ -18,6 +34,8 @@ export interface CollectionDto {
   collaboratorCount: number;
   createdAt: string;
   updatedAt: string;
+  /** Tags associated with this collection */
+  tags?: CollectionTagDto[];
 }
 
 /**
@@ -35,6 +53,10 @@ export interface CollectionDetailsDto {
   createdAt: string;
   updatedAt: string;
   recipes: CollectionRecipeDto[];
+  /** Collaborators for this collection */
+  collaborators?: CollaboratorDto[];
+  /** Tags associated with this collection */
+  tags?: CollectionTagDto[];
 }
 
 /**
@@ -74,6 +96,7 @@ export interface PageCollectionDto extends PageInfo {
  * Supports batch operations during creation:
  * - recipeIds: Add recipes to the collection in a single request
  * - collaboratorIds: Add collaborators (only applicable when collaborationMode is SPECIFIC_USERS)
+ * - tags: Associate tags with the collection (tags will be created if they don't exist)
  */
 export interface CreateCollectionRequest {
   name: string;
@@ -84,6 +107,8 @@ export interface CreateCollectionRequest {
   recipeIds?: number[];
   /** Optional array of user IDs to add as collaborators (only for SPECIFIC_USERS mode) */
   collaboratorIds?: string[];
+  /** Optional array of tag names to associate with the collection during creation */
+  tags?: string[];
 }
 
 /**
