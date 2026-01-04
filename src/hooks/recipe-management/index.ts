@@ -128,6 +128,15 @@ export {
   useDeleteCollection,
 } from './useCollections';
 
+// Collection Tag Management
+export {
+  useCollectionTags,
+  useAddTagToCollection,
+  useRemoveTagFromCollection,
+  useCollectionTagManager,
+  useInvalidateCollectionTags,
+} from './useCollectionTags';
+
 // Health Monitoring
 export {
   useRecipeManagementHealth,
