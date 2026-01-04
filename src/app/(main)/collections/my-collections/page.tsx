@@ -16,8 +16,13 @@ import {
 import { CollectionBrowseGrid } from '@/components/collection/CollectionBrowseGrid';
 import { CollectionFilters } from '@/components/collection/CollectionFilters';
 import { CollectionDraftBanner } from '@/components/collection/CollectionDraftBanner';
-import { useMyCollections } from '@/hooks/recipe-management';
-import { useDeleteCollection } from '@/hooks/recipe-management';
+import {
+  useMyCollections,
+  useDeleteCollection,
+  useFavoriteCollections,
+  useFavoriteCollection,
+  useUnfavoriteCollection,
+} from '@/hooks/recipe-management';
 import { useToastStore } from '@/stores/ui/toast-store';
 import type { CollectionFilterValues } from '@/types/collection/filters';
 import { DEFAULT_COLLECTION_FILTER_VALUES } from '@/types/collection/filters';
@@ -36,7 +41,8 @@ import {
  * Convert CollectionDto to CollectionCardCollection for display
  */
 function mapCollectionToCardCollection(
-  collection: CollectionDto
+  collection: CollectionDto,
+  favoritedIds: Set<number>
 ): CollectionCardCollection {
   return {
     collectionId: collection.collectionId,
@@ -52,7 +58,7 @@ function mapCollectionToCardCollection(
     ownerName: 'You',
     ownerAvatar: undefined,
     recipeImages: [], // TODO: Add media integration
-    isFavorited: false, // TODO: Add favorites integration
+    isFavorited: favoritedIds.has(collection.collectionId),
   };
 }
 
@@ -121,17 +127,33 @@ export default function MyCollectionsPage() {
     size: 100, // Get all for client-side filtering
   });
 
+  // Fetch user's favorited collections to detect favorite status
+  const { data: favoritesData } = useFavoriteCollections({
+    page: 0,
+    size: 100,
+  });
+
   // Delete mutation
   const deleteCollectionMutation = useDeleteCollection();
+
+  // Favorite mutations
+  const favoriteCollectionMutation = useFavoriteCollection();
+  const unfavoriteCollectionMutation = useUnfavoriteCollection();
 
   // Get collections from data
   const dataContent = data?.content;
 
+  // Create a Set of favorited collection IDs for efficient lookup
+  const favoritedIds = useMemo(() => {
+    if (!favoritesData?.content) return new Set<number>();
+    return new Set(favoritesData.content.map(c => c.collectionId));
+  }, [favoritesData?.content]);
+
   // Map and filter collections
   const allCollections = useMemo(() => {
     if (!dataContent) return [];
-    return dataContent.map(mapCollectionToCardCollection);
-  }, [dataContent]);
+    return dataContent.map(c => mapCollectionToCardCollection(c, favoritedIds));
+  }, [dataContent, favoritedIds]);
 
   // Apply filters
   const filteredCollections = useMemo(() => {
@@ -201,10 +223,29 @@ export default function MyCollectionsPage() {
   ]);
 
   const handleFavorite = useCallback(
-    (_collection: CollectionCardCollection) => {
-      addInfoToast('Favorite functionality will be available soon.');
+    async (collection: CollectionCardCollection) => {
+      try {
+        if (collection.isFavorited) {
+          await unfavoriteCollectionMutation.mutateAsync(
+            collection.collectionId
+          );
+          addSuccessToast(`"${collection.name}" removed from favorites.`);
+        } else {
+          await favoriteCollectionMutation.mutateAsync(collection.collectionId);
+          addSuccessToast(`"${collection.name}" added to favorites.`);
+        }
+        void refetch();
+      } catch {
+        addErrorToast('Failed to update favorites. Please try again.');
+      }
     },
-    [addInfoToast]
+    [
+      favoriteCollectionMutation,
+      unfavoriteCollectionMutation,
+      addSuccessToast,
+      addErrorToast,
+      refetch,
+    ]
   );
 
   const handleShare = useCallback(

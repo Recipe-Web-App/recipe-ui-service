@@ -19,8 +19,12 @@ import { RecipeFilters } from '@/components/recipe/RecipeFilters';
 import { DraftBanner } from '@/components/recipe/DraftBanner';
 import { BulkActionToolbar } from '@/components/recipe/BulkActionToolbar';
 import { AddToCollectionModal } from '@/components/recipe/AddToCollectionModal';
-import { useMyRecipes } from '@/hooks/recipe-management';
-import { useDeleteRecipe } from '@/hooks/recipe-management';
+import {
+  useMyRecipes,
+  useDeleteRecipe,
+  useFavoriteRecipe,
+  useUnfavoriteRecipe,
+} from '@/hooks/recipe-management';
 import { useToastStore } from '@/stores/ui/toast-store';
 import type { RecipeFilterValues } from '@/types/recipe/filters';
 import { DEFAULT_RECIPE_FILTER_VALUES } from '@/types/recipe/filters';
@@ -170,6 +174,10 @@ export default function MyRecipesPage() {
   // Delete mutation
   const deleteRecipeMutation = useDeleteRecipe();
 
+  // Favorite mutations
+  const favoriteRecipeMutation = useFavoriteRecipe();
+  const unfavoriteRecipeMutation = useUnfavoriteRecipe();
+
   // Get recipes from data
   const dataContent = data?.recipes;
 
@@ -302,11 +310,27 @@ export default function MyRecipesPage() {
   }, []);
 
   const handleFavorite = useCallback(
-    (_recipe: RecipeCardRecipe) => {
-      // TODO: Implement favorite toggle
-      addInfoToast('Favorite functionality will be available soon.');
+    async (recipe: RecipeCardRecipe) => {
+      try {
+        if (recipe.isFavorite) {
+          await unfavoriteRecipeMutation.mutateAsync(recipe.recipeId);
+          addSuccessToast(`"${recipe.title}" removed from favorites.`);
+        } else {
+          await favoriteRecipeMutation.mutateAsync(recipe.recipeId);
+          addSuccessToast(`"${recipe.title}" added to favorites.`);
+        }
+        void refetch();
+      } catch {
+        addErrorToast('Failed to update favorites. Please try again.');
+      }
     },
-    [addInfoToast]
+    [
+      favoriteRecipeMutation,
+      unfavoriteRecipeMutation,
+      addSuccessToast,
+      addErrorToast,
+      refetch,
+    ]
   );
 
   const handleShare = useCallback(
