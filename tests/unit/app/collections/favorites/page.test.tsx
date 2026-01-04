@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import MyCollectionsPage from '@/app/(main)/collections/my-collections/page';
+import FavoriteCollectionsPage from '@/app/(main)/collections/favorites/page';
 import type {
   CollectionDto,
   PageCollectionDto,
@@ -45,15 +45,10 @@ jest.mock('next/link', () => {
 
 // Mock recipe-management hooks
 const mockRefetch = jest.fn();
-const mockDeleteMutateAsync = jest.fn();
-const mockFavoriteMutateAsync = jest.fn();
 const mockUnfavoriteMutateAsync = jest.fn();
 
 jest.mock('@/hooks/recipe-management', () => ({
-  useMyCollections: jest.fn(),
-  useDeleteCollection: jest.fn(),
   useFavoriteCollections: jest.fn(),
-  useFavoriteCollection: jest.fn(),
   useUnfavoriteCollection: jest.fn(),
 }));
 
@@ -69,26 +64,21 @@ jest.mock('@/stores/ui/toast-store', () => ({
   }),
 }));
 
-// Mock collection store for DraftBanner
-const mockHasUnsavedDraft = jest.fn().mockReturnValue(false);
-const mockClearDraftCollection = jest.fn();
-jest.mock('@/stores/collection-store', () => ({
-  useCollectionStore: () => ({
-    hasUnsavedDraft: mockHasUnsavedDraft,
-    draftCollection: null,
-    draftLastModified: null,
-    clearDraftCollection: mockClearDraftCollection,
-  }),
+// Mock auth store
+const mockAuthStore = {
+  user: { id: 'current-user-123' },
+  authUser: { user_id: 'current-user-123' },
+};
+jest.mock('@/stores/auth-store', () => ({
+  useAuthStore: () => mockAuthStore,
 }));
 
 // Mock lucide-react icons
 jest.mock('lucide-react', () => ({
-  Plus: () => <span data-testid="plus-icon">Plus</span>,
-  FolderOpen: () => <span data-testid="folder-icon">FolderOpen</span>,
+  Heart: () => <span data-testid="heart-icon">Heart</span>,
+  Search: () => <span data-testid="search-icon">Search</span>,
   Grid3X3: () => <span data-testid="grid-icon">Grid</span>,
   List: () => <span data-testid="list-icon">List</span>,
-  Trash2: () => <span data-testid="trash-icon">Trash</span>,
-  X: () => <span data-testid="x-icon">X</span>,
 }));
 
 // Mock child components
@@ -152,21 +142,6 @@ jest.mock('@/components/collection/CollectionFilters', () => ({
   ),
 }));
 
-jest.mock('@/components/collection/CollectionDraftBanner', () => ({
-  CollectionDraftBanner: ({ className }: { className?: string }) => {
-    const { useCollectionStore } = jest.requireMock(
-      '@/stores/collection-store'
-    );
-    const { hasUnsavedDraft } = useCollectionStore();
-    if (!hasUnsavedDraft()) return null;
-    return (
-      <div data-testid="draft-banner" className={className}>
-        Draft banner shown
-      </div>
-    );
-  },
-}));
-
 jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
   CollectionBrowseGrid: ({
     collections,
@@ -179,17 +154,18 @@ jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
     emptyMessage,
     onCollectionClick,
     onEdit,
-    onDelete,
     onFavorite,
     onShare,
     onAddRecipes,
     onManageCollaborators,
     onDuplicate,
+    onQuickView,
+    isOwner,
   }: {
     collections: Array<{
       collectionId: number;
       name: string;
-      isFavorited?: boolean;
+      userId: string;
     }>;
     loading?: boolean;
     error?: string | null;
@@ -200,16 +176,13 @@ jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
     emptyMessage?: string;
     onCollectionClick?: (collection: { collectionId: number }) => void;
     onEdit?: (collection: { collectionId: number }) => void;
-    onDelete?: (collection: { collectionId: number; name: string }) => void;
-    onFavorite?: (collection: {
-      collectionId: number;
-      name: string;
-      isFavorited?: boolean;
-    }) => void;
+    onFavorite?: (collection: { collectionId: number; name: string }) => void;
     onShare?: (collection: { collectionId: number }) => void;
     onAddRecipes?: (collection: { collectionId: number }) => void;
     onManageCollaborators?: (collection: { collectionId: number }) => void;
     onDuplicate?: (collection: { collectionId: number }) => void;
+    onQuickView?: (collection: { collectionId: number }) => void;
+    isOwner?: boolean | ((collection: { userId: string }) => boolean);
   }) => {
     if (loading) {
       return (
@@ -231,29 +204,41 @@ jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
     if (!collections || collections.length === 0) {
       return <div data-testid="collection-grid-empty">{emptyMessage}</div>;
     }
+
+    // Helper to determine ownership
+    const checkOwnership = (collection: { userId: string }) => {
+      if (typeof isOwner === 'function') {
+        return isOwner(collection);
+      }
+      return isOwner ?? false;
+    };
+
     return (
       <div data-testid="collection-browse-grid">
         {collections.map(collection => (
           <div
             key={collection.collectionId}
             data-testid={`collection-card-${collection.collectionId}`}
+            data-is-owner={checkOwnership(collection)}
           >
             <span onClick={() => onCollectionClick?.(collection)}>
               {collection.name}
             </span>
-            <button onClick={() => onEdit?.(collection)}>Edit</button>
             <button
-              onClick={() =>
-                onDelete?.(collection as { collectionId: number; name: string })
-              }
+              onClick={() => onEdit?.(collection)}
+              data-testid={`edit-${collection.collectionId}`}
             >
-              Delete
+              Edit
             </button>
             <button
-              data-testid={`favorite-${collection.collectionId}`}
-              onClick={() => onFavorite?.(collection)}
+              onClick={() =>
+                onFavorite?.(
+                  collection as { collectionId: number; name: string }
+                )
+              }
+              data-testid={`unfavorite-${collection.collectionId}`}
             >
-              {collection.isFavorited ? 'Unfavorite' : 'Favorite'}
+              Unfavorite
             </button>
             <button onClick={() => onShare?.(collection)}>Share</button>
             <button onClick={() => onAddRecipes?.(collection)}>
@@ -263,6 +248,9 @@ jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
               Manage Collaborators
             </button>
             <button onClick={() => onDuplicate?.(collection)}>Duplicate</button>
+            <button onClick={() => onQuickView?.(collection)}>
+              Quick View
+            </button>
           </div>
         ))}
         {totalPages > 1 && (
@@ -291,63 +279,21 @@ jest.mock('@/components/collection/CollectionBrowseGrid', () => ({
   },
 }));
 
-// Mock Dialog components
-jest.mock('@/components/ui/dialog', () => ({
-  Dialog: ({
-    open,
-    onOpenChange,
-    children,
-  }: {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    children: React.ReactNode;
-  }) =>
-    open ? (
-      <div data-testid="dialog" role="dialog">
-        {children}
-        <button
-          data-testid="dialog-backdrop"
-          onClick={() => onOpenChange(false)}
-        >
-          Close
-        </button>
-      </div>
-    ) : null,
-  DialogContent: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="dialog-content">{children}</div>
-  ),
-  DialogHeader: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="dialog-header">{children}</div>
-  ),
-  DialogTitle: ({ children }: { children: React.ReactNode }) => (
-    <h2 data-testid="dialog-title">{children}</h2>
-  ),
-  DialogDescription: ({ children }: { children: React.ReactNode }) => (
-    <p data-testid="dialog-description">{children}</p>
-  ),
-  DialogFooter: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="dialog-footer">{children}</div>
-  ),
-}));
-
 // Import the mocked hooks
 import {
-  useMyCollections,
-  useDeleteCollection,
   useFavoriteCollections,
-  useFavoriteCollection,
   useUnfavoriteCollection,
 } from '@/hooks/recipe-management';
 
-// Sample collection data
+// Sample collection data - note: these are from different users (favorites page)
 const createMockCollection = (
   overrides: Partial<CollectionDto> = {}
 ): CollectionDto => ({
   collectionId: 1,
-  userId: 'user-123',
+  userId: 'other-user-456', // Default to another user (not current user)
   name: 'Test Collection',
   description: 'A test collection for recipes',
-  visibility: 'PRIVATE' as CollectionVisibility,
+  visibility: 'PUBLIC' as CollectionVisibility,
   collaborationMode: 'VIEW_ONLY' as CollaborationMode,
   recipeCount: 5,
   collaboratorCount: 0,
@@ -357,16 +303,20 @@ const createMockCollection = (
 });
 
 const mockCollections: CollectionDto[] = [
-  createMockCollection({ collectionId: 1, name: 'Dinner Recipes' }),
+  createMockCollection({
+    collectionId: 1,
+    name: 'Italian Favorites',
+    userId: 'other-user-456',
+  }),
   createMockCollection({
     collectionId: 2,
     name: 'Quick Meals',
-    visibility: 'PUBLIC' as CollectionVisibility,
+    userId: 'other-user-789',
   }),
   createMockCollection({
     collectionId: 3,
-    name: 'Holiday Favorites',
-    collaboratorCount: 3,
+    name: 'My Own Collection',
+    userId: 'current-user-123', // This one is owned by current user
   }),
 ];
 
@@ -383,38 +333,21 @@ const mockPageData: PageCollectionDto = {
   sort: { sorted: false, unsorted: true, empty: true },
 };
 
-describe('MyCollectionsPage', () => {
+describe('FavoriteCollectionsPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockHasUnsavedDraft.mockReturnValue(false);
-    mockDeleteMutateAsync.mockResolvedValue(undefined);
-    mockFavoriteMutateAsync.mockResolvedValue(undefined);
     mockUnfavoriteMutateAsync.mockResolvedValue(undefined);
 
-    // Default mock for useMyCollections
-    (useMyCollections as jest.Mock).mockReturnValue({
+    // Reset auth store to default
+    mockAuthStore.user = { id: 'current-user-123' };
+    mockAuthStore.authUser = { user_id: 'current-user-123' };
+
+    // Default mock for useFavoriteCollections
+    (useFavoriteCollections as jest.Mock).mockReturnValue({
       data: mockPageData,
       isLoading: false,
       error: null,
       refetch: mockRefetch,
-    });
-
-    // Default mock for useDeleteCollection
-    (useDeleteCollection as jest.Mock).mockReturnValue({
-      mutateAsync: mockDeleteMutateAsync,
-      isPending: false,
-    });
-
-    // Default mock for useFavoriteCollections (no favorites by default)
-    (useFavoriteCollections as jest.Mock).mockReturnValue({
-      data: { content: [] },
-      isLoading: false,
-    });
-
-    // Default mock for useFavoriteCollection
-    (useFavoriteCollection as jest.Mock).mockReturnValue({
-      mutateAsync: mockFavoriteMutateAsync,
-      isPending: false,
     });
 
     // Default mock for useUnfavoriteCollection
@@ -425,24 +358,24 @@ describe('MyCollectionsPage', () => {
   });
 
   describe('Rendering', () => {
-    it('renders the page with header and create button', () => {
-      render(<MyCollectionsPage />);
+    it('renders the page with header and browse button', () => {
+      render(<FavoriteCollectionsPage />);
 
-      expect(screen.getByText('My Collections')).toBeInTheDocument();
+      expect(screen.getByText('Favorite Collections')).toBeInTheDocument();
       expect(
-        screen.getByRole('link', { name: /create collection/i })
+        screen.getByRole('link', { name: /browse collections/i })
       ).toBeInTheDocument();
       expect(screen.getByTestId('view-toggle')).toBeInTheDocument();
     });
 
     it('displays collection count in subtitle', () => {
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByText('3 collections')).toBeInTheDocument();
     });
 
     it('displays singular "collection" when only one', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: {
           ...mockPageData,
           content: [mockCollections[0]],
@@ -454,112 +387,102 @@ describe('MyCollectionsPage', () => {
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByText('1 collection')).toBeInTheDocument();
     });
 
     it('shows loading state', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: undefined,
         isLoading: true,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      expect(
-        screen.getByText('Loading your collections...')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Loading your favorites...')).toBeInTheDocument();
       expect(screen.getByTestId('collection-grid-loading')).toBeInTheDocument();
     });
 
     it('shows error state with retry button', () => {
-      const error = new Error('Failed to load collections');
-      (useMyCollections as jest.Mock).mockReturnValue({
+      const error = new Error('Failed to load favorites');
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: undefined,
         isLoading: false,
         error,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByTestId('collection-grid-error')).toBeInTheDocument();
-      expect(
-        screen.getByText('Failed to load collections')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Failed to load favorites')).toBeInTheDocument();
     });
 
-    it('shows empty state when no collections exist', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+    it('shows empty state when no favorites exist', () => {
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      expect(screen.getByText('No collections yet')).toBeInTheDocument();
       expect(
-        screen.getByText(/haven't created any collections yet/i)
+        screen.getByText('No favorite collections yet')
       ).toBeInTheDocument();
       expect(
-        screen.getByRole('link', { name: /create your first collection/i })
+        screen.getByText(/haven't favorited any collections yet/i)
       ).toBeInTheDocument();
+      // There are two "Browse Collections" links: header and empty state CTA
+      const browseLinks = screen.getAllByRole('link', {
+        name: /browse collections/i,
+      });
+      expect(browseLinks.length).toBeGreaterThanOrEqual(1);
+      expect(browseLinks[0]).toHaveAttribute('href', '/collections');
+      expect(screen.getByTestId('heart-icon')).toBeInTheDocument();
     });
 
     it('renders collection grid by default', () => {
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByTestId('collection-browse-grid')).toBeInTheDocument();
     });
 
     it('shows filters sidebar when collections exist', () => {
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByTestId('collection-filters')).toBeInTheDocument();
     });
 
     it('hides filters sidebar when no collections exist', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: [] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(
         screen.queryByTestId('collection-filters')
       ).not.toBeInTheDocument();
     });
-  });
 
-  describe('Draft Banner', () => {
-    it('does not show draft banner when no draft exists', () => {
-      mockHasUnsavedDraft.mockReturnValue(false);
-
-      render(<MyCollectionsPage />);
+    it('does not show draft banner (favorites page has no drafts)', () => {
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.queryByTestId('draft-banner')).not.toBeInTheDocument();
-    });
-
-    it('shows draft banner when draft exists', () => {
-      mockHasUnsavedDraft.mockReturnValue(true);
-
-      render(<MyCollectionsPage />);
-
-      expect(screen.getByTestId('draft-banner')).toBeInTheDocument();
     });
   });
 
   describe('View Toggle', () => {
     it('defaults to grid view', () => {
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const gridButton = screen.getByTestId('view-toggle-grid');
       expect(gridButton).toHaveAttribute('data-active', 'true');
@@ -568,11 +491,11 @@ describe('MyCollectionsPage', () => {
     it('switches to list view when list button clicked', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       await user.click(screen.getByTestId('view-toggle-list'));
 
-      // Grid should still render (list mode uses same component in this page)
+      // Grid should still render (view mode state changes but same component)
       expect(screen.getByTestId('collection-browse-grid')).toBeInTheDocument();
     });
   });
@@ -581,12 +504,11 @@ describe('MyCollectionsPage', () => {
     it('updates collection count when filters change', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const searchInput = screen.getByTestId('search-input');
-      await user.type(searchInput, 'Dinner');
+      await user.type(searchInput, 'Italian');
 
-      // The filter count should update based on client-side filtering
       await waitFor(() => {
         expect(screen.getByTestId('filter-result-count')).toHaveTextContent(
           '1 results'
@@ -597,7 +519,7 @@ describe('MyCollectionsPage', () => {
     it('shows "No collections match your filters" when filters exclude all', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const searchInput = screen.getByTestId('search-input');
       await user.type(searchInput, 'NonexistentCollection');
@@ -615,10 +537,11 @@ describe('MyCollectionsPage', () => {
         createMockCollection({
           collectionId: i + 1,
           name: `Collection ${i + 1}`,
+          userId: 'other-user-456',
         })
       );
 
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: manyCollections, totalElements: 25 },
         isLoading: false,
         error: null,
@@ -627,7 +550,7 @@ describe('MyCollectionsPage', () => {
 
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       // Navigate to page 2
       const nextButton = screen.getByTestId('next-page');
@@ -646,43 +569,66 @@ describe('MyCollectionsPage', () => {
     it('navigates to collection detail when collection is clicked', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      const collectionName = screen.getByText('Dinner Recipes');
+      const collectionName = screen.getByText('Italian Favorites');
       await user.click(collectionName);
 
-      expect(mockPush).toHaveBeenCalledWith('/collections/1');
+      expect(mockPush).toHaveBeenCalledWith('/collections/1?from=favorites');
     });
 
     it('navigates to edit page when Edit is clicked', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      const editButtons = screen.getAllByText('Edit');
-      await user.click(editButtons[0]);
+      const editButton = screen.getByTestId('edit-1');
+      await user.click(editButton);
 
       expect(mockPush).toHaveBeenCalledWith('/collections/1/edit');
     });
 
-    it('shows delete confirmation dialog when Delete is clicked', async () => {
+    it('unfavorites collection and shows success toast', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      const deleteButtons = screen.getAllByText('Delete');
-      await user.click(deleteButtons[0]);
+      const unfavoriteButton = screen.getByTestId('unfavorite-1');
+      await user.click(unfavoriteButton);
 
-      expect(screen.getByTestId('dialog')).toBeInTheDocument();
-      expect(screen.getByTestId('dialog-title')).toHaveTextContent(
-        'Delete Collection'
+      await waitFor(() => {
+        expect(mockUnfavoriteMutateAsync).toHaveBeenCalledWith(1);
+      });
+
+      expect(mockAddSuccessToast).toHaveBeenCalledWith(
+        '"Italian Favorites" removed from favorites.'
       );
+
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+
+    it('shows error toast when unfavorite fails', async () => {
+      mockUnfavoriteMutateAsync.mockRejectedValue(
+        new Error('Unfavorite failed')
+      );
+      const user = userEvent.setup();
+
+      render(<FavoriteCollectionsPage />);
+
+      const unfavoriteButton = screen.getByTestId('unfavorite-1');
+      await user.click(unfavoriteButton);
+
+      await waitFor(() => {
+        expect(mockAddErrorToast).toHaveBeenCalledWith(
+          'Failed to remove from favorites. Please try again.'
+        );
+      });
     });
 
     it('navigates to add recipes page when clicked', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const addRecipesButtons = screen.getAllByText('Add Recipes');
       await user.click(addRecipesButtons[0]);
@@ -693,7 +639,7 @@ describe('MyCollectionsPage', () => {
     it('navigates to manage collaborators page when clicked', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const collaboratorButtons = screen.getAllByText('Manage Collaborators');
       await user.click(collaboratorButtons[0]);
@@ -703,61 +649,10 @@ describe('MyCollectionsPage', () => {
       );
     });
 
-    it('adds collection to favorites when not favorited', async () => {
-      const user = userEvent.setup();
-
-      render(<MyCollectionsPage />);
-
-      const favoriteButton = screen.getByTestId('favorite-1');
-      await user.click(favoriteButton);
-
-      expect(mockFavoriteMutateAsync).toHaveBeenCalledWith(1);
-      expect(mockAddSuccessToast).toHaveBeenCalledWith(
-        '"Dinner Recipes" added to favorites.'
-      );
-      expect(mockRefetch).toHaveBeenCalled();
-    });
-
-    it('removes collection from favorites when already favorited', async () => {
-      // Setup a collection that is already favorited
-      (useFavoriteCollections as jest.Mock).mockReturnValue({
-        data: { content: [{ collectionId: 1 }] },
-        isLoading: false,
-      });
-
-      const user = userEvent.setup();
-
-      render(<MyCollectionsPage />);
-
-      const unfavoriteButton = screen.getByTestId('favorite-1');
-      await user.click(unfavoriteButton);
-
-      expect(mockUnfavoriteMutateAsync).toHaveBeenCalledWith(1);
-      expect(mockAddSuccessToast).toHaveBeenCalledWith(
-        '"Dinner Recipes" removed from favorites.'
-      );
-      expect(mockRefetch).toHaveBeenCalled();
-    });
-
-    it('shows error toast when favorite action fails', async () => {
-      mockFavoriteMutateAsync.mockRejectedValueOnce(new Error('Network error'));
-
-      const user = userEvent.setup();
-
-      render(<MyCollectionsPage />);
-
-      const favoriteButton = screen.getByTestId('favorite-1');
-      await user.click(favoriteButton);
-
-      expect(mockAddErrorToast).toHaveBeenCalledWith(
-        'Failed to update favorites. Please try again.'
-      );
-    });
-
     it('shows coming soon toast for share action', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const shareButtons = screen.getAllByText('Share');
       await user.click(shareButtons[0]);
@@ -770,7 +665,7 @@ describe('MyCollectionsPage', () => {
     it('shows coming soon toast for duplicate action', async () => {
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const duplicateButtons = screen.getAllByText('Duplicate');
       await user.click(duplicateButtons[0]);
@@ -779,75 +674,46 @@ describe('MyCollectionsPage', () => {
         'Duplicate functionality will be available soon.'
       );
     });
+
+    it('shows coming soon toast for quick view action', async () => {
+      const user = userEvent.setup();
+
+      render(<FavoriteCollectionsPage />);
+
+      const quickViewButtons = screen.getAllByText('Quick View');
+      await user.click(quickViewButtons[0]);
+
+      expect(mockAddInfoToast).toHaveBeenCalledWith(
+        'Quick view functionality will be available soon.'
+      );
+    });
   });
 
-  describe('Delete Flow', () => {
-    it('deletes collection when confirmed', async () => {
-      const user = userEvent.setup();
+  describe('Ownership Detection', () => {
+    it('correctly identifies owned collections', () => {
+      render(<FavoriteCollectionsPage />);
 
-      render(<MyCollectionsPage />);
+      // Collection 3 is owned by current-user-123
+      const ownedCollection = screen.getByTestId('collection-card-3');
+      expect(ownedCollection).toHaveAttribute('data-is-owner', 'true');
 
-      // Click delete on first collection
-      const deleteButtons = screen.getAllByText('Delete');
-      await user.click(deleteButtons[0]);
+      // Collections 1 and 2 are owned by other users
+      const otherCollection1 = screen.getByTestId('collection-card-1');
+      expect(otherCollection1).toHaveAttribute('data-is-owner', 'false');
 
-      // Confirm deletion
-      const confirmButton = within(
-        screen.getByTestId('dialog-footer')
-      ).getByRole('button', { name: /delete/i });
-      await user.click(confirmButton);
-
-      await waitFor(() => {
-        expect(mockDeleteMutateAsync).toHaveBeenCalledWith(1);
-      });
-
-      expect(mockAddSuccessToast).toHaveBeenCalledWith(
-        'Collection "Dinner Recipes" has been deleted.'
-      );
-
-      expect(mockRefetch).toHaveBeenCalled();
+      const otherCollection2 = screen.getByTestId('collection-card-2');
+      expect(otherCollection2).toHaveAttribute('data-is-owner', 'false');
     });
 
-    it('cancels delete when Cancel is clicked', async () => {
-      const user = userEvent.setup();
+    it('handles null user ID gracefully', () => {
+      mockAuthStore.user = null as unknown as { id: string };
+      mockAuthStore.authUser = null as unknown as { user_id: string };
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      // Click delete
-      const deleteButtons = screen.getAllByText('Delete');
-      await user.click(deleteButtons[0]);
-
-      // Cancel
-      const cancelButton = within(
-        screen.getByTestId('dialog-footer')
-      ).getByRole('button', { name: /cancel/i });
-      await user.click(cancelButton);
-
-      expect(screen.queryByTestId('dialog')).not.toBeInTheDocument();
-      expect(mockDeleteMutateAsync).not.toHaveBeenCalled();
-    });
-
-    it('shows error toast when delete fails', async () => {
-      mockDeleteMutateAsync.mockRejectedValue(new Error('Delete failed'));
-      const user = userEvent.setup();
-
-      render(<MyCollectionsPage />);
-
-      // Click delete
-      const deleteButtons = screen.getAllByText('Delete');
-      await user.click(deleteButtons[0]);
-
-      // Confirm
-      const confirmButton = within(
-        screen.getByTestId('dialog-footer')
-      ).getByRole('button', { name: /delete/i });
-      await user.click(confirmButton);
-
-      await waitFor(() => {
-        expect(mockAddErrorToast).toHaveBeenCalledWith(
-          'Failed to delete collection. Please try again.'
-        );
-      });
+      // All collections should show as not owned
+      const collection = screen.getByTestId('collection-card-1');
+      expect(collection).toHaveAttribute('data-is-owner', 'false');
     });
   });
 
@@ -857,17 +723,18 @@ describe('MyCollectionsPage', () => {
         createMockCollection({
           collectionId: i + 1,
           name: `Collection ${i + 1}`,
+          userId: 'other-user-456',
         })
       );
 
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: manyCollections, totalElements: 25 },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByTestId('pagination')).toBeInTheDocument();
     });
@@ -877,10 +744,11 @@ describe('MyCollectionsPage', () => {
         createMockCollection({
           collectionId: i + 1,
           name: `Collection ${i + 1}`,
+          userId: 'other-user-456',
         })
       );
 
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: manyCollections, totalElements: 25 },
         isLoading: false,
         error: null,
@@ -889,7 +757,7 @@ describe('MyCollectionsPage', () => {
 
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       await user.click(screen.getByTestId('next-page'));
 
@@ -900,7 +768,7 @@ describe('MyCollectionsPage', () => {
   describe('Error Handling', () => {
     it('calls refetch when retry button is clicked', async () => {
       const error = new Error('Network error');
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: undefined,
         isLoading: false,
         error,
@@ -909,7 +777,7 @@ describe('MyCollectionsPage', () => {
 
       const user = userEvent.setup();
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       await user.click(screen.getByTestId('retry-button'));
 
@@ -917,14 +785,14 @@ describe('MyCollectionsPage', () => {
     });
 
     it('handles string error message', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: undefined,
         isLoading: false,
         error: 'String error message',
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByText('String error message')).toBeInTheDocument();
     });
@@ -932,54 +800,58 @@ describe('MyCollectionsPage', () => {
 
   describe('Accessibility', () => {
     it('has no accessibility violations', async () => {
-      const { container } = render(<MyCollectionsPage />);
+      const { container } = render(<FavoriteCollectionsPage />);
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('has proper heading hierarchy', () => {
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toHaveTextContent('My Collections');
+      expect(heading).toHaveTextContent('Favorite Collections');
     });
 
-    it('create collection link is accessible', () => {
-      render(<MyCollectionsPage />);
+    it('browse collections link is accessible', () => {
+      render(<FavoriteCollectionsPage />);
 
-      const createLink = screen.getByRole('link', {
-        name: /create collection/i,
+      const browseLink = screen.getByRole('link', {
+        name: /browse collections/i,
       });
-      expect(createLink).toHaveAttribute('href', '/collections/create');
+      expect(browseLink).toHaveAttribute('href', '/collections');
     });
   });
 
   describe('Edge Cases', () => {
     it('handles undefined data content gracefully', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { content: undefined },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      expect(screen.getByText('No collections yet')).toBeInTheDocument();
+      expect(
+        screen.getByText('No favorite collections yet')
+      ).toBeInTheDocument();
     });
 
     it('handles null data gracefully', () => {
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: null,
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
-      expect(screen.getByText('No collections yet')).toBeInTheDocument();
+      expect(
+        screen.getByText('No favorite collections yet')
+      ).toBeInTheDocument();
     });
 
     it('handles collections without optional fields', () => {
@@ -987,7 +859,7 @@ describe('MyCollectionsPage', () => {
         collectionId: 999,
         userId: 'user-1',
         name: 'Minimal Collection',
-        visibility: 'PRIVATE' as CollectionVisibility,
+        visibility: 'PUBLIC' as CollectionVisibility,
         collaborationMode: 'VIEW_ONLY' as CollaborationMode,
         recipeCount: 0,
         collaboratorCount: 0,
@@ -995,16 +867,45 @@ describe('MyCollectionsPage', () => {
         updatedAt: '2024-01-01T00:00:00Z',
       };
 
-      (useMyCollections as jest.Mock).mockReturnValue({
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
         data: { ...mockPageData, content: [minimalCollection] },
         isLoading: false,
         error: null,
         refetch: mockRefetch,
       });
 
-      render(<MyCollectionsPage />);
+      render(<FavoriteCollectionsPage />);
 
       expect(screen.getByText('Minimal Collection')).toBeInTheDocument();
+    });
+
+    it('filters by description as well as name', async () => {
+      const collectionWithDescription = createMockCollection({
+        collectionId: 10,
+        name: 'Generic Name',
+        description: 'This is about pasta recipes',
+        userId: 'other-user-456',
+      });
+
+      (useFavoriteCollections as jest.Mock).mockReturnValue({
+        data: { ...mockPageData, content: [collectionWithDescription] },
+        isLoading: false,
+        error: null,
+        refetch: mockRefetch,
+      });
+
+      const user = userEvent.setup();
+
+      render(<FavoriteCollectionsPage />);
+
+      const searchInput = screen.getByTestId('search-input');
+      await user.type(searchInput, 'pasta');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('filter-result-count')).toHaveTextContent(
+          '1 results'
+        );
+      });
     });
   });
 });

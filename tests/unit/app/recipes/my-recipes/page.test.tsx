@@ -41,10 +41,14 @@ jest.mock('next/link', () => {
 // Mock recipe-management hooks
 const mockRefetch = jest.fn();
 const mockDeleteMutateAsync = jest.fn();
+const mockFavoriteMutateAsync = jest.fn();
+const mockUnfavoriteMutateAsync = jest.fn();
 
 jest.mock('@/hooks/recipe-management', () => ({
   useMyRecipes: jest.fn(),
   useDeleteRecipe: jest.fn(),
+  useFavoriteRecipe: jest.fn(),
+  useUnfavoriteRecipe: jest.fn(),
 }));
 
 // Mock toast store
@@ -231,7 +235,7 @@ jest.mock('@/components/recipe/RecipeBrowseGrid', () => ({
     onFavorite,
     onShare,
   }: {
-    recipes: Array<{ recipeId: number; title: string }>;
+    recipes: Array<{ recipeId: number; title: string; isFavorite?: boolean }>;
     loading?: boolean;
     error?: string | null;
     onRetry?: () => void;
@@ -243,7 +247,11 @@ jest.mock('@/components/recipe/RecipeBrowseGrid', () => ({
     onEdit?: (recipe: { recipeId: number }) => void;
     onDelete?: (recipe: { recipeId: number }) => void;
     onAddToCollection?: (recipe: { recipeId: number }) => void;
-    onFavorite?: (recipe: { recipeId: number }) => void;
+    onFavorite?: (recipe: {
+      recipeId: number;
+      title: string;
+      isFavorite?: boolean;
+    }) => void;
     onShare?: (recipe: { recipeId: number }) => void;
   }) => {
     if (loading) {
@@ -270,6 +278,7 @@ jest.mock('@/components/recipe/RecipeBrowseGrid', () => ({
           <div
             key={recipe.recipeId}
             data-testid={`recipe-card-${recipe.recipeId}`}
+            data-is-favorite={recipe.isFavorite ?? false}
           >
             <span onClick={() => onRecipeClick?.(recipe)}>{recipe.title}</span>
             <button onClick={() => onEdit?.(recipe)}>Edit</button>
@@ -277,7 +286,12 @@ jest.mock('@/components/recipe/RecipeBrowseGrid', () => ({
             <button onClick={() => onAddToCollection?.(recipe)}>
               Add to Collection
             </button>
-            <button onClick={() => onFavorite?.(recipe)}>Favorite</button>
+            <button
+              onClick={() => onFavorite?.(recipe)}
+              data-testid={`favorite-${recipe.recipeId}`}
+            >
+              {recipe.isFavorite ? 'Unfavorite' : 'Favorite'}
+            </button>
             <button onClick={() => onShare?.(recipe)}>Share</button>
           </div>
         ))}
@@ -401,7 +415,12 @@ jest.mock('@/components/ui/dialog', () => ({
 }));
 
 // Import the mocked hooks
-import { useMyRecipes, useDeleteRecipe } from '@/hooks/recipe-management';
+import {
+  useMyRecipes,
+  useDeleteRecipe,
+  useFavoriteRecipe,
+  useUnfavoriteRecipe,
+} from '@/hooks/recipe-management';
 
 // Sample recipe data
 const createMockRecipe = (overrides: Partial<RecipeDto> = {}): RecipeDto => ({
@@ -454,6 +473,8 @@ describe('MyRecipesPage', () => {
     jest.clearAllMocks();
     mockHasUnsavedDraft.mockReturnValue(false);
     mockDeleteMutateAsync.mockResolvedValue(undefined);
+    mockFavoriteMutateAsync.mockResolvedValue(undefined);
+    mockUnfavoriteMutateAsync.mockResolvedValue(undefined);
 
     // Default mock for useMyRecipes
     (useMyRecipes as jest.Mock).mockReturnValue({
@@ -466,6 +487,18 @@ describe('MyRecipesPage', () => {
     // Default mock for useDeleteRecipe
     (useDeleteRecipe as jest.Mock).mockReturnValue({
       mutateAsync: mockDeleteMutateAsync,
+      isPending: false,
+    });
+
+    // Default mock for useFavoriteRecipe
+    (useFavoriteRecipe as jest.Mock).mockReturnValue({
+      mutateAsync: mockFavoriteMutateAsync,
+      isPending: false,
+    });
+
+    // Default mock for useUnfavoriteRecipe
+    (useUnfavoriteRecipe as jest.Mock).mockReturnValue({
+      mutateAsync: mockUnfavoriteMutateAsync,
       isPending: false,
     });
   });
@@ -750,17 +783,78 @@ describe('MyRecipesPage', () => {
       expect(screen.getByTestId('modal-recipe-id')).toHaveTextContent('1');
     });
 
-    it('shows coming soon toast for favorite action', async () => {
+    it('adds recipe to favorites when not favorited', async () => {
       const user = userEvent.setup();
 
       render(<MyRecipesPage />);
 
-      const favoriteButtons = screen.getAllByText('Favorite');
-      await user.click(favoriteButtons[0]);
+      const favoriteButton = screen.getByTestId('favorite-1');
+      await user.click(favoriteButton);
 
-      expect(mockAddInfoToast).toHaveBeenCalledWith(
-        'Favorite functionality will be available soon.'
+      await waitFor(() => {
+        expect(mockFavoriteMutateAsync).toHaveBeenCalledWith(1);
+      });
+
+      expect(mockAddSuccessToast).toHaveBeenCalledWith(
+        '"Pasta Carbonara" added to favorites.'
       );
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+
+    it('removes recipe from favorites when already favorited', async () => {
+      // Setup a recipe that is already favorited
+      const favoritedRecipes = [
+        createMockRecipe({
+          recipeId: 1,
+          title: 'Favorited Recipe',
+          favorites: [
+            {
+              recipeId: 1,
+              userId: 'user-123',
+              favoritedAt: '2024-01-01T00:00:00Z',
+            },
+          ],
+        }),
+      ];
+
+      (useMyRecipes as jest.Mock).mockReturnValue({
+        data: { ...mockPageData, recipes: favoritedRecipes },
+        isLoading: false,
+        error: null,
+        refetch: mockRefetch,
+      });
+
+      const user = userEvent.setup();
+
+      render(<MyRecipesPage />);
+
+      const unfavoriteButton = screen.getByTestId('favorite-1');
+      await user.click(unfavoriteButton);
+
+      await waitFor(() => {
+        expect(mockUnfavoriteMutateAsync).toHaveBeenCalledWith(1);
+      });
+
+      expect(mockAddSuccessToast).toHaveBeenCalledWith(
+        '"Favorited Recipe" removed from favorites.'
+      );
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+
+    it('shows error toast when favorite action fails', async () => {
+      mockFavoriteMutateAsync.mockRejectedValue(new Error('Favorite failed'));
+      const user = userEvent.setup();
+
+      render(<MyRecipesPage />);
+
+      const favoriteButton = screen.getByTestId('favorite-1');
+      await user.click(favoriteButton);
+
+      await waitFor(() => {
+        expect(mockAddErrorToast).toHaveBeenCalledWith(
+          'Failed to update favorites. Please try again.'
+        );
+      });
     });
 
     it('shows coming soon toast for share action', async () => {
