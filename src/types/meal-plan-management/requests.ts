@@ -8,6 +8,7 @@ export interface CreateMealPlanDto {
   isActive?: boolean;
   userId?: string;
   recipes?: CreateMealPlanRecipeDto[];
+  tags?: string[];
 }
 
 export interface UpdateMealPlanDto {
@@ -15,6 +16,7 @@ export interface UpdateMealPlanDto {
   description?: string;
   startDate?: string;
   endDate?: string;
+  tags?: string[];
 }
 
 export interface CreateMealPlanRecipeDto {
