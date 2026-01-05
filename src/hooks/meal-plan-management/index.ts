@@ -12,6 +12,33 @@ export {
   useInvalidateMealPlans,
 } from './use-meal-plans';
 
+// Favorites
+export {
+  useFavoriteMealPlans,
+  useMealPlanFavoriteStatus,
+  useAddMealPlanToFavorites,
+  useRemoveMealPlanFromFavorites,
+  useToggleMealPlanFavorite,
+  useInvalidateFavorites,
+} from './use-favorites';
+
+// Tags
+export {
+  useMealPlanTags,
+  useMealPlanTagsById,
+  useAddMealPlanTags,
+  useReplaceMealPlanTags,
+  useRemoveMealPlanTag,
+  useInvalidateTags,
+} from './use-tags';
+
+// Trending
+export {
+  useTrendingMealPlans,
+  usePrefetchTrendingMealPlans,
+  useInvalidateTrending,
+} from './use-trending';
+
 // Health Monitoring
 export {
   useMealPlanHealth,

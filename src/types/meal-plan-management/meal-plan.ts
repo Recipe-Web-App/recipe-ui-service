@@ -1,4 +1,5 @@
 import { MealType } from './common';
+import { MealPlanTagDto } from './tags';
 
 export interface MealPlanResponseDto {
   id: string;
@@ -13,6 +14,7 @@ export interface MealPlanResponseDto {
   recipes?: MealPlanRecipeResponseDto[];
   recipeCount?: number;
   durationDays?: number;
+  tags?: MealPlanTagDto[];
 }
 
 export interface MealPlanRecipeResponseDto {

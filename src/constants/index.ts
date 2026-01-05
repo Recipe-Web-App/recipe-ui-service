@@ -169,6 +169,17 @@ export const QUERY_KEYS = {
     MEAL_PLANS: ['mealPlanManagement', 'mealPlans'],
     MEAL_PLAN: ['mealPlanManagement', 'mealPlan'],
 
+    // Favorites
+    FAVORITES: ['mealPlanManagement', 'favorites'],
+    FAVORITE: ['mealPlanManagement', 'favorite'],
+
+    // Trending
+    TRENDING: ['mealPlanManagement', 'trending'],
+
+    // Tags
+    TAGS: ['mealPlanManagement', 'tags'],
+    MEAL_PLAN_TAGS: ['mealPlanManagement', 'mealPlanTags'],
+
     // Health endpoints
     HEALTH: ['mealPlanManagement', 'health'],
     READINESS: ['mealPlanManagement', 'readiness'],

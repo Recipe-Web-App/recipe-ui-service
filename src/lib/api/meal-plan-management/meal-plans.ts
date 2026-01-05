@@ -25,6 +25,7 @@ export interface ListMealPlansParams extends PaginationParams {
   sortOrder?: 'asc' | 'desc';
   includeRecipes?: boolean;
   includeArchived?: boolean;
+  tags?: string;
 }
 
 export interface GetMealPlanByIdParams {
