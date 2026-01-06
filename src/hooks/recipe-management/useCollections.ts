@@ -18,6 +18,8 @@ const COLLECTION_RECIPES = QUERY_KEYS.RECIPE_MANAGEMENT
   .COLLECTION_RECIPES as readonly string[];
 const COLLECTION_COLLABORATORS = QUERY_KEYS.RECIPE_MANAGEMENT
   .COLLECTION_COLLABORATORS as readonly string[];
+const TRENDING_COLLECTIONS = QUERY_KEYS.RECIPE_MANAGEMENT
+  .TRENDING_COLLECTIONS as readonly string[];
 
 /**
  * Hook to fetch all accessible collections with optional pagination
@@ -172,5 +174,22 @@ export const useDeleteCollection = () => {
         queryKey: COLLECTIONS,
       });
     },
+  });
+};
+
+/**
+ * Hook to fetch trending collections
+ * Results are pre-sorted by trending score (descending)
+ */
+export const useTrendingCollections = (
+  params?: Omit<PaginationParams, 'sort'>
+) => {
+  return useQuery({
+    queryKey: [...TRENDING_COLLECTIONS, params],
+    queryFn: (): Promise<PageCollectionDto> => {
+      return collectionsApi.getTrendingCollections(params);
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 };
