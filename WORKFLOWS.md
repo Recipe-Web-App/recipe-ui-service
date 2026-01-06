@@ -6,7 +6,7 @@ automation.
 
 ## 🎯 Overview
 
-Our workflow system consists of **18 comprehensive workflows** organized into two categories:
+Our workflow system consists of **19 comprehensive workflows** organized into two categories:
 
 ### Core Development Workflows (7)
 
@@ -18,7 +18,7 @@ Our workflow system consists of **18 comprehensive workflows** organized into tw
 6. **⚡ Performance Monitoring** - Performance testing and monitoring
 7. **🔧 Maintenance & Monitoring** - Repository health and automated maintenance
 
-### Automation & Developer Experience (11)
+### Automation & Developer Experience (12)
 
 1. **🏷️ PR Labeler** - Auto-label PRs based on file changes
 2. **🤖 Dependabot Auto-Merge** - Intelligent dependency update merging
@@ -31,6 +31,7 @@ Our workflow system consists of **18 comprehensive workflows** organized into tw
 9. **👋 Contributor Greeting** - Welcome first-time contributors
 10. **🔗 Link Checker** - Documentation link validation
 11. **🧹 Branch Cleanup** - Automatic branch deletion after merge
+12. **📝 Update Documentation** - Auto-update documentation dates
 
 ## 📊 Workflow Architecture
 
@@ -1204,7 +1205,7 @@ Concurrent PRs: Managed automatically
 
 ## 📋 Workflow Summary Table
 
-Quick reference for all 18 workflows in this repository:
+Quick reference for all 19 workflows in this repository:
 
 ### Core Development Workflows
 
@@ -1233,6 +1234,7 @@ Quick reference for all 18 workflows in this repository:
 | 16  | 👋 Contributor Greeting  | `greet.yml`                 | First Issue/PR   | < 1 min   | Auto        |
 | 17  | 🔗 Link Checker          | `links.yml`                 | PR/Schedule      | ~2-3 min  | Both        |
 | 18  | 🧹 Branch Cleanup        | `cleanup.yml`               | PR Merged        | < 1 min   | Auto        |
+| 19  | 📝 Update Documentation  | `update-docs.yml`           | Push to main     | < 1 min   | Auto        |
 
 ### Workflow Categories
 
@@ -1243,7 +1245,7 @@ Quick reference for all 18 workflows in this repository:
 - Performance monitoring
 - Release automation
 
-**Automation & Experience (11 workflows)**
+**Automation & Experience (12 workflows)**
 
 - Automatic PR management
 - Contributor engagement

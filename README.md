@@ -387,18 +387,15 @@ The application is configured to communicate with multiple backend microservices
 - **[Deployment Guide](DEPLOYMENT.md)** - Production deployment
 - **[Testing Strategy](TESTING.md)** - Comprehensive testing guide
 - **[GitHub Workflows](WORKFLOWS.md)** - CI/CD pipeline documentation
-- **[UI/UX Design Guide](UI_GUIDE.md)** - Design system and component library
+- **[UI/UX Design Guide](UI_GUIDE.md)** - Design system and patterns
+- **[Component Documentation](docs/components/README.md)** - Individual component guides
 - **[Claude Code Guide](CLAUDE.md)** - AI-assisted development
 
-### Planned Documentation
+### GitHub Documentation
 
-The following documentation is planned for future releases:
-
-- **API Documentation** - Backend integration guide
-- **Security Guide** - Security best practices and policies
-- **Contributing Guidelines** - Development workflow and contribution process
-- **Pre-commit Guide** - Quality pipeline setup and usage
-- **Troubleshooting** - Common issues and solutions
+- **[Contributing Guidelines](.github/CONTRIBUTING.md)** - Development workflow and contribution process
+- **[Security Policy](.github/SECURITY.md)** - Security best practices and vulnerability reporting
+- **[Support Guide](.github/SUPPORT.md)** - Getting help and troubleshooting
 
 ### External Resources
 
@@ -510,4 +507,4 @@ npm run format && npm run lint
 ---
 
 **Maintained by**: [Jonathan Samuelsen](https://github.com/jsamuelsen11)
-**Last Updated**: 2025-10-08
+**Last Updated**: 2026-01-05

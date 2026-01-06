@@ -84,14 +84,14 @@ Use [GitHub Issues](https://github.com/Recipe-Web-App/recipe-ui-service/issues/n
 ### Setup and Configuration
 
 **Q: How do I get started?**
-A: See the Quick Start section in [README.md](../README.md) and [CLAUDE.md](../CLAUDE.md#quick-start-commands)
+A: See the Quick Start section in [README.md](../README.md) and [CLAUDE.md](../CLAUDE.md#commands)
 
 **Q: What environment variables are required?**
 A: Check [`.env.example`](../.env.example) for all configuration options. You need to configure URLs for the 6
 backend microservices.
 
 **Q: How do I connect to backend services?**
-A: Configure the service URLs in your `.env.local` file. See [CLAUDE.md](../CLAUDE.md#architecture-overview) for
+A: Configure the service URLs in your `.env.local` file. See [CLAUDE.md](../CLAUDE.md#architecture) for
 the microservices architecture.
 
 **Q: What Node.js version do I need?**
@@ -103,13 +103,13 @@ A: Node.js 20 or higher is required. See package.json for the exact version.
 A: Run `npm run dev` to start the Next.js development server with Turbopack.
 
 **Q: How do I run tests?**
-A: Run `npm test` for all tests, or see [CLAUDE.md](../CLAUDE.md#testing-commands) for specific test commands.
+A: Run `npm test` for all tests, or see [CLAUDE.md](../CLAUDE.md#commands) for specific test commands.
 
 **Q: What's the code structure?**
-A: See Architecture Overview in [CLAUDE.md](../CLAUDE.md#architecture-overview) for the full project structure.
+A: See Architecture Overview in [CLAUDE.md](../CLAUDE.md#architecture) for the full project structure.
 
 **Q: How do I add a new API integration?**
-A: Follow the API Integration Pattern in [CLAUDE.md](../CLAUDE.md#api-integration-pattern) - create client, add
+A: Follow the API Integration Pattern in [CLAUDE.md](../CLAUDE.md#patterns) - create client, add
 methods, create React hooks.
 
 ### Troubleshooting
@@ -135,7 +135,7 @@ methods, create React hooks.
 - Run `npm ci` to ensure dependencies are fresh
 - Check test output for specific errors
 - Verify backend services are available for integration tests
-- See [CLAUDE.md](../CLAUDE.md#testing) for testing guidelines
+- See [TESTING.md](../TESTING.md) for testing guidelines
 
 **Q: Build is failing?**
 
@@ -154,13 +154,13 @@ methods, create React hooks.
 ### Components and Hooks
 
 **Q: How do I create a new component?**
-A: Follow existing patterns in `src/components/`. See [CLAUDE.md](../CLAUDE.md#when-creating-components) for guidelines.
+A: Follow existing patterns in `src/components/`. See [CLAUDE.md](../CLAUDE.md#patterns) for guidelines.
 
 **Q: How do I integrate with a backend service?**
 A: Create API client in `src/lib/api/[service]/`, add types in `src/types/[service]/`, create hooks in `src/hooks/[service]/`.
 
 **Q: How do I manage state?**
-A: Use TanStack Query for server state, Zustand for client state. See [CLAUDE.md](../CLAUDE.md#state-management).
+A: Use TanStack Query for server state, Zustand for client state. See [CLAUDE.md](../CLAUDE.md#architecture).
 
 ## Response Times
 

@@ -84,6 +84,19 @@ space-16: 4rem; /* 64px */
 
 ## 🧩 Component Library
 
+> **Note**: Component documentation has been reorganized into individual files for easier maintenance.
+> See **[docs/components/](./docs/components/README.md)** for the latest documentation.
+> The content below is preserved for reference but may be outdated.
+
+| Category     | Components                                                                                                                                                                                                                                                                                                                 |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Base**     | [Button](./docs/components/button.md), [Badge](./docs/components/badge.md), [Dropdown](./docs/components/dropdown.md), [Tabs](./docs/components/tabs.md), [Tooltip](./docs/components/tooltip.md), [Select](./docs/components/select.md), [Avatar](./docs/components/avatar.md), [Progress](./docs/components/progress.md) |
+| **Form**     | [Input](./docs/components/input.md), [Textarea](./docs/components/textarea.md)                                                                                                                                                                                                                                             |
+| **Layout**   | [Card](./docs/components/card.md), [Navigation](./docs/components/navigation.md), [Grid](./docs/components/grid.md)                                                                                                                                                                                                        |
+| **Feedback** | [Accordion](./docs/components/accordion.md), [Alert](./docs/components/alert.md), [Dialog](./docs/components/dialog.md)                                                                                                                                                                                                    |
+
+---
+
 ### Base Components
 
 #### Button Component

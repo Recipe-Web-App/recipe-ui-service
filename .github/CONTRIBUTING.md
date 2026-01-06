@@ -147,11 +147,11 @@ npm run format
 # Check formatting
 npm run format:check
 
-# Run linter
+# Run linter (auto-fixes issues)
 npm run lint
 
-# Fix linting issues
-npm run lint:fix
+# Check linting without auto-fix
+npm run lint:check
 
 # Type checking
 npm run type-check
