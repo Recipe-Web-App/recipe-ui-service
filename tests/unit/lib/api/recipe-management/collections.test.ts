@@ -309,4 +309,35 @@ describe('Collections API', () => {
       ).rejects.toThrow('Search failed');
     });
   });
+
+  describe('getTrendingCollections', () => {
+    it('should get trending collections without parameters', async () => {
+      mockedClient.get.mockResolvedValue({ data: mockPageCollectionDto });
+
+      const result = await collectionsApi.getTrendingCollections();
+
+      expect(mockedClient.get).toHaveBeenCalledWith('/collections/trending');
+      expect(result).toEqual(mockPageCollectionDto);
+    });
+
+    it('should get trending collections with pagination parameters', async () => {
+      mockedClient.get.mockResolvedValue({ data: mockPageCollectionDto });
+
+      const params = { page: 1, size: 10 };
+      await collectionsApi.getTrendingCollections(params);
+
+      expect(mockedClient.get).toHaveBeenCalledWith(
+        '/collections/trending?page=1&size=10'
+      );
+    });
+
+    it('should handle errors', async () => {
+      const error = new Error('Network error');
+      mockedClient.get.mockRejectedValue(error);
+
+      await expect(collectionsApi.getTrendingCollections()).rejects.toThrow(
+        'Network error'
+      );
+    });
+  });
 });

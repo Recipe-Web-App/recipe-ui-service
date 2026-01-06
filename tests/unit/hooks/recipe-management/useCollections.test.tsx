@@ -9,6 +9,7 @@ import {
   useCreateCollection,
   useUpdateCollection,
   useDeleteCollection,
+  useTrendingCollections,
 } from '@/hooks/recipe-management/useCollections';
 import {
   CollectionVisibility,
@@ -32,6 +33,7 @@ jest.mock('@/lib/api/recipe-management', () => ({
     createCollection: jest.fn(),
     updateCollection: jest.fn(),
     deleteCollection: jest.fn(),
+    getTrendingCollections: jest.fn(),
   },
 }));
 
@@ -339,6 +341,100 @@ describe('useCollections hooks', () => {
       });
 
       expect(mockedCollectionsApi.deleteCollection).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('useTrendingCollections', () => {
+    it('should fetch trending collections successfully', async () => {
+      const mockResponse: PageCollectionDto = {
+        content: [
+          {
+            collectionId: 1,
+            userId: 'user123',
+            name: 'Trending Collection',
+            description: 'Popular recipes',
+            visibility: 'PUBLIC' as CollectionVisibility,
+            collaborationMode: 'OWNER_ONLY' as CollaborationMode,
+            recipeCount: 10,
+            collaboratorCount: 0,
+            createdAt: '2024-01-01T00:00:00Z',
+            updatedAt: '2024-01-01T00:00:00Z',
+          },
+        ],
+        totalElements: 1,
+        totalPages: 1,
+        last: true,
+        first: true,
+        numberOfElements: 1,
+        size: 20,
+        number: 0,
+        sort: { sorted: false, unsorted: true, empty: true },
+        empty: false,
+      };
+
+      mockedCollectionsApi.getTrendingCollections.mockResolvedValue(
+        mockResponse
+      );
+
+      const { result } = renderHook(() => useTrendingCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(result.current.data).toEqual(mockResponse);
+      expect(mockedCollectionsApi.getTrendingCollections).toHaveBeenCalledWith(
+        undefined
+      );
+    });
+
+    it('should fetch trending collections with pagination params', async () => {
+      const params = { page: 1, size: 10 };
+      const mockResponse: PageCollectionDto = {
+        content: [],
+        totalElements: 0,
+        totalPages: 0,
+        first: true,
+        last: true,
+        numberOfElements: 0,
+        size: 10,
+        number: 1,
+        sort: { sorted: false, unsorted: true, empty: true },
+        empty: true,
+      };
+
+      mockedCollectionsApi.getTrendingCollections.mockResolvedValue(
+        mockResponse
+      );
+
+      const { result } = renderHook(() => useTrendingCollections(params), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBe(true);
+      });
+
+      expect(mockedCollectionsApi.getTrendingCollections).toHaveBeenCalledWith(
+        params
+      );
+    });
+
+    it('should handle errors', async () => {
+      const error = new Error('Failed to fetch trending collections');
+      mockedCollectionsApi.getTrendingCollections.mockRejectedValue(error);
+
+      const { result } = renderHook(() => useTrendingCollections(), {
+        wrapper: createWrapper(),
+      });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      expect(result.current.error).toEqual(error);
     });
   });
 });

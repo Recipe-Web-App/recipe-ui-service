@@ -116,4 +116,24 @@ export const collectionsApi = {
       throw error;
     }
   },
+
+  /**
+   * Get trending collections with pagination
+   * GET /collections/trending
+   * Results are pre-sorted by trending score (descending)
+   */
+  async getTrendingCollections(
+    params?: Omit<PaginationParams, 'sort'>
+  ): Promise<PageCollectionDto> {
+    try {
+      const queryString = params ? buildQueryParams(params) : '';
+      const response = await recipeManagementClient.get(
+        `/collections/trending${queryString ? `?${queryString}` : ''}`
+      );
+      return response.data as PageCollectionDto;
+    } catch (error) {
+      handleRecipeManagementApiError(error);
+      throw error;
+    }
+  },
 };

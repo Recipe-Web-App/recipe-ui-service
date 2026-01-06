@@ -111,6 +111,9 @@ export const QUERY_KEYS = {
     COLLECTION_COLLABORATORS: ['recipeManagement', 'collectionCollaborators'],
     COLLECTION_TAGS: ['recipeManagement', 'collectionTags'],
 
+    // Collection discovery
+    TRENDING_COLLECTIONS: ['recipeManagement', 'trendingCollections'],
+
     // Favorite operations (recipes)
     FAVORITES: ['recipeManagement', 'favorites'],
     USER_FAVORITES: ['recipeManagement', 'userFavorites'],
