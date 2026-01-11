@@ -1,0 +1,941 @@
+openapi: 3.1.0
+info:
+  title: Recipe UI Service API
+  version: 0.1.0
+  description: |
+    Health, observability, and metrics endpoints for the Recipe UI Service.
+
+    This Next.js 16 application provides Kubernetes-compatible health probes and
+    detailed runtime metrics for monitoring and observability purposes.
+
+    ## Health Probe Semantics
+
+    - **Liveness Probe** (`/health/live`): Determines if the process should be restarted.
+      Only fails if the process startup failed (uptime < 5 seconds).
+
+    - **Readiness Probe** (`/health/ready`): Determines if the service can receive traffic.
+      Checks uptime, memory usage, environment configuration, and Next.js initialization.
+
+    - **Health Check** (`/health`): Comprehensive health status combining liveness and
+      readiness with additional memory and CPU metrics.
+  contact:
+    name: Recipe Web App Team
+  license:
+    name: Private
+    identifier: UNLICENSED
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+  - url: http://sous-chef-proxy.local
+    description: Local proxy server
+  - url: http://recipe-ui.local
+    description: Local UI service
+
+# All endpoints are public and do not require authentication
+security: []
+
+tags:
+  - name: Health
+    description: |
+      Health check and Kubernetes probe endpoints.
+      These endpoints are designed for container orchestration systems
+      to determine service health and readiness to receive traffic.
+  - name: Observability
+    description: |
+      Metrics and monitoring endpoints.
+      Provides detailed runtime information for observability platforms
+      and debugging purposes.
+
+paths:
+  /api/v1/recipe-ui/health:
+    get:
+      operationId: getHealth
+      summary: Comprehensive health check
+      description: |
+        Returns comprehensive health status including memory usage, CPU metrics,
+        and environment information. This endpoint monitors critical thresholds
+        and returns a degraded status if:
+
+        - Memory usage exceeds 85% of heap limit
+        - Process uptime is less than 10 seconds
+
+        When degraded, returns HTTP 503 to signal load balancers to reduce traffic.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: healthy
+                timestamp: '2024-01-15T10:30:00.000Z'
+                uptime: '3600s'
+                memory:
+                  rss: '150MB'
+                  heapUsed: '75MB'
+                  heapLimit: '512MB'
+                  usagePercent: '15%'
+                cpu:
+                  user: '1250ms'
+                  system: '320ms'
+                environment: production
+                version: '0.1.0'
+                hostname: recipe-ui-abc123
+                pid: 1
+                requestId: health-1705315800000-abc123
+        '503':
+          description: Service is degraded (memory > 85% or uptime < 10s)
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: degraded
+                timestamp: '2024-01-15T10:30:00.000Z'
+                uptime: '5s'
+                memory:
+                  rss: '450MB'
+                  heapUsed: '480MB'
+                  heapLimit: '512MB'
+                  usagePercent: '94%'
+                cpu:
+                  user: '50ms'
+                  system: '20ms'
+                environment: production
+                version: '0.1.0'
+                hostname: recipe-ui-abc123
+                pid: 1
+                requestId: health-1705315800000-xyz789
+        '500':
+          description: Health check failed due to internal error
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthErrorResponse'
+
+  /api/v1/recipe-ui/health/live:
+    get:
+      operationId: getLiveness
+      summary: Kubernetes liveness probe
+      description: |
+        Simple liveness probe for Kubernetes. Checks if the process is responsive
+        and has completed startup (uptime > 5 seconds).
+
+        This probe should only fail if the process needs to be restarted.
+        Memory and other resource checks belong in the readiness probe.
+
+        **Kubernetes Usage:**
+        ```yaml
+        livenessProbe:
+          httpGet:
+            path: /api/v1/recipe-ui/health/live
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        ```
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Process is alive and responsive
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessSuccessResponse'
+              example:
+                status: alive
+                timestamp: '2024-01-15T10:30:00.000Z'
+                uptime: '3600s'
+                memoryUsage: '15%'
+                requestId: live-1705315800000-abc123
+        '500':
+          description: Process is unhealthy and should be restarted
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LivenessFailureResponse'
+              examples:
+                insufficientUptime:
+                  summary: Process still starting up
+                  value:
+                    status: unhealthy
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    reason: insufficient_uptime
+                    uptime: '3s'
+                    memoryUsage: '10%'
+                    requestId: live-1705315800000-xyz789
+                internalError:
+                  summary: Internal error during check
+                  value:
+                    status: unhealthy
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    error: Liveness check failed
+                    errorDetails: 'Cannot read properties of undefined'
+                    requestId: live-1705315800000-err456
+
+  /api/v1/recipe-ui/health/ready:
+    get:
+      operationId: getReadiness
+      summary: Kubernetes readiness probe
+      description: |
+        Comprehensive readiness probe for Kubernetes. Checks multiple conditions
+        to determine if the service is ready to receive traffic:
+
+        - **Uptime**: Process has been running for at least 5 seconds
+        - **Memory**: Heap usage is below 95% of limit
+        - **Environment**: NODE_ENV is properly configured
+        - **Next.js**: Next.js framework is initialized
+
+        All checks must pass for the service to be considered ready.
+
+        **Kubernetes Usage:**
+        ```yaml
+        readinessProbe:
+          httpGet:
+            path: /api/v1/recipe-ui/health/ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3
+        ```
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is ready to receive traffic
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessSuccessResponse'
+              example:
+                status: ready
+                timestamp: '2024-01-15T10:30:00.000Z'
+                uptime: '3600s'
+                checks:
+                  uptime: true
+                  memory: true
+                  environment: true
+                  nextjs: true
+                memory:
+                  heapUsed: '75MB'
+                  heapLimit: '512MB'
+                  usagePercent: '15%'
+                requestId: ready-1705315800000-abc123
+        '503':
+          description: Service is not ready to receive traffic
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessFailureResponse'
+              examples:
+                memoryPressure:
+                  summary: Memory usage too high
+                  value:
+                    status: not_ready
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    uptime: '3600s'
+                    checks:
+                      uptime: true
+                      memory: false
+                      environment: true
+                      nextjs: true
+                    memory:
+                      heapUsed: '500MB'
+                      heapLimit: '512MB'
+                      usagePercent: '98%'
+                    requestId: ready-1705315800000-xyz789
+                startup:
+                  summary: Still starting up
+                  value:
+                    status: not_ready
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    uptime: '2s'
+                    checks:
+                      uptime: false
+                      memory: true
+                      environment: true
+                      nextjs: true
+                    memory:
+                      heapUsed: '50MB'
+                      heapLimit: '512MB'
+                      usagePercent: '10%'
+                    requestId: ready-1705315800000-start123
+                internalError:
+                  summary: Internal error during check
+                  value:
+                    status: not_ready
+                    timestamp: '2024-01-15T10:30:00.000Z'
+                    error: Readiness check failed
+                    errorDetails: 'Cannot read properties of undefined'
+                    checks:
+                      uptime: false
+                      memory: false
+                      environment: false
+                      nextjs: false
+                    requestId: ready-1705315800000-err456
+
+  /api/v1/recipe-ui/metrics:
+    get:
+      operationId: getMetrics
+      summary: Detailed runtime metrics
+      description: |
+        Returns detailed performance and resource metrics for monitoring
+        and observability purposes. Provides memory and CPU metrics in
+        multiple units for flexibility in metric collection systems.
+
+        **Memory Metrics:**
+        - RSS (Resident Set Size): Total memory allocated
+        - Heap Used/Total: V8 JavaScript heap usage
+        - Heap Limit: Maximum heap size
+        - External: Memory used by C++ objects bound to JavaScript
+        - Array Buffers: Memory for ArrayBuffer and SharedArrayBuffer
+
+        **CPU Metrics:**
+        - User: CPU time spent in user mode
+        - System: CPU time spent in kernel mode
+
+        All metrics are available in bytes/microseconds (raw) and
+        human-readable formats (MB/ms/s).
+      tags:
+        - Observability
+      responses:
+        '200':
+          description: Metrics collected successfully
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+              example:
+                timestamp: '2024-01-15T10:30:00.000Z'
+                uptime:
+                  seconds: 3665.123
+                  formatted: '1h 1m 5s'
+                memory:
+                  bytes:
+                    rss: 157286400
+                    heapUsed: 78643200
+                    heapTotal: 104857600
+                    heapLimit: 536870912
+                    external: 2097152
+                    arrayBuffers: 1048576
+                  megabytes:
+                    rss: 150
+                    heapUsed: 75
+                    heapTotal: 100
+                    heapLimit: 512
+                    external: 2
+                    arrayBuffers: 1
+                  heapUsagePercent: 14.65
+                cpu:
+                  microseconds:
+                    user: 1250000
+                    system: 320000
+                  seconds:
+                    user: 1.25
+                    system: 0.32
+                  milliseconds:
+                    user: 1250
+                    system: 320
+                process:
+                  pid: 1
+                  nodeVersion: v20.10.0
+                  platform: linux
+                  arch: x64
+                  environment: production
+                  hostname: recipe-ui-abc123
+                requestId: metrics-1705315800000-abc123
+        '500':
+          description: Metrics collection failed
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsErrorResponse'
+
+components:
+  headers:
+    X-Request-Id:
+      description: Unique identifier for request tracing and debugging
+      schema:
+        type: string
+        pattern: '^(health|live|ready|metrics)-\d+-[a-z0-9]+$'
+        examples:
+          - health-1705315800000-abc123
+          - live-1705315800000-xyz789
+    Cache-Control:
+      description: Cache control directive (always no-cache for health endpoints)
+      schema:
+        type: string
+        const: 'no-cache, no-store, must-revalidate'
+
+  schemas:
+    HealthResponse:
+      type: object
+      description: Comprehensive health check response
+      required:
+        - status
+        - timestamp
+        - uptime
+        - memory
+        - cpu
+        - environment
+        - version
+        - hostname
+        - pid
+        - requestId
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - degraded
+          description: |
+            Overall health status.
+            - `healthy`: All systems operating normally
+            - `degraded`: Service is functional but under stress (memory > 85% or uptime < 10s)
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the health check
+        uptime:
+          type: string
+          pattern: '^\d+s$'
+          description: Process uptime in seconds (e.g., "3600s")
+        memory:
+          $ref: '#/components/schemas/MemorySummary'
+        cpu:
+          $ref: '#/components/schemas/CpuSummary'
+        environment:
+          type: string
+          description: Current NODE_ENV value
+          examples:
+            - development
+            - production
+            - test
+        version:
+          type: string
+          description: Application version from package.json
+          examples:
+            - '0.1.0'
+        hostname:
+          type: string
+          description: Container or machine hostname
+        pid:
+          type: integer
+          minimum: 1
+          description: Process ID
+        requestId:
+          type: string
+          description: Unique request identifier for tracing
+
+    HealthErrorResponse:
+      type: object
+      description: Health check error response
+      required:
+        - status
+        - timestamp
+        - error
+        - requestId
+      properties:
+        status:
+          type: string
+          const: unhealthy
+        timestamp:
+          type: string
+          format: date-time
+        error:
+          type: string
+          const: Health check failed
+        errorDetails:
+          type: string
+          description: Detailed error message
+        requestId:
+          type: string
+
+    LivenessSuccessResponse:
+      type: object
+      description: Successful liveness probe response
+      required:
+        - status
+        - timestamp
+        - uptime
+        - memoryUsage
+        - requestId
+      properties:
+        status:
+          type: string
+          const: alive
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          type: string
+          pattern: '^\d+s$'
+        memoryUsage:
+          type: string
+          pattern: '^\d+%$'
+          description: Current heap memory usage percentage
+        requestId:
+          type: string
+
+    LivenessFailureResponse:
+      type: object
+      description: Failed liveness probe response
+      required:
+        - status
+        - timestamp
+        - requestId
+      properties:
+        status:
+          type: string
+          const: unhealthy
+        timestamp:
+          type: string
+          format: date-time
+        reason:
+          type: string
+          enum:
+            - insufficient_uptime
+          description: Reason for liveness failure (when known)
+        uptime:
+          type: string
+          pattern: '^\d+s$'
+        memoryUsage:
+          type: string
+          pattern: '^\d+%$'
+        error:
+          type: string
+          description: Error message (for internal errors)
+        errorDetails:
+          type: string
+          description: Detailed error message
+        requestId:
+          type: string
+
+    ReadinessSuccessResponse:
+      type: object
+      description: Successful readiness probe response
+      required:
+        - status
+        - timestamp
+        - uptime
+        - checks
+        - memory
+        - requestId
+      properties:
+        status:
+          type: string
+          const: ready
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          type: string
+          pattern: '^\d+s$'
+        checks:
+          $ref: '#/components/schemas/ReadinessChecks'
+        memory:
+          $ref: '#/components/schemas/MemoryReadiness'
+        requestId:
+          type: string
+
+    ReadinessFailureResponse:
+      type: object
+      description: Failed readiness probe response
+      required:
+        - status
+        - timestamp
+        - checks
+        - requestId
+      properties:
+        status:
+          type: string
+          const: not_ready
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          type: string
+          pattern: '^\d+s$'
+        checks:
+          $ref: '#/components/schemas/ReadinessChecks'
+        memory:
+          $ref: '#/components/schemas/MemoryReadiness'
+        error:
+          type: string
+          description: Error message (for internal errors)
+        errorDetails:
+          type: string
+          description: Detailed error message
+        requestId:
+          type: string
+
+    ReadinessChecks:
+      type: object
+      description: Individual readiness check results
+      required:
+        - uptime
+        - memory
+        - environment
+        - nextjs
+      properties:
+        uptime:
+          type: boolean
+          description: True if process uptime > 5 seconds
+        memory:
+          type: boolean
+          description: True if heap usage < 95%
+        environment:
+          type: boolean
+          description: True if NODE_ENV is defined
+        nextjs:
+          type: boolean
+          description: True if Next.js is initialized (always true when responding)
+
+    MetricsResponse:
+      type: object
+      description: Detailed runtime metrics response
+      required:
+        - timestamp
+        - uptime
+        - memory
+        - cpu
+        - process
+        - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          $ref: '#/components/schemas/UptimeMetrics'
+        memory:
+          $ref: '#/components/schemas/MemoryMetrics'
+        cpu:
+          $ref: '#/components/schemas/CpuMetrics'
+        process:
+          $ref: '#/components/schemas/ProcessInfo'
+        requestId:
+          type: string
+
+    MetricsErrorResponse:
+      type: object
+      description: Metrics collection error response
+      required:
+        - error
+        - timestamp
+        - requestId
+      properties:
+        error:
+          type: string
+          const: Metrics collection failed
+        errorDetails:
+          type: string
+          description: Detailed error message
+        timestamp:
+          type: string
+          format: date-time
+        requestId:
+          type: string
+
+    MemorySummary:
+      type: object
+      description: Memory usage summary (human-readable)
+      required:
+        - rss
+        - heapUsed
+        - heapLimit
+        - usagePercent
+      properties:
+        rss:
+          type: string
+          pattern: '^\d+MB$'
+          description: Resident Set Size in megabytes
+        heapUsed:
+          type: string
+          pattern: '^\d+MB$'
+          description: V8 heap memory used in megabytes
+        heapLimit:
+          type: string
+          pattern: '^\d+MB$'
+          description: V8 heap size limit in megabytes
+        usagePercent:
+          type: string
+          pattern: '^\d+%$'
+          description: Heap usage as percentage of limit
+
+    CpuSummary:
+      type: object
+      description: CPU usage summary (human-readable)
+      required:
+        - user
+        - system
+      properties:
+        user:
+          type: string
+          pattern: '^\d+ms$'
+          description: CPU time in user mode (milliseconds)
+        system:
+          type: string
+          pattern: '^\d+ms$'
+          description: CPU time in system/kernel mode (milliseconds)
+
+    MemoryReadiness:
+      type: object
+      description: Memory information for readiness check
+      required:
+        - heapUsed
+        - heapLimit
+        - usagePercent
+      properties:
+        heapUsed:
+          type: string
+          pattern: '^\d+MB$'
+        heapLimit:
+          type: string
+          pattern: '^\d+MB$'
+        usagePercent:
+          type: string
+          pattern: '^\d+%$'
+
+    UptimeMetrics:
+      type: object
+      description: Process uptime in multiple formats
+      required:
+        - seconds
+        - formatted
+      properties:
+        seconds:
+          type: number
+          format: double
+          minimum: 0
+          description: Uptime in seconds (with decimal precision)
+        formatted:
+          type: string
+          pattern: '^\d+h \d+m \d+s$'
+          description: Human-readable uptime (e.g., "1h 23m 45s")
+
+    MemoryMetrics:
+      type: object
+      description: Detailed memory metrics in multiple units
+      required:
+        - bytes
+        - megabytes
+        - heapUsagePercent
+      properties:
+        bytes:
+          $ref: '#/components/schemas/MemoryBytes'
+        megabytes:
+          $ref: '#/components/schemas/MemoryMegabytes'
+        heapUsagePercent:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          description: Heap usage as percentage (2 decimal places)
+
+    MemoryBytes:
+      type: object
+      description: Memory values in bytes
+      required:
+        - rss
+        - heapUsed
+        - heapTotal
+        - heapLimit
+        - external
+        - arrayBuffers
+      properties:
+        rss:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Resident Set Size - total memory allocated for the process
+        heapUsed:
+          type: integer
+          format: int64
+          minimum: 0
+          description: V8 heap memory currently in use
+        heapTotal:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Total V8 heap memory allocated
+        heapLimit:
+          type: integer
+          format: int64
+          minimum: 0
+          description: V8 heap size limit
+        external:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Memory used by C++ objects bound to JavaScript objects
+        arrayBuffers:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Memory allocated for ArrayBuffer and SharedArrayBuffer
+
+    MemoryMegabytes:
+      type: object
+      description: Memory values in megabytes (rounded)
+      required:
+        - rss
+        - heapUsed
+        - heapTotal
+        - heapLimit
+        - external
+        - arrayBuffers
+      properties:
+        rss:
+          type: integer
+          minimum: 0
+        heapUsed:
+          type: integer
+          minimum: 0
+        heapTotal:
+          type: integer
+          minimum: 0
+        heapLimit:
+          type: integer
+          minimum: 0
+        external:
+          type: integer
+          minimum: 0
+        arrayBuffers:
+          type: integer
+          minimum: 0
+
+    CpuMetrics:
+      type: object
+      description: CPU usage in multiple time units
+      required:
+        - microseconds
+        - seconds
+        - milliseconds
+      properties:
+        microseconds:
+          $ref: '#/components/schemas/CpuTime'
+        seconds:
+          type: object
+          required:
+            - user
+            - system
+          properties:
+            user:
+              type: number
+              format: double
+              minimum: 0
+            system:
+              type: number
+              format: double
+              minimum: 0
+        milliseconds:
+          $ref: '#/components/schemas/CpuTime'
+
+    CpuTime:
+      type: object
+      description: CPU time split by user/system mode
+      required:
+        - user
+        - system
+      properties:
+        user:
+          type: integer
+          format: int64
+          minimum: 0
+          description: CPU time spent executing user code
+        system:
+          type: integer
+          format: int64
+          minimum: 0
+          description: CPU time spent in system calls
+
+    ProcessInfo:
+      type: object
+      description: Process and runtime information
+      required:
+        - pid
+        - nodeVersion
+        - platform
+        - arch
+        - environment
+        - hostname
+      properties:
+        pid:
+          type: integer
+          minimum: 1
+          description: Process ID
+        nodeVersion:
+          type: string
+          pattern: '^v\d+\.\d+\.\d+.*$'
+          description: Node.js version (e.g., "v20.10.0")
+        platform:
+          type: string
+          enum:
+            - linux
+            - darwin
+            - win32
+            - freebsd
+            - openbsd
+            - sunos
+            - aix
+          description: Operating system platform
+        arch:
+          type: string
+          enum:
+            - x64
+            - arm64
+            - arm
+            - ia32
+            - ppc64
+            - s390x
+          description: CPU architecture
+        environment:
+          type: string
+          description: NODE_ENV value
+          examples:
+            - development
+            - production
+            - test
+        hostname:
+          type: string
+          description: Machine or container hostname
