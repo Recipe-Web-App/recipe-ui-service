@@ -49,13 +49,13 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📦 Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2
         with:
           bun-version: ${{ env.BUN_VERSION }}
 
@@ -180,7 +180,7 @@ jobs:
           echo "🏥 Repository health score: $SCORE/100"
 
       - name: 📤 Upload health report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: repository-health-report
           path: health-report.md
@@ -195,12 +195,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📦 Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2
         with:
           bun-version: ${{ env.BUN_VERSION }}
 
@@ -318,7 +318,7 @@ jobs:
           echo "✅ Node modules cleaned and reinstalled"
 
       - name: 📤 Upload dependency report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: dependency-management-report
           path: |
@@ -336,12 +336,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           fetch-depth: 0
 
       - name: 📦 Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@b7a1c7ccf290d58743029c4f6903da283811b979 # v2
         with:
           bun-version: ${{ env.BUN_VERSION }}
 
@@ -410,7 +410,7 @@ jobs:
 
       - name: 📤 Upload security report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: security-maintenance-report
           path: |
@@ -428,12 +428,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🧹 Clean up old workflow runs
-        uses: actions/github-script@v8
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           script: |
             const { data: workflows } = await github.rest.actions.listRepoWorkflows({
@@ -468,7 +468,7 @@ jobs:
             }
 
       - name: 🗂️ Manage stale issues and PRs
-        uses: actions/stale@v10
+        uses: actions/stale@997185467fa4f803885201cee163a9f38240193d # v10
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: |
@@ -521,7 +521,7 @@ jobs:
           echo "- **Total lines of code:** $(find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | xargs wc -l | tail -1 | awk '{print $1}')" >> cleanup-report.md
 
       - name: 📤 Upload cleanup report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: repository-cleanup-report
           path: cleanup-report.md
@@ -536,7 +536,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: 💾 Validate repository backup
         run: |
@@ -598,7 +598,7 @@ jobs:
           echo "- Consider setting up additional backup strategies for critical data" >> backup-report.md
 
       - name: 📤 Upload backup report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: backup-validation-report
           path: backup-report.md
@@ -669,7 +669,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_ALERTS_SLACK_WEBHOOK_URL }}
 
       - name: 📤 Upload monitoring report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: monitoring-alerts-report
           path: monitoring-report.md
@@ -690,7 +690,7 @@ jobs:
 
     steps:
       - name: 📥 Download all maintenance reports
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           path: maintenance-reports
           pattern: '*-report*'
@@ -737,7 +737,7 @@ jobs:
           echo "*This report was generated automatically by the maintenance workflow.*" >> maintenance-summary.md
 
       - name: 📤 Upload comprehensive summary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: maintenance-comprehensive-summary
           path: |
