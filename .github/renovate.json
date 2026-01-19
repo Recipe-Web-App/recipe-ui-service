@@ -34,11 +34,15 @@
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security", "dependencies"],
-    "schedule": ["at any time"],
-    "prPriority": 10
+    "schedule": ["at any time"]
   },
 
   "packageRules": [
+    {
+      "description": "Vulnerability alerts - high priority",
+      "matchUpdateTypes": ["vulnerability"],
+      "prPriority": 10
+    },
     {
       "description": "Production dependencies - patch updates (automerge)",
       "matchDepTypes": ["dependencies"],
