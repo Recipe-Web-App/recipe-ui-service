@@ -81,7 +81,7 @@
     "next": "^16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-hook-form": "^7.71.0",
+    "react-hook-form": "^7.71.1",
     "sanitize-filename": "^1.6.3",
     "zod": "^4.3.5",
     "zustand": "^5.0.10"
