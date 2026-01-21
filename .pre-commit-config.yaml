@@ -204,30 +204,3 @@ default_stages: [pre-commit]
 minimum_pre_commit_version: 3.0.0
 default_language_version:
   node: system
-
-# CI Configuration
-ci:
-  autofix_commit_msg: |
-    chore(pre-commit-ci): auto fixes from pre-commit hooks
-
-    for more information, see https://pre-commit.ci
-  autofix_prs: true
-  autoupdate_branch: ''
-  autoupdate_commit_msg: 'chore(pre-commit-ci): pre-commit autoupdate'
-  autoupdate_schedule: weekly
-  skip:
-    # Skip all local hooks - these require Node.js/npm and other system dependencies
-    - prettier
-    - eslint
-    - typescript-check
-    - stylelint
-    - markdownlint
-    - trivy-config
-    - commitlint
-    - madge-circular
-    - license-check
-    - kubeval
-    - conftest
-    - kube-score
-    - test-coverage
-  submodules: false

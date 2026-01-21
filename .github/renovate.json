@@ -24,6 +24,10 @@
     "enabled": true
   },
 
+  "pre-commit": {
+    "enabled": true
+  },
+
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 5am on the first day of the month"],
@@ -131,43 +135,43 @@
     },
     {
       "description": "Next.js ecosystem",
-      "matchPackagePatterns": ["^next", "^@next/"],
+      "matchPackageNames": ["/^next/", "/^@next//"],
       "groupName": "nextjs",
       "groupSlug": "nextjs"
     },
     {
       "description": "Radix UI components - group together",
-      "matchPackagePatterns": ["^@radix-ui/"],
+      "matchPackageNames": ["/^@radix-ui//"],
       "groupName": "radix-ui",
       "groupSlug": "radix-ui"
     },
     {
       "description": "TanStack packages - group together",
-      "matchPackagePatterns": ["^@tanstack/"],
+      "matchPackageNames": ["/^@tanstack//"],
       "groupName": "tanstack",
       "groupSlug": "tanstack"
     },
     {
       "description": "Testing Library packages",
-      "matchPackagePatterns": ["^@testing-library/"],
+      "matchPackageNames": ["/^@testing-library//"],
       "groupName": "testing-library",
       "groupSlug": "testing-library"
     },
     {
       "description": "ESLint ecosystem",
-      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
+      "matchPackageNames": ["/^eslint/", "/^@eslint//", "/^@typescript-eslint//"],
       "groupName": "eslint",
       "groupSlug": "eslint"
     },
     {
       "description": "Playwright testing",
-      "matchPackagePatterns": ["^@playwright/", "^playwright"],
+      "matchPackageNames": ["/^@playwright//", "/^playwright/"],
       "groupName": "playwright",
       "groupSlug": "playwright"
     },
     {
       "description": "TypeScript and types",
-      "matchPackagePatterns": ["^typescript$", "^@types/"],
+      "matchPackageNames": ["/^typescript$/", "/^@types//"],
       "groupName": "typescript",
       "groupSlug": "typescript"
     },
@@ -175,9 +179,9 @@
       "description": "Security scanning tools",
       "matchPackageNames": [
         "secretlint",
-        "@secretlint/secretlint-rule-preset-recommend"
+        "@secretlint/secretlint-rule-preset-recommend",
+        "/^@axe-core//"
       ],
-      "matchPackagePatterns": ["^@axe-core/"],
       "groupName": "security-tools",
       "groupSlug": "security-tools"
     },
@@ -186,6 +190,17 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["oven/bun"],
       "versioning": "docker"
+    },
+    {
+      "description": "Pre-commit hooks - group all updates",
+      "matchManagers": ["pre-commit"],
+      "groupName": "pre-commit-hooks",
+      "groupSlug": "pre-commit-hooks",
+      "labels": ["dependencies", "pre-commit"],
+      "commitMessagePrefix": "ci(pre-commit):",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
     }
   ],
 
@@ -193,7 +208,7 @@
     {
       "customType": "regex",
       "description": "Update Bun version in GitHub Actions",
-      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "managerFilePatterns": ["/^\\.github/workflows/.*\\.ya?ml$/"],
       "matchStrings": [
         "BUN_VERSION:\\s*['\"]?(?<currentValue>[^'\"\\s]+)['\"]?"
       ],
