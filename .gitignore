@@ -100,3 +100,9 @@ tmp/
 # Secrets baseline (keep this tracked for detect-secrets)
 !.secrets.baseline
 .python-version
+
+# Serena
+.serena/
+
+# Beads
+.bv/
