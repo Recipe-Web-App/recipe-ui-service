@@ -88,11 +88,6 @@ envsubst < "k8s/secret-template.yaml" | kubectl apply -f -
 print_status "ok" "Secret updated"
 
 print_separator
-echo -e "${CYAN}🚪 Applying HTTPRoute (Kong Gateway)...${NC}"
-kubectl apply -f "k8s/gateway-route.yaml"
-print_status "ok" "HTTPRoute updated"
-
-print_separator
 echo -e "${CYAN}🔄 Rolling out deployment update...${NC}"
 kubectl apply -f "k8s/deployment.yaml"
 kubectl rollout restart deployment/recipe-ui-service -n "$NAMESPACE"
