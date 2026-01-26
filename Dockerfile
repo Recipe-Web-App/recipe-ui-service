@@ -37,13 +37,13 @@ RUN apk update && \
 ENV TZ=UTC
 
 # Copy package files with specific ownership
-COPY --chown=bun:bun package.json bun.lockb ./
+COPY --chown=bun:bun package.json bun.lock ./
 
 # Verify package integrity and install dependencies
 RUN bun install --frozen-lockfile --production
 
 # Remove package files to reduce attack surface
-RUN rm -f package.json bun.lockb
+RUN rm -f package.json bun.lock
 
 # Stage 2: Builder
 FROM oven/bun:1-alpine AS builder
@@ -69,7 +69,7 @@ RUN apk add --no-cache \
 COPY --from=deps --chown=bun:bun /app/node_modules ./node_modules
 
 # Copy package files
-COPY --chown=bun:bun package.json bun.lockb ./
+COPY --chown=bun:bun package.json bun.lock ./
 
 # Install all dependencies (including devDependencies) with mount cache
 RUN --mount=type=cache,target=/root/.bun \

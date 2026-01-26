@@ -175,12 +175,6 @@ print_separator "-"
 print_status "ok" "Kong Gateway check completed."
 
 print_separator "="
-echo -e "${CYAN}🚪 Applying HTTPRoute (Kong Gateway)...${NC}"
-print_separator "-"
-
-kubectl apply -f "${CONFIG_DIR}/gateway-route.yaml"
-
-print_separator "="
 echo -e "${CYAN}⏳ Waiting for Recipe UI Service pod to be ready...${NC}"
 print_separator "-"
 
