@@ -32,16 +32,19 @@ npm run format                  # Prettier formatting
 
 ### Microservices
 
-This Next.js 15 UI connects to 6 backend services:
+This Next.js 15 UI connects to 7 backend services via `sous-chef-proxy.local`:
 
-| Service              | Port | Purpose                                        |
-| -------------------- | ---- | ---------------------------------------------- |
-| Auth                 | 8081 | Authentication, OAuth2, PKCE                   |
-| Recipe Management    | 8082 | Recipe CRUD, ingredients, steps, tags, reviews |
-| Recipe Scraper       | 8083 | Web scraping, recipe import                    |
-| Media Management     | 8084 | File upload, image processing                  |
-| User Management      | 8085 | Profiles, preferences, social                  |
-| Meal Plan Management | 8086 | Meal planning, scheduling                      |
+| Service              | Purpose                                        |
+| -------------------- | ---------------------------------------------- |
+| Auth                 | Authentication, OAuth2, PKCE                   |
+| Recipe Management    | Recipe CRUD, ingredients, steps, tags, reviews |
+| Recipe Scraper       | Web scraping, recipe import                    |
+| Media Management     | File upload, image processing                  |
+| User Management      | Profiles, preferences, social                  |
+| Meal Plan Management | Meal planning, scheduling                      |
+| Notification         | Email notifications, alerts                    |
+
+Service URLs are configured in `src/config/services.ts` using the `SERVICE_URLS` constant.
 
 ### 3-Layer API Pattern
 
@@ -63,16 +66,16 @@ Example flow for recipes:
 
 ### State Management
 
-- **Server state**: TanStack Query v5 with query keys in `src/constants/query-keys.ts`
+- **Server state**: TanStack Query v5 with query keys in `src/constants/index.ts`
 - **Client state**: Zustand stores in `src/stores/` (auth, recipe, preferences, 12 UI stores)
 - **Forms**: React Hook Form + Zod validation
 
 ### Query Keys Pattern
 
 ```typescript
-// Always use constants from src/constants/query-keys.ts
-QUERY_KEYS.RECIPE_MANAGEMENT.RECIPES; // ['recipe-management', 'recipes']
-QUERY_KEYS.RECIPE_MANAGEMENT.RECIPE; // ['recipe-management', 'recipe']
+// Always use constants from src/constants/index.ts
+QUERY_KEYS.RECIPE_MANAGEMENT.RECIPES; // ['recipeManagement', 'recipes']
+QUERY_KEYS.RECIPE_MANAGEMENT.RECIPE; // ['recipeManagement', 'recipe']
 ```
 
 ### Key Directories
@@ -118,13 +121,4 @@ tests/e2e/                  # Playwright E2E tests
 
 ## Environment Variables
 
-Service URLs (prefix with `NEXT_PUBLIC_`):
-
-```
-NEXT_PUBLIC_AUTH_SERVICE_URL=http://localhost:8081
-NEXT_PUBLIC_RECIPE_MANAGEMENT_SERVICE_URL=http://localhost:8082
-NEXT_PUBLIC_RECIPE_SCRAPER_SERVICE_URL=http://localhost:8083
-NEXT_PUBLIC_MEDIA_MANAGEMENT_SERVICE_URL=http://localhost:8084
-NEXT_PUBLIC_USER_MANAGEMENT_SERVICE_URL=http://localhost:8085
-NEXT_PUBLIC_MEAL_PLAN_MANAGEMENT_SERVICE_URL=http://localhost:8086
-```
+Copy `.env.example` to `.env.local` and configure as needed. Service URLs are hardcoded in `src/config/services.ts` and route through `sous-chef-proxy.local`.
