@@ -94,7 +94,7 @@
     "@eslint/eslintrc": "^3.3.3",
     "@next/bundle-analyzer": "^16.1.4",
     "@next/eslint-plugin-next": "^16.1.4",
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.58.0",
     "@secretlint/secretlint-rule-aws": "^11.3.0",
     "@secretlint/secretlint-rule-gcp": "^11.3.0",
     "@secretlint/secretlint-rule-github": "^11.3.0",
