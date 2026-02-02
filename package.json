@@ -84,7 +84,7 @@
     "react-hook-form": "^7.71.1",
     "sanitize-filename": "^1.6.3",
     "zod": "^4.3.6",
-    "zustand": "^5.0.10"
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
