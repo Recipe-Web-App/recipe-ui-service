@@ -9,7 +9,7 @@ import type {
 
 /**
  * Hook to create a new recipe from a URL
- * POST /api/recipe-scraper/create-recipe
+ * POST /api/recipe-scraper/recipes
  */
 export const useCreateRecipeFromUrl = () => {
   const queryClient = useQueryClient();
@@ -30,16 +30,16 @@ export const useCreateRecipeFromUrl = () => {
 
 /**
  * Hook to get popular recipes from the internet
- * GET /api/recipe-scraper/popular-recipes
+ * GET /api/recipe-scraper/recipes/popular
  *
  * @param params.limit - Maximum number of recipes to return (default: 10, max: 100)
  * @param params.offset - Number of recipes to skip for pagination (default: 0)
- * @param params.count_only - If true, return only the total count of recipes
+ * @param params.countOnly - If true, return only the total count of recipes
  */
 export const usePopularRecipes = (params?: {
   limit?: number;
   offset?: number;
-  count_only?: boolean;
+  countOnly?: boolean;
 }) => {
   return useQuery<PopularRecipesResponse>({
     queryKey: [...QUERY_KEYS.RECIPE_SCRAPER.POPULAR_RECIPES, params],

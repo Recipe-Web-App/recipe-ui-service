@@ -14,6 +14,7 @@ export * from './ingredients';
 export * from './pairing';
 export * from './shopping';
 export * from './admin';
+export * from './allergens';
 
 // Re-export types for convenience
 export type {

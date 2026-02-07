@@ -48,7 +48,7 @@ describe('services config', () => {
 
     it('should have correct recipe scraper service URL', () => {
       expect(SERVICE_URLS.RECIPE_SCRAPER).toBe(
-        'http://sous-chef-proxy.local/api/recipe-scraper'
+        'http://sous-chef-proxy.local/api/v1/recipe-scraper'
       );
     });
 

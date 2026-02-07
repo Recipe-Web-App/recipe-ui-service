@@ -88,11 +88,11 @@ describe('Recipe Scraper Nutrition API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await nutritionApi.getRecipeNutritionalInfo(123, {
-        include_total: true,
+        includeTotal: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/123/nutritional-info?include_total=true'
+        '/recipes/123/nutritional-info?includeTotal=true'
       );
       expect(result.total).toEqual(mockTotal);
       expect(result.total?.macroNutrients?.calories?.amount).toBe(2400);
@@ -124,11 +124,11 @@ describe('Recipe Scraper Nutrition API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await nutritionApi.getRecipeNutritionalInfo(456, {
-        include_ingredients: true,
+        includeIngredients: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/456/nutritional-info?include_ingredients=true'
+        '/recipes/456/nutritional-info?includeIngredients=true'
       );
       expect(result.ingredients).toBeDefined();
       expect(result.ingredients?.flour).toEqual(mockIngredientInfo);
@@ -147,12 +147,12 @@ describe('Recipe Scraper Nutrition API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await nutritionApi.getRecipeNutritionalInfo(789, {
-        include_total: true,
-        include_ingredients: true,
+        includeTotal: true,
+        includeIngredients: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/789/nutritional-info?include_total=true&include_ingredients=true'
+        '/recipes/789/nutritional-info?includeTotal=true&includeIngredients=true'
       );
       expect(result).toEqual(mockResponse);
     });

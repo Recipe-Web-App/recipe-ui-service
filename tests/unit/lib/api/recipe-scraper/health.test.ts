@@ -89,35 +89,6 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
     });
   });
 
-  describe('getLiveness', () => {
-    it('should fetch liveness status successfully', async () => {
-      const mockResponse = {
-        status: 'alive',
-        timestamp: '2025-01-31T12:00:00Z',
-        service: 'recipe-scraper-service',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getLiveness();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/api/liveness');
-      expect(result).toEqual(mockResponse);
-      expect(result.status).toBe('alive');
-      expect(result.timestamp).toBe('2025-01-31T12:00:00Z');
-      expect(result.service).toBe('recipe-scraper-service');
-    });
-
-    it('should handle errors from liveness endpoint', async () => {
-      mockClient.get.mockRejectedValue(new Error('Service not alive'));
-
-      await expect(healthApi.getLiveness()).rejects.toThrow(
-        'Service not alive'
-      );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/liveness');
-    });
-  });
-
   describe('getReadiness', () => {
     it('should fetch readiness status successfully', async () => {
       const mockResponse = {
@@ -137,7 +108,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       const result = await healthApi.getReadiness();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/api/readiness');
+      expect(mockClient.get).toHaveBeenCalledWith('/ready');
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('ready');
       expect(result.checks.database.status).toBe('healthy');
@@ -172,7 +143,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
       await expect(healthApi.getReadiness()).rejects.toThrow(
         'Readiness check failed'
       );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/readiness');
+      expect(mockClient.get).toHaveBeenCalledWith('/ready');
     });
   });
 
@@ -215,7 +186,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       const result = await healthApi.getHealth();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/api/health');
+      expect(mockClient.get).toHaveBeenCalledWith('/health');
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('healthy');
       expect(result.version).toBe('2.0.0');
@@ -277,31 +248,6 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       await expect(healthApi.getHealth()).rejects.toThrow(
         'Health check failed'
-      );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/health');
-    });
-  });
-
-  describe('getLegacyHealth', () => {
-    it('should fetch legacy health status successfully', async () => {
-      const mockResponse = {
-        status: 'ok',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getLegacyHealth();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/health');
-      expect(result).toEqual(mockResponse);
-      expect(result.status).toBe('ok');
-    });
-
-    it('should handle errors from legacy health endpoint', async () => {
-      mockClient.get.mockRejectedValue(new Error('Legacy endpoint failed'));
-
-      await expect(healthApi.getLegacyHealth()).rejects.toThrow(
-        'Legacy endpoint failed'
       );
       expect(mockClient.get).toHaveBeenCalledWith('/health');
     });

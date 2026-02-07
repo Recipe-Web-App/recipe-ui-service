@@ -46,7 +46,7 @@ describe('Recipe Scraper API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/recipe-scraper/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://sous-chef-proxy.local/api/recipe-scraper',
+          baseURL: 'http://sous-chef-proxy.local/api/v1/recipe-scraper',
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',
@@ -494,11 +494,11 @@ describe('Recipe Scraper API Client', () => {
         const params = {
           limit: 10,
           offset: 0,
-          include_total: true,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('limit=10&offset=0&include_total=true');
+        expect(result).toBe('limit=10&offset=0&includeTotal=true');
       });
 
       it('should handle string values', () => {
@@ -528,12 +528,12 @@ describe('Recipe Scraper API Client', () => {
         const params = {
           limit: 10,
           offset: undefined,
-          count_only: null,
-          include_total: true,
+          countOnly: null,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('limit=10&include_total=true');
+        expect(result).toBe('limit=10&includeTotal=true');
       });
 
       it('should handle empty object', () => {
@@ -553,12 +553,12 @@ describe('Recipe Scraper API Client', () => {
 
       it('should handle boolean false values', () => {
         const params = {
-          count_only: false,
-          include_total: true,
+          countOnly: false,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('count_only=false&include_total=true');
+        expect(result).toBe('countOnly=false&includeTotal=true');
       });
 
       it('should handle mixed data types', () => {
@@ -566,7 +566,7 @@ describe('Recipe Scraper API Client', () => {
           recipe_id: 123,
           amount: 2.5,
           measurement: 'CUP',
-          include_ingredients: true,
+          includeIngredients: true,
           tags: ['dessert', 'cookies'],
         };
 
@@ -574,7 +574,7 @@ describe('Recipe Scraper API Client', () => {
         expect(result).toContain('recipe_id=123');
         expect(result).toContain('amount=2.5');
         expect(result).toContain('measurement=CUP');
-        expect(result).toContain('include_ingredients=true');
+        expect(result).toContain('includeIngredients=true');
         expect(result).toContain('tags=dessert');
         expect(result).toContain('tags=cookies');
       });

@@ -4,10 +4,8 @@ import { healthApi } from '@/lib/api/recipe-scraper';
 import {
   useRecipeScraperRoot,
   useRecipeScraperMetrics,
-  useRecipeScraperLiveness,
   useRecipeScraperReadiness,
   useRecipeScraperHealth,
-  useRecipeScraperLegacyHealth,
 } from '@/hooks/recipe-scraper/use-recipe-scraper-health';
 import type { HealthCheckResponse } from '@/types/recipe-scraper';
 
@@ -16,10 +14,8 @@ jest.mock('@/lib/api/recipe-scraper', () => ({
   healthApi: {
     getRoot: jest.fn(),
     getMetrics: jest.fn(),
-    getLiveness: jest.fn(),
     getReadiness: jest.fn(),
     getHealth: jest.fn(),
-    getLegacyHealth: jest.fn(),
   },
 }));
 
@@ -94,30 +90,6 @@ describe('useRecipeScraperMetrics', () => {
 
     expect(result.current.data).toEqual(mockMetrics);
     expect(mockedHealthApi.getMetrics).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('useRecipeScraperLiveness', () => {
-  it('should fetch liveness check status', async () => {
-    const mockData = {
-      status: 'alive',
-      timestamp: '2025-01-31T12:00:00Z',
-      service: 'recipe-scraper-service',
-    };
-
-    mockedHealthApi.getLiveness.mockResolvedValueOnce(mockData);
-
-    const wrapper = createWrapper();
-    const { result } = renderHook(() => useRecipeScraperLiveness(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
-
-    expect(result.current.data).toEqual(mockData);
-    expect(mockedHealthApi.getLiveness).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -196,28 +168,6 @@ describe('useRecipeScraperHealth', () => {
 
     expect(result.current.data).toEqual(mockData);
     expect(mockedHealthApi.getHealth).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('useRecipeScraperLegacyHealth', () => {
-  it('should fetch legacy health check status', async () => {
-    const mockData = {
-      status: 'ok',
-    };
-
-    mockedHealthApi.getLegacyHealth.mockResolvedValueOnce(mockData);
-
-    const wrapper = createWrapper();
-    const { result } = renderHook(() => useRecipeScraperLegacyHealth(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
-
-    expect(result.current.data).toEqual(mockData);
-    expect(mockedHealthApi.getLegacyHealth).toHaveBeenCalledTimes(1);
   });
 });
 

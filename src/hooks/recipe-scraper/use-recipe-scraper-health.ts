@@ -26,19 +26,8 @@ export const useRecipeScraperMetrics = () => {
 };
 
 /**
- * Hook for basic liveness check (Kubernetes/container orchestration)
- * GET /api/liveness
- */
-export const useRecipeScraperLiveness = () => {
-  return useQuery({
-    queryKey: QUERY_KEYS.RECIPE_SCRAPER.LIVENESS,
-    queryFn: () => healthApi.getLiveness(),
-  });
-};
-
-/**
  * Hook for readiness check including database and external dependencies
- * GET /api/readiness
+ * GET /ready
  */
 export const useRecipeScraperReadiness = () => {
   return useQuery({
@@ -49,23 +38,11 @@ export const useRecipeScraperReadiness = () => {
 
 /**
  * Hook for comprehensive health check including all dependencies and metrics
- * GET /api/health
+ * GET /health
  */
 export const useRecipeScraperHealth = () => {
   return useQuery<HealthCheckResponse>({
     queryKey: QUERY_KEYS.RECIPE_SCRAPER.HEALTH,
     queryFn: () => healthApi.getHealth(),
-  });
-};
-
-/**
- * Hook for legacy health check endpoint (deprecated)
- * GET /api/recipe-scraper/health
- * @deprecated Use useRecipeScraperHealth instead
- */
-export const useRecipeScraperLegacyHealth = () => {
-  return useQuery({
-    queryKey: QUERY_KEYS.RECIPE_SCRAPER.LEGACY_HEALTH,
-    queryFn: () => healthApi.getLegacyHealth(),
   });
 };

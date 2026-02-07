@@ -85,10 +85,7 @@ describe('Recipe Scraper Recipes API', () => {
 
       const result = await recipesApi.createRecipe(mockRequest);
 
-      expect(mockClient.post).toHaveBeenCalledWith(
-        '/create-recipe',
-        mockRequest
-      );
+      expect(mockClient.post).toHaveBeenCalledWith('/recipes', mockRequest);
       expect(result).toEqual(mockResponse);
       expect(result.recipe.recipeId).toBe(123);
       expect(result.recipe.title).toBe('Chocolate Cake');
@@ -139,10 +136,7 @@ describe('Recipe Scraper Recipes API', () => {
       await expect(recipesApi.createRecipe(mockRequest)).rejects.toThrow(
         'Invalid recipe URL'
       );
-      expect(mockClient.post).toHaveBeenCalledWith(
-        '/create-recipe',
-        mockRequest
-      );
+      expect(mockClient.post).toHaveBeenCalledWith('/recipes', mockRequest);
     });
 
     it('should handle scraping error', async () => {
@@ -183,7 +177,7 @@ describe('Recipe Scraper Recipes API', () => {
 
       const result = await recipesApi.getPopularRecipes();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/popular-recipes');
+      expect(mockClient.get).toHaveBeenCalledWith('/recipes/popular');
       expect(result).toEqual(mockResponse);
       expect(result.recipes).toHaveLength(2);
       expect(result.recipes[0].recipeName).toBe('Spaghetti Carbonara');
@@ -209,14 +203,14 @@ describe('Recipe Scraper Recipes API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/popular-recipes?limit=20&offset=40'
+        '/recipes/popular?limit=20&offset=40'
       );
       expect(result.limit).toBe(20);
       expect(result.offset).toBe(40);
       expect(result.count).toBe(100);
     });
 
-    it('should fetch popular recipes with count_only parameter', async () => {
+    it('should fetch popular recipes with countOnly parameter', async () => {
       const mockResponse: PopularRecipesResponse = {
         recipes: [],
         limit: 0,
@@ -227,11 +221,11 @@ describe('Recipe Scraper Recipes API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await recipesApi.getPopularRecipes({
-        count_only: true,
+        countOnly: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/popular-recipes?count_only=true'
+        '/recipes/popular?countOnly=true'
       );
       expect(result.recipes).toEqual([]);
       expect(result.count).toBe(1500);
@@ -255,11 +249,11 @@ describe('Recipe Scraper Recipes API', () => {
       const result = await recipesApi.getPopularRecipes({
         limit: 5,
         offset: 10,
-        count_only: false,
+        countOnly: false,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/popular-recipes?limit=5&offset=10&count_only=false'
+        '/recipes/popular?limit=5&offset=10&countOnly=false'
       );
       expect(result.recipes).toHaveLength(1);
       expect(result.recipes[0].recipeName).toBe('Pizza Margherita');
@@ -292,7 +286,7 @@ describe('Recipe Scraper Recipes API', () => {
       await expect(recipesApi.getPopularRecipes()).rejects.toThrow(
         'Service unavailable'
       );
-      expect(mockClient.get).toHaveBeenCalledWith('/popular-recipes');
+      expect(mockClient.get).toHaveBeenCalledWith('/recipes/popular');
     });
 
     it('should handle invalid limit parameter', async () => {

@@ -107,8 +107,8 @@ describe('useRecipeNutritionalInfo', () => {
   it('should fetch recipe nutritional information with custom parameters', async () => {
     const recipeId = 123;
     const params = {
-      include_total: true,
-      include_ingredients: true,
+      includeTotal: true,
+      includeIngredients: true,
     };
 
     const mockResponse: RecipeNutritionalInfoResponse = {

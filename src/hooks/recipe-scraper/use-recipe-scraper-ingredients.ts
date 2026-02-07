@@ -9,12 +9,12 @@ import type {
 
 /**
  * Hook to get recommended substitutions for an ingredient
- * GET /api/recipe-scraper/ingredients/{ingredient_id}/recommended-substitutions
+ * GET /api/recipe-scraper/ingredients/{ingredient_id}/substitutions
  *
  * @param ingredientId - The ID of the ingredient (must be > 0)
  * @param params.limit - Maximum number of substitutions to return (1-100, default: 50)
  * @param params.offset - Number of substitutions to skip for pagination (default: 0)
- * @param params.count_only - If true, return only the total count (default: false)
+ * @param params.countOnly - If true, return only the total count (default: false)
  * @param params.amount - Quantity amount for conversion calculations
  * @param params.measurement - Measurement unit for quantity
  */
@@ -23,7 +23,7 @@ export const useIngredientSubstitutions = (
   params?: {
     limit?: number;
     offset?: number;
-    count_only?: boolean;
+    countOnly?: boolean;
     amount?: number;
     measurement?: IngredientUnitEnum;
   }
