@@ -1,5 +1,6 @@
 import { nutritionApi } from '@/lib/api/recipe-scraper/nutrition';
 import { RecipeScraperApiError } from '@/lib/api/recipe-scraper/client';
+import { NutrientUnit } from '@/types/recipe-scraper';
 import type {
   RecipeNutritionalInfoResponse,
   IngredientNutritionalInfoResponse,
@@ -7,9 +8,7 @@ import type {
   MacroNutrients,
   Vitamins,
   Minerals,
-  IngredientClassification,
   AllergenEnum,
-  FoodGroupEnum,
 } from '@/types/recipe-scraper';
 
 // Mock the client
@@ -65,24 +64,18 @@ describe('Recipe Scraper Nutrition API', () => {
           measurement: 'PIECE' as IngredientUnitEnum,
         },
         macroNutrients: {
-          calories: 2400,
-          carbsG: '320',
-          proteinG: '80',
-          cholesterolMg: '200',
-          sugars: {
-            sugarG: '150',
-            addedSugarsG: '100',
-          },
+          calories: { amount: 2400, measurement: NutrientUnit.KILOCALORIE },
+          carbs: { amount: 320, measurement: NutrientUnit.GRAM },
+          protein: { amount: 80, measurement: NutrientUnit.GRAM },
+          cholesterol: { amount: 200, measurement: NutrientUnit.MILLIGRAM },
+          sugar: { amount: 150, measurement: NutrientUnit.GRAM },
+          addedSugar: { amount: 100, measurement: NutrientUnit.GRAM },
           fats: {
-            fatG: '90',
-            saturatedFatG: '30',
-            transFatG: '0',
+            total: { amount: 90, measurement: NutrientUnit.GRAM },
+            saturated: { amount: 30, measurement: NutrientUnit.GRAM },
+            trans: { amount: 0, measurement: NutrientUnit.GRAM },
           },
-          fibers: {
-            fiberG: '25',
-            solubleFiberG: '10',
-            insolubleFiberG: '15',
-          },
+          fiber: { amount: 25, measurement: NutrientUnit.GRAM },
         },
       };
 
@@ -102,7 +95,7 @@ describe('Recipe Scraper Nutrition API', () => {
         '/recipes/123/nutritional-info?include_total=true'
       );
       expect(result.total).toEqual(mockTotal);
-      expect(result.total?.macroNutrients?.calories).toBe(2400);
+      expect(result.total?.macroNutrients?.calories?.amount).toBe(2400);
     });
 
     it('should fetch recipe nutritional info with ingredients', async () => {
@@ -111,19 +104,11 @@ describe('Recipe Scraper Nutrition API', () => {
           amount: 100,
           measurement: 'G' as IngredientUnitEnum,
         },
-        classification: {
-          allergies: ['GLUTEN' as AllergenEnum, 'WHEAT' as AllergenEnum],
-          foodGroups: ['GRAINS' as FoodGroupEnum],
-          nutriscoreScore: 3,
-          nutriscoreGrade: 'B',
-          productName: 'All-purpose flour',
-          brands: 'Generic',
-          categories: 'Baking ingredients',
-        },
+        usdaFoodDescription: 'All-purpose flour',
         macroNutrients: {
-          calories: 364,
-          carbsG: '76.3',
-          proteinG: '10.3',
+          calories: { amount: 364, measurement: NutrientUnit.KILOCALORIE },
+          carbs: { amount: 76.3, measurement: NutrientUnit.GRAM },
+          protein: { amount: 10.3, measurement: NutrientUnit.GRAM },
         },
       };
 
@@ -197,9 +182,9 @@ describe('Recipe Scraper Nutrition API', () => {
           measurement: 'G' as IngredientUnitEnum,
         },
         macroNutrients: {
-          calories: 52,
-          carbsG: '14',
-          proteinG: '0.3',
+          calories: { amount: 52, measurement: NutrientUnit.KILOCALORIE },
+          carbs: { amount: 14, measurement: NutrientUnit.GRAM },
+          protein: { amount: 0.3, measurement: NutrientUnit.GRAM },
         },
       };
 
@@ -220,28 +205,21 @@ describe('Recipe Scraper Nutrition API', () => {
           amount: 2,
           measurement: 'CUP' as IngredientUnitEnum,
         },
-        classification: {
-          allergies: ['MILK' as AllergenEnum],
-          foodGroups: ['DAIRY' as FoodGroupEnum],
-          nutriscoreScore: 1,
-          nutriscoreGrade: 'A',
-          productName: 'Whole milk',
-        },
+        usdaFoodDescription: 'Whole milk',
         macroNutrients: {
-          calories: 300,
-          carbsG: '24',
-          proteinG: '16',
-          cholesterolMg: '48',
+          calories: { amount: 300, measurement: NutrientUnit.KILOCALORIE },
+          carbs: { amount: 24, measurement: NutrientUnit.GRAM },
+          protein: { amount: 16, measurement: NutrientUnit.GRAM },
+          cholesterol: { amount: 48, measurement: NutrientUnit.MILLIGRAM },
         },
         vitamins: {
-          vitaminAMg: '0.4',
-          vitaminDMg: '0.002',
-          vitaminB12Mg: '0.002',
+          vitaminA: { amount: 0.4, measurement: NutrientUnit.MILLIGRAM },
+          vitaminD: { amount: 0.002, measurement: NutrientUnit.MILLIGRAM },
+          vitaminB12: { amount: 0.002, measurement: NutrientUnit.MILLIGRAM },
         },
         minerals: {
-          calciumMg: '600',
-          potassiumMg: '700',
-          sodiumMg: '200',
+          calcium: { amount: 600, measurement: NutrientUnit.MILLIGRAM },
+          potassium: { amount: 700, measurement: NutrientUnit.MILLIGRAM },
         },
       };
 
@@ -258,8 +236,8 @@ describe('Recipe Scraper Nutrition API', () => {
       expect(result).toEqual(mockResponse);
       expect(result.quantity.amount).toBe(2);
       expect(result.quantity.measurement).toBe('CUP');
-      expect(result.vitamins?.vitaminDMg).toBe('0.002');
-      expect(result.minerals?.calciumMg).toBe('600');
+      expect(result.vitamins?.vitaminD?.amount).toBe(0.002);
+      expect(result.minerals?.calcium?.amount).toBe(600);
     });
 
     it('should fetch ingredient nutritional info with only amount', async () => {
@@ -268,7 +246,7 @@ describe('Recipe Scraper Nutrition API', () => {
           amount: 150,
         },
         macroNutrients: {
-          calories: 200,
+          calories: { amount: 200, measurement: NutrientUnit.KILOCALORIE },
         },
       };
 
@@ -311,55 +289,38 @@ describe('Recipe Scraper Nutrition API', () => {
           amount: 100,
           measurement: 'G' as IngredientUnitEnum,
         },
-        classification: {
-          allergies: ['TREE_NUTS' as AllergenEnum],
-          foodGroups: ['NUTS_SEEDS' as FoodGroupEnum],
-          nutriscoreScore: -1,
-          nutriscoreGrade: 'A',
-          productName: 'Raw almonds',
-          brands: 'Organic Valley',
-          categories: 'Nuts, Seeds',
-        },
+        usdaFoodDescription: 'Raw almonds',
         macroNutrients: {
-          calories: 579,
-          carbsG: '21.6',
-          proteinG: '21.2',
-          cholesterolMg: '0',
-          sugars: {
-            sugarG: '4.4',
-            addedSugarsG: '0',
-          },
+          calories: { amount: 579, measurement: NutrientUnit.KILOCALORIE },
+          carbs: { amount: 21.6, measurement: NutrientUnit.GRAM },
+          protein: { amount: 21.2, measurement: NutrientUnit.GRAM },
+          cholesterol: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
+          sugar: { amount: 4.4, measurement: NutrientUnit.GRAM },
+          addedSugar: { amount: 0, measurement: NutrientUnit.GRAM },
           fats: {
-            fatG: '49.9',
-            saturatedFatG: '3.8',
-            monounsaturatedFatG: '31.6',
-            polyunsaturatedFatG: '12.3',
-            omega3FatG: '0.003',
-            omega6FatG: '12.3',
-            transFatG: '0',
+            total: { amount: 49.9, measurement: NutrientUnit.GRAM },
+            saturated: { amount: 3.8, measurement: NutrientUnit.GRAM },
+            monounsaturated: { amount: 31.6, measurement: NutrientUnit.GRAM },
+            polyunsaturated: { amount: 12.3, measurement: NutrientUnit.GRAM },
+            trans: { amount: 0, measurement: NutrientUnit.GRAM },
           },
-          fibers: {
-            fiberG: '12.5',
-            solubleFiberG: '1',
-            insolubleFiberG: '11.5',
-          },
+          fiber: { amount: 12.5, measurement: NutrientUnit.GRAM },
         },
         vitamins: {
-          vitaminAMg: '0',
-          vitaminB6Mg: '0.137',
-          vitaminB12Mg: '0',
-          vitaminCMg: '0',
-          vitaminDMg: '0',
-          vitaminEMg: '25.6',
-          vitaminKMg: '0',
+          vitaminA: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
+          vitaminB6: { amount: 0.137, measurement: NutrientUnit.MILLIGRAM },
+          vitaminB12: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
+          vitaminC: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
+          vitaminD: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
+          vitaminE: { amount: 25.6, measurement: NutrientUnit.MILLIGRAM },
+          vitaminK: { amount: 0, measurement: NutrientUnit.MILLIGRAM },
         },
         minerals: {
-          calciumMg: '269',
-          ironMg: '3.7',
-          magnesiumMg: '270',
-          potassiumMg: '733',
-          sodiumMg: '1',
-          zincMg: '3.1',
+          calcium: { amount: 269, measurement: NutrientUnit.MILLIGRAM },
+          iron: { amount: 3.7, measurement: NutrientUnit.MILLIGRAM },
+          magnesium: { amount: 270, measurement: NutrientUnit.MILLIGRAM },
+          potassium: { amount: 733, measurement: NutrientUnit.MILLIGRAM },
+          zinc: { amount: 3.1, measurement: NutrientUnit.MILLIGRAM },
         },
       };
 
@@ -370,10 +331,10 @@ describe('Recipe Scraper Nutrition API', () => {
         measurement: 'G' as IngredientUnitEnum,
       });
 
-      expect(result.classification?.nutriscoreGrade).toBe('A');
-      expect(result.macroNutrients?.fats?.omega6FatG).toBe('12.3');
-      expect(result.vitamins?.vitaminEMg).toBe('25.6');
-      expect(result.minerals?.magnesiumMg).toBe('270');
+      expect(result.usdaFoodDescription).toBe('Raw almonds');
+      expect(result.macroNutrients?.fats?.polyunsaturated?.amount).toBe(12.3);
+      expect(result.vitamins?.vitaminE?.amount).toBe(25.6);
+      expect(result.minerals?.magnesium?.amount).toBe(270);
     });
 
     it('should handle 404 error for non-existent ingredient', async () => {

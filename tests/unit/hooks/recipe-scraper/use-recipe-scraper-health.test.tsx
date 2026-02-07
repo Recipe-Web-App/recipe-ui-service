@@ -129,7 +129,7 @@ describe('useRecipeScraperReadiness', () => {
       checks: {
         database: {
           status: 'healthy' as const,
-          response_time_ms: 45.2,
+          responseTimeMs: 45.2,
           message: 'Database connection is healthy',
         },
       },
@@ -158,31 +158,31 @@ describe('useRecipeScraperHealth', () => {
       status: 'healthy',
       timestamp: '2025-01-31T12:00:00Z',
       version: '2.0.0',
-      uptime_seconds: 3600,
+      uptimeSeconds: 3600,
       checks: {
         database: {
           status: 'healthy',
-          response_time_ms: 25.5,
+          responseTimeMs: 25.5,
           message: 'Database connection is healthy',
         },
         cache: {
           status: 'healthy',
-          response_time_ms: 5.2,
+          responseTimeMs: 5.2,
           message: 'Cache is operational',
         },
-        external_apis: {
+        externalApis: {
           spoonacular: {
             status: 'healthy',
-            response_time_ms: 150.8,
+            responseTimeMs: 150.8,
             message: 'Spoonacular API is responsive',
           },
         },
       },
-      database_monitoring: {
+      databaseMonitoring: {
         enabled: true,
-        last_check: '2025-01-31T12:00:00Z',
+        lastCheck: '2025-01-31T12:00:00Z',
       },
-      response_time_ms: 45.2,
+      responseTimeMs: 45.2,
     };
 
     mockedHealthApi.getHealth.mockResolvedValueOnce(mockData);

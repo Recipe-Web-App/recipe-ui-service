@@ -74,7 +74,7 @@ export const healthApi = {
     checks: {
       database: {
         status: 'healthy' | 'degraded';
-        response_time_ms: number;
+        responseTimeMs: number;
         message: string;
       };
     };
@@ -88,7 +88,7 @@ export const healthApi = {
         checks: {
           database: {
             status: 'healthy' | 'degraded';
-            response_time_ms: number;
+            responseTimeMs: number;
             message: string;
           };
         };

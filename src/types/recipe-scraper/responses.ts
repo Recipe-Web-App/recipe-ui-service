@@ -98,15 +98,29 @@ export interface RecipeShoppingInfoResponse {
 }
 
 /**
+ * Structured error detail for validation or field-level errors.
+ */
+export interface ErrorDetail {
+  /** Error code identifying the specific error */
+  code: string;
+  /** Human-readable error message */
+  message: string;
+  /** Field that caused the error, if applicable */
+  field?: string | null;
+}
+
+/**
  * Standard error response schema.
  */
 export interface ErrorResponse {
-  /** Error message */
-  detail: string;
   /** Error code for programmatic handling */
-  error_code?: string;
-  /** Error type classification */
-  error_type?: string;
+  error: string;
+  /** Human-readable error message */
+  message: string;
+  /** Detailed error information */
+  details?: ErrorDetail[] | null;
+  /** Request identifier for tracing */
+  requestId?: string | null;
 }
 
 /**

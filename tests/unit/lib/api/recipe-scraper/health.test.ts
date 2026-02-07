@@ -126,7 +126,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'healthy' as const,
-            response_time_ms: 15.2,
+            responseTimeMs: 15.2,
             message: 'Database connection healthy',
           },
         },
@@ -141,7 +141,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('ready');
       expect(result.checks.database.status).toBe('healthy');
-      expect(result.checks.database.response_time_ms).toBe(15.2);
+      expect(result.checks.database.responseTimeMs).toBe(15.2);
     });
 
     it('should handle degraded readiness status', async () => {
@@ -151,7 +151,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'degraded' as const,
-            response_time_ms: 500,
+            responseTimeMs: 500,
             message: 'Database slow response',
           },
         },
@@ -180,7 +180,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
     it('should fetch comprehensive health status successfully', async () => {
       const mockHealthCheckItem: HealthCheckItem = {
         status: 'healthy',
-        response_time_ms: 25.5,
+        responseTimeMs: 25.5,
         message: 'All systems operational',
       };
 
@@ -188,27 +188,27 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         status: 'healthy',
         timestamp: '2025-01-31T12:00:00Z',
         version: '2.0.0',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
         checks: {
           database: mockHealthCheckItem,
           cache: {
             status: 'healthy',
-            response_time_ms: 5.1,
+            responseTimeMs: 5.1,
             message: 'Cache operational',
           },
-          external_apis: {
+          externalApis: {
             spoonacular: {
               status: 'healthy',
-              response_time_ms: 120.3,
+              responseTimeMs: 120.3,
               message: 'Spoonacular API responsive',
             },
           },
         },
-        database_monitoring: {
+        databaseMonitoring: {
           enabled: true,
-          last_check: '2025-01-31T12:00:00Z',
+          lastCheck: '2025-01-31T12:00:00Z',
         },
-        response_time_ms: 45.2,
+        responseTimeMs: 45.2,
       };
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
@@ -219,12 +219,12 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('healthy');
       expect(result.version).toBe('2.0.0');
-      expect(result.uptime_seconds).toBe(3600);
+      expect(result.uptimeSeconds).toBe(3600);
       expect(result.checks.database?.status).toBe('healthy');
       expect(result.checks.cache?.status).toBe('healthy');
-      expect(result.checks.external_apis?.spoonacular?.status).toBe('healthy');
-      expect(result.database_monitoring?.enabled).toBe(true);
-      expect(result.response_time_ms).toBe(45.2);
+      expect(result.checks.externalApis?.spoonacular?.status).toBe('healthy');
+      expect(result.databaseMonitoring?.enabled).toBe(true);
+      expect(result.responseTimeMs).toBe(45.2);
     });
 
     it('should handle degraded health status', async () => {
@@ -235,7 +235,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'degraded',
-            response_time_ms: 500,
+            responseTimeMs: 500,
             message: 'Database slow',
           },
         },
@@ -257,7 +257,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'unhealthy',
-            response_time_ms: 0,
+            responseTimeMs: 0,
             message: 'Database connection failed',
           },
         },

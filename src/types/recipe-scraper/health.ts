@@ -5,7 +5,7 @@ export interface HealthCheckItem {
   /** Component health status */
   status: 'healthy' | 'degraded' | 'unhealthy';
   /** Component response time in milliseconds */
-  response_time_ms?: number;
+  responseTimeMs?: number;
   /** Status message */
   message: string;
 }
@@ -21,7 +21,7 @@ export interface HealthCheckResponse {
   /** Service version */
   version: string;
   /** Service uptime in seconds */
-  uptime_seconds?: number;
+  uptimeSeconds?: number;
   /** Health check details for each component */
   checks: {
     /** Database health check */
@@ -29,18 +29,18 @@ export interface HealthCheckResponse {
     /** Cache health check */
     cache?: HealthCheckItem;
     /** External APIs health checks */
-    external_apis?: {
+    externalApis?: {
       /** Spoonacular API health check */
       spoonacular?: HealthCheckItem;
     };
   };
   /** Database monitoring status */
-  database_monitoring?: {
+  databaseMonitoring?: {
     /** Whether monitoring is enabled */
     enabled?: boolean;
     /** Last monitoring check timestamp */
-    last_check?: string;
+    lastCheck?: string;
   };
   /** Health check response time in milliseconds */
-  response_time_ms?: number;
+  responseTimeMs?: number;
 }
