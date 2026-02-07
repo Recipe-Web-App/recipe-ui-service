@@ -34,7 +34,6 @@ describe('useClearRecipeScraperCache', () => {
   it('should clear cache successfully', async () => {
     const mockResponse = {
       message: 'Cache cleared successfully',
-      success: true,
     };
 
     mockedAdminApi.clearCache.mockResolvedValueOnce(mockResponse);
@@ -146,12 +145,10 @@ describe('useClearRecipeScraperCache', () => {
 
   it('should properly handle mutation loading state', async () => {
     // Create a promise that we can resolve manually
-    let resolvePromise: (value: { message: string; success: boolean }) => void;
-    const promise = new Promise<{ message: string; success: boolean }>(
-      resolve => {
-        resolvePromise = resolve;
-      }
-    );
+    let resolvePromise: (value: { message: string }) => void;
+    const promise = new Promise<{ message: string }>(resolve => {
+      resolvePromise = resolve;
+    });
 
     mockedAdminApi.clearCache.mockReturnValueOnce(promise);
 
@@ -176,7 +173,7 @@ describe('useClearRecipeScraperCache', () => {
     expect(result.current.isError).toBe(false);
 
     // Resolve the promise
-    resolvePromise!({ message: 'Cache cleared successfully', success: true });
+    resolvePromise!({ message: 'Cache cleared successfully' });
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
@@ -185,14 +182,12 @@ describe('useClearRecipeScraperCache', () => {
     expect(result.current.isPending).toBe(false);
     expect(result.current.data).toEqual({
       message: 'Cache cleared successfully',
-      success: true,
     });
   });
 
   it('should handle partial cache clear success', async () => {
     const mockResponse = {
       message: 'Cache partially cleared - some entries failed',
-      success: false,
     };
 
     mockedAdminApi.clearCache.mockResolvedValueOnce(mockResponse);
@@ -210,7 +205,6 @@ describe('useClearRecipeScraperCache', () => {
     });
 
     expect(result.current.data).toEqual(mockResponse);
-    expect(result.current.data?.success).toBe(false);
     expect(result.current.data?.message).toContain('partially cleared');
   });
 });

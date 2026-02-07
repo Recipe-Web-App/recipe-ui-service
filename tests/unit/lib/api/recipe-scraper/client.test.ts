@@ -46,7 +46,7 @@ describe('Recipe Scraper API Client', () => {
       jest.isolateModules(() => {
         require('@/lib/api/recipe-scraper/client');
         expect(mockedAxios.create).toHaveBeenCalledWith({
-          baseURL: 'http://sous-chef-proxy.local/api/recipe-scraper',
+          baseURL: 'http://sous-chef-proxy.local/api/v1/recipe-scraper',
           timeout: 30000,
           headers: {
             'Content-Type': 'application/json',
@@ -150,14 +150,13 @@ describe('Recipe Scraper API Client', () => {
   });
 
   describe('Response Error Handler', () => {
-    it('should handle errors with detail field', () => {
+    it('should handle errors with message field', () => {
       const error = {
         response: {
           status: 400,
           data: {
-            detail: 'Invalid URL format',
-            error_code: 'INVALID_URL',
-            error_type: 'validation_error',
+            message: 'Invalid URL format',
+            error: 'INVALID_URL',
           } as ErrorResponse,
         },
         message: 'Bad Request',
@@ -220,15 +219,13 @@ describe('Recipe Scraper API Client', () => {
         const error = new RecipeScraperApiError(
           'Test error',
           400,
-          'INVALID_URL',
-          'validation_error'
+          'INVALID_URL'
         );
 
         expect(error.name).toBe('RecipeScraperApiError');
         expect(error.message).toBe('Test error');
         expect(error.status).toBe(400);
-        expect(error.error_code).toBe('INVALID_URL');
-        expect(error.error_type).toBe('validation_error');
+        expect(error.error).toBe('INVALID_URL');
         expect(error).toBeInstanceOf(Error);
       });
 
@@ -238,8 +235,7 @@ describe('Recipe Scraper API Client', () => {
         expect(error.name).toBe('RecipeScraperApiError');
         expect(error.message).toBe('Simple error');
         expect(error.status).toBeUndefined();
-        expect(error.error_code).toBeUndefined();
-        expect(error.error_type).toBeUndefined();
+        expect(error.error).toBeUndefined();
       });
 
       it('should create error with partial properties', () => {
@@ -251,8 +247,7 @@ describe('Recipe Scraper API Client', () => {
 
         expect(error.message).toBe('Partial error');
         expect(error.status).toBe(403);
-        expect(error.error_code).toBe('FORBIDDEN');
-        expect(error.error_type).toBeUndefined();
+        expect(error.error).toBe('FORBIDDEN');
       });
     });
 
@@ -262,9 +257,8 @@ describe('Recipe Scraper API Client', () => {
           response: {
             status: 400,
             data: {
-              detail: 'Invalid recipe URL',
-              error_code: 'INVALID_RECIPE_URL',
-              error_type: 'validation_error',
+              message: 'Invalid recipe URL',
+              error: 'INVALID_RECIPE_URL',
             } as ErrorResponse,
           },
           message: 'Request failed',
@@ -281,8 +275,7 @@ describe('Recipe Scraper API Client', () => {
           const scraperError = error as RecipeScraperApiError;
           expect(scraperError.message).toBe('Invalid recipe URL');
           expect(scraperError.status).toBe(400);
-          expect(scraperError.error_code).toBe('INVALID_RECIPE_URL');
-          expect(scraperError.error_type).toBe('validation_error');
+          expect(scraperError.error).toBe('INVALID_RECIPE_URL');
         }
       });
 
@@ -313,8 +306,8 @@ describe('Recipe Scraper API Client', () => {
           response: {
             status: 404,
             data: {
-              detail: 'Recipe not found',
-              error_code: 'RECIPE_NOT_FOUND',
+              message: 'Recipe not found',
+              error: 'RECIPE_NOT_FOUND',
             } as ErrorResponse,
           },
           message: 'Not found',
@@ -331,7 +324,7 @@ describe('Recipe Scraper API Client', () => {
           const scraperError = error as RecipeScraperApiError;
           expect(scraperError.message).toBe('Recipe not found');
           expect(scraperError.status).toBe(404);
-          expect(scraperError.error_code).toBe('RECIPE_NOT_FOUND');
+          expect(scraperError.error).toBe('RECIPE_NOT_FOUND');
         }
       });
 
@@ -361,8 +354,7 @@ describe('Recipe Scraper API Client', () => {
         const errorObj = {
           message: 'Custom error',
           status: 422,
-          error_code: 'VALIDATION_ERROR',
-          error_type: 'field_validation',
+          error: 'VALIDATION_ERROR',
         };
 
         expect(() => handleRecipeScraperApiError(errorObj)).toThrow(
@@ -376,8 +368,7 @@ describe('Recipe Scraper API Client', () => {
           const scraperError = error as RecipeScraperApiError;
           expect(scraperError.message).toBe('Custom error');
           expect(scraperError.status).toBe(422);
-          expect(scraperError.error_code).toBe('VALIDATION_ERROR');
-          expect(scraperError.error_type).toBe('field_validation');
+          expect(scraperError.error).toBe('VALIDATION_ERROR');
         }
       });
 
@@ -418,9 +409,8 @@ describe('Recipe Scraper API Client', () => {
         axiosError.response = {
           status: 400,
           data: {
-            detail: 'Recipe URL is invalid',
-            error_code: 'INVALID_URL',
-            error_type: 'validation',
+            message: 'Recipe URL is invalid',
+            error: 'INVALID_URL',
           } as ErrorResponse,
         } as any;
 
@@ -435,8 +425,7 @@ describe('Recipe Scraper API Client', () => {
           const scraperError = error as RecipeScraperApiError;
           expect(scraperError.message).toBe('Recipe URL is invalid');
           expect(scraperError.status).toBe(400);
-          expect(scraperError.error_code).toBe('INVALID_URL');
-          expect(scraperError.error_type).toBe('validation');
+          expect(scraperError.error).toBe('INVALID_URL');
         }
       });
 
@@ -505,11 +494,11 @@ describe('Recipe Scraper API Client', () => {
         const params = {
           limit: 10,
           offset: 0,
-          include_total: true,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('limit=10&offset=0&include_total=true');
+        expect(result).toBe('limit=10&offset=0&includeTotal=true');
       });
 
       it('should handle string values', () => {
@@ -539,12 +528,12 @@ describe('Recipe Scraper API Client', () => {
         const params = {
           limit: 10,
           offset: undefined,
-          count_only: null,
-          include_total: true,
+          countOnly: null,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('limit=10&include_total=true');
+        expect(result).toBe('limit=10&includeTotal=true');
       });
 
       it('should handle empty object', () => {
@@ -564,12 +553,12 @@ describe('Recipe Scraper API Client', () => {
 
       it('should handle boolean false values', () => {
         const params = {
-          count_only: false,
-          include_total: true,
+          countOnly: false,
+          includeTotal: true,
         };
 
         const result = buildQueryParams(params);
-        expect(result).toBe('count_only=false&include_total=true');
+        expect(result).toBe('countOnly=false&includeTotal=true');
       });
 
       it('should handle mixed data types', () => {
@@ -577,7 +566,7 @@ describe('Recipe Scraper API Client', () => {
           recipe_id: 123,
           amount: 2.5,
           measurement: 'CUP',
-          include_ingredients: true,
+          includeIngredients: true,
           tags: ['dessert', 'cookies'],
         };
 
@@ -585,7 +574,7 @@ describe('Recipe Scraper API Client', () => {
         expect(result).toContain('recipe_id=123');
         expect(result).toContain('amount=2.5');
         expect(result).toContain('measurement=CUP');
-        expect(result).toContain('include_ingredients=true');
+        expect(result).toContain('includeIngredients=true');
         expect(result).toContain('tags=dessert');
         expect(result).toContain('tags=cookies');
       });

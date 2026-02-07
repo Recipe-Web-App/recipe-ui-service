@@ -89,35 +89,6 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
     });
   });
 
-  describe('getLiveness', () => {
-    it('should fetch liveness status successfully', async () => {
-      const mockResponse = {
-        status: 'alive',
-        timestamp: '2025-01-31T12:00:00Z',
-        service: 'recipe-scraper-service',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getLiveness();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/api/liveness');
-      expect(result).toEqual(mockResponse);
-      expect(result.status).toBe('alive');
-      expect(result.timestamp).toBe('2025-01-31T12:00:00Z');
-      expect(result.service).toBe('recipe-scraper-service');
-    });
-
-    it('should handle errors from liveness endpoint', async () => {
-      mockClient.get.mockRejectedValue(new Error('Service not alive'));
-
-      await expect(healthApi.getLiveness()).rejects.toThrow(
-        'Service not alive'
-      );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/liveness');
-    });
-  });
-
   describe('getReadiness', () => {
     it('should fetch readiness status successfully', async () => {
       const mockResponse = {
@@ -126,7 +97,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'healthy' as const,
-            response_time_ms: 15.2,
+            responseTimeMs: 15.2,
             message: 'Database connection healthy',
           },
         },
@@ -137,11 +108,11 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       const result = await healthApi.getReadiness();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/api/readiness');
+      expect(mockClient.get).toHaveBeenCalledWith('/ready');
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('ready');
       expect(result.checks.database.status).toBe('healthy');
-      expect(result.checks.database.response_time_ms).toBe(15.2);
+      expect(result.checks.database.responseTimeMs).toBe(15.2);
     });
 
     it('should handle degraded readiness status', async () => {
@@ -151,7 +122,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'degraded' as const,
-            response_time_ms: 500,
+            responseTimeMs: 500,
             message: 'Database slow response',
           },
         },
@@ -172,7 +143,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
       await expect(healthApi.getReadiness()).rejects.toThrow(
         'Readiness check failed'
       );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/readiness');
+      expect(mockClient.get).toHaveBeenCalledWith('/ready');
     });
   });
 
@@ -180,7 +151,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
     it('should fetch comprehensive health status successfully', async () => {
       const mockHealthCheckItem: HealthCheckItem = {
         status: 'healthy',
-        response_time_ms: 25.5,
+        responseTimeMs: 25.5,
         message: 'All systems operational',
       };
 
@@ -188,43 +159,43 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         status: 'healthy',
         timestamp: '2025-01-31T12:00:00Z',
         version: '2.0.0',
-        uptime_seconds: 3600,
+        uptimeSeconds: 3600,
         checks: {
           database: mockHealthCheckItem,
           cache: {
             status: 'healthy',
-            response_time_ms: 5.1,
+            responseTimeMs: 5.1,
             message: 'Cache operational',
           },
-          external_apis: {
+          externalApis: {
             spoonacular: {
               status: 'healthy',
-              response_time_ms: 120.3,
+              responseTimeMs: 120.3,
               message: 'Spoonacular API responsive',
             },
           },
         },
-        database_monitoring: {
+        databaseMonitoring: {
           enabled: true,
-          last_check: '2025-01-31T12:00:00Z',
+          lastCheck: '2025-01-31T12:00:00Z',
         },
-        response_time_ms: 45.2,
+        responseTimeMs: 45.2,
       };
 
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await healthApi.getHealth();
 
-      expect(mockClient.get).toHaveBeenCalledWith('/api/health');
+      expect(mockClient.get).toHaveBeenCalledWith('/health');
       expect(result).toEqual(mockResponse);
       expect(result.status).toBe('healthy');
       expect(result.version).toBe('2.0.0');
-      expect(result.uptime_seconds).toBe(3600);
+      expect(result.uptimeSeconds).toBe(3600);
       expect(result.checks.database?.status).toBe('healthy');
       expect(result.checks.cache?.status).toBe('healthy');
-      expect(result.checks.external_apis?.spoonacular?.status).toBe('healthy');
-      expect(result.database_monitoring?.enabled).toBe(true);
-      expect(result.response_time_ms).toBe(45.2);
+      expect(result.checks.externalApis?.spoonacular?.status).toBe('healthy');
+      expect(result.databaseMonitoring?.enabled).toBe(true);
+      expect(result.responseTimeMs).toBe(45.2);
     });
 
     it('should handle degraded health status', async () => {
@@ -235,7 +206,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'degraded',
-            response_time_ms: 500,
+            responseTimeMs: 500,
             message: 'Database slow',
           },
         },
@@ -257,7 +228,7 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
         checks: {
           database: {
             status: 'unhealthy',
-            response_time_ms: 0,
+            responseTimeMs: 0,
             message: 'Database connection failed',
           },
         },
@@ -277,31 +248,6 @@ http_requests_total{method="GET",endpoint="/api/health"} 42`;
 
       await expect(healthApi.getHealth()).rejects.toThrow(
         'Health check failed'
-      );
-      expect(mockClient.get).toHaveBeenCalledWith('/api/health');
-    });
-  });
-
-  describe('getLegacyHealth', () => {
-    it('should fetch legacy health status successfully', async () => {
-      const mockResponse = {
-        status: 'ok',
-      };
-
-      mockClient.get.mockResolvedValue({ data: mockResponse });
-
-      const result = await healthApi.getLegacyHealth();
-
-      expect(mockClient.get).toHaveBeenCalledWith('/health');
-      expect(result).toEqual(mockResponse);
-      expect(result.status).toBe('ok');
-    });
-
-    it('should handle errors from legacy health endpoint', async () => {
-      mockClient.get.mockRejectedValue(new Error('Legacy endpoint failed'));
-
-      await expect(healthApi.getLegacyHealth()).rejects.toThrow(
-        'Legacy endpoint failed'
       );
       expect(mockClient.get).toHaveBeenCalledWith('/health');
     });

@@ -3,7 +3,7 @@ import { adminApi } from '@/lib/api/recipe-scraper';
 
 /**
  * Hook to clear the Recipe Scraper service cache
- * POST /api/recipe-scraper/admin/clear-cache
+ * DELETE /api/recipe-scraper/admin/cache
  *
  * This endpoint is intended for administrative use only and requires
  * service-to-service authentication with admin scope.
@@ -11,7 +11,7 @@ import { adminApi } from '@/lib/api/recipe-scraper';
 export const useClearRecipeScraperCache = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<{ message: string; success: boolean }, Error, void>({
+  return useMutation<{ message: string }, Error, void>({
     mutationFn: () => adminApi.clearCache(),
     onSuccess: () => {
       // Invalidate all recipe scraper queries to ensure fresh data after cache clear

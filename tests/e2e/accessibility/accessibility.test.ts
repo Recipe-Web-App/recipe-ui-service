@@ -7,6 +7,7 @@ test.describe('Accessibility Tests', () => {
   }) => {
     await page.goto('/');
 
+    // @ts-expect-error - playwright-core version mismatch between @playwright/test and @axe-core/playwright
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -73,6 +74,7 @@ test.describe('Accessibility Tests', () => {
   test('should have proper color contrast', async ({ page }) => {
     await page.goto('/');
 
+    // @ts-expect-error - playwright-core version mismatch between @playwright/test and @axe-core/playwright
     const accessibilityScanResults = await new AxeBuilder({ page })
       .withTags(['color-contrast'])
       .analyze();

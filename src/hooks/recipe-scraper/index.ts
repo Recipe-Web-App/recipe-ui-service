@@ -2,10 +2,8 @@
 export {
   useRecipeScraperRoot,
   useRecipeScraperMetrics,
-  useRecipeScraperLiveness,
   useRecipeScraperReadiness,
   useRecipeScraperHealth,
-  useRecipeScraperLegacyHealth,
 } from './use-recipe-scraper-health';
 
 // Recipe hooks
@@ -31,6 +29,12 @@ export { useRecipePairings } from './use-recipe-scraper-pairing';
 
 // Shopping hooks
 export { useRecipeShoppingInfo } from './use-recipe-scraper-shopping';
+
+// Allergen hooks
+export {
+  useIngredientAllergens,
+  useRecipeAllergens,
+} from './use-recipe-scraper-allergens';
 
 // Admin hooks
 export { useClearRecipeScraperCache } from './use-recipe-scraper-admin';

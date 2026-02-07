@@ -62,9 +62,7 @@ describe('Recipe Scraper Pairing API', () => {
 
       const result = await pairingApi.getPairingSuggestions(123);
 
-      expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/123/pairing-suggestions'
-      );
+      expect(mockClient.get).toHaveBeenCalledWith('/recipes/123/pairings');
       expect(result).toEqual(mockResponse);
       expect(result.recipeId).toBe(123);
       expect(result.pairingSuggestions).toHaveLength(3);
@@ -95,7 +93,7 @@ describe('Recipe Scraper Pairing API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/456/pairing-suggestions?limit=5&offset=10'
+        '/recipes/456/pairings?limit=5&offset=10'
       );
       expect(result.limit).toBe(5);
       expect(result.offset).toBe(10);
@@ -103,7 +101,7 @@ describe('Recipe Scraper Pairing API', () => {
       expect(result.pairingSuggestions).toHaveLength(1);
     });
 
-    it('should fetch pairing suggestions with count_only parameter', async () => {
+    it('should fetch pairing suggestions with countOnly parameter', async () => {
       const mockResponse: PairingSuggestionsResponse = {
         recipeId: 789,
         pairingSuggestions: [],
@@ -115,11 +113,11 @@ describe('Recipe Scraper Pairing API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await pairingApi.getPairingSuggestions(789, {
-        count_only: true,
+        countOnly: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/789/pairing-suggestions?count_only=true'
+        '/recipes/789/pairings?countOnly=true'
       );
       expect(result.pairingSuggestions).toEqual([]);
       expect(result.count).toBe(18);
@@ -149,11 +147,11 @@ describe('Recipe Scraper Pairing API', () => {
       const result = await pairingApi.getPairingSuggestions(101, {
         limit: 3,
         offset: 5,
-        count_only: false,
+        countOnly: false,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/recipes/101/pairing-suggestions?limit=3&offset=5&count_only=false'
+        '/recipes/101/pairings?limit=3&offset=5&countOnly=false'
       );
       expect(result.pairingSuggestions).toHaveLength(2);
       expect(result.pairingSuggestions[0].recipeName).toBe('Greek Salad');

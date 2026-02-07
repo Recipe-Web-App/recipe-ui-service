@@ -12,14 +12,14 @@ import type {
  * GET /api/recipe-scraper/recipes/{recipe_id}/nutritional-info
  *
  * @param recipeId - The ID of the recipe (must be > 0)
- * @param params.include_total - Include total nutritional info for the recipe (default: true)
- * @param params.include_ingredients - Include nutritional info for each ingredient (default: false)
+ * @param params.includeTotal - Include total nutritional info for the recipe (default: true)
+ * @param params.includeIngredients - Include nutritional info for each ingredient (default: false)
  */
 export const useRecipeNutritionalInfo = (
   recipeId: number,
   params?: {
-    include_total?: boolean;
-    include_ingredients?: boolean;
+    includeTotal?: boolean;
+    includeIngredients?: boolean;
   }
 ) => {
   return useQuery<RecipeNutritionalInfoResponse>({

@@ -136,10 +136,8 @@ export const QUERY_KEYS = {
     // Health endpoints
     ROOT: ['recipeScraper', 'root'],
     METRICS: ['recipeScraper', 'metrics'],
-    LIVENESS: ['recipeScraper', 'liveness'],
     READINESS: ['recipeScraper', 'readiness'],
     HEALTH: ['recipeScraper', 'health'],
-    LEGACY_HEALTH: ['recipeScraper', 'legacyHealth'],
 
     // Recipe operations
     RECIPES: ['recipeScraper', 'recipes'],
@@ -162,6 +160,10 @@ export const QUERY_KEYS = {
     SHOPPING: ['recipeScraper', 'shopping'],
     INGREDIENT_SHOPPING: ['recipeScraper', 'ingredientShopping'],
     RECIPE_SHOPPING: ['recipeScraper', 'recipeShopping'],
+
+    // Allergen operations
+    INGREDIENT_ALLERGENS: ['recipeScraper', 'ingredientAllergens'],
+    RECIPE_ALLERGENS: ['recipeScraper', 'recipeAllergens'],
 
     // Admin operations
     ADMIN: ['recipeScraper', 'admin'],

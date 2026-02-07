@@ -85,7 +85,7 @@ describe('Recipe Scraper Ingredients API', () => {
       const result = await ingredientsApi.getRecommendedSubstitutions(1);
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/ingredients/1/recommended-substitutions'
+        '/ingredients/1/substitutions'
       );
       expect(result).toEqual(mockResponse);
       expect(result.ingredient.name).toBe('butter');
@@ -116,14 +116,14 @@ describe('Recipe Scraper Ingredients API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/ingredients/2/recommended-substitutions?limit=5&offset=10'
+        '/ingredients/2/substitutions?limit=5&offset=10'
       );
       expect(result.limit).toBe(5);
       expect(result.offset).toBe(10);
       expect(result.count).toBe(15);
     });
 
-    it('should fetch substitutions with count_only parameter', async () => {
+    it('should fetch substitutions with countOnly parameter', async () => {
       const mockResponse: RecommendedSubstitutionsResponse = {
         ingredient: {
           ingredientId: 3,
@@ -136,11 +136,11 @@ describe('Recipe Scraper Ingredients API', () => {
       mockClient.get.mockResolvedValue({ data: mockResponse });
 
       const result = await ingredientsApi.getRecommendedSubstitutions(3, {
-        count_only: true,
+        countOnly: true,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/ingredients/3/recommended-substitutions?count_only=true'
+        '/ingredients/3/substitutions?countOnly=true'
       );
       expect(result.recommendedSubstitutions).toEqual([]);
       expect(result.count).toBe(8);
@@ -179,7 +179,7 @@ describe('Recipe Scraper Ingredients API', () => {
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/ingredients/4/recommended-substitutions?amount=1&measurement=CUP'
+        '/ingredients/4/substitutions?amount=1&measurement=CUP'
       );
       expect(result.ingredient.quantity?.amount).toBe(1);
       expect(result.ingredient.quantity?.measurement).toBe('CUP');
@@ -219,13 +219,13 @@ describe('Recipe Scraper Ingredients API', () => {
       const result = await ingredientsApi.getRecommendedSubstitutions(5, {
         limit: 3,
         offset: 0,
-        count_only: false,
+        countOnly: false,
         amount: 2,
         measurement: 'TBSP' as IngredientUnitEnum,
       });
 
       expect(mockClient.get).toHaveBeenCalledWith(
-        '/ingredients/5/recommended-substitutions?limit=3&offset=0&count_only=false&amount=2&measurement=TBSP'
+        '/ingredients/5/substitutions?limit=3&offset=0&countOnly=false&amount=2&measurement=TBSP'
       );
       expect(result.recommendedSubstitutions).toHaveLength(1);
       expect(result.recommendedSubstitutions[0].ingredient).toBe(

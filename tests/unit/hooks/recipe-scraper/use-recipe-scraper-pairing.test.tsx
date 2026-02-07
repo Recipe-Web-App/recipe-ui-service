@@ -76,7 +76,7 @@ describe('useRecipePairings', () => {
     const params = {
       limit: 10,
       offset: 5,
-      count_only: false,
+      countOnly: false,
     };
 
     const mockResponse: PairingSuggestionsResponse = {
@@ -114,10 +114,10 @@ describe('useRecipePairings', () => {
     );
   });
 
-  it('should fetch count only when count_only parameter is true', async () => {
+  it('should fetch count only when countOnly parameter is true', async () => {
     const recipeId = 123;
     const params = {
-      count_only: true,
+      countOnly: true,
     };
 
     const mockResponse: PairingSuggestionsResponse = {

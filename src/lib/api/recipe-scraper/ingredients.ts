@@ -11,12 +11,12 @@ import type {
 export const ingredientsApi = {
   /**
    * Get recommended substitutions for an ingredient
-   * GET /ingredients/{ingredient_id}/recommended-substitutions
+   * GET /ingredients/{ingredient_id}/substitutions
    *
    * @param ingredientId - The ID of the ingredient
    * @param params.limit - Maximum number of substitutions to return
    * @param params.offset - Number of substitutions to skip for pagination
-   * @param params.count_only - If true, return only the total count
+   * @param params.countOnly - If true, return only the total count
    * @param params.amount - The amount of the ingredient
    * @param params.measurement - The unit of measurement for the amount
    */
@@ -25,7 +25,7 @@ export const ingredientsApi = {
     params?: {
       limit?: number;
       offset?: number;
-      count_only?: boolean;
+      countOnly?: boolean;
       amount?: number;
       measurement?: IngredientUnitEnum;
     }
@@ -33,7 +33,7 @@ export const ingredientsApi = {
     try {
       const queryString = params ? buildQueryParams(params) : '';
       const response = await recipeScraperClient.get(
-        `/ingredients/${ingredientId}/recommended-substitutions${queryString ? `?${queryString}` : ''}`
+        `/ingredients/${ingredientId}/substitutions${queryString ? `?${queryString}` : ''}`
       );
       return response.data as RecommendedSubstitutionsResponse;
     } catch (error) {

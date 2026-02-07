@@ -58,19 +58,30 @@ export enum AllergenEnum {
 }
 
 /**
- * Food group classifications for nutritional analysis.
+ * Units of measurement for nutrient values.
  */
-export enum FoodGroupEnum {
-  VEGETABLES = 'VEGETABLES',
-  FRUITS = 'FRUITS',
-  GRAINS = 'GRAINS',
-  LEGUMES = 'LEGUMES',
-  NUTS_SEEDS = 'NUTS_SEEDS',
-  MEAT = 'MEAT',
-  POULTRY = 'POULTRY',
-  SEAFOOD = 'SEAFOOD',
-  DAIRY = 'DAIRY',
-  BEVERAGES = 'BEVERAGES',
-  PROCESSED_FOODS = 'PROCESSED_FOODS',
-  UNKNOWN = 'UNKNOWN',
+export enum NutrientUnit {
+  GRAM = 'GRAM',
+  MILLIGRAM = 'MILLIGRAM',
+  MICROGRAM = 'MICROGRAM',
+  KILOCALORIE = 'KILOCALORIE',
+}
+
+/**
+ * Allergen presence type classification.
+ */
+export enum AllergenPresenceTypeEnum {
+  CONTAINS = 'CONTAINS',
+  MAY_CONTAIN = 'MAY_CONTAIN',
+  TRACES = 'TRACES',
+}
+
+/**
+ * Data source for allergen information.
+ */
+export enum AllergenDataSourceEnum {
+  USDA = 'USDA',
+  OPEN_FOOD_FACTS = 'OPEN_FOOD_FACTS',
+  LLM_INFERRED = 'LLM_INFERRED',
+  MANUAL = 'MANUAL',
 }

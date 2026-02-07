@@ -14,13 +14,16 @@ export * from './ingredients';
 export * from './pairing';
 export * from './shopping';
 export * from './admin';
+export * from './allergens';
 
 // Re-export types for convenience
 export type {
   // Enums
   IngredientUnitEnum,
   AllergenEnum,
-  FoodGroupEnum,
+  NutrientUnit,
+  AllergenPresenceTypeEnum,
+  AllergenDataSourceEnum,
 
   // Core Models
   Quantity,
@@ -32,13 +35,11 @@ export type {
   IngredientSubstitution,
 
   // Nutrition Types
-  Sugars,
+  NutrientValue,
   Fats,
-  Fibers,
   Vitamins,
   Minerals,
   MacroNutrients,
-  IngredientClassification,
   IngredientNutritionalInfoResponse,
 
   // Request Types
@@ -52,9 +53,15 @@ export type {
   PairingSuggestionsResponse,
   IngredientShoppingInfoResponse,
   RecipeShoppingInfoResponse,
+  ErrorDetail,
   ErrorResponse,
   ValidationError,
   HTTPValidationError,
+
+  // Allergen Types
+  AllergenInfo,
+  IngredientAllergenResponse,
+  RecipeAllergenResponse,
 
   // Health Check Types
   HealthCheckItem,

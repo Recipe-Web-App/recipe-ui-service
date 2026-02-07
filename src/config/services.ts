@@ -39,7 +39,7 @@ export const SERVICE_URLS = {
   /**
    * Recipe Scraper Service - Web scraping and recipe import
    */
-  RECIPE_SCRAPER: 'http://sous-chef-proxy.local/api/recipe-scraper',
+  RECIPE_SCRAPER: 'http://sous-chef-proxy.local/api/v1/recipe-scraper',
 
   /**
    * User Management Service - User profiles and preferences

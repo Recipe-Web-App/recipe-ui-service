@@ -110,7 +110,7 @@ describe('useIngredientSubstitutions', () => {
     const params = {
       limit: 10,
       offset: 5,
-      count_only: false,
+      countOnly: false,
       amount: 2.25,
       measurement: IngredientUnitEnum.CUP,
     };
@@ -158,10 +158,10 @@ describe('useIngredientSubstitutions', () => {
     ).toHaveBeenCalledWith(ingredientId, params);
   });
 
-  it('should fetch count only when count_only parameter is true', async () => {
+  it('should fetch count only when countOnly parameter is true', async () => {
     const ingredientId = 1;
     const params = {
-      count_only: true,
+      countOnly: true,
     };
 
     const mockResponse: RecommendedSubstitutionsResponse = {

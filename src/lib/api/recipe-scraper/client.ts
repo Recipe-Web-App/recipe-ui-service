@@ -3,7 +3,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
-import type { ErrorResponse } from '@/types/recipe-scraper';
+import type { ErrorDetail, ErrorResponse } from '@/types/recipe-scraper';
 import { getServiceUrl } from '@/config/services';
 import { attachTokenRefreshInterceptor } from '@/lib/api/shared/token-refresh-interceptor';
 
@@ -44,7 +44,7 @@ export const responseInterceptor = (response: AxiosResponse) => response;
 export const responseErrorHandler = (error: AxiosError) => {
   const errorData = error.response?.data as ErrorResponse | undefined;
   const message =
-    errorData?.detail ?? error.message ?? 'An unexpected error occurred';
+    errorData?.message ?? error.message ?? 'An unexpected error occurred';
 
   return Promise.reject({
     ...error,
@@ -63,20 +63,23 @@ attachTokenRefreshInterceptor(recipeScraperClient);
 
 export class RecipeScraperApiError extends Error {
   status?: number;
-  error_code?: string;
-  error_type?: string;
+  error?: string;
+  details?: ErrorDetail[];
+  requestId?: string;
 
   constructor(
     message: string,
     status?: number,
-    error_code?: string,
-    error_type?: string
+    error?: string,
+    details?: ErrorDetail[],
+    requestId?: string
   ) {
     super(message);
     this.name = 'RecipeScraperApiError';
     this.status = status;
-    this.error_code = error_code;
-    this.error_type = error_type;
+    this.error = error;
+    this.details = details;
+    this.requestId = requestId;
   }
 }
 
@@ -86,10 +89,11 @@ export const handleRecipeScraperApiError = (error: unknown): never => {
     const errorData = error.response?.data as ErrorResponse | undefined;
 
     throw new RecipeScraperApiError(
-      errorData?.detail ?? error.message,
+      errorData?.message ?? error.message,
       error.response?.status,
-      errorData?.error_code,
-      errorData?.error_type
+      errorData?.error,
+      errorData?.details ?? undefined,
+      errorData?.requestId ?? undefined
     );
   }
 
@@ -106,12 +110,13 @@ export const handleRecipeScraperApiError = (error: unknown): never => {
     const errorData = axiosLikeError.response?.data;
 
     throw new RecipeScraperApiError(
-      errorData?.detail ??
+      errorData?.message ??
         axiosLikeError.message ??
         'An unexpected error occurred',
       axiosLikeError.response?.status,
-      errorData?.error_code,
-      errorData?.error_type
+      errorData?.error,
+      errorData?.details ?? undefined,
+      errorData?.requestId ?? undefined
     );
   }
 
@@ -119,15 +124,17 @@ export const handleRecipeScraperApiError = (error: unknown): never => {
     const errorObj = error as {
       message: string;
       status?: number;
-      error_code?: string;
-      error_type?: string;
+      error?: string;
+      details?: ErrorDetail[];
+      requestId?: string;
     };
 
     throw new RecipeScraperApiError(
       errorObj.message,
       errorObj.status,
-      errorObj.error_code,
-      errorObj.error_type
+      errorObj.error,
+      errorObj.details,
+      errorObj.requestId
     );
   }
 

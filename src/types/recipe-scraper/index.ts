@@ -1,5 +1,11 @@
 // Enums
-export { IngredientUnitEnum, AllergenEnum, FoodGroupEnum } from './enums';
+export {
+  IngredientUnitEnum,
+  AllergenEnum,
+  NutrientUnit,
+  AllergenPresenceTypeEnum,
+  AllergenDataSourceEnum,
+} from './enums';
 
 // Core Models
 export type {
@@ -14,13 +20,11 @@ export type {
 
 // Nutrition Types
 export type {
-  Sugars,
+  NutrientValue,
   Fats,
-  Fibers,
   Vitamins,
   Minerals,
   MacroNutrients,
-  IngredientClassification,
   IngredientNutritionalInfoResponse,
 } from './nutrition';
 
@@ -36,10 +40,18 @@ export type {
   PairingSuggestionsResponse,
   IngredientShoppingInfoResponse,
   RecipeShoppingInfoResponse,
+  ErrorDetail,
   ErrorResponse,
   ValidationError,
   HTTPValidationError,
 } from './responses';
+
+// Allergen Types
+export type {
+  AllergenInfo,
+  IngredientAllergenResponse,
+  RecipeAllergenResponse,
+} from './allergens';
 
 // Health Check Types
 export type { HealthCheckItem, HealthCheckResponse } from './health';

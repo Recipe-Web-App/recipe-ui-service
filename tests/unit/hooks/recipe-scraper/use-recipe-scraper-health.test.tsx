@@ -4,10 +4,8 @@ import { healthApi } from '@/lib/api/recipe-scraper';
 import {
   useRecipeScraperRoot,
   useRecipeScraperMetrics,
-  useRecipeScraperLiveness,
   useRecipeScraperReadiness,
   useRecipeScraperHealth,
-  useRecipeScraperLegacyHealth,
 } from '@/hooks/recipe-scraper/use-recipe-scraper-health';
 import type { HealthCheckResponse } from '@/types/recipe-scraper';
 
@@ -16,10 +14,8 @@ jest.mock('@/lib/api/recipe-scraper', () => ({
   healthApi: {
     getRoot: jest.fn(),
     getMetrics: jest.fn(),
-    getLiveness: jest.fn(),
     getReadiness: jest.fn(),
     getHealth: jest.fn(),
-    getLegacyHealth: jest.fn(),
   },
 }));
 
@@ -97,30 +93,6 @@ describe('useRecipeScraperMetrics', () => {
   });
 });
 
-describe('useRecipeScraperLiveness', () => {
-  it('should fetch liveness check status', async () => {
-    const mockData = {
-      status: 'alive',
-      timestamp: '2025-01-31T12:00:00Z',
-      service: 'recipe-scraper-service',
-    };
-
-    mockedHealthApi.getLiveness.mockResolvedValueOnce(mockData);
-
-    const wrapper = createWrapper();
-    const { result } = renderHook(() => useRecipeScraperLiveness(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
-
-    expect(result.current.data).toEqual(mockData);
-    expect(mockedHealthApi.getLiveness).toHaveBeenCalledTimes(1);
-  });
-});
-
 describe('useRecipeScraperReadiness', () => {
   it('should fetch readiness check status', async () => {
     const mockData = {
@@ -129,7 +101,7 @@ describe('useRecipeScraperReadiness', () => {
       checks: {
         database: {
           status: 'healthy' as const,
-          response_time_ms: 45.2,
+          responseTimeMs: 45.2,
           message: 'Database connection is healthy',
         },
       },
@@ -158,31 +130,31 @@ describe('useRecipeScraperHealth', () => {
       status: 'healthy',
       timestamp: '2025-01-31T12:00:00Z',
       version: '2.0.0',
-      uptime_seconds: 3600,
+      uptimeSeconds: 3600,
       checks: {
         database: {
           status: 'healthy',
-          response_time_ms: 25.5,
+          responseTimeMs: 25.5,
           message: 'Database connection is healthy',
         },
         cache: {
           status: 'healthy',
-          response_time_ms: 5.2,
+          responseTimeMs: 5.2,
           message: 'Cache is operational',
         },
-        external_apis: {
+        externalApis: {
           spoonacular: {
             status: 'healthy',
-            response_time_ms: 150.8,
+            responseTimeMs: 150.8,
             message: 'Spoonacular API is responsive',
           },
         },
       },
-      database_monitoring: {
+      databaseMonitoring: {
         enabled: true,
-        last_check: '2025-01-31T12:00:00Z',
+        lastCheck: '2025-01-31T12:00:00Z',
       },
-      response_time_ms: 45.2,
+      responseTimeMs: 45.2,
     };
 
     mockedHealthApi.getHealth.mockResolvedValueOnce(mockData);
@@ -196,28 +168,6 @@ describe('useRecipeScraperHealth', () => {
 
     expect(result.current.data).toEqual(mockData);
     expect(mockedHealthApi.getHealth).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('useRecipeScraperLegacyHealth', () => {
-  it('should fetch legacy health check status', async () => {
-    const mockData = {
-      status: 'ok',
-    };
-
-    mockedHealthApi.getLegacyHealth.mockResolvedValueOnce(mockData);
-
-    const wrapper = createWrapper();
-    const { result } = renderHook(() => useRecipeScraperLegacyHealth(), {
-      wrapper,
-    });
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true);
-    });
-
-    expect(result.current.data).toEqual(mockData);
-    expect(mockedHealthApi.getLegacyHealth).toHaveBeenCalledTimes(1);
   });
 });
 

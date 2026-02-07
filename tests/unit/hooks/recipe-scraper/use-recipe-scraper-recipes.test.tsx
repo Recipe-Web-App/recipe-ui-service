@@ -168,7 +168,7 @@ describe('usePopularRecipes', () => {
     const params = {
       limit: 20,
       offset: 10,
-      count_only: false,
+      countOnly: false,
     };
 
     const mockResponse: PopularRecipesResponse = {
@@ -197,9 +197,9 @@ describe('usePopularRecipes', () => {
     expect(mockedRecipesApi.getPopularRecipes).toHaveBeenCalledTimes(1);
   });
 
-  it('should fetch popular recipes with count_only parameter', async () => {
+  it('should fetch popular recipes with countOnly parameter', async () => {
     const params = {
-      count_only: true,
+      countOnly: true,
     };
 
     const mockResponse: PopularRecipesResponse = {

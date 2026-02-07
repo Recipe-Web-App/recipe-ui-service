@@ -43,30 +43,8 @@ export const healthApi = {
   },
 
   /**
-   * Basic liveness check for Kubernetes/container orchestration
-   * GET /api/liveness
-   */
-  async getLiveness(): Promise<{
-    status: string;
-    timestamp: string;
-    service: string;
-  }> {
-    try {
-      const response = await recipeScraperClient.get('/api/liveness');
-      return response.data as {
-        status: string;
-        timestamp: string;
-        service: string;
-      };
-    } catch (error) {
-      handleRecipeScraperApiError(error);
-      throw error;
-    }
-  },
-
-  /**
    * Readiness check including database and external dependencies
-   * GET /api/readiness
+   * GET /ready
    */
   async getReadiness(): Promise<{
     status: 'ready' | 'degraded';
@@ -74,21 +52,21 @@ export const healthApi = {
     checks: {
       database: {
         status: 'healthy' | 'degraded';
-        response_time_ms: number;
+        responseTimeMs: number;
         message: string;
       };
     };
     message: string;
   }> {
     try {
-      const response = await recipeScraperClient.get('/api/readiness');
+      const response = await recipeScraperClient.get('/ready');
       return response.data as {
         status: 'ready' | 'degraded';
         timestamp: string;
         checks: {
           database: {
             status: 'healthy' | 'degraded';
-            response_time_ms: number;
+            responseTimeMs: number;
             message: string;
           };
         };
@@ -102,30 +80,12 @@ export const healthApi = {
 
   /**
    * Comprehensive health check including all dependencies and metrics
-   * GET /api/health
+   * GET /health
    */
   async getHealth(): Promise<HealthCheckResponse> {
     try {
-      const response = await recipeScraperClient.get('/api/health');
-      return response.data as HealthCheckResponse;
-    } catch (error) {
-      handleRecipeScraperApiError(error);
-      throw error;
-    }
-  },
-
-  /**
-   * Legacy health check endpoint for backwards compatibility (deprecated)
-   * GET /health
-   */
-  async getLegacyHealth(): Promise<{
-    status: string;
-  }> {
-    try {
       const response = await recipeScraperClient.get('/health');
-      return response.data as {
-        status: string;
-      };
+      return response.data as HealthCheckResponse;
     } catch (error) {
       handleRecipeScraperApiError(error);
       throw error;
