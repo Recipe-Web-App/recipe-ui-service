@@ -95,7 +95,7 @@ repos:
 
   # Enhanced secret detection
   - repo: https://github.com/trufflesecurity/trufflehog
-    rev: v3.92.5
+    rev: v3.93.1
     hooks:
       - id: trufflehog
         name: TruffleHog Secret Detection
@@ -105,7 +105,7 @@ repos:
 
   # Security analysis with semgrep
   - repo: https://github.com/returntocorp/semgrep
-    rev: v1.150.0
+    rev: v1.151.0
     hooks:
       - id: semgrep
         args: [--config=auto, --error]
