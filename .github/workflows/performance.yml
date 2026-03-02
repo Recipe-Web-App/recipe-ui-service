@@ -102,7 +102,7 @@ jobs:
 
       - name: 📤 Upload Lighthouse artifacts
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: lighthouse-results-${{ matrix.device }}-${{ matrix.url-path }}-${{ github.run_id }}
           path: |
@@ -176,7 +176,7 @@ jobs:
 
       - name: 📤 Upload Web Vitals results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: web-vitals-results
           path: |
@@ -270,7 +270,7 @@ jobs:
 
       - name: 📤 Upload load test results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: load-test-results-${{ matrix.scenario.name }}
           path: |
@@ -339,7 +339,7 @@ jobs:
 
       - name: 📤 Upload bundle analysis
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: bundle-analysis
           path: |
@@ -424,7 +424,7 @@ jobs:
 
       - name: 📤 Upload memory profiling results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: memory-profiling-results
           path: |
@@ -446,7 +446,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: 📥 Download performance results
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
         with:
           path: performance-results
           pattern: '*-results*'
@@ -542,7 +542,7 @@ jobs:
           fi
 
       - name: 📤 Upload performance summary
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: performance-summary
           path: performance-summary.md

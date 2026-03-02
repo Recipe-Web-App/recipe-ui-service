@@ -180,7 +180,7 @@ jobs:
           echo "🏥 Repository health score: $SCORE/100"
 
       - name: 📤 Upload health report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: repository-health-report
           path: health-report.md
@@ -318,7 +318,7 @@ jobs:
           echo "✅ Node modules cleaned and reinstalled"
 
       - name: 📤 Upload dependency report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: dependency-management-report
           path: |
@@ -410,7 +410,7 @@ jobs:
 
       - name: 📤 Upload security report
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: security-maintenance-report
           path: |
@@ -521,7 +521,7 @@ jobs:
           echo "- **Total lines of code:** $(find src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | xargs wc -l | tail -1 | awk '{print $1}')" >> cleanup-report.md
 
       - name: 📤 Upload cleanup report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: repository-cleanup-report
           path: cleanup-report.md
@@ -598,7 +598,7 @@ jobs:
           echo "- Consider setting up additional backup strategies for critical data" >> backup-report.md
 
       - name: 📤 Upload backup report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: backup-validation-report
           path: backup-report.md
@@ -669,7 +669,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.CRITICAL_ALERTS_SLACK_WEBHOOK_URL }}
 
       - name: 📤 Upload monitoring report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: monitoring-alerts-report
           path: monitoring-report.md
@@ -690,7 +690,7 @@ jobs:
 
     steps:
       - name: 📥 Download all maintenance reports
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
         with:
           path: maintenance-reports
           pattern: '*-report*'
@@ -737,7 +737,7 @@ jobs:
           echo "*This report was generated automatically by the maintenance workflow.*" >> maintenance-summary.md
 
       - name: 📤 Upload comprehensive summary
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: maintenance-comprehensive-summary
           path: |

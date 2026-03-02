@@ -93,7 +93,7 @@ jobs:
           CI: true
 
       - name: 📤 Upload blob report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: always()
         with:
           name: blob-report-${{ matrix.browser }}-${{ strategy.job-index }}
@@ -121,7 +121,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: 📥 Download blob reports
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8
         with:
           path: all-blob-reports
           pattern: blob-report-*
@@ -131,7 +131,7 @@ jobs:
         run: bunx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: 📤 Upload HTML report
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: e2e-test-report
           path: playwright-report/
@@ -192,7 +192,7 @@ jobs:
 
       - name: 📤 Upload visual test results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: visual-test-results
           path: |
@@ -245,7 +245,7 @@ jobs:
 
       - name: 📤 Upload accessibility results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: accessibility-test-results
           path: |
@@ -303,7 +303,7 @@ jobs:
 
       - name: 📤 Upload performance results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: performance-test-results
           path: |
@@ -344,7 +344,7 @@ jobs:
 
       - name: 📤 Upload test results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: cross-browser-results-${{ matrix.os }}-${{ matrix.browser }}
           path: |
@@ -407,7 +407,7 @@ jobs:
 
       - name: 📤 Upload mobile test results
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: mobile-test-results-${{ matrix.device }}
           path: |
@@ -444,7 +444,7 @@ jobs:
           echo "Generated on: $(date)" >> test-summary.md
 
       - name: 📤 Upload summary
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         with:
           name: test-suite-summary
           path: test-summary.md
